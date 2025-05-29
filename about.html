@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О портале — Портал рынка труда</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .section-spacing {
+            padding: 3rem 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Логотип" class="rounded-full">
+                    <div>
+                        <h1 class="text-2xl font-bold">Портал рынка труда</h1>
+                        <p class="text-sm opacity-90">Республика Таджикистан</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="index.html#jobs" class="hover:text-yellow-300 transition-colors">Вакансии</a>
+                    <a href="index.html#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#registration" class="hover:text-yellow-300 transition-colors">Регистрация</a>
+                    <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="index.html#ai-tools" class="hover:text-yellow-300 transition-colors">ИИ Инструменты</a>
+                    <a href="about.html" class="text-yellow-300 font-semibold underline">О портале</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6">О портале рынка труда</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">Единая цифровая платформа для поиска работы, подбора персонала и получения актуальной информации о рынке труда Республики Таджикистан.</p>
+        </div>
+    </section>
+
+    <section class="section-spacing bg-white">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Миссия портала</h3>
+                <p class="text-gray-700 text-lg">
+                    Портал создан для содействия эффективному трудоустройству граждан, повышения прозрачности рынка труда и предоставления современных цифровых сервисов для соискателей, работодателей и государственных органов.
+                </p>
+            </div>
+            <div class="mb-12 grid md:grid-cols-2 gap-8">
+                <div class="bg-blue-50 rounded-lg p-6 card-hover">
+                    <h4 class="text-xl font-semibold mb-2 text-blue-800"><i class="fas fa-users mr-2"></i> Для соискателей</h4>
+                    <ul class="list-disc ml-6 text-gray-700 space-y-2">
+                        <li>Поиск актуальных вакансий по всей стране</li>
+                        <li>Создание и отправка резюме онлайн</li>
+                        <li>Доступ к образовательным ресурсам и программам переподготовки</li>
+                        <li>Возможность записать видео-резюме</li>
+                    </ul>
+                </div>
+                <div class="bg-green-50 rounded-lg p-6 card-hover">
+                    <h4 class="text-xl font-semibold mb-2 text-green-800"><i class="fas fa-building mr-2"></i> Для работодателей</h4>
+                    <ul class="list-disc ml-6 text-gray-700 space-y-2">
+                        <li>Публикация вакансий и управление откликами</li>
+                        <li>Поиск и подбор кандидатов по различным критериям</li>
+                        <li>Доступ к аналитике и статистике по рынку труда</li>
+                        <li>Инструменты для проведения онлайн-собеседований</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mb-12 grid md:grid-cols-2 gap-8">
+                <div class="bg-purple-50 rounded-lg p-6 card-hover">
+                    <h4 class="text-xl font-semibold mb-2 text-purple-800"><i class="fas fa-chart-line mr-2"></i> Для аналитиков и госорганов</h4>
+                    <ul class="list-disc ml-6 text-gray-700 space-y-2">
+                        <li>Доступ к актуальной статистике и аналитическим отчетам</li>
+                        <li>Мониторинг динамики занятости и безработицы</li>
+                        <li>Возможность формирования собственных отчетов</li>
+                    </ul>
+                </div>
+                <div class="bg-yellow-50 rounded-lg p-6 card-hover">
+                    <h4 class="text-xl font-semibold mb-2 text-yellow-800"><i class="fas fa-lightbulb mr-2"></i> Инновационные сервисы</h4>
+                    <ul class="list-disc ml-6 text-gray-700 space-y-2">
+                        <li>ИИ-инструменты для генерации описаний вакансий и карьерных рекомендаций</li>
+                        <li>Онлайн-курсы и вебинары для повышения квалификации</li>
+                        <li>Интеграция с государственными и образовательными платформами</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Партнеры и поддержка</h3>
+                <p class="text-gray-700 text-lg mb-2">
+                    Портал реализован при поддержке Министерства труда, миграции и занятости населения Республики Таджикистан, а также ведущих образовательных и IT-организаций страны.
+                </p>
+                <div class="flex flex-wrap gap-6 mt-4">
+                    <img src="https://placehold.co/100x40?text=МТМЗН" alt="Министерство труда" class="bg-white rounded shadow p-2">
+                    <img src="https://placehold.co/100x40?text=IT+Academy" alt="IT Academy" class="bg-white rounded shadow p-2">
+                    <img src="https://placehold.co/100x40?text=Edu+Partner" alt="Образовательный партнер" class="bg-white rounded shadow p-2">
+                </div>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Контакты</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="mb-2 text-gray-700"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>г. Душанбе, проспект Рудаки 105</p>
+                        <p class="mb-2 text-gray-700"><i class="fas fa-phone text-green-500 mr-2"></i>+992 (37) 221-00-10</p>
+                        <p class="mb-2 text-gray-700"><i class="fas fa-envelope text-purple-500 mr-2"></i>info@employment.tj</p>
+                    </div>
+                    <div>
+                        <p class="mb-2 text-gray-700"><i class="fas fa-globe text-indigo-500 mr-2"></i><a href="https://www.mehnat.tj/" target="_blank" class="underline hover:text-blue-600">www.mehnat.tj</a></p>
+                        <p class="mb-2 text-gray-700"><i class="fab fa-telegram text-blue-400 mr-2"></i><a href="https://t.me/employment_tj" target="_blank" class="underline hover:text-blue-600">Telegram-канал</a></p>
+                        <p class="mb-2 text-gray-700"><i class="fab fa-facebook text-blue-700 mr-2"></i><a href="https://facebook.com/employment.tj" target="_blank" class="underline hover:text-blue-600">Facebook</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">О портале</h3>
+                    <p class="text-sm opacity-90">Официальный портал информационной системы рынка труда Республики Таджикистан</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Полезные ссылки</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.gov.tj/" target="_blank" class="opacity-90 hover:opacity-100">Правительство РТ</a></li>
+                        <li><a href="https://www.mehnat.tj/" target="_blank" class="opacity-90 hover:opacity-100">Министерство труда</a></li>
+                        <li><a href="https://www.andoz.tj/" target="_blank" class="opacity-90 hover:opacity-100">Налоговый комитет</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Нормативные акты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Поддержка</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Часто задаваемые вопросы</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Руководство пользователя</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Техническая поддержка</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Обратная связь</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Социальные сети</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://facebook.com/employment.tj" target="_blank" class="text-2xl opacity-90 hover:opacity-100" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://t.me/employment_tj" target="_blank" class="text-2xl opacity-90 hover:opacity-100" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2024 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

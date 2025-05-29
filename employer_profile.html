@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль работодателя</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        /* Custom gradient background for header and hero sections */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        /* Enhanced hover effect for cards */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px); /* Slightly more pronounced lift */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Larger, softer shadow */
+        }
+        /* Consistent spacing for sections */
+        .section-spacing {
+            padding: 3rem 0; /* Increased vertical padding for more breathing room */
+        }
+        /* Basic spinner for loading states */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #667eea;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Input and select styling */
+        input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select, textarea {
+            border-radius: 0.375rem; /* rounded-md */
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            padding: 0.5rem 0.75rem; /* px-3 py-2 */
+            width: 100%;
+            color: #374151; /* text-gray-800 */
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2563eb; /* focus:border-blue-500 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* focus:ring-blue-500 */
+        }
+
+        /* Print-specific styles for A4 format */
+        @media print {
+            /* Define A4 page size and margins */
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+
+            /* Adjust body font and color for print */
+            body {
+                font-size: 10pt;
+                line-height: 1.5;
+                color: #000;
+                background-color: #fff !important; /* Ensure white background for printing */
+            }
+
+            /* Hide elements not relevant for print */
+            header, nav, footer,
+            button, /* Hide all buttons */
+            input, select, textarea, /* Hide form inputs */
+            .spinner /* Hide loading spinners */
+             {
+                display: none !important;
+            }
+            /* Ensure text content of inputs is visible */
+            input, select, textarea {
+                display: block !important;
+                color: #000 !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+
+
+            /* Ensure main content sections are visible */
+            section {
+                display: block !important;
+                padding: 0.5cm 0 !important; /* Reduce padding for print */
+                background: none !important; /* Remove section backgrounds */
+                box-shadow: none !important; /* Remove section shadows */
+            }
+
+            /* Adjust hero section for print */
+            .gradient-bg {
+                background: none !important; /* Remove gradient background for print */
+                color: #000 !important; /* Change text color to black */
+            }
+            .gradient-bg h2, .gradient-bg p {
+                color: #000 !important;
+            }
+            .gradient-bg .bg-opacity-20 {
+                background: none !important; /* Remove background opacity */
+                backdrop-filter: none !important; /* Remove backdrop blur */
+                border: 1px solid #ddd; /* Add a subtle border for definition */
+            }
+
+            /* Ensure charts are visible but not interactive */
+            .chart-container {
+                height: auto !important; /* Auto height for print */
+                width: 100% !important;
+                page-break-inside: avoid; /* Avoid breaking charts across pages */
+            }
+            canvas {
+                max-width: 100% !important;
+                height: auto !important;
+                background: none !important;
+            }
+
+            /* Adjust card styles for print */
+            .bg-white, .bg-gray-50, .bg-blue-50, .bg-yellow-50, .bg-green-50 {
+                background: #fff !important;
+                box-shadow: none !important;
+                border: 1px solid #eee; /* Add a subtle border for definition */
+            }
+            .text-white {
+                color: #000 !important; /* Ensure text is black on white background */
+            }
+
+            /* Ensure text elements are black */
+            h1, h2, h3, h4, p, span, li, a {
+                color: #000 !important;
+            }
+
+            /* Ensure links are underlined and show href */
+            a {
+                text-decoration: underline;
+            }
+            a[href]:after {
+                content: " (" attr(href) ")";
+                font-size: 8pt;
+            }
+            /* Hide href for internal anchors */
+            a[href^="#"]:after {
+                content: "";
+            }
+
+            /* Force page breaks for better layout */
+            .section-spacing {
+                page-break-after: always;
+            }
+            .section-spacing:last-child {
+                page-break-after: auto; /* No page break after the last section */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
+                    <div>
+                        <h1 class="text-2xl font-bold">Портал рынка труда</h1>
+                        <p class="text-sm opacity-90">Республика Таджикистан</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#" class="hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="#" class="hover:text-yellow-300 transition-colors">Вакансии</a>
+                    <a href="#" class="hover:text-yellow-300 transition-colors">Профиль</a>
+                    <a href="#" class="hover:text-yellow-300 transition-colors">О портале</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="hover:text-yellow-300 transition-colors">Мой профиль</a>
+                    <span class="text-sm">РУС <i class="fas fa-chevron-down text-xs ml-1"></i></span>
+                    <span class="text-sm">Контраст <i class="fas fa-chevron-down text-xs ml-1"></i></span>
+                    <span class="text-sm">A+</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="employer-profile" class="section-spacing bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Профиль работодателя</h2>
+            
+            <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-xl">
+                <div class="mb-8 pb-8 border-b border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Основная информация</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="companyName" class="block text-sm font-medium text-gray-700 mb-2">Название компании:</label>
+                            <input type="text" id="companyName" value="ООО "ТехноСофт"" class="w-full">
+                        </div>
+                        <div>
+                            <label for="tin" class="block text-sm font-medium text-gray-700 mb-2">ИНН:</label>
+                            <input type="text" id="tin" value="1234567890" class="w-full">
+                        </div>
+                        <div>
+                            <label for="companyPhone" class="block text-sm font-medium text-gray-700 mb-2">Телефон:</label>
+                            <input type="tel" id="companyPhone" value="+992 (37) 221-00-00" class="w-full">
+                        </div>
+                        <div>
+                            <label for="companyEmail" class="block text-sm font-medium text-gray-700 mb-2">Email:</label>
+                            <input type="email" id="companyEmail" value="info@technosoft.tj" class="w-full">
+                        </div>
+                        <div>
+                            <label for="companyAddress" class="block text-sm font-medium text-gray-700 mb-2">Адрес:</label>
+                            <input type="text" id="companyAddress" value="г. Душанбе, ул. Примерная 1" class="w-full">
+                        </div>
+                        <div>
+                            <label for="industry" class="block text-sm font-medium text-gray-700 mb-2">Отрасль:</label>
+                            <select id="industry" class="w-full">
+                                <option>IT и Программирование</option>
+                                <option>Строительство</option>
+                                <option>Торговля</option>
+                                <option>Образование</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <label for="companyDescription" class="block text-sm font-medium text-gray-700 mb-2">Описание компании:</label>
+                        <textarea id="companyDescription" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">ТехноСофт - ведущая IT-компания в Таджикистане, специализирующаяся на разработке программного обеспечения и IT-консалтинге.</textarea>
+                    </div>
+                </div>
+
+                <div class="mb-8 pb-8 border-b border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Контактное лицо</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="contactFullName" class="block text-sm font-medium text-gray-700 mb-2">ФИО:</label>
+                            <input type="text" id="contactFullName" value="Петров Петр Петрович" class="w-full">
+                        </div>
+                        <div>
+                            <label for="contactPosition" class="block text-sm font-medium text-gray-700 mb-2">Должность:</label>
+                            <input type="text" id="contactPosition" value="Менеджер по персоналу" class="w-full">
+                        </div>
+                        <div>
+                            <label for="contactPhone" class="block text-sm font-medium text-gray-700 mb-2">Телефон:</label>
+                            <input type="tel" id="contactPhone" value="+992 (37) 221-00-01" class="w-full">
+                        </div>
+                        <div>
+                            <label for="contactEmail" class="block text-sm font-medium text-gray-700 mb-2">Email:</label>
+                            <input type="email" id="contactEmail" value="hr@technosoft.tj" class="w-full">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8 pb-8 border-b border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Размещенные вакансии</h3>
+                    <div id="postedJobsContainer" class="space-y-6">
+                        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                            <h4 class="text-lg font-semibold mb-4 text-gray-800">Программист Java</h4>
+                            <p class="text-gray-700 mb-2">Полная занятость, Душанбе</p>
+                            <p class="text-gray-700 mb-4">Зарплата: 8000-12000 сомони</p>
+                            <button class="text-blue-500 hover:underline text-sm"><i class="fas fa-edit mr-2"></i>Редактировать</button>
+                            <button class="text-red-500 hover:text-red-700 text-sm ml-4"><i class="fas fa-trash-alt mr-2"></i>Удалить</button>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                            <h4 class="text-lg font-semibold mb-4 text-gray-800">Менеджер по продажам</h4>
+                            <p class="text-gray-700 mb-2">Частичная занятость, Худжанд</p>
+                            <p class="text-gray-700 mb-4">Зарплата: договорная</p>
+                            <button class="text-blue-500 hover:underline text-sm"><i class="fas fa-edit mr-2"></i>Редактировать</button>
+                            <button class="text-red-500 hover:text-red-700 text-sm ml-4"><i class="fas fa-trash-alt mr-2"></i>Удалить</button>
+                        </div>
+                    </div>
+                    <button class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors"><i class="fas fa-plus mr-2"></i>Разместить новую вакансию</button>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Видео-презентация компании</h3>
+                    <p class="text-gray-700 mb-4">Запишите или загрузите видео-презентацию вашей компании для привлечения соискателей.</p>
+                    <a href="#" class="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">Перейти к видео-презентации</a>
+                </div>
+
+                <div class="text-center mt-10">
+                    <button class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-xl hover:bg-green-700 transition-colors shadow-lg">Сохранить профиль</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">О портале</h3>
+                    <p class="text-sm opacity-90">Официальный портал информационной системы рынка труда Республики Таджикистан</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Полезные ссылки</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Правительство РТ</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Министерство труда</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Налоговый комитет</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Нормативные акты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Поддержка</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Часто задаваемые вопросы</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Руководство пользователя</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Техническая поддержка</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Обратная связь</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Социальные сети</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2024 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
