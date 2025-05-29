@@ -159,13 +159,14 @@
                         <p class="text-sm opacity-90">Республика Таджикистан</p>
                     </div>
                 </div>
-                <nav class="hidden md:flex space-x-6">
-                    <a href="#jobs" class="hover:text-yellow-300 transition-colors">Вакансии</a>
-                    <a href="#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
-                    <a href="#registration" class="hover:text-yellow-300 transition-colors">Регистрация</a>
-                    <a href="#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
-                    <a href="#education" class="hover:text-yellow-300 transition-colors">Образование</a>
-                    <a href="#ai-tools" class="hover:text-yellow-300 transition-colors">ИИ Инструменты</a>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="index.html#jobs" class="hover:text-yellow-300 transition-colors">Вакансии</a>
+                    <a href="index.html#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="index.html#ai-tools" class="hover:text-yellow-300 transition-colors">ИИ Инструменты</a>
+                    <button id="profileMenuBtn" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2">Мой профиль</button>
                 </nav>
             </div>
         </div>
@@ -707,6 +708,16 @@
         </div>
     </footer>
 
+    <!-- Модальное окно профиля -->
+<div id="profileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-lg shadow-lg p-8 max-w-xs w-full text-center">
+    <h3 class="text-xl font-bold mb-6 text-gray-800">Вход или регистрация</h3>
+    <button id="demoLoginBtn" class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors mb-4">Войти (демо)</button>
+    <button id="goRegisterBtn" class="w-full bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors">Зарегистрироваться</button>
+    <button id="closeProfileModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+  </div>
+</div>
+
     <script>
         // Unemployment Chart
         const ctx1 = document.getElementById('unemploymentChart').getContext('2d');
@@ -832,66 +843,98 @@
                     const apiKey = ""; // Leave as empty string for Canvas environment
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    const result = await response.json();
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        const text = result.candidates[0].content.parts[0].text;
                         outputElement.querySelector('p').textContent = text;
                         outputElement.classList.remove('hidden'); // Show new output
-                    } else {
+                    } else {ers: { 'Content-Type': 'application/json' },
                         outputElement.querySelector('p').textContent = 'Не удалось сгенерировать ответ. Попробуйте еще раз.';
                         outputElement.classList.remove('hidden');
                     }
-                } catch (error) {
-                    console.error('Ошибка при вызове Gemini API:', error);
+                } catch (error) {= await response.json();
+                    console.error('Ошибка при вызове Gemini API:', error);&&
                     outputElement.querySelector('p').textContent = 'Произошла ошибка при запросе. Пожалуйста, проверьте консоль.';
-                    outputElement.classList.remove('hidden');
-                } finally {
-                    loadingElement.classList.add('hidden'); // Hide spinner
-                }
-            }
-
-            // Event listener for Job Description Generator
+                    outputElement.classList.remove('hidden');ngth > 0) {
+                } finally {st text = result.candidates[0].content.parts[0].text;
+                    loadingElement.classList.add('hidden'); // Hide spinner;
+                }       outputElement.classList.remove('hidden'); // Show new output
+            }       } else {
+                        outputElement.querySelector('p').textContent = 'Не удалось сгенерировать ответ. Попробуйте еще раз.';
+            // Event listener for Job Description Generatorden');
             if (generateJobDescriptionBtn) { // Check if element exists (only on AI Tools section)
                 generateJobDescriptionBtn.addEventListener('click', () => {
-                    const jobTitle = jobTitleInput.value.trim();
-                    const jobKeywords = jobKeywordsInput.value.trim();
-
+                    const jobTitle = jobTitleInput.value.trim();', error);
+                    const jobKeywords = jobKeywordsInput.value.trim();оизошла ошибка при запросе. Пожалуйста, проверьте консоль.';
+                    outputElement.classList.remove('hidden');
                     if (!jobTitle) {
                         jobDescriptionOutput.querySelector('p').textContent = 'Пожалуйста, введите название должности.';
                         jobDescriptionOutput.classList.remove('hidden');
                         return;
                     }
-
+            // Event listener for Job Description Generator
                     const prompt = `Сгенерируйте подробное описание вакансии для должности "${jobTitle}". Включите следующие ключевые навыки и обязанности: ${jobKeywords || 'общие обязанности для этой роли'}. Описание должно быть на русском языке и подходить для портала по трудоустройству в Таджикистане.`;
                     callGeminiAPI(prompt, jobDescriptionLoading, jobDescriptionOutput);
-                });
-            }
+                }); const jobTitle = jobTitleInput.value.trim();
+            }       const jobKeywords = jobKeywordsInput.value.trim();
 
             // Event listener for Career Path Suggestion
-            if (suggestCareerPathsBtn) { // Check if element exists (only on AI Tools section)
-                suggestCareerPathsBtn.addEventListener('click', () => {
+            if (suggestCareerPathsBtn) { // Check if element exists (only on AI Tools section)дите название должности.';
+                suggestCareerPathsBtn.addEventListener('click', () => {;
                     const currentProfession = currentProfessionInput.value.trim();
                     const careerInterests = careerInterestsInput.value.trim();
 
-                    if (!currentProfession) {
+                    if (!currentProfession) {йте подробное описание вакансии для должности "${jobTitle}". Включите следующие ключевые навыки и обязанности: ${jobKeywords || 'общие обязанности для этой роли'}. Описание должно быть на русском языке и подходить для портала по трудоустройству в Таджикистане.`;
                         careerPathsOutput.querySelector('p').textContent = 'Пожалуйста, введите вашу текущую профессию.';
                         careerPathsOutput.classList.remove('hidden');
                         return;
                     }
+            // Event listener for Career Path Suggestion
+                    const prompt = `Предложите 3-5 возможных карьерных путей для человека с профессией "${currentProfession}". Учитывайте следующие интересы: ${careerInterests || 'общие интересы'}. Для каждого пути укажите несколько ключевых навыков, которые необходимо развить. Ответ должен быть на русском языке в виде маркированного списка.`;
+                    callGeminiAPI(prompt, careerPathsLoading, careerPathsOutput);
+                }); const currentProfession = currentProfessionInput.value.trim();
+            }       const careerInterests = careerInterestsInput.value.trim();
+        });
+       if (!currentProfession) {
+document.getElementById('profileMenuBtn').onclick = function() {                 careerPathsOutput.querySelector('p').textContent = 'Пожалуйста, введите вашу текущую профессию.';
+    document.getElementById('profileModal').classList.remove('hidden');                 careerPathsOutput.classList.remove('hidden');
+};                        return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html></body>    </script>};    window.location.href = 'register.html';document.getElementById('goRegisterBtn').onclick = function() {};    window.location.href = 'employer_profile.html';document.getElementById('demoLoginBtn').onclick = function() {};    if (e.target === this) this.classList.add('hidden');document.getElementById('profileModal').onclick = function(e) {};    document.getElementById('profileModal').classList.add('hidden');document.getElementById('closeProfileModal').onclick = function() {                    }
 
                     const prompt = `Предложите 3-5 возможных карьерных путей для человека с профессией "${currentProfession}". Учитывайте следующие интересы: ${careerInterests || 'общие интересы'}. Для каждого пути укажите несколько ключевых навыков, которые необходимо развить. Ответ должен быть на русском языке в виде маркированного списка.`;
                     callGeminiAPI(prompt, careerPathsLoading, careerPathsOutput);
                 });
             }
         });
+
+document.getElementById('profileMenuBtn').onclick = function() {
+    document.getElementById('profileModal').classList.remove('hidden');
+};
+document.getElementById('closeProfileModal').onclick = function() {
+    document.getElementById('profileModal').classList.add('hidden');
+};
+document.getElementById('profileModal').onclick = function(e) {
+    if (e.target === this) this.classList.add('hidden');
+};
+document.getElementById('demoLoginBtn').onclick = function() {
+    window.location.href = 'employer_profile.html';
+};
+document.getElementById('goRegisterBtn').onclick = function() {
+    window.location.href = 'register.html';
+};
     </script>
 </body>
 </html>
