@@ -735,7 +735,7 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // Important: allows chart to resize without maintaining original aspect ratio
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -767,23 +767,23 @@
                 datasets: [{
                     data: [18, 22, 25, 12, 8, 15],
                     backgroundColor: [
-                        '#3B82F6', // Blue
-                        '#10B981', // Green
-                        '#F59E0B', // Amber
-                        '#EF4444', // Red
-                        '#8B5CF6', // Purple
-                        '#6B7280'  // Gray
+                        '#3B82F6',
+                        '#10B981',
+                        '#F59E0B',
+                        '#EF4444',
+                        '#8B5CF6',
+                        '#6B7280'
                     ],
-                    borderColor: '#ffffff', // White border for segments
+                    borderColor: '#ffffff',
                     borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // Important: allows chart to resize without maintaining original aspect ratio
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'right', // Position legend to the right for better space utilization
+                        position: 'right',
                     },
                     tooltip: {
                         callbacks: {
@@ -806,135 +806,32 @@
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault(); // Prevent default anchor click behavior
-                const target = document.querySelector(this.getAttribute('href')); // Get the target element
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({ // Scroll to the target with smooth animation
+                    target.scrollIntoView({
                         behavior: 'smooth'
                     });
                 }
             });
         });
 
-        // Gemini API Integration (for AI Tools section)
-        document.addEventListener('DOMContentLoaded', () => {
-            const generateJobDescriptionBtn = document.getElementById('generateJobDescriptionBtn');
-            const jobTitleInput = document.getElementById('jobTitleInput');
-            const jobKeywordsInput = document.getElementById('jobKeywordsInput');
-            const jobDescriptionOutput = document.getElementById('jobDescriptionOutput');
-            const jobDescriptionLoading = document.getElementById('jobDescriptionLoading');
-
-            const suggestCareerPathsBtn = document.getElementById('suggestCareerPathsBtn');
-            const currentProfessionInput = document.getElementById('currentProfessionInput');
-            const careerInterestsInput = document.getElementById('careerInterestsInput');
-            const careerPathsOutput = document.getElementById('careerPathsOutput');
-            const careerPathsLoading = document.getElementById('careerPathsLoading');
-
-            // Function to call Gemini API
-            async function callGeminiAPI(prompt, loadingElement, outputElement) {
-                loadingElement.classList.remove('hidden'); // Show spinner
-                outputElement.classList.add('hidden'); // Hide previous output
-                outputElement.querySelector('p').textContent = ''; // Clear previous text
-
-                try {
-                    let chatHistory = [];
-                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                    const payload = { contents: chatHistory };
-                    const apiKey = ""; // Leave as empty string for Canvas environment
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                        outputElement.querySelector('p').textContent = text;
-                        outputElement.classList.remove('hidden'); // Show new output
-                    } else {ers: { 'Content-Type': 'application/json' },
-                        outputElement.querySelector('p').textContent = 'Не удалось сгенерировать ответ. Попробуйте еще раз.';
-                        outputElement.classList.remove('hidden');
-                    }
-                } catch (error) {= await response.json();
-                    console.error('Ошибка при вызове Gemini API:', error);&&
-                    outputElement.querySelector('p').textContent = 'Произошла ошибка при запросе. Пожалуйста, проверьте консоль.';
-                    outputElement.classList.remove('hidden');ngth > 0) {
-                } finally {st text = result.candidates[0].content.parts[0].text;
-                    loadingElement.classList.add('hidden'); // Hide spinner;
-                }       outputElement.classList.remove('hidden'); // Show new output
-            }       } else {
-                        outputElement.querySelector('p').textContent = 'Не удалось сгенерировать ответ. Попробуйте еще раз.';
-            // Event listener for Job Description Generatorden');
-            if (generateJobDescriptionBtn) { // Check if element exists (only on AI Tools section)
-                generateJobDescriptionBtn.addEventListener('click', () => {
-                    const jobTitle = jobTitleInput.value.trim();', error);
-                    const jobKeywords = jobKeywordsInput.value.trim();оизошла ошибка при запросе. Пожалуйста, проверьте консоль.';
-                    outputElement.classList.remove('hidden');
-                    if (!jobTitle) {
-                        jobDescriptionOutput.querySelector('p').textContent = 'Пожалуйста, введите название должности.';
-                        jobDescriptionOutput.classList.remove('hidden');
-                        return;
-                    }
-            // Event listener for Job Description Generator
-                    const prompt = `Сгенерируйте подробное описание вакансии для должности "${jobTitle}". Включите следующие ключевые навыки и обязанности: ${jobKeywords || 'общие обязанности для этой роли'}. Описание должно быть на русском языке и подходить для портала по трудоустройству в Таджикистане.`;
-                    callGeminiAPI(prompt, jobDescriptionLoading, jobDescriptionOutput);
-                }); const jobTitle = jobTitleInput.value.trim();
-            }       const jobKeywords = jobKeywordsInput.value.trim();
-
-            // Event listener for Career Path Suggestion
-            if (suggestCareerPathsBtn) { // Check if element exists (only on AI Tools section)дите название должности.';
-                suggestCareerPathsBtn.addEventListener('click', () => {;
-                    const currentProfession = currentProfessionInput.value.trim();
-                    const careerInterests = careerInterestsInput.value.trim();
-
-                    if (!currentProfession) {йте подробное описание вакансии для должности "${jobTitle}". Включите следующие ключевые навыки и обязанности: ${jobKeywords || 'общие обязанности для этой роли'}. Описание должно быть на русском языке и подходить для портала по трудоустройству в Таджикистане.`;
-                        careerPathsOutput.querySelector('p').textContent = 'Пожалуйста, введите вашу текущую профессию.';
-                        careerPathsOutput.classList.remove('hidden');
-                        return;
-                    }
-            // Event listener for Career Path Suggestion
-                    const prompt = `Предложите 3-5 возможных карьерных путей для человека с профессией "${currentProfession}". Учитывайте следующие интересы: ${careerInterests || 'общие интересы'}. Для каждого пути укажите несколько ключевых навыков, которые необходимо развить. Ответ должен быть на русском языке в виде маркированного списка.`;
-                    callGeminiAPI(prompt, careerPathsLoading, careerPathsOutput);
-                }); const currentProfession = currentProfessionInput.value.trim();
-            }       const careerInterests = careerInterestsInput.value.trim();
-        });
-       if (!currentProfession) {
-document.getElementById('profileMenuBtn').onclick = function() {                 careerPathsOutput.querySelector('p').textContent = 'Пожалуйста, введите вашу текущую профессию.';
-    document.getElementById('profileModal').classList.remove('hidden');                 careerPathsOutput.classList.remove('hidden');
-};                        return;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</html></body>    </script>};    window.location.href = 'register.html';document.getElementById('goRegisterBtn').onclick = function() {};    window.location.href = 'employer_profile.html';document.getElementById('demoLoginBtn').onclick = function() {};    if (e.target === this) this.classList.add('hidden');document.getElementById('profileModal').onclick = function(e) {};    document.getElementById('profileModal').classList.add('hidden');document.getElementById('closeProfileModal').onclick = function() {                    }
-
-                    const prompt = `Предложите 3-5 возможных карьерных путей для человека с профессией "${currentProfession}". Учитывайте следующие интересы: ${careerInterests || 'общие интересы'}. Для каждого пути укажите несколько ключевых навыков, которые необходимо развить. Ответ должен быть на русском языке в виде маркированного списка.`;
-                    callGeminiAPI(prompt, careerPathsLoading, careerPathsOutput);
-                });
-            }
-        });
-
-document.getElementById('profileMenuBtn').onclick = function() {
-    document.getElementById('profileModal').classList.remove('hidden');
-};
-document.getElementById('closeProfileModal').onclick = function() {
-    document.getElementById('profileModal').classList.add('hidden');
-};
-document.getElementById('profileModal').onclick = function(e) {
-    if (e.target === this) this.classList.add('hidden');
-};
-document.getElementById('demoLoginBtn').onclick = function() {
-    window.location.href = 'employer_profile.html';
-};
-document.getElementById('goRegisterBtn').onclick = function() {
-    window.location.href = 'register.html';
-};
+        // Модальное окно профиля
+        document.getElementById('profileMenuBtn').onclick = function() {
+            document.getElementById('profileModal').classList.remove('hidden');
+        };
+        document.getElementById('closeProfileModal').onclick = function() {
+            document.getElementById('profileModal').classList.add('hidden');
+        };
+        document.getElementById('profileModal').onclick = function(e) {
+            if (e.target === this) this.classList.add('hidden');
+        };
+        document.getElementById('demoLoginBtn').onclick = function() {
+            window.location.href = 'employer_profile.html';
+        };
+        document.getElementById('goRegisterBtn').onclick = function() {
+            window.location.href = 'register.html';
+        };
     </script>
 </body>
 </html>
