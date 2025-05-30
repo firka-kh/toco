@@ -110,31 +110,33 @@
                         <p class="text-sm opacity-90">Республика Таджикистан</p>
                     </div>
                 </div>
-                <!-- Desktop nav -->
-                <nav class="hidden md:flex space-x-6 items-center">
-                    <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
-                    <a href="#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
-                    <a href="#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
-                    <a href="#education" class="hover:text-yellow-300 transition-colors">Образование</a>
-                    <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
-                    <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
-                        <button id="profileMenuBtn" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2">Мой профиль</button>
-                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden">
-                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
-                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
-                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                <!-- Google Translate neatly in header -->
+                <div class="flex items-center space-x-6">
+                    <div id="google_translate_element" class="bg-white rounded px-2 py-1 shadow text-gray-800"></div>
+                    <nav class="hidden md:flex space-x-6 items-center">
+                        <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                        <a href="#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
+                        <a href="#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
+                        <a href="#education" class="hover:text-yellow-300 transition-colors">Образование</a>
+                        <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
+                        <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
+                            <button id="profileMenuBtn" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2">Мой профиль</button>
+                            <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden">
+                                <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
+                                <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
+                                <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                            </div>
+                            <!-- AI button after profile -->
+                            <a href="#ai-tools"
+                               class="ml-4 px-4 py-2 rounded-lg font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 shadow hover:scale-105 transition-transform animate-pulse"
+                               style="animation-duration:1.5s;">
+                                AI
+                            </a>
                         </div>
-                        <!-- AI button after profile -->
-                        <a href="#ai-tools"
-                           class="ml-4 px-4 py-2 rounded-lg font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 shadow hover:scale-105 transition-transform animate-pulse"
-                           style="animation-duration:1.5s;">
-                            AI
-                        </a>
-                    </div>
-                    <!-- Theme/Font controls -->
-                    <button id="darkModeBtn" class="ml-4 text-xl hover:text-yellow-300 transition-colors" title="Тёмная тема"><i class="fas fa-moon"></i></button>
-                    <button id="fontSizeBtn" class="ml-2 text-xl hover:text-yellow-300 transition-colors" title="Увеличить шрифт">A+</button>
-                </nav>
+                        <button id="darkModeBtn" class="ml-4 text-xl hover:text-yellow-300 transition-colors" title="Тёмная тема"><i class="fas fa-moon"></i></button>
+                        <button id="fontSizeBtn" class="ml-2 text-xl hover:text-yellow-300 transition-colors" title="Увеличить шрифт">A+</button>
+                    </nav>
+                </div>
                 <!-- Hamburger for mobile -->
                 <button class="hamburger text-3xl focus:outline-none" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
@@ -860,5 +862,23 @@
             loading.classList.add('hidden');
         });
     </script>
+
+    <style>
+/* Скрыть рамку и сделать виджет компактным */
+#google_translate_element select {
+    background: transparent;
+    border: none;
+    color: #374151;
+    font-weight: 500;
+    padding: 2px 8px;
+}
+.goog-te-gadget {
+    font-size: 0.95rem !important;
+    font-family: inherit !important;
+}
+.goog-logo-link, .goog-te-gadget span {
+    display: none !important;
+}
+</style>
 </body>
 </html>
