@@ -64,7 +64,7 @@
             transition: max-height 0.3s ease-out;
         }
         .filter-group-content.expanded {
-            max-height: 500px; /* Adjust based on content */
+            max-height: 500px; /* Adjust based on content, should be larger than max possible content height */
             transition: max-height 0.3s ease-in;
         }
 
@@ -221,9 +221,9 @@
 
                         <div class="border-b border-gray-200 pb-4">
                             <button class="flex justify-between items-center w-full text-left font-semibold text-gray-800 mb-2 filter-toggle" data-target="resourceTypeFilter">
-                                Тип ресурса <i class="fas fa-chevron-down text-sm"></i>
+                                Тип ресурса <i class="fas fa-chevron-up text-sm"></i>
                             </button>
-                            <div id="resourceTypeFilter" class="filter-group-content expanded">
+                            <div id="resourceTypeFilter" class="filter-group-content">
                                 <div class="space-y-2">
                                     <label class="flex items-center">
                                         <input type="checkbox" class="form-checkbox text-blue-600 rounded">
@@ -247,9 +247,9 @@
 
                         <div class="border-b border-gray-200 pb-4">
                             <button class="flex justify-between items-center w-full text-left font-semibold text-gray-800 mb-2 filter-toggle" data-target="subjectAreaFilter">
-                                Предметная область <i class="fas fa-chevron-down text-sm"></i>
+                                Предметная область <i class="fas fa-chevron-up text-sm"></i>
                             </button>
-                            <div id="subjectAreaFilter" class="filter-group-content expanded">
+                            <div id="subjectAreaFilter" class="filter-group-content">
                                 <div class="space-y-2">
                                     <label class="flex items-center">
                                         <input type="checkbox" class="form-checkbox text-blue-600 rounded">
@@ -283,7 +283,7 @@
                             <button class="flex justify-between items-center w-full text-left font-semibold text-gray-800 mb-2 filter-toggle" data-target="levelFilter">
                                 Уровень <i class="fas fa-chevron-down text-sm"></i>
                             </button>
-                            <div id="levelFilter" class="filter-group-content expanded">
+                            <div id="levelFilter" class="filter-group-content">
                                 <div class="space-y-2">
                                     <label class="flex items-center">
                                         <input type="checkbox" class="form-checkbox text-blue-600 rounded">
@@ -305,7 +305,7 @@
                             <button class="flex justify-between items-center w-full text-left font-semibold text-gray-800 mb-2 filter-toggle" data-target="formatFilter">
                                 Формат <i class="fas fa-chevron-down text-sm"></i>
                             </button>
-                            <div id="formatFilter" class="filter-group-content expanded">
+                            <div id="formatFilter" class="filter-group-content">
                                 <div class="space-y-2">
                                     <label class="flex items-center">
                                         <input type="checkbox" class="form-checkbox text-blue-600 rounded">
@@ -446,7 +446,7 @@
                                 <i class="fas fa-chart-line mr-2"></i>
                                 **Спрос на рынке труда:** Стабильный (около 100 вакансий в регионе).
                             </p>
-                             <div class="mt-4">
+                            <div class="mt-4">
                                 <h5 class="text-md font-semibold text-gray-700 mb-2">Отзывы пользователей:</h5>
                                 <div class="flex items-center mb-2">
                                     <i class="fas fa-star text-yellow-400 mr-1"></i>
@@ -505,4 +505,90 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Социальные сети</h3>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-2xl opacity-
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2024 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Profile Dropdown Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileMenuBtn = document.getElementById('profileMenuBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+
+            // Toggle dropdown visibility
+            if (profileMenuBtn) {
+                profileMenuBtn.onclick = function(e) {
+                    e.stopPropagation(); // Prevent document click from closing immediately
+                    profileDropdown.classList.toggle('hidden');
+                };
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (profileDropdownContainer && !profileDropdownContainer.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+
+            // Filter toggle functionality
+            document.querySelectorAll('.filter-toggle').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+                    const targetContent = document.getElementById(targetId);
+                    const icon = button.querySelector('i');
+
+                    // Toggle the 'expanded' class
+                    targetContent.classList.toggle('expanded');
+
+                    // Adjust maxHeight and icon based on the new state
+                    if (targetContent.classList.contains('expanded')) {
+                        targetContent.style.maxHeight = targetContent.scrollHeight + "px"; // Set to scrollHeight for smooth expansion
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        targetContent.style.maxHeight = null; // Reset to allow collapse
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
+            });
+
+            // Initialize filter groups states
+            const filtersToExpand = ['resourceTypeFilter', 'subjectAreaFilter']; // IDs of filters to be expanded by default
+
+            document.querySelectorAll('.filter-group-content').forEach(content => {
+                const button = content.previousElementSibling; // Get the toggle button
+                const icon = button ? button.querySelector('i') : null;
+
+                if (filtersToExpand.includes(content.id)) {
+                    // Expand this filter
+                    content.classList.add('expanded');
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    if (icon) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    }
+                } else {
+                    // Collapse this filter
+                    content.classList.remove('expanded');
+                    content.style.maxHeight = null;
+                    if (icon) {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
