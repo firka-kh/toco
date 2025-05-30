@@ -97,6 +97,25 @@
             .section-spacing { page-break-after: always; }
             .section-spacing:last-child { page-break-after: auto; }
         }
+
+        /* Контрастная тема */
+        .contrast {
+            background: #111 !important;
+            color: #fff !important;
+        }
+        .contrast .bg-white, .contrast .bg-gray-50, .contrast .bg-gray-100 {
+            background: #222 !important;
+            color: #fff !important;
+        }
+        .contrast input, .contrast select, .contrast textarea {
+            background: #222 !important;
+            color: #fff !important;
+            border-color: #fff !important;
+        }
+        /* Увеличенный шрифт */
+        .large-font, .large-font * {
+            font-size: 1.15em !important;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -117,9 +136,23 @@
                 </nav>
                 <div class="flex items-center space-x-4">
                     <a href="#" class="hover:text-yellow-300 transition-colors">Мой профиль</a>
-                    <span class="text-sm">РУС <i class="fas fa-chevron-down text-xs ml-1"></i></span>
-                    <span class="text-sm">Контраст <i class="fas fa-chevron-down text-xs ml-1"></i></span>
-                    <span class="text-sm">A+</span>
+                    <!-- Языки -->
+                    <div class="relative">
+                        <button id="langBtn" class="text-sm hover:text-yellow-300 transition-colors flex items-center">
+                            RUS <i class="fas fa-chevron-down text-xs ml-1"></i>
+                        </button>
+                        <div id="langDropdown" class="absolute right-0 mt-2 w-24 bg-white rounded shadow-lg z-50 hidden">
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="setLang('RUS')">RUS</button>
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="setLang('TAJ')">TAJ</button>
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="setLang('ENG')">ENG</button>
+                        </div>
+                    </div>
+                    <!-- Контраст -->
+                    <button id="contrastBtn" class="text-sm hover:text-yellow-300 transition-colors flex items-center">
+                        Контраст <i class="fas fa-chevron-down text-xs ml-1"></i>
+                    </button>
+                    <!-- Размер шрифта -->
+                    <button id="fontSizeBtn" class="text-sm hover:text-yellow-300 transition-colors">A+</button>
                 </div>
             </div>
         </div>
@@ -513,6 +546,33 @@
                 issuingOrg: "Coursera",
                 issueDate: "03.2023"
             });
+
+            // Языковое меню
+            document.getElementById('langBtn').onclick = function(e) {
+                e.stopPropagation();
+                document.getElementById('langDropdown').classList.toggle('hidden');
+            };
+            document.addEventListener('click', function(e) {
+                const dropdown = document.getElementById('langDropdown');
+                if (dropdown && !dropdown.contains(e.target) && e.target.id !== 'langBtn') {
+                    dropdown.classList.add('hidden');
+                }
+            });
+            function setLang(lang) {
+                document.getElementById('langBtn').innerHTML = lang + ' <i class="fas fa-chevron-down text-xs ml-1"></i>';
+                document.getElementById('langDropdown').classList.add('hidden');
+                // Здесь можно добавить смену языка сайта
+            }
+
+            // Контраст
+            document.getElementById('contrastBtn').onclick = function() {
+                document.body.classList.toggle('contrast');
+            };
+
+            // Размер шрифта
+            document.getElementById('fontSizeBtn').onclick = function() {
+                document.body.classList.toggle('large-font');
+            };
 
             // Валидация формы (пример)
             document.getElementById('profileForm').addEventListener('submit', function(e) {
