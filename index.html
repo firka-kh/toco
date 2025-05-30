@@ -94,6 +94,18 @@
         .goog-te-banner-frame.skiptranslate { display: none !important; }
         body { top: 0px !important; }
         #google_translate_element { position: fixed; top: 10px; right: 10px; z-index: 9999; }
+        /* Анимация появления */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .animate-fade-in {
+            animation: fade-in 0.25s;
+        }
+        /* Скрыть стандартный виджет Google */
+        #google_translate_element, .goog-logo-link, .goog-te-gadget span, .goog-te-banner-frame {
+            display: none !important;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans transition-colors duration-300">
@@ -114,7 +126,7 @@
                 <div class="flex items-center space-x-6">
                     <!-- Кастомный переключатель языков, который управляет Google Translate -->
                     <div class="relative" id="customLangSwitcher">
-                        <button id="langSwitcherBtn" class="bg-white text-gray-800 rounded px-3 py-1 shadow font-semibold flex items-center hover:bg-gray-100 transition-colors focus:outline-none min-w-[64px]">
+                        <button id="langSwitcherBtn" class="bg-white text-gray-800 rounded px-3 py-1 shadow font-semibold flex items-center hover:bg-gray-100 transition-colors min-w-[64px]">
                             <span id="currentLang">RUS</span>
                             <i class="fas fa-chevron-down ml-2 text-xs"></i>
                         </button>
@@ -876,25 +888,26 @@
         // Кастомный переключатель языков, который управляет Google Translate
         const langSwitcherBtn = document.getElementById('langSwitcherBtn');
         const langSwitcherDropdown = document.getElementById('langSwitcherDropdown');
-        const currentLang = document.getElementById('currentLang');
-        let selectedLang = 'ru';
+        let langDropdownOpen = false;
 
         langSwitcherBtn.onclick = function(e) {
             e.stopPropagation();
             langSwitcherDropdown.classList.toggle('hidden');
+            langDropdownOpen = !langDropdownOpen;
         };
         document.addEventListener('click', function(e) {
-            if (!langSwitcherDropdown.contains(e.target) && e.target !== langSwitcherBtn) {
+            if (langDropdownOpen && !langSwitcherDropdown.contains(e.target) && e.target !== langSwitcherBtn) {
                 langSwitcherDropdown.classList.add('hidden');
+                langDropdownOpen = false;
             }
         });
 
         // Автоматический перевод через Google Translate при выборе языка
         langSwitcherDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
             btn.onclick = function() {
-                selectedLang = this.getAttribute('data-lang');
-                currentLang.textContent = this.textContent;
+                const selectedLang = this.getAttribute('data-lang');
                 langSwitcherDropdown.classList.add('hidden');
+                langDropdownOpen = false;
                 // Найти фрейм Google Translate и кликнуть нужный язык
                 setTimeout(() => {
                     const frame = document.querySelector('iframe.goog-te-menu-frame');
