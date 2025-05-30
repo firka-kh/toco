@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- AOS Animate On Scroll -->
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <style>
         .gradient-bg {
@@ -106,62 +105,68 @@
         #google_translate_element, .goog-logo-link, .goog-te-gadget span, .goog-te-banner-frame {
             display: none !important;
         }
+        /* Кастомизация переключателя */
+        #customLangSwitcher button[data-lang] {
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+        #customLangSwitcher #langSwitcherDropdown {
+            min-width: 100px;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans transition-colors duration-300">
-    <!-- Google Translate widget -->
-    <div id="google_translate_element"></div>
     <!-- Header -->
     <header class="gradient-bg text-white shadow-lg">
         <div class="container mx-auto px-4 py-6">
             <div class="flex items-center justify-between">
+                <!-- Левая часть: Лого и название -->
                 <div class="flex items-center space-x-4">
                     <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
                     <div>
                         <h1 class="text-2xl font-bold">Портал рынка труда</h1>
                         <p class="text-sm opacity-90">Республика Таджикистан</p>
                     </div>
-                </div>
-                <!-- Google Translate neatly in header -->
-                <div class="flex items-center space-x-6">
-                    <!-- Кастомный переключатель языков, который управляет Google Translate -->
-                    <div class="relative" id="customLangSwitcher">
-                        <button id="langSwitcherBtn" class="bg-white text-gray-800 rounded px-3 py-1 shadow font-semibold flex items-center hover:bg-gray-100 transition-colors min-w-[64px]">
+                    <!-- Переключатель языков -->
+                    <div class="relative ml-6" id="customLangSwitcher">
+                        <button id="langSwitcherBtn" class="bg-white text-gray-800 rounded px-3 py-1 shadow font-semibold flex items-center hover:bg-gray-100 transition-colors focus:outline-none min-w-[64px]">
                             <span id="currentLang">RUS</span>
                             <i class="fas fa-chevron-down ml-2 text-xs"></i>
                         </button>
-                        <div id="langSwitcherDropdown" class="absolute right-0 mt-2 w-32 bg-white rounded shadow-lg z-50 hidden">
+                        <div id="langSwitcherDropdown" class="absolute left-0 mt-2 w-32 bg-white rounded shadow-lg z-50 hidden">
                             <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
                             <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
                             <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
                         </div>
                     </div>
-                    <nav class="hidden md:flex space-x-6 items-center">
-                        <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
-                        <a href="#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
-                        <a href="#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
-                        <a href="#education" class="hover:text-yellow-300 transition-colors">Образование</a>
-                        <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
-                        <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
-                            <button id="profileMenuBtn" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2">Мой профиль</button>
-                            <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden">
-                                <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
-                                <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
-                                <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
-                            </div>
-                            <!-- AI button after profile -->
-                            <a href="#ai-tools"
-                               class="ml-4 px-4 py-2 rounded-lg font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 shadow hover:scale-105 transition-transform animate-pulse"
-                               style="animation-duration:1.5s;">
-                                AI
-                            </a>
-                        </div>
-                        <button id="darkModeBtn" class="ml-4 text-xl hover:text-yellow-300 transition-colors" title="Тёмная тема"><i class="fas fa-moon"></i></button>
-                        <button id="fontSizeBtn" class="ml-2 text-xl hover:text-yellow-300 transition-colors" title="Увеличить шрифт">A+</button>
-                    </nav>
                 </div>
+                <!-- Правая часть: Навигация и профиль -->
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <a href="#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="#education" class="hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
+                    <!-- Профиль и AI -->
+                    <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
+                        <button id="profileMenuBtn" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2">Мой профиль</button>
+                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden">
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
+                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                        </div>
+                        <!-- AI button after profile -->
+                        <a href="#ai-tools"
+                           class="ml-4 px-4 py-2 rounded-lg font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 shadow hover:scale-105 transition-transform animate-pulse"
+                           style="animation-duration:1.5s;">
+                            AI
+                        </a>
+                    </div>
+                    <button id="darkModeBtn" class="ml-4 text-xl hover:text-yellow-300 transition-colors" title="Тёмная тема"><i class="fas fa-moon"></i></button>
+                    <button id="fontSizeBtn" class="ml-2 text-xl hover:text-yellow-300 transition-colors" title="Увеличить шрифт">A+</button>
+                </nav>
                 <!-- Hamburger for mobile -->
-                <button class="hamburger text-3xl focus:outline-none" id="mobileMenuBtn">
+                <button class="hamburger text-3xl focus:outline-none md:hidden" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
@@ -888,6 +893,7 @@
         // Кастомный переключатель языков, который управляет Google Translate
         const langSwitcherBtn = document.getElementById('langSwitcherBtn');
         const langSwitcherDropdown = document.getElementById('langSwitcherDropdown');
+        const currentLang = document.getElementById('currentLang');
         let langDropdownOpen = false;
 
         langSwitcherBtn.onclick = function(e) {
@@ -906,6 +912,7 @@
         langSwitcherDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
             btn.onclick = function() {
                 const selectedLang = this.getAttribute('data-lang');
+                currentLang.textContent = this.textContent;
                 langSwitcherDropdown.classList.add('hidden');
                 langDropdownOpen = false;
                 // Найти фрейм Google Translate и кликнуть нужный язык
@@ -919,4 +926,64 @@
                             if (items[i].innerText.trim().toLowerCase().includes(langName.toLowerCase())) {
                                 items[i].click();
                                 break;
-                           
+                            }
+                        }
+                    }
+                }, 200);
+            };
+        });
+
+        // Профиль: выпадающее меню и модальное окно
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+        profileMenuBtn.onclick = function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+        };
+        document.addEventListener('click', function(e) {
+            if (!profileDropdownContainer.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        // Модальное окно профиля (если есть)
+        if (document.getElementById('profileModal')) {
+            document.getElementById('profileMenuBtn').onclick = function(e) {
+                e.stopPropagation();
+                document.getElementById('profileModal').classList.remove('hidden');
+                profileDropdown.classList.add('hidden');
+            };
+            document.getElementById('mobileProfileBtn').onclick = function() {
+                document.getElementById('profileModal').classList.remove('hidden');
+                document.getElementById('mobileMenu').classList.add('hidden');
+            };
+            document.getElementById('closeProfileModal').onclick = function() {
+                document.getElementById('profileModal').classList.add('hidden');
+            };
+            document.getElementById('profileModal').onclick = function(e) {
+                if (e.target === this) this.classList.add('hidden');
+            };
+            document.getElementById('demoLoginBtn').onclick = function() {
+                window.location.href = 'employer_profile.html';
+            };
+            document.getElementById('goRegisterBtn').onclick = function() {
+                window.location.href = 'register.html';
+            };
+        }
+
+        // Остальные скрипты (темная тема, увеличение шрифта, мобильное меню и т.д.) оставьте как есть
+    </script>
+    <!-- Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'ru',
+                includedLanguages: 'ru,en,tg',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
