@@ -112,7 +112,19 @@
                 </div>
                 <!-- Google Translate neatly in header -->
                 <div class="flex items-center space-x-6">
-                    <div id="google_translate_element" class="bg-white rounded px-2 py-1 shadow text-gray-800"></div>
+                    <!-- Кастомный выпадающий переводчик -->
+                    <div class="relative" id="customTranslateContainer">
+                        <button id="customTranslateBtn" class="bg-white text-gray-800 rounded px-3 py-1 shadow font-semibold flex items-center hover:bg-gray-100 transition-colors">
+                            <span id="currentLang">RUS</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div id="customTranslateDropdown" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg z-50 hidden">
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
+                            <button class="block w-full text-left px-4 py-2 text-blue-700 hover:bg-blue-50 font-semibold" id="doTranslate">TRANSLATE</button>
+                        </div>
+                    </div>
                     <nav class="hidden md:flex space-x-6 items-center">
                         <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
                         <a href="#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
@@ -861,6 +873,41 @@
             }
             loading.classList.add('hidden');
         });
+
+        // Кастомный выпадающий переводчик
+        const customTranslateBtn = document.getElementById('customTranslateBtn');
+        const customTranslateDropdown = document.getElementById('customTranslateDropdown');
+        const currentLang = document.getElementById('currentLang');
+        let selectedLang = 'ru';
+
+        customTranslateBtn.onclick = function(e) {
+            e.stopPropagation();
+            customTranslateDropdown.classList.toggle('hidden');
+        };
+        document.addEventListener('click', function(e) {
+            if (!customTranslateDropdown.contains(e.target) && e.target !== customTranslateBtn) {
+                customTranslateDropdown.classList.add('hidden');
+            }
+        });
+        customTranslateDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                selectedLang = this.getAttribute('data-lang');
+                currentLang.textContent = this.textContent;
+            };
+        });
+        document.getElementById('doTranslate').onclick = function() {
+            if (window.google && window.google.translate) {
+                const frame = document.querySelector('iframe.goog-te-menu-frame');
+                if (frame) {
+                    const langs = {ru: 0, tg: 1, en: 2};
+                    frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text')[langs[selectedLang]].click();
+                }
+            } else {
+                // fallback: вызвать стандартный виджет
+                alert('Google Translate еще не загрузился');
+            }
+            customTranslateDropdown.classList.add('hidden');
+        };
     </script>
 
     <style>
@@ -879,6 +926,8 @@
 .goog-logo-link, .goog-te-gadget span {
     display: none !important;
 }
+.large-font, .large-font * { font-size: 1.08em !important; }
+#fontSizeBtn { transition: background 0.2s; }
 </style>
 </body>
 </html>
