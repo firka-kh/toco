@@ -7,24 +7,21 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <style>
-        /* Custom gradient background for header and hero sections */
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        /* Enhanced hover effect for cards */
         .card-hover {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .card-hover:hover {
-            transform: translateY(-8px); /* Slightly more pronounced lift */
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Larger, softer shadow */
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-        /* Consistent spacing for sections */
         .section-spacing {
-            padding: 3rem 0; /* Increased vertical padding for more breathing room */
+            padding: 3rem 0;
         }
-        /* Basic spinner for loading states */
         .spinner {
             border: 4px solid rgba(0, 0, 0, 0.1);
             border-left-color: #667eea;
@@ -37,181 +34,186 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* Ensure canvas elements are responsive within their containers */
         .chart-container {
             position: relative;
-            height: 320px; /* Fixed height for chart containers */
-            width: 100%; /* Full width within parent */
+            height: 320px;
+            width: 100%;
         }
-
-        /* Print-specific styles for A4 format */
-        @media print {
-            /* Define A4 page size and margins */
-            @page {
-                size: A4;
-                margin: 1cm;
-            }
-
-            /* Adjust body font and color for print */
-            body {
-                font-size: 10pt;
-                line-height: 1.5;
-                color: #000;
-                background-color: #fff !important; /* Ensure white background for printing */
-            }
-
-            /* Hide elements not relevant for print */
-            header, nav, footer,
-            .job-search-form-controls, /* Hide the job search input form controls */
-            #ai-tools, /* Hide the AI tools section */
-            .card-hover, /* Hide hover effects */
-            button, /* Hide all buttons */
-            input, select, textarea, /* Hide form inputs */
-            .spinner, /* Hide loading spinners */
-            .pagination, /* Hide pagination */
-            #expandVideoButton, /* Hide expand button */
-            #soundVisualizer /* Hide sound visualizer */
-             {
-                display: none !important;
-            }
-
-            /* Ensure main content sections are visible */
-            section {
-                display: block !important;
-                padding: 0.5cm 0 !important; /* Reduce padding for print */
-                background: none !important; /* Remove section backgrounds */
-                box-shadow: none !important; /* Remove section shadows */
-            }
-
-            /* Adjust hero section for print */
-            .gradient-bg {
-                background: none !important; /* Remove gradient background for print */
-                color: #000 !important; /* Change text color to black */
-            }
-            .gradient-bg h2, .gradient-bg p {
-                color: #000 !important;
-            }
-            .gradient-bg .bg-opacity-20 {
-                background: none !important; /* Remove background opacity */
-                backdrop-filter: none !important; /* Remove backdrop blur */
-                border: 1px solid #ddd; /* Add a subtle border for definition */
-            }
-
-            /* Ensure charts are visible but not interactive */
-            .chart-container {
-                height: auto !important; /* Auto height for print */
-                width: 100% !important;
-                page-break-inside: avoid; /* Avoid breaking charts across pages */
-            }
-            canvas {
-                max-width: 100% !important;
-                height: auto !important;
-                background: none !important;
-            }
-
-            /* Adjust card styles for print */
-            .bg-white, .bg-gray-50, .bg-blue-50, .bg-yellow-50, .bg-green-50 {
-                background: #fff !important;
-                box-shadow: none !important;
-                border: 1px solid #eee; /* Add a subtle border for definition */
-            }
-            .text-white {
-                color: #000 !important; /* Ensure text is black on white background */
-            }
-
-            /* Ensure text elements are black */
-            h1, h2, h3, h4, p, span, li, a {
-                color: #000 !important;
-            }
-
-            /* Ensure links are underlined and show href */
-            a {
-                text-decoration: underline;
-            }
-            a[href]:after {
-                content: " (" attr(href) ")";
-                font-size: 8pt;
-            }
-            /* Hide href for internal anchors */
-            a[href^="#"]:after {
-                content: "";
-            }
-
-            /* Force page breaks for better layout */
-            .section-spacing {
-                page-break-after: always;
-            }
-            .section-spacing:last-child {
-                page-break-after: auto; /* No page break after the last section */
-            }
+        /* Dark mode support */
+        .dark {
+            background: #18181b !important;
+            color: #f3f4f6 !important;
         }
-
-        /* Выпадающее меню профиля */
-        #profileDropdown {
-            min-width: 180px;
-            transition: opacity 0.2s;
+        .dark .bg-white, .dark .bg-gray-50, .dark .bg-blue-50, .dark .bg-yellow-50, .dark .bg-green-50 {
+            background: #23232b !important;
+            color: #f3f4f6 !important;
+        }
+        .dark .text-gray-800, .dark .text-gray-700, .dark .text-gray-600 {
+            color: #f3f4f6 !important;
+        }
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, #23232b 0%, #3b3b4f 100%) !important;
+        }
+        .large-font, .large-font * {
+            font-size: 1.15em !important;
+        }
+        /* Floating AI button */
+        #floatingAI {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 1000;
+            background: linear-gradient(90deg, #fbbf24, #ec4899, #8b5cf6);
+            color: #fff;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(139,92,246,0.25);
+            cursor: pointer;
+            font-size: 1.5rem;
+            animation: pulseAI 1.5s infinite;
+        }
+        @keyframes pulseAI {
+            0%, 100% { box-shadow: 0 8px 32px rgba(139,92,246,0.25);}
+            50% { box-shadow: 0 0 0 16px rgba(251,191,36,0.15);}
+        }
+        /* Hamburger for mobile */
+        .hamburger {
+            display: none;
+        }
+        @media (max-width: 1023px) {
+            .hidden.md\:flex { display: none !important; }
+            .hamburger { display: block; }
+        }
+        /* Google Translate widget */
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0px !important; }
+        #google_translate_element { position: fixed; top: 10px; right: 10px; z-index: 9999; }
+        /* Анимация появления */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .animate-fade-in {
+            animation: fade-in 0.25s;
+        }
+        /* Скрыть стандартный виджет Google */
+        #google_translate_element, .goog-logo-link, .goog-te-gadget span, .goog-te-banner-frame {
+            display: none !important;
+        }
+        /* Кастомизация переключателя */
+        #customLangSwitcher button[data-lang] {
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+        #customLangSwitcher #langSwitcherDropdown {
+            min-width: 100px;
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-50 font-sans transition-colors duration-300">
+    <!-- Header -->
     <header class="gradient-bg text-white shadow-lg">
         <div class="container mx-auto px-4 py-6">
             <div class="flex items-center justify-between">
+                <!-- Левая часть: Лого и название -->
                 <div class="flex items-center space-x-4">
                     <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
                     <div>
                         <h1 class="text-2xl font-bold">Портал рынка труда</h1>
                         <p class="text-sm opacity-90">Республика Таджикистан</p>
                     </div>
+                    <!-- Переключатель языков -->
+                    <div class="relative ml-6" id="customLangSwitcher">
+                        <button id="langSwitcherBtn" class="bg-white text-gray-800 rounded px-3 py-1 shadow font-semibold flex items-center hover:bg-gray-100 transition-colors focus:outline-none min-w-[64px]">
+                            <span id="currentLang">RUS</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div id="langSwitcherDropdown" class="absolute left-0 mt-2 w-32 bg-white rounded shadow-lg z-50 hidden">
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
+                        </div>
+                    </div>
                 </div>
+                <!-- Правая часть: Навигация и профиль -->
                 <nav class="hidden md:flex space-x-6 items-center">
                     <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
-                    <a href="index.html#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
-                    <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
-                    <a href="index.html#education" class="hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="#education" class="hover:text-yellow-300 transition-colors">Образование</a>
                     <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
-                    <!-- Выпадающее меню профиля -->
+                    <!-- Профиль и AI -->
                     <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
                         <button id="profileMenuBtn" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2">Мой профиль</button>
-                        <!-- AI кнопка после профиля -->
-                        <a href="index.html#ai-tools"
-                           class="ml-4 px-4 py-2 rounded-lg font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 shadow hover:scale-105 transition-transform animate-pulse"
-                           style="animation-duration:1.5s;">
-                            AI
-                        </a>
                         <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden">
                             <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
                             <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
                             <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
                         </div>
+                        <!-- AI button after profile -->
+                        <a href="#ai-tools"
+                           class="ml-4 px-4 py-2 rounded-lg font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 shadow hover:scale-105 transition-transform animate-pulse"
+                           style="animation-duration:1.5s;">
+                            AI
+                        </a>
                     </div>
+                    <button id="darkModeBtn" class="ml-4 text-xl hover:text-yellow-300 transition-colors" title="Тёмная тема"><i class="fas fa-moon"></i></button>
+                    <button id="fontSizeBtn" class="ml-2 text-xl hover:text-yellow-300 transition-colors" title="Увеличить шрифт">A+</button>
+                </nav>
+                <!-- Hamburger for mobile -->
+                <button class="hamburger text-3xl focus:outline-none md:hidden" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <!-- Mobile nav -->
+            <div id="mobileMenu" class="md:hidden hidden mt-4">
+                <nav class="flex flex-col space-y-3">
+                    <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <a href="#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="#education" class="hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
+                    <a href="#ai-tools" class="font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 rounded-lg px-4 py-2 animate-pulse text-center">AI</a>
+                    <button id="mobileDarkModeBtn" class="text-left text-xl hover:text-yellow-300 transition-colors mt-2"><i class="fas fa-moon"></i> Тёмная тема</button>
+                    <button id="mobileFontSizeBtn" class="text-left text-xl hover:text-yellow-300 transition-colors">A+ Увеличить шрифт</button>
+                    <button id="mobileProfileBtn" class="text-left hover:text-yellow-300 transition-colors">Мой профиль</button>
                 </nav>
             </div>
         </div>
     </header>
 
-    <section class="gradient-bg text-white py-16">
+    <!-- Floating AI button -->
+    <a id="floatingAI" href="#ai-tools" title="AI инструменты" class="hidden md:flex">
+        <i class="fas fa-robot"></i>
+    </a>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-16" data-aos="fade-up">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold mb-6">Добро пожаловать на портал рынка труда</h2>
             <p class="text-xl mb-8 max-w-3xl mx-auto">Единая платформа для соискателей, работодателей и государственных служащих Республики Таджикистан</p>
             <div class="grid md:grid-cols-4 gap-6 mt-12">
-                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm">
+                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm" data-aos="fade-up" data-aos-delay="100">
                     <i class="fas fa-users text-3xl mb-4"></i>
                     <h3 class="text-lg font-semibold mb-2">Соискатели</h3>
                     <p class="text-sm">Поиск работы и карьерные возможности</p>
                 </div>
-                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm">
+                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm" data-aos="fade-up" data-aos-delay="200">
                     <i class="fas fa-building text-3xl mb-4"></i>
                     <h3 class="text-lg font-semibold mb-2">Работодатели</h3>
                     <p class="text-sm">Размещение вакансий и поиск кадров</p>
                 </div>
-                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm">
+                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm" data-aos="fade-up" data-aos-delay="300">
                     <i class="fas fa-chart-line text-3xl mb-4"></i>
                     <h3 class="text-lg font-semibold mb-2">Аналитики</h3>
                     <p class="text-sm">Статистика и анализ рынка труда</p>
                 </div>
-                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm">
+                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm" data-aos="fade-up" data-aos-delay="400">
                     <i class="fas fa-shield-alt text-3xl mb-4"></i>
                     <h3 class="text-lg font-semibold mb-2">Гос. служащие</h3>
                     <p class="text-sm">Управление и мониторинг</p>
@@ -732,116 +734,69 @@
     </footer>
 
     <!-- Модальное окно профиля -->
-<div id="profileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-  <div class="bg-white rounded-lg shadow-lg p-8 max-w-xs w-full text-center">
-    <h3 class="text-xl font-bold mb-6 text-gray-800">Вход или регистрация</h3>
-    <button id="demoLoginBtn" class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors mb-4">Войти (демо)</button>
-    <button id="goRegisterBtn" class="w-full bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors">Зарегистрироваться</button>
-    <button id="closeProfileModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
-  </div>
-</div>
+    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg shadow-lg p-8 max-w-xs w-full text-center">
+        <h3 class="text-xl font-bold mb-6 text-gray-800">Вход или регистрация</h3>
+        <button id="demoLoginBtn" class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors mb-4">Войти (демо)</button>
+        <button id="goRegisterBtn" class="w-full bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors">Зарегистрироваться</button>
+        <button id="closeProfileModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+      </div>
+    </div>
 
+    <!-- AOS Animate On Scroll -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
-        // Unemployment Chart
-        const ctx1 = document.getElementById('unemploymentChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: ['Душанбе', 'Худжанд', 'Куляб', 'Курган-Тюбе', 'ГБАО'],
-                datasets: [{
-                    label: 'Уровень безработицы (%)',
-                    data: [4.2, 5.8, 7.1, 6.3, 8.9],
-                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                    borderColor: 'rgba(59, 130, 246, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 10
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + context.parsed.y + '%';
-                            }
-                        }
-                    }
-                }
+        AOS.init({ once: true, duration: 700 });
+    </script>
+    <!-- Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'ru',
+                includedLanguages: 'ru,en,tg',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script>
+        // Floating AI button show/hide
+        function handleFloatingAI() {
+            const aiBtn = document.getElementById('floatingAI');
+            if (window.scrollY > 300) {
+                aiBtn.classList.remove('hidden');
+            } else {
+                aiBtn.classList.add('hidden');
             }
-        });
+        }
+        window.addEventListener('scroll', handleFloatingAI);
 
-        // Professions Chart
-        const ctx2 = document.getElementById('professionsChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'doughnut',
-            data: {
-                labels: ['IT', 'Строительство', 'Торговля', 'Образование', 'Здравоохранение', 'Другие'],
-                datasets: [{
-                    data: [18, 22, 25, 12, 8, 15],
-                    backgroundColor: [
-                        '#3B82F6',
-                        '#10B981',
-                        '#F59E0B',
-                        '#EF4444',
-                        '#8B5CF6',
-                        '#6B7280'
-                    ],
-                    borderColor: '#ffffff',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed !== null) {
-                                    label += context.parsed + '%';
-                                }
-                                return label;
-                            }
-                        }
-                    }
-                }
-            }
-        });
+        // Dark mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+        }
+        document.getElementById('darkModeBtn').onclick = toggleDarkMode;
+        document.getElementById('mobileDarkModeBtn').onclick = toggleDarkMode;
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
+        // Font size
+        function toggleFontSize() {
+            document.body.classList.toggle('large-font');
+        }
+        document.getElementById('fontSizeBtn').onclick = toggleFontSize;
+        document.getElementById('mobileFontSizeBtn').onclick = toggleFontSize;
+
+        // Mobile menu
+        document.getElementById('mobileMenuBtn').onclick = function() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        };
 
         // Модальное окно профиля
         document.getElementById('profileMenuBtn').onclick = function() {
             document.getElementById('profileModal').classList.remove('hidden');
+        };
+        document.getElementById('mobileProfileBtn').onclick = function() {
+            document.getElementById('profileModal').classList.remove('hidden');
+            document.getElementById('mobileMenu').classList.add('hidden');
         };
         document.getElementById('closeProfileModal').onclick = function() {
             document.getElementById('profileModal').classList.add('hidden');
@@ -860,18 +815,175 @@
         const profileMenuBtn = document.getElementById('profileMenuBtn');
         const profileDropdown = document.getElementById('profileDropdown');
         const profileDropdownContainer = document.getElementById('profileDropdownContainer');
-
         profileMenuBtn.onclick = function(e) {
             e.stopPropagation();
             profileDropdown.classList.toggle('hidden');
         };
-
-        // Закрытие меню при клике вне его
         document.addEventListener('click', function(e) {
             if (!profileDropdownContainer.contains(e.target)) {
                 profileDropdown.classList.add('hidden');
             }
         });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // AI генератор описания вакансии (пример подключения к API)
+        document.getElementById('generateJobDescriptionBtn')?.addEventListener('click', async function() {
+            const jobTitle = document.getElementById('jobTitleInput').value.trim();
+            const keywords = document.getElementById('jobKeywordsInput').value.trim();
+            const loading = document.getElementById('jobDescriptionLoading');
+            const outputBlock = document.getElementById('jobDescriptionOutput');
+            const outputText = outputBlock.querySelector('p');
+            loading.classList.remove('hidden');
+            outputBlock.classList.add('hidden');
+            try {
+                // Замените на ваш реальный API
+                const response = await fetch('YOUR_API_URL/generate-description', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jobTitle, keywords })
+                });
+                const data = await response.json();
+                outputText.textContent = data.description || 'Нет ответа от сервера.';
+                outputBlock.classList.remove('hidden');
+            } catch (e) {
+                outputText.textContent = 'Ошибка при обращении к API.';
+                outputBlock.classList.remove('hidden');
+            }
+            loading.classList.add('hidden');
+        });
+
+        // AI карьерные пути (пример подключения к API)
+        document.getElementById('suggestCareerPathsBtn')?.addEventListener('click', async function() {
+            const profession = document.getElementById('currentProfessionInput').value.trim();
+            const interests = document.getElementById('careerInterestsInput').value.trim();
+            const loading = document.getElementById('careerPathsLoading');
+            const outputBlock = document.getElementById('careerPathsOutput');
+            const outputText = outputBlock.querySelector('p');
+            loading.classList.remove('hidden');
+            outputBlock.classList.add('hidden');
+            try {
+                // Замените на ваш реальный API
+                const response = await fetch('YOUR_API_URL/suggest-career-paths', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ profession, interests })
+                });
+                const data = await response.json();
+                outputText.textContent = data.paths || 'Нет ответа от сервера.';
+                outputBlock.classList.remove('hidden');
+            } catch (e) {
+                outputText.textContent = 'Ошибка при обращении к API.';
+                outputBlock.classList.remove('hidden');
+            }
+            loading.classList.add('hidden');
+        });
+
+        // Кастомный переключатель языков, который управляет Google Translate
+        const langSwitcherBtn = document.getElementById('langSwitcherBtn');
+        const langSwitcherDropdown = document.getElementById('langSwitcherDropdown');
+        const currentLang = document.getElementById('currentLang');
+        let langDropdownOpen = false;
+
+        langSwitcherBtn.onclick = function(e) {
+            e.stopPropagation();
+            langSwitcherDropdown.classList.toggle('hidden');
+            langDropdownOpen = !langDropdownOpen;
+        };
+        document.addEventListener('click', function(e) {
+            if (langDropdownOpen && !langSwitcherDropdown.contains(e.target) && e.target !== langSwitcherBtn) {
+                langSwitcherDropdown.classList.add('hidden');
+                langDropdownOpen = false;
+            }
+        });
+
+        // Автоматический перевод через Google Translate при выборе языка
+        langSwitcherDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                const selectedLang = this.getAttribute('data-lang');
+                currentLang.textContent = this.textContent;
+                langSwitcherDropdown.classList.add('hidden');
+                langDropdownOpen = false;
+                // Найти фрейм Google Translate и кликнуть нужный язык
+                setTimeout(() => {
+                    const frame = document.querySelector('iframe.goog-te-menu-frame');
+                    if (frame) {
+                        const langMap = {ru: 'Русский', tg: 'Таджикский', en: 'Английский'};
+                        const langName = langMap[selectedLang];
+                        const items = frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text');
+                        for (let i = 0; i < items.length; i++) {
+                            if (items[i].innerText.trim().toLowerCase().includes(langName.toLowerCase())) {
+                                items[i].click();
+                                break;
+                            }
+                        }
+                    }
+                }, 200);
+            };
+        });
+
+        // Профиль: выпадающее меню и модальное окно
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+        profileMenuBtn.onclick = function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+        };
+        document.addEventListener('click', function(e) {
+            if (!profileDropdownContainer.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        // Модальное окно профиля (если есть)
+        if (document.getElementById('profileModal')) {
+            document.getElementById('profileMenuBtn').onclick = function(e) {
+                e.stopPropagation();
+                document.getElementById('profileModal').classList.remove('hidden');
+                profileDropdown.classList.add('hidden');
+            };
+            document.getElementById('mobileProfileBtn').onclick = function() {
+                document.getElementById('profileModal').classList.remove('hidden');
+                document.getElementById('mobileMenu').classList.add('hidden');
+            };
+            document.getElementById('closeProfileModal').onclick = function() {
+                document.getElementById('profileModal').classList.add('hidden');
+            };
+            document.getElementById('profileModal').onclick = function(e) {
+                if (e.target === this) this.classList.add('hidden');
+            };
+            document.getElementById('demoLoginBtn').onclick = function() {
+                window.location.href = 'employer_profile.html';
+            };
+            document.getElementById('goRegisterBtn').onclick = function() {
+                window.location.href = 'register.html';
+            };
+        }
+
+        // Остальные скрипты (темная тема, увеличение шрифта, мобильное меню и т.д.) оставьте как есть
     </script>
+    <!-- Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'ru',
+                includedLanguages: 'ru,en,tg',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
