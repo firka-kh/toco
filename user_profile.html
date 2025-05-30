@@ -6,6 +6,7 @@
     <title>Профиль соискателя</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <!-- Google Translate widget -->
     <style>
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -119,6 +120,8 @@
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
+    <!-- Google Translate widget container -->
+    <div id="google_translate_element"></div>
     <header class="gradient-bg text-white shadow-lg">
         <div class="container mx-auto px-4 py-6">
             <div class="flex items-center justify-between">
@@ -585,5 +588,15 @@
             });
         });
     </script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'ru',
+                includedLanguages: 'ru,en,tg',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
