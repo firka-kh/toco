@@ -112,17 +112,25 @@
                 </div>
                 <!-- Google Translate neatly in header -->
                 <div class="flex items-center space-x-6">
-                    <!-- Кастомный выпадающий переводчик -->
-                    <div class="relative" id="customTranslateContainer">
-                        <button id="customTranslateBtn" class="bg-white text-gray-800 rounded px-3 py-1 shadow font-semibold flex items-center hover:bg-gray-100 transition-colors focus:outline-none">
+                    <!-- Кастомный переключатель языков -->
+                    <div class="relative" id="customLangSwitcher">
+                        <button id="langSwitcherBtn" class="bg-white text-gray-800 rounded px-3 py-1 shadow font-semibold flex items-center hover:bg-gray-100 transition-colors focus:outline-none min-w-[64px]">
                             <span id="currentLang">RUS</span>
                             <i class="fas fa-chevron-down ml-2 text-xs"></i>
                         </button>
-                        <div id="customTranslateDropdown" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg z-50 hidden">
+                        <div id="langSwitcherDropdown" class="absolute right-0 mt-2 w-32 bg-white rounded shadow-lg z-50 hidden">
                             <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
                             <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
                             <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
-                            <button class="block w-full text-left px-4 py-2 text-blue-700 hover:bg-blue-50 font-semibold" id="doTranslate">Перевести</button>
+                            <button class="block w-full text-left px-4 py-2 text-blue-700 hover:bg-blue-50 font-semibold" id="showTranslateMenu">Перевести...</button>
+                        </div>
+                        <!-- Меню выбора перевода -->
+                        <div id="translateMenu" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg z-50 hidden">
+                            <div class="px-4 py-2 text-gray-700 font-semibold border-b">Выберите язык перевода</div>
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-translate="ru">Русский</button>
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-translate="tg">Таджикский</button>
+                            <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-translate="en">Английский</button>
+                            <button class="block w-full text-left px-4 py-2 text-gray-500 hover:bg-gray-100" id="closeTranslateMenu">Отмена</button>
                         </div>
                     </div>
                     <nav class="hidden md:flex space-x-6 items-center">
@@ -874,67 +882,101 @@
             loading.classList.add('hidden');
         });
 
-        // Кастомный выпадающий переводчик
-        const customTranslateBtn = document.getElementById('customTranslateBtn');
-        const customTranslateDropdown = document.getElementById('customTranslateDropdown');
+        // Кастомный переключатель языков
+        const langSwitcherBtn = document.getElementById('langSwitcherBtn');
+        const langSwitcherDropdown = document.getElementById('langSwitcherDropdown');
         const currentLang = document.getElementById('currentLang');
+        const translateMenu = document.getElementById('translateMenu');
         let selectedLang = 'ru';
 
-        customTranslateBtn.onclick = function(e) {
+        langSwitcherBtn.onclick = function(e) {
             e.stopPropagation();
-            customTranslateDropdown.classList.toggle('hidden');
+            langSwitcherDropdown.classList.toggle('hidden');
+            translateMenu.classList.add('hidden');
         };
         document.addEventListener('click', function(e) {
-            if (!customTranslateDropdown.contains(e.target) && e.target !== customTranslateBtn) {
-                customTranslateDropdown.classList.add('hidden');
+            if (!langSwitcherDropdown.contains(e.target) && e.target !== langSwitcherBtn && !translateMenu.contains(e.target)) {
+                langSwitcherDropdown.classList.add('hidden');
+                translateMenu.classList.add('hidden');
             }
         });
-        customTranslateDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
+        // Автоматический перевод при выборе языка
+        langSwitcherDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
             btn.onclick = function() {
                 selectedLang = this.getAttribute('data-lang');
                 currentLang.textContent = this.textContent;
-            };
-        });
-        document.getElementById('doTranslate').onclick = function() {
-            if (window.google && window.google.translate) {
-                const frame = document.querySelector('iframe.goog-te-menu-frame');
-                if (frame) {
-                    // Найти нужный язык по data-lang
-                    const langMap = {ru: 'ru', tg: 'tg', en: 'en'};
-                    const langCode = langMap[selectedLang];
-                    const items = frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text');
-                    for (let i = 0; i < items.length; i++) {
-                        if (items[i].innerText.toLowerCase().includes(langCode)) {
-                            items[i].click();
-                            break;
+                langSwitcherDropdown.classList.add('hidden');
+                // Автоматический перевод через Google Translate
+                setTimeout(() => {
+                    if (window.google && window.google.translate) {
+                        const frame = document.querySelector('iframe.goog-te-menu-frame');
+                        if (frame) {
+                            const langMap = {ru: 'ru', tg: 'tg', en: 'en'};
+                            const langCode = langMap[selectedLang];
+                            const items = frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text');
+                            for (let i = 0; i < items.length; i++) {
+                                if (items[i].innerText.toLowerCase().includes(langCode)) {
+                                    items[i].click();
+                                    break;
+                                }
+                            }
                         }
                     }
-                }
-            } else {
-                alert('Google Translate еще не загрузился');
-            }
-            customTranslateDropdown.classList.add('hidden');
+                }, 200);
+            };
+        });
+        // Кнопка "Перевести..." открывает дополнительное меню
+        document.getElementById('showTranslateMenu').onclick = function(e) {
+            e.stopPropagation();
+            langSwitcherDropdown.classList.add('hidden');
+            translateMenu.classList.remove('hidden');
+        };
+        // Перевод на выбранный язык из translateMenu
+        translateMenu.querySelectorAll('button[data-translate]').forEach(btn => {
+            btn.onclick = function() {
+                const lang = this.getAttribute('data-translate');
+                currentLang.textContent = btn.textContent.slice(0,3).toUpperCase();
+                translateMenu.classList.add('hidden');
+                // Автоматический перевод через Google Translate
+                setTimeout(() => {
+                    if (window.google && window.google.translate) {
+                        const frame = document.querySelector('iframe.goog-te-menu-frame');
+                        if (frame) {
+                            const langMap = {ru: 'ru', tg: 'tg', en: 'en'};
+                            const langCode = langMap[lang];
+                            const items = frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text');
+                            for (let i = 0; i < items.length; i++) {
+                                if (items[i].innerText.toLowerCase().includes(langCode)) {
+                                    items[i].click();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }, 200);
+            };
+        });
+        document.getElementById('closeTranslateMenu').onclick = function() {
+            translateMenu.classList.add('hidden');
         };
     </script>
-
     <style>
-/* Скрыть рамку и сделать виджет компактным */
-#google_translate_element select {
-    background: transparent;
-    border: none;
-    color: #374151;
+/* Кастомизация переключателя */
+#customLangSwitcher button[data-lang], #customLangSwitcher button[data-translate] {
     font-weight: 500;
-    padding: 2px 8px;
+    letter-spacing: 0.02em;
 }
-.goog-te-gadget {
-    font-size: 0.95rem !important;
-    font-family: inherit !important;
+#customLangSwitcher button#showTranslateMenu {
+    border-top: 1px solid #e5e7eb;
+    margin-top: 2px;
 }
-.goog-logo-link, .goog-te-gadget span {
+#customLangSwitcher #translateMenu {
+    min-width: 180px;
+}
+.goog-logo-link, .goog-te-gadget span, .goog-te-banner-frame, #google_translate_element {
     display: none !important;
 }
-.large-font, .large-font * { font-size: 1.08em !important; }
-#fontSizeBtn { transition: background 0.2s; }
+body { top: 0px !important; }
 </style>
 </body>
 </html>
