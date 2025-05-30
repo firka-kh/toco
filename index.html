@@ -146,6 +146,12 @@
                 page-break-after: auto; /* No page break after the last section */
             }
         }
+
+        /* Выпадающее меню профиля */
+        #profileDropdown {
+            min-width: 180px;
+            transition: opacity 0.2s;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -166,7 +172,15 @@
                     <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
                     <a href="index.html#education" class="hover:text-yellow-300 transition-colors">Образование</a>
                     <a href="index.html#ai-tools" class="hover:text-yellow-300 transition-colors">ИИ Инструменты</a>
-                    <button id="profileMenuBtn" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2">Мой профиль</button>
+                    <!-- Выпадающее меню профиля -->
+                    <div class="relative" id="profileDropdownContainer">
+                        <button id="profileMenuBtn" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2">Мой профиль</button>
+                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden">
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
+                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                        </div>
+                    </div>
                 </nav>
             </div>
         </div>
@@ -832,6 +846,23 @@
         document.getElementById('goRegisterBtn').onclick = function() {
             window.location.href = 'register.html';
         };
+
+        // Выпадающее меню профиля
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+
+        profileMenuBtn.onclick = function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+        };
+
+        // Закрытие меню при клике вне его
+        document.addEventListener('click', function(e) {
+            if (!profileDropdownContainer.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
     </script>
 </body>
 </html>
