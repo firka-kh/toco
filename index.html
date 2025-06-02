@@ -296,12 +296,7 @@
                                 <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
                             </div>
                         </div>
-                        <!-- AI кнопка (самая правая) -->
-                        <a href="index.html#ai-tools"
-                           class="ml-4 px-4 py-2 rounded-lg font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 shadow hover:scale-105 transition-transform animate-pulse"
-                           style="animation-duration:1.5s;">
-                            AI
-                        </a>
+                        <!-- УДАЛЕНО: AI кнопка в шапке -->
                     </div>
                 </nav>
             </div>
@@ -1041,20 +1036,19 @@
     const aiChatInput = document.getElementById('aiChatInput');
     const aiChatHistory = document.getElementById('aiChatHistory');
 
-    // Открытие модального окна AI
+    // Открытие модального окна AI только по клику на виджет
     aiWidgetBtn.addEventListener('click', function() {
         aiWidgetModal.classList.remove('hidden');
-        setTimeout(() => {
-            aiWidgetModal.classList.add('flex');
-        }, 10);
     });
 
     // Закрытие модального окна AI
     closeAiWidget.addEventListener('click', function() {
-        aiWidgetModal.classList.remove('flex');
-        setTimeout(() => {
-            aiWidgetModal.classList.add('hidden');
-        }, 300);
+        aiWidgetModal.classList.add('hidden');
+    });
+
+    // Закрытие по клику вне окна
+    aiWidgetModal.addEventListener('click', function(e) {
+        if (e.target === aiWidgetModal) aiWidgetModal.classList.add('hidden');
     });
 
     // Отправка сообщения в AI чате
@@ -1098,33 +1092,6 @@
         aiChatHistory.appendChild(messageElement);
         aiChatHistory.scrollTop = aiChatHistory.scrollHeight;
     }
-
-    // Открытие/закрытие AI-виджета
-    const aiWidgetBtn = document.getElementById('aiWidgetBtn');
-    const aiWidgetModal = document.getElementById('aiWidgetModal');
-    const closeAiWidget = document.getElementById('closeAiWidget');
-    const aiChatForm = document.getElementById('aiChatForm');
-    const aiChatInput = document.getElementById('aiChatInput');
-    const aiChatHistory = document.getElementById('aiChatHistory');
-
-    aiWidgetBtn.onclick = () => aiWidgetModal.classList.remove('hidden');
-    closeAiWidget.onclick = () => aiWidgetModal.classList.add('hidden');
-    aiWidgetModal.onclick = e => { if (e.target === aiWidgetModal) aiWidgetModal.classList.add('hidden'); };
-
-    aiChatForm.onsubmit = function(e) {
-        e.preventDefault();
-        const userMsg = aiChatInput.value.trim();
-        if (!userMsg) return;
-        // Добавить сообщение пользователя
-        aiChatHistory.innerHTML += `<div class="text-right"><span class="inline-block bg-blue-100 text-blue-800 rounded-lg px-3 py-2">${userMsg}</span></div>`;
-        aiChatInput.value = '';
-        aiChatHistory.scrollTop = aiChatHistory.scrollHeight;
-        // Имитация ответа AI (замените на реальный запрос к AI)
-        setTimeout(() => {
-            aiChatHistory.innerHTML += `<div class="text-left"><span class="inline-block bg-gray-200 text-gray-800 rounded-lg px-3 py-2">AI: Я получил ваш вопрос: "${userMsg}"</span></div>`;
-            aiChatHistory.scrollTop = aiChatHistory.scrollHeight;
-        }, 800);
-    };
     </script>
 <!-- Google Translate -->
 <script type="text/javascript">
