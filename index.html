@@ -182,11 +182,11 @@
                     <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
                     <a href="index.html#education" class="hover:text-yellow-300 transition-colors">Образование</a>
                     <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
-                    <!-- Выпадающее меню профиля, AI и языки -->
+                    <!-- Выпадающее меню профиля и языков -->
                     <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
                         <!-- Мой профиль -->
                         <div class="relative">
-                            <button id="profileMenuBtn" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
+                            <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
                                 Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
                             </button>
                             <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
@@ -195,24 +195,24 @@
                                 <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
                             </div>
                         </div>
-                        <!-- AI кнопка -->
+                        <!-- Выпадающее меню языков -->
+                        <div class="relative">
+                            <button id="langMenuBtn" type="button" class="px-3 py-1 rounded font-semibold bg-white text-gray-800 hover:bg-yellow-100 transition-colors flex items-center">
+                                <span id="currentLangLabel">RUS</span>
+                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div id="langDropdown" class="absolute right-0 mt-2 w-28 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
+                            </div>
+                        </div>
+                        <!-- AI кнопка (самая правая) -->
                         <a href="index.html#ai-tools"
                            class="ml-4 px-4 py-2 rounded-lg font-bold text-white bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 shadow hover:scale-105 transition-transform animate-pulse"
                            style="animation-duration:1.5s;">
                             AI
                         </a>
-                        <!-- Выпадающее меню языков -->
-                        <div class="relative">
-                            <button id="langMenuBtn" class="px-3 py-1 rounded font-semibold bg-white text-gray-800 hover:bg-yellow-100 transition-colors flex items-center">
-                                <span id="currentLangLabel">RUS</span>
-                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                            </button>
-                            <div id="langDropdown" class="absolute right-0 mt-2 w-28 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
-                                <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
-                                <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
-                                <button class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
-                            </div>
-                        </div>
                     </div>
                 </nav>
             </div>
@@ -891,13 +891,13 @@
     // Выпадающее меню профиля
     const profileMenuBtn = document.getElementById('profileMenuBtn');
     const profileDropdown = document.getElementById('profileDropdown');
-    profileMenuBtn.onclick = function(e) {
+    profileMenuBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         profileDropdown.classList.toggle('hidden');
         langDropdown.classList.add('hidden');
-    };
+    });
     document.addEventListener('click', function(e) {
-        if (!profileMenuBtn.contains(e.target)) {
+        if (!profileDropdown.contains(e.target) && e.target !== profileMenuBtn) {
             profileDropdown.classList.add('hidden');
         }
     });
@@ -906,13 +906,13 @@
     const langMenuBtn = document.getElementById('langMenuBtn');
     const langDropdown = document.getElementById('langDropdown');
     const currentLangLabel = document.getElementById('currentLangLabel');
-    langMenuBtn.onclick = function(e) {
+    langMenuBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         langDropdown.classList.toggle('hidden');
         profileDropdown.classList.add('hidden');
-    };
+    });
     document.addEventListener('click', function(e) {
-        if (!langMenuBtn.contains(e.target)) {
+        if (!langDropdown.contains(e.target) && e.target !== langMenuBtn) {
             langDropdown.classList.add('hidden');
         }
     });
