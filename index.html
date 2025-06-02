@@ -161,6 +161,95 @@
         .animate-fade-in {
             animation: fade-in 0.18s;
         }
+
+        /* Плавающая кнопка AI */
+        #aiWidgetBtn {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        #aiWidgetBtn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Модальное окно AI */
+        #aiWidgetModal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        #aiWidgetModal .modal-content {
+            background: #fff;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            width: 90%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        #aiWidgetModal .modal-header {
+            padding: 1rem;
+            background: #667eea;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #aiWidgetModal .modal-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+        #aiWidgetModal .modal-header button {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        #aiWidgetModal .modal-body {
+            padding: 1rem;
+            background: #f9f9f9;
+            flex: 1;
+            overflow-y: auto;
+        }
+        #aiWidgetModal .modal-body p {
+            margin: 0.5rem 0;
+        }
+        #aiWidgetModal .modal-footer {
+            padding: 0.5rem;
+            background: #fff;
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid #ddd;
+        }
+        #aiWidgetModal .modal-footer button {
+            background: #667eea;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        #aiWidgetModal .modal-footer button:hover {
+            background: #5a67d8;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -769,6 +858,28 @@
   </div>
 </div>
 
+    <!-- Плавающая кнопка AI -->
+<button id="aiWidgetBtn" class="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl hover:scale-110 transition-transform">
+    <i class="fas fa-robot"></i>
+</button>
+
+<!-- Модальное окно AI -->
+<div id="aiWidgetModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-0 flex flex-col">
+    <div class="flex items-center justify-between px-6 py-4 border-b">
+      <span class="font-bold text-lg text-gray-800">AI-ассистент рынка труда</span>
+      <button id="closeAiWidget" class="text-2xl text-gray-400 hover:text-gray-700">&times;</button>
+    </div>
+    <div id="aiChatHistory" class="flex-1 overflow-y-auto px-6 py-4 space-y-4 bg-gray-50" style="min-height:200px;max-height:350px;">
+      <!-- Сообщения чата будут здесь -->
+    </div>
+    <form id="aiChatForm" class="flex border-t p-4 bg-white">
+      <input id="aiChatInput" type="text" class="flex-1 border rounded-lg px-3 py-2 mr-2 focus:outline-none" placeholder="Задайте вопрос...">
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">Отправить</button>
+    </form>
+  </div>
+</div>
+
     <script>
         // Unemployment Chart
         const ctx1 = document.getElementById('unemploymentChart').getContext('2d');
@@ -921,6 +1032,99 @@
             }, 200);
         };
     });
+
+    // AI Widget
+    const aiWidgetBtn = document.getElementById('aiWidgetBtn');
+    const aiWidgetModal = document.getElementById('aiWidgetModal');
+    const closeAiWidget = document.getElementById('closeAiWidget');
+    const aiChatForm = document.getElementById('aiChatForm');
+    const aiChatInput = document.getElementById('aiChatInput');
+    const aiChatHistory = document.getElementById('aiChatHistory');
+
+    // Открытие модального окна AI
+    aiWidgetBtn.addEventListener('click', function() {
+        aiWidgetModal.classList.remove('hidden');
+        setTimeout(() => {
+            aiWidgetModal.classList.add('flex');
+        }, 10);
+    });
+
+    // Закрытие модального окна AI
+    closeAiWidget.addEventListener('click', function() {
+        aiWidgetModal.classList.remove('flex');
+        setTimeout(() => {
+            aiWidgetModal.classList.add('hidden');
+        }, 300);
+    });
+
+    // Отправка сообщения в AI чате
+    aiChatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const userMessage = aiChatInput.value.trim();
+        if (userMessage === '') return;
+        appendMessage('user', userMessage);
+        aiChatInput.value = '';
+        // Эмуляция ответа AI
+        setTimeout(() => {
+            const aiResponse = `Вы задали вопрос: "${userMessage}". Это пример автоматического ответа.`;
+            appendMessage('ai', aiResponse);
+        }, 1000);
+    });
+
+    // Функция для добавления сообщения в чат
+    function appendMessage(sender, text) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('flex', 'items-start', 'space-x-3');
+        if (sender === 'user') {
+            messageElement.classList.add('justify-end');
+            messageElement.innerHTML = `
+                <div class="bg-blue-500 text-white rounded-lg p-3 max-w-xs break-words">
+                    ${text}
+                </div>
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <i class="fas fa-user text-blue-500"></i>
+                </div>
+            `;
+        } else {
+            messageElement.innerHTML = `
+                <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                    <i class="fas fa-robot text-gray-500"></i>
+                </div>
+                <div class="bg-gray-100 rounded-lg p-3 max-w-xs break-words">
+                    ${text}
+                </div>
+            `;
+        }
+        aiChatHistory.appendChild(messageElement);
+        aiChatHistory.scrollTop = aiChatHistory.scrollHeight;
+    }
+
+    // Открытие/закрытие AI-виджета
+    const aiWidgetBtn = document.getElementById('aiWidgetBtn');
+    const aiWidgetModal = document.getElementById('aiWidgetModal');
+    const closeAiWidget = document.getElementById('closeAiWidget');
+    const aiChatForm = document.getElementById('aiChatForm');
+    const aiChatInput = document.getElementById('aiChatInput');
+    const aiChatHistory = document.getElementById('aiChatHistory');
+
+    aiWidgetBtn.onclick = () => aiWidgetModal.classList.remove('hidden');
+    closeAiWidget.onclick = () => aiWidgetModal.classList.add('hidden');
+    aiWidgetModal.onclick = e => { if (e.target === aiWidgetModal) aiWidgetModal.classList.add('hidden'); };
+
+    aiChatForm.onsubmit = function(e) {
+        e.preventDefault();
+        const userMsg = aiChatInput.value.trim();
+        if (!userMsg) return;
+        // Добавить сообщение пользователя
+        aiChatHistory.innerHTML += `<div class="text-right"><span class="inline-block bg-blue-100 text-blue-800 rounded-lg px-3 py-2">${userMsg}</span></div>`;
+        aiChatInput.value = '';
+        aiChatHistory.scrollTop = aiChatHistory.scrollHeight;
+        // Имитация ответа AI (замените на реальный запрос к AI)
+        setTimeout(() => {
+            aiChatHistory.innerHTML += `<div class="text-left"><span class="inline-block bg-gray-200 text-gray-800 rounded-lg px-3 py-2">AI: Я получил ваш вопрос: "${userMsg}"</span></div>`;
+            aiChatHistory.scrollTop = aiChatHistory.scrollHeight;
+        }, 800);
+    };
     </script>
 <!-- Google Translate -->
 <script type="text/javascript">
