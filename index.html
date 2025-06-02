@@ -891,31 +891,36 @@
     // Выпадающее меню профиля
     const profileMenuBtn = document.getElementById('profileMenuBtn');
     const profileDropdown = document.getElementById('profileDropdown');
+    const langMenuBtn = document.getElementById('langMenuBtn');
+    const langDropdown = document.getElementById('langDropdown');
+    const currentLangLabel = document.getElementById('currentLangLabel');
+
+    // Открытие/закрытие меню "Мой профиль"
     profileMenuBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         profileDropdown.classList.toggle('hidden');
         langDropdown.classList.add('hidden');
     });
-    document.addEventListener('click', function(e) {
-        if (!profileDropdown.contains(e.target) && e.target !== profileMenuBtn) {
-            profileDropdown.classList.add('hidden');
-        }
-    });
 
-    // Выпадающее меню языков
-    const langMenuBtn = document.getElementById('langMenuBtn');
-    const langDropdown = document.getElementById('langDropdown');
-    const currentLangLabel = document.getElementById('currentLangLabel');
+    // Открытие/закрытие меню языков
     langMenuBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         langDropdown.classList.toggle('hidden');
         profileDropdown.classList.add('hidden');
     });
+
+    // Закрытие обоих меню при клике вне
     document.addEventListener('click', function(e) {
-        if (!langDropdown.contains(e.target) && e.target !== langMenuBtn) {
+        // Проверяем, был ли клик вне обоих меню и их кнопок
+        if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+        if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
             langDropdown.classList.add('hidden');
         }
     });
+
+    // Переключение языка
     langDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
         btn.onclick = function() {
             const lang = this.getAttribute('data-lang');
