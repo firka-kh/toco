@@ -867,28 +867,7 @@
             });
         });
 
-        // Языковой переключатель
-    function switchLang(lang) {
-        setTimeout(() => {
-            const frame = document.querySelector('iframe.goog-te-menu-frame');
-            if (frame) {
-                const langMap = {ru: 'Русский', tg: 'Таджикский', en: 'Английский'};
-                const langName = langMap[lang];
-                const items = frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text');
-                for (let i = 0; i < items.length; i++) {
-                    if (items[i].innerText.trim().toLowerCase().includes(langName.toLowerCase())) {
-                        items[i].click();
-                        break;
-                    }
-                }
-            }
-        }, 200);
-    }
-    document.getElementById('langBtnRU').onclick = function() { switchLang('ru'); };
-    document.getElementById('langBtnTG').onclick = function() { switchLang('tg'); };
-    document.getElementById('langBtnEN').onclick = function() { switchLang('en'); };
-
-    // Выпадающее меню профиля
+        // Выпадающее меню профиля и языков
     const profileMenuBtn = document.getElementById('profileMenuBtn');
     const profileDropdown = document.getElementById('profileDropdown');
     const langMenuBtn = document.getElementById('langMenuBtn');
@@ -942,7 +921,7 @@
             }, 200);
         };
     });
-</script>
+    </script>
 <!-- Google Translate -->
 <script type="text/javascript">
     function googleTranslateElementInit() {
