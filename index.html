@@ -911,7 +911,6 @@
 
     // Закрытие обоих меню при клике вне
     document.addEventListener('click', function(e) {
-        // Проверяем, был ли клик вне обоих меню и их кнопок
         if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
             profileDropdown.classList.add('hidden');
         }
