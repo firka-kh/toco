@@ -633,14 +633,17 @@
                 <div class="grid lg:grid-cols-2 gap-8 mb-12">
                     <div class="chart-container">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800">Динамика вакансий (по месяцам)</h3>
-                        <div class="chart-container">
-                            <canvas id="jobTrendChart"></canvas>
-                        </div>
+                        <canvas id="jobTrendChart" style="min-height:320px;"></canvas>
                     </div>
                     <div class="chart-container">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800">Распределение вакансий по отраслям</h3>
-                        <div class="chart-container">
-                            <canvas id="industryDistributionChart"></canvas>
+                        <div class="chart-container flex flex-col lg:flex-row items-center justify-between">
+                            <div class="w-full lg:w-2/3 flex-shrink-0">
+                                <canvas id="industryDistributionChart" style="min-height:260px;"></canvas>
+                            </div>
+                            <div class="w-full lg:w-1/3 flex-shrink-0 flex justify-center lg:justify-end mt-6 lg:mt-0">
+                                <div id="industryLegend" class="legend-block"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="chart-container lg:col-span-2">
@@ -912,35 +915,34 @@
                 new Chart(jobTrendCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['Душанбе', 'Худжанд', 'Куляб', 'Курган-Тюбе', 'ГБАО'],
+                        labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
                         datasets: [{
-                            label: 'Уровень безработицы (%)',
-                            data: [4.2, 5.8, 7.1, 6.3, 8.9],
-                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                            borderColor: 'rgba(59, 130, 246, 1)',
-                            borderWidth: 1
+                            label: 'Вакансии',
+                            data: [4, 5, 6, 7, 8, 7, 6, 5, 4, 5, 6, 7],
+                            backgroundColor: [
+                                '#2563eb', '#22c55e', '#f59e42', '#a78bfa', '#ef4444', '#6b7280',
+                                '#fbbf24', '#10b981', '#6366f1', '#f472b6', '#f87171', '#34d399'
+                            ],
+                            borderRadius: 8,
+                            barPercentage: 0.7,
+                            categoryPercentage: 0.7
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
                         scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: 14 } }
+                            },
                             y: {
                                 beginAtZero: true,
-                                max: 10
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top',
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return context.dataset.label + ': ' + context.parsed.y + '%';
-                                    }
-                                }
+                                grid: { color: '#e5e7eb' },
+                                ticks: { font: { size: 14 } }
                             }
                         }
                     }
@@ -950,21 +952,21 @@
             // 2. Распределение вакансий по отраслям (doughnut)
             const industryDistCtx = document.getElementById('industryDistributionChart')?.getContext('2d');
             if (industryDistCtx) {
-                new Chart(industryDistCtx, {
+                const industryChart = new Chart(industryDistCtx, {
                     type: 'doughnut',
                     data: {
                         labels: ['IT', 'Строительство', 'Торговля', 'Образование', 'Здравоохранение', 'Другие'],
                         datasets: [{
                             data: [18, 22, 25, 12, 8, 15],
                             backgroundColor: [
-                                '#3B82F6',
-                                '#10B981',
-                                '#F59E0B',
-                                '#EF4444',
-                                '#8B5CF6',
-                                '#6B7280'
+                                '#2563eb', // IT
+                                '#22c55e', // Строительство
+                                '#f59e42', // Торговля
+                                '#a78bfa', // Образование
+                                '#ef4444', // Здравоохранение
+                                '#6b7280'  // Другие
                             ],
-                            borderColor: '#ffffff',
+                            borderColor: '#fff',
                             borderWidth: 2
                         }]
                     },
@@ -972,12 +974,23 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: {
-                                display: true,
-                                position: 'bottom',
+                            legend: { display: false },
+                        }
+                    },
+                    plugins: [{
+                        id: 'customLegend',
+                        afterRender(chart) {
+                            const legendBlock = document.getElementById('industryLegend');
+                            if (legendBlock) {
+                                legendBlock.innerHTML = chart.data.labels.map((label, i) =>
+                                    `<div style="display:flex;align-items:center;margin-bottom:8px;">
+                                        <span style="display:inline-block;width:16px;height:16px;background:${chart.data.datasets[0].backgroundColor[i]};border-radius:3px;margin-right:8px;"></span>
+                                        <span style="font-size:15px;">${label}</span>
+                                    </div>`
+                                ).join('');
                             }
                         }
-                    }
+                    }]
                 });
             }
 
