@@ -55,6 +55,15 @@
             padding: 1.5rem;
             border-bottom: 1px solid #c3dafe;
         }
+        /* --- Для анимации сворачивания/разворачивания фильтров --- */
+        .filter-group-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .filter-group-content.expanded {
+            max-height: 500px; /* Достаточно для большинства фильтров */
+        }
         /* Print-specific styles for A4 format */
         @media print {
             @page {
