@@ -647,6 +647,7 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Global state object for filters (not directly used for report generation in this version, but kept for filter form)
         let currentFiltersState = {
@@ -855,6 +856,94 @@
                     }
                 });
             });
+
+            // --- Chart.js widgets initialization ---
+            // 1. Динамика вакансий (по месяцам)
+            const jobTrendCtx = document.getElementById('jobTrendChart')?.getContext('2d');
+            if (jobTrendCtx) {
+                new Chart(jobTrendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                        datasets: [{
+                            label: 'Вакансии',
+                            data: [1200, 1350, 1400, 1500, 1600, 1700, 1800, 1750, 1650, 1550, 1450, 1300],
+                            borderColor: '#3B82F6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#3B82F6',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: true, position: 'top' },
+                            title: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+
+            // 2. Распределение вакансий по отраслям
+            const industryDistCtx = document.getElementById('industryDistributionChart')?.getContext('2d');
+            if (industryDistCtx) {
+                new Chart(industryDistCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['IT', 'Строительство', 'Торговля', 'Образование', 'Здравоохранение', 'Производство', 'Финансы'],
+                        datasets: [{
+                            data: [18, 22, 25, 12, 8, 10, 5],
+                            backgroundColor: [
+                                '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#6B7280', '#F472B6'
+                            ],
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: true, position: 'bottom' },
+                            title: { display: false }
+                        }
+                    }
+                });
+            }
+
+            // 3. Уровень безработицы по регионам (тренды)
+            const regionalUnempCtx = document.getElementById('regionalUnemploymentChart')?.getContext('2d');
+            if (regionalUnempCtx) {
+                new Chart(regionalUnempCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Душанбе', 'Согдийская область', 'Хатлонская область', 'ГБАО', 'Районы республиканского подчинения'],
+                        datasets: [{
+                            label: 'Безработица (%)',
+                            data: [4.2, 5.8, 7.1, 6.3, 8.9],
+                            backgroundColor: [
+                                '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'
+                            ],
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: true, position: 'top' },
+                            title: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, max: 10 }
+                        }
+                    }
+                });
+            }
 
             // Initialize filter groups states (Existing)
             const filtersToExpandByDefault = [
