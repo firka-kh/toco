@@ -754,17 +754,16 @@
         // Function to render the report table
         function renderReportTable(numRows = 5) {
             const reportTableBody = document.getElementById('reportTableBody');
-            if (!reportTableBody) { // Added null check for reportTableBody
+            if (!reportTableBody) {
                 console.error("Элемент с ID 'reportTableBody' не найден.");
                 return;
             }
-            reportTableBody.innerHTML = ''; // Clear previous rows
+            reportTableBody.innerHTML = '';
 
             for (let i = 0; i < numRows; i++) {
                 const rowData = generateRandomReportRow();
                 const row = document.createElement('tr');
                 row.className = 'border-b border-gray-200 hover:bg-gray-50';
-
                 row.innerHTML = `
                     <td class="px-4 py-2 text-sm text-gray-800">${rowData.period}</td>
                     <td class="px-4 py-2 text-sm text-gray-800">${rowData.regions}</td>
