@@ -857,49 +857,64 @@
                 });
             });
 
-            // --- Chart.js widgets initialization ---
-            // 1. Динамика вакансий (по месяцам)
+            // --- Chart.js widgets initialization (как на index.html) ---
+            // 1. Уровень безработицы по регионам (bar)
             const jobTrendCtx = document.getElementById('jobTrendChart')?.getContext('2d');
             if (jobTrendCtx) {
                 new Chart(jobTrendCtx, {
-                    type: 'line',
+                    type: 'bar',
                     data: {
-                        labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                        labels: ['Душанбе', 'Худжанд', 'Куляб', 'Курган-Тюбе', 'ГБАО'],
                         datasets: [{
-                            label: 'Вакансии',
-                            data: [1200, 1350, 1400, 1500, 1600, 1700, 1800, 1750, 1650, 1550, 1450, 1300],
-                            borderColor: '#3B82F6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            tension: 0.3,
-                            fill: true,
-                            pointRadius: 4,
-                            pointBackgroundColor: '#3B82F6',
+                            label: 'Уровень безработицы (%)',
+                            data: [4.2, 5.8, 7.1, 6.3, 8.9],
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
                         }]
                     },
                     options: {
                         responsive: true,
-                        plugins: {
-                            legend: { display: true, position: 'top' },
-                            title: { display: false }
-                        },
+                        maintainAspectRatio: false,
                         scales: {
-                            y: { beginAtZero: true }
+                            y: {
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.parsed.y + '%';
+                                    }
+                                }
+                            }
                         }
                     }
                 });
             }
 
-            // 2. Распределение вакансий по отраслям
+            // 2. Распределение вакансий по отраслям (doughnut)
             const industryDistCtx = document.getElementById('industryDistributionChart')?.getContext('2d');
             if (industryDistCtx) {
                 new Chart(industryDistCtx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['IT', 'Строительство', 'Торговля', 'Образование', 'Здравоохранение', 'Производство', 'Финансы'],
+                        labels: ['IT', 'Строительство', 'Торговля', 'Образование', 'Здравоохранение', 'Другие'],
                         datasets: [{
-                            data: [18, 22, 25, 12, 8, 10, 5],
+                            data: [18, 22, 25, 12, 8, 15],
                             backgroundColor: [
-                                '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#6B7280', '#F472B6'
+                                '#3B82F6',
+                                '#10B981',
+                                '#F59E0B',
+                                '#EF4444',
+                                '#8B5CF6',
+                                '#6B7280'
                             ],
                             borderColor: '#ffffff',
                             borderWidth: 2
@@ -907,39 +922,65 @@
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         plugins: {
-                            legend: { display: true, position: 'bottom' },
-                            title: { display: false }
+                            legend: {
+                                display: true,
+                                position: 'bottom',
+                            }
                         }
                     }
                 });
             }
 
-            // 3. Уровень безработицы по регионам (тренды)
+            // 3. Уровень безработицы по регионам (тренды) (line)
             const regionalUnempCtx = document.getElementById('regionalUnemploymentChart')?.getContext('2d');
             if (regionalUnempCtx) {
                 new Chart(regionalUnempCtx, {
-                    type: 'bar',
+                    type: 'line',
                     data: {
-                        labels: ['Душанбе', 'Согдийская область', 'Хатлонская область', 'ГБАО', 'Районы республиканского подчинения'],
-                        datasets: [{
-                            label: 'Безработица (%)',
-                            data: [4.2, 5.8, 7.1, 6.3, 8.9],
-                            backgroundColor: [
-                                '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'
-                            ],
-                            borderColor: '#ffffff',
-                            borderWidth: 2
-                        }]
+                        labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                        datasets: [
+                            {
+                                label: 'Душанбе',
+                                data: [4.2, 4.3, 4.1, 4.0, 4.2, 4.4, 4.3, 4.1, 4.0, 4.2, 4.3, 4.1],
+                                borderColor: '#3B82F6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                tension: 0.3,
+                                fill: false
+                            },
+                            {
+                                label: 'Худжанд',
+                                data: [5.8, 5.7, 5.9, 5.6, 5.8, 5.7, 5.9, 5.6, 5.8, 5.7, 5.9, 5.6],
+                                borderColor: '#10B981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                tension: 0.3,
+                                fill: false
+                            },
+                            {
+                                label: 'Куляб',
+                                data: [7.1, 7.0, 7.2, 7.1, 7.0, 7.2, 7.1, 7.0, 7.2, 7.1, 7.0, 7.2],
+                                borderColor: '#F59E0B',
+                                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                tension: 0.3,
+                                fill: false
+                            }
+                        ]
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         plugins: {
-                            legend: { display: true, position: 'top' },
-                            title: { display: false }
+                            legend: {
+                                display: true,
+                                position: 'top',
+                            }
                         },
                         scales: {
-                            y: { beginAtZero: true, max: 10 }
+                            y: {
+                                beginAtZero: true,
+                                max: 10
+                            }
                         }
                     }
                 });
