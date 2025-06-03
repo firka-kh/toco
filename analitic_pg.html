@@ -493,11 +493,15 @@
                                 Уровень заработной платы (сомони) <i class="fas fa-chevron-down text-sm"></i>
                             </button>
                             <div id="salaryFilter" class="filter-group-content">
-                                <div class="flex gap-2 relative">
-                                    <input type="number" id="salaryMinInput" name="salaryMin" placeholder="От (сомони)" class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-gray-800 pr-12">
-                                    <span class="salary-input-suffix">сомони</span>
-                                    <input type="number" id="salaryMaxInput" name="salaryMax" placeholder="До (сомони)" class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-gray-800 pr-12">
-                                    <span class="salary-input-suffix" style="right:calc(50% - 1rem)">сомони</span>
+                                <div class="flex gap-2">
+                                    <div class="relative w-1/2">
+                                        <input type="number" id="salaryMinInput" name="salaryMin" placeholder="От" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-800 pr-12">
+                                        <span class="salary-input-suffix" style="right:1rem;">сомони</span>
+                                    </div>
+                                    <div class="relative w-1/2">
+                                        <input type="number" id="salaryMaxInput" name="salaryMax" placeholder="До" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-800 pr-12">
+                                        <span class="salary-input-suffix" style="right:1rem;">сомони</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1031,31 +1035,15 @@
             }
 
             // Initialize filter groups states (Existing)
-            const filtersToExpandByDefault = [
-                'periodFilter', 'regionFilter', 'industryFilter', 'dataTypeFilter',
-                'keywordsFilter', 'salaryFilter', 'employmentTypeFilter', 'companyTypeFilter'
-            ];
-
+            // Все фильтры свернуты по умолчанию
             document.querySelectorAll('.filter-group-content').forEach(content => {
+                content.classList.remove('expanded');
+                content.style.maxHeight = null;
                 const button = content.previousElementSibling;
                 const icon = button ? button.querySelector('i') : null;
-
-                if (filtersToExpandByDefault.includes(content.id)) {
-                    content.classList.add('expanded');
-                    setTimeout(() => {
-                        content.style.maxHeight = content.scrollHeight + "px";
-                    }, 0);
-                    if (icon) {
-                        icon.classList.remove('fa-chevron-down');
-                        icon.classList.add('fa-chevron-up');
-                    }
-                } else {
-                    content.classList.remove('expanded');
-                    content.style.maxHeight = null;
-                    if (icon) {
-                        icon.classList.remove('fa-chevron-up');
-                        icon.classList.add('fa-chevron-down');
-                    }
+                if (icon) {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
                 }
             });
 
