@@ -650,8 +650,16 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Новый виджет: Гендерное распределение рынка труда -->
+                    <div class="chart-container">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Гендерное распределение рынка труда</h3>
+                        <div class="flex flex-col items-center">
+                            <canvas id="genderDistributionChart" style="min-height:220px;max-width:260px;"></canvas>
+                            <div id="genderLegend" class="legend-block mt-4"></div>
+                        </div>
+                    </div>
                     <div class="chart-container lg:col-span-2">
-                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Уровень безработицы по регионам (тренды)</h3>
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 text-center">Уровень безработицы по регионам (тренды)</h3>
                         <div class="chart-container">
                             <canvas id="regionalUnemploymentChart"></canvas>
                         </div>
@@ -994,6 +1002,48 @@
                                         <span style="font-size:15px;">${label}</span>
                                     </div>`
                                 ).join('');
+                            }
+                        }
+                    }]
+                });
+            }
+
+            // Новый виджет: Гендерное распределение рынка труда (doughnut)
+            const genderDistCtx = document.getElementById('genderDistributionChart')?.getContext('2d');
+            if (genderDistCtx) {
+                const genderChart = new Chart(genderDistCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Мужчины', 'Женщины', 'Не указано'],
+                        datasets: [{
+                            data: [54, 43, 3], // Примерные проценты
+                            backgroundColor: [
+                                '#2563eb', // Мужчины
+                                '#f472b6', // Женщины
+                                '#a3a3a3'  // Не указано
+                            ],
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    },
+                    plugins: [{
+                        id: 'customGenderLegend',
+                        afterRender(chart) {
+                            const legendBlock = document.getElementById('genderLegend');
+                            if (legendBlock) {
+                                legendBlock.innerHTML = chart.data.labels.map((label, i) =>
+                                    `<div style="display:flex;align-items:center;margin-bottom:8px;">
+                                        <span style="display:inline-block;width:16px;height:16px;background:${chart.data.datasets[0].backgroundColor[i]};border-radius:3px;margin-right:8px;"></span>
+                                        <span style="font-size:15px;">${label}</span>
+                            </div>`
+                        ).join('');
                             }
                         }
                     }]
