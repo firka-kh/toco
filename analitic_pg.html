@@ -630,30 +630,30 @@
                     </div>
                 </div>
 
-                <div class="grid lg:grid-cols-3 gap-8 mb-12">
+                <div class="grid lg:grid-cols-2 gap-8 mb-12">
 
                     <!-- Виджет: Динамика вакансий по месяцам -->
-                    <div class="bg-white rounded-lg p-6 shadow-lg lg:col-span-3">
-                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Динамика вакансий по месяцам</h3>
+                    <div class="bg-white rounded-lg p-6 shadow-lg lg:col-span-2">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 text-center">Динамика вакансий по месяцам</h3>
                         <div class="chart-container" style="height:320px;max-width:100%;">
                             <canvas id="vacanciesTrendChart"></canvas>
                         </div>
                     </div>
-                    <div class="bg-white rounded-lg p-6 shadow-lg flex flex-col items-center justify-center">
-                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Распределение вакансий по отраслям</h3>
-                        <div class="w-full flex flex-col items-center">
+                    <div class="bg-white rounded-lg p-6 shadow-lg flex flex-col items-center justify-start min-h-[340px]">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 text-center w-full">Распределение вакансий по отраслям</h3>
+                        <div class="flex flex-col items-center flex-1 justify-center w-full">
                             <canvas id="industryDistributionChart" width="220" height="220" style="max-width:220px;max-height:220px;"></canvas>
                             <div id="industryLegend" class="legend-block mt-4"></div>
                         </div>
                     </div>
-                    <div class="bg-white rounded-lg p-6 shadow-lg flex flex-col items-center justify-center">
-                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Гендерное распределение рынка труда</h3>
-                        <div class="w-full flex flex-col items-center">
+                    <div class="bg-white rounded-lg p-6 shadow-lg flex flex-col items-center justify-start min-h-[340px]">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 text-center w-full">Гендерное распределение рынка труда</h3>
+                        <div class="flex flex-col items-center flex-1 justify-center w-full">
                             <canvas id="genderDistributionChart" width="220" height="220" style="max-width:220px;max-height:220px;"></canvas>
                             <div id="genderLegend" class="legend-block mt-4"></div>
                         </div>
                     </div>
-                    <div class="bg-white rounded-lg p-6 shadow-lg lg:col-span-3">
+                    <div class="bg-white rounded-lg p-6 shadow-lg lg:col-span-2">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800 text-center">Уровень безработицы по регионам (тренды)</h3>
                         <div class="chart-container">
                             <canvas id="regionalUnemploymentChart"></canvas>
