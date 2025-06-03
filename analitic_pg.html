@@ -708,6 +708,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <script>
         // Global state object for filters (not directly used for report generation in this version, but kept for filter form)
         let currentFiltersState = {
@@ -984,26 +985,41 @@
                         maintainAspectRatio: false,
                         plugins: {
                             legend: { display: false },
-                        }
-                    },
-                    plugins: [{
-                        id: 'customLegend',
-                        afterRender(chart) {
-                            const legendBlock = document.getElementById('industryLegend');
-                            if (legendBlock) {
-                                legendBlock.innerHTML = chart.data.labels.map((label, i) =>
-                                    `<div style="display:flex;align-items:center;margin-bottom:8px;">
-                                        <span style="display:inline-block;width:16px;height:16px;background:${chart.data.datasets[0].backgroundColor[i]};border-radius:3px;margin-right:8px;"></span>
-                                        <span style="font-size:15px;">${label}</span>
-                                    </div>`
-                                ).join('');
+                            datalabels: {
+                                color: '#222',
+                                font: { weight: 'bold', size: 15 },
+                                formatter: function(value, context) {
+                                    const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    const percent = Math.round((value / total) * 100);
+                                    return percent + '%';
+                                }
                             }
                         }
-                    }]
+                    },
+                    plugins: [
+                        ChartDataLabels,
+                        {
+                            id: 'customLegend',
+                            afterRender(chart) {
+                                const legendBlock = document.getElementById('industryLegend');
+                                if (legendBlock) {
+                                    legendBlock.innerHTML = chart.data.labels.map((label, i) => {
+                                        const value = chart.data.datasets[0].data[i];
+                                        const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                        const percent = Math.round((value / total) * 100);
+                                        return `<div style="display:flex;align-items:center;margin-bottom:8px;">
+                                            <span style="display:inline-block;width:16px;height:16px;background:${chart.data.datasets[0].backgroundColor[i]};border-radius:3px;margin-right:8px;"></span>
+                                            <span style="font-size:15px;">${label} — <b>${percent}%</b></span>
+                                        </div>`;
+                                    }).join('');
+                                }
+                            }
+                        }
+                    ]
                 });
             }
 
-            // Новый виджет: Гендерное распределение рынка труда (doughnut)
+            // Гендерное распределение рынка труда (doughnut)
             const genderDistCtx = document.getElementById('genderDistributionChart')?.getContext('2d');
             if (genderDistCtx) {
                 const genderChart = new Chart(genderDistCtx, {
@@ -1025,23 +1041,38 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { display: false }
-                        }
-                    },
-                    plugins: [{
-                        id: 'customGenderLegend',
-                        afterRender(chart) {
-                            const legendBlock = document.getElementById('genderLegend');
-                            if (legendBlock) {
-                                legendBlock.innerHTML = chart.data.labels.map((label, i) =>
-                                    `<div style="display:flex;align-items:center;margin-bottom:8px;">
-                                        <span style="display:inline-block;width:16px;height:16px;background:${chart.data.datasets[0].backgroundColor[i]};border-radius:3px;margin-right:8px;"></span>
-                                        <span style="font-size:15px;">${label}</span>
-                            </div>`
-                        ).join('');
+                            legend: { display: false },
+                            datalabels: {
+                                color: '#222',
+                                font: { weight: 'bold', size: 15 },
+                                formatter: function(value, context) {
+                                    const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    const percent = Math.round((value / total) * 100);
+                                    return percent + '%';
+                                }
                             }
                         }
-                    }]
+                    },
+                    plugins: [
+                        ChartDataLabels,
+                        {
+                            id: 'customGenderLegend',
+                            afterRender(chart) {
+                                const legendBlock = document.getElementById('genderLegend');
+                                if (legendBlock) {
+                                    legendBlock.innerHTML = chart.data.labels.map((label, i) => {
+                                        const value = chart.data.datasets[0].data[i];
+                                        const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                        const percent = Math.round((value / total) * 100);
+                                        return `<div style="display:flex;align-items:center;margin-bottom:8px;">
+                                            <span style="display:inline-block;width:16px;height:16px;background:${chart.data.datasets[0].backgroundColor[i]};border-radius:3px;margin-right:8px;"></span>
+                                            <span style="font-size:15px;">${label} — <b>${percent}%</b></span>
+                                        </div>`;
+                                    }).join('');
+                                }
+                            }
+                        }
+                    ]
                 });
             }
 
