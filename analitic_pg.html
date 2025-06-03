@@ -991,12 +991,15 @@
                         afterRender(chart) {
                             const legendBlock = document.getElementById('industryLegend');
                             if (legendBlock) {
-                                legendBlock.innerHTML = chart.data.labels.map((label, i) =>
-                                    `<div style="display:flex;align-items:center;margin-bottom:8px;">
+                                const data = chart.data.datasets[0].data;
+                                const total = data.reduce((a, b) => a + b, 0);
+                                legendBlock.innerHTML = chart.data.labels.map((label, i) => {
+                                    const percent = Math.round((data[i] / total) * 100);
+                                    return `<div style="display:flex;align-items:center;margin-bottom:8px;">
                                         <span style="display:inline-block;width:16px;height:16px;background:${chart.data.datasets[0].backgroundColor[i]};border-radius:3px;margin-right:8px;"></span>
-                                        <span style="font-size:15px;">${label}</span>
-                                    </div>`
-                                ).join('');
+                                        <span style="font-size:15px;">${label} <b>${percent}%</b></span>
+                                    </div>`;
+                                }).join('');
                             }
                         }
                     }]
@@ -1033,12 +1036,15 @@
                         afterRender(chart) {
                             const legendBlock = document.getElementById('genderLegend');
                             if (legendBlock) {
-                                legendBlock.innerHTML = chart.data.labels.map((label, i) =>
-                                    `<div style="display:flex;align-items:center;margin-bottom:8px;">
+                                const data = chart.data.datasets[0].data;
+                                const total = data.reduce((a, b) => a + b, 0);
+                                legendBlock.innerHTML = chart.data.labels.map((label, i) => {
+                                    const percent = Math.round((data[i] / total) * 100);
+                                    return `<div style="display:flex;align-items:center;margin-bottom:8px;">
                                         <span style="display:inline-block;width:16px;height:16px;background:${chart.data.datasets[0].backgroundColor[i]};border-radius:3px;margin-right:8px;"></span>
-                                        <span style="font-size:15px;">${label}</span>
-                                    </div>`
-                                ).join('');
+                                        <span style="font-size:15px;">${label} <b>${percent}%</b></span>
+                                    </div>`;
+                                }).join('');
                             }
                         }
                     }]
