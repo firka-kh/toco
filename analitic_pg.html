@@ -633,7 +633,9 @@
                 <div class="grid lg:grid-cols-2 gap-8 mb-12">
                     <div class="chart-container" style="max-width: 520px; margin-left:auto; margin-right:auto;">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800">Динамика вакансий (по месяцам)</h3>
-                        <canvas id="jobTrendChart" style="min-height:320px; max-width:480px;"></canvas>
+                        <div class="chart-container" style="height:320px;max-width:480px;">
+                            <canvas id="jobTrendChart"></canvas>
+                        </div>
                     </div>
                     <div class="chart-container">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800">Распределение вакансий по отраслям</h3>
@@ -909,7 +911,7 @@
             });
 
             // --- Chart.js widgets initialization (как на index.html) ---
-            // 1. Уровень безработицы по регионам (bar)
+            // 1. Динамика вакансий (по месяцам) - bar chart как на index.html
             const jobTrendCtx = document.getElementById('jobTrendChart')?.getContext('2d');
             if (jobTrendCtx) {
                 new Chart(jobTrendCtx, {
@@ -919,43 +921,31 @@
                         datasets: [{
                             label: 'Вакансии',
                             data: [4, 5, 6, 7, 8, 7, 6, 5, 4, 5, 6, 7],
-                            backgroundColor: [
-                                '#2563eb', // Январь
-                                '#22c55e', // Февраль
-                                '#f59e42', // Март
-                                '#a78bfa', // Апрель
-                                '#ef4444', // Май
-                                '#6b7280', // Июнь
-                                '#fbbf24', // Июль
-                                '#10b981', // Август
-                                '#6366f1', // Сентябрь
-                                '#f472b6', // Октябрь
-                                '#f87171', // Ноябрь
-                                '#34d399'  // Декабрь
-                            ],
-                            borderRadius: 8,
-                            barPercentage: 0.65,
-                            categoryPercentage: 0.65
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        layout: {
-                            padding: { left: 0, right: 0, top: 0, bottom: 0 }
-                        },
                         scales: {
-                            x: {
-                                grid: { display: false },
-                                ticks: { font: { size: 13 } }
-                            },
                             y: {
                                 beginAtZero: true,
-                                grid: { color: '#e5e7eb' },
-                                ticks: { font: { size: 13 } }
+                                max: 10
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.parsed.y;
+                                    }
+                                }
                             }
                         }
                     }
