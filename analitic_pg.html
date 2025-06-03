@@ -655,6 +655,14 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Виджет: Динамика вакансий по месяцам -->
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Динамика вакансий по месяцам</h3>
+                    <div class="chart-container" style="height:320px;max-width:480px;">
+                        <canvas id="vacanciesTrendChart"></canvas>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -1048,6 +1056,48 @@
                     }
                 });
             }
+
+            // Динамика вакансий по месяцам
+            const ctxVacancies = document.getElementById('vacanciesTrendChart').getContext('2d');
+            new Chart(ctxVacancies, {
+                type: 'line',
+                data: {
+                    labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                    datasets: [{
+                        label: 'Количество вакансий',
+                        data: [1200, 1350, 1500, 1700, 1600, 1800, 2000, 2100, 1950, 2200, 2300, 2400],
+                        fill: true,
+                        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        tension: 0.3,
+                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Вакансии' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Месяц' }
+                        }
+                    }
+                }
+            });
 
             // Initialize filter groups states (Existing)
             // Все фильтры свернуты по умолчанию
