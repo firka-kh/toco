@@ -1019,22 +1019,22 @@
                 });
             }
 
-            // Гендерное распределение рынка труда (doughnut)
+            // Гендерное распределение рынка труда (bar)
             const genderDistCtx = document.getElementById('genderDistributionChart')?.getContext('2d');
             if (genderDistCtx) {
+                const genderData = [54, 43, 3];
+                const genderLabels = ['Мужчины', 'Женщины', 'Не указано'];
+                const genderColors = ['#2563eb', '#f472b6', '#a3a3a3'];
                 const genderChart = new Chart(genderDistCtx, {
-                    type: 'doughnut',
+                    type: 'bar',
                     data: {
-                        labels: ['Мужчины', 'Женщины', 'Не указано'],
+                        labels: genderLabels,
                         datasets: [{
-                            data: [54, 43, 3], // Примерные проценты
-                            backgroundColor: [
-                                '#2563eb', // Мужчины
-                                '#f472b6', // Женщины
-                                '#a3a3a3'  // Не указано
-                            ],
-                            borderColor: '#fff',
-                            borderWidth: 2
+                            label: 'Доля (%)',
+                            data: genderData,
+                            backgroundColor: genderColors,
+                            borderRadius: 8,
+                            maxBarThickness: 48
                         }]
                     },
                     options: {
@@ -1043,273 +1043,19 @@
                         plugins: {
                             legend: { display: false },
                             datalabels: {
+                                anchor: 'end',
+                                align: 'top',
                                 color: '#222',
                                 font: { weight: 'bold', size: 15 },
-                                formatter: function(value, context) {
-                                    const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                    const percent = Math.round((value / total) * 100);
-                                    return percent + '%';
+                                formatter: function(value) {
+                                    return value + '%';
                                 }
-                            }
-                        }
-                    },
-                    plugins: [
-                        ChartDataLabels,
-                        {
-                            id: 'customGenderLegend',
-                            afterRender(chart) {
-                                const legendBlock = document.getElementById('genderLegend');
-                                if (legendBlock) {
-                                    legendBlock.innerHTML = chart.data.labels.map((label, i) => {
-                                        const value = chart.data.datasets[0].data[i];
-                                        const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                        const percent = Math.round((value / total) * 100);
-                                        return `<div style="display:flex;align-items:center;margin-bottom:8px;">
-                                            <span style="display:inline-block;width:16px;height:16px;background:${chart.data.datasets[0].backgroundColor[i]};border-radius:3px;margin-right:8px;"></span>
-                                            <span style="font-size:15px;">${label} — <b>${percent}%</b></span>
-                                        </div>`;
-                                    }).join('');
-                                }
-                            }
-                        }
-                    ]
-                });
-            }
-
-            // 3. Уровень безработицы по регионам (тренды) (line)
-            const regionalUnempCtx = document.getElementById('regionalUnemploymentChart')?.getContext('2d');
-            if (regionalUnempCtx) {
-                new Chart(regionalUnempCtx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                        datasets: [
-                            {
-                                label: 'Душанбе',
-                                data: [4.2, 4.3, 4.1, 4.0, 4.2, 4.4, 4.3, 4.1, 4.0, 4.2, 4.3, 4.1],
-                                borderColor: '#3B82F6',
-                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                                tension: 0.3,
-                                fill: false
-                            },
-                            {
-                                label: 'Худжанд',
-                                data: [5.8, 5.7, 5.9, 5.6, 5.8, 5.7, 5.9, 5.6, 5.8, 5.7, 5.9, 5.6],
-                                borderColor: '#10B981',
-                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                                tension: 0.3,
-                                fill: false
-                            },
-                            {
-                                label: 'Куляб',
-                                data: [7.1, 7.0, 7.2, 7.1, 7.0, 7.2, 7.1, 7.0, 7.2, 7.1, 7.0, 7.2],
-                                borderColor: '#F59E0B',
-                                backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                                tension: 0.3,
-                                fill: false
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top',
                             }
                         },
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                max: 10
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Динамика вакансий по месяцам
-            const ctxVacancies = document.getElementById('vacanciesTrendChart').getContext('2d');
-            new Chart(ctxVacancies, {
-                type: 'line',
-                data: {
-                    labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
-                    datasets: [{
-                        label: 'Количество вакансий',
-                        data: [1200, 1350, 1500, 1700, 1600, 1800, 2000, 2100, 1950, 2200, 2300, 2400],
-                        fill: true,
-                        backgroundColor: 'rgba(59, 130, 246, 0.15)',
-                        borderColor: 'rgba(59, 130, 246, 1)',
-                        tension: 0.3,
-                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
-                        pointRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: true, position: 'top' },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.dataset.label + ': ' + context.parsed.y;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: { display: true, text: 'Вакансии' }
-                        },
-                        x: {
-                            title: { display: true, text: 'Месяц' }
-                        }
-                    }
-                }
-            });
-
-            // Initialize filter groups states (Existing)
-            // Все фильтры свернуты по умолчанию
-            document.querySelectorAll('.filter-group-content').forEach(content => {
-                content.classList.remove('expanded');
-                content.style.maxHeight = null;
-                const button = content.previousElementSibling;
-                const icon = button ? button.querySelector('i') : null;
-                if (icon) {
-                    icon.classList.remove('fa-chevron-up');
-                    icon.classList.add('fa-chevron-down');
-                }
-            });
-
-            // Populate Year/Month Selects and set defaults (Existing)
-            const selectYear = document.getElementById('selectYear');
-            const selectMonth = document.getElementById('selectMonth');
-            const selectQuarter = document.getElementById('selectQuarter');
-            const currentYear = new Date().getFullYear();
-            const currentMonth = new Date().getMonth(); // 0-11
-
-            if (selectYear) { // ADDED NULL CHECK
-                for (let i = currentYear; i >= currentYear - 5; i--) {
-                    const option = document.createElement('option');
-                    option.value = i;
-                    option.textContent = i;
-                    selectYear.appendChild(option);
-                }
-                selectYear.value = currentYear;
-            } else {
-                console.error("Элемент с ID 'selectYear' не найден.");
-            }
-
-            if (selectMonth) { // ADDED NULL CHECK
-                months.forEach((month, index) => {
-                    const option = document.createElement('option');
-                    option.value = index + 1;
-                    option.textContent = month;
-                    selectMonth.appendChild(option);
-                });
-                selectMonth.value = currentMonth + 1;
-            } else {
-                console.error("Элемент с ID 'selectMonth' не найден.");
-            }
-
-            document.querySelectorAll('input[name="period"]').forEach(radio => {
-                radio.addEventListener('change', () => {
-                    if (selectYear) selectYear.classList.add('hidden');
-                    if (selectQuarter) selectQuarter.classList.add('hidden');
-                    if (selectMonth) selectMonth.classList.add('hidden');
-
-                    if (radio.value === 'year') {
-                        if (selectYear) selectYear.classList.remove('hidden');
-                    } else if (radio.value === 'quarter') {
-                        if (selectYear) selectYear.classList.remove('hidden');
-                        if (selectQuarter) selectQuarter.classList.remove('hidden');
-                    } else if (radio.value === 'month') {
-                        if (selectYear) selectYear.classList.remove('hidden');
-                        if (selectMonth) selectMonth.classList.remove('hidden');
-                    }
-                    currentFiltersState.period = radio.value;
-                    updateFiltersState();
-                });
-            });
-            const initialPeriodRadio = document.querySelector('input[name="period"]:checked');
-            if (initialPeriodRadio) { // ADDED NULL CHECK
-                initialPeriodRadio.dispatchEvent(new Event('change'));
-            } else {
-                console.error("Не найдена выбранная радио-кнопка для периода.");
-            }
-
-            if (selectYear) selectYear.addEventListener('change', (e) => { currentFiltersState.year = e.target.value; updateFiltersState(); });
-            if (selectQuarter) selectQuarter.addEventListener('change', (e) => { currentFiltersState.quarter = e.target.value; updateFiltersState(); });
-            if (selectMonth) selectMonth.addEventListener('change', (e) => { currentFiltersState.month = e.target.value; updateFiltersState(); });
-
-            document.querySelectorAll('input[name="region"], input[name="industry"], input[name="dataType"], input[name="ageGroup"], input[name="educationLevel"], input[name="experience"], input[name="socialStatus"]').forEach(input => {
-                input.addEventListener('change', updateFiltersState);
-            });
-            document.querySelectorAll('input[name="gender"], input[name="employmentType"], input[name="companyType"]').forEach(input => {
-                input.addEventListener('change', updateFiltersState);
-            });
-            document.getElementById('keywordsInput')?.addEventListener('input', updateFiltersState);
-            document.getElementById('salaryMinInput')?.addEventListener('input', updateFiltersState);
-            document.getElementById('salaryMaxInput')?.addEventListener('input', updateFiltersState);
-
-            function updateFiltersState() {
-                currentFiltersState.period = document.querySelector('input[name="period"]:checked')?.value || 'month';
-                currentFiltersState.year = document.getElementById('selectYear')?.value || new Date().getFullYear();
-                currentFiltersState.quarter = document.getElementById('selectQuarter')?.value || 'Q1';
-                currentFiltersState.month = document.getElementById('selectMonth')?.value || (new Date().getMonth() + 1);
-
-                currentFiltersState.regions = Array.from(document.querySelectorAll('input[name="region"]:checked')).map(cb => cb.value);
-                currentFiltersState.industries = Array.from(document.querySelectorAll('input[name="industry"]:checked')).map(cb => cb.value);
-                currentFiltersState.dataTypes = Array.from(document.querySelectorAll('input[name="dataType"]:checked')).map(cb => cb.value);
-                currentFiltersState.ageGroups = Array.from(document.querySelectorAll('input[name="ageGroup"]:checked')).map(cb => cb.value);
-                currentFiltersState.gender = document.querySelector('input[name="gender"]:checked')?.value || 'Не имеет значения';
-                currentFiltersState.educationLevels = Array.from(document.querySelectorAll('input[name="educationLevel"]:checked')).map(cb => cb.value);
-                currentFiltersState.experience = Array.from(document.querySelectorAll('input[name="experience"]:checked')).map(cb => cb.value);
-                currentFiltersState.socialStatus = Array.from(document.querySelectorAll('input[name="socialStatus"]:checked')).map(cb => cb.value);
-                currentFiltersState.keywords = document.getElementById('keywordsInput')?.value || '';
-                currentFiltersState.salaryMin = document.getElementById('salaryMinInput')?.value || '';
-                currentFiltersState.salaryMax = document.getElementById('salaryMaxInput')?.value || '';
-                currentFiltersState.employmentType = document.querySelector('input[name="employmentType"]:checked')?.value || 'Полная занятость';
-                currentFiltersState.companyType = document.querySelector('input[name="companyType"]:checked')?.value || 'Прямой работодатель';
-
-                console.log('Текущее состояние фильтров:', currentFiltersState);
-            }
-
-            updateFiltersState(); // Initial update on load
-
-            // "Apply Filters" button - for demonstration, it just logs the current state
-            document.getElementById('applyFiltersBtn').addEventListener('click', () => {
-                updateFiltersState();
-                alert('Фильтры применены (состояние обновлено)! Проверьте консоль для деталей.');
-            });
-
-            // "Generate Report" button logic
-            const generateReportBtn = document.getElementById('generateReportBtn');
-            const reportLoadingSpinner = document.getElementById('reportLoadingSpinner');
-            const reportOutputContainer = document.getElementById('reportOutputContainer'); // Changed to specific report output container
-            const reportTableBody = document.getElementById('reportTableBody');
-
-            generateReportBtn.addEventListener('click', async () => {
-                reportLoadingSpinner.classList.remove('hidden');
-                if (reportTableBody) reportTableBody.innerHTML = ''; // Clear previous report content, added null check
-                if (reportOutputContainer) reportOutputContainer.classList.add('opacity-50', 'pointer-events-none'); // Dim and disable interaction, added null check
-
-                // Simulate loading delay
-                await new Promise(resolve => setTimeout(resolve, 1500));
-
-                renderReportTable(5); // Generate 5 random rows
-
-                reportLoadingSpinner.classList.add('hidden');
-                if (reportOutputContainer) reportOutputContainer.classList.remove('opacity-50', 'pointer-events-none'); // Added null check
-                if (reportOutputContainer) reportOutputContainer.classList.remove('hidden'); // Show the report container
-            });
-
-            // Initial render of the table when the page loads
-            renderReportTable(5); // Render 5 random rows on initial load
-        });
-    </script>
-</body>
-</html>
+                                max: 100,
+                                title: { display: true, text: 'Проценты' },
+                                ticks: { stepSize: 10 }
+                           
