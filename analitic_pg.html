@@ -631,7 +631,7 @@
                 </div>
 
                 <div class="grid lg:grid-cols-2 gap-8 mb-12">
-                    <div class="chart-container" style="max-width: 520px; margin-left:auto; margin-right:auto;">
+                    <div class="bg-white rounded-lg p-6 shadow-lg" style="max-width: 520px; margin-left:auto; margin-right:auto;">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800">Динамика вакансий (по месяцам)</h3>
                         <div class="chart-container" style="height:320px;max-width:480px;">
                             <canvas id="jobTrendChart"></canvas>
@@ -910,8 +910,7 @@
                 });
             });
 
-            // --- Chart.js widgets initialization (как на index.html) ---
-            // 1. Динамика вакансий (по месяцам) - bar chart как на index.html
+            // Динамика вакансий (по месяцам) — как на скриншоте (bar, синие столбцы, белый фон)
             const jobTrendCtx = document.getElementById('jobTrendChart')?.getContext('2d');
             if (jobTrendCtx) {
                 new Chart(jobTrendCtx, {
@@ -920,7 +919,7 @@
                         labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
                         datasets: [{
                             label: 'Вакансии',
-                            data: [4, 5, 6, 7, 8, 7, 6, 5, 4, 5, 6, 7],
+                            data: [4, 5.8, 7.1, 6.3, 8.9, 7.2, 6.8, 5.5, 4.7, 5.2, 6.0, 7.3],
                             backgroundColor: 'rgba(59, 130, 246, 0.8)',
                             borderColor: 'rgba(59, 130, 246, 1)',
                             borderWidth: 1
