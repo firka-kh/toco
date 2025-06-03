@@ -184,6 +184,7 @@
     <header class="gradient-bg text-white shadow-lg">
         <div class="container mx-auto px-4 py-6">
             <div class="flex items-center justify-between">
+                <!-- Левая часть: Лого и название -->
                 <div class="flex items-center space-x-4">
                     <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
                     <div>
@@ -191,19 +192,37 @@
                         <p class="text-sm opacity-90">Республика Таджикистан</p>
                     </div>
                 </div>
+                <!-- Правая часть: Навигация, языки и профиль -->
                 <nav class="hidden md:flex space-x-6 items-center">
-                    <a href="#" class="hover:text-yellow-300 transition-colors">Вакансии</a>
-                    <a href="#" class="hover:text-yellow-300 transition-colors">Статистика</a>
-                    <a href="#" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
-                    <a href="#" class="hover:text-yellow-300 transition-colors">Программы</a>
-                    <a href="#" class="hover:text-yellow-300 transition-colors">Образование</a>
-                    <a href="#" class="hover:text-yellow-300 transition-colors">ИИ Инструменты</a>
-                    <div class="relative" id="profileDropdownContainer">
-                        <button id="profileMenuBtn" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2">Мой профиль</button>
-                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden">
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                    <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <a href="index.html#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
+                    <!-- Выпадающее меню профиля и языков -->
+                    <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
+                        <!-- Мой профиль -->
+                        <div class="relative">
+                            <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
+                                Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                                <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
+                                <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
+                                <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                            </div>
+                        </div>
+                        <!-- Выпадающее меню языков -->
+                        <div class="relative">
+                            <button id="langMenuBtn" type="button" class="px-3 py-1 rounded font-semibold bg-white text-gray-800 hover:bg-yellow-100 transition-colors flex items-center">
+                                <span id="currentLangLabel">RUS</span>
+                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div id="langDropdown" class="absolute right-0 mt-2 w-28 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
+                            </div>
                         </div>
                     </div>
                 </nav>
@@ -1286,5 +1305,17 @@
             renderReportTable(5); // Render 5 random rows on initial load
         });
     </script>
+    <!-- Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'ru',
+                includedLanguages: 'ru,en,tg',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div id="google_translate_element" style="display:none"></div>
 </body>
 </html>
