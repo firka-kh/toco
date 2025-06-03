@@ -145,6 +145,39 @@
                 font-size: 8pt;
             }
         }
+        /* --- Для аккуратности виджетов --- */
+        .dashboard-card {
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .dashboard-card i {
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+        }
+        .chart-container {
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04);
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+        /* Chart.js аккуратность */
+        canvas {
+            background: none !important;
+        }
+        /* Для фильтра зарплаты */
+        .salary-input-suffix {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-size: 0.95em;
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
@@ -457,12 +490,14 @@
 
                         <div class="border-b border-gray-200 pb-4">
                             <button class="flex justify-between items-center w-full text-left font-semibold text-gray-800 mb-2 filter-toggle" data-target="salaryFilter">
-                                Уровень заработной платы (₽) <i class="fas fa-chevron-down text-sm"></i>
+                                Уровень заработной платы (сомони) <i class="fas fa-chevron-down text-sm"></i>
                             </button>
                             <div id="salaryFilter" class="filter-group-content">
-                                <div class="flex gap-2">
-                                    <input type="number" id="salaryMinInput" name="salaryMin" placeholder="От" class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-gray-800">
-                                    <input type="number" id="salaryMaxInput" name="salaryMax" placeholder="До" class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-gray-800">
+                                <div class="flex gap-2 relative">
+                                    <input type="number" id="salaryMinInput" name="salaryMin" placeholder="От (сомони)" class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-gray-800 pr-12">
+                                    <span class="salary-input-suffix">сомони</span>
+                                    <input type="number" id="salaryMaxInput" name="salaryMax" placeholder="До (сомони)" class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-gray-800 pr-12">
+                                    <span class="salary-input-suffix" style="right:calc(50% - 1rem)">сомони</span>
                                 </div>
                             </div>
                         </div>
@@ -569,42 +604,42 @@
                 </div>
 
                 <div class="grid md:grid-cols-4 gap-6 mb-12">
-                    <div class="bg-blue-500 text-white rounded-lg p-6 text-center shadow-lg card-hover">
-                        <i class="fas fa-briefcase text-4xl mb-4"></i>
+                    <div class="bg-blue-500 text-white rounded-lg p-6 text-center shadow-lg card-hover dashboard-card">
+                        <i class="fas fa-briefcase"></i>
                         <h3 class="text-2xl font-bold">15,230</h3>
                         <p class="text-sm opacity-90">Активных вакансий</p>
                     </div>
-                    <div class="bg-green-500 text-white rounded-lg p-6 text-center shadow-lg card-hover">
-                        <i class="fas fa-users text-4xl mb-4"></i>
+                    <div class="bg-green-500 text-white rounded-lg p-6 text-center shadow-lg card-hover dashboard-card">
+                        <i class="fas fa-users"></i>
                         <h3 class="text-2xl font-bold">52,100</h3>
                         <p class="text-sm opacity-90">Зарегистрированных соискателей</p>
                     </div>
-                    <div class="bg-purple-500 text-white rounded-lg p-6 text-center shadow-lg card-hover">
-                        <i class="fas fa-handshake text-4xl mb-4"></i>
+                    <div class="bg-purple-500 text-white rounded-lg p-6 text-center shadow-lg card-hover dashboard-card">
+                        <i class="fas fa-handshake"></i>
                         <h3 class="text-2xl font-bold">9,876</h3>
                         <p class="text-sm opacity-90">Успешных трудоустройств</p>
                     </div>
-                    <div class="bg-yellow-500 text-white rounded-lg p-6 text-center shadow-lg card-hover">
-                        <i class="fas fa-chart-line text-4xl mb-4"></i>
+                    <div class="bg-yellow-500 text-white rounded-lg p-6 text-center shadow-lg card-hover dashboard-card">
+                        <i class="fas fa-chart-line"></i>
                         <h3 class="text-2xl font-bold">6.5%</h3>
                         <p class="text-sm opacity-90">Средний уровень безработицы</p>
                     </div>
                 </div>
 
                 <div class="grid lg:grid-cols-2 gap-8 mb-12">
-                    <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <div class="chart-container">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800">Динамика вакансий (по месяцам)</h3>
                         <div class="chart-container">
                             <canvas id="jobTrendChart"></canvas>
                         </div>
                     </div>
-                    <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <div class="chart-container">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800">Распределение вакансий по отраслям</h3>
                         <div class="chart-container">
                             <canvas id="industryDistributionChart"></canvas>
                         </div>
                     </div>
-                    <div class="bg-white rounded-lg p-6 shadow-lg lg:col-span-2">
+                    <div class="chart-container lg:col-span-2">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800">Уровень безработицы по регионам (тренды)</h3>
                         <div class="chart-container">
                             <canvas id="regionalUnemploymentChart"></canvas>
