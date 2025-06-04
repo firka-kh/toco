@@ -944,7 +944,19 @@
 
         function populateSearchCityDistrict() {
             const selectedRegion = searchRegionSelect.value;
-            const cities = searchRegionsData[selectedRegion] || [];
+            let cities = [];
+            if (selectedRegion === "all") {
+                // Собрать все города/районы из всех регионов (без дубликатов)
+                const citySet = new Set();
+                Object.keys(searchRegionsData).forEach(region => {
+                    if (region !== "all") {
+                        searchRegionsData[region].forEach(city => citySet.add(city));
+                    }
+                });
+                cities = Array.from(citySet);
+            } else {
+                cities = searchRegionsData[selectedRegion] || [];
+            }
 
             searchCityDistrictSelect.innerHTML = '<option value="all">Все города/районы</option>';
             cities.forEach(city => {
@@ -1042,6 +1054,49 @@
             searchResultsContainer.classList.add('hidden'); // Hide results until loaded
             document.getElementById('talentReportActions').classList.add('hidden');
             document.getElementById('talentReportTableWrapper').classList.add('hidden');
+
+            // --- NEW: Проверка заполненности фильтров ---
+            // Список id обязательных фильтров для демо-отчета
+            const requiredFields = [
+                'searchAgeMin',
+                'searchAgeMax',
+                'searchGender',
+                'searchRegion',
+                'searchCityDistrict',
+                'searchEducationLevel',
+                'searchExperienceYears',
+                'searchSkills',
+                'searchEmploymentStatus',
+                'searchSocialVulnerability',
+                'searchDesiredSalaryMin',
+                'searchDesiredSalaryMax'
+            ];
+            let allFilled = true;
+            for (const id of requiredFields) {
+                const el = document.getElementById(id);
+                // Для select и input type=number
+                if (el && (el.tagName === 'SELECT' || el.type === 'number' || el.type === 'text')) {
+                    // select: не 'all', input: не пусто
+                    if (
+                        (el.tagName === 'SELECT' && el.value === 'all') ||
+                        (el.type === 'number' && el.value === '') ||
+                        (el.type === 'text' && el.value.trim() === '')
+                    ) {
+                        allFilled = false;
+                        break;
+                    }
+                }
+                // Для textarea
+                if (el && el.tagName === 'TEXTAREA' && el.value.trim() === '') {
+                    allFilled = false;
+                    break;
+                }
+            }
+            if (!allFilled) {
+                spinner.classList.add('hidden');
+                alert('Пожалуйста, заполните все фильтры для генерации отчета.');
+                return;
+            }
 
             // Для демонстрации — просто генерируем 10 кандидатов
             setTimeout(() => {
