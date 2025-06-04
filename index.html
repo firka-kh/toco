@@ -935,21 +935,29 @@
                 const lang = this.getAttribute('data-lang');
                 currentLangLabel.textContent = this.textContent;
                 langDropdown.classList.add('hidden');
-                // Google Translate
-                setTimeout(() => {
-                    const frame = document.querySelector('iframe.goog-te-menu-frame');
-                    if (frame) {
-                        const langMap = {ru: 'Русский', tg: 'Таджикский', en: 'Английский'};
-                        const langName = langMap[lang];
-                        const items = frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text');
-                        for (let i = 0; i < items.length; i++) {
-                            if (items[i].innerText.trim().toLowerCase().includes(langName.toLowerCase())) {
-                                items[i].click();
-                                break;
-                            }
-                        }
+                if (lang === 'ru') {
+                    // Сбросить перевод (вернуть на русский)
+                    if (window.google && window.google.translate) {
+                        window.google.translate.TranslateElement && window.google.translate.TranslateElement.getInstance().showBanner(false);
                     }
-                }, 200);
+                    // Программно выбрать "Исходный язык" в выпадающем списке Google Translate
+                    setTimeout(() => {
+                        var select = document.querySelector('select.goog-te-combo');
+                        if (select) {
+                            select.value = '';
+                            select.dispatchEvent(new Event('change'));
+                        }
+                    }, 200);
+                } else {
+                    // Перевести на выбранный язык
+                    setTimeout(() => {
+                        var select = document.querySelector('select.goog-te-combo');
+                        if (select) {
+                            select.value = lang;
+                            select.dispatchEvent(new Event('change'));
+                        }
+                    }, 200);
+                }
             };
         });
 
