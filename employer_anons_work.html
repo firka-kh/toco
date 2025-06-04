@@ -1047,58 +1047,11 @@
             document.getElementById('talentReportActions').classList.add('hidden');
             document.getElementById('talentReportTableWrapper').classList.add('hidden');
 
-            // Для демонстрации — фильтр всегда заполнен
-            document.getElementById('searchAgeMin').value = 25;
-            document.getElementById('searchAgeMax').value = 40;
-            document.getElementById('searchGender').value = "Male";
-            document.getElementById('searchRegion').value = "Dushanbe";
-            populateSearchCityDistrict(); // <-- добавлено
-            document.getElementById('searchCityDistrict').value = "Район Исмоили Сомони";
-            populateSearchJamoat(); // <-- добавлено
-            document.getElementById('searchJamoat').value = "Джамоат И.Сомони 1";
-            document.getElementById('searchEducationLevel').value = "Higher";
-            document.getElementById('searchProfessionType').value = "Программист";
-            document.getElementById('searchExperienceYears').value = "3-5_Years";
-            document.getElementById('searchSkills').value = "Java, SQL";
-            document.getElementById('searchEmploymentStatus').value = "Employed";
-            document.getElementById('searchSocialVulnerability').value = "Disabled";
-            document.getElementById('searchDesiredSalaryMin').value = 5000;
-            document.getElementById('searchDesiredSalaryMax').value = 10000;
-            document.getElementById('searchReadyForRelocation').checked = true;
-            document.getElementById('searchReadyForBusinessTrips').checked = true;
-
-            // Собираем значения фильтров
-            const filters = {
-                fullName: "—", // Нет в фильтре, но для отчета можно добавить
-                age: `${document.getElementById('searchAgeMin').value}-${document.getElementById('searchAgeMax').value}`,
-                gender: document.getElementById('searchGender').options[document.getElementById('searchGender').selectedIndex].text,
-                region: document.getElementById('searchRegion').options[document.getElementById('searchRegion').selectedIndex].text,
-                cityDistrict: document.getElementById('searchCityDistrict').options[document.getElementById('searchCityDistrict').selectedIndex]?.text || "",
-                jamoat: document.getElementById('searchJamoat').options[document.getElementById('searchJamoat').selectedIndex]?.text || "",
-                education: document.getElementById('searchEducationLevel').options[document.getElementById('searchEducationLevel').selectedIndex].text,
-                profession: document.getElementById('searchProfessionType').value,
-                experienceYears: document.getElementById('searchExperienceYears').options[document.getElementById('searchExperienceYears').selectedIndex].text,
-                skills: document.getElementById('searchSkills').value,
-                employmentStatus: document.getElementById('searchEmploymentStatus').options[document.getElementById('searchEmploymentStatus').selectedIndex].text,
-                socialVulnerability: document.getElementById('searchSocialVulnerability').options[document.getElementById('searchSocialVulnerability').selectedIndex].text,
-                desiredSalary: `${document.getElementById('searchDesiredSalaryMin').value} - ${document.getElementById('searchDesiredSalaryMax').value}`,
-                readyForRelocation: document.getElementById('searchReadyForRelocation').checked ? "Да" : "Нет",
-                readyForBusinessTrips: document.getElementById('searchReadyForBusinessTrips').checked ? "Да" : "Нет"
-            };
-
+            // Для демонстрации — просто генерируем 10 кандидатов
             setTimeout(() => {
                 spinner.classList.add('hidden');
-                // Генерируем 10 кандидатов с такими же фильтрами (для демонстрации)
-                const candidates = [];
-                for (let i = 1; i <= 10; i++) {
-                    candidates.push({
-                        ...filters,
-                        fullName: `Кандидат ${i}`
-                    });
-                }
+                const candidates = generateMockCandidates();
                 lastTalentReportCandidates = candidates;
-
-                // Показываем таблицу и кнопки экспорта
                 renderTalentReportTable(candidates);
                 document.getElementById('talentReportActions').classList.remove('hidden');
                 document.getElementById('talentReportTableWrapper').classList.remove('hidden');
