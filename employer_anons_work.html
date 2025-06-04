@@ -221,17 +221,20 @@
                 <div class="flex items-center space-x-4">
                     <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
                     <div>
-                        <h1 class="text-2xl font-bold">Портал рынка труда</h1>
-                        <p class="text-sm opacity-90">Республика Таджикистан</p>
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
                     </div>
                 </div>
                 <!-- Правая часть: Навигация, языки и профиль -->
                 <nav class="hidden md:flex space-x-6 items-center">
-                    <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
-                    <a href="index.html#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
-                    <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
-                    <a href="index.html#education" class="hover:text-yellow-300 transition-colors">Образование</a>
-                    <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
+                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
                     <!-- Выпадающее меню профиля и языков -->
                     <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
                         <!-- Мой профиль -->
@@ -247,14 +250,23 @@
                         </div>
                         <!-- Выпадающее меню языков -->
                         <div class="relative">
-                            <button id="langMenuBtn" type="button" class="px-3 py-1 rounded font-semibold bg-white text-gray-800 hover:bg-yellow-100 transition-colors flex items-center">
+                            <button id="langMenuBtn" type="button"
+                                class="px-4 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                aria-haspopup="true" aria-expanded="false">
                                 <span id="currentLangLabel">RUS</span>
-                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                <i class="fas fa-chevron-down ml-2 text-xs"></i>
                             </button>
-                            <div id="langDropdown" class="absolute right-0 mt-2 w-28 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
-                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
-                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
-                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
+                            <div id="langDropdown"
+                                class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="ru">RUS</button>
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="tg">TAJ</button>
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="en">ENG</button>
                             </div>
                         </div>
                     </div>
@@ -764,6 +776,42 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
     <script>
+        // Выпадающее меню профиля и языков
+    const profileMenuBtn = document.getElementById('profileMenuBtn');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const langMenuBtn = document.getElementById('langMenuBtn');
+    const langDropdown = document.getElementById('langDropdown');
+    const currentLangLabel = document.getElementById('currentLangLabel');
+
+    profileMenuBtn?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('hidden');
+        langDropdown.classList.add('hidden');
+    });
+
+    langMenuBtn?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        langDropdown.classList.toggle('hidden');
+        profileDropdown.classList.add('hidden');
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+        if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
+            langDropdown.classList.add('hidden');
+        }
+    });
+
+    langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+        btn.onclick = function() {
+            currentLangLabel.textContent = this.textContent;
+            langDropdown.classList.add('hidden');
+        };
+    });
+    </script>
+    <script>
         // Data for dynamic dropdowns (can be fetched from backend in real app)
         const regionsData = {
             "Dushanbe": ["Район Исмоили Сомони", "Район Сино", "Район Фирдавси", "Район Шохмансур"],
@@ -1216,55 +1264,7 @@
                     <td class="border px-3 py-2">${c.employmentStatus}</td>
                     <td class="border px-3 py-2">${c.socialVulnerability}</td>
                     <td class="border px-3 py-2">${c.desiredSalary}</td>
-                    <td class="border px-3 py-2">${c.readyForRelocation}</td>
-                    <td class="border px-3 py-2">${c.readyForBusinessTrips}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // PDF export
-        document.getElementById('downloadPdfBtn').onclick = function() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ orientation: "landscape" });
-            doc.setFontSize(10);
-            doc.text("Отчет по найденным соискателям", 14, 10);
-
-            const rows = lastTalentReportCandidates.map(c => [
-                c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
-                c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
-            ]);
-            const headers = [["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"]];
-
-            if (doc.autoTable) {
-                doc.autoTable({
-                    head: headers,
-                    body: rows,
-                    startY: 16,
-                    styles: { fontSize: 8 }
-                });
-            } else {
-                let y = 16;
-                rows.forEach(row => {
-                    doc.text(row.join(" | "), 14, y);
-                    y += 6;
-                });
-            }
-            doc.save("talent_report.pdf");
-        };
-
-        // Excel export
-        document.getElementById('downloadExcelBtn').onclick = function() {
-            const ws_data = [
-                ["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"],
-                ...lastTalentReportCandidates.map(c => [
-                    c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
-                    c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
-                ])
-            ];
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet(ws_data);
-            XLSX.utils.book_append_sheet(wb, ws, "Отчет");
+                    <td class="border px-3 py-2">${c.readyForRel
             XLSX.writeFile(wb, "talent_report.xlsx");
         };
 

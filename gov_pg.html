@@ -176,17 +176,20 @@
                 <div class="flex items-center space-x-4">
                     <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
                     <div>
-                        <h1 class="text-2xl font-bold">Портал рынка труда</h1>
-                        <p class="text-sm opacity-90">Республика Таджикистан</p>
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
                     </div>
                 </div>
                 <!-- Правая часть: Навигация, языки и профиль -->
                 <nav class="hidden md:flex space-x-6 items-center">
-                    <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
-                    <a href="index.html#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
-                    <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
-                    <a href="index.html#education" class="hover:text-yellow-300 transition-colors">Образование</a>
-                    <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
+                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
                     <!-- Выпадающее меню профиля и языков -->
                     <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
                         <!-- Мой профиль -->
@@ -202,14 +205,23 @@
                         </div>
                         <!-- Выпадающее меню языков -->
                         <div class="relative">
-                            <button id="langMenuBtn" type="button" class="px-3 py-1 rounded font-semibold bg-white text-gray-800 hover:bg-yellow-100 transition-colors flex items-center">
+                            <button id="langMenuBtn" type="button"
+                                class="px-4 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                aria-haspopup="true" aria-expanded="false">
                                 <span id="currentLangLabel">RUS</span>
-                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                <i class="fas fa-chevron-down ml-2 text-xs"></i>
                             </button>
-                            <div id="langDropdown" class="absolute right-0 mt-2 w-28 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
-                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
-                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
-                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
+                            <div id="langDropdown"
+                                class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="ru">RUS</button>
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="tg">TAJ</button>
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="en">ENG</button>
                             </div>
                         </div>
                     </div>
@@ -1144,13 +1156,13 @@
         const langDropdown = document.getElementById('langDropdown');
         const currentLangLabel = document.getElementById('currentLangLabel');
 
-        profileMenuBtn.addEventListener('click', function(e) {
+        profileMenuBtn?.addEventListener('click', function(e) {
             e.stopPropagation();
             profileDropdown.classList.toggle('hidden');
             langDropdown.classList.add('hidden');
         });
 
-        langMenuBtn.addEventListener('click', function(e) {
+        langMenuBtn?.addEventListener('click', function(e) {
             e.stopPropagation();
             langDropdown.classList.toggle('hidden');
             profileDropdown.classList.add('hidden');
@@ -1165,134 +1177,11 @@
             }
         });
 
-        langDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
+        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
             btn.onclick = function() {
-                const lang = this.getAttribute('data-lang');
                 currentLangLabel.textContent = this.textContent;
                 langDropdown.classList.add('hidden');
-                // Google Translate (для демо-целей)
-                setTimeout(() => {
-                    const frame = document.querySelector('iframe.goog-te-menu-frame');
-                    if (frame) {
-                        const langMap = {ru: 'Русский', tg: 'Таджикский', en: 'Английский'};
-                        const langName = langMap[lang];
-                        const items = frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text');
-                        for (let i = 0; i < items.length; i++) {
-                            if (items[i].innerText.trim().toLowerCase().includes(langName.toLowerCase())) {
-                                items[i].click();
-                                break;
-                            }
-                        }
-                    }
-                }, 200);
             };
-        });
-
-        // Google Translate (для демо-целей)
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'ru',
-                includedLanguages: 'ru,en,tg',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-            }, 'google_translate_element');
-        }
-
-        // --- Каскадные выпадающие списки для Регион -> Город/Район -> Джамоат ---
-        const reportRegionSelect = document.getElementById('reportRegionSelect');
-        const cityDistrictSelect = document.getElementById('cityDistrictSelect');
-        const jamoatSelect = document.getElementById('jamoatSelect');
-
-        function populateCityDistrict() {
-            const selectedRegion = reportRegionSelect.value;
-            const cities = regionsData[selectedRegion] || [];
-
-            cityDistrictSelect.innerHTML = '<option value="all">Все города/районы</option>';
-            // Если выбран "Все регионы", добавляем все города/районы из regionsData.all
-            if (selectedRegion === 'all') {
-                // Создаем Set для уникальных городов/районов
-                const uniqueCities = new Set();
-                for (const regionKey in regionsData) {
-                    if (regionKey !== 'all' && Array.isArray(regionsData[regionKey])) {
-                        regionsData[regionKey].forEach(city => uniqueCities.add(city));
-                    }
-                }
-                Array.from(uniqueCities).sort().forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city;
-                    option.textContent = city;
-                    cityDistrictSelect.appendChild(option);
-                });
-            } else {
-                cities.forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city;
-                    option.textContent = city;
-                    cityDistrictSelect.appendChild(option);
-                });
-            }
-            // Сбрасываем и заполняем джамоаты при изменении города/района
-            populateJamoat();
-        }
-
-        function populateJamoat() {
-            const selectedCityDistrict = cityDistrictSelect.value;
-            const jamoats = cityDistrictData[selectedCityDistrict] || [];
-
-            jamoatSelect.innerHTML = '<option value="all">Все джамоаты</option>';
-            // Если выбран "Все города/районы" или "Все регионы", добавляем все джамоаты
-            if (selectedCityDistrict === 'all' || reportRegionSelect.value === 'all') {
-                // Собираем все уникальные джамоаты
-                const allUniqueJamoats = new Set();
-                for (const city in cityDistrictData) {
-                    if (Array.isArray(cityDistrictData[city])) {
-                        cityDistrictData[city].forEach(j => allUniqueJamoats.add(j));
-                    }
-                }
-                Array.from(allUniqueJamoats).sort().forEach(jamoat => {
-                    const option = document.createElement('option');
-                    option.value = jamoat;
-                    option.textContent = jamoat;
-                    jamoatSelect.appendChild(option);
-                });
-            } else {
-                jamoats.forEach(jamoat => {
-                    const option = document.createElement('option');
-                    option.value = jamoat;
-                    option.textContent = jamoat;
-                    jamoatSelect.appendChild(option);
-                });
-            }
-        }
-
-        // Event listeners for cascading filters
-        reportRegionSelect.addEventListener('change', populateCityDistrict);
-        cityDistrictSelect.addEventListener('change', populateJamoat);
-
-        // Initial population on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            populateCityDistrict();
-            populateJamoat(); // Ensure jamoat is populated based on initial city/district
-        });
-
-        // --- Логика открытия/закрытия боковой панели фильтров ---
-        const toggleFilterBtn = document.getElementById('toggleFilterBtn');
-        const closeFilterBtn = document.getElementById('closeFilterBtn');
-        const filterSidebar = document.getElementById('filterSidebar');
-        const filterOverlay = document.getElementById('filterOverlay');
-
-        toggleFilterBtn.addEventListener('click', () => {
-            filterSidebar.classList.add('open');
-            filterOverlay.classList.add('active');
-        });
-
-        closeFilterBtn.addEventListener('click', () => {
-            filterSidebar.classList.remove('open');
-            filterOverlay.classList.remove('active');
-        });
-
-        filterOverlay.addEventListener('click', () => {
-            filterSidebar.classList.remove('open');
-            filterOverlay.classList.remove('active');
         });
     </script>
 </body>
