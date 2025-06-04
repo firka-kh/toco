@@ -760,241 +760,521 @@
         <i class="fas fa-robot"></i>
     </button>
 
-    <!-- Подключение библиотек должно быть ДО основного скрипта -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
-
-<script>
-    // --- Talent Search Logic ---
-
-    // Глобальная переменная для отчёта
-    let lastTalentReportCandidates = [];
-
-    // Каскадные селекты для поиска
-    const searchRegionSelect = document.getElementById('searchRegion');
-    const searchCityDistrictSelect = document.getElementById('searchCityDistrict');
-    const searchJamoatSelect = document.getElementById('searchJamoat');
-    const talentResultsList = document.getElementById('talentResultsList');
-    const searchResultsContainer = document.getElementById('searchResults');
-
-    // Данные для селектов поиска
-    const searchRegionsData = {
-        "Dushanbe": ["Район Исмоили Сомони", "Район Сино"],
-        "Sughd": ["Худжанд", "Бободжон Гафуров"],
-        "Khatlon": ["Бохтар", "Куляб"],
-        "all": ["Район Исмоили Сомони", "Район Сино", "Худжанд", "Бободжон Гафуров", "Бохтар", "Куляб"]
-    };
-    const searchCityDistrictData = {
-        "Район Исмоили Сомони": ["Джамоат И.Сомони 1", "Джамоат И.Сомони 2"],
-        "Район Сино": ["Джамоат Сино 1", "Джамоат Сино 2"],
-        "Худжанд": ["Джамоат Худжанд 1", "Джамоат Худжанд 2"],
-        "Бохтар": ["Джамоат Бохтар 1"],
-        "all": ["Джамоат И.Сомони 1", "Джамоат И.Сомони 2", "Джамоат Сино 1", "Джамоат Сино 2", "Джамоат Худжанд 1", "Джамоат Худжанд 2", "Джамоат Бохтар 1"]
-    };
-
-    function populateSearchCityDistrict() {
-        const selectedRegion = searchRegionSelect.value;
-        const cities = searchRegionsData[selectedRegion] || [];
-        searchCityDistrictSelect.innerHTML = '<option value="all">Все города/районы</option>';
-        cities.forEach(city => {
-            const option = document.createElement('option');
-            option.value = city;
-            option.textContent = city;
-            searchCityDistrictSelect.appendChild(option);
-        });
-        populateSearchJamoat();
-    }
-    function populateSearchJamoat() {
-        const selectedCityDistrict = searchCityDistrictSelect.value;
-        const jamoats = searchCityDistrictData[selectedCityDistrict] || [];
-        searchJamoatSelect.innerHTML = '<option value="all">Все джамоаты</option>';
-        jamoats.forEach(jamoat => {
-            const option = document.createElement('option');
-            option.value = jamoat;
-            option.textContent = jamoat;
-            searchJamoatSelect.appendChild(option);
-        });
-    }
-    searchRegionSelect.addEventListener('change', populateSearchCityDistrict);
-    searchCityDistrictSelect.addEventListener('change', populateSearchJamoat);
-    document.addEventListener('DOMContentLoaded', () => {
-        populateSearchCityDistrict();
-        populateSearchJamoat();
-    });
-
-    // Генерация кандидатов для отчёта (демо)
-    function generateMockCandidates(filters) {
-        const candidates = [];
-        for (let i = 1; i <= 10; i++) {
-            candidates.push({
-                ...filters,
-                fullName: `Кандидат ${i}`
-            });
-        }
-        return candidates;
-    }
-
-    // Обработка формы поиска
-    document.getElementById('talentSearchForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const spinner = document.getElementById('searchTalentSpinner');
-        spinner.classList.remove('hidden');
-        talentResultsList.innerHTML = '';
-        searchResultsContainer.classList.add('hidden');
-        document.getElementById('talentReportActions').classList.add('hidden');
-        document.getElementById('talentReportTableWrapper').classList.add('hidden');
-
-        // Для демонстрации — фильтр всегда заполнен
-        document.getElementById('searchAgeMin').value = 25;
-        document.getElementById('searchAgeMax').value = 40;
-        document.getElementById('searchGender').value = "Male";
-        document.getElementById('searchRegion').value = "Dushanbe";
-        document.getElementById('searchCityDistrict').value = "Район Исмоили Сомони";
-        document.getElementById('searchJamoat').value = "Джамоат И.Сомони 1";
-        document.getElementById('searchEducationLevel').value = "Higher";
-        document.getElementById('searchProfessionType').value = "Программист";
-        document.getElementById('searchExperienceYears').value = "3-5_Years";
-        document.getElementById('searchSkills').value = "Java, SQL";
-        document.getElementById('searchEmploymentStatus').value = "Employed";
-        document.getElementById('searchSocialVulnerability').value = "Disabled";
-        document.getElementById('searchDesiredSalaryMin').value = 5000;
-        document.getElementById('searchDesiredSalaryMax').value = 10000;
-        document.getElementById('searchReadyForRelocation').checked = true;
-        document.getElementById('searchReadyForBusinessTrips').checked = true;
-
-        // Собираем значения фильтров
-        const filters = {
-            fullName: "—",
-            age: `${document.getElementById('searchAgeMin').value}-${document.getElementById('searchAgeMax').value}`,
-            gender: document.getElementById('searchGender').options[document.getElementById('searchGender').selectedIndex].text,
-            region: document.getElementById('searchRegion').options[document.getElementById('searchRegion').selectedIndex].text,
-            cityDistrict: document.getElementById('searchCityDistrict').options[document.getElementById('searchCityDistrict').selectedIndex]?.text || "",
-            jamoat: document.getElementById('searchJamoat').options[document.getElementById('searchJamoat').selectedIndex]?.text || "",
-            education: document.getElementById('searchEducationLevel').options[document.getElementById('searchEducationLevel').selectedIndex].text,
-            profession: document.getElementById('searchProfessionType').value,
-            experienceYears: document.getElementById('searchExperienceYears').options[document.getElementById('searchExperienceYears').selectedIndex].text,
-            skills: document.getElementById('searchSkills').value,
-            employmentStatus: document.getElementById('searchEmploymentStatus').options[document.getElementById('searchEmploymentStatus').selectedIndex].text,
-            socialVulnerability: document.getElementById('searchSocialVulnerability').options[document.getElementById('searchSocialVulnerability').selectedIndex].text,
-            desiredSalary: `${document.getElementById('searchDesiredSalaryMin').value} - ${document.getElementById('searchDesiredSalaryMax').value}`,
-            readyForRelocation: document.getElementById('searchReadyForRelocation').checked ? "Да" : "Нет",
-            readyForBusinessTrips: document.getElementById('searchReadyForBusinessTrips').checked ? "Да" : "Нет"
+    <script>
+        // Data for dynamic dropdowns (can be fetched from backend in real app)
+        const regionsData = {
+            "Dushanbe": ["Район Исмоили Сомони", "Район Сино", "Район Фирдавси", "Район Шохмансур"],
+            "RRP": ["Варзоб", "Гиссар", "Лахш", "Нуробод", "Рашт", "Сангвор", "Тоджикобод", "Файзабад", "Шахринав", "Рудаки", "Турсунзаде"],
+            "Sughd": ["Худжанд", "Бободжон Гафуров", "Ашт", "Исфара", "Канибадам", "Пенджикент"],
+            "Khatlon": ["Бохтар", "Куляб", "Дангара", "Вахш", "Яван", "Пяндж"],
+            "GBAO": ["Хорог", "Ишкашим", "Мургаб", "Рошткала", "Рушан", "Шугнан"],
         };
 
-        setTimeout(() => {
-            spinner.classList.add('hidden');
-            // Генерируем 10 кандидатов с такими же фильтрами (для демонстрации)
-            const candidates = generateMockCandidates(filters);
-            lastTalentReportCandidates = candidates;
+        const cityDistrictData = {
+            "Район Исмоили Сомони": ["Джамоат И. Сомони 1", "Джамоат И. Сомони 2"],
+            "Район Сино": ["Джамоат Сино 1", "Джамоат Сино 2"],
+            "Район Фирдавси": ["Джамоат Фирдавси 1", "Джамоат Фирдавси 2"],
+            "Район Шохмансур": ["Джамоат Шохмансур 1", "Джамоат Шохмансур 2"],
+            "Варзоб": ["Джамоат Варзоб 1"],
+            "Гиссар": ["Джамоат Гиссар 1", "Джамоат Гиссар 2"],
+            "Лахш": ["Джамоат Лахш 1"],
+            "Нуробод": ["Джамоат Нуробод 1"],
+            "Рашт": ["Джамоат Рашт 1"],
+            "Сангвор": ["Джамоат Сангвор 1"],
+            "Тоджикобод": ["Джамоат Тоджикобод 1"],
+            "Файзабад": ["Джамоат Файзабад 1"],
+            "Шахринав": ["Джамоат Шахринав 1"],
+            "Рудаки": ["Джамоат Рудаки 1", "Джамоат Рудаки 2"],
+            "Турсунзаде": ["Джамоат Турсунзаде 1", "Джамоат Турсунзаде 2"],
+            "Худжанд": ["Джамоат Худжанд 1", "Джамоат Худжанд 2"],
+            "Бободжон Гафуров": ["Джамоат Б. Гафуров 1", "Джамоат Б. Гафуров 2"],
+            "Ашт": ["Джамоат Ашт 1"],
+            "Исфара": ["Джамоат Исфара 1"],
+            "Канибадам": ["Джамоат Канибадам 1"],
+            "Пенджикент": ["Джамоат Пенджикент 1"],
+            "Бохтар": ["Джамоат Бохтар 1", "Джамоат Бохтар 2"],
+            "Куляб": ["Джамоат Куляб 1", "Джамоат Куляб 2"],
+            "Дангара": ["Джамоат Дангара 1"],
+            "Вахш": ["Джамоат Вахш 1"],
+            "Яван": ["Джамоат Яван 1"],
+            "Пяндж": ["Джамоат Пяндж 1"],
+            "Хорог": ["Джамоат Хорог 1"],
+            "Ишкашим": ["Джамоат Ишкашим 1"],
+            "Мургаб": ["Джамоат Мургаб 1"],
+            "Рошткала": ["Джамоат Рошткала 1"],
+            "Рушан": ["Джамоат Рушан 1"],
+            "Шугнан": ["Джамоат Шугнан 1"],
+        };
 
-            // Показываем таблицу и кнопки экспорта
-            renderTalentReportTable(candidates);
-            document.getElementById('talentReportActions').classList.remove('hidden');
-            document.getElementById('talentReportTableWrapper').classList.remove('hidden');
-            searchResultsContainer.classList.remove('hidden');
-        }, 1000);
-    });
-
-    // Генерация таблицы отчёта
-    function renderTalentReportTable(candidates) {
-        const tbody = document.querySelector('#talentReportTable tbody');
-        tbody.innerHTML = '';
-        candidates.forEach(c => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td class="border px-3 py-2">${c.fullName}</td>
-                <td class="border px-3 py-2">${c.age}</td>
-                <td class="border px-3 py-2">${c.gender}</td>
-                <td class="border px-3 py-2">${c.region}</td>
-                <td class="border px-3 py-2">${c.cityDistrict}</td>
-                <td class="border px-3 py-2">${c.jamoat}</td>
-                <td class="border px-3 py-2">${c.education}</td>
-                <td class="border px-3 py-2">${c.profession}</td>
-                <td class="border px-3 py-2">${c.experienceYears}</td>
-                <td class="border px-3 py-2">${c.skills}</td>
-                <td class="border px-3 py-2">${c.employmentStatus}</td>
-                <td class="border px-3 py-2">${c.socialVulnerability}</td>
-                <td class="border px-3 py-2">${c.desiredSalary}</td>
-                <td class="border px-3 py-2">${c.readyForRelocation}</td>
-                <td class="border px-3 py-2">${c.readyForBusinessTrips}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-
-    // PDF export
-    document.getElementById('downloadPdfBtn').onclick = function() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: "landscape" });
-        doc.setFontSize(10);
-        doc.text("Отчет по найденным соискателям", 14, 10);
-
-        const rows = lastTalentReportCandidates.map(c => [
-            c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
-            c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
-        ]);
-        const headers = [["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"]];
-
-        if (doc.autoTable) {
-            doc.autoTable({
-                head: headers,
-                body: rows,
-                startY: 16,
-                styles: { fontSize: 8 }
-            });
-        } else {
-            let y = 16;
-            rows.forEach(row => {
-                doc.text(row.join(" | "), 14, y);
-                y += 6;
-            });
-        }
-        doc.save("talent_report.pdf");
-    };
-
-    // Excel export
-    document.getElementById('downloadExcelBtn').onclick = function() {
-        const ws_data = [
-            ["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"],
-            ...lastTalentReportCandidates.map(c => [
-                c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
-                c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
-            ])
+        // Демо-данные для учебных центров (в реальном приложении будут загружаться из БД)
+        const certifiedTrainingCenters = [
+            { id: "it_academy", name: "IT Академия Душанбе" },
+            { id: "business_school", name: "Бизнес Школа Таджикистана" },
+            { id: "language_center", name: "Языковой Центр 'Полиглот'" },
+            { id: "construction_college", name: "Строительный колледж №1" },
+            { id: "online_coursera", name: "Coursera (онлайн)" },
+            { id: "online_udemy", name: "Udemy (онлайн)" }
         ];
-        const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.aoa_to_sheet(ws_data);
-        XLSX.utils.book_append_sheet(wb, ws, "Отчет");
-        XLSX.writeFile(wb, "talent_report.xlsx");
-    };
 
-    // Открыть отчет на отдельной странице
-    document.getElementById('openReportPageBtn').onclick = function() {
-        localStorage.setItem('talentReportData', JSON.stringify(lastTalentReportCandidates));
-        window.open('talent_report.html', '_blank');
-    };
+        // Function to populate training centers dropdown
+        function populateTrainingCentersDropdown() {
+            const trainingCenterSelect = document.getElementById('trainingCenter');
+            if (trainingCenterSelect) {
+                trainingCenterSelect.innerHTML = '<option value="">Выберите учебный центр</option>';
+                certifiedTrainingCenters.forEach(center => {
+                    const option = document.createElement('option');
+                    option.value = center.id;
+                    option.textContent = center.name;
+                    trainingCenterSelect.appendChild(option);
+                });
+            }
+        }
 
-    document.querySelectorAll('.collapsible-header').forEach(header => {
-        header.addEventListener('click', function () {
-            const targetId = header.getAttribute('data-target');
-            const content = document.getElementById(targetId);
-            const expanded = content.classList.contains('expanded');
-            // Свернуть все секции
-            document.querySelectorAll('.collapsible-content').forEach(c => c.classList.remove('expanded'));
-            document.querySelectorAll('.collapsible-header').forEach(h => h.classList.remove('expanded'));
-            // Если не была раскрыта — раскрыть
-            if (!expanded) {
-                content.classList.add('expanded');
-                header.classList.add('expanded');
+        // Initial population of training centers dropdown on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            populateTrainingCentersDropdown();
+        });
+
+
+        // Handle "По договоренности" checkbox for salary inputs
+        document.getElementById('salaryNegotiable').addEventListener('change', function() {
+            const salaryMin = document.getElementById('vacancySalaryMin');
+            const salaryMax = document.getElementById('vacancySalaryMax');
+            if (this.checked) {
+                salaryMin.value = '';
+                salaryMax.value = '';
+                salaryMin.disabled = true;
+                salaryMax.disabled = true;
+            } else {
+                salaryMin.disabled = false;
+                salaryMax.disabled = false;
             }
         });
-    });
 
-    // По умолчанию раскрыть первую секцию (опционально)
-    document.addEventListener('DOMContentLoaded', function () {
-        const firstHeader = document.querySelector('.collapsible-header');
-        if (firstHeader) firstHeader.click();
-    });
-</script>
+        // Handle "Предусмотрено обучение для сотрудников" checkbox
+        document.getElementById('trainingProvided').addEventListener('change', function() {
+            const trainingDetailsDiv = document.getElementById('trainingDetails');
+            if (this.checked) {
+                trainingDetailsDiv.classList.remove('hidden');
+                // Make training fields required when visible (optional, but good practice)
+                trainingDetailsDiv.querySelectorAll('input, select').forEach(el => el.required = true);
+            } else {
+                trainingDetailsDiv.classList.add('hidden');
+                // Make training fields not required when hidden
+                trainingDetailsDiv.querySelectorAll('input, select').forEach(el => el.required = false);
+            }
+        });
+
+        // Handle form submission (placeholder)
+        document.getElementById('postVacancyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const spinner = document.getElementById('postVacancySpinner');
+            spinner.classList.remove('hidden');
+            
+            // Simulate API call
+            setTimeout(() => {
+                spinner.classList.add('hidden');
+                alert('Вакансия успешно отправлена на модерацию!');
+                this.reset(); // Clear form fields
+                // Reset conditional fields visibility after form reset
+                document.getElementById('trainingProvided').checked = false; // Uncheck training checkbox
+                document.getElementById('trainingDetails').classList.add('hidden');
+                document.getElementById('salaryNegotiable').checked = false;
+                document.getElementById('vacancySalaryMin').disabled = false;
+                document.getElementById('vacancySalaryMax').disabled = false;
+            }, 1500);
+        });
+
+        // --- Collapsible sections logic ---
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const targetId = header.dataset.target;
+                const targetContent = document.getElementById(targetId);
+                const icon = header.querySelector('i');
+
+                // Close all other sections
+                document.querySelectorAll('.collapsible-content').forEach(content => {
+                    if (content.id !== targetId && content.classList.contains('expanded')) {
+                        content.classList.remove('expanded');
+                        content.style.maxHeight = null;
+                        const otherHeader = content.previousElementSibling;
+                        if (otherHeader) {
+                            otherHeader.classList.remove('expanded');
+                            otherHeader.querySelector('i').classList.remove('fa-chevron-up');
+                            otherHeader.querySelector('i').classList.add('fa-chevron-down');
+                        }
+                    }
+                });
+
+                // Toggle the clicked section
+                if (targetContent) {
+                    header.classList.toggle('expanded');
+                    targetContent.classList.toggle('expanded');
+
+                    if (targetContent.classList.contains('expanded')) {
+                        targetContent.style.maxHeight = targetContent.scrollHeight + "px";
+                        if (icon) {
+                            icon.classList.remove('fa-chevron-down');
+                            icon.classList.add('fa-chevron-up');
+                        }
+                    } else {
+                        targetContent.style.maxHeight = null;
+                        if (icon) {
+                            icon.classList.remove('fa-chevron-up');
+                            icon.classList.add('fa-chevron-down');
+                        }
+                    }
+                }
+            });
+        });
+
+        // Initial state: collapse all sections on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.collapsible-content').forEach(content => {
+                content.classList.remove('expanded');
+                content.style.maxHeight = null;
+                const header = content.previousElementSibling;
+                if (header) {
+                    header.classList.remove('expanded');
+                    header.querySelector('i').classList.remove('fa-chevron-up');
+                    header.querySelector('i').classList.add('fa-chevron-down');
+                }
+            });
+        });
+
+
+        // Profile Dropdown Logic (from original index.html)
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+
+        if (profileMenuBtn) {
+            profileMenuBtn.onclick = function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            };
+        }
+
+        document.addEventListener('click', function(e) {
+            if (profileDropdownContainer && !profileDropdownContainer.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        // Language Dropdown Logic (from original index.html)
+        const langMenuBtn = document.getElementById('langMenuBtn');
+        const langDropdown = document.getElementById('langDropdown');
+        const currentLangLabel = document.getElementById('currentLangLabel');
+
+        if (langMenuBtn) {
+            langMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                langDropdown.classList.toggle('hidden');
+                profileDropdown.classList.add('hidden'); // Close profile dropdown if open
+            });
+        }
+
+        document.addEventListener('click', function(e) {
+            if (langDropdown && !langDropdown.contains(e.target) && langMenuBtn && !langMenuBtn.contains(e.target)) {
+                langDropdown.classList.add('hidden');
+            }
+        });
+
+        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                const lang = this.getAttribute('data-lang');
+                currentLangLabel.textContent = this.textContent;
+                langDropdown.classList.add('hidden');
+                // Google Translate (for demo purposes)
+                setTimeout(() => {
+                    const frame = document.querySelector('iframe.goog-te-menu-frame');
+                    if (frame) {
+                        const langMap = {ru: 'Русский', tg: 'Таджикский', en: 'Английский'};
+                        const langName = langMap[lang];
+                        const items = frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text');
+                        for (let i = 0; i < items.length; i++) {
+                            if (items[i].innerText.trim().toLowerCase().includes(langName.toLowerCase())) {
+                                items[i].click();
+                                break;
+                            }
+                        }
+                    }
+                }, 200);
+            };
+        });
+
+        // Google Translate (for demo purposes)
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'ru',
+                includedLanguages: 'ru,en,tg',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
+        // --- Talent Search Logic ---
+        const searchRegionSelect = document.getElementById('searchRegion');
+        const searchCityDistrictSelect = document.getElementById('searchCityDistrict');
+        const searchJamoatSelect = document.getElementById('searchJamoat');
+        const talentResultsList = document.getElementById('talentResultsList');
+        const searchResultsContainer = document.getElementById('searchResults');
+
+        // Data for search filters (simplified for demo)
+        const searchRegionsData = {
+            "Dushanbe": ["Район Исмоили Сомони", "Район Сино"],
+            "Sughd": ["Худжанд", "Бободжон Гафуров"],
+            "Khatlon": ["Бохтар", "Куляб"],
+            "all": ["Район Исмоили Сомони", "Район Сино", "Худжанд", "Бободжон Гафуров", "Бохтар", "Куляб"] // All for 'all regions'
+        };
+
+        const searchCityDistrictData = {
+            "Район Исмоили Сомони": ["Джамоат И.Сомони 1", "Джамоат И.Сомони 2"],
+            "Район Сино": ["Джамоат Сино 1", "Джамоат Сино 2"],
+            "Худжанд": ["Джамоат Худжанд 1", "Джамоат Худжанд 2"],
+            "Бохтар": ["Джамоат Бохтар 1"],
+            "all": ["Джамоат И.Сомони 1", "Джамоат И.Сомони 2", "Джамоат Сино 1", "Джамоат Сино 2", "Джамоат Худжанд 1", "Джамоат Худжанд 2", "Джамоат Бохтар 1"] // All for 'all cities/districts'
+        };
+
+        function populateSearchCityDistrict() {
+            const selectedRegion = searchRegionSelect.value;
+            const cities = searchRegionsData[selectedRegion] || [];
+
+            searchCityDistrictSelect.innerHTML = '<option value="all">Все города/районы</option>';
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                searchCityDistrictSelect.appendChild(option);
+            });
+            populateSearchJamoat(); // Update jamoat when city/district changes
+        }
+
+        function populateSearchJamoat() {
+            const selectedCityDistrict = searchCityDistrictSelect.value;
+            const jamoats = searchCityDistrictData[selectedCityDistrict] || [];
+
+            searchJamoatSelect.innerHTML = '<option value="all">Все джамоаты</option>';
+            jamoats.forEach(jamoat => {
+                const option = document.createElement('option');
+                option.value = jamoat;
+                option.textContent = jamoat;
+                searchJamoatSelect.appendChild(option);
+            });
+        }
+
+        // Event listeners for cascading search filters
+        searchRegionSelect.addEventListener('change', populateSearchCityDistrict);
+        searchCityDistrictSelect.addEventListener('change', populateSearchJamoat);
+
+        // Initial population of search dropdowns on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            populateSearchCityDistrict();
+            populateSearchJamoat();
+        });
+
+        // Mock candidate data generation
+        function generateMockCandidates(filters) {
+            const candidates = [];
+            const firstNames = ["Алишер", "Фатима", "Рустам", "Зухро", "Бахром", "Гулнора"];
+            const lastNames = ["Ахмедов", "Каримова", "Рахимов", "Сафарова", "Ибрагимов", "Назарова"];
+            const professions = ["Программист", "Бухгалтер", "Менеджер по продажам", "Учитель", "Врач", "Инженер"];
+            const skills = ["Java", "SQL", "JavaScript", "1C", "Коммуникация", "Переговоры", "MS Office", "Педагогика"];
+            const statuses = ["Трудоустроен", "Безработный (зарегистрированный)", "Студент"];
+
+            for (let i = 0; i < 10; i++) { // Generate 10 mock candidates
+                const age = Math.floor(Math.random() * (50 - 20 + 1)) + 20;
+                const gender = Math.random() > 0.5 ? "Мужской" : "Женский";
+                const region = getRandomElement(Object.keys(regionsData));
+                const cityDistrict = getRandomElement(regionsData[region] || regionsData["Dushanbe"]);
+                const jamoat = getRandomElement(cityDistrictData[cityDistrict] || ["Джамоат X"]);
+                const education = getRandomElement(["Высшее", "Среднее специальное", "Среднее"]);
+                const profession = getRandomElement(professions);
+                const candidateSkills = getRandomSubset(skills, 2, 4).join(', ');
+                const employmentStatus = getRandomElement(statuses);
+                const socialVulnerability = Math.random() > 0.7 ? getRandomElement(["Лицо с инвалидностью", "Молодежь без опыта работы"]) : "Нет";
+                const desiredSalary = Math.floor(Math.random() * (15000 - 3000 + 1)) + 3000;
+                const readyForRelocation = Math.random() > 0.5;
+                const readyForBusinessTrips = Math.random() > 0.5;
+
+                candidates.push({
+                    fullName: `${getRandomElement(firstNames)} ${getRandomElement(lastNames)}`,
+                    age: age,
+                    gender: gender,
+                    region: region,
+                    cityDistrict: cityDistrict,
+                    jamoat: jamoat,
+                    education: education,
+                    profession: profession,
+                    skills: candidateSkills,
+                    employmentStatus: employmentStatus,
+                    socialVulnerability: socialVulnerability,
+                    desiredSalary: desiredSalary,
+                    readyForRelocation: readyForRelocation,
+                    readyForBusinessTrips: readyForBusinessTrips,
+                    profileLink: "#" // Placeholder
+                });
+            }
+            return candidates;
+        }
+
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function getRandomSubset(arr, min, max) {
+            const shuffled = arr.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, Math.floor(Math.random() * (max - min + 1)) + min);
+        }
+
+        // Handle talent search form submission
+        document.getElementById('talentSearchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const spinner = document.getElementById('searchTalentSpinner');
+            spinner.classList.remove('hidden');
+            talentResultsList.innerHTML = ''; // Clear previous results
+            searchResultsContainer.classList.add('hidden'); // Hide results until loaded
+            document.getElementById('talentReportActions').classList.add('hidden');
+            document.getElementById('talentReportTableWrapper').classList.add('hidden');
+
+            // Для демонстрации — фильтр всегда заполнен
+            document.getElementById('searchAgeMin').value = 25;
+            document.getElementById('searchAgeMax').value = 40;
+            document.getElementById('searchGender').value = "Male";
+            document.getElementById('searchRegion').value = "Dushanbe";
+            document.getElementById('searchCityDistrict').value = "Район Исмоили Сомони";
+            document.getElementById('searchJamoat').value = "Джамоат И.Сомони 1";
+            document.getElementById('searchEducationLevel').value = "Higher";
+            document.getElementById('searchProfessionType').value = "Программист";
+            document.getElementById('searchExperienceYears').value = "3-5_Years";
+            document.getElementById('searchSkills').value = "Java, SQL";
+            document.getElementById('searchEmploymentStatus').value = "Employed";
+            document.getElementById('searchSocialVulnerability').value = "Disabled";
+            document.getElementById('searchDesiredSalaryMin').value = 5000;
+            document.getElementById('searchDesiredSalaryMax').value = 10000;
+            document.getElementById('searchReadyForRelocation').checked = true;
+            document.getElementById('searchReadyForBusinessTrips').checked = true;
+
+            // Собираем значения фильтров
+            const filters = {
+                fullName: "—", // Нет в фильтре, но для отчета можно добавить
+                age: `${document.getElementById('searchAgeMin').value}-${document.getElementById('searchAgeMax').value}`,
+                gender: document.getElementById('searchGender').options[document.getElementById('searchGender').selectedIndex].text,
+                region: document.getElementById('searchRegion').options[document.getElementById('searchRegion').selectedIndex].text,
+                cityDistrict: document.getElementById('searchCityDistrict').options[document.getElementById('searchCityDistrict').selectedIndex]?.text || "",
+                jamoat: document.getElementById('searchJamoat').options[document.getElementById('searchJamoat').selectedIndex]?.text || "",
+                education: document.getElementById('searchEducationLevel').options[document.getElementById('searchEducationLevel').selectedIndex].text,
+                profession: document.getElementById('searchProfessionType').value,
+                experienceYears: document.getElementById('searchExperienceYears').options[document.getElementById('searchExperienceYears').selectedIndex].text,
+                skills: document.getElementById('searchSkills').value,
+                employmentStatus: document.getElementById('searchEmploymentStatus').options[document.getElementById('searchEmploymentStatus').selectedIndex].text,
+                socialVulnerability: document.getElementById('searchSocialVulnerability').options[document.getElementById('searchSocialVulnerability').selectedIndex].text,
+                desiredSalary: `${document.getElementById('searchDesiredSalaryMin').value} - ${document.getElementById('searchDesiredSalaryMax').value}`,
+                readyForRelocation: document.getElementById('searchReadyForRelocation').checked ? "Да" : "Нет",
+                readyForBusinessTrips: document.getElementById('searchReadyForBusinessTrips').checked ? "Да" : "Нет"
+            };
+
+            setTimeout(() => {
+                spinner.classList.add('hidden');
+                // Генерируем 10 кандидатов с такими же фильтрами (для демонстрации)
+                const candidates = [];
+                for (let i = 1; i <= 10; i++) {
+                    candidates.push({
+                        ...filters,
+                        fullName: `Кандидат ${i}`
+                    });
+                }
+                lastTalentReportCandidates = candidates;
+
+                // Показываем таблицу и кнопки экспорта
+                renderTalentReportTable(candidates);
+                document.getElementById('talentReportActions').classList.remove('hidden');
+                document.getElementById('talentReportTableWrapper').classList.remove('hidden');
+                searchResultsContainer.classList.remove('hidden');
+            }, 1000);
+        });
+
+        // Функция для генерации таблицы отчета
+        function renderTalentReportTable(candidates) {
+            const tbody = document.querySelector('#talentReportTable tbody');
+            tbody.innerHTML = '';
+            candidates.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="border px-3 py-2">${c.fullName}</td>
+                    <td class="border px-3 py-2">${c.age}</td>
+                    <td class="border px-3 py-2">${c.gender}</td>
+                    <td class="border px-3 py-2">${c.region}</td>
+                    <td class="border px-3 py-2">${c.cityDistrict}</td>
+                    <td class="border px-3 py-2">${c.jamoat}</td>
+                    <td class="border px-3 py-2">${c.education}</td>
+                    <td class="border px-3 py-2">${c.profession}</td>
+                    <td class="border px-3 py-2">${c.experienceYears}</td>
+                    <td class="border px-3 py-2">${c.skills}</td>
+                    <td class="border px-3 py-2">${c.employmentStatus}</td>
+                    <td class="border px-3 py-2">${c.socialVulnerability}</td>
+                    <td class="border px-3 py-2">${c.desiredSalary}</td>
+                    <td class="border px-3 py-2">${c.readyForRelocation}</td>
+                    <td class="border px-3 py-2">${c.readyForBusinessTrips}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // PDF export
+        document.getElementById('downloadPdfBtn').onclick = function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: "landscape" });
+            doc.setFontSize(10);
+            doc.text("Отчет по найденным соискателям", 14, 10);
+
+            const rows = lastTalentReportCandidates.map(c => [
+                c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
+                c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
+            ]);
+            const headers = [["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"]];
+
+            if (doc.autoTable) {
+                doc.autoTable({
+                    head: headers,
+                    body: rows,
+                    startY: 16,
+                    styles: { fontSize: 8 }
+                });
+            } else {
+                let y = 16;
+                rows.forEach(row => {
+                    doc.text(row.join(" | "), 14, y);
+                    y += 6;
+                });
+            }
+            doc.save("talent_report.pdf");
+        };
+
+        // Excel export
+        document.getElementById('downloadExcelBtn').onclick = function() {
+            const ws_data = [
+                ["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"],
+                ...lastTalentReportCandidates.map(c => [
+                    c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
+                    c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
+                ])
+            ];
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            XLSX.utils.book_append_sheet(wb, ws, "Отчет");
+            XLSX.writeFile(wb, "talent_report.xlsx");
+        };
+
+        // Открыть отчет на отдельной странице
+        document.getElementById('openReportPageBtn').onclick = function() {
+            localStorage.setItem('talentReportData', JSON.stringify(lastTalentReportCandidates));
+            window.open('talent_report.html', '_blank');
+        };
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div id="google_translate_element" style="display:none"></div>
 </body>
 </html>

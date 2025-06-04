@@ -929,12 +929,12 @@
             }
         });
 
-        // Переключение языка (только смена label, перевод не происходит)
+        // Переключение языка (только смена надписи, без перевода)
         langDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
             btn.onclick = function() {
-                const lang = this.getAttribute('data-lang');
                 currentLangLabel.textContent = this.textContent;
                 langDropdown.classList.add('hidden');
+                // Здесь можно добавить свою логику смены языка, если потребуется
             };
         });
 
