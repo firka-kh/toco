@@ -221,20 +221,17 @@
                 <div class="flex items-center space-x-4">
                     <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
                     <div>
-                        <a href="index.html" class="hover:underline focus:outline-none">
-                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
-                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
-                        </a>
+                        <h1 class="text-2xl font-bold">Портал рынка труда</h1>
+                        <p class="text-sm opacity-90">Республика Таджикистан</p>
                     </div>
                 </div>
                 <!-- Правая часть: Навигация, языки и профиль -->
                 <nav class="hidden md:flex space-x-6 items-center">
-                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
-                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
-                    <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
-                    <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
-                    <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
-                    <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                    <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <a href="index.html#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
                     <!-- Выпадающее меню профиля и языков -->
                     <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
                         <!-- Мой профиль -->
@@ -250,23 +247,14 @@
                         </div>
                         <!-- Выпадающее меню языков -->
                         <div class="relative">
-                            <button id="langMenuBtn" type="button"
-                                class="px-4 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                                aria-haspopup="true" aria-expanded="false">
+                            <button id="langMenuBtn" type="button" class="px-3 py-1 rounded font-semibold bg-white text-gray-800 hover:bg-yellow-100 transition-colors flex items-center">
                                 <span id="currentLangLabel">RUS</span>
-                                <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
                             </button>
-                            <div id="langDropdown"
-                                class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
-                                <button type="button"
-                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
-                                    data-lang="ru">RUS</button>
-                                <button type="button"
-                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
-                                    data-lang="tg">TAJ</button>
-                                <button type="button"
-                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
-                                    data-lang="en">ENG</button>
+                            <div id="langDropdown" class="absolute right-0 mt-2 w-28 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
                             </div>
                         </div>
                     </div>
@@ -426,7 +414,7 @@
                                     <div>
                                         <label for="vacancyIndustry" class="block text-sm font-medium text-gray-700 mb-2">Отрасль <span class="text-red-500">*</span></label>
                                         <select id="vacancyIndustry" name="vacancyIndustry" required>
-                                            <option value="">Выберите отрасль</option>
+                                            <option value="">Выберите отрасль</soption>
                                             <option value="IT">IT (Информационные технологии)</option>
                                             <option value="Construction">Строительство</option>
                                             <option value="Trade">Торговля</option>
@@ -454,7 +442,7 @@
                                             <option value="Part_Time">Частичная занятость</option>
                                             <option value="Temporary">Временная работа</option>
                                             <option value="Project">Проектная работа</option>
-                                            <option value="Internship">Стажировка</option>
+                                            <option value="Internship">Стажировка</soption>
                                         </select>
                                     </div>
                                     <!-- Новое поле: Возможность удаленной работы -->
@@ -547,16 +535,16 @@
                             <form id="talentSearchForm" class="space-y-6">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label for="searchAgeMin">Возраст от</label>
-                                        <input type="number" id="searchAgeMin" name="searchAgeMin" min="18" max="99">
+                                        <label for="searchAgeMin" class="block text-sm font-medium text-gray-700 mb-2">Возраст от</label>
+                                        <input type="number" id="searchAgeMin" name="searchAgeMin" placeholder="Например: 20" min="18" max="99">
                                     </div>
                                     <div>
-                                        <label for="searchAgeMax">Возраст до</label>
-                                        <input type="number" id="searchAgeMax" name="searchAgeMax" min="18" max="99">
+                                        <label for="searchAgeMax" class="block text-sm font-medium text-gray-700 mb-2">Возраст до</label>
+                                        <input type="number" id="searchAgeMax" name="searchAgeMax" placeholder="Например: 40" min="18" max="99">
                                     </div>
                                 </div>
                                 <div>
-                                    <label for="searchGender">Пол</label>
+                                    <label for="searchGender" class="block text-sm font-medium text-gray-700 mb-2">Пол</label>
                                     <select id="searchGender" name="searchGender">
                                         <option value="all">Любой</option>
                                         <option value="Male">Мужской</option>
@@ -564,7 +552,7 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="searchRegion">Регион</label>
+                                    <label for="searchRegion" class="block text-sm font-medium text-gray-700 mb-2">Регион</label>
                                     <select id="searchRegion" name="searchRegion">
                                         <option value="all">Все регионы</option>
                                         <option value="Dushanbe">Город Душанбе</option>
@@ -575,19 +563,21 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="searchCityDistrict">Город/Район</label>
+                                    <label for="searchCityDistrict" class="block text-sm font-medium text-gray-700 mb-2">Город/Район</label>
                                     <select id="searchCityDistrict" name="searchCityDistrict">
                                         <option value="all">Все города/районы</option>
+                                        <!-- Options will be populated dynamically based on searchRegion -->
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="searchJamoat">Джамоат</label>
+                                    <label for="searchJamoat" class="block text-sm font-medium text-gray-700 mb-2">Джамоат</label>
                                     <select id="searchJamoat" name="searchJamoat">
                                         <option value="all">Все джамоаты</option>
+                                        <!-- Options will be populated dynamically based on searchCityDistrict -->
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="searchEducationLevel">Уровень образования</label>
+                                    <label for="searchEducationLevel" class="block text-sm font-medium text-gray-700 mb-2">Уровень образования</label>
                                     <select id="searchEducationLevel" name="searchEducationLevel">
                                         <option value="all">Любое</option>
                                         <option value="Primary">Начальное</option>
@@ -598,7 +588,11 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="searchExperienceYears">Опыт работы</label>
+                                    <label for="searchProfessionType" class="block text-sm font-medium text-gray-700 mb-2">Профессия/Должность</label>
+                                    <input type="text" id="searchProfessionType" name="searchProfessionType" placeholder="Например: Программист, Бухгалтер">
+                                </div>
+                                <div>
+                                    <label for="searchExperienceYears" class="block text-sm font-medium text-gray-700 mb-2">Опыт работы</label>
                                     <select id="searchExperienceYears" name="searchExperienceYears">
                                         <option value="all">Любой опыт</option>
                                         <option value="No_Experience">Без опыта</option>
@@ -608,50 +602,28 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="searchSkills">Ключевые навыки (через запятую)</label>
-                                    <textarea id="searchSkills" name="searchSkills" rows="3"></textarea>
+                                    <label for="searchSkills" class="block text-sm font-medium text-gray-700 mb-2">Ключевые навыки (через запятую)</label>
+                                    <textarea id="searchSkills" name="searchSkills" rows="3" placeholder="Например: Python, SQL, Коммуникация"></textarea>
                                 </div>
                                 <div>
-                                    <label for="searchEmploymentStatus">Статус занятости</label>
+                                    <label for="searchEmploymentStatus" class="block text-sm font-medium text-gray-700 mb-2">Статус занятости</label>
                                     <select id="searchEmploymentStatus" name="searchEmploymentStatus">
                                         <option value="all">Любой</option>
                                         <option value="Employed">Трудоустроен</option>
                                         <option value="Unemployed_Registered">Безработный (зарегистрированный)</option>
-                                        <option value="Student">Студент</option>
-                                        <option value="Self_Employed">Самозанятый</option>
+                                        <option value="Student">Студент</soption>
+                                        <option value="Self_Employed">Самозанятый</soption>
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="searchSocialVulnerability">Социальная уязвимость</label>
+                                    <label for="searchSocialVulnerability" class="block text-sm font-medium text-gray-700 mb-2">Социальная уязвимость</label>
                                     <select id="searchSocialVulnerability" name="searchSocialVulnerability">
                                         <option value="all">Все категории</option>
                                         <option value="Disabled">Лица с инвалидностью</option>
-                                        <option value="Youth_No_Experience">Молодежь без опыта работы</option>
+                                        <option value="Youth_No_Experience">Молодежь без опыта работы</soption>
                                         <option value="Women_With_Children">Женщины с малолетними детьми</option>
                                         <option value="Labor_Migrants">Трудовые мигранты (возвратившиеся)</option>
                                     </select>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label for="searchDesiredSalaryMin">Желаемая зарплата от (сомони)</label>
-                                        <input type="number" id="searchDesiredSalaryMin" name="searchDesiredSalaryMin">
-                                    </div>
-                                    <div>
-                                        <label for="searchDesiredSalaryMax">Желаемая зарплата до (сомони)</label>
-                                        <input type="number" id="searchDesiredSalaryMax" name="searchDesiredSalaryMax">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" id="searchReadyForRelocation" name="searchReadyForRelocation" class="form-checkbox mr-2">
-                                        Готовность к переезду
-                                    </label>
-                                </div>
-                                <div>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" id="searchReadyForBusinessTrips" name="searchReadyForBusinessTrips" class="form-checkbox mr-2">
-                                        Готовность к командировкам
-                                    </label>
                                 </div>
                                 <button type="submit" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors shadow-md flex items-center justify-center">
                                     <span id="searchTalentSpinner" class="hidden spinner mr-2"></span>
@@ -663,43 +635,43 @@
                                 <div class="space-y-4" id="talentResultsList">
                                     <!-- Результаты будут здесь -->
                                 </div>
-                            </div>
-                            <div id="talentReportActions" class="mt-8 hidden flex flex-wrap gap-4 items-center">
-                                <button id="downloadPdfBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors flex items-center">
-                                    <i class="fas fa-file-pdf mr-2"></i>Скачать PDF
-                                </button>
-                                <button id="downloadExcelBtn" class="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors flex items-center">
-                                    <i class="fas fa-file-excel mr-2"></i>Скачать Excel
-                                </button>
-                                <button id="openReportPageBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors flex items-center">
-                                    <i class="fas fa-external-link-alt mr-2"></i>Открыть отчет на странице
-                                </button>
-                            </div>
-                            <div id="talentReportTableWrapper" class="mt-6 hidden overflow-x-auto rounded-lg border border-gray-200 bg-white shadow">
-                                <table id="talentReportTable" class="min-w-full text-sm text-gray-800">
-                                    <thead class="bg-gray-100">
-                                        <tr>
-                                            <th class="px-3 py-2">ФИО</th>
-                                            <th class="px-3 py-2">Возраст</th>
-                                            <th class="px-3 py-2">Пол</th>
-                                            <th class="px-3 py-2">Регион</th>
-                                            <th class="px-3 py-2">Город/Район</th>
-                                            <th class="px-3 py-2">Джамоат</th>
-                                            <th class="px-3 py-2">Образование</th>
-                                            <th class="px-3 py-2">Профессия</th>
-                                            <th class="px-3 py-2">Опыт</th>
-                                            <th class="px-3 py-2">Навыки</th>
-                                            <th class="px-3 py-2">Статус занятости</th>
-                                            <th class="px-3 py-2">Социальная уязвимость</th>
-                                            <th class="px-3 py-2">Желаемая зарплата</th>
-                                            <th class="px-3 py-2">Готов к переезду</th>
-                                            <th class="px-3 py-2">Готов к командировкам</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Данные будут добавлены скриптом -->
-                                    </tbody>
-                                </table>
+                                <div id="talentReportActions" class="mt-8 hidden flex flex-wrap gap-4 items-center">
+                                    <button id="downloadPdfBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors flex items-center">
+                                        <i class="fas fa-file-pdf mr-2"></i>Скачать PDF
+                                    </button>
+                                    <button id="downloadExcelBtn" class="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors flex items-center">
+                                        <i class="fas fa-file-excel mr-2"></i>Скачать Excel
+                                    </button>
+                                    <button id="openReportPageBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors flex items-center">
+                                        <i class="fas fa-external-link-alt mr-2"></i>Открыть отчет на странице
+                                    </button>
+                                </div>
+                                <div id="talentReportTableWrapper" class="mt-6 hidden overflow-x-auto rounded-lg border border-gray-200 bg-white shadow">
+                                    <table id="talentReportTable" class="min-w-full text-sm text-gray-800">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="px-3 py-2">ФИО</th>
+                                                <th class="px-3 py-2">Возраст</th>
+                                                <th class="px-3 py-2">Пол</th>
+                                                <th class="px-3 py-2">Регион</th>
+                                                <th class="px-3 py-2">Город/Район</th>
+                                                <th class="px-3 py-2">Джамоат</th>
+                                                <th class="px-3 py-2">Образование</th>
+                                                <th class="px-3 py-2">Профессия</th>
+                                                <th class="px-3 py-2">Опыт</th>
+                                                <th class="px-3 py-2">Навыки</th>
+                                                <th class="px-3 py-2">Статус занятости</th>
+                                                <th class="px-3 py-2">Социальная уязвимость</th>
+                                                <th class="px-3 py-2">Желаемая зарплата</th>
+                                                <th class="px-3 py-2">Готов к переезду</th>
+                                                <th class="px-3 py-2">Готов к командировкам</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Данные будут добавлены скриптом -->
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -832,7 +804,7 @@
                     const targetContent = document.getElementById(targetId);
                     const icon = header.querySelector('i');
 
-                    // Close all others
+                    // Close all other sections
                     document.querySelectorAll('.collapsible-content').forEach(content => {
                         if (content.id !== targetId && content.classList.contains('expanded')) {
                             content.classList.remove('expanded');
@@ -923,24 +895,23 @@
         const searchJamoatSelect = document.getElementById('searchJamoat');
         const talentResultsList = document.getElementById('talentResultsList');
         const searchResultsContainer = document.getElementById('searchResults');
+        const talentReportActions = document.getElementById('talentReportActions');
+        const talentReportTableWrapper = document.getElementById('talentReportTableWrapper');
 
         // Data for search filters (simplified for demo)
         const searchRegionsData = {
             "Dushanbe": ["Район Исмоили Сомони", "Район Сино"],
             "Sughd": ["Худжанд", "Бободжон Гафуров"],
             "Khatlon": ["Бохтар", "Куляб"],
-            "RRP": [],
-            "GBAO": [],
-            "all": ["Район Исмоили Сомони", "Район Сино", "Худжанд", "Бободжон Гафуров", "Бохтар", "Куляб"]
+            "all": ["Район Исмоили Сомони", "Район Сино", "Худжанд", "Бободжон Гафуров", "Бохтар", "Куляб"] // All for 'all regions'
         };
+
         const searchCityDistrictData = {
             "Район Исмоили Сомони": ["Джамоат И.Сомони 1", "Джамоат И.Сомони 2"],
             "Район Сино": ["Джамоат Сино 1", "Джамоат Сино 2"],
             "Худжанд": ["Джамоат Худжанд 1", "Джамоат Худжанд 2"],
-            "Бободжон Гафуров": [],
             "Бохтар": ["Джамоат Бохтар 1"],
-            "Куляб": [],
-            "all": ["Джамоат И.Сомони 1", "Джамоат И.Сомони 2", "Джамоат Сино 1", "Джамоат Сино 2", "Джамоат Худжанд 1", "Джамоат Худжанд 2", "Джамоат Бохтар 1"]
+            "all": ["Джамоат И.Сомони 1", "Джамоат И.Сомони 2", "Джамоат Сино 1", "Джамоат Сино 2", "Джамоат Худжанд 1", "Джамоат Худжанд 2", "Джамоат Бохтар 1"] // All for 'all cities/districts'
         };
 
         function populateSearchCityDistrict() {
@@ -957,6 +928,7 @@
             } else {
                 cities = searchRegionsData[selectedRegion] || [];
             }
+
             searchCityDistrictSelect.innerHTML = '<option value="all">Все города/районы</option>';
             cities.forEach(city => {
                 const option = document.createElement('option');
@@ -966,9 +938,11 @@
             });
             populateSearchJamoat();
         }
+
         function populateSearchJamoat() {
             const selectedCityDistrict = searchCityDistrictSelect.value;
             const jamoats = searchCityDistrictData[selectedCityDistrict] || [];
+
             searchJamoatSelect.innerHTML = '<option value="all">Все джамоаты</option>';
             jamoats.forEach(jamoat => {
                 const option = document.createElement('option');
@@ -977,75 +951,221 @@
                 searchJamoatSelect.appendChild(option);
             });
         }
+
+        // Event listeners for cascading search filters
         searchRegionSelect.addEventListener('change', populateSearchCityDistrict);
         searchCityDistrictSelect.addEventListener('change', populateSearchJamoat);
+
+        // --- Random pre-filling for search filters ---
+        function getRandomValueFromSelect(selectElement) {
+            const options = Array.from(selectElement.options);
+            // Exclude "all" option if it's the only one or if there are other specific options
+            const selectableOptions = options.filter(opt => opt.value !== 'all' || options.length === 1);
+            if (selectableOptions.length > 0) {
+                return selectableOptions[Math.floor(Math.random() * selectableOptions.length)].value;
+            }
+            return selectElement.value; // Fallback to current value or default 'all'
+        }
+
+        function populateSearchFiltersRandomly() {
+            // Age
+            const ageMinInput = document.getElementById('searchAgeMin');
+            const ageMaxInput = document.getElementById('searchAgeMax');
+            const randomMinAge = Math.floor(Math.random() * (30 - 18 + 1)) + 18;
+            const randomMaxAge = Math.floor(Math.random() * (60 - randomMinAge + 1)) + randomMinAge;
+            ageMinInput.value = randomMinAge;
+            ageMaxInput.value = randomMaxAge;
+
+            // Gender
+            const genderSelect = document.getElementById('searchGender');
+            genderSelect.value = getRandomValueFromSelect(genderSelect);
+
+            // Region, City/District, Jamoat (cascading random fill)
+            const regionSelect = document.getElementById('searchRegion');
+            regionSelect.value = getRandomValueFromSelect(regionSelect);
+            // Trigger change to populate dependent dropdowns
+            regionSelect.dispatchEvent(new Event('change'));
+
+            setTimeout(() => { // Small delay for cascading selects to populate
+                const cityDistrictSelect = document.getElementById('searchCityDistrict');
+                cityDistrictSelect.value = getRandomValueFromSelect(cityDistrictSelect);
+                cityDistrictSelect.dispatchEvent(new Event('change'));
+
+                setTimeout(() => {
+                    const jamoatSelect = document.getElementById('searchJamoat');
+                    jamoatSelect.value = getRandomValueFromSelect(jamoatSelect);
+                }, 100);
+            }, 100);
+
+            // Education Level
+            const educationSelect = document.getElementById('searchEducationLevel');
+            educationSelect.value = getRandomValueFromSelect(educationSelect);
+
+            // Profession Type
+            const professionTypeInput = document.getElementById('searchProfessionType');
+            const mockProfessions = ["Программист", "Бухгалтер", "Менеджер", "Учитель", "Врач"];
+            professionTypeInput.value = getRandomElement(mockProfessions);
+
+            // Experience Years
+            const experienceSelect = document.getElementById('searchExperienceYears');
+            experienceSelect.value = getRandomValueFromSelect(experienceSelect);
+
+            // Skills
+            const skillsTextarea = document.getElementById('searchSkills');
+            const mockSkills = ["Java, Spring", "SQL, Python", "Продажи, CRM", "Педагогика, Методика", "Диагностика, Лечение"];
+            skillsTextarea.value = getRandomElement(mockSkills);
+
+            // Employment Status
+            const employmentStatusSelect = document.getElementById('searchEmploymentStatus');
+            employmentStatusSelect.value = getRandomValueFromSelect(employmentStatusSelect);
+
+            // Social Vulnerability
+            const socialVulnerabilitySelect = document.getElementById('searchSocialVulnerability');
+            socialVulnerabilitySelect.value = getRandomValueFromSelect(socialVulnerabilitySelect);
+
+            // Desired Salary
+            const desiredSalaryMinInput = document.getElementById('searchDesiredSalaryMin');
+            const desiredSalaryMaxInput = document.getElementById('searchDesiredSalaryMax');
+            const randomMinSalary = Math.floor(Math.random() * (7000 - 3000 + 1)) + 3000;
+            const randomMaxSalary = Math.floor(Math.random() * (15000 - randomMinSalary + 1)) + randomMinSalary;
+            desiredSalaryMinInput.value = randomMinSalary;
+            desiredSalaryMaxInput.value = randomMaxSalary;
+
+            // Relocation and Business Trips
+            document.getElementById('searchReadyForRelocation').checked = Math.random() > 0.5;
+            document.getElementById('searchReadyForBusinessTrips').checked = Math.random() > 0.5;
+        }
+
+        // Initial population of search filters on page load
         document.addEventListener('DOMContentLoaded', () => {
-            populateSearchCityDistrict();
-            populateSearchJamoat();
-            // --- Автозаполнение фильтров при загрузке страницы ---
-            document.getElementById('searchAgeMin').value = 25;
-            document.getElementById('searchAgeMax').value = 40;
-            document.getElementById('searchGender').value = 'Male';
-            document.getElementById('searchRegion').value = 'Dushanbe';
-            populateSearchCityDistrict();
-            document.getElementById('searchCityDistrict').value = 'Район Исмоили Сомони';
-            populateSearchJamoat();
-            document.getElementById('searchJamoat').value = 'Джамоат И.Сомони 1';
-            document.getElementById('searchEducationLevel').value = 'Higher';
-            document.getElementById('searchExperienceYears').value = '1-3_Years';
-            document.getElementById('searchSkills').value = 'Python, SQL, Коммуникация';
-            document.getElementById('searchEmploymentStatus').value = 'Employed';
-            document.getElementById('searchSocialVulnerability').value = 'Disabled';
-            document.getElementById('searchDesiredSalaryMin').value = 5000;
-            document.getElementById('searchDesiredSalaryMax').value = 10000;
-            document.getElementById('searchReadyForRelocation').checked = true;
-            document.getElementById('searchReadyForBusinessTrips').checked = true;
+            populateSearchFiltersRandomly();
         });
 
-        // Генерация демо-кандидатов для таблицы (столбцы соответствуют фильтрам)
-        function generateDemoCandidates(count = 10) {
+
+        // Mock candidate data generation (now more comprehensive)
+        function generateMockCandidates() {
+            const candidates = [];
             const firstNames = ["Алишер", "Фатима", "Рустам", "Зухро", "Бахром", "Гулнора"];
             const lastNames = ["Ахмедов", "Каримова", "Рахимов", "Сафарова", "Ибрагимов", "Назарова"];
             const genders = ["Мужской", "Женский"];
             const regions = ["Город Душанбе", "Районы Республиканского Подчинения", "Согдийская область", "Хатлонская область", "Горно-Бадахшанская автономная область (ГБАО)"];
-            const cityDistricts = ["Район Исмоили Сомони", "Район Сино", "Худжанд", "Бободжон Гафуров", "Бохтар", "Куляб"];
-            const jamoats = ["Джамоат И.Сомони 1", "Джамоат И.Сомони 2", "Джамоат Сино 1", "Джамоат Сино 2", "Джамоат Худжанд 1", "Джамоат Худжанд 2", "Джамоат Бохтар 1"];
-            const educations = ["Начальное", "Среднее", "Профессиональное", "Высшее", "Послевузовское"];
+            const cityDistricts = ["Район Исмоили Сомони", "Район Сино", "Худжанд", "Бохтар", "Куляб"];
+            const jamoats = ["Джамоат 1", "Джамоат 2", "Джамоат 3", "Джамоат X", "Джамоат Y"];
+            const educations = ["Высшее", "Среднее", "Профессиональное", "Послевузовское", "Начальное"];
+            const professions = ["Программист", "Бухгалтер", "Менеджер по продажам", "Учитель", "Врач", "Инженер", "Дизайнер", "Юрист"];
             const experiences = ["Без опыта", "1-3 года", "3-5 лет", "Более 5 лет"];
-            const skillsArr = ["Java", "SQL", "JavaScript", "1C", "Коммуникация", "Переговоры", "MS Office", "Педагогика"];
-            const statuses = ["Трудоустроен", "Безработный (зарегистрированный)", "Студент", "Самозанятый"];
-            const vulnerabilities = ["Нет", "Лица с инвалидностью", "Молодежь без опыта работы", "Женщины с малолетними детьми", "Трудовые мигранты (возвратившиеся)"];
+            const skillsArr = ["Java", "SQL", "JavaScript", "Python", "C++", "1C", "Коммуникация", "Переговоры", "MS Office", "Педагогика", "Маркетинг", "SEO", "Финансы", "Аудит"];
+            const statuses = ["Трудоустроен", "Безработный (зарегистрированный)", "Студент", "Самозанятый", "В декретном отпуске"];
+            const vulnerabilities = ["Нет", "Лица с инвалидностью", "Молодежь без опыта работы", "Женщины с малолетними детьми", "Трудовые мигранты (возвратившиеся)", "Дети-сироты", "Недавно освободившиеся из мест лишения свободы"];
+            const workplaces = ["ООО 'ТехноСофт'", "Торговый дом 'Ориёна'", "Банк 'Имон'", "Школа №1", "Гос. учреждение №5", "Международная корпорация 'Глобал'", "IT-стартап 'Инновация'"];
+
             function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-            function randSkills() {
-                const shuffled = skillsArr.slice().sort(() => 0.5 - Math.random());
-                return shuffled.slice(0, Math.floor(Math.random() * 3) + 2).join(', ');
+            function randSubset(arr, min, max) {
+                const shuffled = arr.slice().sort(() => 0.5 - Math.random());
+                return shuffled.slice(0, Math.floor(Math.random() * (max - min + 1)) + min);
             }
-            const candidates = [];
-            for (let i = 0; i < count; i++) {
+
+            for (let i = 0; i < 15; i++) { // Generate 15 mock candidates
                 candidates.push({
                     fullName: `${rand(firstNames)} ${rand(lastNames)}`,
-                    age: Math.floor(Math.random() * 40) + 20,
+                    age: Math.floor(Math.random() * (50 - 20 + 1)) + 20,
                     gender: rand(genders),
                     region: rand(regions),
                     cityDistrict: rand(cityDistricts),
                     jamoat: rand(jamoats),
                     education: rand(educations),
+                    profession: rand(professions),
                     experienceYears: rand(experiences),
-                    skills: randSkills(),
+                    skills: randSubset(skillsArr, 2, 4).join(', '),
                     employmentStatus: rand(statuses),
-                    socialVulnerability: rand(vulnerabilities),
-                    desiredSalary: `${Math.floor(Math.random() * 10000) + 3000} сомони`,
-                    readyForRelocation: Math.random() > 0.5 ? "Да" : "Нет",
-                    readyForBusinessTrips: Math.random() > 0.5 ? "Да" : "Нет"
+                    socialVulnerability: Math.random() > 0.7 ? rand(vulnerabilities.filter(v => v !== "Нет")) : "Нет",
+                    lastWorkplace: rand(workplaces),
+                    lastPosition: rand(professions),
+                    desiredSalary: `${Math.floor(Math.random() * (15000 - 3000 + 1)) + 3000} сомони`,
+                    readyForRelocation: Math.random() > 0.5,
+                    readyForBusinessTrips: Math.random() > 0.5,
+                    profileLink: "#" // Placeholder
                 });
             }
             return candidates;
         }
 
-        // Функция для генерации таблицы отчета (столбцы соответствуют фильтрам)
+        // Handle talent search form submission
+        document.getElementById('talentSearchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const spinner = document.getElementById('searchTalentSpinner');
+            spinner.classList.remove('hidden');
+            talentResultsList.innerHTML = ''; // Clear previous results
+            searchResultsContainer.classList.add('hidden'); // Hide results until loaded
+            talentReportActions.classList.add('hidden'); // Hide actions
+            talentReportTableWrapper.classList.add('hidden'); // Hide table wrapper
+
+            // Simulate API call and render results
+            setTimeout(() => {
+                spinner.classList.add('hidden');
+                const candidates = generateMockCandidates(); // Generate mock data (filters are applied conceptually for demo)
+                lastTalentReportCandidates = candidates; // Store for export
+
+                if (candidates.length > 0) {
+                    // Render results in the simple list view (first few candidates)
+                    candidates.slice(0, 3).forEach(candidate => { // Show first 3 in the simple list
+                        const candidateDiv = document.createElement('div');
+                        candidateDiv.className = 'bg-white p-4 rounded-lg border border-gray-200 shadow-sm';
+                        candidateDiv.innerHTML = `
+                            <h5 class="font-semibold text-gray-800">${candidate.fullName} (${candidate.age} лет, ${candidate.gender})</h5>
+                            <p class="text-gray-600 text-sm mb-1">Профессия: ${candidate.profession}, Опыт: ${candidate.experienceYears}</p>
+                            <p class="text-gray-600 text-sm mb-1">Навыки: ${candidate.skills}</p>
+                            <button class="text-blue-500 hover:underline text-sm mt-2"><i class="fas fa-user-circle mr-1"></i>Просмотреть профиль</button>
+                        `;
+                        talentResultsList.appendChild(candidateDiv);
+                    });
+                    searchResultsContainer.classList.remove('hidden'); // Show results
+                    talentReportActions.classList.remove('hidden'); // Show export buttons
+                    talentReportTableWrapper.classList.remove('hidden'); // Show table wrapper
+                    renderTalentReportTable(candidates); // Render the full table
+                } else {
+                    talentResultsList.innerHTML = '<p class="text-gray-600 text-center">По вашему запросу кандидатов не найдено.</p>';
+                    searchResultsContainer.classList.remove('hidden');
+                    talentReportActions.classList.add('hidden'); // Hide export buttons if no results
+                    talentReportTableWrapper.classList.add('hidden'); // Hide table if no results
+                }
+            }, 1500);
+        });
+
+        // Генерация демо-кандидатов для таблицы (заполняет все столбцы)
         function renderTalentReportTable(candidates) {
             const tbody = document.querySelector('#talentReportTable tbody');
             tbody.innerHTML = '';
+
+            // Define column headers based on search filter labels and desired output
+            const columnHeaders = [
+                { id: 'fullName', label: 'ФИО' },
+                { id: 'age', label: 'Возраст' },
+                { id: 'gender', label: 'Пол' },
+                { id: 'region', label: 'Регион' },
+                { id: 'cityDistrict', label: 'Город/Район' },
+                { id: 'jamoat', label: 'Джамоат' },
+                { id: 'education', label: 'Образование' },
+                { id: 'profession', label: 'Профессия' },
+                { id: 'experienceYears', label: 'Опыт' },
+                { id: 'skills', label: 'Навыки' },
+                { id: 'employmentStatus', label: 'Статус занятости' },
+                { id: 'socialVulnerability', label: 'Социальная уязвимость' },
+                { id: 'desiredSalary', label: 'Желаемая зарплата' },
+                { id: 'readyForRelocation', label: 'Готов к переезду' },
+                { id: 'readyForBusinessTrips', label: 'Готов к командировкам' }
+            ];
+
+            // Update table header row
+            const theadRow = document.querySelector('#talentReportTable thead tr');
+            theadRow.innerHTML = '';
+            columnHeaders.forEach(header => {
+                const th = document.createElement('th');
+                th.className = 'px-3 py-2';
+                th.textContent = header.label;
+                theadRow.appendChild(th);
+            });
+
             candidates.forEach(c => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -1056,13 +1176,14 @@
                     <td class="border px-3 py-2">${c.cityDistrict}</td>
                     <td class="border px-3 py-2">${c.jamoat}</td>
                     <td class="border px-3 py-2">${c.education}</td>
+                    <td class="border px-3 py-2">${c.profession}</td>
                     <td class="border px-3 py-2">${c.experienceYears}</td>
                     <td class="border px-3 py-2">${c.skills}</td>
                     <td class="border px-3 py-2">${c.employmentStatus}</td>
                     <td class="border px-3 py-2">${c.socialVulnerability}</td>
                     <td class="border px-3 py-2">${c.desiredSalary}</td>
-                    <td class="border px-3 py-2">${c.readyForRelocation}</td>
-                    <td class="border px-3 py-2">${c.readyForBusinessTrips}</td>
+                    <td class="border px-3 py-2">${c.readyForRelocation ? 'Да' : 'Нет'}</td>
+                    <td class="border px-3 py-2">${c.readyForBusinessTrips ? 'Да' : 'Нет'}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1071,20 +1192,157 @@
         // --- Export and report page logic ---
         document.getElementById('downloadExcelBtn').onclick = function() {
             const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.json_to_sheet(lastTalentReportCandidates);
+            // Prepare data for Excel with correct headers
+            const excelData = lastTalentReportCandidates.map(c => ({
+                'ФИО': c.fullName,
+                'Возраст': c.age,
+                'Пол': c.gender,
+                'Регион': c.region,
+                'Город/Район': c.cityDistrict,
+                'Джамоат': c.jamoat,
+                'Образование': c.education,
+                'Профессия': c.profession,
+                'Опыт': c.experienceYears,
+                'Навыки': c.skills,
+                'Статус занятости': c.employmentStatus,
+                'Социальная уязвимость': c.socialVulnerability,
+                'Желаемая зарплата': c.desiredSalary,
+                'Готов к переезду': c.readyForRelocation ? 'Да' : 'Нет',
+                'Готов к командировкам': c.readyForBusinessTrips ? 'Да' : 'Нет'
+            }));
+            const ws = XLSX.utils.json_to_sheet(excelData);
             XLSX.utils.book_append_sheet(wb, ws, "Отчет");
             XLSX.writeFile(wb, "talent_report.xlsx");
         };
 
+        document.getElementById('downloadPdfBtn').onclick = function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('landscape'); // 'landscape' for wider tables
+
+            const tableColumn = [
+                "ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", 
+                "Профессия", "Опыт", "Навыки", "Статус занятости", "Соц. уязвимость", 
+                "Зарплата", "Переезд", "Командировки"
+            ];
+            const tableRows = [];
+
+            lastTalentReportCandidates.forEach(candidate => {
+                const candidateData = [
+                    candidate.fullName,
+                    candidate.age,
+                    candidate.gender,
+                    candidate.region,
+                    candidate.cityDistrict,
+                    candidate.jamoat,
+                    candidate.education,
+                    candidate.profession,
+                    candidate.experienceYears,
+                    candidate.skills,
+                    candidate.employmentStatus,
+                    candidate.socialVulnerability,
+                    candidate.desiredSalary,
+                    candidate.readyForRelocation ? 'Да' : 'Нет',
+                    candidate.readyForBusinessTrips ? 'Да' : 'Нет'
+                ];
+                tableRows.push(candidateData);
+            });
+
+            doc.autoTable({
+                head: [tableColumn],
+                body: tableRows,
+                startY: 20,
+                styles: { fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                headStyles: { fillColor: [239, 242, 247], textColor: [74, 85, 104], fontStyle: 'bold' },
+                margin: { left: 10, right: 10, top: 10, bottom: 10 }
+            });
+            doc.text("Отчет по поиску соискателей", 14, 15);
+            doc.save('talent_report.pdf');
+        };
+
         document.getElementById('openReportPageBtn').onclick = function() {
             localStorage.setItem('talentReportData', JSON.stringify(lastTalentReportCandidates));
-            window.open('talent_report.html', '_blank');
+            // Create a temporary HTML page for the report
+            const reportPageContent = `
+                <!DOCTYPE html>
+                <html lang="ru">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Отчет по поиску соискателей</title>
+                    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+                    <style>
+                        body { font-family: sans-serif; margin: 20px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                        @media print {
+                            body { font-size: 10pt; }
+                            table { page-break-after: auto; }
+                            tr { page-break-inside: avoid; page-break-after: auto; }
+                            td, th { page-break-inside: avoid; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1 class="text-2xl font-bold mb-4">Отчет по поиску соискателей</h1>
+                    <p class="mb-4">Сгенерировано: ${new Date().toLocaleString()}</p>
+                    <div id="reportTableContainer" class="overflow-x-auto"></div>
+                    <script>
+                        const reportData = JSON.parse(localStorage.getItem('talentReportData'));
+                        const tableContainer = document.getElementById('reportTableContainer');
+                        if (reportData && reportData.length > 0) {
+                            let tableHTML = '<table class="min-w-full text-sm text-gray-800 border border-gray-300">';
+                            tableHTML += '<thead class="bg-gray-100"><tr>';
+                            const headers = [
+                                "ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", 
+                                "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", 
+                                "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"
+                            ];
+                            headers.forEach(header => {
+                                tableHTML += \`<th class="px-3 py-2 border border-gray-300">\${header}</th>\`;
+                            });
+                            tableHTML += '</tr></thead><tbody>';
+
+                            reportData.forEach(candidate => {
+                                tableHTML += '<tr>';
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.fullName}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.age}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.gender}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.region}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.cityDistrict}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.jamoat}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.education}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.profession}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.experienceYears}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.skills}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.employmentStatus}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.socialVulnerability}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.desiredSalary}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.readyForRelocation ? 'Да' : 'Нет'}</td>\`;
+                                tableHTML += \`<td class="border px-3 py-2">\${candidate.readyForBusinessTrips ? 'Да' : 'Нет'}</td>\`;
+                                tableHTML += '</tr>';
+                            });
+                            tableHTML += '</tbody></table>';
+                            tableContainer.innerHTML = tableHTML;
+                        } else {
+                            tableContainer.innerHTML = '<p>Нет данных для отчета.</p>';
+                        }
+                    </script>
+                </body>
+                </html>
+            `;
+            const newWindow = window.open('', '_blank');
+            if (newWindow) {
+                newWindow.document.write(reportPageContent);
+                newWindow.document.close();
+            } else {
+                alert('Не удалось открыть новое окно. Пожалуйста, разрешите всплывающие окна для этого сайта.');
+            }
         };
 
         // --- Google Translate stub (prevent error if not loaded) ---
         function googleTranslateElementInit() {}
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <div id="google_translate_element" style="display:none"></div>
 </body>
 </html>
