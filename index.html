@@ -1006,35 +1006,36 @@
         }, 'google_translate_element');
     }
 
-    // Функция для смены языка
-    function changeLanguage(lang) {
-      var select = document.querySelector('select.goog-te-combo');
-      if (select) {
-        select.value = lang;
-        select.dispatchEvent(new Event('change'));
-      }
+    // Ждать появления select.goog-te-combo и только потом менять язык
+    function setLanguage(lang) {
+        function trySet() {
+            var select = document.querySelector('select.goog-te-combo');
+            if (select) {
+                select.value = lang;
+                select.dispatchEvent(new Event('change'));
+            } else {
+                setTimeout(trySet, 100);
+            }
+        }
+        trySet();
     }
 
-    // Навешиваем обработчик на кнопки меню
     document.addEventListener('DOMContentLoaded', function() {
-      // Инициализация Google Translate
-      var gtScript = document.createElement('script');
-      gtScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-      document.body.appendChild(gtScript);
+        // Подключаем Google Translate
+        var gtScript = document.createElement('script');
+        gtScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+        document.body.appendChild(gtScript);
 
-      // Обработка кликов по языковым кнопкам
-      document.querySelectorAll('#langDropdown button[data-lang]').forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-          var lang = btn.getAttribute('data-lang');
-          // Карта языков Google Translate
-          var googleLangs = {ru: 'ru', en: 'en', tg: 'tg'};
-          changeLanguage(googleLangs[lang]);
-          // Обновление текущей метки языка
-          document.getElementById('currentLangLabel').textContent = btn.textContent;
-          // Закрытие меню
-          document.getElementById('langDropdown').classList.add('hidden');
+        // Обработка кликов по языковым кнопкам
+        document.querySelectorAll('#langDropdown button[data-lang]').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                var lang = btn.getAttribute('data-lang');
+                // ru — сбросить перевод, tg/en — перевести
+                setLanguage(lang === 'ru' ? '' : lang);
+                document.getElementById('currentLangLabel').textContent = btn.textContent;
+                document.getElementById('langDropdown').classList.add('hidden');
+            });
         });
-      });
     });
 </script>
 <div id="google_translate_element" style="display:none"></div>
