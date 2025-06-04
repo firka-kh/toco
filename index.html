@@ -212,15 +212,24 @@
                         </div>
                         <!-- Выпадающее меню языков -->
                         <div class="relative">
-                            <button id="langMenuBtn" type="button" class="px-3 py-1 rounded font-semibold bg-white text-gray-800 hover:bg-yellow-100 transition-colors flex items-center">
-                                <span id="currentLangLabel">RUS</span>
-                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                            </button>
-                            <div id="langDropdown" class="absolute right-0 mt-2 w-28 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
-                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
-                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
-                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
-                            </div>
+                            <button id="langMenuBtn" type="button"
+        class="px-4 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400"
+        aria-haspopup="true" aria-expanded="false">
+        <span id="currentLangLabel">RUS</span>
+        <i class="fas fa-chevron-down ml-2 text-xs"></i>
+    </button>
+    <div id="langDropdown"
+        class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+        <button type="button"
+            class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+            data-lang="ru">RUS</button>
+        <button type="button"
+            class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+            data-lang="tg">TAJ</button>
+        <button type="button"
+            class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+            data-lang="en">ENG</button>
+    </div>
                         </div>
                     </div>
                 </nav>
