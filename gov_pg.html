@@ -131,6 +131,40 @@
                 page-break-after: auto; /* No page break after the last section */
             }
         }
+
+        /* Стили для выдвижной панели фильтров */
+        .filter-sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px; /* Скрыто за левым краем */
+            width: 300px;
+            height: 100%;
+            background-color: #f9fafb; /* Светлый фон для панели */
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease-in-out;
+            z-index: 1000; /* Поверх остального контента */
+            overflow-y: auto; /* Прокрутка, если фильтров много */
+            padding: 1.5rem;
+        }
+
+        .filter-sidebar.open {
+            left: 0; /* Выдвинуто */
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -192,10 +226,21 @@
                 <span class="font-semibold text-purple-700">Эта информация доступна только государственным служащим.</span>
             </p>
 
-            <!-- Фильтры для дашбордов -->
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-                <h3 class="text-xl font-semibold mb-4 text-gray-800">Фильтры данных</h3>
-                <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Кнопка для открытия/закрытия фильтров -->
+            <div class="text-center mb-8">
+                <button id="toggleFilterBtn" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors shadow-md">
+                    <i class="fas fa-filter mr-2"></i>Открыть фильтр
+                </button>
+            </div>
+
+            <!-- Выдвижная панель фильтров -->
+            <div id="filterSidebar" class="filter-sidebar">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-semibold text-gray-800">Фильтры данных</h3>
+                    <button id="closeFilterBtn" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-6">
                     <!-- Пол -->
                     <div>
                         <label for="genderSelect" class="block text-sm font-medium text-gray-700 mb-2">Пол</label>
@@ -204,6 +249,14 @@
                             <option value="Male">Мужской</option>
                             <option value="Female">Женский</option>
                         </select>
+                    </div>
+                    <!-- Возраст от - до -->
+                    <div>
+                        <label for="ageMinInput" class="block text-sm font-medium text-gray-700 mb-2">Возраст от - до</label>
+                        <div class="flex gap-2">
+                            <input type="number" id="ageMinInput" placeholder="От" class="w-1/2 px-4 py-2 rounded-lg border border-gray-300 text-gray-800" title="Минимальный возраст">
+                            <input type="number" id="ageMaxInput" placeholder="До" class="w-1/2 px-4 py-2 rounded-lg border border-gray-300 text-gray-800" title="Максимальный возраст">
+                        </div>
                     </div>
                     <!-- Временной период -->
                     <div>
@@ -245,6 +298,20 @@
                         <select id="jamoatSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
                             <option value="all">Все джамоаты</option>
                             <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <!-- Статус занятости (новый фильтр) -->
+                    <div>
+                        <label for="employmentStatusSelect" class="block text-sm font-medium text-gray-700 mb-2">Статус занятости</label>
+                        <select id="employmentStatusSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все статусы</option>
+                            <option value="Employed">Трудоустроен</option>
+                            <option value="Unemployed_Registered">Безработный (зарегистрированный)</option>
+                            <option value="Unemployed_Unregistered">Безработный (незарегистрированный)</option>
+                            <option value="Student">Студент</option>
+                            <option value="Pensioner">Пенсионер</option>
+                            <option value="Maternity_Leave">В декретном отпуске</option>
+                            <option value="Self_Employed">Самозанятый</option>
                         </select>
                     </div>
                     <!-- Отрасль (ОКЭД) -->
@@ -299,7 +366,7 @@
                             <option value="Better_Salary">Лучшая зарплата</option>
                             <option value="Career_Growth">Карьерный рост</option>
                             <option value="Dissatisfaction">Неудовлетворенность условиями</option>
-                            <option value="Relocation">Переезд</option>
+                            <option value="Relocation">Переезд</soption>
                             <option value="Personal_Reasons">Личные причины</option>
                             <option value="Company_Restructuring">Реорганизация компании</option>
                         </select>
@@ -327,17 +394,6 @@
                             <option value="Subsidies">Субсидии для работодателей</option>
                             <option value="Grants">Гранты для самозанятости</option>
                             <option value="Youth_Internship">Молодежные стажировки</option>
-                        </select>
-                    </div>
-                    <!-- Возрастная категория -->
-                    <div>
-                        <label for="ageCategorySelect" class="block text-sm font-medium text-gray-700 mb-2">Возрастная категория</label>
-                        <select id="ageCategorySelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
-                            <option value="all">Все категории</option>
-                            <option value="Youth_18-24">Молодежь (18-24)</option>
-                            <option value="Adult_25-45">Взрослые (25-45)</option>
-                            <option value="Pre-Retirement_46-60">Предпенсионный возраст (46-60)</option>
-                            <option value="Senior_60+">Пожилые (60+)</option>
                         </select>
                     </div>
                     <!-- Социальная уязвимость -->
@@ -383,6 +439,8 @@
                     Применить фильтры
                 </button>
             </div>
+            <div id="filterOverlay" class="overlay"></div>
+
 
             <!-- Секция ключевых метрик -->
             <div class="grid md:grid-cols-4 gap-6 mb-12">
@@ -504,6 +562,9 @@
                     <button id="exportExcelBtn" class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors shadow flex items-center justify-center">
                         <i class="fas fa-file-excel mr-2"></i>Экспорт в Excel
                     </button>
+                    <button id="exportNewWindowBtn" class="bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors shadow flex items-center justify-center">
+                        <i class="fas fa-external-link-alt mr-2"></i>В отдельном окне
+                    </button>
                 </div>
             </div>
         </section>
@@ -579,18 +640,67 @@
             "Sughd": ["Худжанд", "Бободжон Гафуров", "Ашт", "Исфара", "Канибадам", "Пенджикент"],
             "Khatlon": ["Бохтар", "Куляб", "Дангара", "Вахш", "Яван", "Пяндж"],
             "GBAO": ["Хорог", "Ишкашим", "Мургаб", "Рошткала", "Рушан", "Шугнан"],
-            "all": [] // Для "Все регионы"
+            "all": [] // Для "Все регионы" - будет заполняться всеми городами/районами
         };
 
         const cityDistrictData = {
-            "Район Исмоили Сомони": ["Джамоат №1", "Джамоат №2"],
-            "Район Сино": ["Джамоат №3", "Джамоат №4"],
-            // ... добавьте остальные города/районы и их джамоаты
+            "Район Исмоили Сомони": ["Джамоат И. Сомони 1", "Джамоат И. Сомони 2"],
+            "Район Сино": ["Джамоат Сино 1", "Джамоат Сино 2"],
+            "Район Фирдавси": ["Джамоат Фирдавси 1", "Джамоат Фирдавси 2"],
+            "Район Шохмансур": ["Джамоат Шохмансур 1", "Джамоат Шохмансур 2"],
+            "Варзоб": ["Джамоат Варзоб 1"],
+            "Гиссар": ["Джамоат Гиссар 1", "Джамоат Гиссар 2"],
+            "Лахш": ["Джамоат Лахш 1"],
+            "Нуробод": ["Джамоат Нуробод 1"],
+            "Рашт": ["Джамоат Рашт 1"],
+            "Сангвор": ["Джамоат Сангвор 1"],
+            "Тоджикобод": ["Джамоат Тоджикобод 1"],
+            "Файзабад": ["Джамоат Файзабад 1"],
+            "Шахринав": ["Джамоат Шахринав 1"],
+            "Рудаки": ["Джамоат Рудаки 1", "Джамоат Рудаки 2"],
+            "Турсунзаде": ["Джамоат Турсунзаде 1", "Джамоат Турсунзаде 2"],
             "Худжанд": ["Джамоат Худжанд 1", "Джамоат Худжанд 2"],
+            "Бободжон Гафуров": ["Джамоат Б. Гафуров 1", "Джамоат Б. Гафуров 2"],
+            "Ашт": ["Джамоат Ашт 1"],
+            "Исфара": ["Джамоат Исфара 1"],
+            "Канибадам": ["Джамоат Канибадам 1"],
+            "Пенджикент": ["Джамоат Пенджикент 1"],
             "Бохтар": ["Джамоат Бохтар 1", "Джамоат Бохтар 2"],
+            "Куляб": ["Джамоат Куляб 1", "Джамоат Куляб 2"],
+            "Дангара": ["Джамоат Дангара 1"],
+            "Вахш": ["Джамоат Вахш 1"],
+            "Яван": ["Джамоат Яван 1"],
+            "Пяндж": ["Джамоат Пяндж 1"],
             "Хорог": ["Джамоат Хорог 1"],
-            "all": [] // Для "Все города/районы"
+            "Ишкашим": ["Джамоат Ишкашим 1"],
+            "Мургаб": ["Джамоат Мургаб 1"],
+            "Рошткала": ["Джамоат Рошткала 1"],
+            "Рушан": ["Джамоат Рушан 1"],
+            "Шугнан": ["Джамоат Шугнан 1"],
+            "all": [] // Для "Все города/районы" - будет заполняться всеми джамоатами
         };
+
+        // Populate all cities/districts for the "all regions" option
+        Object.values(regionsData).forEach(cities => {
+            if (Array.isArray(cities)) { // Ensure it's an array of cities
+                cities.forEach(city => {
+                    if (city !== "Все регионы") { // Avoid adding "Все регионы" as a city
+                        regionsData.all.push(city);
+                    }
+                });
+            }
+        });
+        // Populate all jamoats for the "all cities/districts" option
+        Object.values(cityDistrictData).forEach(jamoats => {
+            if (Array.isArray(jamoats)) { // Ensure it's an array of jamoats
+                jamoats.forEach(jamoat => {
+                    if (jamoat !== "Все джамоаты") { // Avoid adding "Все джамоаты" as a jamoat
+                        cityDistrictData.all.push(jamoat);
+                    }
+                });
+            }
+        });
+
 
         // Функция для обновления графиков на основе выбранных фильтров
         function updateCharts(region, period, industry, resignationReason, positionTransition, organizationTransition) {
@@ -986,8 +1096,9 @@
             const period = document.getElementById('reportPeriodSelect').value;
             const industry = document.getElementById('reportIndustrySelect').value;
             const resignationReason = document.getElementById('resignationReasonSelect').value;
-            const positionTransition = document.getElementById('positionTransitionInput').value;
-            const organizationTransition = document.getElementById('organizationTransitionInput').value;
+            // Получаем выбранные значения из множественных select'ов
+            const positionTransition = Array.from(document.getElementById('positionTransitionSelect').selectedOptions).map(option => option.value);
+            const organizationTransition = Array.from(document.getElementById('organizationTransitionSelect').selectedOptions).map(option => option.value);
             
             const loadingSpinner = document.getElementById('filterLoading');
             loadingSpinner.classList.remove('hidden'); // Показать спиннер
@@ -1014,6 +1125,15 @@
             // В реальном приложении здесь будет логика генерации и скачивания Excel
             alert('Функция экспорта в Excel находится в разработке и будет реализована через бэкенд.');
         });
+
+        // Новая функция для кнопки "В отдельном окне"
+        document.getElementById('exportNewWindowBtn').addEventListener('click', () => {
+            // Открываем новое окно и распечатываем текущее содержимое
+            // Это использует CSS @media print стили для оптимизации вывода
+            window.print();
+            alert('Предварительный просмотр для печати открыт в новом окне/вкладке.');
+        });
+
 
         // Выпадающее меню профиля и языков (аналогично главной странице)
         const profileMenuBtn = document.getElementById('profileMenuBtn');
@@ -1080,57 +1200,66 @@
         const cityDistrictSelect = document.getElementById('cityDistrictSelect');
         const jamoatSelect = document.getElementById('jamoatSelect');
 
-        const allCitiesAndDistricts = {
-            "Dushanbe": ["Район Исмоили Сомони", "Район Сино", "Район Фирдавси", "Район Шохмансур"],
-            "RRP": ["Варзоб", "Гиссар", "Лахш", "Нуробод", "Рашт", "Сангвор", "Тоджикобод", "Файзабад", "Шахринав", "Рудаки", "Турсунзаде"],
-            "Sughd": ["Худжанд", "Бободжон Гафуров", "Ашт", "Исфара", "Канибадам", "Пенджикент"],
-            "Khatlon": ["Бохтар", "Куляб", "Дангара", "Вахш", "Яван", "Пяндж"],
-            "GBAO": ["Хорог", "Ишкашим", "Мургаб", "Рошткала", "Рушан", "Шугнан"],
-            "all": [
-                "Район Исмоили Сомони", "Район Сино", "Район Фирдавси", "Район Шохмансур",
-                "Варзоб", "Гиссар", "Лахш", "Нуробод", "Рашт", "Сангвор", "Тоджикобод", "Файзабад", "Шахринав", "Рудаки", "Турсунзаде",
-                "Худжанд", "Бободжон Гафуров", "Ашт", "Исфара", "Канибадам", "Пенджикент",
-                "Бохтар", "Куляб", "Дангара", "Вахш", "Яван", "Пяндж",
-                "Хорог", "Ишкашим", "Мургаб", "Рошткала", "Рушан", "Шугнан"
-            ]
-        };
-
-        const allJamoats = {
-            "Район Исмоили Сомони": ["Джамоат И. Сомони 1", "Джамоат И. Сомони 2"],
-            "Район Сино": ["Джамоат Сино 1", "Джамоат Сино 2"],
-            "Худжанд": ["Джамоат Худжанд 1", "Джамоат Худжанд 2"],
-            "Бохтар": ["Джамоат Бохтар 1", "Джамоат Бохтар 2"],
-            "Хорог": ["Джамоат Хорог 1"],
-            "all": ["Все джамоаты"] // Placeholder for "All jamoats"
-        };
-
-
         function populateCityDistrict() {
             const selectedRegion = reportRegionSelect.value;
-            const cities = allCitiesAndDistricts[selectedRegion] || [];
+            const cities = regionsData[selectedRegion] || [];
 
             cityDistrictSelect.innerHTML = '<option value="all">Все города/районы</option>';
-            cities.forEach(city => {
-                const option = document.createElement('option');
-                option.value = city;
-                option.textContent = city;
-                cityDistrictSelect.appendChild(option);
-            });
-            // Reset jamoat filter when region changes
+            // Если выбран "Все регионы", добавляем все города/районы из regionsData.all
+            if (selectedRegion === 'all') {
+                // Создаем Set для уникальных городов/районов
+                const uniqueCities = new Set();
+                for (const regionKey in regionsData) {
+                    if (regionKey !== 'all' && Array.isArray(regionsData[regionKey])) {
+                        regionsData[regionKey].forEach(city => uniqueCities.add(city));
+                    }
+                }
+                Array.from(uniqueCities).sort().forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    cityDistrictSelect.appendChild(option);
+                });
+            } else {
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    cityDistrictSelect.appendChild(option);
+                });
+            }
+            // Сбрасываем и заполняем джамоаты при изменении города/района
             populateJamoat();
         }
 
         function populateJamoat() {
             const selectedCityDistrict = cityDistrictSelect.value;
-            const jamoats = allJamoats[selectedCityDistrict] || [];
+            const jamoats = cityDistrictData[selectedCityDistrict] || [];
 
             jamoatSelect.innerHTML = '<option value="all">Все джамоаты</option>';
-            jamoats.forEach(jamoat => {
-                const option = document.createElement('option');
-                option.value = jamoat;
-                option.textContent = jamoat;
-                jamoatSelect.appendChild(option);
-            });
+            // Если выбран "Все города/районы" или "Все регионы", добавляем все джамоаты
+            if (selectedCityDistrict === 'all' || reportRegionSelect.value === 'all') {
+                // Собираем все уникальные джамоаты
+                const allUniqueJamoats = new Set();
+                for (const city in cityDistrictData) {
+                    if (Array.isArray(cityDistrictData[city])) {
+                        cityDistrictData[city].forEach(j => allUniqueJamoats.add(j));
+                    }
+                }
+                Array.from(allUniqueJamoats).sort().forEach(jamoat => {
+                    const option = document.createElement('option');
+                    option.value = jamoat;
+                    option.textContent = jamoat;
+                    jamoatSelect.appendChild(option);
+                });
+            } else {
+                jamoats.forEach(jamoat => {
+                    const option = document.createElement('option');
+                    option.value = jamoat;
+                    option.textContent = jamoat;
+                    jamoatSelect.appendChild(option);
+                });
+            }
         }
 
         // Event listeners for cascading filters
@@ -1141,6 +1270,27 @@
         document.addEventListener('DOMContentLoaded', () => {
             populateCityDistrict();
             populateJamoat(); // Ensure jamoat is populated based on initial city/district
+        });
+
+        // --- Логика открытия/закрытия боковой панели фильтров ---
+        const toggleFilterBtn = document.getElementById('toggleFilterBtn');
+        const closeFilterBtn = document.getElementById('closeFilterBtn');
+        const filterSidebar = document.getElementById('filterSidebar');
+        const filterOverlay = document.getElementById('filterOverlay');
+
+        toggleFilterBtn.addEventListener('click', () => {
+            filterSidebar.classList.add('open');
+            filterOverlay.classList.add('active');
+        });
+
+        closeFilterBtn.addEventListener('click', () => {
+            filterSidebar.classList.remove('open');
+            filterOverlay.classList.remove('active');
+        });
+
+        filterOverlay.addEventListener('click', () => {
+            filterSidebar.classList.remove('open');
+            filterOverlay.classList.remove('active');
         });
     </script>
 </body>
