@@ -1026,16 +1026,8 @@
         gtScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
         document.body.appendChild(gtScript);
 
-        // Обработка кликов по языковым кнопкам
-        document.querySelectorAll('#langDropdown button[data-lang]').forEach(function(btn) {
-            btn.addEventListener('click', function(e) {
-                var lang = btn.getAttribute('data-lang');
-                // ru — сбросить перевод, tg/en — перевести
-                setLanguage(lang === 'ru' ? '' : lang);
-                document.getElementById('currentLangLabel').textContent = btn.textContent;
-                document.getElementById('langDropdown').classList.add('hidden');
-            });
-        });
+        // Удалено: дублирующая обработка кликов по языковым кнопкам
+        // Она уже реализована в основном <script> выше.
     });
 </script>
 <div id="google_translate_element" style="display:none"></div>
