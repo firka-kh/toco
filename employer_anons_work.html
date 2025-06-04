@@ -40,14 +40,14 @@
         }
 
         /* Input and select styling */
-        input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select, textarea {
+        input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="date"], select, textarea {
             border-radius: 0.375rem; /* rounded-md */
             border: 1px solid #d1d5db; /* border-gray-300 */
             padding: 0.5rem 0.75rem; /* px-3 py-2 */
             width: 100%;
             color: #374151; /* text-gray-800 */
         }
-        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #2563eb; /* focus:border-blue-500 */
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* focus:ring-blue-500 */
@@ -292,6 +292,13 @@
                                     <option value="Internship">Стажировка</option>
                                 </select>
                             </div>
+                            <!-- Новое поле: Возможность удаленной работы -->
+                            <div>
+                                <label class="flex items-center text-sm font-medium text-gray-700">
+                                    <input type="checkbox" id="remoteWork" name="remoteWork" class="form-checkbox text-blue-600 rounded mr-2">
+                                    Возможна удаленная работа
+                                </label>
+                            </div>
                         </div>
                         <!-- Новый блок: Обучение сотрудников -->
                         <div class="bg-blue-50 rounded-lg p-4 mt-4">
@@ -338,13 +345,6 @@
                         <div>
                             <label for="vacancySkills" class="block text-sm font-medium text-gray-700 mb-2">Ключевые навыки (через запятую)</label>
                             <textarea id="vacancySkills" name="vacancySkills" rows="3" placeholder="Например: Java, Spring Boot, SQL, Git"></textarea>
-                        </div>
-                        <!-- Новое поле: Возможность удаленной работы -->
-                        <div>
-                            <label class="flex items-center text-sm font-medium text-gray-700">
-                                <input type="checkbox" id="remoteWork" name="remoteWork" class="form-checkbox text-blue-600 rounded mr-2">
-                                Возможна удаленная работа
-                            </label>
                         </div>
                         <!-- Новое поле: Социальный пакет -->
                         <div>
@@ -487,15 +487,26 @@
             "GBAO": ["Хорог", "Ишкашим", "Мургаб", "Рошткала", "Рушан", "Шугнан"],
         };
 
+        // Демо-данные для учебных центров (в реальном приложении будут загружаться из БД)
+        const certifiedTrainingCenters = [
+            { id: "it_academy", name: "IT Академия Душанбе" },
+            { id: "business_school", name: "Бизнес Школа Таджикистана" },
+            { id: "language_center", name: "Языковой Центр 'Полиглот'" },
+            { id: "construction_college", name: "Строительный колледж №1" },
+            { id: "online_coursera", name: "Coursera (онлайн)" },
+            { id: "online_udemy", name: "Udemy (онлайн)" }
+        ];
+
         // Function to populate city/district dropdown based on selected region
         function populateCityDistrictDropdown() {
             const regionSelect = document.getElementById('vacancyRegion');
-            const cityDistrictSelect = document.getElementById('cityDistrict');
+            // На этой странице нет cityDistrict, поэтому этот вызов не нужен
+            // const cityDistrictSelect = document.getElementById('cityDistrict'); 
             const selectedRegion = regionSelect.value;
 
-            // Clear existing options
-            cityDistrictSelect.innerHTML = '<option value="">Выберите город/район</option>';
-            
+            // Если бы cityDistrict был на этой странице, код был бы таким:
+            /*
+            cityDistrictSelect.innerHTML = '<option value="">Выберите город/район</option>'; // Default option
             const cities = regionsData[selectedRegion];
             if (cities) {
                 cities.forEach(city => {
@@ -505,14 +516,30 @@
                     cityDistrictSelect.appendChild(option);
                 });
             }
+            */
         }
 
-        // Event listener for region dropdown change
+        // Function to populate training centers dropdown
+        function populateTrainingCentersDropdown() {
+            const trainingCenterSelect = document.getElementById('trainingCenter');
+            if (trainingCenterSelect) {
+                trainingCenterSelect.innerHTML = '<option value="">Выберите учебный центр</option>';
+                certifiedTrainingCenters.forEach(center => {
+                    const option = document.createElement('option');
+                    option.value = center.id;
+                    option.textContent = center.name;
+                    trainingCenterSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Event listener for region dropdown change (still here for potential future use or if element is added)
         document.getElementById('vacancyRegion').addEventListener('change', populateCityDistrictDropdown);
 
         // Initial population of city/district dropdown on page load
         document.addEventListener('DOMContentLoaded', () => {
-            populateCityDistrictDropdown();
+            populateCityDistrictDropdown(); // This will now do nothing if cityDistrict is not on the page
+            populateTrainingCentersDropdown(); // Populate training centers on load
         });
 
 
@@ -531,6 +558,20 @@
             }
         });
 
+        // Handle "Предусмотрено обучение для сотрудников" checkbox
+        document.getElementById('trainingProvided').addEventListener('change', function() {
+            const trainingDetailsDiv = document.getElementById('trainingDetails');
+            if (this.checked) {
+                trainingDetailsDiv.classList.remove('hidden');
+                // Make training fields required when visible (optional, but good practice)
+                trainingDetailsDiv.querySelectorAll('input, select, textarea').forEach(el => el.required = true);
+            } else {
+                trainingDetailsDiv.classList.add('hidden');
+                // Make training fields not required when hidden
+                trainingDetailsDiv.querySelectorAll('input, select, textarea').forEach(el => el.required = false);
+            }
+        });
+
         // Handle form submission (placeholder)
         document.getElementById('postVacancyForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -542,7 +583,11 @@
                 spinner.classList.add('hidden');
                 alert('Вакансия успешно отправлена на модерацию!');
                 this.reset(); // Clear form fields
-                populateCityDistrictDropdown(); // Reset city/district dropdown as well
+                // Reset conditional fields visibility after form reset
+                document.getElementById('trainingDetails').classList.add('hidden');
+                document.getElementById('salaryNegotiable').checked = false;
+                document.getElementById('vacancySalaryMin').disabled = false;
+                document.getElementById('vacancySalaryMax').disabled = false;
             }, 1500);
         });
 
