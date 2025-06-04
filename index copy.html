@@ -905,21 +905,18 @@
         const langDropdown = document.getElementById('langDropdown');
         const currentLangLabel = document.getElementById('currentLangLabel');
 
-        // Открытие/закрытие меню "Мой профиль"
-        profileMenuBtn.addEventListener('click', function(e) {
+        profileMenuBtn?.addEventListener('click', function(e) {
             e.stopPropagation();
             profileDropdown.classList.toggle('hidden');
             langDropdown.classList.add('hidden');
         });
 
-        // Открытие/закрытие меню языков
-        langMenuBtn.addEventListener('click', function(e) {
+        langMenuBtn?.addEventListener('click', function(e) {
             e.stopPropagation();
             langDropdown.classList.toggle('hidden');
             profileDropdown.classList.add('hidden');
         });
 
-        // Закрытие обоих меню при клике вне
         document.addEventListener('click', function(e) {
             if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
                 profileDropdown.classList.add('hidden');
@@ -929,27 +926,10 @@
             }
         });
 
-        // Переключение языка
-        langDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
+        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
             btn.onclick = function() {
-                const lang = this.getAttribute('data-lang');
                 currentLangLabel.textContent = this.textContent;
                 langDropdown.classList.add('hidden');
-                // Google Translate
-                setTimeout(() => {
-                    const frame = document.querySelector('iframe.goog-te-menu-frame');
-                    if (frame) {
-                        const langMap = {ru: 'Русский', tg: 'Таджикский', en: 'Английский'};
-                        const langName = langMap[lang];
-                        const items = frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text');
-                        for (let i = 0; i < items.length; i++) {
-                            if (items[i].innerText.trim().toLowerCase().includes(langName.toLowerCase())) {
-                                items[i].click();
-                                break;
-                            }
-                        }
-                    }
-                }, 200);
             };
         });
 
