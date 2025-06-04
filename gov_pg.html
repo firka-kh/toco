@@ -196,6 +196,16 @@
             <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
                 <h3 class="text-xl font-semibold mb-4 text-gray-800">Фильтры данных</h3>
                 <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Пол -->
+                    <div>
+                        <label for="genderSelect" class="block text-sm font-medium text-gray-700 mb-2">Пол</label>
+                        <select id="genderSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="all">Все</option>
+                            <option value="Male">Мужской</option>
+                            <option value="Female">Женский</option>
+                        </select>
+                    </div>
+                    <!-- Временной период -->
                     <div>
                         <label for="reportPeriodSelect" class="block text-sm font-medium text-gray-700 mb-2">Временной период</label>
                         <select id="reportPeriodSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -204,7 +214,12 @@
                             <option value="year">Год</option>
                             <option value="week">Неделя</option>
                         </select>
+                        <div class="flex gap-2 mt-2">
+                            <input type="date" id="startDateInput" class="w-1/2 px-4 py-2 rounded-lg border border-gray-300 text-gray-800" title="Дата начала">
+                            <input type="date" id="endDateInput" class="w-1/2 px-4 py-2 rounded-lg border border-gray-300 text-gray-800" title="Дата окончания">
+                        </div>
                     </div>
+                    <!-- Регион -->
                     <div>
                         <label for="reportRegionSelect" class="block text-sm font-medium text-gray-700 mb-2">Регион</label>
                         <select id="reportRegionSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -216,6 +231,7 @@
                             <option value="GBAO">Горно-Бадахшанская автономная область (ГБАО)</option>
                         </select>
                     </div>
+                    <!-- Город/Район (каскадный) -->
                     <div>
                         <label for="cityDistrictSelect" class="block text-sm font-medium text-gray-700 mb-2">Город/Район</label>
                         <select id="cityDistrictSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
@@ -223,6 +239,15 @@
                             <!-- Options will be populated dynamically -->
                         </select>
                     </div>
+                    <!-- Джамоат (каскадный) -->
+                    <div>
+                        <label for="jamoatSelect" class="block text-sm font-medium text-gray-700 mb-2">Джамоат</label>
+                        <select id="jamoatSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все джамоаты</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <!-- Отрасль (ОКЭД) -->
                     <div>
                         <label for="reportIndustrySelect" class="block text-sm font-medium text-gray-700 mb-2">Отрасль (ОКЭД)</label>
                         <select id="reportIndustrySelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
@@ -238,6 +263,7 @@
                             <option value="Transport">Транспорт и логистика</option>
                         </select>
                     </div>
+                    <!-- Профессии (ISCO) -->
                     <div>
                         <label for="professionsSelect" class="block text-sm font-medium text-gray-700 mb-2">Профессии (ISCO)</label>
                         <select id="professionsSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
@@ -252,6 +278,7 @@
                             <option value="Builder">Строитель</option>
                         </select>
                     </div>
+                    <!-- Уровень образования (ISCED) -->
                     <div>
                         <label for="educationLevelSelect" class="block text-sm font-medium text-gray-700 mb-2">Уровень образования (ISCED)</label>
                         <select id="educationLevelSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
@@ -264,6 +291,7 @@
                             <option value="Unemployed_Registered">Зарегистрированный безработный</option>
                         </select>
                     </div>
+                    <!-- Причина увольнения -->
                     <div>
                         <label for="resignationReasonSelect" class="block text-sm font-medium text-gray-700 mb-2">Причина увольнения</label>
                         <select id="resignationReasonSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
@@ -276,6 +304,7 @@
                             <option value="Company_Restructuring">Реорганизация компании</option>
                         </select>
                     </div>
+                    <!-- Тип занятости -->
                     <div>
                         <label for="employmentTypeSelect" class="block text-sm font-medium text-gray-700 mb-2">Тип занятости</label>
                         <select id="employmentTypeSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
@@ -288,6 +317,7 @@
                             <option value="Public_Works">Общественные работы</option>
                         </select>
                     </div>
+                    <!-- Программы занятости -->
                     <div>
                         <label for="employmentProgramsSelect" class="block text-sm font-medium text-gray-700 mb-2">Программы занятости</label>
                         <select id="employmentProgramsSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
@@ -299,6 +329,7 @@
                             <option value="Youth_Internship">Молодежные стажировки</option>
                         </select>
                     </div>
+                    <!-- Возрастная категория -->
                     <div>
                         <label for="ageCategorySelect" class="block text-sm font-medium text-gray-700 mb-2">Возрастная категория</label>
                         <select id="ageCategorySelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
@@ -309,14 +340,7 @@
                             <option value="Senior_60+">Пожилые (60+)</option>
                         </select>
                     </div>
-                    <div>
-                        <label for="genderSelect" class="block text-sm font-medium text-gray-700 mb-2">Пол</label>
-                        <select id="genderSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="all">Все</option>
-                            <option value="Male">Мужской</option>
-                            <option value="Female">Женский</option>
-                        </select>
-                    </div>
+                    <!-- Социальная уязвимость -->
                     <div>
                         <label for="socialVulnerabilitySelect" class="block text-sm font-medium text-gray-700 mb-2">Социальная уязвимость</label>
                         <select id="socialVulnerabilitySelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
@@ -329,6 +353,7 @@
                             <option value="Released_Prisoners">Недавно освободившиеся из мест лишения свободы</option>
                         </select>
                     </div>
+                    <!-- Переход по позиции -->
                     <div>
                         <label for="positionTransitionSelect" class="block text-sm font-medium text-gray-700 mb-2">Переход по позиции</label>
                         <select id="positionTransitionSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
@@ -340,6 +365,7 @@
                             <option value="Teacher">Учитель</option>
                         </select>
                     </div>
+                    <!-- Переход по организации -->
                     <div>
                         <label for="organizationTransitionSelect" class="block text-sm font-medium text-gray-700 mb-2">Переход по организации</label>
                         <select id="organizationTransitionSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
@@ -545,6 +571,26 @@
         let unemploymentChartInstance, professionsChartInstance, vacancyResponseChartInstance, trainingEffectivenessChartInstance;
         // Новые переменные для графиков
         let resignedPositionsChartInstance, transitionedPositionsChartInstance, resignedOrganizationsChartInstance, transitionedOrganizationsChartInstance, resignationReasonsChartInstance, employmentForecastChartInstance;
+
+        // Справочники для каскадной фильтрации
+        const regionsData = {
+            "Dushanbe": ["Район Исмоили Сомони", "Район Сино", "Район Фирдавси", "Район Шохмансур"],
+            "RRP": ["Варзоб", "Гиссар", "Лахш", "Нуробод", "Рашт", "Сангвор", "Тоджикобод", "Файзабад", "Шахринав", "Рудаки", "Турсунзаде"],
+            "Sughd": ["Худжанд", "Бободжон Гафуров", "Ашт", "Исфара", "Канибадам", "Пенджикент"],
+            "Khatlon": ["Бохтар", "Куляб", "Дангара", "Вахш", "Яван", "Пяндж"],
+            "GBAO": ["Хорог", "Ишкашим", "Мургаб", "Рошткала", "Рушан", "Шугнан"],
+            "all": [] // Для "Все регионы"
+        };
+
+        const cityDistrictData = {
+            "Район Исмоили Сомони": ["Джамоат №1", "Джамоат №2"],
+            "Район Сино": ["Джамоат №3", "Джамоат №4"],
+            // ... добавьте остальные города/районы и их джамоаты
+            "Худжанд": ["Джамоат Худжанд 1", "Джамоат Худжанд 2"],
+            "Бохтар": ["Джамоат Бохтар 1", "Джамоат Бохтар 2"],
+            "Хорог": ["Джамоат Хорог 1"],
+            "all": [] // Для "Все города/районы"
+        };
 
         // Функция для обновления графиков на основе выбранных фильтров
         function updateCharts(region, period, industry, resignationReason, positionTransition, organizationTransition) {
@@ -1028,8 +1074,74 @@
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE
             }, 'google_translate_element');
         }
+
+        // --- Каскадные выпадающие списки для Регион -> Город/Район -> Джамоат ---
+        const reportRegionSelect = document.getElementById('reportRegionSelect');
+        const cityDistrictSelect = document.getElementById('cityDistrictSelect');
+        const jamoatSelect = document.getElementById('jamoatSelect');
+
+        const allCitiesAndDistricts = {
+            "Dushanbe": ["Район Исмоили Сомони", "Район Сино", "Район Фирдавси", "Район Шохмансур"],
+            "RRP": ["Варзоб", "Гиссар", "Лахш", "Нуробод", "Рашт", "Сангвор", "Тоджикобод", "Файзабад", "Шахринав", "Рудаки", "Турсунзаде"],
+            "Sughd": ["Худжанд", "Бободжон Гафуров", "Ашт", "Исфара", "Канибадам", "Пенджикент"],
+            "Khatlon": ["Бохтар", "Куляб", "Дангара", "Вахш", "Яван", "Пяндж"],
+            "GBAO": ["Хорог", "Ишкашим", "Мургаб", "Рошткала", "Рушан", "Шугнан"],
+            "all": [
+                "Район Исмоили Сомони", "Район Сино", "Район Фирдавси", "Район Шохмансур",
+                "Варзоб", "Гиссар", "Лахш", "Нуробод", "Рашт", "Сангвор", "Тоджикобод", "Файзабад", "Шахринав", "Рудаки", "Турсунзаде",
+                "Худжанд", "Бободжон Гафуров", "Ашт", "Исфара", "Канибадам", "Пенджикент",
+                "Бохтар", "Куляб", "Дангара", "Вахш", "Яван", "Пяндж",
+                "Хорог", "Ишкашим", "Мургаб", "Рошткала", "Рушан", "Шугнан"
+            ]
+        };
+
+        const allJamoats = {
+            "Район Исмоили Сомони": ["Джамоат И. Сомони 1", "Джамоат И. Сомони 2"],
+            "Район Сино": ["Джамоат Сино 1", "Джамоат Сино 2"],
+            "Худжанд": ["Джамоат Худжанд 1", "Джамоат Худжанд 2"],
+            "Бохтар": ["Джамоат Бохтар 1", "Джамоат Бохтар 2"],
+            "Хорог": ["Джамоат Хорог 1"],
+            "all": ["Все джамоаты"] // Placeholder for "All jamoats"
+        };
+
+
+        function populateCityDistrict() {
+            const selectedRegion = reportRegionSelect.value;
+            const cities = allCitiesAndDistricts[selectedRegion] || [];
+
+            cityDistrictSelect.innerHTML = '<option value="all">Все города/районы</option>';
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                cityDistrictSelect.appendChild(option);
+            });
+            // Reset jamoat filter when region changes
+            populateJamoat();
+        }
+
+        function populateJamoat() {
+            const selectedCityDistrict = cityDistrictSelect.value;
+            const jamoats = allJamoats[selectedCityDistrict] || [];
+
+            jamoatSelect.innerHTML = '<option value="all">Все джамоаты</option>';
+            jamoats.forEach(jamoat => {
+                const option = document.createElement('option');
+                option.value = jamoat;
+                option.textContent = jamoat;
+                jamoatSelect.appendChild(option);
+            });
+        }
+
+        // Event listeners for cascading filters
+        reportRegionSelect.addEventListener('change', populateCityDistrict);
+        cityDistrictSelect.addEventListener('change', populateJamoat);
+
+        // Initial population on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            populateCityDistrict();
+            populateJamoat(); // Ensure jamoat is populated based on initial city/district
+        });
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    <div id="google_translate_element" style="display:none"></div>
 </body>
 </html>
