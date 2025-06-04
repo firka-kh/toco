@@ -161,6 +161,16 @@
         .animate-fade-in {
             animation: fade-in 0.18s;
         }
+
+        /* Меню навигации */
+        .menu-link {
+            font-size: 1rem;
+            font-weight: 700; /* жирный по умолчанию */
+            transition: font-weight 0.2s;
+        }
+        .menu-link:active {
+            font-weight: 400 !important; /* тонкий при нажатии */
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -181,12 +191,12 @@
                 <!-- Правая часть: Навигация, языки и профиль -->
                 <nav class="hidden md:flex space-x-6 items-center">
                     <!-- Добавляем пункт меню "Главная" -->
-                    <a href="index.html" class="hover:text-yellow-300 transition-colors font-semibold">Главная</a>
-                    <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
-                    <a href="index.html#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
-                    <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
-                    <a href="index.html#education" class="hover:text-yellow-300 transition-colors">Образование</a>
-                    <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
+                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
                     <!-- Выпадающее меню профиля и языков -->
                     <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
                         <!-- Мой профиль -->
