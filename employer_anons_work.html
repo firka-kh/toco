@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Управление вакансиями и поиск кадров - Портал рынка труда</title>
+    <title>Кабинет работодателя - Портал рынка труда</title>
     <!-- Подключение Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Подключение Font Awesome для иконок -->
@@ -191,6 +191,25 @@
         .collapsible-header.expanded i {
             transform: rotate(180deg);
         }
+
+        /* Стили для таблицы обзора вакансий */
+        .vacancy-overview-table th, .vacancy-overview-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        .vacancy-overview-table th {
+            background-color: #edf2f7;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        .vacancy-overview-table tbody tr:hover {
+            background-color: #f7fafc;
+        }
+        .vacancy-overview-table tbody tr:last-child td {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -249,16 +268,108 @@
             <div class="container mx-auto px-4">
                 <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Кабинет работодателя</h2>
 
-                <!-- Секция: Управление вакансиями -->
+                <!-- Секция: Управление вакансиями и аналитика -->
                 <div class="mb-8">
-                    <div class="collapsible-header" data-target="vacancyManagementContent">
-                        <span>Управление вакансиями</span>
+                    <div class="collapsible-header" data-target="vacancyOverviewContent">
+                        <span>Управление вакансиями и аналитика</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div id="vacancyManagementContent" class="collapsible-content">
-                        <!-- Раздел "Разместить новую вакансию" -->
+                    <div id="vacancyOverviewContent" class="collapsible-content">
                         <div class="bg-gray-50 p-8 rounded-lg shadow-inner mb-8 border border-gray-200">
-                            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Разместить новую вакансию</h3>
+                            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Обзор и аналитика вакансий</h3>
+                            
+                            <!-- Ключевые метрики по вакансиям работодателя -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                <div class="bg-white rounded-lg p-6 text-center shadow-md">
+                                    <i class="fas fa-briefcase text-3xl text-blue-500 mb-2"></i>
+                                    <h4 class="text-2xl font-bold text-gray-800" id="totalVacanciesPosted">120</h4>
+                                    <p class="text-gray-600 text-sm">Всего размещено вакансий</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-6 text-center shadow-md">
+                                    <i class="fas fa-reply-all text-3xl text-green-500 mb-2"></i>
+                                    <h4 class="text-2xl font-bold text-gray-800" id="avgApplicationsPerVacancy">18.5</h4>
+                                    <p class="text-gray-600 text-sm">Среднее откликов на вакансию</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-6 text-center shadow-md">
+                                    <i class="fas fa-check-circle text-3xl text-purple-500 mb-2"></i>
+                                    <h4 class="text-2xl font-bold text-gray-800" id="successfulClosuresRate">75%</h4>
+                                    <p class="text-gray-600 text-sm">Процент успешных закрытий</p>
+                                </div>
+                            </div>
+
+                            <h4 class="text-xl font-semibold mb-4 text-gray-800">Обзор размещенных вакансий</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white rounded-lg shadow-md vacancy-overview-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-4 py-2">Название вакансии</th>
+                                            <th class="px-4 py-2">Статус</th>
+                                            <th class="px-4 py-2">Регион</th>
+                                            <th class="px-4 py-2">Зарплата</th>
+                                            <th class="px-4 py-2">Просмотры</th>
+                                            <th class="px-4 py-2">Отклики</th>
+                                            <th class="px-4 py-2">Обучение</th>
+                                            <th class="px-4 py-2">Действия</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="employerVacanciesOverviewTableBody">
+                                        <!-- Пример данных -->
+                                        <tr>
+                                            <td class="px-4 py-2">Программист Java</td>
+                                            <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Активна</span></td>
+                                            <td class="px-4 py-2">Душанбе</td>
+                                            <td class="px-4 py-2">8000-12000 сомони</td>
+                                            <td class="px-4 py-2">520</td>
+                                            <td class="px-4 py-2">15</td>
+                                            <td class="px-4 py-2">Да</td>
+                                            <td class="px-4 py-2">
+                                                <button class="text-blue-500 hover:underline text-sm mr-2"><i class="fas fa-edit"></i></button>
+                                                <button class="text-red-500 hover:underline text-sm"><i class="fas fa-archive"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2">Менеджер по продажам</td>
+                                            <td class="px-4 py-2"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">На модерации</span></td>
+                                            <td class="px-4 py-2">Худжанд</td>
+                                            <td class="px-4 py-2">По договоренности</td>
+                                            <td class="px-4 py-2">180</td>
+                                            <td class="px-4 py-2">5</td>
+                                            <td class="px-4 py-2">Нет</td>
+                                            <td class="px-4 py-2">
+                                                <button class="text-blue-500 hover:underline text-sm mr-2"><i class="fas fa-edit"></i></button>
+                                                <button class="text-red-500 hover:underline text-sm"><i class="fas fa-eye"></i></button>
+                                                <button class="text-red-500 hover:underline text-sm"><i class="fas fa-archive"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2">Маркетолог</td>
+                                            <td class="px-4 py-2"><span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">Архив</span></td>
+                                            <td class="px-4 py-2">Душанбе</td>
+                                            <td class="px-4 py-2">6000-9000 сомони</td>
+                                            <td class="px-4 py-2">300</td>
+                                            <td class="px-4 py-2">10</td>
+                                            <td class="px-4 py-2">Нет</td>
+                                            <td class="px-4 py-2">
+                                                <button class="text-green-500 hover:underline text-sm mr-2"><i class="fas fa-box-open"></i></button>
+                                                <button class="text-red-500 hover:underline text-sm"><i class="fas fa-times-circle"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Секция: Разместить вакансию -->
+                <div class="mb-8">
+                    <div class="collapsible-header" data-target="postVacancyContent">
+                        <span>Разместить вакансию</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div id="postVacancyContent" class="collapsible-content">
+                        <div class="bg-gray-50 p-8 rounded-lg shadow-inner mb-8 border border-gray-200">
+                            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Форма публикации новой вакансии</h3>
                             <form id="postVacancyForm" class="space-y-6">
                                 <div>
                                     <label for="vacancyTitle" class="block text-sm font-medium text-gray-700 mb-2">Название вакансии <span class="text-red-500">*</span></label>
@@ -331,7 +442,7 @@
                                             <option value="Part_Time">Частичная занятость</option>
                                             <option value="Temporary">Временная работа</option>
                                             <option value="Project">Проектная работа</option>
-                                            <option value="Internship">Стажировка</option>
+                                            <option value="Internship">Стажировка</soption>
                                         </select>
                                     </div>
                                     <!-- Новое поле: Возможность удаленной работы -->
@@ -409,64 +520,6 @@
                                 </button>
                             </form>
                         </div>
-
-                        <!-- Раздел "Мои активные вакансии" -->
-                        <div class="bg-white p-8 rounded-lg shadow-xl mb-8 border border-gray-200">
-                            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Мои активные вакансии</h3>
-                            <div id="activeVacanciesList" class="space-y-6">
-                                <!-- Пример вакансии -->
-                                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm">
-                                    <div class="flex justify-between items-start mb-4">
-                                        <h4 class="text-lg font-semibold text-gray-800">Программист Java</h4>
-                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Активна</span>
-                                    </div>
-                                    <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Город Душанбе</p>
-                                    <p class="text-gray-700 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>8000-12000 сомони</p>
-                                    <p class="text-gray-600 text-sm mb-4">Откликов: 15</p>
-                                    <div class="flex flex-wrap gap-3">
-                                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"><i class="fas fa-edit mr-2"></i>Редактировать</button>
-                                        <button class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm"><i class="fas fa-eye mr-2"></i>Просмотреть отклики</button>
-                                        <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm"><i class="fas fa-archive mr-2"></i>Архивировать</button>
-                                    </div>
-                                </div>
-                                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm">
-                                    <div class="flex justify-between items-start mb-4">
-                                        <h4 class="text-lg font-semibold text-gray-800">Менеджер по продажам</h4>
-                                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">На модерации</span>
-                                    </div>
-                                    <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Согдийская область, Худжанд</p>
-                                    <p class="text-gray-700 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>По договоренности</p>
-                                    <p class="text-gray-600 text-sm mb-4">Откликов: 5</p>
-                                    <div class="flex flex-wrap gap-3">
-                                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"><i class="fas fa-edit mr-2"></i>Редактировать</button>
-                                        <button class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm"><i class="fas fa-eye mr-2"></i>Просмотреть отклики</button>
-                                        <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm"><i class="fas fa-archive mr-2"></i>Архивировать</button>
-                                    </div>
-                                </div>
-                                <!-- Добавьте больше вакансий по мере необходимости -->
-                            </div>
-                        </div>
-
-                        <!-- Раздел "Архив вакансий" -->
-                        <div class="bg-white p-8 rounded-lg shadow-xl border border-gray-200">
-                            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Архив вакансий</h3>
-                            <div id="archivedVacanciesList" class="space-y-6">
-                                <!-- Пример архивной вакансии -->
-                                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 opacity-75 shadow-sm">
-                                    <div class="flex justify-between items-start mb-4">
-                                        <h4 class="text-lg font-semibold text-gray-800">Маркетолог</h4>
-                                        <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">Архив</span>
-                                    </div>
-                                    <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Город Душанбе</p>
-                                    <p class="text-gray-700 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>6000-9000 сомони</p>
-                                    <p class="text-gray-600 text-sm mb-4">Дата архивации: 2024-01-15</p>
-                                    <div class="flex flex-wrap gap-3">
-                                        <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm"><i class="fas fa-box-open mr-2"></i>Восстановить</button>
-                                        <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm"><i class="fas fa-times-circle mr-2"></i>Удалить навсегда</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -480,10 +533,6 @@
                         <div class="bg-gray-50 p-8 rounded-lg shadow-inner border border-gray-200">
                             <h3 class="text-2xl font-semibold mb-6 text-gray-800">Поиск соискателей</h3>
                             <form id="talentSearchForm" class="space-y-6">
-                                <div>
-                                    <label for="searchFullName" class="block text-sm font-medium text-gray-700 mb-2">ФИО соискателя</label>
-                                    <input type="text" id="searchFullName" name="searchFullName" placeholder="Например: Иванов Иван Иванович">
-                                </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label for="searchAgeMin" class="block text-sm font-medium text-gray-700 mb-2">Возраст от</label>
@@ -562,8 +611,8 @@
                                         <option value="all">Любой</option>
                                         <option value="Employed">Трудоустроен</option>
                                         <option value="Unemployed_Registered">Безработный (зарегистрированный)</option>
-                                        <option value="Student">Студент</option>
-                                        <option value="Self_Employed">Самозанятый</option>
+                                        <option value="Student">Студент</soption>
+                                        <option value="Self_Employed">Самозанятый</soption>
                                     </select>
                                 </div>
                                 <div>
@@ -1001,7 +1050,6 @@
             const lastNames = ["Ахмедов", "Каримова", "Рахимов", "Сафарова", "Ибрагимов", "Назарова"];
             const professions = ["Программист", "Бухгалтер", "Менеджер по продажам", "Учитель", "Врач", "Инженер"];
             const skills = ["Java", "SQL", "JavaScript", "1C", "Коммуникация", "Переговоры", "MS Office", "Педагогика"];
-            const workplaces = ["ООО 'ТехноСофт'", "Торговый дом 'Ориёна'", "Банк 'Имон'", "Школа №1", "Гос. учреждение №5"];
             const statuses = ["Трудоустроен", "Безработный (зарегистрированный)", "Студент"];
 
             for (let i = 0; i < 10; i++) { // Generate 10 mock candidates
@@ -1015,8 +1063,6 @@
                 const candidateSkills = getRandomSubset(skills, 2, 4).join(', ');
                 const employmentStatus = getRandomElement(statuses);
                 const socialVulnerability = Math.random() > 0.7 ? getRandomElement(["Лицо с инвалидностью", "Молодежь без опыта работы"]) : "Нет";
-                const lastWorkplace = getRandomElement(workplaces);
-                const lastPosition = getRandomElement(professions);
                 const desiredSalary = Math.floor(Math.random() * (15000 - 3000 + 1)) + 3000;
                 const readyForRelocation = Math.random() > 0.5;
                 const readyForBusinessTrips = Math.random() > 0.5;
@@ -1033,8 +1079,6 @@
                     skills: candidateSkills,
                     employmentStatus: employmentStatus,
                     socialVulnerability: socialVulnerability,
-                    lastWorkplace: lastWorkplace,
-                    lastPosition: lastPosition,
                     desiredSalary: desiredSalary,
                     readyForRelocation: readyForRelocation,
                     readyForBusinessTrips: readyForBusinessTrips,
@@ -1061,9 +1105,8 @@
             talentResultsList.innerHTML = ''; // Clear previous results
             searchResultsContainer.classList.add('hidden'); // Hide results until loaded
 
-            // Collect filter values
+            // Collect filter values (excluding removed fields)
             const filters = {
-                fullName: document.getElementById('searchFullName').value,
                 ageMin: document.getElementById('searchAgeMin').value,
                 ageMax: document.getElementById('searchAgeMax').value,
                 gender: document.getElementById('searchGender').value,
@@ -1076,8 +1119,6 @@
                 skills: document.getElementById('searchSkills').value,
                 employmentStatus: document.getElementById('searchEmploymentStatus').value,
                 socialVulnerability: document.getElementById('searchSocialVulnerability').value,
-                lastWorkplace: document.getElementById('searchLastWorkplace').value,
-                lastPosition: document.getElementById('searchLastPosition').value,
                 desiredSalaryMin: document.getElementById('searchDesiredSalaryMin').value,
                 desiredSalaryMax: document.getElementById('searchDesiredSalaryMax').value,
                 readyForRelocation: document.getElementById('searchReadyForRelocation').checked,
@@ -1095,12 +1136,12 @@
                         candidateDiv.className = 'bg-white p-4 rounded-lg border border-gray-200 shadow-sm';
                         candidateDiv.innerHTML = `
                             <h5 class="font-semibold text-gray-800">${candidate.fullName} (${candidate.age} лет, ${candidate.gender})</h5>
-                            <p class="text-gray-600 text-sm mb-1">${candidate.profession}, Опыт: ${candidate.experienceYears === 'all' ? 'Любой' : candidate.experienceYears}</p>
                             <p class="text-gray-600 text-sm mb-1">Регион: ${candidate.region}, ${candidate.cityDistrict}, ${candidate.jamoat}</p>
                             <p class="text-gray-600 text-sm mb-1">Образование: ${candidate.education}</p>
+                            <p class="text-gray-600 text-sm mb-1">Профессия: ${candidate.profession}, Опыт: ${candidate.experienceYears === 'all' ? 'Любой' : candidate.experienceYears}</p>
                             <p class="text-gray-600 text-sm mb-1">Навыки: ${candidate.skills}</p>
-                            <p class="text-gray-600 text-sm mb-1">Статус: ${candidate.employmentStatus}</p>
-                            <p class="text-gray-600 text-sm mb-1">Последнее место работы: ${candidate.lastWorkplace} (${candidate.lastPosition})</p>
+                            <p class="text-gray-600 text-sm mb-1">Статус занятости: ${candidate.employmentStatus}</p>
+                            <p class="text-gray-600 text-sm mb-1">Социальная уязвимость: ${candidate.socialVulnerability}</p>
                             <p class="text-gray-600 text-sm mb-1">Желаемая зарплата: ${candidate.desiredSalary} сомони</p>
                             <p class="text-gray-600 text-sm mb-2">Готовность к переезду: ${candidate.readyForRelocation ? 'Да' : 'Нет'}, Командировки: ${candidate.readyForBusinessTrips ? 'Да' : 'Нет'}</p>
                             <button class="text-blue-500 hover:underline text-sm mt-2"><i class="fas fa-user-circle mr-1"></i>Просмотреть профиль</button>
