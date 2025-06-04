@@ -1256,7 +1256,6 @@
         // Excel export
         document.getElementById('downloadExcelBtn').onclick = function() {
             const ws_data = [
-                ["ФИО", "Возраст", "Пол", "Регион", "Город
                 ["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"],
                 ...lastTalentReportCandidates.map(c => [
                     c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
