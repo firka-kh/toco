@@ -171,37 +171,6 @@
         .menu-link:active {
             font-weight: 400 !important; /* тонкий при нажатии */
         }
-
-        /* Скрыть верхнюю панель Google Translate */
-        .goog-te-banner-frame.skiptranslate,
-        body > .goog-te-banner-frame,
-        body > .goog-te-spinner-pos,
-        .goog-te-gadget-icon,
-        .goog-te-balloon-frame,
-        .goog-te-menu-frame,
-        .goog-te-menu-value,
-        .goog-te-gadget-simple {
-            display: none !important;
-            height: 0 !important;
-            visibility: hidden !important;
-        }
-
-        /* Скрыть полностью виджет Google Translate */
-        #google_translate_element,
-        .goog-te-banner-frame,
-        .goog-te-menu-frame,
-        .goog-te-balloon-frame,
-        .goog-te-gadget-simple,
-        .goog-te-gadget {
-            display: none !important;
-            height: 0 !important;
-            visibility: hidden !important;
-        }
-
-        /* Сдвиг body обратно вверх, если баннер был */
-        body {
-            top: 0px !important;
-        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -960,35 +929,12 @@
             }
         });
 
-        // Переключение языка
+        // Переключение языка (только смена label, перевод не происходит)
         langDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
             btn.onclick = function() {
                 const lang = this.getAttribute('data-lang');
                 currentLangLabel.textContent = this.textContent;
                 langDropdown.classList.add('hidden');
-                if (lang === 'ru') {
-                    // Сбросить перевод (вернуть на русский)
-                    if (window.google && window.google.translate) {
-                        window.google.translate.TranslateElement && window.google.translate.TranslateElement.getInstance().showBanner(false);
-                    }
-                    // Программно выбрать "Исходный язык" в выпадающем списке Google Translate
-                    setTimeout(() => {
-                        var select = document.querySelector('select.goog-te-combo');
-                        if (select) {
-                            select.value = '';
-                            select.dispatchEvent(new Event('change'));
-                        }
-                    }, 200);
-                } else {
-                    // Перевести на выбранный язык
-                    setTimeout(() => {
-                        var select = document.querySelector('select.goog-te-combo');
-                        if (select) {
-                            select.value = lang;
-                            select.dispatchEvent(new Event('change'));
-                        }
-                    }, 200);
-                }
             };
         });
 
@@ -1007,41 +953,5 @@
         window.location.href = 'analitic_pg.html';
     });
     </script>
-<!-- Google Translate -->
-<script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'ru',
-            includedLanguages: 'ru,en,tg',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false
-        }, 'google_translate_element');
-    }
-
-    // Ждать появления select.goog-te-combo и только потом менять язык
-    function setLanguage(lang) {
-        function trySet() {
-            var select = document.querySelector('select.goog-te-combo');
-            if (select) {
-                select.value = lang;
-                select.dispatchEvent(new Event('change'));
-            } else {
-                setTimeout(trySet, 100);
-            }
-        }
-        trySet();
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Подключаем Google Translate
-        var gtScript = document.createElement('script');
-        gtScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-        document.body.appendChild(gtScript);
-
-        // Удалено: дублирующая обработка кликов по языковым кнопкам
-        // Она уже реализована в основном <script> выше.
-    });
-</script>
-<div id="google_translate_element" style="display:none"></div>
 </body>
 </html>
