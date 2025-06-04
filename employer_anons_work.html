@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Управление вакансиями - Портал рынка труда</title>
+    <title>Управление вакансиями и поиск кадров - Портал рынка труда</title>
     <!-- Подключение Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Подключение Font Awesome для иконок -->
@@ -156,6 +156,41 @@
                 page-break-after: auto; /* No page break after the last section */
             }
         }
+
+        /* Стили для сворачиваемых секций */
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out; /* Более плавная анимация */
+        }
+        .collapsible-content.expanded {
+            max-height: 2000px; /* Достаточно большое значение для развернутого состояния */
+            transition: max-height 0.5s ease-in;
+        }
+        .collapsible-header {
+            cursor: pointer;
+            padding: 1.5rem;
+            background-color: #f3f4f6; /* bg-gray-100 */
+            border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+            border-radius: 0.5rem; /* rounded-lg */
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            color: #1f2937; /* text-gray-800 */
+            transition: background-color 0.3s ease;
+        }
+        .collapsible-header:hover {
+            background-color: #e5e7eb; /* bg-gray-200 */
+        }
+        .collapsible-header i {
+            transition: transform 0.3s ease;
+        }
+        .collapsible-header.expanded i {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -210,217 +245,377 @@
     </header>
 
     <main class="container mx-auto px-4 py-8">
-        <section id="vacancy-management" class="section-spacing bg-white rounded-lg shadow-xl">
+        <section id="employer-dashboard" class="section-spacing bg-white rounded-lg shadow-xl">
             <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Управление вакансиями</h2>
+                <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Кабинет работодателя</h2>
 
-                <!-- Раздел "Разместить новую вакансию" -->
-                <div class="bg-gray-50 p-8 rounded-lg shadow-inner mb-12 border border-gray-200">
-                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Разместить новую вакансию</h3>
-                    <form id="postVacancyForm" class="space-y-6">
-                        <div>
-                            <label for="vacancyTitle" class="block text-sm font-medium text-gray-700 mb-2">Название вакансии <span class="text-red-500">*</span></label>
-                            <input type="text" id="vacancyTitle" name="vacancyTitle" placeholder="Например: Программист Java" required>
-                        </div>
-                        <div>
-                            <label for="vacancyDescription" class="block text-sm font-medium text-gray-700 mb-2">Описание вакансии <span class="text-red-500">*</span></label>
-                            <textarea id="vacancyDescription" name="vacancyDescription" rows="6" placeholder="Подробное описание обязанностей, требований и условий..." required></textarea>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="vacancySalaryMin" class="block text-sm font-medium text-gray-700 mb-2">Зарплата от (сомони)</label>
-                                <input type="number" id="vacancySalaryMin" name="vacancySalaryMin" placeholder="Например: 5000">
-                            </div>
-                            <div>
-                                <label for="vacancySalaryMax" class="block text-sm font-medium text-gray-700 mb-2">Зарплата до (сомони)</label>
-                                <input type="number" id="vacancySalaryMax" name="vacancySalaryMax" placeholder="Например: 10000">
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="flex items-center text-sm font-medium text-gray-700">
-                                    <input type="checkbox" id="salaryNegotiable" name="salaryNegotiable" class="form-checkbox text-blue-600 rounded mr-2">
-                                    По договоренности
-                                </label>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="vacancyRegion" class="block text-sm font-medium text-gray-700 mb-2">Регион <span class="text-red-500">*</span></label>
-                                <select id="vacancyRegion" name="vacancyRegion" required>
-                                    <option value="">Выберите регион</option>
-                                    <option value="Dushanbe">Город Душанбе</option>
-                                    <option value="RRP">Районы Республиканского Подчинения</option>
-                                    <option value="Sughd">Согдийская область</option>
-                                    <option value="Khatlon">Хатлонская область</option>
-                                    <option value="GBAO">Горно-Бадахшанская автономная область (ГБАО)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="vacancyEndDate" class="block text-sm font-medium text-gray-700 mb-2">Дата окончания публикации <span class="text-red-500">*</span></label>
-                                <input type="date" id="vacancyEndDate" name="vacancyEndDate" required>
-                            </div>
-                            <div>
-                                <label for="vacancyIndustry" class="block text-sm font-medium text-gray-700 mb-2">Отрасль <span class="text-red-500">*</span></label>
-                                <select id="vacancyIndustry" name="vacancyIndustry" required>
-                                    <option value="">Выберите отрасль</option>
-                                    <option value="IT">IT (Информационные технологии)</option>
-                                    <option value="Construction">Строительство</option>
-                                    <option value="Trade">Торговля</option>
-                                    <option value="Education">Образование</option>
-                                    <option value="Healthcare">Здравоохранение</option>
-                                    <option value="Manufacturing">Производство</option>
-                                    <option value="Finance">Финансы</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="vacancyExperience" class="block text-sm font-medium text-gray-700 mb-2">Требования к опыту <span class="text-red-500">*</span></label>
-                                <select id="vacancyExperience" name="vacancyExperience" required>
-                                    <option value="">Выберите опыт</option>
-                                    <option value="No_Experience">Без опыта</option>
-                                    <option value="1-3_Years">1-3 года</option>
-                                    <option value="3-5_Years">3-5 лет</option>
-                                    <option value="5+_Years">Более 5 лет</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="vacancyEmploymentType" class="block text-sm font-medium text-gray-700 mb-2">Тип занятости <span class="text-red-500">*</span></label>
-                                <select id="vacancyEmploymentType" name="vacancyEmploymentType" required>
-                                    <option value="">Выберите тип занятости</option>
-                                    <option value="Full_Time">Полная занятость</option>
-                                    <option value="Part_Time">Частичная занятость</option>
-                                    <option value="Temporary">Временная работа</option>
-                                    <option value="Project">Проектная работа</option>
-                                    <option value="Internship">Стажировка</option>
-                                </select>
-                            </div>
-                            <!-- Новое поле: Возможность удаленной работы -->
-                            <div>
-                                <label class="flex items-center text-sm font-medium text-gray-700">
-                                    <input type="checkbox" id="remoteWork" name="remoteWork" class="form-checkbox text-blue-600 rounded mr-2">
-                                    Возможна удаленная работа
-                                </label>
-                            </div>
-                        </div>
-                        <!-- Новый блок: Обучение сотрудников -->
-                        <div class="bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl p-6 mt-6 shadow-inner border border-blue-200">
-                            <label class="flex items-center text-base font-semibold text-blue-900 mb-4">
-                                <input type="checkbox" id="trainingProvided" name="trainingProvided" class="form-checkbox text-blue-600 rounded mr-3 h-5 w-5">
-                                <span>Обучение за счет компании</span>
-                                <span class="ml-2 text-blue-400" title="Компания организует обучение для новых сотрудников">
-                                    <i class="fas fa-info-circle"></i>
-                                </span>
-                            </label>
-                            <div id="trainingDetails" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2 hidden">
+                <!-- Секция: Управление вакансиями -->
+                <div class="mb-8">
+                    <div class="collapsible-header" data-target="vacancyManagementContent">
+                        <span>Управление вакансиями</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div id="vacancyManagementContent" class="collapsible-content">
+                        <!-- Раздел "Разместить новую вакансию" -->
+                        <div class="bg-gray-50 p-8 rounded-lg shadow-inner mb-8 border border-gray-200">
+                            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Разместить новую вакансию</h3>
+                            <form id="postVacancyForm" class="space-y-6">
                                 <div>
-                                    <label for="trainingDurationValue" class="block text-sm font-medium text-gray-700 mb-2">Срок обучения</label>
-                                    <div class="flex gap-2">
-                                        <input type="number" min="1" id="trainingDurationValue" name="trainingDurationValue" class="w-2/3" placeholder="Количество" required>
-                                        <select id="trainingDurationUnit" name="trainingDurationUnit" class="w-1/3" required>
-                                            <option value="days">дней</option>
-                                            <option value="weeks">недель</option>
-                                            <option value="months">месяцев</option>
+                                    <label for="vacancyTitle" class="block text-sm font-medium text-gray-700 mb-2">Название вакансии <span class="text-red-500">*</span></label>
+                                    <input type="text" id="vacancyTitle" name="vacancyTitle" placeholder="Например: Программист Java" required>
+                                </div>
+                                <div>
+                                    <label for="vacancyDescription" class="block text-sm font-medium text-gray-700 mb-2">Описание вакансии <span class="text-red-500">*</span></label>
+                                    <textarea id="vacancyDescription" name="vacancyDescription" rows="6" placeholder="Подробное описание обязанностей, требований и условий..." required></textarea>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="vacancySalaryMin" class="block text-sm font-medium text-gray-700 mb-2">Зарплата от (сомони)</label>
+                                        <input type="number" id="vacancySalaryMin" name="vacancySalaryMin" placeholder="Например: 5000">
+                                    </div>
+                                    <div>
+                                        <label for="vacancySalaryMax" class="block text-sm font-medium text-gray-700 mb-2">Зарплата до (сомони)</label>
+                                        <input type="number" id="vacancySalaryMax" name="vacancySalaryMax" placeholder="Например: 10000">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="flex items-center text-sm font-medium text-gray-700">
+                                            <input type="checkbox" id="salaryNegotiable" name="salaryNegotiable" class="form-checkbox text-blue-600 rounded mr-2">
+                                            По договоренности
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="vacancyRegion" class="block text-sm font-medium text-gray-700 mb-2">Регион <span class="text-red-500">*</span></label>
+                                        <select id="vacancyRegion" name="vacancyRegion" required>
+                                            <option value="">Выберите регион</option>
+                                            <option value="Dushanbe">Город Душанбе</option>
+                                            <option value="RRP">Районы Республиканского Подчинения</option>
+                                            <option value="Sughd">Согдийская область</option>
+                                            <option value="Khatlon">Хатлонская область</option>
+                                            <option value="GBAO">Горно-Бадахшанская автономная область (ГБАО)</option>
                                         </select>
+                                    </div>
+                                    <div>
+                                        <label for="vacancyEndDate" class="block text-sm font-medium text-gray-700 mb-2">Дата окончания публикации <span class="text-red-500">*</span></label>
+                                        <input type="date" id="vacancyEndDate" name="vacancyEndDate" required>
+                                    </div>
+                                    <div>
+                                        <label for="vacancyIndustry" class="block text-sm font-medium text-gray-700 mb-2">Отрасль <span class="text-red-500">*</span></label>
+                                        <select id="vacancyIndustry" name="vacancyIndustry" required>
+                                            <option value="">Выберите отрасль</option>
+                                            <option value="IT">IT (Информационные технологии)</option>
+                                            <option value="Construction">Строительство</option>
+                                            <option value="Trade">Торговля</option>
+                                            <option value="Education">Образование</option>
+                                            <option value="Healthcare">Здравоохранение</option>
+                                            <option value="Manufacturing">Производство</option>
+                                            <option value="Finance">Финансы</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="vacancyExperience" class="block text-sm font-medium text-gray-700 mb-2">Требования к опыту <span class="text-red-500">*</span></label>
+                                        <select id="vacancyExperience" name="vacancyExperience" required>
+                                            <option value="">Выберите опыт</option>
+                                            <option value="No_Experience">Без опыта</option>
+                                            <option value="1-3_Years">1-3 года</option>
+                                            <option value="3-5_Years">3-5 лет</option>
+                                            <option value="5+_Years">Более 5 лет</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="vacancyEmploymentType" class="block text-sm font-medium text-gray-700 mb-2">Тип занятости <span class="text-red-500">*</span></label>
+                                        <select id="vacancyEmploymentType" name="vacancyEmploymentType" required>
+                                            <option value="">Выберите тип занятости</option>
+                                            <option value="Full_Time">Полная занятость</option>
+                                            <option value="Part_Time">Частичная занятость</option>
+                                            <option value="Temporary">Временная работа</option>
+                                            <option value="Project">Проектная работа</option>
+                                            <option value="Internship">Стажировка</option>
+                                        </select>
+                                    </div>
+                                    <!-- Новое поле: Возможность удаленной работы -->
+                                    <div>
+                                        <label class="flex items-center text-sm font-medium text-gray-700">
+                                            <input type="checkbox" id="remoteWork" name="remoteWork" class="form-checkbox text-blue-600 rounded mr-2">
+                                            Возможна удаленная работа
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- Новый блок: Обучение сотрудников -->
+                                <div class="bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl p-6 mt-6 shadow-inner border border-blue-200">
+                                    <label class="flex items-center text-base font-semibold text-blue-900 mb-4">
+                                        <input type="checkbox" id="trainingProvided" name="trainingProvided" class="form-checkbox text-blue-600 rounded mr-3 h-5 w-5">
+                                        <span>Обучение за счет компании</span>
+                                        <span class="ml-2 text-blue-400" title="Компания организует обучение для новых сотрудников">
+                                            <i class="fas fa-info-circle"></i>
+                                        </span>
+                                    </label>
+                                    <div id="trainingDetails" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2 hidden">
+                                        <div>
+                                            <label for="trainingDurationValue" class="block text-sm font-medium text-gray-700 mb-2">Срок обучения</label>
+                                            <div class="flex gap-2">
+                                                <input type="number" min="1" id="trainingDurationValue" name="trainingDurationValue" class="w-2/3" placeholder="Количество" required>
+                                                <select id="trainingDurationUnit" name="trainingDurationUnit" class="w-1/3" required>
+                                                    <option value="days">дней</option>
+                                                    <option value="weeks">недель</option>
+                                                    <option value="months">месяцев</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label for="trainingMode" class="block text-sm font-medium text-gray-700 mb-2">Формат обучения</label>
+                                            <select id="trainingMode" name="trainingMode" required>
+                                                <option value="">Выберите формат</option>
+                                                <option value="remote">Дистанционно</option>
+                                                <option value="onsite">Очно</option>
+                                                <option value="mixed">Смешанный</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="trainingCompensation" class="block text-sm font-medium text-gray-700 mb-2">Оплата времени обучения</label>
+                                            <select id="trainingCompensation" name="trainingCompensation" required>
+                                                <option value="">Выберите вариант</option>
+                                                <option value="paid">Время обучения оплачивается</option>
+                                                <option value="unpaid">Время обучения не оплачивается</option>
+                                                <option value="partial">Частичная оплата</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="trainingCenter" class="block text-sm font-medium text-gray-700 mb-2">Учебный центр</label>
+                                            <select id="trainingCenter" name="trainingCenter" required>
+                                                <option value="">Выберите учебный центр</option>
+                                                <!-- Здесь будут динамически подгружаться сертифицированные учебные центры -->
+                                            </select>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label for="trainingDescription" class="block text-sm font-medium text-gray-700 mb-2">Дополнительная информация</label>
+                                            <textarea id="trainingDescription" name="trainingDescription" rows="2" placeholder="Программа, требования, условия..." class="resize-none"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <label for="trainingMode" class="block text-sm font-medium text-gray-700 mb-2">Формат обучения</label>
-                                    <select id="trainingMode" name="trainingMode" required>
-                                        <option value="">Выберите формат</option>
-                                        <option value="remote">Дистанционно</option>
-                                        <option value="onsite">Очно</option>
-                                        <option value="mixed">Смешанный</option>
-                                    </select>
+                                    <label for="vacancySkills" class="block text-sm font-medium text-gray-700 mb-2">Ключевые навыки (через запятую)</label>
+                                    <textarea id="vacancySkills" name="vacancySkills" rows="3" placeholder="Например: Java, Spring Boot, SQL, Git"></textarea>
                                 </div>
+                                <!-- Новое поле: Социальный пакет -->
                                 <div>
-                                    <label for="trainingCompensation" class="block text-sm font-medium text-gray-700 mb-2">Оплата времени обучения</label>
-                                    <select id="trainingCompensation" name="trainingCompensation" required>
-                                        <option value="">Выберите вариант</option>
-                                        <option value="paid">Время обучения оплачивается</option>
-                                        <option value="unpaid">Время обучения не оплачивается</option>
-                                        <option value="partial">Частичная оплата</option>
-                                    </select>
+                                    <label for="socialPackage" class="block text-sm font-medium text-gray-700 mb-2">Социальный пакет</label>
+                                    <textarea id="socialPackage" name="socialPackage" rows="2" placeholder="Например: медицинская страховка, питание, транспорт и т.д."></textarea>
                                 </div>
-                                <div>
-                                    <label for="trainingCenter" class="block text-sm font-medium text-gray-700 mb-2">Учебный центр</label>
-                                    <select id="trainingCenter" name="trainingCenter" required>
-                                        <option value="">Выберите учебный центр</option>
-                                        <!-- Динамически подгружаются сертифицированные учебные центры -->
-                                    </select>
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label for="trainingDescription" class="block text-sm font-medium text-gray-700 mb-2">Дополнительная информация</label>
-                                    <textarea id="trainingDescription" name="trainingDescription" rows="2" placeholder="Программа, требования, условия..." class="resize-none"></textarea>
-                                </div>
-                            </div>
+                                <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md flex items-center justify-center">
+                                    <span id="postVacancySpinner" class="hidden spinner mr-2"></span>
+                                    <i class="fas fa-paper-plane mr-2"></i>Опубликовать вакансию
+                                </button>
+                            </form>
                         </div>
-                        <div>
-                            <label for="vacancySkills" class="block text-sm font-medium text-gray-700 mb-2">Ключевые навыки (через запятую)</label>
-                            <textarea id="vacancySkills" name="vacancySkills" rows="3" placeholder="Например: Java, Spring Boot, SQL, Git"></textarea>
-                        </div>
-                        <!-- Новое поле: Социальный пакет -->
-                        <div>
-                            <label for="socialPackage" class="block text-sm font-medium text-gray-700 mb-2">Социальный пакет</label>
-                            <textarea id="socialPackage" name="socialPackage" rows="2" placeholder="Например: медицинская страховка, питание, транспорт и т.д."></textarea>
-                        </div>
-                        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md flex items-center justify-center">
-                            <span id="postVacancySpinner" class="hidden spinner mr-2"></span>
-                            <i class="fas fa-paper-plane mr-2"></i>Опубликовать вакансию
-                        </button>
-                    </form>
-                </div>
 
-                <!-- Раздел "Мои активные вакансии" -->
-                <div class="bg-white p-8 rounded-lg shadow-xl mb-12 border border-gray-200">
-                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Мои активные вакансии</h3>
-                    <div id="activeVacanciesList" class="space-y-6">
-                        <!-- Пример вакансии -->
-                        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm">
-                            <div class="flex justify-between items-start mb-4">
-                                <h4 class="text-lg font-semibold text-gray-800">Программист Java</h4>
-                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Активна</span>
-                            </div>
-                            <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Город Душанбе</p>
-                            <p class="text-gray-700 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>8000-12000 сомони</p>
-                            <p class="text-gray-600 text-sm mb-4">Откликов: 15</p>
-                            <div class="flex flex-wrap gap-3">
-                                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"><i class="fas fa-edit mr-2"></i>Редактировать</button>
-                                <button class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm"><i class="fas fa-eye mr-2"></i>Просмотреть отклики</button>
-                                <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm"><i class="fas fa-archive mr-2"></i>Архивировать</button>
+                        <!-- Раздел "Мои активные вакансии" -->
+                        <div class="bg-white p-8 rounded-lg shadow-xl mb-8 border border-gray-200">
+                            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Мои активные вакансии</h3>
+                            <div id="activeVacanciesList" class="space-y-6">
+                                <!-- Пример вакансии -->
+                                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <h4 class="text-lg font-semibold text-gray-800">Программист Java</h4>
+                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Активна</span>
+                                    </div>
+                                    <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Город Душанбе</p>
+                                    <p class="text-gray-700 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>8000-12000 сомони</p>
+                                    <p class="text-gray-600 text-sm mb-4">Откликов: 15</p>
+                                    <div class="flex flex-wrap gap-3">
+                                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"><i class="fas fa-edit mr-2"></i>Редактировать</button>
+                                        <button class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm"><i class="fas fa-eye mr-2"></i>Просмотреть отклики</button>
+                                        <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm"><i class="fas fa-archive mr-2"></i>Архивировать</button>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <h4 class="text-lg font-semibold text-gray-800">Менеджер по продажам</h4>
+                                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">На модерации</span>
+                                    </div>
+                                    <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Согдийская область, Худжанд</p>
+                                    <p class="text-gray-700 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>По договоренности</p>
+                                    <p class="text-gray-600 text-sm mb-4">Откликов: 5</p>
+                                    <div class="flex flex-wrap gap-3">
+                                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"><i class="fas fa-edit mr-2"></i>Редактировать</button>
+                                        <button class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm"><i class="fas fa-eye mr-2"></i>Просмотреть отклики</button>
+                                        <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm"><i class="fas fa-archive mr-2"></i>Архивировать</button>
+                                    </div>
+                                </div>
+                                <!-- Добавьте больше вакансий по мере необходимости -->
                             </div>
                         </div>
-                        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm">
-                            <div class="flex justify-between items-start mb-4">
-                                <h4 class="text-lg font-semibold text-gray-800">Менеджер по продажам</h4>
-                                <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">На модерации</span>
-                            </div>
-                            <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Согдийская область, Худжанд</p>
-                            <p class="text-gray-700 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>По договоренности</p>
-                            <p class="text-gray-600 text-sm mb-4">Откликов: 5</p>
-                            <div class="flex flex-wrap gap-3">
-                                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"><i class="fas fa-edit mr-2"></i>Редактировать</button>
-                                <button class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm"><i class="fas fa-eye mr-2"></i>Просмотреть отклики</button>
-                                <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm"><i class="fas fa-archive mr-2"></i>Архивировать</button>
+
+                        <!-- Раздел "Архив вакансий" -->
+                        <div class="bg-white p-8 rounded-lg shadow-xl border border-gray-200">
+                            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Архив вакансий</h3>
+                            <div id="archivedVacanciesList" class="space-y-6">
+                                <!-- Пример архивной вакансии -->
+                                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 opacity-75 shadow-sm">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <h4 class="text-lg font-semibold text-gray-800">Маркетолог</h4>
+                                        <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">Архив</span>
+                                    </div>
+                                    <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Город Душанбе</p>
+                                    <p class="text-gray-700 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>6000-9000 сомони</p>
+                                    <p class="text-gray-600 text-sm mb-4">Дата архивации: 2024-01-15</p>
+                                    <div class="flex flex-wrap gap-3">
+                                        <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm"><i class="fas fa-box-open mr-2"></i>Восстановить</button>
+                                        <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm"><i class="fas fa-times-circle mr-2"></i>Удалить навсегда</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <!-- Добавьте больше вакансий по мере необходимости -->
                     </div>
                 </div>
 
-                <!-- Раздел "Архив вакансий" -->
-                <div class="bg-white p-8 rounded-lg shadow-xl border border-gray-200">
-                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Архив вакансий</h3>
-                    <div id="archivedVacanciesList" class="space-y-6">
-                        <!-- Пример архивной вакансии -->
-                        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 opacity-75 shadow-sm">
-                            <div class="flex justify-between items-start mb-4">
-                                <h4 class="text-lg font-semibold text-gray-800">Маркетолог</h4>
-                                <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">Архив</span>
-                            </div>
-                            <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Город Душанбе</p>
-                            <p class="text-gray-700 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>6000-9000 сомони</p>
-                            <p class="text-gray-600 text-sm mb-4">Дата архивации: 2024-01-15</p>
-                            <div class="flex flex-wrap gap-3">
-                                <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm"><i class="fas fa-box-open mr-2"></i>Восстановить</button>
-                                <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm"><i class="fas fa-times-circle mr-2"></i>Удалить навсегда</button>
+                <!-- Секция: Инструмент поиска кадров -->
+                <div class="mb-8">
+                    <div class="collapsible-header" data-target="talentSearchContent">
+                        <span>Инструмент поиска кадров</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div id="talentSearchContent" class="collapsible-content">
+                        <div class="bg-gray-50 p-8 rounded-lg shadow-inner border border-gray-200">
+                            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Поиск соискателей</h3>
+                            <form id="talentSearchForm" class="space-y-6">
+                                <div>
+                                    <label for="searchFullName" class="block text-sm font-medium text-gray-700 mb-2">ФИО соискателя</label>
+                                    <input type="text" id="searchFullName" name="searchFullName" placeholder="Например: Иванов Иван Иванович">
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="searchAgeMin" class="block text-sm font-medium text-gray-700 mb-2">Возраст от</label>
+                                        <input type="number" id="searchAgeMin" name="searchAgeMin" placeholder="Например: 20" min="18" max="99">
+                                    </div>
+                                    <div>
+                                        <label for="searchAgeMax" class="block text-sm font-medium text-gray-700 mb-2">Возраст до</label>
+                                        <input type="number" id="searchAgeMax" name="searchAgeMax" placeholder="Например: 40" min="18" max="99">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="searchGender" class="block text-sm font-medium text-gray-700 mb-2">Пол</label>
+                                    <select id="searchGender" name="searchGender">
+                                        <option value="all">Любой</option>
+                                        <option value="Male">Мужской</option>
+                                        <option value="Female">Женский</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="searchRegion" class="block text-sm font-medium text-gray-700 mb-2">Регион</label>
+                                    <select id="searchRegion" name="searchRegion">
+                                        <option value="all">Все регионы</option>
+                                        <option value="Dushanbe">Город Душанбе</option>
+                                        <option value="RRP">Районы Республиканского Подчинения</option>
+                                        <option value="Sughd">Согдийская область</option>
+                                        <option value="Khatlon">Хатлонская область</option>
+                                        <option value="GBAO">Горно-Бадахшанская автономная область (ГБАО)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="searchCityDistrict" class="block text-sm font-medium text-gray-700 mb-2">Город/Район</label>
+                                    <select id="searchCityDistrict" name="searchCityDistrict">
+                                        <option value="all">Все города/районы</option>
+                                        <!-- Options will be populated dynamically based on searchRegion -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="searchJamoat" class="block text-sm font-medium text-gray-700 mb-2">Джамоат</label>
+                                    <select id="searchJamoat" name="searchJamoat">
+                                        <option value="all">Все джамоаты</option>
+                                        <!-- Options will be populated dynamically based on searchCityDistrict -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="searchEducationLevel" class="block text-sm font-medium text-gray-700 mb-2">Уровень образования</label>
+                                    <select id="searchEducationLevel" name="searchEducationLevel">
+                                        <option value="all">Любое</option>
+                                        <option value="Primary">Начальное</option>
+                                        <option value="Secondary">Среднее</option>
+                                        <option value="Vocational">Профессиональное</option>
+                                        <option value="Higher">Высшее</option>
+                                        <option value="Postgraduate">Послевузовское</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="searchProfessionType" class="block text-sm font-medium text-gray-700 mb-2">Профессия/Должность</label>
+                                    <input type="text" id="searchProfessionType" name="searchProfessionType" placeholder="Например: Программист, Бухгалтер">
+                                </div>
+                                <div>
+                                    <label for="searchExperienceYears" class="block text-sm font-medium text-gray-700 mb-2">Опыт работы</label>
+                                    <select id="searchExperienceYears" name="searchExperienceYears">
+                                        <option value="all">Любой опыт</option>
+                                        <option value="No_Experience">Без опыта</option>
+                                        <option value="1-3_Years">1-3 года</option>
+                                        <option value="3-5_Years">3-5 лет</option>
+                                        <option value="5+_Years">Более 5 лет</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="searchSkills" class="block text-sm font-medium text-gray-700 mb-2">Ключевые навыки (через запятую)</label>
+                                    <textarea id="searchSkills" name="searchSkills" rows="3" placeholder="Например: Python, SQL, Коммуникация"></textarea>
+                                </div>
+                                <div>
+                                    <label for="searchEmploymentStatus" class="block text-sm font-medium text-gray-700 mb-2">Статус занятости</label>
+                                    <select id="searchEmploymentStatus" name="searchEmploymentStatus">
+                                        <option value="all">Любой</option>
+                                        <option value="Employed">Трудоустроен</option>
+                                        <option value="Unemployed_Registered">Безработный (зарегистрированный)</option>
+                                        <option value="Student">Студент</option>
+                                        <option value="Self_Employed">Самозанятый</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="searchSocialVulnerability" class="block text-sm font-medium text-gray-700 mb-2">Социальная уязвимость</label>
+                                    <select id="searchSocialVulnerability" name="searchSocialVulnerability">
+                                        <option value="all">Все категории</option>
+                                        <option value="Disabled">Лица с инвалидностью</option>
+                                        <option value="Youth_No_Experience">Молодежь без опыта работы</option>
+                                        <option value="Women_With_Children">Женщины с малолетними детьми</option>
+                                        <option value="Labor_Migrants">Трудовые мигранты (возвратившиеся)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="searchLastWorkplace" class="block text-sm font-medium text-gray-700 mb-2">Последнее место работы</label>
+                                    <input type="text" id="searchLastWorkplace" name="searchLastWorkplace" placeholder="Например: ООО 'ТехноСофт'">
+                                </div>
+                                <div>
+                                    <label for="searchLastPosition" class="block text-sm font-medium text-gray-700 mb-2">Последняя должность</label>
+                                    <input type="text" id="searchLastPosition" name="searchLastPosition" placeholder="Например: Менеджер по продажам">
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="searchDesiredSalaryMin" class="block text-sm font-medium text-gray-700 mb-2">Желаемая зарплата от (сомони)</label>
+                                        <input type="number" id="searchDesiredSalaryMin" name="searchDesiredSalaryMin" placeholder="Например: 5000">
+                                    </div>
+                                    <div>
+                                        <label for="searchDesiredSalaryMax" class="block text-sm font-medium text-gray-700 mb-2">Желаемая зарплата до (сомони)</label>
+                                        <input type="number" id="searchDesiredSalaryMax" name="searchDesiredSalaryMax" placeholder="Например: 10000">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="flex items-center text-sm font-medium text-gray-700">
+                                        <input type="checkbox" id="searchReadyForRelocation" name="searchReadyForRelocation" class="form-checkbox text-blue-600 rounded mr-2">
+                                        Готовность к переезду
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="flex items-center text-sm font-medium text-gray-700">
+                                        <input type="checkbox" id="searchReadyForBusinessTrips" name="searchReadyForBusinessTrips" class="form-checkbox text-blue-600 rounded mr-2">
+                                        Готовность к командировкам
+                                    </label>
+                                </div>
+                                <button type="submit" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors shadow-md flex items-center justify-center">
+                                    <span id="searchTalentSpinner" class="hidden spinner mr-2"></span>
+                                    <i class="fas fa-search mr-2"></i>Найти соискателей
+                                </button>
+                            </form>
+                            <div id="searchResults" class="mt-8 hidden">
+                                <h4 class="text-xl font-semibold mb-4 text-gray-800">Результаты поиска:</h4>
+                                <div class="space-y-4" id="talentResultsList">
+                                    <!-- Результаты будут здесь -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -497,6 +692,42 @@
             "GBAO": ["Хорог", "Ишкашим", "Мургаб", "Рошткала", "Рушан", "Шугнан"],
         };
 
+        const cityDistrictData = {
+            "Район Исмоили Сомони": ["Джамоат И. Сомони 1", "Джамоат И. Сомони 2"],
+            "Район Сино": ["Джамоат Сино 1", "Джамоат Сино 2"],
+            "Район Фирдавси": ["Джамоат Фирдавси 1", "Джамоат Фирдавси 2"],
+            "Район Шохмансур": ["Джамоат Шохмансур 1", "Джамоат Шохмансур 2"],
+            "Варзоб": ["Джамоат Варзоб 1"],
+            "Гиссар": ["Джамоат Гиссар 1", "Джамоат Гиссар 2"],
+            "Лахш": ["Джамоат Лахш 1"],
+            "Нуробод": ["Джамоат Нуробод 1"],
+            "Рашт": ["Джамоат Рашт 1"],
+            "Сангвор": ["Джамоат Сангвор 1"],
+            "Тоджикобод": ["Джамоат Тоджикобод 1"],
+            "Файзабад": ["Джамоат Файзабад 1"],
+            "Шахринав": ["Джамоат Шахринав 1"],
+            "Рудаки": ["Джамоат Рудаки 1", "Джамоат Рудаки 2"],
+            "Турсунзаде": ["Джамоат Турсунзаде 1", "Джамоат Турсунзаде 2"],
+            "Худжанд": ["Джамоат Худжанд 1", "Джамоат Худжанд 2"],
+            "Бободжон Гафуров": ["Джамоат Б. Гафуров 1", "Джамоат Б. Гафуров 2"],
+            "Ашт": ["Джамоат Ашт 1"],
+            "Исфара": ["Джамоат Исфара 1"],
+            "Канибадам": ["Джамоат Канибадам 1"],
+            "Пенджикент": ["Джамоат Пенджикент 1"],
+            "Бохтар": ["Джамоат Бохтар 1", "Джамоат Бохтар 2"],
+            "Куляб": ["Джамоат Куляб 1", "Джамоат Куляб 2"],
+            "Дангара": ["Джамоат Дангара 1"],
+            "Вахш": ["Джамоат Вахш 1"],
+            "Яван": ["Джамоат Яван 1"],
+            "Пяндж": ["Джамоат Пяндж 1"],
+            "Хорог": ["Джамоат Хорог 1"],
+            "Ишкашим": ["Джамоат Ишкашим 1"],
+            "Мургаб": ["Джамоат Мургаб 1"],
+            "Рошткала": ["Джамоат Рошткала 1"],
+            "Рушан": ["Джамоат Рушан 1"],
+            "Шугнан": ["Джамоат Шугнан 1"],
+        };
+
         // Демо-данные для учебных центров (в реальном приложении будут загружаться из БД)
         const certifiedTrainingCenters = [
             { id: "it_academy", name: "IT Академия Душанбе" },
@@ -506,28 +737,6 @@
             { id: "online_coursera", name: "Coursera (онлайн)" },
             { id: "online_udemy", name: "Udemy (онлайн)" }
         ];
-
-        // Function to populate city/district dropdown based on selected region
-        function populateCityDistrictDropdown() {
-            const regionSelect = document.getElementById('vacancyRegion');
-            // На этой странице нет cityDistrict, поэтому этот вызов не нужен
-            // const cityDistrictSelect = document.getElementById('cityDistrict'); 
-            const selectedRegion = regionSelect.value;
-
-            // Если бы cityDistrict был на этой странице, код был бы таким:
-            /*
-            cityDistrictSelect.innerHTML = '<option value="">Выберите город/район</option>'; // Default option
-            const cities = regionsData[selectedRegion];
-            if (cities) {
-                cities.forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city;
-                    option.textContent = city;
-                    cityDistrictSelect.appendChild(option);
-                });
-            }
-            */
-        }
 
         // Function to populate training centers dropdown
         function populateTrainingCentersDropdown() {
@@ -543,13 +752,9 @@
             }
         }
 
-        // Event listener for region dropdown change (still here for potential future use or if element is added)
-        document.getElementById('vacancyRegion').addEventListener('change', populateCityDistrictDropdown);
-
-        // Initial population of city/district dropdown on page load
+        // Initial population of training centers dropdown on page load
         document.addEventListener('DOMContentLoaded', () => {
-            populateCityDistrictDropdown(); // This will now do nothing if cityDistrict is not on the page
-            populateTrainingCentersDropdown(); // Populate training centers on load
+            populateTrainingCentersDropdown();
         });
 
 
@@ -568,15 +773,16 @@
             }
         });
 
-        // Показ/скрытие блока обучения с современным UX
+        // Handle "Предусмотрено обучение для сотрудников" checkbox
         document.getElementById('trainingProvided').addEventListener('change', function() {
             const trainingDetailsDiv = document.getElementById('trainingDetails');
             if (this.checked) {
                 trainingDetailsDiv.classList.remove('hidden');
-                // Сделать поля обучения обязательными
+                // Make training fields required when visible (optional, but good practice)
                 trainingDetailsDiv.querySelectorAll('input, select').forEach(el => el.required = true);
             } else {
                 trainingDetailsDiv.classList.add('hidden');
+                // Make training fields not required when hidden
                 trainingDetailsDiv.querySelectorAll('input, select').forEach(el => el.required = false);
             }
         });
@@ -593,12 +799,71 @@
                 alert('Вакансия успешно отправлена на модерацию!');
                 this.reset(); // Clear form fields
                 // Reset conditional fields visibility after form reset
+                document.getElementById('trainingProvided').checked = false; // Uncheck training checkbox
                 document.getElementById('trainingDetails').classList.add('hidden');
                 document.getElementById('salaryNegotiable').checked = false;
                 document.getElementById('vacancySalaryMin').disabled = false;
                 document.getElementById('vacancySalaryMax').disabled = false;
             }, 1500);
         });
+
+        // --- Collapsible sections logic ---
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const targetId = header.dataset.target;
+                const targetContent = document.getElementById(targetId);
+                const icon = header.querySelector('i');
+
+                // Close all other sections
+                document.querySelectorAll('.collapsible-content').forEach(content => {
+                    if (content.id !== targetId && content.classList.contains('expanded')) {
+                        content.classList.remove('expanded');
+                        content.style.maxHeight = null;
+                        const otherHeader = content.previousElementSibling;
+                        if (otherHeader) {
+                            otherHeader.classList.remove('expanded');
+                            otherHeader.querySelector('i').classList.remove('fa-chevron-up');
+                            otherHeader.querySelector('i').classList.add('fa-chevron-down');
+                        }
+                    }
+                });
+
+                // Toggle the clicked section
+                if (targetContent) {
+                    header.classList.toggle('expanded');
+                    targetContent.classList.toggle('expanded');
+
+                    if (targetContent.classList.contains('expanded')) {
+                        targetContent.style.maxHeight = targetContent.scrollHeight + "px";
+                        if (icon) {
+                            icon.classList.remove('fa-chevron-down');
+                            icon.classList.add('fa-chevron-up');
+                        }
+                    } else {
+                        targetContent.style.maxHeight = null;
+                        if (icon) {
+                            icon.classList.remove('fa-chevron-up');
+                            icon.classList.add('fa-chevron-down');
+                        }
+                    }
+                }
+            });
+        });
+
+        // Initial state: collapse all sections on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.collapsible-content').forEach(content => {
+                content.classList.remove('expanded');
+                content.style.maxHeight = null;
+                const header = content.previousElementSibling;
+                if (header) {
+                    header.classList.remove('expanded');
+                    header.querySelector('i').classList.remove('fa-chevron-up');
+                    header.querySelector('i').classList.add('fa-chevron-down');
+                }
+            });
+        });
+
 
         // Profile Dropdown Logic (from original index.html)
         const profileMenuBtn = document.getElementById('profileMenuBtn');
@@ -668,6 +933,187 @@
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE
             }, 'google_translate_element');
         }
+
+        // --- Talent Search Logic ---
+        const searchRegionSelect = document.getElementById('searchRegion');
+        const searchCityDistrictSelect = document.getElementById('searchCityDistrict');
+        const searchJamoatSelect = document.getElementById('searchJamoat');
+        const talentResultsList = document.getElementById('talentResultsList');
+        const searchResultsContainer = document.getElementById('searchResults');
+
+        // Data for search filters (simplified for demo)
+        const searchRegionsData = {
+            "Dushanbe": ["Район Исмоили Сомони", "Район Сино"],
+            "Sughd": ["Худжанд", "Бободжон Гафуров"],
+            "Khatlon": ["Бохтар", "Куляб"],
+            "all": ["Район Исмоили Сомони", "Район Сино", "Худжанд", "Бободжон Гафуров", "Бохтар", "Куляб"] // All for 'all regions'
+        };
+
+        const searchCityDistrictData = {
+            "Район Исмоили Сомони": ["Джамоат И.Сомони 1", "Джамоат И.Сомони 2"],
+            "Район Сино": ["Джамоат Сино 1", "Джамоат Сино 2"],
+            "Худжанд": ["Джамоат Худжанд 1", "Джамоат Худжанд 2"],
+            "Бохтар": ["Джамоат Бохтар 1"],
+            "all": ["Джамоат И.Сомони 1", "Джамоат И.Сомони 2", "Джамоат Сино 1", "Джамоат Сино 2", "Джамоат Худжанд 1", "Джамоат Худжанд 2", "Джамоат Бохтар 1"] // All for 'all cities/districts'
+        };
+
+        function populateSearchCityDistrict() {
+            const selectedRegion = searchRegionSelect.value;
+            const cities = searchRegionsData[selectedRegion] || [];
+
+            searchCityDistrictSelect.innerHTML = '<option value="all">Все города/районы</option>';
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                searchCityDistrictSelect.appendChild(option);
+            });
+            populateSearchJamoat(); // Update jamoat when city/district changes
+        }
+
+        function populateSearchJamoat() {
+            const selectedCityDistrict = searchCityDistrictSelect.value;
+            const jamoats = searchCityDistrictData[selectedCityDistrict] || [];
+
+            searchJamoatSelect.innerHTML = '<option value="all">Все джамоаты</option>';
+            jamoats.forEach(jamoat => {
+                const option = document.createElement('option');
+                option.value = jamoat;
+                option.textContent = jamoat;
+                searchJamoatSelect.appendChild(option);
+            });
+        }
+
+        // Event listeners for cascading search filters
+        searchRegionSelect.addEventListener('change', populateSearchCityDistrict);
+        searchCityDistrictSelect.addEventListener('change', populateSearchJamoat);
+
+        // Initial population of search dropdowns on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            populateSearchCityDistrict();
+            populateSearchJamoat();
+        });
+
+        // Mock candidate data generation
+        function generateMockCandidates(filters) {
+            const candidates = [];
+            const firstNames = ["Алишер", "Фатима", "Рустам", "Зухро", "Бахром", "Гулнора"];
+            const lastNames = ["Ахмедов", "Каримова", "Рахимов", "Сафарова", "Ибрагимов", "Назарова"];
+            const professions = ["Программист", "Бухгалтер", "Менеджер по продажам", "Учитель", "Врач", "Инженер"];
+            const skills = ["Java", "SQL", "JavaScript", "1C", "Коммуникация", "Переговоры", "MS Office", "Педагогика"];
+            const workplaces = ["ООО 'ТехноСофт'", "Торговый дом 'Ориёна'", "Банк 'Имон'", "Школа №1", "Гос. учреждение №5"];
+            const statuses = ["Трудоустроен", "Безработный (зарегистрированный)", "Студент"];
+
+            for (let i = 0; i < 10; i++) { // Generate 10 mock candidates
+                const age = Math.floor(Math.random() * (50 - 20 + 1)) + 20;
+                const gender = Math.random() > 0.5 ? "Мужской" : "Женский";
+                const region = getRandomElement(Object.keys(regionsData));
+                const cityDistrict = getRandomElement(regionsData[region] || regionsData["Dushanbe"]);
+                const jamoat = getRandomElement(cityDistrictData[cityDistrict] || ["Джамоат X"]);
+                const education = getRandomElement(["Высшее", "Среднее специальное", "Среднее"]);
+                const profession = getRandomElement(professions);
+                const candidateSkills = getRandomSubset(skills, 2, 4).join(', ');
+                const employmentStatus = getRandomElement(statuses);
+                const socialVulnerability = Math.random() > 0.7 ? getRandomElement(["Лицо с инвалидностью", "Молодежь без опыта работы"]) : "Нет";
+                const lastWorkplace = getRandomElement(workplaces);
+                const lastPosition = getRandomElement(professions);
+                const desiredSalary = Math.floor(Math.random() * (15000 - 3000 + 1)) + 3000;
+                const readyForRelocation = Math.random() > 0.5;
+                const readyForBusinessTrips = Math.random() > 0.5;
+
+                candidates.push({
+                    fullName: `${getRandomElement(firstNames)} ${getRandomElement(lastNames)}`,
+                    age: age,
+                    gender: gender,
+                    region: region,
+                    cityDistrict: cityDistrict,
+                    jamoat: jamoat,
+                    education: education,
+                    profession: profession,
+                    skills: candidateSkills,
+                    employmentStatus: employmentStatus,
+                    socialVulnerability: socialVulnerability,
+                    lastWorkplace: lastWorkplace,
+                    lastPosition: lastPosition,
+                    desiredSalary: desiredSalary,
+                    readyForRelocation: readyForRelocation,
+                    readyForBusinessTrips: readyForBusinessTrips,
+                    profileLink: "#" // Placeholder
+                });
+            }
+            return candidates;
+        }
+
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function getRandomSubset(arr, min, max) {
+            const shuffled = arr.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, Math.floor(Math.random() * (max - min + 1)) + min);
+        }
+
+        // Handle talent search form submission
+        document.getElementById('talentSearchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const spinner = document.getElementById('searchTalentSpinner');
+            spinner.classList.remove('hidden');
+            talentResultsList.innerHTML = ''; // Clear previous results
+            searchResultsContainer.classList.add('hidden'); // Hide results until loaded
+
+            // Collect filter values
+            const filters = {
+                fullName: document.getElementById('searchFullName').value,
+                ageMin: document.getElementById('searchAgeMin').value,
+                ageMax: document.getElementById('searchAgeMax').value,
+                gender: document.getElementById('searchGender').value,
+                region: document.getElementById('searchRegion').value,
+                cityDistrict: document.getElementById('searchCityDistrict').value,
+                jamoat: document.getElementById('searchJamoat').value,
+                educationLevel: document.getElementById('searchEducationLevel').value,
+                professionType: document.getElementById('searchProfessionType').value,
+                experienceYears: document.getElementById('searchExperienceYears').value,
+                skills: document.getElementById('searchSkills').value,
+                employmentStatus: document.getElementById('searchEmploymentStatus').value,
+                socialVulnerability: document.getElementById('searchSocialVulnerability').value,
+                lastWorkplace: document.getElementById('searchLastWorkplace').value,
+                lastPosition: document.getElementById('searchLastPosition').value,
+                desiredSalaryMin: document.getElementById('searchDesiredSalaryMin').value,
+                desiredSalaryMax: document.getElementById('searchDesiredSalaryMax').value,
+                readyForRelocation: document.getElementById('searchReadyForRelocation').checked,
+                readyForBusinessTrips: document.getElementById('searchReadyForBusinessTrips').checked,
+            };
+
+            // Simulate API call and render results
+            setTimeout(() => {
+                spinner.classList.add('hidden');
+                const candidates = generateMockCandidates(filters); // Generate mock data based on filters (or just random)
+
+                if (candidates.length > 0) {
+                    candidates.forEach(candidate => {
+                        const candidateDiv = document.createElement('div');
+                        candidateDiv.className = 'bg-white p-4 rounded-lg border border-gray-200 shadow-sm';
+                        candidateDiv.innerHTML = `
+                            <h5 class="font-semibold text-gray-800">${candidate.fullName} (${candidate.age} лет, ${candidate.gender})</h5>
+                            <p class="text-gray-600 text-sm mb-1">${candidate.profession}, Опыт: ${candidate.experienceYears === 'all' ? 'Любой' : candidate.experienceYears}</p>
+                            <p class="text-gray-600 text-sm mb-1">Регион: ${candidate.region}, ${candidate.cityDistrict}, ${candidate.jamoat}</p>
+                            <p class="text-gray-600 text-sm mb-1">Образование: ${candidate.education}</p>
+                            <p class="text-gray-600 text-sm mb-1">Навыки: ${candidate.skills}</p>
+                            <p class="text-gray-600 text-sm mb-1">Статус: ${candidate.employmentStatus}</p>
+                            <p class="text-gray-600 text-sm mb-1">Последнее место работы: ${candidate.lastWorkplace} (${candidate.lastPosition})</p>
+                            <p class="text-gray-600 text-sm mb-1">Желаемая зарплата: ${candidate.desiredSalary} сомони</p>
+                            <p class="text-gray-600 text-sm mb-2">Готовность к переезду: ${candidate.readyForRelocation ? 'Да' : 'Нет'}, Командировки: ${candidate.readyForBusinessTrips ? 'Да' : 'Нет'}</p>
+                            <button class="text-blue-500 hover:underline text-sm mt-2"><i class="fas fa-user-circle mr-1"></i>Просмотреть профиль</button>
+                        `;
+                        talentResultsList.appendChild(candidateDiv);
+                    });
+                    searchResultsContainer.classList.remove('hidden'); // Show results
+                } else {
+                    talentResultsList.innerHTML = '<p class="text-gray-600 text-center">По вашему запросу кандидатов не найдено.</p>';
+                    searchResultsContainer.classList.remove('hidden');
+                }
+            }, 1500);
+        });
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <div id="google_translate_element" style="display:none"></div>
