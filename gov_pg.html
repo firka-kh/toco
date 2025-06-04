@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления для государственных служащих - Портал рынка труда</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <!-- Подключение Chart.js для графиков -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Пользовательские стили для градиентного фона шапки и футера */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        /* Стиль для контейнеров графиков, обеспечивающий адаптивность */
+        .chart-container {
+            position: relative;
+            height: 320px; /* Фиксированная высота для единообразия */
+            width: 100%;   /* Полная ширина внутри родительского элемента */
+        }
+        /* Анимация для выпадающих меню */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .animate-fade-in {
+            animation: fade-in 0.18s;
+        }
+
+        /* Print-specific styles for A4 format */
+        @media print {
+            /* Define A4 page size and margins */
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+
+            /* Adjust body font and color for print */
+            body {
+                font-size: 10pt;
+                line-height: 1.5;
+                color: #000;
+                background-color: #fff !important; /* Ensure white background for printing */
+            }
+
+            /* Hide elements not relevant for print */
+            header, nav, footer,
+            .job-search-form-controls, /* Hide the job search input form controls */
+            #ai-tools, /* Hide the AI tools section */
+            .card-hover, /* Hide hover effects */
+            button, /* Hide all buttons */
+            input, select, textarea, /* Hide form inputs */
+            .spinner, /* Hide loading spinners */
+            .pagination, /* Hide pagination */
+            #expandVideoButton, /* Hide expand button */
+            #soundVisualizer /* Hide sound visualizer */
+             {
+                display: none !important;
+            }
+
+            /* Ensure main content sections are visible */
+            section {
+                display: block !important;
+                padding: 0.5cm 0 !important; /* Reduce padding for print */
+                background: none !important; /* Remove section backgrounds */
+                box-shadow: none !important; /* Remove section shadows */
+            }
+
+            /* Adjust hero section for print */
+            .gradient-bg {
+                background: none !important; /* Remove gradient background for print */
+                color: #000 !important; /* Change text color to black */
+            }
+            .gradient-bg h2, .gradient-bg p {
+                color: #000 !important;
+            }
+            .gradient-bg .bg-opacity-20 {
+                background: none !important; /* Remove background opacity */
+                backdrop-filter: none !important; /* Remove backdrop blur */
+                border: 1px solid #ddd; /* Add a subtle border for definition */
+            }
+
+            /* Ensure charts are visible but not interactive */
+            .chart-container {
+                height: auto !important; /* Auto height for print */
+                width: 100% !important;
+                page-break-inside: avoid; /* Avoid breaking charts across pages */
+            }
+            canvas {
+                max-width: 100% !important;
+                height: auto !important;
+                background: none !important;
+            }
+
+            /* Adjust card styles for print */
+            .bg-white, .bg-gray-50, .bg-blue-50, .bg-yellow-50, .bg-green-50 {
+                background: #fff !important;
+                box-shadow: none !important;
+                border: 1px solid #eee; /* Add a subtle border for definition */
+            }
+            .text-white {
+                color: #000 !important; /* Ensure text is black on white background */
+            }
+
+            /* Ensure text elements are black */
+            h1, h2, h3, h4, p, span, li, a {
+                color: #000 !important;
+            }
+
+            /* Ensure links are underlined and show href */
+            a {
+                text-decoration: underline;
+            }
+            a[href]:after {
+                content: " (" attr(href) ")";
+                font-size: 8pt;
+            }
+            /* Hide href for internal anchors */
+            a[href^="#"]:after {
+                content: "";
+            }
+
+            /* Force page breaks for better layout */
+            .section-spacing {
+                page-break-after: always;
+            }
+            .section-spacing:last-child {
+                page-break-after: auto; /* No page break after the last section */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Шапка портала (аналогична главной странице) -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <!-- Левая часть: Лого и название -->
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
+                    <div>
+                        <h1 class="text-2xl font-bold">Портал рынка труда</h1>
+                        <p class="text-sm opacity-90">Республика Таджикистан</p>
+                    </div>
+                </div>
+                <!-- Правая часть: Навигация, языки и профиль -->
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <a href="index.html#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="hover:text-yellow-300 transition-colors">О портале</a>
+                    <!-- Выпадающее меню профиля и языков -->
+                    <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
+                        <!-- Мой профиль -->
+                        <div class="relative">
+                            <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
+                                Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                                <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
+                                <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
+                                <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                            </div>
+                        </div>
+                        <!-- Выпадающее меню языков -->
+                        <div class="relative">
+                            <button id="langMenuBtn" type="button" class="px-3 py-1 rounded font-semibold bg-white text-gray-800 hover:bg-yellow-100 transition-colors flex items-center">
+                                <span id="currentLangLabel">RUS</span>
+                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div id="langDropdown" class="absolute right-0 mt-2 w-28 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="ru">RUS</button>
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="tg">TAJ</button>
+                                <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100" data-lang="en">ENG</button>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Дашборды аналитики рынка труда для государственных служащих</h2>
+            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">
+                Здесь вы можете просматривать данные об уровне безработицы, количестве вакансий, трендах профессий, демографической информации, а также детальную статистику по переходам между позициями и организациями.
+                <span class="font-semibold text-purple-700">Эта информация доступна только государственным служащим.</span>
+            </p>
+
+            <!-- Фильтры для дашбордов -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">Фильтры данных</h3>
+                <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div>
+                        <label for="reportPeriodSelect" class="block text-sm font-medium text-gray-700 mb-2">Временной период</label>
+                        <select id="reportPeriodSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="month">Месяц</option>
+                            <option value="quarter">Квартал</option>
+                            <option value="year">Год</option>
+                            <option value="week">Неделя</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="reportRegionSelect" class="block text-sm font-medium text-gray-700 mb-2">Регион</label>
+                        <select id="reportRegionSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="all">Все регионы</option>
+                            <option value="Dushanbe">Город Душанбе</option>
+                            <option value="RRP">Районы Республиканского Подчинения</option>
+                            <option value="Sughd">Согдийская область</option>
+                            <option value="Khatlon">Хатлонская область</option>
+                            <option value="GBAO">Горно-Бадахшанская автономная область (ГБАО)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="cityDistrictSelect" class="block text-sm font-medium text-gray-700 mb-2">Город/Район</label>
+                        <select id="cityDistrictSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все города/районы</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="reportIndustrySelect" class="block text-sm font-medium text-gray-700 mb-2">Отрасль (ОКЭД)</label>
+                        <select id="reportIndustrySelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все отрасли</option>
+                            <option value="IT">IT (Информационные технологии)</option>
+                            <option value="Construction">Строительство</option>
+                            <option value="Trade">Торговля</option>
+                            <option value="Education">Образование</option>
+                            <option value="Healthcare">Здравоохранение</option>
+                            <option value="Manufacturing">Производство</option>
+                            <option value="Finance">Финансы</option>
+                            <option value="Agriculture">Сельское хозяйство</option>
+                            <option value="Transport">Транспорт и логистика</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="professionsSelect" class="block text-sm font-medium text-gray-700 mb-2">Профессии (ISCO)</label>
+                        <select id="professionsSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все профессии</option>
+                            <option value="Programmer">Программист</option>
+                            <option value="Accountant">Бухгалтер</option>
+                            <option value="Teacher">Учитель</option>
+                            <option value="Sales_Manager">Менеджер по продажам</option>
+                            <option value="Doctor">Врач</option>
+                            <option value="Engineer">Инженер</option>
+                            <option value="Driver">Водитель</option>
+                            <option value="Builder">Строитель</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="educationLevelSelect" class="block text-sm font-medium text-gray-700 mb-2">Уровень образования (ISCED)</label>
+                        <select id="educationLevelSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все уровни</option>
+                            <option value="Primary">Начальное</option>
+                            <option value="Secondary">Среднее</option>
+                            <option value="Vocational">Профессиональное</option>
+                            <option value="Higher">Высшее</option>
+                            <option value="Postgraduate">Послевузовское</option>
+                            <option value="Unemployed_Registered">Зарегистрированный безработный</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="resignationReasonSelect" class="block text-sm font-medium text-gray-700 mb-2">Причина увольнения</label>
+                        <select id="resignationReasonSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все причины</option>
+                            <option value="Better_Salary">Лучшая зарплата</option>
+                            <option value="Career_Growth">Карьерный рост</option>
+                            <option value="Dissatisfaction">Неудовлетворенность условиями</option>
+                            <option value="Relocation">Переезд</option>
+                            <option value="Personal_Reasons">Личные причины</option>
+                            <option value="Company_Restructuring">Реорганизация компании</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="employmentTypeSelect" class="block text-sm font-medium text-gray-700 mb-2">Тип занятости</label>
+                        <select id="employmentTypeSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все типы</option>
+                            <option value="Full_Time">Постоянная (полная занятость)</option>
+                            <option value="Part_Time">Временная (частичная занятость)</option>
+                            <option value="Contract">По контракту</option>
+                            <option value="Seasonal">Сезонная</option>
+                            <option value="Freelance">Фриланс</option>
+                            <option value="Public_Works">Общественные работы</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="employmentProgramsSelect" class="block text-sm font-medium text-gray-700 mb-2">Программы занятости</label>
+                        <select id="employmentProgramsSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все программы</option>
+                            <option value="Vocational_Training">Курсы профессионального обучения</option>
+                            <option value="Public_Works">Общественные работы</option>
+                            <option value="Subsidies">Субсидии для работодателей</option>
+                            <option value="Grants">Гранты для самозанятости</option>
+                            <option value="Youth_Internship">Молодежные стажировки</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="ageCategorySelect" class="block text-sm font-medium text-gray-700 mb-2">Возрастная категория</label>
+                        <select id="ageCategorySelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все категории</option>
+                            <option value="Youth_18-24">Молодежь (18-24)</option>
+                            <option value="Adult_25-45">Взрослые (25-45)</option>
+                            <option value="Pre-Retirement_46-60">Предпенсионный возраст (46-60)</option>
+                            <option value="Senior_60+">Пожилые (60+)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="genderSelect" class="block text-sm font-medium text-gray-700 mb-2">Пол</label>
+                        <select id="genderSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="all">Все</option>
+                            <option value="Male">Мужской</option>
+                            <option value="Female">Женский</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="socialVulnerabilitySelect" class="block text-sm font-medium text-gray-700 mb-2">Социальная уязвимость</label>
+                        <select id="socialVulnerabilitySelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все категории</option>
+                            <option value="Disabled">Лица с инвалидностью</option>
+                            <option value="Youth_No_Experience">Молодежь без опыта работы</option>
+                            <option value="Women_With_Children">Женщины с малолетними детьми</option>
+                            <option value="Labor_Migrants">Трудовые мигранты (возвратившиеся)</option>
+                            <option value="Orphans">Дети-сироты</option>
+                            <option value="Released_Prisoners">Недавно освободившиеся из мест лишения свободы</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="positionTransitionSelect" class="block text-sm font-medium text-gray-700 mb-2">Переход по позиции</label>
+                        <select id="positionTransitionSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все позиции</option>
+                            <option value="Sales_Manager">Менеджер по продажам</option>
+                            <option value="Accountant">Бухгалтер</option>
+                            <option value="Programmer">Программист</option>
+                            <option value="Data_Analyst">Аналитик данных</option>
+                            <option value="Teacher">Учитель</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="organizationTransitionSelect" class="block text-sm font-medium text-gray-700 mb-2">Переход по организации</label>
+                        <select id="organizationTransitionSelect" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" multiple>
+                            <option value="all">Все организации</option>
+                            <option value="TechSoft">ООО "ТехноСофт"</option>
+                            <option value="Oriyona">Торговый дом "Ориёна"</option>
+                            <option value="Imon_Bank">Банк "Имон"</option>
+                            <option value="Global_Corp">Международная корпорация "Глобал"</option>
+                            <option value="Gov_Agency_1">Гос. учреждение №1</option>
+                        </select>
+                    </div>
+                </div>
+                <button id="applyFiltersBtn" class="mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors shadow flex items-center justify-center">
+                    <span id="filterLoading" class="hidden spinner mr-2"></span>
+                    Применить фильтры
+                </button>
+            </div>
+
+            <!-- Секция ключевых метрик -->
+            <div class="grid md:grid-cols-4 gap-6 mb-12">
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                    <i class="fas fa-users text-4xl text-blue-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-gray-800" id="metricJobSeekers">0</h3>
+                    <p class="text-gray-600">Зарегистрированных соискателей</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                    <i class="fas fa-briefcase text-4xl text-green-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-gray-800" id="metricActiveVacancies">0</h3>
+                    <p class="text-gray-600">Активных вакансий</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                    <i class="fas fa-handshake text-4xl text-purple-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-gray-800" id="metricSuccessfulPlacements">0</h3>
+                    <p class="text-gray-600">Успешных трудоустройств</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                    <i class="fas fa-building text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-gray-800" id="metricEmployers">0</h3>
+                    <p class="text-gray-600">Зарегистрированных работодателей</p>
+                </div>
+            </div>
+
+            <!-- Секция графиков -->
+            <div class="grid lg:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Уровень безработицы по регионам</h3>
+                    <div class="chart-container">
+                        <canvas id="unemploymentChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Популярные профессии</h3>
+                    <div class="chart-container">
+                        <canvas id="professionsChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Динамика вакансий и откликов</h3>
+                    <div class="chart-container">
+                        <canvas id="vacancyResponseChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Эффективность обучения и трудоустройства выпускников</h3>
+                    <div class="chart-container">
+                        <canvas id="trainingEffectivenessChart"></canvas>
+                    </div>
+                </div>
+                <!-- Новые графики для гос. служащих -->
+                <div class="bg-white rounded-lg p-6 shadow-lg lg:col-span-2">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Топ-5 позиций, с которых уволились / на которые перешли</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="chart-container">
+                            <canvas id="resignedPositionsChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="transitionedPositionsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-lg lg:col-span-2">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Топ-5 организаций, откуда уволились / куда перешли</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="chart-container">
+                            <canvas id="resignedOrganizationsChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="transitionedOrganizationsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Распределение причин увольнения</h3>
+                    <div class="chart-container">
+                        <canvas id="resignationReasonsChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Прогноз занятости по отраслям (Правительственный)</h3>
+                    <div class="chart-container">
+                        <canvas id="employmentForecastChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-lg lg:col-span-2">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Анализ миграционных потоков трудовых ресурсов (Правительственный)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white report-table rounded-lg shadow-md">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Регион</th>
+                                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Приток (чел.)</th>
+                                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Отток (чел.)</th>
+                                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Чистая миграция</th>
+                                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Основные страны притока</th>
+                                </tr>
+                            </thead>
+                            <tbody id="migrationFlowTableBody">
+                                <!-- Данные будут генерироваться JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Секция экспорта отчетов -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">Экспорт аналитических отчетов</h3>
+                <p class="text-gray-700 mb-4">Выберите формат для экспорта текущих данных дашборда:</p>
+                <div class="flex flex-wrap gap-4">
+                    <button id="exportPdfBtn" class="bg-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-600 transition-colors shadow flex items-center justify-center">
+                        <i class="fas fa-file-pdf mr-2"></i>Экспорт в PDF
+                    </button>
+                    <button id="exportCsvBtn" class="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors shadow flex items-center justify-center">
+                        <i class="fas fa-file-csv mr-2"></i>Экспорт в CSV
+                    </button>
+                    <button id="exportExcelBtn" class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors shadow flex items-center justify-center">
+                        <i class="fas fa-file-excel mr-2"></i>Экспорт в Excel
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер портала (аналогичен главной странице) -->
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">О портале</h3>
+                    <p class="text-sm opacity-90">Официальный портал информационной системы рынка труда Республики Таджикистан</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Полезные ссылки</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Правительство РТ</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Министерство труда</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Налоговый комитет</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Нормативные акты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Поддержка</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Часто задаваемые вопросы</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Руководство пользователя</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Техническая поддержка</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Обратная связь</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Социальные сети</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2024 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно профиля (аналогично главной странице) -->
+    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg p-8 max-w-xs w-full text-center">
+            <h3 class="text-xl font-bold mb-6 text-gray-800">Вход или регистрация</h3>
+            <button id="demoLoginBtn" class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors mb-4">Войти (демо)</button>
+            <button id="goRegisterBtn" class="w-full bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors">Зарегистрироваться</button>
+            <button id="closeProfileModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
+    </div>
+
+    <!-- Кнопка AI-виджета (аналогична главной странице) -->
+    <button id="aiWidgetBtn" class="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl hover:scale-110 transition-transform" title="AI-ассистент (демо)">
+        <i class="fas fa-robot"></i>
+    </button>
+
+    <script>
+        // Инициализация переменных для графиков
+        let unemploymentChartInstance, professionsChartInstance, vacancyResponseChartInstance, trainingEffectivenessChartInstance;
+        // Новые переменные для графиков
+        let resignedPositionsChartInstance, transitionedPositionsChartInstance, resignedOrganizationsChartInstance, transitionedOrganizationsChartInstance, resignationReasonsChartInstance, employmentForecastChartInstance;
+
+        // Функция для обновления графиков на основе выбранных фильтров
+        function updateCharts(region, period, industry, resignationReason, positionTransition, organizationTransition) {
+            // Демо-данные для графиков (можно заменить на реальные данные из API)
+            const unemploymentData = {
+                'all': [4.2, 5.8, 7.1, 6.3, 8.9],
+                'Dushanbe': [3.5, 4.0, 4.5, 3.8, 4.1],
+                'Khujand': [5.0, 5.5, 6.0, 5.2, 5.8],
+                'Kulob': [6.5, 7.0, 7.5, 7.2, 7.8],
+                'Kurgan-Tyube': [5.8, 6.2, 6.7, 6.0, 6.5],
+                'GBAO': [8.0, 8.5, 9.0, 8.2, 8.8]
+            };
+            const professionsData = {
+                'all': [18, 22, 25, 12, 8, 15],
+                'IT': [40, 10, 5, 15, 10, 20],
+                'Construction': [10, 40, 5, 15, 10, 20],
+                'Trade': [5, 10, 40, 15, 10, 20],
+                'Education': [15, 5, 10, 40, 10, 20],
+                'Healthcare': [10, 15, 5, 10, 40, 20],
+                'Manufacturing': [10, 15, 10, 5, 10, 35, 15],
+                'Finance': [15, 10, 15, 5, 10, 10, 35]
+            };
+            const vacancyResponseData = {
+                'month': [1200, 1500, 1300, 1600, 1400, 1700, 1550], // Просмотры
+                'quarter': [80, 100, 90, 110, 95, 120, 105], // Отклики
+            };
+            const trainingEffectivenessData = {
+                'IT': [85, 70, 90, 75, 80],
+                'Construction': [70, 80, 75, 85, 78],
+                'Trade': [90, 85, 88, 92, 87],
+                'Education': [75, 80, 78, 82, 79],
+                'Healthcare': [80, 75, 82, 79, 83],
+                'Manufacturing': [78, 83, 79, 85, 80],
+                'Finance': [92, 88, 90, 95, 91]
+            };
+
+            // Новые демо-данные для гос. служащих
+            const resignedPositions = {
+                'all': ['Менеджер по продажам', 'Бухгалтер', 'Водитель', 'Программист', 'Учитель'],
+                'data': [150, 120, 100, 80, 70]
+            };
+            const transitionedPositions = {
+                'all': ['Аналитик данных', 'UX/UI Дизайнер', 'DevOps Инженер', 'Специалист по кибербезопасности', 'Менеджер проектов'],
+                'data': [90, 85, 75, 60, 50]
+            };
+            const resignedOrganizations = {
+                'all': ['ООО "ТехноСофт"', 'Торговый дом "Ориёна"', 'Банк "Имон"', 'Образовательный центр "Знание"', 'Гос. учреждение №1'],
+                'data': [200, 180, 150, 130, 110]
+            };
+            const transitionedOrganizations = {
+                'all': ['Международная корпорация "Глобал"', 'IT-стартап "Инновация"', 'Крупный банк "Амонат"', 'Строительная компания "Созидатель"', 'Мин. образования'],
+                'data': [100, 95, 80, 70, 65]
+            };
+            const resignationReasons = {
+                'all': ['Лучшая зарплата', 'Карьерный рост', 'Неудовлетворенность', 'Переезд', 'Личные причины'],
+                'data': [30, 25, 20, 15, 10]
+            };
+            const employmentForecast = {
+                'IT': [10, 12, 15, 18, 20, 22, 25, 28, 30, 32, 35, 38], // Процент роста
+                'Construction': [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+                'Trade': [2, 3, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5],
+                'all': [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+            };
+
+            // Обновление метрик
+            document.getElementById('metricJobSeekers').textContent = (Math.floor(Math.random() * 10000) + 40000).toLocaleString();
+            document.getElementById('metricActiveVacancies').textContent = (Math.floor(Math.random() * 5000) + 10000).toLocaleString();
+            document.getElementById('metricSuccessfulPlacements').textContent = (Math.floor(Math.random() * 3000) + 7000).toLocaleString();
+            document.getElementById('metricEmployers').textContent = (Math.floor(Math.random() * 1000) + 3000).toLocaleString();
+
+            // Обновление графика уровня безработицы
+            if (unemploymentChartInstance) unemploymentChartInstance.destroy();
+            const ctx1 = document.getElementById('unemploymentChart').getContext('2d');
+            unemploymentChartInstance = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Неделя 1', 'Неделя 2', 'Неделя 3', 'Неделя 4', 'Неделя 5'], // Пример меток
+                    datasets: [{
+                        label: 'Уровень безработицы (%)',
+                        data: unemploymentData[region] || unemploymentData['all'],
+                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10
+                        }
+                    },
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Обновление графика популярных профессий
+            if (professionsChartInstance) professionsChartInstance.destroy();
+            const ctx2 = document.getElementById('professionsChart').getContext('2d');
+            professionsChartInstance = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['IT', 'Строительство', 'Торговля', 'Образование', 'Здравоохранение', 'Другие'],
+                    datasets: [{
+                        data: professionsData[industry] || professionsData['all'],
+                        backgroundColor: [
+                            '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#6B7280'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed !== null) { label += context.parsed + '%'; }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Обновление графика динамики вакансий и откликов
+            if (vacancyResponseChartInstance) vacancyResponseChartInstance.destroy();
+            const ctx3 = document.getElementById('vacancyResponseChart').getContext('2d');
+            vacancyResponseChartInstance = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн'], // Пример меток
+                    datasets: [
+                        {
+                            label: 'Просмотры вакансий',
+                            data: vacancyResponseData['month'].map(val => val * 10), // Увеличим для наглядности
+                            borderColor: '#3B82F6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Отклики на вакансии',
+                            data: vacancyResponseData['quarter'].map(val => val * 5), // Увеличим для наглядности
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        tooltip: { mode: 'index', intersect: false }
+                    }
+                }
+            });
+
+            // Обновление графика эффективности обучения и трудоустройства
+            if (trainingEffectivenessChartInstance) trainingEffectivenessChartInstance.destroy();
+            const ctx4 = document.getElementById('trainingEffectivenessChart').getContext('2d');
+            trainingEffectivenessChartInstance = new Chart(ctx4, {
+                type: 'bar',
+                data: {
+                    labels: ['Курс 1', 'Курс 2', 'Курс 3', 'Курс 4', 'Курс 5'], // Пример меток
+                    datasets: [{
+                        label: 'Процент трудоустройства выпускников',
+                        data: trainingEffectivenessData[industry] || trainingEffectivenessData['IT'], // Зависит от отрасли
+                        backgroundColor: [
+                            '#8B5CF6', '#F59E0B', '#EF4444', '#3B82F6', '#10B981'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100 }
+                    },
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- Новые графики для гос. служащих ---
+
+            // Топ-5 позиций, с которых уволились
+            if (resignedPositionsChartInstance) resignedPositionsChartInstance.destroy();
+            const ctxResignedPos = document.getElementById('resignedPositionsChart').getContext('2d');
+            resignedPositionsChartInstance = new Chart(ctxResignedPos, {
+                type: 'bar',
+                data: {
+                    labels: resignedPositions.all,
+                    datasets: [{
+                        label: 'Количество увольнений',
+                        data: resignedPositions.data,
+                        backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: true, position: 'top' } }
+                }
+            });
+
+            // Топ-5 позиций, на которые перешли
+            if (transitionedPositionsChartInstance) transitionedPositionsChartInstance.destroy();
+            const ctxTransitionedPos = document.getElementById('transitionedPositionsChart').getContext('2d');
+            transitionedPositionsChartInstance = new Chart(ctxTransitionedPos, {
+                type: 'bar',
+                data: {
+                    labels: transitionedPositions.all,
+                    datasets: [{
+                        label: 'Количество переходов',
+                        data: transitionedPositions.data,
+                        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: true, position: 'top' } }
+                }
+            });
+
+            // Топ-5 организаций, откуда уволились
+            if (resignedOrganizationsChartInstance) resignedOrganizationsChartInstance.destroy();
+            const ctxResignedOrg = document.getElementById('resignedOrganizationsChart').getContext('2d');
+            resignedOrganizationsChartInstance = new Chart(ctxResignedOrg, {
+                type: 'bar',
+                data: {
+                    labels: resignedOrganizations.all,
+                    datasets: [{
+                        label: 'Количество увольнений',
+                        data: resignedOrganizations.data,
+                        backgroundColor: 'rgba(245, 158, 11, 0.8)',
+                        borderColor: 'rgba(245, 158, 11, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: true, position: 'top' } }
+                }
+            });
+
+            // Топ-5 организаций, куда перешли
+            if (transitionedOrganizationsChartInstance) transitionedOrganizationsChartInstance.destroy();
+            const ctxTransitionedOrg = document.getElementById('transitionedOrganizationsChart').getContext('2d');
+            transitionedOrganizationsChartInstance = new Chart(ctxTransitionedOrg, {
+                type: 'bar',
+                data: {
+                    labels: transitionedOrganizations.all,
+                    datasets: [{
+                        label: 'Количество переходов',
+                        data: transitionedOrganizations.data,
+                        backgroundColor: 'rgba(139, 92, 246, 0.8)',
+                        borderColor: 'rgba(139, 92, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: true, position: 'top' } }
+                }
+            });
+
+            // Распределение причин увольнения
+            if (resignationReasonsChartInstance) resignationReasonsChartInstance.destroy();
+            const ctxResignationReasons = document.getElementById('resignationReasonsChart').getContext('2d');
+            resignationReasonsChartInstance = new Chart(ctxResignationReasons, {
+                type: 'doughnut',
+                data: {
+                    labels: resignationReasons.all,
+                    datasets: [{
+                        data: resignationReasons.data,
+                        backgroundColor: [
+                            '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right' } }
+                }
+            });
+
+            // Прогноз занятости по отраслям (Правительственный)
+            if (employmentForecastChartInstance) employmentForecastChartInstance.destroy();
+            const ctxEmploymentForecast = document.getElementById('employmentForecastChart').getContext('2d');
+            employmentForecastChartInstance = new Chart(ctxEmploymentForecast, {
+                type: 'line',
+                data: {
+                    labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                    datasets: [{
+                        label: 'Процент роста занятости',
+                        data: employmentForecast[industry] || employmentForecast['all'],
+                        borderColor: '#14b8a6',
+                        backgroundColor: 'rgba(20, 184, 166, 0.2)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, max: 40 } },
+                    plugins: { legend: { display: true, position: 'top' } }
+                }
+            });
+
+            // Анализ миграционных потоков трудовых ресурсов (Правительственный)
+            const migrationFlowTableBody = document.getElementById('migrationFlowTableBody');
+            if (migrationFlowTableBody) {
+                migrationFlowTableBody.innerHTML = ''; // Очищаем таблицу перед обновлением
+                const migrationData = [
+                    { region: 'Душанбе', inflow: 500, outflow: 200, net: 300, countries: 'Россия, Казахстан' },
+                    { region: 'Согдийская область', inflow: 350, outflow: 150, net: 200, countries: 'Россия, Узбекистан' },
+                    { region: 'Хатлонская область', inflow: 400, outflow: 250, net: 150, countries: 'Россия, Турция' },
+                    { region: 'ГБАО', inflow: 50, outflow: 30, net: 20, countries: 'Китай, Афганистан' },
+                    { region: 'Районы республиканского подчинения', inflow: 280, outflow: 100, net: 180, countries: 'Россия, Кыргызстан' }
+                ];
+                migrationData.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b border-gray-200 hover:bg-gray-50';
+                    tr.innerHTML = `
+                        <td class="px-4 py-2 text-sm text-gray-800">${row.region}</td>
+                        <td class="px-4 py-2 text-sm text-gray-800">${row.inflow}</td>
+                        <td class="px-4 py-2 text-sm text-gray-800">${row.outflow}</td>
+                        <td class="px-4 py-2 text-sm text-gray-800">${row.net}</td>
+                        <td class="px-4 py-2 text-sm text-gray-800">${row.countries}</td>
+                    `;
+                    migrationFlowTableBody.appendChild(tr);
+                });
+            }
+        }
+
+        // Инициализация графиков при загрузке страницы с дефолтными значениями
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCharts('all', 'month', 'all', 'all', '', ''); // Изначальные фильтры
+        });
+
+        // Обработчик кнопки "Применить фильтры"
+        document.getElementById('applyFiltersBtn').addEventListener('click', () => {
+            const region = document.getElementById('reportRegionSelect').value;
+            const period = document.getElementById('reportPeriodSelect').value;
+            const industry = document.getElementById('reportIndustrySelect').value;
+            const resignationReason = document.getElementById('resignationReasonSelect').value;
+            const positionTransition = document.getElementById('positionTransitionInput').value;
+            const organizationTransition = document.getElementById('organizationTransitionInput').value;
+            
+            const loadingSpinner = document.getElementById('filterLoading');
+            loadingSpinner.classList.remove('hidden'); // Показать спиннер
+
+            // Имитация задержки загрузки данных
+            setTimeout(() => {
+                updateCharts(region, period, industry, resignationReason, positionTransition, organizationTransition);
+                loadingSpinner.classList.add('hidden'); // Скрыть спиннер
+            }, 1000); 
+        });
+
+        // Функции экспорта (заглушки)
+        document.getElementById('exportPdfBtn').addEventListener('click', () => {
+            // В реальном приложении здесь будет логика генерации и скачивания PDF
+            alert('Функция экспорта в PDF находится в разработке и будет реализована через бэкенд.');
+        });
+
+        document.getElementById('exportCsvBtn').addEventListener('click', () => {
+            // В реальном приложении здесь будет логика генерации и скачивания CSV
+            alert('Функция экспорта в CSV находится в разработке и будет реализована через бэкенд.');
+        });
+
+        document.getElementById('exportExcelBtn').addEventListener('click', () => {
+            // В реальном приложении здесь будет логика генерации и скачивания Excel
+            alert('Функция экспорта в Excel находится в разработке и будет реализована через бэкенд.');
+        });
+
+        // Выпадающее меню профиля и языков (аналогично главной странице)
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const langMenuBtn = document.getElementById('langMenuBtn');
+        const langDropdown = document.getElementById('langDropdown');
+        const currentLangLabel = document.getElementById('currentLangLabel');
+
+        profileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+            langDropdown.classList.add('hidden');
+        });
+
+        langMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            langDropdown.classList.toggle('hidden');
+            profileDropdown.classList.add('hidden');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+            if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
+                langDropdown.classList.add('hidden');
+            }
+        });
+
+        langDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                const lang = this.getAttribute('data-lang');
+                currentLangLabel.textContent = this.textContent;
+                langDropdown.classList.add('hidden');
+                // Google Translate (для демо-целей)
+                setTimeout(() => {
+                    const frame = document.querySelector('iframe.goog-te-menu-frame');
+                    if (frame) {
+                        const langMap = {ru: 'Русский', tg: 'Таджикский', en: 'Английский'};
+                        const langName = langMap[lang];
+                        const items = frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text');
+                        for (let i = 0; i < items.length; i++) {
+                            if (items[i].innerText.trim().toLowerCase().includes(langName.toLowerCase())) {
+                                items[i].click();
+                                break;
+                            }
+                        }
+                    }
+                }, 200);
+            };
+        });
+
+        // Google Translate (для демо-целей)
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'ru',
+                includedLanguages: 'ru,en,tg',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div id="google_translate_element" style="display:none"></div>
+</body>
+</html>
