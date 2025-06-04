@@ -973,5 +973,28 @@
         localStorage.setItem('talentReportData', JSON.stringify(lastTalentReportCandidates));
         window.open('talent_report.html', '_blank');
     };
+
+    document.querySelectorAll('.collapsible-header').forEach(header => {
+        header.addEventListener('click', function () {
+            const targetId = header.getAttribute('data-target');
+            const content = document.getElementById(targetId);
+            const expanded = content.classList.contains('expanded');
+            // Свернуть все секции
+            document.querySelectorAll('.collapsible-content').forEach(c => c.classList.remove('expanded'));
+            document.querySelectorAll('.collapsible-header').forEach(h => h.classList.remove('expanded'));
+            // Если не была раскрыта — раскрыть
+            if (!expanded) {
+                content.classList.add('expanded');
+                header.classList.add('expanded');
+            }
+        });
+    });
+
+    // По умолчанию раскрыть первую секцию (опционально)
+    document.addEventListener('DOMContentLoaded', function () {
+        const firstHeader = document.querySelector('.collapsible-header');
+        if (firstHeader) firstHeader.click();
+    });
 </script>
-<!-- ...existing code... -->
+</body>
+</html>
