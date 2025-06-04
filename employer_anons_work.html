@@ -255,6 +255,10 @@
                                 </select>
                             </div>
                             <div>
+                                <label for="vacancyEndDate" class="block text-sm font-medium text-gray-700 mb-2">Дата окончания публикации <span class="text-red-500">*</span></label>
+                                <input type="date" id="vacancyEndDate" name="vacancyEndDate" required>
+                            </div>
+                            <div>
                                 <label for="vacancyIndustry" class="block text-sm font-medium text-gray-700 mb-2">Отрасль <span class="text-red-500">*</span></label>
                                 <select id="vacancyIndustry" name="vacancyIndustry" required>
                                     <option value="">Выберите отрасль</option>
@@ -288,17 +292,64 @@
                                     <option value="Internship">Стажировка</option>
                                 </select>
                             </div>
-                            <!-- Новое поле: Обучение за счет компании -->
-                            <div class="md:col-span-2">
-                                <label class="flex items-center text-sm font-medium text-gray-700 mt-2">
-                                    <input type="checkbox" id="companyTraining" name="companyTraining" class="form-checkbox text-blue-600 rounded mr-2">
-                                    Предоставляется обучение за счет компании
-                                </label>
+                        </div>
+                        <!-- Новый блок: Обучение сотрудников -->
+                        <div class="bg-blue-50 rounded-lg p-4 mt-4">
+                            <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                                <input type="checkbox" id="trainingProvided" name="trainingProvided" class="form-checkbox text-blue-600 rounded mr-2">
+                                Предусмотрено обучение для сотрудников
+                            </label>
+                            <div id="trainingDetails" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2 hidden">
+                                <div>
+                                    <label for="trainingDuration" class="block text-sm font-medium text-gray-700 mb-2">Срок обучения (дней/недель/месяцев)</label>
+                                    <input type="text" id="trainingDuration" name="trainingDuration" placeholder="Например: 2 недели">
+                                </div>
+                                <div>
+                                    <label for="trainingMode" class="block text-sm font-medium text-gray-700 mb-2">Модель обучения</label>
+                                    <select id="trainingMode" name="trainingMode">
+                                        <option value="">Выберите модель</option>
+                                        <option value="remote">Дистанционно</option>
+                                        <option value="onsite">Очно</option>
+                                        <option value="mixed">Смешанная</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="trainingCompensation" class="block text-sm font-medium text-gray-700 mb-2">Возмещение обучения</label>
+                                    <select id="trainingCompensation" name="trainingCompensation">
+                                        <option value="">Выберите вариант</option>
+                                        <option value="paid">Время обучения оплачивается</option>
+                                        <option value="unpaid">Время обучения не оплачивается</option>
+                                        <option value="partial">Частичное возмещение</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="trainingCenter" class="block text-sm font-medium text-gray-700 mb-2">Учебный центр</label>
+                                    <select id="trainingCenter" name="trainingCenter">
+                                        <option value="">Выберите учебный центр</option>
+                                        <!-- Здесь будут динамически подгружаться сертифицированные учебные центры -->
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="trainingDescription" class="block text-sm font-medium text-gray-700 mb-2">Дополнительная информация об обучении</label>
+                                    <textarea id="trainingDescription" name="trainingDescription" rows="2" placeholder="Например: программа обучения, требования к участникам и т.д."></textarea>
+                                </div>
                             </div>
                         </div>
                         <div>
                             <label for="vacancySkills" class="block text-sm font-medium text-gray-700 mb-2">Ключевые навыки (через запятую)</label>
                             <textarea id="vacancySkills" name="vacancySkills" rows="3" placeholder="Например: Java, Spring Boot, SQL, Git"></textarea>
+                        </div>
+                        <!-- Новое поле: Возможность удаленной работы -->
+                        <div>
+                            <label class="flex items-center text-sm font-medium text-gray-700">
+                                <input type="checkbox" id="remoteWork" name="remoteWork" class="form-checkbox text-blue-600 rounded mr-2">
+                                Возможна удаленная работа
+                            </label>
+                        </div>
+                        <!-- Новое поле: Социальный пакет -->
+                        <div>
+                            <label for="socialPackage" class="block text-sm font-medium text-gray-700 mb-2">Социальный пакет</label>
+                            <textarea id="socialPackage" name="socialPackage" rows="2" placeholder="Например: медицинская страховка, питание, транспорт и т.д."></textarea>
                         </div>
                         <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md flex items-center justify-center">
                             <span id="postVacancySpinner" class="hidden spinner mr-2"></span>
