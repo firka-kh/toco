@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчет по найденным соискателям</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS для стилей -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">Отчет по найденным соискателям</h1>
+        <div class="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow mb-8">
+            <table id="talentReportTable" class="min-w-full text-sm text-gray-800">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-3 py-2">ФИО</th>
+                        <th class="px-3 py-2">Возраст</th>
+                        <th class="px-3 py-2">Пол</th>
+                        <th class="px-3 py-2">Регион</th>
+                        <th class="px-3 py-2">Город/Район</th>
+                        <th class="px-3 py-2">Джамоат</th>
+                        <th class="px-3 py-2">Образование</th>
+                        <th class="px-3 py-2">Профессия</th>
+                        <th class="px-3 py-2">Опыт</th>
+                        <th class="px-3 py-2">Навыки</th>
+                        <th class="px-3 py-2">Статус занятости</th>
+                        <th class="px-3 py-2">Социальная уязвимость</th>
+                        <th class="px-3 py-2">Желаемая зарплата</th>
+                        <th class="px-3 py-2">Готов к переезду</th>
+                        <th class="px-3 py-2">Готов к командировкам</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Данные будут добавлены скриптом -->
+                </tbody>
+            </table>
+        </div>
+        <div class="flex flex-wrap gap-4 items-center justify-center">
+            <button id="downloadPdfBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors flex items-center">
+                <i class="fas fa-file-pdf mr-2"></i>Скачать PDF
+            </button>
+            <button id="downloadExcelBtn" class="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors flex items-center">
+                <i class="fas fa-file-excel mr-2"></i>Скачать Excel
+            </button>
+        </div>
+    </div>
+    <!-- Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <!-- Подключение библиотек экспорта -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        // Получаем данные из localStorage
+        const candidates = JSON.parse(localStorage.getItem('talentReportData') || '[]');
+        function renderTalentReportTable(candidates) {
+            const tbody = document.querySelector('#talentReportTable tbody');
+            tbody.innerHTML = '';
+            candidates.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="border px-3 py-2">${c.fullName}</td>
+                    <td class="border px-3 py-2">${c.age}</td>
+                    <td class="border px-3 py-2">${c.gender}</td>
+                    <td class="border px-3 py-2">${c.region}</td>
+                    <td class="border px-3 py-2">${c.cityDistrict}</td>
+                    <td class="border px-3 py-2">${c.jamoat}</td>
+                    <td class="border px-3 py-2">${c.education}</td>
+                    <td class="border px-3 py-2">${c.profession}</td>
+                    <td class="border px-3 py-2">${c.experienceYears}</td>
+                    <td class="border px-3 py-2">${c.skills}</td>
+                    <td class="border px-3 py-2">${c.employmentStatus}</td>
+                    <td class="border px-3 py-2">${c.socialVulnerability}</td>
+                    <td class="border px-3 py-2">${c.desiredSalary}</td>
+                    <td class="border px-3 py-2">${c.readyForRelocation}</td>
+                    <td class="border px-3 py-2">${c.readyForBusinessTrips}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        renderTalentReportTable(candidates);
+
+        // PDF export
+        document.getElementById('downloadPdfBtn').onclick = function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: "landscape" });
+            doc.setFontSize(10);
+            doc.text("Отчет по найденным соискателям", 14, 10);
+
+            const rows = candidates.map(c => [
+                c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
+                c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
+            ]);
+            const headers = [["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"]];
+
+            if (doc.autoTable) {
+                doc.autoTable({
+                    head: headers,
+                    body: rows,
+                    startY: 16,
+                    styles: { fontSize: 8 }
+                });
+            } else {
+                let y = 16;
+                rows.forEach(row => {
+                    doc.text(row.join(" | "), 14, y);
+                    y += 6;
+                });
+            }
+            doc.save("talent_report.pdf");
+        };
+
+        // Excel export
+        document.getElementById('downloadExcelBtn').onclick = function() {
+            const ws_data = [
+                ["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"],
+                ...candidates.map(c => [
+                    c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
+                    c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
+                ])
+            ];
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            XLSX.utils.book_append_sheet(wb, ws, "Отчет");
+            XLSX.writeFile(wb, "talent_report.xlsx");
+        };
+    </script>
+</body>
+</html>

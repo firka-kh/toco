@@ -171,12 +171,17 @@
                 <div class="flex items-center space-x-4">
                     <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
                     <div>
-                        <h1 class="text-2xl font-bold">Портал рынка труда</h1>
-                        <p class="text-sm opacity-90">Республика Таджикистан</p>
+                        <!-- Добавляем ссылку на главную страницу -->
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
                     </div>
                 </div>
                 <!-- Правая часть: Навигация, языки и профиль -->
                 <nav class="hidden md:flex space-x-6 items-center">
+                    <!-- Добавляем пункт меню "Главная" -->
+                    <a href="index.html" class="hover:text-yellow-300 transition-colors font-semibold">Главная</a>
                     <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск вакансий</a>
                     <a href="index.html#statistics" class="hover:text-yellow-300 transition-colors">Статистика</a>
                     <a href="index.html#programs" class="hover:text-yellow-300 transition-colors">Программы</a>
