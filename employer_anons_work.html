@@ -666,6 +666,43 @@
                                     <!-- Результаты будут здесь -->
                                 </div>
                             </div>
+                            <div id="talentReportActions" class="mt-8 hidden flex flex-wrap gap-4 items-center">
+                                <button id="downloadPdfBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors flex items-center">
+                                    <i class="fas fa-file-pdf mr-2"></i>Скачать PDF
+                                </button>
+                                <button id="downloadExcelBtn" class="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors flex items-center">
+                                    <i class="fas fa-file-excel mr-2"></i>Скачать Excel
+                                </button>
+                                <button id="openReportPageBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors flex items-center">
+                                    <i class="fas fa-external-link-alt mr-2"></i>Открыть отчет на странице
+                                </button>
+                            </div>
+                            <div id="talentReportTableWrapper" class="mt-6 hidden overflow-x-auto rounded-lg border border-gray-200 bg-white shadow">
+                                <table id="talentReportTable" class="min-w-full text-sm text-gray-800">
+                                    <thead class="bg-gray-100">
+                                        <tr>
+                                            <th class="px-3 py-2">ФИО</th>
+                                            <th class="px-3 py-2">Возраст</th>
+                                            <th class="px-3 py-2">Пол</th>
+                                            <th class="px-3 py-2">Регион</th>
+                                            <th class="px-3 py-2">Город/Район</th>
+                                            <th class="px-3 py-2">Джамоат</th>
+                                            <th class="px-3 py-2">Образование</th>
+                                            <th class="px-3 py-2">Профессия</th>
+                                            <th class="px-3 py-2">Опыт</th>
+                                            <th class="px-3 py-2">Навыки</th>
+                                            <th class="px-3 py-2">Статус занятости</th>
+                                            <th class="px-3 py-2">Социальная уязвимость</th>
+                                            <th class="px-3 py-2">Желаемая зарплата</th>
+                                            <th class="px-3 py-2">Готов к переезду</th>
+                                            <th class="px-3 py-2">Готов к командировкам</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Данные будут добавлены скриптом -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1104,57 +1141,144 @@
             spinner.classList.remove('hidden');
             talentResultsList.innerHTML = ''; // Clear previous results
             searchResultsContainer.classList.add('hidden'); // Hide results until loaded
+            document.getElementById('talentReportActions').classList.add('hidden');
+            document.getElementById('talentReportTableWrapper').classList.add('hidden');
 
-            // Collect filter values (excluding removed fields)
+            // Для демонстрации — фильтр всегда заполнен
+            document.getElementById('searchAgeMin').value = 25;
+            document.getElementById('searchAgeMax').value = 40;
+            document.getElementById('searchGender').value = "Male";
+            document.getElementById('searchRegion').value = "Dushanbe";
+            document.getElementById('searchCityDistrict').value = "Район Исмоили Сомони";
+            document.getElementById('searchJamoat').value = "Джамоат И.Сомони 1";
+            document.getElementById('searchEducationLevel').value = "Higher";
+            document.getElementById('searchProfessionType').value = "Программист";
+            document.getElementById('searchExperienceYears').value = "3-5_Years";
+            document.getElementById('searchSkills').value = "Java, SQL";
+            document.getElementById('searchEmploymentStatus').value = "Employed";
+            document.getElementById('searchSocialVulnerability').value = "Disabled";
+            document.getElementById('searchDesiredSalaryMin').value = 5000;
+            document.getElementById('searchDesiredSalaryMax').value = 10000;
+            document.getElementById('searchReadyForRelocation').checked = true;
+            document.getElementById('searchReadyForBusinessTrips').checked = true;
+
+            // Собираем значения фильтров
             const filters = {
-                ageMin: document.getElementById('searchAgeMin').value,
-                ageMax: document.getElementById('searchAgeMax').value,
-                gender: document.getElementById('searchGender').value,
-                region: document.getElementById('searchRegion').value,
-                cityDistrict: document.getElementById('searchCityDistrict').value,
-                jamoat: document.getElementById('searchJamoat').value,
-                educationLevel: document.getElementById('searchEducationLevel').value,
-                professionType: document.getElementById('searchProfessionType').value,
-                experienceYears: document.getElementById('searchExperienceYears').value,
+                fullName: "—", // Нет в фильтре, но для отчета можно добавить
+                age: `${document.getElementById('searchAgeMin').value}-${document.getElementById('searchAgeMax').value}`,
+                gender: document.getElementById('searchGender').options[document.getElementById('searchGender').selectedIndex].text,
+                region: document.getElementById('searchRegion').options[document.getElementById('searchRegion').selectedIndex].text,
+                cityDistrict: document.getElementById('searchCityDistrict').options[document.getElementById('searchCityDistrict').selectedIndex]?.text || "",
+                jamoat: document.getElementById('searchJamoat').options[document.getElementById('searchJamoat').selectedIndex]?.text || "",
+                education: document.getElementById('searchEducationLevel').options[document.getElementById('searchEducationLevel').selectedIndex].text,
+                profession: document.getElementById('searchProfessionType').value,
+                experienceYears: document.getElementById('searchExperienceYears').options[document.getElementById('searchExperienceYears').selectedIndex].text,
                 skills: document.getElementById('searchSkills').value,
-                employmentStatus: document.getElementById('searchEmploymentStatus').value,
-                socialVulnerability: document.getElementById('searchSocialVulnerability').value,
-                desiredSalaryMin: document.getElementById('searchDesiredSalaryMin').value,
-                desiredSalaryMax: document.getElementById('searchDesiredSalaryMax').value,
-                readyForRelocation: document.getElementById('searchReadyForRelocation').checked,
-                readyForBusinessTrips: document.getElementById('searchReadyForBusinessTrips').checked,
+                employmentStatus: document.getElementById('searchEmploymentStatus').options[document.getElementById('searchEmploymentStatus').selectedIndex].text,
+                socialVulnerability: document.getElementById('searchSocialVulnerability').options[document.getElementById('searchSocialVulnerability').selectedIndex].text,
+                desiredSalary: `${document.getElementById('searchDesiredSalaryMin').value} - ${document.getElementById('searchDesiredSalaryMax').value}`,
+                readyForRelocation: document.getElementById('searchReadyForRelocation').checked ? "Да" : "Нет",
+                readyForBusinessTrips: document.getElementById('searchReadyForBusinessTrips').checked ? "Да" : "Нет"
             };
 
-            // Simulate API call and render results
             setTimeout(() => {
                 spinner.classList.add('hidden');
-                const candidates = generateMockCandidates(filters); // Generate mock data based on filters (or just random)
-
-                if (candidates.length > 0) {
-                    candidates.forEach(candidate => {
-                        const candidateDiv = document.createElement('div');
-                        candidateDiv.className = 'bg-white p-4 rounded-lg border border-gray-200 shadow-sm';
-                        candidateDiv.innerHTML = `
-                            <h5 class="font-semibold text-gray-800">${candidate.fullName} (${candidate.age} лет, ${candidate.gender})</h5>
-                            <p class="text-gray-600 text-sm mb-1">Регион: ${candidate.region}, ${candidate.cityDistrict}, ${candidate.jamoat}</p>
-                            <p class="text-gray-600 text-sm mb-1">Образование: ${candidate.education}</p>
-                            <p class="text-gray-600 text-sm mb-1">Профессия: ${candidate.profession}, Опыт: ${candidate.experienceYears === 'all' ? 'Любой' : candidate.experienceYears}</p>
-                            <p class="text-gray-600 text-sm mb-1">Навыки: ${candidate.skills}</p>
-                            <p class="text-gray-600 text-sm mb-1">Статус занятости: ${candidate.employmentStatus}</p>
-                            <p class="text-gray-600 text-sm mb-1">Социальная уязвимость: ${candidate.socialVulnerability}</p>
-                            <p class="text-gray-600 text-sm mb-1">Желаемая зарплата: ${candidate.desiredSalary} сомони</p>
-                            <p class="text-gray-600 text-sm mb-2">Готовность к переезду: ${candidate.readyForRelocation ? 'Да' : 'Нет'}, Командировки: ${candidate.readyForBusinessTrips ? 'Да' : 'Нет'}</p>
-                            <button class="text-blue-500 hover:underline text-sm mt-2"><i class="fas fa-user-circle mr-1"></i>Просмотреть профиль</button>
-                        `;
-                        talentResultsList.appendChild(candidateDiv);
+                // Генерируем 10 кандидатов с такими же фильтрами (для демонстрации)
+                const candidates = [];
+                for (let i = 1; i <= 10; i++) {
+                    candidates.push({
+                        ...filters,
+                        fullName: `Кандидат ${i}`
                     });
-                    searchResultsContainer.classList.remove('hidden'); // Show results
-                } else {
-                    talentResultsList.innerHTML = '<p class="text-gray-600 text-center">По вашему запросу кандидатов не найдено.</p>';
-                    searchResultsContainer.classList.remove('hidden');
                 }
-            }, 1500);
+                lastTalentReportCandidates = candidates;
+
+                // Показываем таблицу и кнопки экспорта
+                renderTalentReportTable(candidates);
+                document.getElementById('talentReportActions').classList.remove('hidden');
+                document.getElementById('talentReportTableWrapper').classList.remove('hidden');
+                searchResultsContainer.classList.remove('hidden');
+            }, 1000);
         });
+
+        // Функция для генерации таблицы отчета
+        function renderTalentReportTable(candidates) {
+            const tbody = document.querySelector('#talentReportTable tbody');
+            tbody.innerHTML = '';
+            candidates.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="border px-3 py-2">${c.fullName}</td>
+                    <td class="border px-3 py-2">${c.age}</td>
+                    <td class="border px-3 py-2">${c.gender}</td>
+                    <td class="border px-3 py-2">${c.region}</td>
+                    <td class="border px-3 py-2">${c.cityDistrict}</td>
+                    <td class="border px-3 py-2">${c.jamoat}</td>
+                    <td class="border px-3 py-2">${c.education}</td>
+                    <td class="border px-3 py-2">${c.profession}</td>
+                    <td class="border px-3 py-2">${c.experienceYears}</td>
+                    <td class="border px-3 py-2">${c.skills}</td>
+                    <td class="border px-3 py-2">${c.employmentStatus}</td>
+                    <td class="border px-3 py-2">${c.socialVulnerability}</td>
+                    <td class="border px-3 py-2">${c.desiredSalary}</td>
+                    <td class="border px-3 py-2">${c.readyForRelocation}</td>
+                    <td class="border px-3 py-2">${c.readyForBusinessTrips}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // PDF export
+        document.getElementById('downloadPdfBtn').onclick = function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: "landscape" });
+            doc.setFontSize(10);
+            doc.text("Отчет по найденным соискателям", 14, 10);
+
+            // Формируем данные для таблицы
+            const rows = lastTalentReportCandidates.map(c => [
+                c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
+                c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
+            ]);
+            const headers = [["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"]];
+
+            if (doc.autoTable) {
+                doc.autoTable({
+                    head: headers,
+                    body: rows,
+                    startY: 16,
+                    styles: { fontSize: 8 }
+                });
+            } else {
+                let y = 16;
+                rows.forEach(row => {
+                    doc.text(row.join(" | "), 14, y);
+                    y +=  6;
+                });
+            }
+            doc.save("talent_report.pdf");
+        };
+
+        // Excel export
+        document.getElementById('downloadExcelBtn').onclick = function() {
+            const ws_data = [
+                ["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"],
+                ...lastTalentReportCandidates.map(c => [
+                    c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
+                    c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
+                ])
+            ];
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            XLSX.utils.book_append_sheet(wb, ws, "Отчет");
+            XLSX.writeFile(wb, "talent_report.xlsx");
+        };
+
+        // Открыть отчет на отдельной странице
+        document.getElementById('openReportPageBtn').onclick = function() {
+            localStorage.setItem('talentReportData', JSON.stringify(lastTalentReportCandidates));
+            window.open('talent_report.html', '_blank');
+        };
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <div id="google_translate_element" style="display:none"></div>
