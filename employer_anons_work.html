@@ -777,115 +777,99 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
     <script>
         // Выпадающее меню профиля и языков
-    const profileMenuBtn = document.getElementById('profileMenuBtn');
-    const profileDropdown = document.getElementById('profileDropdown');
-    const langMenuBtn = document.getElementById('langMenuBtn');
-    const langDropdown = document.getElementById('langDropdown');
-    const currentLangLabel = document.getElementById('currentLangLabel');
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+        const langMenuBtn = document.getElementById('langMenuBtn');
+        const langDropdown = document.getElementById('langDropdown');
+        const currentLangLabel = document.getElementById('currentLangLabel');
 
-    profileMenuBtn?.addEventListener('click', function(e) {
-        e.stopPropagation();
-        profileDropdown.classList.toggle('hidden');
-        langDropdown.classList.add('hidden');
-    });
-
-    langMenuBtn?.addEventListener('click', function(e) {
-        e.stopPropagation();
-        langDropdown.classList.toggle('hidden');
-        profileDropdown.classList.add('hidden');
-    });
-
-    document.addEventListener('click', function(e) {
-        if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
-            profileDropdown.classList.add('hidden');
-        }
-        if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
+        // Профиль
+        profileMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
             langDropdown.classList.add('hidden');
-        }
-    });
-
-    langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
-        btn.onclick = function() {
-            currentLangLabel.textContent = this.textContent;
-            langDropdown.classList.add('hidden');
-        };
-    });
-    </script>
-    <script>
-        // Data for dynamic dropdowns (can be fetched from backend in real app)
-        const regionsData = {
-            "Dushanbe": ["Район Исмоили Сомони", "Район Сино", "Район Фирдавси", "Район Шохмансур"],
-            "RRP": ["Варзоб", "Гиссар", "Лахш", "Нуробод", "Рашт", "Сангвор", "Тоджикобод", "Файзабад", "Шахринав", "Рудаки", "Турсунзаде"],
-            "Sughd": ["Худжанд", "Бободжон Гафуров", "Ашт", "Исфара", "Канибадам", "Пенджикент"],
-            "Khatlon": ["Бохтар", "Куляб", "Дангара", "Вахш", "Яван", "Пяндж"],
-            "GBAO": ["Хорог", "Ишкашим", "Мургаб", "Рошткала", "Рушан", "Шугнан"],
-        };
-
-        const cityDistrictData = {
-            "Район Исмоили Сомони": ["Джамоат И. Сомони 1", "Джамоат И. Сомони 2"],
-            "Район Сино": ["Джамоат Сино 1", "Джамоат Сино 2"],
-            "Район Фирдавси": ["Джамоат Фирдавси 1", "Джамоат Фирдавси 2"],
-            "Район Шохмансур": ["Джамоат Шохмансур 1", "Джамоат Шохмансур 2"],
-            "Варзоб": ["Джамоат Варзоб 1"],
-            "Гиссар": ["Джамоат Гиссар 1", "Джамоат Гиссар 2"],
-            "Лахш": ["Джамоат Лахш 1"],
-            "Нуробод": ["Джамоат Нуробод 1"],
-            "Рашт": ["Джамоат Рашт 1"],
-            "Сангвор": ["Джамоат Сангвор 1"],
-            "Тоджикобод": ["Джамоат Тоджикобод 1"],
-            "Файзабад": ["Джамоат Файзабад 1"],
-            "Шахринав": ["Джамоат Шахринав 1"],
-            "Рудаки": ["Джамоат Рудаки 1", "Джамоат Рудаки 2"],
-            "Турсунзаде": ["Джамоат Турсунзаде 1", "Джамоат Турсунзаде 2"],
-            "Худжанд": ["Джамоат Худжанд 1", "Джамоат Худжанд 2"],
-            "Бободжон Гафуров": ["Джамоат Б. Гафуров 1", "Джамоат Б. Гафуров 2"],
-            "Ашт": ["Джамоат Ашт 1"],
-            "Исфара": ["Джамоат Исфара 1"],
-            "Канибадам": ["Джамоат Канибадам 1"],
-            "Пенджикент": ["Джамоат Пенджикент 1"],
-            "Бохтар": ["Джамоат Бохтар 1", "Джамоат Бохтар 2"],
-            "Куляб": ["Джамоат Куляб 1", "Джамоат Куляб 2"],
-            "Дангара": ["Джамоат Дангара 1"],
-            "Вахш": ["Джамоат Вахш 1"],
-            "Яван": ["Джамоат Яван 1"],
-            "Пяндж": ["Джамоат Пяндж 1"],
-            "Хорог": ["Джамоат Хорог 1"],
-            "Ишкашим": ["Джамоат Ишкашим 1"],
-            "Мургаб": ["Джамоат Мургаб 1"],
-            "Рошткала": ["Джамоат Рошткала 1"],
-            "Рушан": ["Джамоат Рушан 1"],
-            "Шугнан": ["Джамоат Шугнан 1"],
-        };
-
-        // Демо-данные для учебных центров (в реальном приложении будут загружаться из БД)
-        const certifiedTrainingCenters = [
-            { id: "it_academy", name: "IT Академия Душанбе" },
-            { id: "business_school", name: "Бизнес Школа Таджикистана" },
-            { id: "language_center", name: "Языковой Центр 'Полиглот'" },
-            { id: "construction_college", name: "Строительный колледж №1" },
-            { id: "online_coursera", name: "Coursera (онлайн)" },
-            { id: "online_udemy", name: "Udemy (онлайн)" }
-        ];
-
-        // Function to populate training centers dropdown
-        function populateTrainingCentersDropdown() {
-            const trainingCenterSelect = document.getElementById('trainingCenter');
-            if (trainingCenterSelect) {
-                trainingCenterSelect.innerHTML = '<option value="">Выберите учебный центр</option>';
-                certifiedTrainingCenters.forEach(center => {
-                    const option = document.createElement('option');
-                    option.value = center.id;
-                    option.textContent = center.name;
-                    trainingCenterSelect.appendChild(option);
-                });
+        });
+        document.addEventListener('click', function(e) {
+            if (profileDropdownContainer && !profileDropdownContainer.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
             }
-        }
-
-        // Initial population of training centers dropdown on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            populateTrainingCentersDropdown();
         });
 
+        // Языки
+        langMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            langDropdown.classList.toggle('hidden');
+            profileDropdown.classList.add('hidden');
+        });
+        document.addEventListener('click', function(e) {
+            if (langDropdown && !langDropdown.contains(e.target) && langMenuBtn && !langMenuBtn.contains(e.target)) {
+                langDropdown.classList.add('hidden');
+            }
+        });
+        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                currentLangLabel.textContent = this.textContent;
+                langDropdown.classList.add('hidden');
+            };
+        });
+
+        // --- Collapsible sections logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Collapse all on load
+            document.querySelectorAll('.collapsible-content').forEach(content => {
+                content.classList.remove('expanded');
+                content.style.maxHeight = null;
+                const header = content.previousElementSibling;
+                if (header) {
+                    header.classList.remove('expanded');
+                    header.querySelector('i').classList.remove('fa-chevron-up');
+                    header.querySelector('i').classList.add('fa-chevron-down');
+                }
+            });
+
+            // Collapsible header click
+            document.querySelectorAll('.collapsible-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const targetId = header.dataset.target;
+                    const targetContent = document.getElementById(targetId);
+                    const icon = header.querySelector('i');
+
+                    // Close all others
+                    document.querySelectorAll('.collapsible-content').forEach(content => {
+                        if (content.id !== targetId && content.classList.contains('expanded')) {
+                            content.classList.remove('expanded');
+                            content.style.maxHeight = null;
+                            const otherHeader = content.previousElementSibling;
+                            if (otherHeader) {
+                                otherHeader.classList.remove('expanded');
+                                otherHeader.querySelector('i').classList.remove('fa-chevron-up');
+                                otherHeader.querySelector('i').classList.add('fa-chevron-down');
+                            }
+                        }
+                    });
+
+                    // Toggle this
+                    if (targetContent) {
+                        header.classList.toggle('expanded');
+                        targetContent.classList.toggle('expanded');
+                        if (targetContent.classList.contains('expanded')) {
+                            targetContent.style.maxHeight = targetContent.scrollHeight + "px";
+                            if (icon) {
+                                icon.classList.remove('fa-chevron-down');
+                                icon.classList.add('fa-chevron-up');
+                            }
+                        } else {
+                            targetContent.style.maxHeight = null;
+                            if (icon) {
+                                icon.classList.remove('fa-chevron-up');
+                                icon.classList.add('fa-chevron-down');
+                            }
+                        }
+                    }
+                });
+            });
+        });
 
         // Handle "По договоренности" checkbox for salary inputs
         document.getElementById('salaryNegotiable').addEventListener('change', function() {
@@ -935,133 +919,6 @@
                 document.getElementById('vacancySalaryMax').disabled = false;
             }, 1500);
         });
-
-        // --- Collapsible sections logic ---
-        document.querySelectorAll('.collapsible-header').forEach(header => {
-            header.addEventListener('click', () => {
-                const targetId = header.dataset.target;
-                const targetContent = document.getElementById(targetId);
-                const icon = header.querySelector('i');
-
-                // Close all other sections
-                document.querySelectorAll('.collapsible-content').forEach(content => {
-                    if (content.id !== targetId && content.classList.contains('expanded')) {
-                        content.classList.remove('expanded');
-                        content.style.maxHeight = null;
-                        const otherHeader = content.previousElementSibling;
-                        if (otherHeader) {
-                            otherHeader.classList.remove('expanded');
-                            otherHeader.querySelector('i').classList.remove('fa-chevron-up');
-                            otherHeader.querySelector('i').classList.add('fa-chevron-down');
-                        }
-                    }
-                });
-
-                // Toggle the clicked section
-                if (targetContent) {
-                    header.classList.toggle('expanded');
-                    targetContent.classList.toggle('expanded');
-
-                    if (targetContent.classList.contains('expanded')) {
-                        targetContent.style.maxHeight = targetContent.scrollHeight + "px";
-                        if (icon) {
-                            icon.classList.remove('fa-chevron-down');
-                            icon.classList.add('fa-chevron-up');
-                        }
-                    } else {
-                        targetContent.style.maxHeight = null;
-                        if (icon) {
-                            icon.classList.remove('fa-chevron-up');
-                            icon.classList.add('fa-chevron-down');
-                        }
-                    }
-                }
-            });
-        });
-
-        // Initial state: collapse all sections on load
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.collapsible-content').forEach(content => {
-                content.classList.remove('expanded');
-                content.style.maxHeight = null;
-                const header = content.previousElementSibling;
-                if (header) {
-                    header.classList.remove('expanded');
-                    header.querySelector('i').classList.remove('fa-chevron-up');
-                    header.querySelector('i').classList.add('fa-chevron-down');
-                }
-            });
-        });
-
-
-        // Profile Dropdown Logic (from original index.html)
-        const profileMenuBtn = document.getElementById('profileMenuBtn');
-        const profileDropdown = document.getElementById('profileDropdown');
-        const profileDropdownContainer = document.getElementById('profileDropdownContainer');
-
-        if (profileMenuBtn) {
-            profileMenuBtn.onclick = function(e) {
-                e.stopPropagation();
-                profileDropdown.classList.toggle('hidden');
-            };
-        }
-
-        document.addEventListener('click', function(e) {
-            if (profileDropdownContainer && !profileDropdownContainer.contains(e.target)) {
-                profileDropdown.classList.add('hidden');
-            }
-        });
-
-        // Language Dropdown Logic (from original index.html)
-        const langMenuBtn = document.getElementById('langMenuBtn');
-        const langDropdown = document.getElementById('langDropdown');
-        const currentLangLabel = document.getElementById('currentLangLabel');
-
-        if (langMenuBtn) {
-            langMenuBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                langDropdown.classList.toggle('hidden');
-                profileDropdown.classList.add('hidden'); // Close profile dropdown if open
-            });
-        }
-
-        document.addEventListener('click', function(e) {
-            if (langDropdown && !langDropdown.contains(e.target) && langMenuBtn && !langMenuBtn.contains(e.target)) {
-                langDropdown.classList.add('hidden');
-            }
-        });
-
-        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
-            btn.onclick = function() {
-                const lang = this.getAttribute('data-lang');
-                currentLangLabel.textContent = this.textContent;
-                langDropdown.classList.add('hidden');
-                // Google Translate (for demo purposes)
-                setTimeout(() => {
-                    const frame = document.querySelector('iframe.goog-te-menu-frame');
-                    if (frame) {
-                        const langMap = {ru: 'Русский', tg: 'Таджикский', en: 'Английский'};
-                        const langName = langMap[lang];
-                        const items = frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span.text');
-                        for (let i = 0; i < items.length; i++) {
-                            if (items[i].innerText.trim().toLowerCase().includes(langName.toLowerCase())) {
-                                items[i].click();
-                                break;
-                            }
-                        }
-                    }
-                }, 200);
-            };
-        });
-
-        // Google Translate (for demo purposes)
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'ru',
-                includedLanguages: 'ru,en,tg',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-            }, 'google_translate_element');
-        }
 
         // --- Talent Search Logic ---
         const searchRegionSelect = document.getElementById('searchRegion');
@@ -1264,7 +1121,21 @@
                     <td class="border px-3 py-2">${c.employmentStatus}</td>
                     <td class="border px-3 py-2">${c.socialVulnerability}</td>
                     <td class="border px-3 py-2">${c.desiredSalary}</td>
-                    <td class="border px-3 py-2">${c.readyForRelocation}</td
+                    <td class="border px-3 py-2">${c.readyForRelocation}</td>
+                    <td class="border px-3 py-2">${c.readyForBusinessTrips}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- Export and report page logic ---
+        let lastTalentReportCandidates = []; // To store last generated candidates for report
+
+        // Excel export
+        document.getElementById('downloadExcelBtn').onclick = function() {
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(lastTalentReportCandidates);
+            XLSX.utils.book_append_sheet(wb, ws, "Отчет");
             XLSX.writeFile(wb, "talent_report.xlsx");
         };
 
