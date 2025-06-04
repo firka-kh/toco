@@ -1230,7 +1230,6 @@
             doc.setFontSize(10);
             doc.text("Отчет по найденным соискателям", 14, 10);
 
-            // Формируем данные для таблицы
             const rows = lastTalentReportCandidates.map(c => [
                 c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
                 c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
@@ -1248,7 +1247,7 @@
                 let y = 16;
                 rows.forEach(row => {
                     doc.text(row.join(" | "), 14, y);
-                    y +=  6;
+                    y += 6;
                 });
             }
             doc.save("talent_report.pdf");
@@ -1257,6 +1256,7 @@
         // Excel export
         document.getElementById('downloadExcelBtn').onclick = function() {
             const ws_data = [
+                ["ФИО", "Возраст", "Пол", "Регион", "Город
                 ["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"],
                 ...lastTalentReportCandidates.map(c => [
                     c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
