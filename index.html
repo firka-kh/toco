@@ -218,22 +218,22 @@
             <h2 class="text-4xl font-bold mb-6">Добро пожаловать на портал рынка труда</h2>
             <p class="text-xl mb-8 max-w-3xl mx-auto">Единая платформа для соискателей, работодателей и государственных служащих Республики Таджикистан</p>
             <div class="grid md:grid-cols-4 gap-6 mt-12">
-                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm">
+                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:scale-105 cursor-pointer card-hover">
                     <i class="fas fa-users text-3xl mb-4"></i>
                     <h3 class="text-lg font-semibold mb-2">Соискатели</h3>
                     <p class="text-sm">Поиск работы и карьерные возможности</p>
                 </div>
-                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm">
+                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:scale-105 cursor-pointer card-hover">
                     <i class="fas fa-building text-3xl mb-4"></i>
                     <h3 class="text-lg font-semibold mb-2">Работодатели</h3>
                     <p class="text-sm">Размещение вакансий и поиск кадров</p>
                 </div>
-                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm">
+                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:scale-105 cursor-pointer card-hover">
                     <i class="fas fa-chart-line text-3xl mb-4"></i>
                     <h3 class="text-lg font-semibold mb-2">Аналитики</h3>
                     <p class="text-sm">Статистика и анализ рынка труда</p>
                 </div>
-                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm">
+                <div id="govCard" class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:scale-105 cursor-pointer card-hover">
                     <i class="fas fa-shield-alt text-3xl mb-4"></i>
                     <h3 class="text-lg font-semibold mb-2">Гос. служащие</h3>
                     <p class="text-sm">Управление и мониторинг</p>
@@ -928,6 +928,11 @@
                 }, 200);
             };
         });
+
+        // Добавляем переход по клику на "Гос. служащие"
+    document.getElementById('govCard').addEventListener('click', function() {
+        window.location.href = 'gov_pg.html';
+    });
     </script>
 <!-- Google Translate -->
 <script type="text/javascript">
