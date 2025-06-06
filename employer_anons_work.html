@@ -728,8 +728,15 @@
                 const targetContent = document.getElementById(targetId);
                 header.classList.toggle('expanded');
                 targetContent.classList.toggle('expanded');
-                header.querySelector('i').classList.toggle('fa-chevron-down');
-                header.querySelector('i').classList.toggle('fa-chevron-up');
+                // Исправлено: корректно переключаем иконку
+                const icon = header.querySelector('i');
+                if (header.classList.contains('expanded')) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                } else {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
             });
         });
 
@@ -833,11 +840,15 @@
                     ).join('');
                     document.getElementById('searchResults').classList.remove('hidden');
                     document.getElementById('talentReportActions').classList.remove('hidden');
+                    // Исправлено: всегда показываем таблицу после поиска
                     document.getElementById('talentReportTableWrapper').classList.remove('hidden');
                     renderTalentReportTable(candidates);
                 } else {
                     document.getElementById('talentResultsList').innerHTML = '<p class="text-gray-600 text-center">По вашему запросу кандидатов не найдено.</p>';
                     document.getElementById('searchResults').classList.remove('hidden');
+                    // Скрываем таблицу и действия, если нет кандидатов
+                    document.getElementById('talentReportActions').classList.add('hidden');
+                    document.getElementById('talentReportTableWrapper').classList.add('hidden');
                 }
             }, 1000);
         });
