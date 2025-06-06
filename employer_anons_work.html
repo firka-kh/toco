@@ -157,12 +157,13 @@
 
         /* Стили для сворачиваемых секций */
         .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
+            max-height: 0 !important;
+            overflow: hidden !important;
             transition: max-height 0.5s ease-out; /* Более плавная анимация */
         }
         .collapsible-content.expanded {
-            max-height: 2000px; /* Достаточно большое значение для развернутого состояния */
+            max-height: 2000px !important;
+            overflow: visible !important;
             transition: max-height 0.5s ease-in;
         }
         .collapsible-header {
@@ -728,6 +729,14 @@
                 const targetContent = document.getElementById(targetId);
                 header.classList.toggle('expanded');
                 targetContent.classList.toggle('expanded');
+                // Явное управление стилем (fallback для Safari/старых браузеров)
+                if (targetContent.classList.contains('expanded')) {
+                    targetContent.style.maxHeight = targetContent.scrollHeight + "px";
+                    targetContent.style.overflow = "visible";
+                } else {
+                    targetContent.style.maxHeight = "0px";
+                    targetContent.style.overflow = "hidden";
+                }
                 // Исправлено: корректно переключаем иконку
                 const icon = header.querySelector('i');
                 if (header.classList.contains('expanded')) {
