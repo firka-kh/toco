@@ -188,6 +188,69 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Новое раскрывающееся меню с дополнительными возможностями -->
+            <div class="bg-white rounded-xl shadow p-4 mb-4 w-full mt-4">
+                <button id="toggleExtraMenuBtn" class="w-full flex justify-between items-center text-lg font-semibold focus:outline-none">
+                    <span>Дополнительные возможности</span>
+                    <i id="toggleExtraIcon" class="fas fa-chevron-down transition-transform duration-200"></i>
+                </button>
+                <div id="extraMenuSection" class="mt-6 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Кнопка добавить вакансию -->
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                            <i class="fas fa-plus-circle text-2xl text-blue-500"></i>
+                            <a href="#" class="font-semibold text-blue-700 hover:underline">Добавить вакансию</a>
+                        </div>
+                        <!-- Фильтр и поиск -->
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                            <i class="fas fa-filter text-2xl text-green-500"></i>
+                            <span class="font-semibold">Фильтр и поиск по вакансиям</span>
+                        </div>
+                        <!-- График статистики -->
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                            <i class="fas fa-chart-line text-2xl text-purple-500"></i>
+                            <span class="font-semibold">График просмотров и откликов</span>
+                        </div>
+                        <!-- Последние отклики -->
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                            <i class="fas fa-user-check text-2xl text-yellow-500"></i>
+                            <span class="font-semibold">Последние отклики</span>
+                        </div>
+                        <!-- Уведомления -->
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                            <i class="fas fa-bell text-2xl text-red-400"></i>
+                            <span class="font-semibold">Уведомления</span>
+                        </div>
+                        <!-- Профиль компании -->
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                            <i class="fas fa-building text-2xl text-gray-500"></i>
+                            <span class="font-semibold">Профиль компании</span>
+                        </div>
+                        <!-- История действий -->
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                            <i class="fas fa-history text-2xl text-indigo-500"></i>
+                            <span class="font-semibold">История действий</span>
+                        </div>
+                        <!-- Экспорт данных -->
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                            <i class="fas fa-file-export text-2xl text-green-700"></i>
+                            <span class="font-semibold">Экспорт данных</span>
+                        </div>
+                        <!-- Обратная связь -->
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                            <i class="fas fa-headset text-2xl text-pink-500"></i>
+                            <span class="font-semibold">Обратная связь / Поддержка</span>
+                        </div>
+                        <!-- Справка -->
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                            <i class="fas fa-question-circle text-2xl text-blue-400"></i>
+                            <span class="font-semibold">Справка / FAQ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Конец нового меню -->
         </div>
     </div>
 
@@ -200,6 +263,16 @@
         toggleBtn.addEventListener('click', () => {
             dashboardSection.classList.toggle('hidden');
             toggleIcon.classList.toggle('rotate-180');
+        });
+
+        // Кнопка раскрытия/сворачивания дополнительного меню
+        const toggleExtraBtn = document.getElementById('toggleExtraMenuBtn');
+        const extraMenuSection = document.getElementById('extraMenuSection');
+        const toggleExtraIcon = document.getElementById('toggleExtraIcon');
+
+        toggleExtraBtn.addEventListener('click', () => {
+            extraMenuSection.classList.toggle('hidden');
+            toggleExtraIcon.classList.toggle('rotate-180');
         });
     </script>
 </body>
