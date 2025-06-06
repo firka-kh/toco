@@ -203,47 +203,47 @@
                             <a href="#" class="font-semibold text-blue-700 hover:underline">Добавить вакансию</a>
                         </div>
                         <!-- Фильтр и поиск -->
-                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4 cursor-pointer" id="openFilter">
                             <i class="fas fa-filter text-2xl text-green-500"></i>
                             <span class="font-semibold">Фильтр и поиск по вакансиям</span>
                         </div>
                         <!-- График статистики -->
-                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4 cursor-pointer" id="openChart">
                             <i class="fas fa-chart-line text-2xl text-purple-500"></i>
                             <span class="font-semibold">График просмотров и откликов</span>
                         </div>
                         <!-- Последние отклики -->
-                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4 cursor-pointer" id="openResponses">
                             <i class="fas fa-user-check text-2xl text-yellow-500"></i>
                             <span class="font-semibold">Последние отклики</span>
                         </div>
                         <!-- Уведомления -->
-                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4 cursor-pointer" id="openNotifications">
                             <i class="fas fa-bell text-2xl text-red-400"></i>
                             <span class="font-semibold">Уведомления</span>
                         </div>
                         <!-- Профиль компании -->
-                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4 cursor-pointer" id="openProfile">
                             <i class="fas fa-building text-2xl text-gray-500"></i>
                             <span class="font-semibold">Профиль компании</span>
                         </div>
                         <!-- История действий -->
-                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4 cursor-pointer" id="openHistory">
                             <i class="fas fa-history text-2xl text-indigo-500"></i>
                             <span class="font-semibold">История действий</span>
                         </div>
                         <!-- Экспорт данных -->
-                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4 cursor-pointer" id="openExport">
                             <i class="fas fa-file-export text-2xl text-green-700"></i>
                             <span class="font-semibold">Экспорт данных</span>
                         </div>
                         <!-- Обратная связь -->
-                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4 cursor-pointer" id="openSupport">
                             <i class="fas fa-headset text-2xl text-pink-500"></i>
                             <span class="font-semibold">Обратная связь / Поддержка</span>
                         </div>
                         <!-- Справка -->
-                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center space-x-4 bg-gray-50 rounded-lg p-4 cursor-pointer" id="openFAQ">
                             <i class="fas fa-question-circle text-2xl text-blue-400"></i>
                             <span class="font-semibold">Справка / FAQ</span>
                         </div>
@@ -251,6 +251,18 @@
                 </div>
             </div>
             <!-- Конец нового меню -->
+        </div>
+    </div>
+
+    <!-- Модальные окна -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+        <div id="modalContent" class="bg-white rounded-xl shadow-lg p-8 max-w-lg w-full relative">
+            <button id="closeModalBtn" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl focus:outline-none">
+                &times;
+            </button>
+            <div id="modalInnerContent">
+                <!-- Сюда будет подставляться содержимое модального окна -->
+            </div>
         </div>
     </div>
 
@@ -274,6 +286,110 @@
             extraMenuSection.classList.toggle('hidden');
             toggleExtraIcon.classList.toggle('rotate-180');
         });
+
+        // Модальное окно
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalContent = document.getElementById('modalContent');
+        const modalInnerContent = document.getElementById('modalInnerContent');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        function openModal(html) {
+            modalInnerContent.innerHTML = html;
+            modalOverlay.classList.remove('hidden');
+        }
+        function closeModal() {
+            modalOverlay.classList.add('hidden');
+            modalInnerContent.innerHTML = '';
+        }
+        closeModalBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+
+        // Демонстрационные формы и тексты
+        document.getElementById('openFilter').onclick = () => openModal(`
+            <h2 class="text-xl font-bold mb-4">Фильтр и поиск по вакансиям</h2>
+            <form class="space-y-4">
+                <input type="text" placeholder="Название вакансии" class="w-full border rounded px-3 py-2">
+                <select class="w-full border rounded px-3 py-2">
+                    <option>Все статусы</option>
+                    <option>Активна</option>
+                    <option>На модерации</option>
+                    <option>Архив</option>
+                </select>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Найти</button>
+            </form>
+        `);
+
+        document.getElementById('openChart').onclick = () => openModal(`
+            <h2 class="text-xl font-bold mb-4">График просмотров и откликов</h2>
+            <div class="h-40 flex items-center justify-center text-gray-400">[Здесь будет график]</div>
+        `);
+
+        document.getElementById('openResponses').onclick = () => openModal(`
+            <h2 class="text-xl font-bold mb-4">Последние отклики</h2>
+            <ul class="space-y-2">
+                <li>Иван Иванов — Программист Java — <span class="text-green-600">Новый отклик</span></li>
+                <li>Мария Петрова — Маркетолог — <span class="text-yellow-600">Рассмотрено</span></li>
+                <li>Алишер Саидов — Менеджер по продажам — <span class="text-gray-600">Отклонено</span></li>
+            </ul>
+        `);
+
+        document.getElementById('openNotifications').onclick = () => openModal(`
+            <h2 class="text-xl font-bold mb-4">Уведомления</h2>
+            <ul class="space-y-2">
+                <li>Ваша вакансия "Менеджер по продажам" прошла модерацию.</li>
+                <li>Поступил новый отклик на вакансию "Программист Java".</li>
+                <li>Профиль компании обновлен.</li>
+            </ul>
+        `);
+
+        document.getElementById('openProfile').onclick = () => openModal(`
+            <h2 class="text-xl font-bold mb-4">Профиль компании</h2>
+            <form class="space-y-4">
+                <input type="text" value="ООО Пример" class="w-full border rounded px-3 py-2">
+                <input type="text" value="Душанбе" class="w-full border rounded px-3 py-2">
+                <textarea class="w-full border rounded px-3 py-2" rows="3">Описание компании...</textarea>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Сохранить</button>
+            </form>
+        `);
+
+        document.getElementById('openHistory').onclick = () => openModal(`
+            <h2 class="text-xl font-bold mb-4">История действий</h2>
+            <ul class="space-y-2">
+                <li>10.06.2025 — Добавлена вакансия "Маркетолог"</li>
+                <li>09.06.2025 — Изменена вакансия "Программист Java"</li>
+                <li>08.06.2025 — Удалена вакансия "Дизайнер"</li>
+            </ul>
+        `);
+
+        document.getElementById('openExport').onclick = () => openModal(`
+            <h2 class="text-xl font-bold mb-4">Экспорт данных</h2>
+            <p>Скачать список вакансий и статистику:</p>
+            <div class="mt-4 flex space-x-4">
+                <button class="bg-green-600 text-white px-4 py-2 rounded">Excel</button>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded">PDF</button>
+            </div>
+        `);
+
+        document.getElementById('openSupport').onclick = () => openModal(`
+            <h2 class="text-xl font-bold mb-4">Обратная связь / Поддержка</h2>
+            <form class="space-y-4">
+                <input type="text" placeholder="Ваше имя" class="w-full border rounded px-3 py-2">
+                <input type="email" placeholder="Email" class="w-full border rounded px-3 py-2">
+                <textarea class="w-full border rounded px-3 py-2" rows="3" placeholder="Ваш вопрос"></textarea>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Отправить</button>
+            </form>
+        `);
+
+        document.getElementById('openFAQ').onclick = () => openModal(`
+            <h2 class="text-xl font-bold mb-4">Справка / FAQ</h2>
+            <ul class="space-y-2">
+                <li><b>Как добавить вакансию?</b> — Нажмите "Добавить вакансию" и заполните форму.</li>
+                <li><b>Как посмотреть отклики?</b> — В разделе "Обзор размещенных вакансий" выберите нужную вакансию.</li>
+                <li><b>Как связаться с поддержкой?</b> — Используйте форму "Обратная связь".</li>
+            </ul>
+        `);
     </script>
 </body>
 </html>
