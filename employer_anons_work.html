@@ -498,6 +498,22 @@
         document.getElementById('modalContent').classList.remove('max-w-lg');
         document.getElementById('modalContent').style.maxHeight = '90vh';
         document.getElementById('modalContent').style.overflowY = 'auto';
+
+        // Выпадающее меню "Мой профиль"
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+
+        profileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        // Закрытие меню при клике вне его
+        document.addEventListener('click', function(e) {
+            if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
     </script>
 </body>
 </html>
