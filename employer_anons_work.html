@@ -727,17 +727,12 @@
             header.addEventListener('click', () => {
                 const targetId = header.dataset.target;
                 const targetContent = document.getElementById(targetId);
+
+                // Toggle the 'expanded' class on both header and content
                 header.classList.toggle('expanded');
                 targetContent.classList.toggle('expanded');
-                // Явное управление стилем (fallback для Safari/старых браузеров)
-                if (targetContent.classList.contains('expanded')) {
-                    targetContent.style.maxHeight = targetContent.scrollHeight + "px";
-                    targetContent.style.overflow = "visible";
-                } else {
-                    targetContent.style.maxHeight = "0px";
-                    targetContent.style.overflow = "hidden";
-                }
-                // Исправлено: корректно переключаем иконку
+
+                // Toggle the icon
                 const icon = header.querySelector('i');
                 if (header.classList.contains('expanded')) {
                     icon.classList.remove('fa-chevron-down');
