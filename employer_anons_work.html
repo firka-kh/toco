@@ -323,8 +323,23 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block mb-1 font-semibold">Желаемая должность</label>
-                        <input type="text" placeholder="Например: Менеджер, Программист" class="w-full border rounded px-3 py-2">
+                        <label class="block mb-1 font-semibold">Город</label>
+                        <input type="text" placeholder="Например: Душанбе, Худжанд" class="w-full border rounded px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block mb-1 font-semibold">Социальный статус</label>
+                        <select class="w-full border rounded px-3 py-2">
+                            <option>Любой</option>
+                            <option>Безработный</option>
+                            <option>Мигрант</option>
+                            <option>Лицо с ограниченными возможностями здоровья</option>
+                            <option>Студент</option>
+                            <option>Работающий</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-1 font-semibold">Специализация кандидата / Прошлая/текущая должность</label>
+                        <input type="text" placeholder="Например: Бухгалтер, Водитель" class="w-full border rounded px-3 py-2">
                     </div>
                     <div>
                         <label class="block mb-1 font-semibold">Опыт работы</label>
@@ -348,22 +363,47 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block mb-1 font-semibold">Возраст</label>
-                        <div class="flex space-x-2">
-                            <input type="number" min="16" max="99" placeholder="от" class="w-1/2 border rounded px-3 py-2">
-                            <input type="number" min="16" max="99" placeholder="до" class="w-1/2 border rounded px-3 py-2">
-                        </div>
+                        <label class="block mb-1 font-semibold">Навыки</label>
+                        <input type="text" placeholder="Например: MS Office, 1C, Вождение" class="w-full border rounded px-3 py-2">
                     </div>
                     <div>
-                        <label class="block mb-1 font-semibold">Пол</label>
+                        <label class="block mb-1 font-semibold">График работы</label>
                         <select class="w-full border rounded px-3 py-2">
                             <option>Любой</option>
-                            <option>Мужской</option>
-                            <option>Женский</option>
+                            <option>Полный день</option>
+                            <option>Сменный график</option>
+                            <option>Гибкий график</option>
+                            <option>Удаленная работа</option>
+                            <option>Вахтовый метод</option>
                         </select>
                     </div>
                     <div>
+                        <label class="block mb-1 font-semibold">Тип занятости</label>
+                        <select class="w-full border rounded px-3 py-2">
+                            <option>Любая</option>
+                            <option>Полная</option>
+                            <option>Частичная</option>
+                            <option>Стажировка</option>
+                            <option>Временная</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-1 font-semibold">Предлагаемая зарплата</label>
+                        <div class="flex space-x-2">
+                            <input type="number" min="0" placeholder="от" class="w-1/2 border rounded px-3 py-2">
+                            <input type="number" min="0" placeholder="до" class="w-1/2 border rounded px-3 py-2">
+                        </div>
+                    </div>
+                    <div>
                         <label class="block mb-1 font-semibold">Готовность к переезду</label>
+                        <select class="w-full border rounded px-3 py-2">
+                            <option>Не важно</option>
+                            <option>Да</option>
+                            <option>Нет</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-1 font-semibold">Готовность к повышению квалификации/обучению</label>
                         <select class="w-full border rounded px-3 py-2">
                             <option>Не важно</option>
                             <option>Да</option>
@@ -376,27 +416,6 @@
                             <option>Не важно</option>
                             <option>Да</option>
                             <option>Нет</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block mb-1 font-semibold">Знание языков</label>
-                        <input type="text" placeholder="Русский, Таджикский, Английский..." class="w-full border rounded px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="block mb-1 font-semibold">Желаемая зарплата</label>
-                        <div class="flex space-x-2">
-                            <input type="number" min="0" placeholder="от" class="w-1/2 border rounded px-3 py-2">
-                            <input type="number" min="0" placeholder="до" class="w-1/2 border rounded px-3 py-2">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block mb-1 font-semibold">Тип занятости</label>
-                        <select class="w-full border rounded px-3 py-2">
-                            <option>Любая</option>
-                            <option>Полная</option>
-                            <option>Частичная</option>
-                            <option>Стажировка</option>
-                            <option>Удаленная</option>
                         </select>
                     </div>
                 </div>
@@ -473,6 +492,12 @@
                 <li><b>Как связаться с поддержкой?</b> — Используйте форму "Обратная связь".</li>
             </ul>
         `);
+
+        // Растянуть модальное окно по ширине и высоте
+        document.getElementById('modalContent').classList.add('max-w-4xl', 'w-full');
+        document.getElementById('modalContent').classList.remove('max-w-lg');
+        document.getElementById('modalContent').style.maxHeight = '90vh';
+        document.getElementById('modalContent').style.overflowY = 'auto';
     </script>
 </body>
 </html>
