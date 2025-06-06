@@ -1183,6 +1183,27 @@
                 langDropdown.classList.add('hidden');
             };
         });
+
+        // Открытие/закрытие фильтра
+        const toggleFilterBtn = document.getElementById('toggleFilterBtn');
+        const filterSidebar = document.getElementById('filterSidebar');
+        const filterOverlay = document.getElementById('filterOverlay');
+        const closeFilterBtn = document.getElementById('closeFilterBtn');
+
+        toggleFilterBtn.addEventListener('click', () => {
+            filterSidebar.classList.add('open');
+            filterOverlay.classList.add('active');
+        });
+
+        closeFilterBtn.addEventListener('click', () => {
+            filterSidebar.classList.remove('open');
+            filterOverlay.classList.remove('active');
+        });
+
+        filterOverlay.addEventListener('click', () => {
+            filterSidebar.classList.remove('open');
+            filterOverlay.classList.remove('active');
+        });
     </script>
 </body>
 </html>
