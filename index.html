@@ -265,7 +265,7 @@
             </div>
         </div>
     </section>
-
+<br>
     <!-- Интерактивные 4 виджета статистики по Душанбе -->
     <div class="max-w-6xl mx-auto mb-12 mt-[-60px] relative z-10">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -294,7 +294,7 @@
                 <div class="text-xs opacity-80">г. Душанбе</div>
             </div>
         </div>
-    </div>
+    </div></br>
     <!-- конец блока виджетов -->
 
     <section id="jobs" class="section-spacing bg-white">
@@ -989,7 +989,7 @@ document.getElementById('profSkillApplyBtn').addEventListener('click', function(
     window.location.href = 'prof_skill_need.html';
 });
 
-// Анимация значений для 4 виджетов статистики по Душанбе
+// Анимация значений для 4 виджетов статистики по Душанбе с эффектом "перелистывания"
 const statsData = [
     // Нашли работу, Потеряли работу, Прошли обучение, Участники ПЭИ
     ['2 350', '180', '1 120', '540'],
@@ -999,11 +999,31 @@ const statsData = [
 ];
 
 let statsIndex = 0;
+const statValueEls = [
+    document.getElementById('statValue1'),
+    document.getElementById('statValue2'),
+    document.getElementById('statValue3'),
+    document.getElementById('statValue4')
+];
+
+function flipText(el, newValue) {
+    el.style.transition = 'transform 0.3s, opacity 0.3s';
+    el.style.transform = 'rotateX(90deg)';
+    el.style.opacity = '0';
+    setTimeout(() => {
+        el.textContent = newValue;
+        el.style.transform = 'rotateX(-90deg)';
+        setTimeout(() => {
+            el.style.transform = 'rotateX(0deg)';
+            el.style.opacity = '1';
+        }, 30);
+    }, 300);
+}
+
 function renderStats(idx) {
-    document.getElementById('statValue1').textContent = statsData[idx][0];
-    document.getElementById('statValue2').textContent = statsData[idx][1];
-    document.getElementById('statValue3').textContent = statsData[idx][2];
-    document.getElementById('statValue4').textContent = statsData[idx][3];
+    for (let i = 0; i < 4; i++) {
+        flipText(statValueEls[i], statsData[idx][i]);
+    }
 }
 renderStats(statsIndex);
 
