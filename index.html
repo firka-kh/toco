@@ -237,34 +237,36 @@
         </div>
     </header>
 
-    <section class="gradient-bg text-white py-16">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl font-bold mb-6">Добро пожаловать на портал рынка труда</h2>
-            <p class="text-xl mb-8 max-w-3xl mx-auto">Единая платформа для соискателей, работодателей и государственных служащих Республики Таджикистан</p>
-            <div class="grid md:grid-cols-4 gap-6 mt-12">
-                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:scale-105 cursor-pointer card-hover">
-                    <i class="fas fa-users text-3xl mb-4"></i>
-                    <h3 class="text-lg font-semibold mb-2">Соискатели</h3>
-                    <p class="text-sm">Поиск работы и карьерные возможности</p>
-                </div>
-                <div id="employerCard" class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:scale-105 cursor-pointer card-hover">
-                    <i class="fas fa-building text-3xl mb-4"></i>
-                    <h3 class="text-lg font-semibold mb-2">Работодатели</h3>
-                    <p class="text-sm">Размещение вакансий и поиск кадров</p>
-                </div>
-                <div id="analiticCard" class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:scale-105 cursor-pointer card-hover">
-                    <i class="fas fa-chart-line text-3xl mb-4"></i>
-                    <h3 class="text-lg font-semibold mb-2">Аналитики</h3>
-                    <p class="text-sm">Статистика и анализ рынка труда</p>
-                </div>
-                <div id="govCard" class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:scale-105 cursor-pointer card-hover">
-                    <i class="fas fa-shield-alt text-3xl mb-4"></i>
-                    <h3 class="text-lg font-semibold mb-2">Гос. служащие</h3>
-                    <p class="text-sm">Управление и мониторинг</p>
-                </div>
+    <!-- Интерактивные 4 виджета статистики по Душанбе -->
+    <div class="max-w-6xl mx-auto mb-12 mt-[-60px] relative z-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div id="statCard1" class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 text-white text-center shadow-lg transition-transform duration-200 hover:-translate-y-2">
+                <i class="fas fa-briefcase text-3xl mb-3"></i>
+                <div class="text-lg font-semibold mb-1">Нашли работу</div>
+                <div id="statValue1" class="text-2xl font-bold mb-1">2 350</div>
+                <div class="text-xs opacity-80">г. Душанбе</div>
+            </div>
+            <div id="statCard2" class="bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl p-6 text-white text-center shadow-lg transition-transform duration-200 hover:-translate-y-2">
+                <i class="fas fa-user-times text-3xl mb-3"></i>
+                <div class="text-lg font-semibold mb-1">Потеряли работу</div>
+                <div id="statValue2" class="text-2xl font-bold mb-1">180</div>
+                <div class="text-xs opacity-80">г. Душанбе</div>
+            </div>
+            <div id="statCard3" class="bg-gradient-to-br from-green-500 to-blue-500 rounded-xl p-6 text-white text-center shadow-lg transition-transform duration-200 hover:-translate-y-2">
+                <i class="fas fa-user-graduate text-3xl mb-3"></i>
+                <div class="text-lg font-semibold mb-1">Прошли обучение</div>
+                <div id="statValue3" class="text-2xl font-bold mb-1">1 120</div>
+                <div class="text-xs opacity-80">г. Душанбе</div>
+            </div>
+            <div id="statCard4" class="bg-gradient-to-br from-yellow-400 to-pink-500 rounded-xl p-6 text-white text-center shadow-lg transition-transform duration-200 hover:-translate-y-2">
+                <i class="fas fa-users text-3xl mb-3"></i>
+                <div class="text-lg font-semibold mb-1">Участники программы ПЭИ</div>
+                <div id="statValue4" class="text-2xl font-bold mb-1">540</div>
+                <div class="text-xs opacity-80">г. Душанбе</div>
             </div>
         </div>
-    </section>
+    </div>
+    <!-- конец блока виджетов -->
 
     <section id="jobs" class="section-spacing bg-white">
         <div class="container mx-auto px-4">
@@ -956,6 +958,55 @@
     // Переход на страницу профпереподготовки при нажатии на "Подать заявку"
 document.getElementById('profSkillApplyBtn').addEventListener('click', function() {
     window.location.href = 'prof_skill_need.html';
+});
+
+    // Анимация значений для 4 виджетов статистики по Душанбе// Анимация значений статистики
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html></body></script>    }, 3000);        renderStats(statsIndex);        statsIndex = (statsIndex + 1) % statsData.length;    setInterval(() => {    renderStats(statsIndex);    }        document.getElementById('statValue4').textContent = statsData[idx][3];        document.getElementById('statValue3').textContent = statsData[idx][2];        document.getElementById('statValue2').textContent = statsData[idx][1];        document.getElementById('statValue1').textContent = statsData[idx][0];    function renderStats(idx) {    let statsIndex = 0;    ];        ['2 470', '160', '1 250', '700'],        ['2 500', '190', '1 200', '650'],        ['2 410', '175', '1 180', '600'],        ['2 350', '180', '1 120', '540'],        // Нашли работу, Потеряли работу, Прошли обучение, Участники ПЭИ    const statsData = [function animateStatValue(elementId, start, end, duration) {
+    const element = document.getElementById(elementId);
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = timestamp - startTimestamp;
+        const value = Math.min(Math.floor(progress / duration * (end - start)) + start, end);
+        element.textContent = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        if (value < end) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
+}
+
+// Запускаем анимацию значений при загрузке страницы
+window.addEventListener('load', () => {
+    animateStatValue('statValue1', 0, 2350, 2000);
+    animateStatValue('statValue2', 0, 180, 2000);
+    animateStatValue('statValue3', 0, 1120, 2000);
+    animateStatValue('statValue4', 0, 540, 2000);
 });
     </script>
 </body>
