@@ -342,67 +342,18 @@
             </div>
         </section>
 
-        <!-- Вертикальная лента возможностей для роста (слева) -->
+        <!-- Вертикальная лента возможностей для роста (слева, с интерактивностью) -->
         <aside class="fixed top-36 left-0 z-40 hidden lg:block">
-            <div class="ml-6 bg-white rounded-2xl shadow-2xl border border-blue-100 w-80 overflow-hidden">
+            <div class="ml-6 bg-white rounded-2xl shadow-2xl border border-blue-100 w-80 overflow-hidden" id="growthOpportunities">
                 <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-4 flex items-center space-x-3">
                     <i class="fas fa-graduation-cap text-2xl"></i>
                     <span class="font-bold text-lg">Возможности для роста</span>
                 </div>
-                <ul class="divide-y divide-blue-50">
-                    <li class="p-5 hover:bg-blue-50 transition">
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-laptop-code text-blue-500 text-xl"></i>
-                            <div>
-                                <div class="font-semibold text-gray-800">Курс: Frontend-разработчик</div>
-                                <div class="text-sm text-gray-500">Старт: 15 июня • Онлайн</div>
-                            </div>
-                        </div>
-                        <div class="mt-2 text-xs text-blue-600 font-semibold cursor-pointer hover:underline">Записаться &rarr;</div>
-                    </li>
-                    <li class="p-5 hover:bg-blue-50 transition">
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-chart-line text-green-500 text-xl"></i>
-                            <div>
-                                <div class="font-semibold text-gray-800">Вебинар: Современный маркетинг</div>
-                                <div class="text-sm text-gray-500">20 июня • Бесплатно</div>
-                            </div>
-                        </div>
-                        <div class="mt-2 text-xs text-green-600 font-semibold cursor-pointer hover:underline">Подробнее &rarr;</div>
-                    </li>
-                    <li class="p-5 hover:bg-blue-50 transition">
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-user-tie text-yellow-500 text-xl"></i>
-                            <div>
-                                <div class="font-semibold text-gray-800">Мастер-класс: Лидерство и soft skills</div>
-                                <div class="text-sm text-gray-500">25 июня • Офлайн, Душанбе</div>
-                            </div>
-                        </div>
-                        <div class="mt-2 text-xs text-yellow-600 font-semibold cursor-pointer hover:underline">Узнать больше &rarr;</div>
-                    </li>
-                    <li class="p-5 hover:bg-blue-50 transition">
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-network-wired text-purple-500 text-xl"></i>
-                            <div>
-                                <div class="font-semibold text-gray-800">Курс: Основы сетевых технологий</div>
-                                <div class="text-sm text-gray-500">Июль • Онлайн</div>
-                            </div>
-                        </div>
-                        <div class="mt-2 text-xs text-purple-600 font-semibold cursor-pointer hover:underline">Подробнее &rarr;</div>
-                    </li>
-                    <li class="p-5 hover:bg-blue-50 transition">
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-language text-pink-500 text-xl"></i>
-                            <div>
-                                <div class="font-semibold text-gray-800">Интенсив: Английский для IT</div>
-                                <div class="text-sm text-gray-500">Август • Онлайн</div>
-                            </div>
-                        </div>
-                        <div class="mt-2 text-xs text-pink-600 font-semibold cursor-pointer hover:underline">Записаться &rarr;</div>
-                    </li>
+                <ul class="divide-y divide-blue-50" id="growthOpportunitiesList">
+                    <!-- Сюда будет подставляться активный элемент -->
                 </ul>
                 <div class="bg-blue-50 text-center py-3">
-                    <a href="https://edu.tj" target="_blank" class="text-blue-700 font-semibold hover:underline text-sm flex items-center justify-center">
+                    <a href="skill_serch.html" id="allCoursesBtn" class="text-blue-700 font-semibold hover:underline text-sm flex items-center justify-center">
                         <i class="fas fa-external-link-alt mr-2"></i> Все курсы и мероприятия
                     </a>
                 </div>
@@ -592,6 +543,73 @@
         document.addEventListener('DOMContentLoaded', () => {
             populateCoursesDropdown(); // Populate courses dropdown on initial load
         });
+
+        // Вертикальная лента возможностей для роста (интерактивность)
+        const growthOpportunitiesData = [
+            {
+                icon: 'fas fa-laptop-code text-blue-500',
+                title: 'Курс: Frontend-разработчик',
+                desc: 'Старт: 15 июня • Онлайн',
+                action: 'Записаться &rarr;',
+                actionColor: 'text-blue-600'
+            },
+            {
+                icon: 'fas fa-chart-line text-green-500',
+                title: 'Вебинар: Современный маркетинг',
+                desc: '20 июня • Бесплатно',
+                action: 'Подробнее &rarr;',
+                actionColor: 'text-green-600'
+            },
+            {
+                icon: 'fas fa-user-tie text-yellow-500',
+                title: 'Мастер-класс: Лидерство и soft skills',
+                desc: '25 июня • Офлайн, Душанбе',
+                action: 'Узнать больше &rarr;',
+                actionColor: 'text-yellow-600'
+            },
+            {
+                icon: 'fas fa-network-wired text-purple-500',
+                title: 'Курс: Основы сетевых технологий',
+                desc: 'Июль • Онлайн',
+                action: 'Подробнее &rarr;',
+                actionColor: 'text-purple-600'
+            },
+            {
+                icon: 'fas fa-language text-pink-500',
+                title: 'Интенсив: Английский для IT',
+                desc: 'Август • Онлайн',
+                action: 'Записаться &rarr;',
+                actionColor: 'text-pink-600'
+            }
+        ];
+
+        let currentGrowthIndex = 0;
+        const growthList = document.getElementById('growthOpportunitiesList');
+
+        function renderGrowthOpportunity(idx) {
+            const item = growthOpportunitiesData[idx];
+            growthList.innerHTML = `
+                <li class="p-5 hover:bg-blue-50 transition">
+                    <div class="flex items-center space-x-3">
+                        <i class="${item.icon} text-xl"></i>
+                        <div>
+                            <div class="font-semibold text-gray-800">${item.title}</div>
+                            <div class="text-sm text-gray-500">${item.desc}</div>
+                        </div>
+                    </div>
+                    <div class="mt-2 text-xs ${item.actionColor} font-semibold cursor-pointer hover:underline">${item.action}</div>
+                </li>
+            `;
+        }
+
+        // Первичная отрисовка
+        renderGrowthOpportunity(currentGrowthIndex);
+
+        // Автоматическая смена каждые 3 секунды
+        setInterval(() => {
+            currentGrowthIndex = (currentGrowthIndex + 1) % growthOpportunitiesData.length;
+            renderGrowthOpportunity(currentGrowthIndex);
+        }, 3000);
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <div id="google_translate_element" style="display:none"></div>
