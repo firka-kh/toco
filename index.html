@@ -800,6 +800,80 @@
         <i class="fas fa-robot"></i>
     </button>
 
+    <!-- Интерактивный виджет статистики по Душанбе -->
+<div id="dushanbeStatsWidget" class="max-w-3xl mx-auto mb-12">
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl shadow-xl p-8 flex flex-col md:flex-row items-center justify-between text-white relative overflow-hidden">
+        <div class="flex-1 flex flex-col md:flex-row items-center justify-between w-full">
+            <div class="flex items-center space-x-4 mb-6 md:mb-0">
+                <i id="dushanbeStatsIcon" class="fas fa-briefcase text-4xl"></i>
+                <div>
+                    <div id="dushanbeStatsTitle" class="text-lg font-semibold">Нашли работу</div>
+                    <div id="dushanbeStatsValue" class="text-3xl font-bold mt-1">2 350</div>
+                </div>
+            </div>
+            <div class="hidden md:block h-16 w-px bg-white bg-opacity-30 mx-8"></div>
+            <div class="flex flex-col items-center">
+                <div class="text-sm opacity-80">г. Душанбе</div>
+                <div id="dushanbeStatsDesc" class="text-xs mt-1 opacity-80">За последний месяц</div>
+            </div>
+        </div>
+        <div class="absolute right-6 top-6 opacity-10 text-7xl pointer-events-none select-none">
+            <i class="fas fa-city"></i>
+        </div>
+    </div>
+</div>
+
+<script>
+// Данные для виджета
+const dushanbeStatsData = [
+    {
+        icon: 'fas fa-briefcase',
+        title: 'Нашли работу',
+        value: '2 350',
+        desc: 'За последний месяц'
+    },
+    {
+        icon: 'fas fa-user-times',
+        title: 'Потеряли работу',
+        value: '180',
+        desc: 'За последний месяц'
+    },
+    {
+        icon: 'fas fa-user-graduate',
+        title: 'Прошли обучение',
+        value: '1 120',
+        desc: 'В рамках госпрограмм'
+    },
+    {
+        icon: 'fas fa-chalkboard-teacher',
+        title: 'Получили новую профессию',
+        value: '540',
+        desc: 'Через курсы переподготовки'
+    },
+    {
+        icon: 'fas fa-users',
+        title: 'Обратились за помощью',
+        value: '3 800',
+        desc: 'В центры занятости'
+    }
+];
+
+let dushanbeStatsIndex = 0;
+function renderDushanbeStats(idx) {
+    const stat = dushanbeStatsData[idx];
+    document.getElementById('dushanbeStatsIcon').className = stat.icon + ' text-4xl';
+    document.getElementById('dushanbeStatsTitle').textContent = stat.title;
+    document.getElementById('dushanbeStatsValue').textContent = stat.value;
+    document.getElementById('dushanbeStatsDesc').textContent = stat.desc;
+}
+renderDushanbeStats(dushanbeStatsIndex);
+
+setInterval(() => {
+    dushanbeStatsIndex = (dushanbeStatsIndex + 1) % dushanbeStatsData.length;
+    renderDushanbeStats(dushanbeStatsIndex);
+}, 3000);
+</script>
+
     <script>
         // Unemployment Chart
         const ctx1 = document.getElementById('unemploymentChart').getContext('2d');
