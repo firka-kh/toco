@@ -342,7 +342,7 @@
             </div>
         </section>
 
-        <!-- Вертикальная лента возможностей для роста (слева, с интерактивностью) -->
+        <!-- Вертикальная лента возможностей для роста (слева, с интерактивностью, 4 объявления одновременно) -->
         <aside class="fixed top-36 left-0 z-40 hidden lg:block">
             <div class="ml-6 bg-white rounded-2xl shadow-2xl border border-blue-100 w-80 overflow-hidden" id="growthOpportunities">
                 <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-4 flex items-center space-x-3">
@@ -350,7 +350,7 @@
                     <span class="font-bold text-lg">Возможности для роста</span>
                 </div>
                 <ul class="divide-y divide-blue-50" id="growthOpportunitiesList">
-                    <!-- Сюда будет подставляться активный элемент -->
+                    <!-- Здесь будут 4 объявления -->
                 </ul>
                 <div class="bg-blue-50 text-center py-3">
                     <a href="skill_serch.html" id="allCoursesBtn" class="text-blue-700 font-semibold hover:underline text-sm flex items-center justify-center">
@@ -580,35 +580,47 @@
                 desc: 'Август • Онлайн',
                 action: 'Записаться &rarr;',
                 actionColor: 'text-pink-600'
+            },
+            {
+                icon: 'fas fa-briefcase text-indigo-500',
+                title: 'Курс: Управление проектами',
+                desc: 'Сентябрь • Онлайн',
+                action: 'Подробнее &rarr;',
+                actionColor: 'text-indigo-600'
             }
         ];
 
         let currentGrowthIndex = 0;
         const growthList = document.getElementById('growthOpportunitiesList');
 
-        function renderGrowthOpportunity(idx) {
-            const item = growthOpportunitiesData[idx];
-            growthList.innerHTML = `
-                <li class="p-5 hover:bg-blue-50 transition">
-                    <div class="flex items-center space-x-3">
-                        <i class="${item.icon} text-xl"></i>
-                        <div>
-                            <div class="font-semibold text-gray-800">${item.title}</div>
-                            <div class="text-sm text-gray-500">${item.desc}</div>
+        function renderGrowthOpportunities(startIdx) {
+            let html = '';
+            for (let i = 0; i < 4; i++) {
+                const idx = (startIdx + i) % growthOpportunitiesData.length;
+                const item = growthOpportunitiesData[idx];
+                html += `
+                    <li class="p-5 hover:bg-blue-50 transition">
+                        <div class="flex items-center space-x-3">
+                            <i class="${item.icon} text-xl"></i>
+                            <div>
+                                <div class="font-semibold text-gray-800">${item.title}</div>
+                                <div class="text-sm text-gray-500">${item.desc}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mt-2 text-xs ${item.actionColor} font-semibold cursor-pointer hover:underline">${item.action}</div>
-                </li>
-            `;
+                        <div class="mt-2 text-xs ${item.actionColor} font-semibold cursor-pointer hover:underline">${item.action}</div>
+                    </li>
+                `;
+            }
+            growthList.innerHTML = html;
         }
 
         // Первичная отрисовка
-        renderGrowthOpportunity(currentGrowthIndex);
+        renderGrowthOpportunities(currentGrowthIndex);
 
-        // Автоматическая смена каждые 3 секунды
+        // Автоматическая смена каждые 3 секунды (сдвиг на 1)
         setInterval(() => {
             currentGrowthIndex = (currentGrowthIndex + 1) % growthOpportunitiesData.length;
-            renderGrowthOpportunity(currentGrowthIndex);
+            renderGrowthOpportunities(currentGrowthIndex);
         }, 3000);
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
