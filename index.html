@@ -973,17 +973,10 @@
     document.getElementById('employerCard').addEventListener('click', function() {
         window.location.href = 'employer_anons_work.html';
     });
-
-    // Добавляем переход по клику на "Гос. служащие"
-    document.getElementById('govCard').addEventListener('click', function() {
-        window.location.href = 'gov_pg.html';
+    // Добавляем переход по клику на "Соискатели"
+    document.querySelector('.card-hover i.fas.fa-users').closest('.card-hover').addEventListener('click', function() {
+        window.location.href = 'serchwork.html';
     });
-
-    // Добавляем переход по клику на "Аналитики"
-    document.getElementById('analiticCard').addEventListener('click', function() {
-        window.location.href = 'analitic_pg.html';
-    });
-
     // Переход на страницу профпереподготовки при нажатии на "Подать заявку"
 document.getElementById('profSkillApplyBtn').addEventListener('click', function() {
     window.location.href = 'prof_skill_need.html';
