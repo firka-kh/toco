@@ -258,34 +258,54 @@
             <div id="recordVideoContent" class="bg-gray-50 p-8 rounded-lg shadow-md">
                 <h3 class="text-xl font-semibold mb-6 text-gray-800">Запись видео-резюме</h3>
                 <p class="text-sm text-gray-600 mb-4">Максимальная длительность: 3 минуты.</p>
-                <div class="max-w-xl mx-auto w-full">
-                    <div class="flex flex-col items-center gap-4 mb-6">
-                        <div class="relative w-96 h-96 bg-gray-200 rounded-lg overflow-hidden video-container" id="videoPlayerContainer">
-                            <div class="absolute inset-0 flex items-center justify-center text-gray-500 text-lg">
-                                [Область для записи видео с веб-камеры]
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Левая часть: видео и кнопки -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex flex-col items-center gap-4 mb-6">
+                            <div class="relative w-96 h-96 bg-gray-200 rounded-lg overflow-hidden video-container" id="videoPlayerContainer">
+                                <div class="absolute inset-0 flex items-center justify-center text-gray-500 text-lg">
+                                    [Область для записи видео с веб-камеры]
+                                </div>
+                                <video id="webcamVideo" class="absolute inset-0 w-full h-full object-cover bg-black" autoplay muted></video>
+                                <i id="expandVideoButton" class="fas fa-expand-alt expand-button-icon" title="Развернуть видео"></i>
                             </div>
-                            <video id="webcamVideo" class="absolute inset-0 w-full h-full object-cover bg-black" autoplay muted></video>
-                            <i id="expandVideoButton" class="fas fa-expand-alt expand-button-icon" title="Развернуть видео"></i>
+                            <div id="soundVisualizer" class="sound-bar-container w-96">
+                                <div id="soundBar" class="sound-bar"></div>
+                            </div>
                         </div>
-                        <div id="soundVisualizer" class="sound-bar-container w-96">
-                            <div id="soundBar" class="sound-bar"></div>
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 max-w-3xl mx-auto w-full">
+                            <span id="timer" class="text-lg font-mono">Таймер: 00:00/03:00</span>
+                            <button id="startButton" class="icon-button bg-green-500 text-white hover:bg-green-600" title="Начать запись">
+                                <i class="fas fa-circle"></i>
+                            </button>
+                            <button id="stopButton" class="icon-button bg-red-500 text-white hover:bg-red-600" title="Остановить запись" disabled>
+                                <i class="fas fa-stop"></i>
+                            </button>
+                            <button id="retakeButton" class="icon-button bg-gray-500 text-white hover:bg-gray-600" title="Перезаписать видео" disabled>
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <a id="downloadButton" class="icon-button bg-blue-500 text-white hover:bg-blue-600" title="Скачать видео" style="display:none" download="video_resume.webm">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
+                        <!-- Кнопка "Опубликовать резюме" -->
+                        <div class="flex justify-center mt-6">
+                            <button id="publishResumeBtn" class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-10 py-4 rounded-lg shadow transition-colors text-lg flex items-center gap-2">
+                                <i class="fas fa-paper-plane"></i>
+                                Опубликовать резюме
+                            </button>
                         </div>
                     </div>
-                </div>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 max-w-3xl mx-auto w-full">
-                    <span id="timer" class="text-lg font-mono">Таймер: 00:00/03:00</span>
-                    <button id="startButton" class="icon-button bg-green-500 text-white hover:bg-green-600" title="Начать запись">
-                        <i class="fas fa-circle"></i>
-                    </button>
-                    <button id="stopButton" class="icon-button bg-red-500 text-white hover:bg-red-600" title="Остановить запись" disabled>
-                        <i class="fas fa-stop"></i>
-                    </button>
-                    <button id="retakeButton" class="icon-button bg-gray-500 text-white hover:bg-gray-600" title="Перезаписать видео" disabled>
-                        <i class="fas fa-redo"></i>
-                    </button>
-                    <a id="downloadButton" class="icon-button bg-blue-500 text-white hover:bg-blue-600" title="Скачать видео" style="display:none" download="video_resume.webm">
-                        <i class="fas fa-download"></i>
-                    </a>
+                    <!-- Правая часть: рекомендации -->
+                    <div class="flex-shrink-0 w-full lg:w-96">
+                        <div class="bg-blue-50 p-6 rounded-lg text-blue-800 h-full flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-semibold mb-2 flex items-center"><i class="fas fa-lightbulb mr-2"></i>Рекомендации :</h4>
+                                <p class="text-sm mb-4">Говорите четко и уверенно. Расскажите о своих ключевых навыках и достижениях. Подготовьтесь заранее!</p>
+                            </div>
+                            <a href="#" class="text-blue-600 hover:underline text-sm mt-4 flex items-center"><i class="fas fa-download mr-2"></i>Скачать файл с вопросами для подготовки</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
