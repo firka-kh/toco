@@ -293,25 +293,25 @@
             <div id="statCard1" class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 text-white text-center shadow-lg transition-transform duration-200 hover:-translate-y-2">
                 <i class="fas fa-briefcase text-3xl mb-3"></i>
                 <div class="text-lg font-semibold mb-1">Нашли работу</div>
-                <div id="statValue1" class="text-2xl font-bold mb-1">2 350</div>
+                <div class="text-2xl font-bold mb-1 stat-flip stat-flip-1">2 350</div>
                 <div class="text-xs opacity-80">г. Душанбе</div>
             </div>
             <div id="statCard2" class="bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl p-6 text-white text-center shadow-lg transition-transform duration-200 hover:-translate-y-2">
                 <i class="fas fa-user-times text-3xl mb-3"></i>
                 <div class="text-lg font-semibold mb-1">Потеряли работу</div>
-                <div id="statValue2" class="text-2xl font-bold mb-1">180</div>
+                <div class="text-2xl font-bold mb-1 stat-flip stat-flip-2">180</div>
                 <div class="text-xs opacity-80">г. Душанбе</div>
             </div>
             <div id="statCard3" class="bg-gradient-to-br from-green-500 to-blue-500 rounded-xl p-6 text-white text-center shadow-lg transition-transform duration-200 hover:-translate-y-2">
                 <i class="fas fa-user-graduate text-3xl mb-3"></i>
                 <div class="text-lg font-semibold mb-1">Прошли обучение</div>
-                <div id="statValue3" class="text-2xl font-bold mb-1">1 120</div>
+                <div class="text-2xl font-bold mb-1 stat-flip stat-flip-3">1 120</div>
                 <div class="text-xs opacity-80">г. Душанбе</div>
             </div>
             <div id="statCard4" class="bg-gradient-to-br from-yellow-400 to-pink-500 rounded-xl p-6 text-white text-center shadow-lg transition-transform duration-200 hover:-translate-y-2">
                 <i class="fas fa-users text-3xl mb-3"></i>
                 <div class="text-lg font-semibold mb-1">Программа ПЭИ</div>
-                <div id="statValue4" class="text-2xl font-bold mb-1">540</div>
+                <div class="text-2xl font-bold mb-1 stat-flip stat-flip-4">540</div>
                 <div class="text-xs opacity-80">г. Душанбе</div>
             </div>
         </div>
@@ -1081,6 +1081,91 @@ function animateStatsFlip() {
 
 setInterval(animateStatsFlip, 3000);
 
+// Flip-анимация для цветных карточек статистики (Душанбе)
+const statFlipEls = [
+    document.querySelector('.stat-flip-1'),
+    document.querySelector('.stat-flip-2'),
+    document.querySelector('.stat-flip-3'),
+    document.querySelector('.stat-flip-4')
+];
+const statFlipData = [
+    Array.from({length: 10}, () => (2000 + Math.floor(Math.random() * 800)).toLocaleString('ru-RU')), // Нашли работу
+    Array.from({length: 10}, () => (150 + Math.floor(Math.random() * 100)).toLocaleString('ru-RU')),  // Потеряли работу
+    Array.from({length: 10}, () => (900 + Math.floor(Math.random() * 400)).toLocaleString('ru-RU')),  // Прошли обучение
+    Array.from({length: 10}, () => (400 + Math.floor(Math.random() * 200)).toLocaleString('ru-RU')),  // Программа ПЭИ
+];
+let statFlipIndex = 0;
+
+// Стили flip-анимации (если еще не добавлены)
+if (!document.getElementById('flip-anim-style-stat')) {
+    const style = document.createElement('style');
+    style.id = 'flip-anim-style-stat';
+    style.innerHTML = `
+    .flip-anim {
+        display: inline-block;
+        perspective: 400px;
+        position: relative;
+    }
+    .flip-anim .flip-front, .flip-anim .flip-back {
+        display: block;
+        backface-visibility: hidden;
+        transition: transform 0.5s cubic-bezier(.4,0,.2,1);
+        position: absolute;
+        left: 0; right: 0; top: 0; bottom: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .flip-anim .flip-front {
+        transform: rotateX(0deg);
+        z-index: 2;
+    }
+    .flip-anim .flip-back {
+        transform: rotateX(90deg);
+        z-index: 1;
+    }
+    .flip-anim.flipping .flip-front {
+        transform: rotateX(-90deg);
+    }
+    .flip-anim.flipping .flip-back {
+        transform: rotateX(0deg);
+    }
+    `;
+    document.head.appendChild(style);
+}
+
+// Обернуть цифры в flip-anim контейнер (один раз)
+statFlipEls.forEach(el => {
+    if (el && !el.classList.contains('flip-anim')) {
+        const val = el.textContent;
+        el.innerHTML = `<span class="flip-front">${val}</span><span class="flip-back"></span>`;
+        el.classList.add('flip-anim');
+        el.style.position = 'relative';
+        el.style.display = 'inline-block';
+    }
+});
+
+function flipNumberStat(el, newValue) {
+    if (!el) return;
+    const front = el.querySelector('.flip-front');
+    const back = el.querySelector('.flip-back');
+    back.textContent = newValue;
+    el.classList.add('flipping');
+    setTimeout(() => {
+        front.textContent = newValue;
+        el.classList.remove('flipping');
+    }, 500);
+}
+
+function animateStatFlipCards() {
+    for (let i = 0; i < 4; i++) {
+        setTimeout(() => {
+            flipNumberStat(statFlipEls[i], statFlipData[i][statFlipIndex]);
+        }, i * 350); // задержка между flip-анимациями
+    }
+    statFlipIndex = (statFlipIndex + 1) % 10;
+}
+
+setInterval(animateStatFlipCards, 3000);
     </script>
 </body>
 </html>
