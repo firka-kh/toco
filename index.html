@@ -171,6 +171,24 @@
         .menu-link:active {
             font-weight: 400 !important; /* тонкий при нажатии */
         }
+
+        #jobSliderTrack {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .job-slide {
+            min-width: 320px;
+            max-width: 370px;
+            width: 100%;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+        @media (max-width: 1024px) {
+            .job-slide { min-width: 260px; max-width: 100%; }
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -329,10 +347,17 @@
                 
                 <!-- Слайдер объявлений -->
                 <div id="jobSlider" class="relative overflow-hidden">
-                    <div id="jobSliderTrack" class="flex transition-transform duration-700" style="will-change: transform;">
-                        <!-- Сюда будут подставляться объявления -->
-                    </div>
-                </div>
+    <!-- Стрелки для ручного перелистывания -->
+    <button id="jobSliderPrev" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-80 hover:bg-blue-100 text-blue-600 rounded-full shadow p-2 transition hidden md:block" aria-label="Назад">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <div id="jobSliderTrack" class="flex transition-transform duration-700" style="will-change: transform;">
+        <!-- Сюда будут подставляться объявления -->
+    </div>
+    <button id="jobSliderNext" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-80 hover:bg-blue-100 text-blue-600 rounded-full shadow p-2 transition hidden md:block" aria-label="Вперед">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+</div>
             </div>
         </div>
     </section>
@@ -1102,16 +1127,12 @@ const jobAds = [
     }
 ];
 
-// Слайдер объявлений
 const jobSliderTrack = document.getElementById('jobSliderTrack');
+const prevBtn = document.getElementById('jobSliderPrev');
+const nextBtn = document.getElementById('jobSliderNext');
 let jobSliderIndex = 0;
 const JOBS_PER_SLIDE = 3;
-
-// Стилизация трека для 3 объявлений
-jobSliderTrack.style.display = 'flex';
-jobSliderTrack.style.width = '100%';
-jobSliderTrack.style.justifyContent = 'center';
-jobSliderTrack.style.overflow = 'hidden';
+let isSliding = false;
 
 // Генерация HTML для 3 объявлений
 function renderJobSlide(startIdx) {
@@ -1121,7 +1142,7 @@ function renderJobSlide(startIdx) {
         const ad = jobAds[idx];
         html += `
         <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover min-w-[320px] max-w-[370px] w-full mx-2 flex-shrink-0 job-slide"
-            style="transition: all 0.7s;">
+            style="transition: transform 0.7s, opacity 0.7s;">
             <div class="flex justify-between items-start mb-4">
                 <h3 class="text-xl font-semibold text-gray-800">${ad.title}</h3>
                 <span class="${ad.labelClass} px-3 py-1 rounded-full text-sm">${ad.label}</span>
@@ -1137,36 +1158,69 @@ function renderJobSlide(startIdx) {
     jobSliderTrack.innerHTML = html;
 }
 
-// Анимация слайдера: три объявления уезжают вправо, появляются следующие три
-function slideRight() {
-    // Анимация ухода вправо
-    document.querySelectorAll('.job-slide').forEach(el => {
-        el.style.transform = 'translateX(100vw)';
+// Анимация слайдера: три объявления уезжают вправо/влево, появляются следующие три
+function slideJobs(direction = 1) {
+    if (isSliding) return;
+    isSliding = true;
+    const slides = document.querySelectorAll('.job-slide');
+    slides.forEach(el => {
+        el.style.transition = 'transform 0.7s, opacity 0.7s';
+        el.style.transform = `translateX(${direction > 0 ? '100vw' : '-100vw'})`;
         el.style.opacity = '0';
     });
     setTimeout(() => {
-        jobSliderIndex = (jobSliderIndex + JOBS_PER_SLIDE) % jobAds.length;
+        jobSliderIndex = (jobSliderIndex + JOBS_PER_SLIDE * direction + jobAds.length) % jobAds.length;
         renderJobSlide(jobSliderIndex);
-        // Появление новых слайдов справа
+        // Появление новых слайдов с другой стороны
         document.querySelectorAll('.job-slide').forEach(el => {
-            el.style.transform = 'translateX(-100vw)';
+            el.style.transition = 'none';
+            el.style.transform = `translateX(${direction > 0 ? '-100vw' : '100vw'})`;
             el.style.opacity = '0';
             setTimeout(() => {
-                el.style.transition = 'all 0.7s';
+                el.style.transition = 'transform 0.7s, opacity 0.7s';
                 el.style.transform = 'translateX(0)';
                 el.style.opacity = '1';
             }, 30);
         });
+        setTimeout(() => { isSliding = false; }, 700);
     }, 700);
 }
 
 // Инициализация первого слайда
 renderJobSlide(jobSliderIndex);
 
-// Автосмена каждые 7 секунд
-setInterval(() => {
-    slideRight();
-}, 7000);
+// Автосмена каждые 5 секунд
+let jobSliderTimer = setInterval(() => {
+    slideJobs(1);
+}, 5000);
+
+// Стрелки для ручного перелистывания
+if (prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', () => {
+        clearInterval(jobSliderTimer);
+        slideJobs(-1);
+        jobSliderTimer = setInterval(() => slideJobs(1), 5000);
+    });
+    nextBtn.addEventListener('click', () => {
+        clearInterval(jobSliderTimer);
+        slideJobs(1);
+        jobSliderTimer = setInterval(() => slideJobs(1), 5000);
+    });
+}
+
+// Показывать стрелки только на md+ экранах
+function updateArrowVisibility() {
+    if (window.innerWidth >= 768) {
+        prevBtn.style.display = '';
+        nextBtn.style.display = '';
+    } else {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+    }
+}
+window.addEventListener('resize', updateArrowVisibility);
+updateArrowVisibility();
+
     </script>
 </body>
 </html>
