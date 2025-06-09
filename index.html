@@ -242,7 +242,7 @@
             <h2 class="text-4xl font-bold mb-6">Добро пожаловать на портал рынка труда</h2>
             <p class="text-xl mb-8 max-w-3xl mx-auto">Единая платформа для соискателей, работодателей и государственных служащих Республики Таджикистан</p>
             <div class="grid md:grid-cols-4 gap-6 mt-12">
-                <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:scale-105 cursor-pointer card-hover">
+                <div id="seekerCard" class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:scale-105 cursor-pointer card-hover">
                     <i class="fas fa-users text-3xl mb-4"></i>
                     <h3 class="text-lg font-semibold mb-2">Соискатели</h3>
                     <p class="text-sm">Поиск работы и карьерные возможности</p>
@@ -973,6 +973,17 @@
     document.getElementById('employerCard').addEventListener('click', function() {
         window.location.href = 'employer_anons_work.html';
     });
+
+    // Добавляем переход по клику на "Гос. служащие"
+    document.getElementById('govCard').addEventListener('click', function() {
+        window.location.href = 'gov_pg.html';
+    });
+
+    // Добавляем переход по клику на "Аналитики"
+    document.getElementById('analiticCard').addEventListener('click', function() {
+        window.location.href = 'analitic_pg.html';
+    });
+
     // Переход на страницу профпереподготовки при нажатии на "Подать заявку"
 document.getElementById('profSkillApplyBtn').addEventListener('click', function() {
     window.location.href = 'prof_skill_need.html';
@@ -1020,6 +1031,10 @@ setInterval(() => {
     statsIndex = (statsIndex + 1) % statsData.length;
     renderStats(statsIndex);
 }, 3000);
+
+document.getElementById('seekerCard').addEventListener('click', function() {
+    window.location.href = 'serchwork.html';
+});
     </script>
 </body>
 </html>
