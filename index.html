@@ -176,7 +176,7 @@
             display: flex;
             width: 100%;
             justify-content: center;
-            overflow: visible;
+            overflow: hidden; /* исправлено! */
         }
         .job-slide {
             min-width: 320px;
@@ -350,17 +350,12 @@
                 </div>
                 
                 <!-- Слайдер объявлений -->
-                <div id="jobSlider" class="relative overflow-x-auto">
+                <div id="jobSlider" class="relative overflow-hidden">
     <!-- Стрелки для ручного перелистывания -->
-    <button id="jobSliderPrev" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-80 hover:bg-blue-100 text-blue-600 rounded-full shadow p-2 transition hidden md:block" aria-label="Назад">
-        <i class="fas fa-chevron-left"></i>
-    </button>
     <div id="jobSliderTrack" class="flex transition-transform duration-700" style="will-change: transform;">
         <!-- Сюда будут подставляться объявления -->
     </div>
-    <button id="jobSliderNext" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-80 hover:bg-blue-100 text-blue-600 rounded-full shadow p-2 transition hidden md:block" aria-label="Вперед">
-        <i class="fas fa-chevron-right"></i>
-    </button>
+    <!-- Стрелки для ручного перелистывания -->
 </div>
             </div>
         </div>
