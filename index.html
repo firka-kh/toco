@@ -994,9 +994,8 @@ document.getElementById('profSkillApplyBtn').addEventListener('click', function(
     window.location.href = 'prof_skill_need.html';
 });
 
-// Динамическая анимация статистики (4 виджета) с перелистыванием вверх и рандомными значениями
+// Динамическая анимация статистики (4 виджета) с flip-анимацией и задержкой между цифрами
 const statsAnimatedData = [
-    // 10 случайных значений для каждого показателя
     Array.from({length: 10}, () => (45000 + Math.floor(Math.random() * 10000)).toLocaleString('ru-RU')), // Соискатели
     Array.from({length: 10}, () => (11000 + Math.floor(Math.random() * 4000)).toLocaleString('ru-RU')),  // Вакансии
     Array.from({length: 10}, () => (7000 + Math.floor(Math.random() * 3000)).toLocaleString('ru-RU')),   // Трудоустройства
@@ -1012,56 +1011,75 @@ const statAnimatedEls = [
 
 let statsAnimIndex = 0;
 
-function flipUpText(el, newValue) {
-    // Создаем новый элемент для анимации вверх
-    const oldValue = el.textContent;
-    const newEl = document.createElement('span');
-    newEl.textContent = newValue;
-    newEl.style.display = 'block';
-    newEl.style.position = 'absolute';
-    newEl.style.left = 0;
-    newEl.style.right = 0;
-    newEl.style.top = '100%';
-    newEl.style.transition = 'top 0.5s cubic-bezier(.4,0,.2,1), opacity 0.5s';
-    newEl.style.opacity = '0';
-
-    el.style.position = 'relative';
-    el.parentNode.appendChild(newEl);
-
-    setTimeout(() => {
-        newEl.style.top = '0';
-        newEl.style.opacity = '1';
-        el.style.transition = 'top 0.5s cubic-bezier(.4,0,.2,1), opacity 0.5s';
-        el.style.top = '-100%';
-        el.style.opacity = '0';
-    }, 10);
-
-    setTimeout(() => {
-        el.textContent = newValue;
-        el.style.top = '0';
-        el.style.opacity = '1';
-        newEl.remove();
-    }, 510);
+// Добавим стили flip-анимации
+if (!document.getElementById('flip-anim-style')) {
+    const style = document.createElement('style');
+    style.id = 'flip-anim-style';
+    style.innerHTML = `
+    .flip-anim {
+        display: inline-block;
+        perspective: 400px;
+        position: relative;
+    }
+    .flip-anim .flip-front, .flip-anim .flip-back {
+        display: block;
+        backface-visibility: hidden;
+        transition: transform 0.5s cubic-bezier(.4,0,.2,1);
+        position: absolute;
+        left: 0; right: 0; top: 0; bottom: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .flip-anim .flip-front {
+        transform: rotateX(0deg);
+        z-index: 2;
+    }
+    .flip-anim .flip-back {
+        transform: rotateX(90deg);
+        z-index: 1;
+    }
+    .flip-anim.flipping .flip-front {
+        transform: rotateX(-90deg);
+    }
+    .flip-anim.flipping .flip-back {
+        transform: rotateX(0deg);
+    }
+    `;
+    document.head.appendChild(style);
 }
 
-function animateStats() {
+// Обернуть цифры в flip-anim контейнер (один раз)
+statAnimatedEls.forEach(el => {
+    if (!el.classList.contains('flip-anim')) {
+        const val = el.textContent;
+        el.innerHTML = `<span class="flip-front">${val}</span><span class="flip-back"></span>`;
+        el.classList.add('flip-anim');
+        el.style.position = 'relative';
+        el.style.display = 'inline-block';
+    }
+});
+
+function flipNumber(el, newValue) {
+    const front = el.querySelector('.flip-front');
+    const back = el.querySelector('.flip-back');
+    back.textContent = newValue;
+    el.classList.add('flipping');
+    setTimeout(() => {
+        front.textContent = newValue;
+        el.classList.remove('flipping');
+    }, 500);
+}
+
+function animateStatsFlip() {
     for (let i = 0; i < 4; i++) {
-        flipUpText(statAnimatedEls[i], statsAnimatedData[i][statsAnimIndex]);
+        setTimeout(() => {
+            flipNumber(statAnimatedEls[i], statsAnimatedData[i][statsAnimIndex]);
+        }, i * 350); // задержка между flip-анимациями
     }
     statsAnimIndex = (statsAnimIndex + 1) % 10;
 }
 
-// Инициализация: добавьте классы к цифрам в HTML!
-/*
-<span class="text-2xl font-bold mb-1 job-stat-seekers">47,382</span>
-<span class="text-2xl font-bold mb-1 job-stat-vacancies">12,456</span>
-<span class="text-2xl font-bold mb-1 job-stat-success">8,921</span>
-<span class="text-2xl font-bold mb-1 job-stat-employers">3,247</span>
-*/
-
-setInterval(animateStats, 5000);
-
-// ...существующий код...
+setInterval(animateStatsFlip, 3000);
 
     </script>
 </body>
