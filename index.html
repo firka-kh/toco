@@ -1107,6 +1107,10 @@ const jobSliderTrack = document.getElementById('jobSliderTrack');
 let jobSliderIndex = 0;
 const JOBS_PER_SLIDE = 3;
 
+// Изменяем стили для корректного отображения 3 объявлений
+jobSliderTrack.style.width = '100%';
+jobSliderTrack.style.justifyContent = 'center';
+
 // Функция для генерации HTML объявлений
 function renderJobSlide(startIdx) {
     let html = '';
@@ -1114,7 +1118,7 @@ function renderJobSlide(startIdx) {
         const idx = (startIdx + i) % jobAds.length;
         const ad = jobAds[idx];
         html += `
-        <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover min-w-[320px] max-w-[370px] mx-2 flex-shrink-0 job-slide" style="opacity:0; transform:translateX(50px); transition:all .7s;">
+        <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover min-w-[320px] max-w-[370px] w-full mx-2 flex-shrink-0 job-slide" style="opacity:0; transform:translateX(50px); transition:all .7s;">
             <div class="flex justify-between items-start mb-4">
                 <h3 class="text-xl font-semibold text-gray-800">${ad.title}</h3>
                 <span class="${ad.labelClass} px-3 py-1 rounded-full text-sm">${ad.label}</span>
@@ -1152,10 +1156,10 @@ function slideLeft() {
 // Инициализация первого слайда
 renderJobSlide(jobSliderIndex);
 
-// Запуск автослайдера
+// Запуск автослайдера с интервалом 7 секунд
 setInterval(() => {
     slideLeft();
-}, 4000);
+}, 7000);
     </script>
 </body>
 </html>
