@@ -66,6 +66,42 @@
         .modal-close-btn:hover {
             color: #1f2937; /* gray-800 */
         }
+        @keyframes ticker-move {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+        .animate-ticker {
+            transition: transform 0.6s cubic-bezier(.4,2,.6,1);
+        }
+        .news-item {
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem 1rem 1rem;
+            background: transparent;
+            border-bottom: 1px solid #e0e7ff;
+            font-size: 1rem;
+        }
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        .news-org {
+            font-weight: 600;
+            color: #6366f1;
+            background: #e0e7ff;
+            border-radius: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            margin-right: 1rem;
+            font-size: 0.95em;
+            display: inline-block;
+        }
+        .news-date {
+            color: #818cf8;
+            font-size: 0.9em;
+            margin-left: auto;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -125,6 +161,26 @@
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold mb-4">Молодежные программы</h2>
             <p class="text-xl mb-8 max-w-2xl mx-auto">Возможности для молодых специалистов: развитие, стажировки, наставничество и карьерный рост.</p>
+        </div>
+    </section>
+
+    <!-- Добавьте этот блок сразу после секции с заголовком (после </section> с gradient-bg): -->
+    <section class="bg-white py-8">
+        <div class="max-w-4xl mx-auto px-4">
+            <h3 class="text-2xl font-bold text-indigo-700 mb-4 flex items-center">
+                <i class="fas fa-newspaper mr-3 text-indigo-400"></i>
+                Новости молодежных программ от партнеров
+            </h3>
+            <div id="newsTicker" class="relative overflow-hidden rounded-xl shadow border border-indigo-100 bg-indigo-50">
+                <div id="newsList" class="flex flex-col gap-0 animate-ticker">
+                    <!-- Новости будут добавлены скриптом -->
+                </div>
+                <!-- Кнопки управления -->
+                <div class="absolute right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-2 z-10">
+                    <button id="prevNews" class="bg-white bg-opacity-80 hover:bg-indigo-100 text-indigo-600 rounded-full p-2 shadow transition"><i class="fas fa-chevron-up"></i></button>
+                    <button id="nextNews" class="bg-white bg-opacity-80 hover:bg-indigo-100 text-indigo-600 rounded-full p-2 shadow transition"><i class="fas fa-chevron-down"></i></button>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -325,6 +381,89 @@
                 }
             });
         });
+
+        // Новости
+        const newsData = [
+            {
+                org: "UNICEF",
+                text: "Открыт набор на бесплатные курсы цифровых навыков для молодежи 16-25 лет.",
+                date: "09.06.2025",
+                link: "#"
+            },
+            {
+                org: "USAID",
+                text: "Стартует программа стажировок в IT-компаниях Душанбе. Подайте заявку до 20 июня!",
+                date: "08.06.2025",
+                link: "#"
+            },
+            {
+                org: "British Council",
+                text: "Мастер-класс по развитию soft skills для студентов вузов. Регистрация открыта.",
+                date: "07.06.2025",
+                link: "#"
+            },
+            {
+                org: "Aga Khan Foundation",
+                text: "Программа наставничества для молодых женщин. Участие бесплатное.",
+                date: "06.06.2025",
+                link: "#"
+            },
+            {
+                org: "World Bank",
+                text: "Гранты на обучение и карьерное консультирование для выпускников колледжей.",
+                date: "05.06.2025",
+                link: "#"
+            }
+        ];
+
+        const newsList = document.getElementById('newsList');
+        let currentIndex = 0;
+        const visibleCount = 2; // сколько новостей видно одновременно
+
+        function renderNews() {
+            newsList.innerHTML = '';
+            for (let i = 0; i < visibleCount; i++) {
+                const idx = (currentIndex + i) % newsData.length;
+                const news = newsData[idx];
+                const item = document.createElement('a');
+                item.href = news.link;
+                item.className = 'news-item hover:bg-indigo-100 transition-colors';
+                item.innerHTML = `
+                    <span class="news-org">${news.org}</span>
+                    <span>${news.text}</span>
+                    <span class="news-date"><i class="far fa-calendar-alt mr-1"></i>${news.date}</span>
+                `;
+                newsList.appendChild(item);
+            }
+        }
+        renderNews();
+
+        function nextNews() {
+            currentIndex = (currentIndex + 1) % newsData.length;
+            newsList.style.transform = 'translateY(32px)';
+            setTimeout(() => {
+                newsList.style.transition = 'transform 0.6s cubic-bezier(.4,2,.6,1)';
+                newsList.style.transform = 'translateY(0)';
+                renderNews();
+            }, 100);
+        }
+        function prevNews() {
+            currentIndex = (currentIndex - 1 + newsData.length) % newsData.length;
+            newsList.style.transform = 'translateY(-32px)';
+            setTimeout(() => {
+                newsList.style.transition = 'transform 0.6s cubic-bezier(.4,2,.6,1)';
+                newsList.style.transform = 'translateY(0)';
+                renderNews();
+            }, 100);
+        }
+
+        document.getElementById('nextNews').onclick = nextNews;
+        document.getElementById('prevNews').onclick = prevNews;
+
+        // Автоматическая прокрутка
+        let tickerInterval = setInterval(nextNews, 5000);
+        newsList.onmouseenter = () => clearInterval(tickerInterval);
+        newsList.onmouseleave = () => tickerInterval = setInterval(nextNews, 5000);
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <div id="google_translate_element" style="display:none"></div>
