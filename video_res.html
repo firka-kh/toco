@@ -260,7 +260,14 @@
                 <p class="text-sm text-gray-600 mb-4">Максимальная длительность: 3 минуты.</p>
                 <div class="flex flex-col lg:flex-row gap-8">
                     <!-- Левая часть: видео и кнопки -->
-                    <div class="flex-1 min-w-0">
+                    <div class="flex-1 min-w-0 flex flex-col items-center">
+                        <!-- Новый красивый баннер с длительностью -->
+                        <div class="mb-4 w-full flex justify-center">
+                            <div class="inline-flex items-center bg-yellow-100 text-yellow-800 text-sm font-semibold px-4 py-2 rounded-lg shadow-sm border border-yellow-300">
+                                <i class="fas fa-clock mr-2"></i>
+                                Максимальная длительность: 5 минут
+                            </div>
+                        </div>
                         <div class="flex flex-col items-center gap-4 mb-6">
                             <div class="relative w-96 h-96 bg-gray-200 rounded-lg overflow-hidden video-container" id="videoPlayerContainer">
                                 <div class="absolute inset-0 flex items-center justify-center text-gray-500 text-lg">
@@ -274,7 +281,7 @@
                             </div>
                         </div>
                         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 max-w-3xl mx-auto w-full">
-                            <span id="timer" class="text-lg font-mono">Таймер: 00:00/03:00</span>
+                            <span id="timer" class="text-lg font-mono">Таймер: 00:00/05:00</span>
                             <button id="startButton" class="icon-button bg-green-500 text-white hover:bg-green-600" title="Начать запись">
                                 <i class="fas fa-circle"></i>
                             </button>
@@ -387,7 +394,7 @@
             let recordedChunks = [];
             let timerInterval;
             let seconds = 0;
-            const maxDuration = 180;
+            const maxDuration = 300; // 5 минут
 
             let audioContext;
             let analyser;
@@ -398,7 +405,7 @@
                 seconds++;
                 const minutes = Math.floor(seconds / 60);
                 const remainingSeconds = seconds % 60;
-                timerDisplay.textContent = `Таймер: ${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}/03:00`;
+                timerDisplay.textContent = `Таймер: ${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}/05:00`;
 
                 if (seconds >= maxDuration) {
                     stopRecording();
@@ -472,7 +479,7 @@
                     retakeButton.disabled = true;
 
                     seconds = 0;
-                    timerDisplay.textContent = `Таймер: 00:00/03:00`;
+                    timerDisplay.textContent = `Таймер: 00:00/05:00`;
                     timerInterval = setInterval(updateTimer, 1000);
 
                     // Скрываем кнопку скачивания при новой записи
@@ -508,7 +515,7 @@
                 webcamVideo.controls = false;
                 webcamVideo.muted = true;
                 seconds = 0;
-                timerDisplay.textContent = `Таймер: 00:00/03:00`;
+                timerDisplay.textContent = `Таймер: 00:00/05:00`;
                 startButton.disabled = false;
                 stopButton.disabled = true;
                 retakeButton.disabled = true;
@@ -549,7 +556,7 @@
                     stopButton.disabled = true;
                     retakeButton.disabled = true;
                     seconds = 0;
-                    timerDisplay.textContent = `Таймер: 00:00/03:00`;
+                    timerDisplay.textContent = `Таймер: 00:00/05:00`;
                 }
                 if (animationFrameId) {
                     cancelAnimationFrame(animationFrameId);
