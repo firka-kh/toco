@@ -66,6 +66,39 @@
         .modal-close-btn:hover {
             color: #1f2937; /* gray-800 */
         }
+        .partner-program-item {
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem 1rem 1rem;
+            background: transparent;
+            border-bottom: 1px solid #e0e7ff;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        .partner-program-item:last-child {
+            border-bottom: none;
+        }
+        .partner-org {
+            font-weight: 600;
+            color: #6366f1;
+            background: #e0e7ff;
+            border-radius: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            margin-right: 1rem;
+            font-size: 0.95em;
+            display: inline-block;
+        }
+        .partner-date {
+            color: #818cf8;
+            font-size: 0.9em;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+        .partner-program-item:hover {
+            background: #e0e7ff;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -134,6 +167,24 @@
 
     <section class="section-spacing bg-white">
         <div class="max-w-4xl mx-auto px-4 py-12">
+            <!-- Блок с программами партнеров -->
+            <div class="mb-10">
+                <div class="relative overflow-hidden rounded-xl shadow border border-indigo-100 bg-indigo-50 max-w-3xl mx-auto">
+                    <h4 class="text-xl font-bold text-indigo-700 py-4 px-6 text-center flex items-center justify-center">
+                        <i class="fas fa-handshake mr-3 text-indigo-400"></i>
+                        Другие программы от партнеров
+                    </h4>
+                    <div id="partnerProgramsList" class="flex flex-col gap-0 animate-ticker">
+                        <!-- Программы будут добавлены скриптом -->
+                    </div>
+                    <!-- Кнопки управления -->
+                    <div class="absolute right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-2 z-10">
+                        <button id="prevPartnerProgram" class="bg-white bg-opacity-80 hover:bg-indigo-100 text-indigo-600 rounded-full p-2 shadow transition"><i class="fas fa-chevron-up"></i></button>
+                        <button id="nextPartnerProgram" class="bg-white bg-opacity-80 hover:bg-indigo-100 text-indigo-600 rounded-full p-2 shadow transition"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+            </div>
+
             <h3 class="text-3xl font-bold text-center mb-10 text-gray-800">Микрокредитование для малого бизнеса</h3>
             <p class="text-gray-700 text-lg mb-8 text-center leading-relaxed">
                 Микрокредиты — это доступный инструмент финансовой поддержки для начинающих и малых предпринимателей,
@@ -357,5 +408,89 @@ function googleTranslateElementInit() {}
 </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <div id="google_translate_element" style="display:none"></div>
+
+    <script>
+const partnerProgramsData = [
+    {
+        org: "UNDP",
+        text: "Гранты для стартапов и молодых предпринимателей. Получите до 10 000 сомони на развитие бизнеса.",
+        date: "09.06.2025",
+        link: "#"
+    },
+    {
+        org: "EBRD",
+        text: "Бесплатные консультации по финансовому планированию для малого бизнеса.",
+        date: "08.06.2025",
+        link: "#"
+    },
+    {
+        org: "GIZ",
+        text: "Программа акселерации для женщин-предпринимателей. Регистрация открыта!",
+        date: "07.06.2025",
+        link: "#"
+    },
+    {
+        org: "IFC",
+        text: "Онлайн-курс по управлению бизнесом для начинающих. Сертификат по окончании.",
+        date: "06.06.2025",
+        link: "#"
+    },
+    {
+        org: "KfW",
+        text: "Льготные кредиты для модернизации сельскохозяйственных предприятий.",
+        date: "05.06.2025",
+        link: "#"
+    }
+];
+
+const partnerProgramsList = document.getElementById('partnerProgramsList');
+let partnerCurrentIndex = 0;
+const partnerVisibleCount = 2; // сколько программ видно одновременно
+
+function renderPartnerPrograms() {
+    partnerProgramsList.innerHTML = '';
+    for (let i = 0; i < partnerVisibleCount; i++) {
+        const idx = (partnerCurrentIndex + i) % partnerProgramsData.length;
+        const prog = partnerProgramsData[idx];
+        const item = document.createElement('a');
+        item.href = prog.link;
+        item.className = 'partner-program-item hover:bg-indigo-100 transition-colors';
+        item.innerHTML = `
+            <span class="partner-org">${prog.org}</span>
+            <span>${prog.text}</span>
+            <span class="partner-date"><i class="far fa-calendar-alt mr-1"></i>${prog.date}</span>
+        `;
+        partnerProgramsList.appendChild(item);
+    }
+}
+renderPartnerPrograms();
+
+function nextPartnerProgram() {
+    partnerCurrentIndex = (partnerCurrentIndex + 1) % partnerProgramsData.length;
+    partnerProgramsList.style.transform = 'translateY(32px)';
+    setTimeout(() => {
+        partnerProgramsList.style.transition = 'transform 0.6s cubic-bezier(.4,2,.6,1)';
+        partnerProgramsList.style.transform = 'translateY(0)';
+        renderPartnerPrograms();
+    }, 100);
+}
+function prevPartnerProgram() {
+    partnerCurrentIndex = (partnerCurrentIndex - 1 + partnerProgramsData.length) % partnerProgramsData.length;
+    partnerProgramsList.style.transform = 'translateY(-32px)';
+    setTimeout(() => {
+        partnerProgramsList.style.transition = 'transform 0.6s cubic-bezier(.4,2,.6,1)';
+        partnerProgramsList.style.transform = 'translateY(0)';
+        renderPartnerPrograms();
+    }, 100);
+}
+
+document.getElementById('nextPartnerProgram').onclick = nextPartnerProgram;
+document.getElementById('prevPartnerProgram').onclick = prevPartnerProgram;
+
+// Автоматическая прокрутка
+let partnerTickerInterval = setInterval(nextPartnerProgram, 5000);
+partnerProgramsList.onmouseenter = () => clearInterval(partnerTickerInterval);
+partnerProgramsList.onmouseleave = () => partnerTickerInterval = setInterval(nextPartnerProgram, 5000);
+</script>
 </body>
 </html>
