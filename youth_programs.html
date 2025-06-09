@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Молодежные программы — Портал рынка труда</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение Font Awesome для иконок -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
         .gradient-bg {
@@ -16,6 +18,53 @@
         .card-hover:hover {
             transform: translateY(-8px) scale(1.03);
             box-shadow: 0 16px 32px -8px rgba(59, 130, 246, 0.15);
+        }
+        /* Стили для модального окна */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280; /* gray-500 */
+            cursor: pointer;
+        }
+        .modal-close-btn:hover {
+            color: #1f2937; /* gray-800 */
         }
     </style>
 </head>
@@ -34,6 +83,40 @@
                 <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
                 <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
                 <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                <!-- Выпадающее меню профиля и языков (аналогично главной) -->
+                <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
+                    <div class="relative">
+                        <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
+                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
+                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <button id="langMenuBtn" type="button"
+                            class="px-4 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                            aria-haspopup="true" aria-expanded="false">
+                            <span id="currentLangLabel">RUS</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div id="langDropdown"
+                            class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                            <button type="button"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                data-lang="ru">RUS</button>
+                            <button type="button"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                data-lang="tg">TAJ</button>
+                            <button type="button"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                data-lang="en">ENG</button>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -53,7 +136,10 @@
                     <i class="fas fa-briefcase text-4xl text-blue-500 mb-4"></i>
                     <h3 class="text-xl font-bold mb-2 text-blue-800">Стажировки в госучреждениях</h3>
                     <p class="text-gray-700 mb-4">Получите ценный опыт работы в государственных организациях и начните свою карьеру с реальных задач.</p>
-                    <button class="mt-auto bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors" onclick="alert('Заявка на стажировку отправлена!')">
+                    <button class="action-button mt-auto bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+                        data-action="apply_internship"
+                        data-title="Заявка на стажировку"
+                        data-message="Для подачи заявки на стажировку, пожалуйста, перейдите на страницу оформления.">
                         Подать заявку
                     </button>
                 </div>
@@ -62,7 +148,10 @@
                     <i class="fas fa-user-friends text-4xl text-purple-500 mb-4"></i>
                     <h3 class="text-xl font-bold mb-2 text-purple-800">Программы наставничества</h3>
                     <p class="text-gray-700 mb-4">Работайте с опытными наставниками, получайте советы и поддержку для профессионального и личностного роста.</p>
-                    <button class="mt-auto bg-purple-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-600 transition-colors" onclick="alert('Заявка на наставничество отправлена!')">
+                    <button class="action-button mt-auto bg-purple-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-600 transition-colors"
+                        data-action="join_mentorship"
+                        data-title="Присоединиться к программе наставничества"
+                        data-message="Ваш запрос на присоединение к программе наставничества отправлен. Мы свяжемся с вами в ближайшее время!">
                         Присоединиться
                     </button>
                 </div>
@@ -71,7 +160,10 @@
                     <i class="fas fa-chalkboard-teacher text-4xl text-green-500 mb-4"></i>
                     <h3 class="text-xl font-bold mb-2 text-green-800">Карьерное консультирование</h3>
                     <p class="text-gray-700 mb-4">Индивидуальные консультации по построению карьеры, выбору профессии и развитию навыков.</p>
-                    <button class="mt-auto bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors" onclick="alert('Запрос на консультацию отправлен!')">
+                    <button class="action-button mt-auto bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors"
+                        data-action="book_consultation"
+                        data-title="Запись на карьерное консультирование"
+                        data-message="Ваш запрос на карьерное консультирование успешно отправлен. Ожидайте подтверждения записи!">
                         Записаться
                     </button>
                 </div>
@@ -80,7 +172,10 @@
                     <i class="fas fa-lightbulb text-4xl text-yellow-500 mb-4"></i>
                     <h3 class="text-xl font-bold mb-2 text-yellow-800">Развитие soft skills</h3>
                     <p class="text-gray-700 mb-4">Тренинги и мастер-классы по развитию коммуникации, лидерства, критического мышления и других навыков.</p>
-                    <button class="mt-auto bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors" onclick="alert('Вы записаны на тренинг!')">
+                    <button class="action-button mt-auto bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors"
+                        data-action="enroll_softskills"
+                        data-title="Запись на тренинг по soft skills"
+                        data-message="Вы успешно записаны на тренинг по развитию soft skills! Мы отправили детали на вашу почту.">
                         Записаться
                     </button>
                 </div>
@@ -128,5 +223,110 @@
             </div>
         </div>
     </footer>
+
+    <!-- Модальное окно -->
+    <div id="infoModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="closeModalBtn">&times;</button>
+            <h3 class="text-xl font-bold mb-4 text-gray-800" id="modalTitle"></h3>
+            <p class="text-gray-700 mb-6" id="modalMessage"></p>
+            <div class="text-center">
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" id="modalActionBtn">ОК</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Профиль и языки (стандартная логика, как в других файлах)
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+        const langMenuBtn = document.getElementById('langMenuBtn');
+        const langDropdown = document.getElementById('langDropdown');
+        const currentLangLabel = document.getElementById('currentLangLabel');
+
+        profileMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+            langDropdown.classList.add('hidden');
+        });
+        document.addEventListener('click', function(e) {
+            if (profileDropdownContainer && !profileDropdownContainer.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        langMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            langDropdown.classList.toggle('hidden');
+            profileDropdown.classList.add('hidden');
+        });
+        document.addEventListener('click', function(e) {
+            if (langDropdown && !langDropdown.contains(e.target) && langMenuBtn && !langMenuBtn.contains(e.target)) {
+                langDropdown.classList.add('hidden');
+            }
+        });
+        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                currentLangLabel.textContent = this.textContent;
+                langDropdown.classList.add('hidden');
+            };
+        });
+
+        // Google Translate stub (prevent error if not loaded)
+        function googleTranslateElementInit() {}
+
+        // --- Логика модального окна ---
+        const infoModalOverlay = document.getElementById('infoModalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalActionBtn = document.getElementById('modalActionBtn');
+
+        function openModal(title, message, actionType) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            infoModalOverlay.classList.add('active');
+
+            // Настройка кнопки действия в модальном окне
+            modalActionBtn.onclick = () => {
+                closeModal();
+                if (actionType === 'apply_internship_redirect') {
+                    // Перенаправление только для стажировок
+                    window.location.href = 'professional_retraining_application.html';
+                }
+            };
+        }
+
+        function closeModal() {
+            infoModalOverlay.classList.remove('active');
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        infoModalOverlay.addEventListener('click', (e) => {
+            if (e.target === infoModalOverlay) {
+                closeModal();
+            }
+        });
+
+        // Обработчики для кнопок на карточках программ
+        document.querySelectorAll('.action-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const action = this.dataset.action;
+                const title = this.dataset.title;
+                const message = this.dataset.message;
+
+                if (action === 'apply_internship') {
+                    // Для стажировок, предлагаем перейти на страницу заявки
+                    openModal(title, message, 'apply_internship_redirect');
+                } else {
+                    // Для остальных программ - просто сообщение о принятии запроса
+                    openModal(title, message, 'generic_confirmation');
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div id="google_translate_element" style="display:none"></div>
 </body>
 </html>
