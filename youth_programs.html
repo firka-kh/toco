@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Молодежные программы — Портал рынка труда</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 16px 32px -8px rgba(59, 130, 246, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Логотип" class="rounded-full">
+                <a href="index.html" class="hover:underline focus:outline-none">
+                    <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                    <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                </a>
+            </div>
+            <nav class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-4">Молодежные программы</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Возможности для молодых специалистов: развитие, стажировки, наставничество и карьерный рост.</p>
+        </div>
+    </section>
+
+    <section class="section-spacing bg-white">
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Карточка: Стажировки -->
+                <div class="bg-blue-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-briefcase text-4xl text-blue-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-blue-800">Стажировки в госучреждениях</h3>
+                    <p class="text-gray-700 mb-4">Получите ценный опыт работы в государственных организациях и начните свою карьеру с реальных задач.</p>
+                    <button class="mt-auto bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors" onclick="alert('Заявка на стажировку отправлена!')">
+                        Подать заявку
+                    </button>
+                </div>
+                <!-- Карточка: Наставничество -->
+                <div class="bg-purple-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-user-friends text-4xl text-purple-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-purple-800">Программы наставничества</h3>
+                    <p class="text-gray-700 mb-4">Работайте с опытными наставниками, получайте советы и поддержку для профессионального и личностного роста.</p>
+                    <button class="mt-auto bg-purple-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-600 transition-colors" onclick="alert('Заявка на наставничество отправлена!')">
+                        Присоединиться
+                    </button>
+                </div>
+                <!-- Карточка: Карьерное консультирование -->
+                <div class="bg-green-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-chalkboard-teacher text-4xl text-green-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-green-800">Карьерное консультирование</h3>
+                    <p class="text-gray-700 mb-4">Индивидуальные консультации по построению карьеры, выбору профессии и развитию навыков.</p>
+                    <button class="mt-auto bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors" onclick="alert('Запрос на консультацию отправлен!')">
+                        Записаться
+                    </button>
+                </div>
+                <!-- Карточка: Soft Skills -->
+                <div class="bg-yellow-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-lightbulb text-4xl text-yellow-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-yellow-800">Развитие soft skills</h3>
+                    <p class="text-gray-700 mb-4">Тренинги и мастер-классы по развитию коммуникации, лидерства, критического мышления и других навыков.</p>
+                    <button class="mt-auto bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors" onclick="alert('Вы записаны на тренинг!')">
+                        Записаться
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="gradient-bg text-white py-12 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">О портале</h3>
+                    <p class="text-sm opacity-90">Официальный портал информационной системы рынка труда Республики Таджикистан</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Полезные ссылки</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Правительство РТ</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Министерство труда</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Налоговый комитет</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Нормативные акты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Поддержка</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Часто задаваемые вопросы</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Руководство пользователя</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Техническая поддержка</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Обратная связь</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Социальные сети</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2025 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
