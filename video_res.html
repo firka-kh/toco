@@ -257,10 +257,10 @@
             <!-- Контент: Запись видео -->
             <div id="recordVideoContent" class="bg-gray-50 p-8 rounded-lg shadow-md">
                 <h3 class="text-xl font-semibold mb-6 text-gray-800">Запись видео-резюме</h3>
-                <div class="flex flex-col lg:flex-row gap-8">
-                    <!-- Левая часть: видео и кнопки -->
-                    <div class="flex-1 min-w-0 flex flex-col items-center">
-                        <!-- Новый красивый баннер с длительностью -->
+                <div class="flex flex-col lg:flex-row gap-8 justify-center items-center">
+                    <!-- Левая часть: видео и кнопки строго по центру -->
+                    <div class="flex-1 min-w-0 flex flex-col items-center justify-center">
+                        <!-- Баннер с длительностью -->
                         <div class="mb-4 w-full flex justify-center">
                             <div class="inline-flex items-center bg-yellow-100 text-yellow-800 text-sm font-semibold px-4 py-2 rounded-lg shadow-sm border border-yellow-300">
                                 <i class="fas fa-clock mr-2"></i>
@@ -279,7 +279,7 @@
                                 <div id="soundBar" class="sound-bar"></div>
                             </div>
                         </div>
-                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 max-w-3xl mx-auto w-full">
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 w-full">
                             <span id="timer" class="text-lg font-mono">Таймер: 00:00/05:00</span>
                             <button id="startButton" class="icon-button bg-green-500 text-white hover:bg-green-600" title="Начать запись">
                                 <i class="fas fa-circle"></i>
@@ -295,7 +295,7 @@
                             </a>
                         </div>
                         <!-- Кнопка "Опубликовать резюме" -->
-                        <div class="flex justify-center mt-6">
+                        <div class="flex justify-center mt-6 w-full">
                             <button id="publishResumeBtn" class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-10 py-4 rounded-lg shadow transition-colors text-lg flex items-center gap-2">
                                 <i class="fas fa-paper-plane"></i>
                                 Опубликовать резюме
