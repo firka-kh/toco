@@ -244,34 +244,34 @@
     <section id="video-resume" class="section-spacing bg-white">
         <div class="container mx-auto px-4 py-8">
             <h2 class="text-3xl font-bold mb-6 text-gray-800">Ваше видео-резюме</h2>
-            <p class="text-gray-700 mb-8 max-w-2xl">
-                Видеорезюме — это отличный способ представить себя работодателю. Вы можете записать его прямо на портале или загрузить готовое видео. Эта функция опциональна.
-            </p>
+            <p class="text-gray-700 mb-8 max-w-2xl">Видеорезюме - это отличный способ представить себя работодателю. Вы можете записать его прямо на портале или загрузить готовое видео. Эта функция опциональна.</p>
 
-            <!-- Табы -->
             <div class="flex space-x-4 mb-8">
                 <button id="recordVideoTab" class="px-6 py-3 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600 transition-colors">Записать видео</button>
                 <button id="uploadVideoTab" class="px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors">Загрузить видео</button>
             </div>
 
-            <!-- Контент: Запись видео -->
             <div id="recordVideoContent" class="bg-gray-50 p-8 rounded-lg shadow-md">
                 <h3 class="text-xl font-semibold mb-6 text-gray-800">Запись видео-резюме</h3>
                 <p class="text-sm text-gray-600 mb-4">Максимальная длительность: 3 минуты.</p>
-                <div class="max-w-xl mx-auto w-full">
+                
+                <div class="max-w-xl mx-auto w-full"> 
                     <div class="flex flex-col items-center gap-4 mb-6">
                         <div class="relative w-96 h-96 bg-gray-200 rounded-lg overflow-hidden video-container" id="videoPlayerContainer">
                             <div class="absolute inset-0 flex items-center justify-center text-gray-500 text-lg">
                                 [Область для записи видео с веб-камеры]
                             </div>
                             <video id="webcamVideo" class="absolute inset-0 w-full h-full object-cover bg-black" autoplay muted></video>
+                            
                             <i id="expandVideoButton" class="fas fa-expand-alt expand-button-icon" title="Развернуть видео"></i>
                         </div>
+
                         <div id="soundVisualizer" class="sound-bar-container w-96">
                             <div id="soundBar" class="sound-bar"></div>
                         </div>
                     </div>
                 </div>
+                
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 max-w-3xl mx-auto w-full">
                     <span id="timer" class="text-lg font-mono">Таймер: 00:00/03:00</span>
                     <button id="startButton" class="icon-button bg-green-500 text-white hover:bg-green-600" title="Начать запись">
@@ -283,10 +283,12 @@
                     <button id="retakeButton" class="icon-button bg-gray-500 text-white hover:bg-gray-600" title="Перезаписать видео" disabled>
                         <i class="fas fa-redo"></i>
                     </button>
+                    <!-- Кнопка для скачивания видео -->
                     <a id="downloadButton" class="icon-button bg-blue-500 text-white hover:bg-blue-600" title="Скачать видео" style="display:none" download="video_resume.webm">
                         <i class="fas fa-download"></i>
                     </a>
                 </div>
+
                 <div class="bg-blue-50 p-6 rounded-lg text-blue-800">
                     <h4 class="font-semibold mb-2"><i class="fas fa-lightbulb mr-2"></i>Рекомендации :</h4>
                     <p class="text-sm mb-4">Говорите четко и уверенно. Расскажите о своих ключевых навыках и достижениях. Подготовьтесь заранее!</p>
@@ -294,24 +296,17 @@
                 </div>
             </div>
 
-            <!-- Контент: Загрузка видео -->
             <div id="uploadVideoContent" class="bg-gray-50 p-8 rounded-lg shadow-md hidden">
                 <h3 class="text-xl font-semibold mb-6 text-gray-800">Загрузка видео-резюме</h3>
                 <p class="text-sm text-gray-600 mb-4">Загрузите готовое видео-резюме с вашего компьютера. Максимальный размер файла: 100 МБ. Поддерживаемые форматы: MP4, MOV, AVI.</p>
+                
                 <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center text-gray-500 mb-6">
                     <i class="fas fa-cloud-upload-alt text-5xl mb-4"></i>
                     <p class="text-lg">Перетащите файл сюда или <span class="text-blue-500 cursor-pointer">выберите файл</span></p>
                     <input type="file" id="videoUploadInput" accept="video/mp4,video/mov,video/avi" class="hidden">
                 </div>
-                <button id="uploadButton" class="w-full bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">Загрузить видео</button>
-            </div>
 
-            <!-- Кнопка "Опубликовать резюме" -->
-            <div class="flex justify-center mt-10">
-                <button id="publishResumeBtn" class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-10 py-4 rounded-lg shadow transition-colors text-lg flex items-center gap-2">
-                    <i class="fas fa-paper-plane"></i>
-                    Опубликовать резюме
-                </button>
+                <button id="uploadButton" class="w-full bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">Загрузить видео</button>
             </div>
         </div>
     </section>
@@ -645,12 +640,6 @@
                 currentLangLabel.textContent = this.textContent;
                 langDropdown.classList.add('hidden');
             };
-        });
-    </script>
-    <script>
-        document.getElementById('publishResumeBtn').addEventListener('click', function() {
-            alert('Ваше резюме опубликовано!');
-            // Здесь можно добавить отправку данных на сервер
         });
     </script>
 </body>
