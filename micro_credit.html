@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Микрокредитование - Поддержка предпринимательства — Портал рынка труда</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 16px 32px -8px rgba(59, 130, 246, 0.15);
+        }
+        /* Стили для модального окна, аналогичные "Молодежным программам" */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280; /* gray-500 */
+            cursor: pointer;
+        }
+        .modal-close-btn:hover {
+            color: #1f2937; /* gray-800 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Шапка портала (аналогична главной странице) -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Логотип" class="rounded-full">
+                <a href="index.html" class="hover:underline focus:outline-none">
+                    <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                    <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                </a>
+            </div>
+            <nav class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                <!-- Выпадающее меню профиля и языков -->
+                <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
+                    <div class="relative">
+                        <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
+                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
+                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <button id="langMenuBtn" type="button"
+                            class="px-4 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                            aria-haspopup="true" aria-expanded="false">
+                            <span id="currentLangLabel">RUS</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div id="langDropdown"
+                            class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                            <button type="button"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                data-lang="ru">RUS</button>
+                            <button type="button"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                data-lang="tg">TAJ</button>
+                            <button type="button"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                data-lang="en">ENG</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-4">Поддержка предпринимательства</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">
+                Получите финансовую поддержку и консультации для развития вашего бизнеса в Таджикистане.
+            </p>
+        </div>
+    </section>
+
+    <section class="section-spacing bg-white">
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <h3 class="text-3xl font-bold text-center mb-10 text-gray-800">Микрокредитование для малого бизнеса</h3>
+            <p class="text-gray-700 text-lg mb-8 text-center leading-relaxed">
+                Микрокредиты — это доступный инструмент финансовой поддержки для начинающих и малых предпринимателей,
+                нуждающихся в небольших суммах для старта или расширения своего дела. Мы помогаем получить средства на выгодных условиях.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <!-- Карточка: Быстрое одобрение -->
+                <div class="bg-indigo-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-hand-holding-usd text-4xl text-indigo-600 mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2 text-indigo-800">Доступное финансирование</h4>
+                    <p class="text-gray-700 mb-4">Получите небольшие займы без сложной бюрократии и высоких требований к залогу.</p>
+                </div>
+                <!-- Карточка: Гибкие условия -->
+                <div class="bg-teal-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-chart-line text-4xl text-teal-600 mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2 text-teal-800">Гибкие сроки и процентные ставки</h4>
+                    <p class="text-gray-700 mb-4">Индивидуальный подход к каждому заемщику, адаптированные планы погашения.</p>
+                </div>
+                <!-- Карточка: Консультационная поддержка -->
+                <div class="bg-fuchsia-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-comments text-4xl text-fuchsia-600 mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2 text-fuchsia-800">Бизнес-консультации</h4>
+                    <p class="text-gray-700 mb-4">Бесплатные консультации от экспертов по разработке бизнес-плана и управлению финансами.</p>
+                </div>
+                <!-- Карточка: Для всех отраслей -->
+                <div class="bg-rose-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-industry text-4xl text-rose-600 mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2 text-rose-800">Широкий спектр применения</h4>
+                    <p class="text-gray-700 mb-4">Поддержка проектов в различных сферах: от сельского хозяйства до IT-услуг.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-8 shadow-lg border border-gray-200 mb-12">
+                <h3 class="text-2xl font-semibold mb-6 text-gray-800 text-center">Кто может получить микрокредит?</h3>
+                <ul class="list-none space-y-4 text-gray-700 text-lg">
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
+                        <span>Граждане Республики Таджикистан в возрасте от 18 до 65 лет.</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
+                        <span>Индивидуальные предприниматели или руководители малых предприятий.</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
+                        <span>Наличие действующего бизнес-плана или обоснования необходимости финансирования.</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
+                        <span>Положительная кредитная история (при наличии).</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
+                        <span>Отсутствие просроченной задолженности по другим обязательствам.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-8 shadow-inner border border-gray-200">
+                <h3 class="text-2xl font-semibold mb-6 text-gray-800 text-center">Как подать заявку?</h3>
+                <ol class="list-decimal list-inside space-y-4 text-gray-700 text-lg leading-relaxed">
+                    <li>
+                        <span class="font-semibold">Ознакомьтесь с условиями:</span> Внимательно изучите требования к заемщикам и условия предоставления микрокредитов на нашем портале.
+                    </li>
+                    <li>
+                        <span class="font-semibold">Подготовьте документы:</span> Соберите необходимые документы, включая удостоверение личности, бизнес-план, а также документы, подтверждающие вашу предпринимательскую деятельность.
+                    </li>
+                    <li>
+                        <span class="font-semibold">Заполните онлайн-форму:</span> Перейдите по кнопке "Подать заявку на микрокредит" ниже и заполните все обязательные поля онлайн-формы.
+                    </li>
+                    <li>
+                        <span class="font-semibold">Ожидайте рассмотрения:</span> Ваша заявка будет рассмотрена специалистами в течение 5 рабочих дней. Мы свяжемся с вами для уточнения деталей.
+                    </li>
+                    <li>
+                        <span class="font-semibold">Получите решение:</span> В случае одобрения, мы пригласим вас для подписания договора и получения средств.
+                    </li>
+                </ol>
+                <div class="mt-10 text-center">
+                    <button class="action-button bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-xl hover:bg-green-700 transition-colors shadow-lg"
+                        data-action="apply_microcredit"
+                        data-title="Подача заявки на микрокредит"
+                        data-message="Ваша заявка на микрокредит принята! В течение 5 рабочих дней с вами свяжется наш специалист.">
+                        Подать заявку на микрокредит
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Футер портала (аналогичен главной странице) -->
+    <footer class="gradient-bg text-white py-12 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">О портале</h3>
+                    <p class="text-sm opacity-90">Официальный портал информационной системы рынка труда Республики Таджикистан</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Полезные ссылки</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Правительство РТ</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Министерство труда</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Налоговый комитет</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Нормативные акты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Поддержка</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Часто задаваемые вопросы</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Руководство пользователя</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Техническая поддержка</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Обратная связь</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Социальные сети</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2025 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно (аналогично Молодежным программам) -->
+    <div id="infoModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="closeModalBtn">&times;</button>
+            <h3 class="text-xl font-bold mb-4 text-gray-800" id="modalTitle"></h3>
+            <p class="text-gray-700 mb-6" id="modalMessage"></p>
+            <div class="text-center">
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" id="modalActionBtn">ОК</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Профиль и языки (стандартная логика, как в других файлах)
+    const profileMenuBtn = document.getElementById('profileMenuBtn');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+    const langMenuBtn = document.getElementById('langMenuBtn');
+    const langDropdown = document.getElementById('langDropdown');
+    const currentLangLabel = document.getElementById('currentLangLabel');
+
+    profileMenuBtn?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('hidden');
+        langDropdown.classList.add('hidden');
+    });
+    document.addEventListener('click', function(e) {
+        if (profileDropdownContainer && !profileDropdownContainer.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+    });
+
+    langMenuBtn?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        langDropdown.classList.toggle('hidden');
+        profileDropdown.classList.add('hidden');
+    });
+    document.addEventListener('click', function(e) {
+        if (langDropdown && !langDropdown.contains(e.target) && langMenuBtn && !langMenuBtn.contains(e.target)) {
+            langDropdown.classList.add('hidden');
+        }
+    });
+    langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+        btn.onclick = function() {
+            currentLangLabel.textContent = this.textContent;
+            langDropdown.classList.add('hidden');
+        };
+    });
+
+    // --- Логика модального окна ---
+    const infoModalOverlay = document.getElementById('infoModalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const modalActionBtn = document.getElementById('modalActionBtn');
+
+    function openModal(title, message) {
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        infoModalOverlay.classList.add('active');
+        modalActionBtn.onclick = () => {
+            closeModal();
+        };
+    }
+
+    function closeModal() {
+        infoModalOverlay.classList.remove('active');
+    }
+
+    closeModalBtn.addEventListener('click', closeModal);
+    infoModalOverlay.addEventListener('click', (e) => {
+        if (e.target === infoModalOverlay) {
+            closeModal();
+        }
+    });
+
+    // Обработчик для кнопки "Подать заявку на микрокредит"
+    document.querySelector('.action-button[data-action="apply_microcredit"]').addEventListener('click', function() {
+        const title = this.dataset.title;
+        const message = this.dataset.message;
+        openModal(title, message);
+    });
+});
+
+// Google Translate stub (prevent error if not loaded)
+function googleTranslateElementInit() {}
+</script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div id="google_translate_element" style="display:none"></div>
+</body>
+</html>
