@@ -176,7 +176,7 @@
             display: flex;
             width: 100%;
             justify-content: center;
-            overflow: hidden;
+            overflow: visible;
         }
         .job-slide {
             min-width: 320px;
@@ -186,8 +186,11 @@
             margin-right: 0.5rem;
             flex-shrink: 0;
         }
+        @media (max-width: 1200px) {
+            .job-slide { min-width: 280px; }
+        }
         @media (max-width: 1024px) {
-            .job-slide { min-width: 260px; max-width: 100%; }
+            .job-slide { min-width: 240px; max-width: 100%; }
         }
     </style>
 </head>
@@ -318,7 +321,8 @@
     <section id="jobs" class="section-spacing bg-white" style="margin-top:-1.5rem;">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Поиск вакансий</h2>
-            <div class="max-w-4xl mx-auto">
+            <!-- Увеличиваем ширину контейнера для слайдера -->
+            <div class="max-w-6xl mx-auto">
                 <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-8 text-white mb-8">
                     <div class="grid md:grid-cols-3 gap-4">
                         <div>
@@ -346,7 +350,7 @@
                 </div>
                 
                 <!-- Слайдер объявлений -->
-                <div id="jobSlider" class="relative overflow-hidden">
+                <div id="jobSlider" class="relative overflow-x-auto">
     <!-- Стрелки для ручного перелистывания -->
     <button id="jobSliderPrev" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-80 hover:bg-blue-100 text-blue-600 rounded-full shadow p-2 transition hidden md:block" aria-label="Назад">
         <i class="fas fa-chevron-left"></i>
