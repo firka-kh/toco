@@ -1107,12 +1107,13 @@ const jobSliderTrack = document.getElementById('jobSliderTrack');
 let jobSliderIndex = 0;
 const JOBS_PER_SLIDE = 3;
 
-// Обновим стили контейнера для корректного отображения 3 объявлений
+// Стилизация трека для 3 объявлений
 jobSliderTrack.style.display = 'flex';
 jobSliderTrack.style.width = '100%';
 jobSliderTrack.style.justifyContent = 'center';
+jobSliderTrack.style.overflow = 'hidden';
 
-// Функция для генерации HTML объявлений (3 объявления на слайде)
+// Генерация HTML для 3 объявлений
 function renderJobSlide(startIdx) {
     let html = '';
     for (let i = 0; i < JOBS_PER_SLIDE; i++) {
@@ -1120,7 +1121,7 @@ function renderJobSlide(startIdx) {
         const ad = jobAds[idx];
         html += `
         <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover min-w-[320px] max-w-[370px] w-full mx-2 flex-shrink-0 job-slide"
-            style="opacity:1; transform:translateX(0); transition:all .7s;">
+            style="transition: all 0.7s;">
             <div class="flex justify-between items-start mb-4">
                 <h3 class="text-xl font-semibold text-gray-800">${ad.title}</h3>
                 <span class="${ad.labelClass} px-3 py-1 rounded-full text-sm">${ad.label}</span>
@@ -1128,9 +1129,7 @@ function renderJobSlide(startIdx) {
             <p class="text-gray-600 mb-2"><i class="fas fa-building mr-2"></i>${ad.company}</p>
             <p class="text-gray-600 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>${ad.city}</p>
             <p class="text-gray-600 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>${ad.salary}</p>
-            <div class="job-desc-slide overflow-hidden relative h-12">
-                <span class="absolute left-0 top-0 w-full h-full flex items-center text-gray-700 job-desc-text" style="transition: transform 0.7s;">${ad.desc}</span>
-            </div>
+            <p class="text-gray-700 mb-4">${ad.desc}</p>
             <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors mt-4">Подробнее</button>
         </div>
         `;
@@ -1138,39 +1137,35 @@ function renderJobSlide(startIdx) {
     jobSliderTrack.innerHTML = html;
 }
 
-// Функция анимации: пролистывание текста описания вправо
-function animateJobDescRight() {
-    document.querySelectorAll('.job-desc-text').forEach(el => {
-        el.style.transform = 'translateX(0)';
-        setTimeout(() => {
-            el.style.transform = 'translateX(100%)';
-        }, 50);
-        setTimeout(() => {
-            el.style.transition = 'none';
-            el.style.transform = 'translateX(-100%)';
-            // После ухода текста, меняем слайд и возвращаем текст с анимацией справа налево
-            setTimeout(() => {
-                jobSliderIndex = (jobSliderIndex + JOBS_PER_SLIDE) % jobAds.length;
-                renderJobSlide(jobSliderIndex);
-                document.querySelectorAll('.job-desc-text').forEach(newEl => {
-                    newEl.style.transition = 'none';
-                    newEl.style.transform = 'translateX(100%)';
-                    setTimeout(() => {
-                        newEl.style.transition = 'transform 0.7s';
-                        newEl.style.transform = 'translateX(0)';
-                    }, 50);
-                });
-            }, 100);
-        }, 650); // 0.65s анимация вправо
+// Анимация слайдера: три объявления уезжают вправо, появляются следующие три
+function slideRight() {
+    // Анимация ухода вправо
+    document.querySelectorAll('.job-slide').forEach(el => {
+        el.style.transform = 'translateX(100vw)';
+        el.style.opacity = '0';
     });
+    setTimeout(() => {
+        jobSliderIndex = (jobSliderIndex + JOBS_PER_SLIDE) % jobAds.length;
+        renderJobSlide(jobSliderIndex);
+        // Появление новых слайдов справа
+        document.querySelectorAll('.job-slide').forEach(el => {
+            el.style.transform = 'translateX(-100vw)';
+            el.style.opacity = '0';
+            setTimeout(() => {
+                el.style.transition = 'all 0.7s';
+                el.style.transform = 'translateX(0)';
+                el.style.opacity = '1';
+            }, 30);
+        });
+    }, 700);
 }
 
 // Инициализация первого слайда
 renderJobSlide(jobSliderIndex);
 
-// Запуск автослайдера с интервалом 7 секунд и анимацией описания вправо
+// Автосмена каждые 7 секунд
 setInterval(() => {
-    animateJobDescRight();
+    slideRight();
 }, 7000);
     </script>
 </body>
