@@ -165,11 +165,16 @@
       };
     });
 
-    // Озвучивание вопроса
-    function speakQuestion(idx) {
-      const utter = new window.SpeechSynthesisUtterance(questions[idx].text);
+    // Озвучивание текста
+    function speak(text) {
+      const utter = new window.SpeechSynthesisUtterance(text);
       utter.lang = 'ru-RU';
       window.speechSynthesis.speak(utter);
+    }
+
+    // Озвучивание вопроса
+    function speakQuestion(idx) {
+      speak(questions[idx].text);
     }
 
     // Запись ответа
@@ -196,6 +201,7 @@
         questions[idx].recBtn.disabled = true;
         questions[idx].stopBtn.disabled = false;
         currentRecording = idx;
+        speak('Запись началась. Для остановки нажмите S.');
       }).catch(() => {
         alert('Не удалось получить доступ к микрофону.');
       });
@@ -210,15 +216,30 @@
       questions[idx].recBtn.disabled = false;
       questions[idx].stopBtn.disabled = true;
       currentRecording = null;
+      speak('Запись остановлена.');
     }
 
-    // Горячие клавиши: 1,2,3...
+    // Горячие клавиши: 1,2,3... для вопросов, S — стоп, P — прослушать вопрос, A — прослушать ответ
     document.addEventListener('keydown', e => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
       const n = parseInt(e.key, 10);
       if (n >= 1 && n <= questions.length) {
         speakQuestion(n - 1);
-        setTimeout(() => startRecording(n - 1), 1200); // чуть позже, чтобы не перекрывать озвучку
+        setTimeout(() => startRecording(n - 1), 1200);
+        window.currentQuestionIdx = n - 1;
+      }
+      if (typeof window.currentQuestionIdx === 'number') {
+        const idx = window.currentQuestionIdx;
+        if (e.key.toLowerCase() === 's') {
+          stopRecording(idx);
+        }
+        if (e.key.toLowerCase() === 'p') {
+          speakQuestion(idx);
+        }
+        if (e.key.toLowerCase() === 'a' && audios[idx]) {
+          questions[idx].answerAudio.play();
+          speak('Воспроизвожу ваш ответ.');
+        }
       }
     });
   </script>
