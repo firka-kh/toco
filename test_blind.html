@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Опросник для резюме (доступная версия)</title>
+  <style>
+    body {
+      background: #fff;
+      color: #111;
+      font-size: 1.3rem;
+      font-family: Arial, Verdana, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 60ch;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    .question-block {
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 2rem;
+    }
+    .question {
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .record-indicator {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ccc;
+      display: inline-block;
+      vertical-align: middle;
+      border: 2px solid #888;
+      transition: background 0.2s;
+    }
+    .recording {
+      background: #e00 !important;
+      box-shadow: 0 0 8px #e00;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.5em 1em;
+      border-radius: 4px;
+      border: 1px solid #888;
+      background: #eee;
+      cursor: pointer;
+    }
+    .answer-audio {
+      margin-top: 0.5rem;
+      display: block;
+    }
+    .hint {
+      color: #555;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Опросник для резюме</h1>
+    <div class="hint">
+      Для ответа нажмите цифру (1, 2, 3...), чтобы услышать вопрос и начать запись голоса.<br>
+      После окончания ответа нажмите "Стоп".<br>
+      Для прослушивания вопроса — кнопка "Прослушать".
+    </div>
+    <div id="questions"></div>
+  </main>
+  <script>
+    // Вопросы
+    const questions = [
+      "Расскажите о себе.",
+      "Какие у вас сильные стороны?",
+      "Почему вы хотите работать у нас?",
+      "Опишите ваш опыт работы.",
+      "Какие ваши профессиональные цели?"
+    ];
+
+    // DOM
+    const questionsDiv = document.getElementById('questions');
+
+    // Состояния
+    let currentRecording = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let audios = Array(questions.length).fill(null);
+
+    // Генерация блоков вопросов
+    questions.forEach((q, idx) => {
+      const block = document.createElement('section');
+      block.className = 'question-block';
+      block.tabIndex = 0;
+
+      const questionEl = document.createElement('div');
+      questionEl.className = 'question';
+      questionEl.textContent = `${idx + 1}. ${q}`;
+
+      // Controls
+      const controls = document.createElement('div');
+      controls.className = 'controls';
+
+      // Индикатор записи
+      const indicator = document.createElement('span');
+      indicator.className = 'record-indicator';
+      indicator.setAttribute('aria-label', 'Индикатор записи');
+      indicator.id = `rec-indicator-${idx}`;
+
+      // Кнопка прослушать вопрос
+      const playBtn = document.createElement('button');
+      playBtn.type = 'button';
+      playBtn.textContent = 'Прослушать';
+      playBtn.setAttribute('aria-label', `Прослушать вопрос ${idx + 1}`);
+      playBtn.onclick = () => speakQuestion(idx);
+
+      // Кнопка запись/стоп
+      const recBtn = document.createElement('button');
+      recBtn.type = 'button';
+      recBtn.textContent = 'Записать';
+      recBtn.setAttribute('aria-label', `Записать ответ на вопрос ${idx + 1}`);
+      recBtn.onclick = () => startRecording(idx);
+
+      const stopBtn = document.createElement('button');
+      stopBtn.type = 'button';
+      stopBtn.textContent = 'Стоп';
+      stopBtn.setAttribute('aria-label', `Остановить запись ответа на вопрос ${idx + 1}`);
+      stopBtn.disabled = true;
+      stopBtn.onclick = () => stopRecording(idx);
+
+      controls.appendChild(indicator);
+      controls.appendChild(playBtn);
+      controls.appendChild(recBtn);
+      controls.appendChild(stopBtn);
+
+      // Аудио ответа
+      const answerAudio = document.createElement('audio');
+      answerAudio.controls = true;
+      answerAudio.className = 'answer-audio';
+      answerAudio.style.display = 'none';
+      answerAudio.id = `audio-answer-${idx}`;
+
+      block.appendChild(questionEl);
+      block.appendChild(controls);
+      block.appendChild(answerAudio);
+
+      questionsDiv.appendChild(block);
+
+      // Сохраняем элементы для управления
+      questions[idx] = {
+        text: q,
+        indicator,
+        recBtn,
+        stopBtn,
+        answerAudio
+      };
+    });
+
+    // Озвучивание вопроса
+    function speakQuestion(idx) {
+      const utter = new window.SpeechSynthesisUtterance(questions[idx].text);
+      utter.lang = 'ru-RU';
+      window.speechSynthesis.speak(utter);
+    }
+
+    // Запись ответа
+    function startRecording(idx) {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('Ваш браузер не поддерживает запись голоса.');
+        return;
+      }
+      if (currentRecording !== null) stopRecording(currentRecording);
+
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(audioChunks, { type: 'audio/webm' });
+          const url = URL.createObjectURL(blob);
+          questions[idx].answerAudio.src = url;
+          questions[idx].answerAudio.style.display = 'block';
+          audios[idx] = url;
+        };
+        mediaRecorder.start();
+        questions[idx].indicator.classList.add('recording');
+        questions[idx].recBtn.disabled = true;
+        questions[idx].stopBtn.disabled = false;
+        currentRecording = idx;
+      }).catch(() => {
+        alert('Не удалось получить доступ к микрофону.');
+      });
+    }
+
+    // Остановить запись
+    function stopRecording(idx) {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+      questions[idx].indicator.classList.remove('recording');
+      questions[idx].recBtn.disabled = false;
+      questions[idx].stopBtn.disabled = true;
+      currentRecording = null;
+    }
+
+    // Горячие клавиши: 1,2,3...
+    document.addEventListener('keydown', e => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const n = parseInt(e.key, 10);
+      if (n >= 1 && n <= questions.length) {
+        speakQuestion(n - 1);
+        setTimeout(() => startRecording(n - 1), 1200); // чуть позже, чтобы не перекрывать озвучку
+      }
+    });
+  </script>
+</body>
+</html>
