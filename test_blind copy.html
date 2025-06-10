@@ -57,6 +57,7 @@
         border-radius: 1.1rem;
       }
     }
+    /* Остальные стили (эквалайзер, плеер, вопросы) оставьте без изменений */
     .record-indicator {
       width: 24px;
       height: 24px;
@@ -79,12 +80,12 @@
       100% { box-shadow: 0 0 0 0 #ef4444; }
     }
     .eq-bar {
-      width: 8px;
+      width: 6px;
       height: 20px;
       background: #6366f1;
-      margin: 0 3px;
+      margin: 0 2px;
       display: inline-block;
-      border-radius: 4px;
+      border-radius: 3px;
       vertical-align: middle;
       transition: height 0.1s, background 0.2s;
     }
@@ -98,27 +99,14 @@
       box-shadow: 0 8px 32px 0 rgba(99,102,241,0.12);
       padding: 1.2rem 2rem;
       min-height: 72px;
-      transition: box-shadow 0.4s cubic-bezier(.4,2,.6,1), transform 0.4s cubic-bezier(.4,2,.6,1), background 0.3s;
+      transition: box-shadow 0.3s, transform 0.3s;
       position: relative;
       z-index: 2;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(40px) scale(0.98);
     }
     .audio-player.active {
-      opacity: 1;
-      pointer-events: auto;
-      box-shadow: 0 24px 64px 0 rgba(99,102,241,0.25), 0 2px 8px 0 rgba(0,0,0,0.07);
+      box-shadow: 0 16px 48px 0 rgba(99,102,241,0.25), 0 2px 8px 0 rgba(0,0,0,0.07);
       transform: translateY(-18px) scale(1.04);
       background: #fff;
-    }
-    .audio-player.recording {
-      opacity: 1;
-      pointer-events: auto;
-      box-shadow: 0 32px 80px 0 rgba(239,68,68,0.25), 0 2px 8px 0 rgba(0,0,0,0.07);
-      background: linear-gradient(90deg, #f87171 0%, #6366f1 100%);
-      transform: translateY(-32px) scale(1.07);
-      border: 2px solid #ef4444;
     }
     .audio-btn {
       background: #6366f1;
