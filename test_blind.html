@@ -3,78 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Опросник для резюме (доступная версия)</title>
+  <title>Опросник для резюме</title>
+  <!-- Tailwind CSS и FontAwesome для иконок и стиля -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
   <style>
-    body {
-      background: #fff;
-      color: #111;
-      font-size: 1.3rem;
-      font-family: Arial, Verdana, sans-serif;
-      line-height: 1.6;
-      margin: 0;
-      padding: 0;
+    .record-indicator {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #d1d5db;
+      display: inline-block;
+      border: 2px solid #888;
+      transition: background 0.2s, box-shadow 0.2s;
+      margin-right: 0.75rem;
     }
-    main {
-      max-width: 60ch;
-      margin: 0 auto;
-      padding: 2rem 1rem;
+    .recording {
+      background: #ef4444 !important;
+      box-shadow: 0 0 12px #ef4444;
+      animation: pulse 1s infinite;
     }
-    .question-block {
-      margin-bottom: 2.5rem;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 2rem;
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 #ef4444; }
+      70% { box-shadow: 0 0 0 10px rgba(239,68,68,0); }
+      100% { box-shadow: 0 0 0 0 #ef4444; }
     }
-    .question {
-      font-weight: bold;
-      margin-bottom: 1rem;
+    .eq-bar {
+      width: 4px;
+      height: 24px;
+      background: #6366f1;
+      margin: 0 1px;
+      display: inline-block;
+      border-radius: 2px;
+      vertical-align: middle;
+      transition: height 0.1s;
     }
-    .controls {
+    .audio-player {
       display: flex;
       align-items: center;
       gap: 1rem;
-      margin-bottom: 1rem;
+      margin-top: 0.5rem;
     }
-    .record-indicator {
-      width: 18px;
-      height: 18px;
+    .audio-btn {
+      background: #6366f1;
+      color: #fff;
+      border: none;
       border-radius: 50%;
-      background: #ccc;
-      display: inline-block;
-      vertical-align: middle;
-      border: 2px solid #888;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      cursor: pointer;
       transition: background 0.2s;
     }
-    .recording {
-      background: #e00 !important;
-      box-shadow: 0 0 8px #e00;
+    .audio-btn:hover, .audio-btn:focus {
+      background: #4338ca;
+      outline: none;
     }
-    button {
-      font-size: 1rem;
-      padding: 0.5em 1em;
-      border-radius: 4px;
-      border: 1px solid #888;
-      background: #eee;
-      cursor: pointer;
-    }
-    .answer-audio {
-      margin-top: 0.5rem;
-      display: block;
-    }
-    .hint {
-      color: #555;
-      font-size: 1rem;
-      margin-bottom: 2rem;
+    .audio-time {
+      font-size: 0.95rem;
+      color: #374151;
+      min-width: 48px;
+      text-align: right;
     }
   </style>
 </head>
-<body>
-  <main>
-    <h1>Опросник для резюме</h1>
-    <div class="hint">
-      Для ответа нажмите цифру (1, 2, 3...), чтобы услышать вопрос и начать запись голоса.<br>
-      После окончания ответа нажмите "Стоп".<br>
-      Для прослушивания вопроса — кнопка "Прослушать".
+<body class="bg-gray-50 font-sans">
+  <header class="gradient-bg text-white shadow-lg">
+    <div class="container mx-auto px-4 py-6 flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Логотип" class="rounded-full">
+        <a href="index.html" class="hover:underline focus:outline-none">
+          <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+          <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+        </a>
+      </div>
+      <nav class="hidden md:flex space-x-6 items-center">
+        <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
+        <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+        <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+        <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
+        <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
+        <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
+      </nav>
     </div>
+  </header>
+  <section class="gradient-bg text-white py-12">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-4">Опросник для резюме</h2>
+      <p class="text-lg mb-2">Ответьте на вопросы голосом — это поможет составить ваше резюме.</p>
+      <p class="text-base opacity-90">Для ответа нажмите цифру (1, 2, 3...), чтобы услышать вопрос и начать запись. <br>Для остановки записи — S, для прослушивания вопроса — P, для прослушивания ответа — A.</p>
+    </div>
+  </section>
+  <main class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-6 mt-[-3rem] mb-12 relative z-10">
     <div id="questions"></div>
   </main>
   <script>
@@ -89,8 +112,6 @@
 
     // DOM
     const questionsDiv = document.getElementById('questions');
-
-    // Состояния
     let currentRecording = null;
     let mediaRecorder = null;
     let audioChunks = [];
@@ -99,16 +120,16 @@
     // Генерация блоков вопросов
     questions.forEach((q, idx) => {
       const block = document.createElement('section');
-      block.className = 'question-block';
+      block.className = 'question-block mb-8 pb-6 border-b border-gray-200';
       block.tabIndex = 0;
 
       const questionEl = document.createElement('div');
-      questionEl.className = 'question';
+      questionEl.className = 'question text-xl font-semibold mb-3';
       questionEl.textContent = `${idx + 1}. ${q}`;
 
       // Controls
       const controls = document.createElement('div');
-      controls.className = 'controls';
+      controls.className = 'controls flex items-center gap-3 mb-2';
 
       // Индикатор записи
       const indicator = document.createElement('span');
@@ -119,20 +140,24 @@
       // Кнопка прослушать вопрос
       const playBtn = document.createElement('button');
       playBtn.type = 'button';
-      playBtn.textContent = 'Прослушать';
+      playBtn.className = 'audio-btn';
+      playBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
       playBtn.setAttribute('aria-label', `Прослушать вопрос ${idx + 1}`);
       playBtn.onclick = () => speakQuestion(idx);
 
-      // Кнопка запись/стоп
+      // Кнопка запись
       const recBtn = document.createElement('button');
       recBtn.type = 'button';
-      recBtn.textContent = 'Записать';
+      recBtn.className = 'audio-btn bg-red-500 hover:bg-red-600';
+      recBtn.innerHTML = '<i class="fas fa-microphone"></i>';
       recBtn.setAttribute('aria-label', `Записать ответ на вопрос ${idx + 1}`);
       recBtn.onclick = () => startRecording(idx);
 
+      // Кнопка стоп
       const stopBtn = document.createElement('button');
       stopBtn.type = 'button';
-      stopBtn.textContent = 'Стоп';
+      stopBtn.className = 'audio-btn bg-gray-400 hover:bg-gray-600';
+      stopBtn.innerHTML = '<i class="fas fa-stop"></i>';
       stopBtn.setAttribute('aria-label', `Остановить запись ответа на вопрос ${idx + 1}`);
       stopBtn.disabled = true;
       stopBtn.onclick = () => stopRecording(idx);
@@ -142,16 +167,50 @@
       controls.appendChild(recBtn);
       controls.appendChild(stopBtn);
 
-      // Аудио ответа
+      // Аудио-плеер с эквалайзером
+      const playerWrap = document.createElement('div');
+      playerWrap.className = 'audio-player';
+      playerWrap.style.display = 'none';
+
       const answerAudio = document.createElement('audio');
-      answerAudio.controls = true;
-      answerAudio.className = 'answer-audio';
-      answerAudio.style.display = 'none';
+      answerAudio.className = 'hidden';
       answerAudio.id = `audio-answer-${idx}`;
+
+      // Кнопка play/pause для ответа
+      const answerPlayBtn = document.createElement('button');
+      answerPlayBtn.type = 'button';
+      answerPlayBtn.className = 'audio-btn bg-blue-500 hover:bg-blue-600';
+      answerPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+      answerPlayBtn.setAttribute('aria-label', `Воспроизвести ответ на вопрос ${idx + 1}`);
+
+      // Эквалайзер
+      const eqWrap = document.createElement('div');
+      eqWrap.style.display = 'flex';
+      eqWrap.style.alignItems = 'center';
+      eqWrap.style.height = '24px';
+      eqWrap.style.gap = '2px';
+      eqWrap.style.marginLeft = '8px';
+      const eqBars = [];
+      for (let i = 0; i < 8; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'eq-bar';
+        eqWrap.appendChild(bar);
+        eqBars.push(bar);
+      }
+
+      // Время
+      const timeLabel = document.createElement('span');
+      timeLabel.className = 'audio-time';
+      timeLabel.textContent = '00:00';
+
+      playerWrap.appendChild(answerPlayBtn);
+      playerWrap.appendChild(eqWrap);
+      playerWrap.appendChild(timeLabel);
+      playerWrap.appendChild(answerAudio);
 
       block.appendChild(questionEl);
       block.appendChild(controls);
-      block.appendChild(answerAudio);
+      block.appendChild(playerWrap);
 
       questionsDiv.appendChild(block);
 
@@ -161,11 +220,52 @@
         indicator,
         recBtn,
         stopBtn,
-        answerAudio
+        answerAudio,
+        playerWrap,
+        answerPlayBtn,
+        eqBars,
+        timeLabel
       };
+
+      // Плеер: play/pause и эквалайзер
+      let eqAnim = null;
+      answerPlayBtn.onclick = () => {
+        if (answerAudio.paused) {
+          answerAudio.play();
+        } else {
+          answerAudio.pause();
+        }
+      };
+      answerAudio.addEventListener('play', () => {
+        answerPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        eqAnim = setInterval(() => {
+          questions[idx].eqBars.forEach(bar => {
+            bar.style.height = (8 + Math.random() * 16) + 'px';
+          });
+        }, 100);
+      });
+      answerAudio.addEventListener('pause', () => {
+        answerPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+        clearInterval(eqAnim);
+        questions[idx].eqBars.forEach(bar => bar.style.height = '8px');
+      });
+      answerAudio.addEventListener('ended', () => {
+        answerPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+        clearInterval(eqAnim);
+        questions[idx].eqBars.forEach(bar => bar.style.height = '8px');
+      });
+      answerAudio.addEventListener('timeupdate', () => {
+        questions[idx].timeLabel.textContent = formatTime(answerAudio.currentTime);
+      });
     });
 
-    // Озвучивание текста
+    // Формат времени
+    function formatTime(sec) {
+      sec = Math.floor(sec);
+      return `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
+    }
+
+    // Озвучивание текста (улучшенная функция)
     function speak(text) {
       const synth = window.speechSynthesis;
       function doSpeak() {
@@ -180,7 +280,6 @@
         if (voice) utter.voice = voice;
         synth.speak(utter);
       }
-      // Если голоса ещё не загружены, дождаться события
       if (synth.getVoices().length === 0) {
         synth.onvoiceschanged = doSpeak;
       } else {
@@ -209,8 +308,12 @@
           const blob = new Blob(audioChunks, { type: 'audio/webm' });
           const url = URL.createObjectURL(blob);
           questions[idx].answerAudio.src = url;
-          questions[idx].answerAudio.style.display = 'block';
-          audios[idx] = url;
+          questions[idx].answerAudio.className = 'hidden';
+          questions[idx].playerWrap.style.display = 'flex';
+          questions[idx].answerAudio.load();
+          questions[idx].answerAudio.onloadedmetadata = () => {
+            questions[idx].timeLabel.textContent = formatTime(questions[idx].answerAudio.duration);
+          };
         };
         mediaRecorder.start();
         questions[idx].indicator.classList.add('recording');
@@ -252,7 +355,8 @@
         if (e.key.toLowerCase() === 'p') {
           speakQuestion(idx);
         }
-        if (e.key.toLowerCase() === 'a' && audios[idx]) {
+        if (e.key.toLowerCase() === 'a' && questions[idx].answerAudio.src) {
+          questions[idx].playerWrap.style.display = 'flex';
           questions[idx].answerAudio.play();
           speak('Воспроизвожу ваш ответ.');
         }
