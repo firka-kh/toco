@@ -312,7 +312,6 @@
       // Аудио-плеер с эквалайзером
       const playerWrap = document.createElement('div');
       playerWrap.className = 'audio-player';
-      playerWrap.style.display = 'none';
 
       const answerAudio = document.createElement('audio');
       answerAudio.className = 'hidden';
@@ -382,7 +381,6 @@
       answerAudio.addEventListener('play', () => {
         answerPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
         playerWrap.classList.add('active');
-        playerWrap.style.display = 'flex';
         eqAnim = setInterval(() => {
           eqBars.forEach(bar => {
             bar.style.height = (8 + Math.random() * 14) + 'px';
@@ -459,7 +457,6 @@
 
       // Плеер выплывает и меняет стиль при записи
       questions[idx].playerWrap.classList.add('recording');
-      questions[idx].playerWrap.style.display = 'flex';
 
       function draw() {
         micAnalyser.getByteFrequencyData(micDataArray);
@@ -490,7 +487,7 @@
         alert('Ваш браузер не поддерживает запись голоса.');
         return;
       }
-      if currentRecording !== null) stopRecording(currentRecording);
+      if (currentRecording !== null) stopRecording(currentRecording);
 
       navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         micStream = stream;
@@ -502,7 +499,6 @@
           const url = URL.createObjectURL(blob);
           questions[idx].answerAudio.src = url;
           questions[idx].answerAudio.className = 'hidden';
-          questions[idx].playerWrap.style.display = 'flex';
           questions[idx].playerWrap.classList.remove('recording');
           questions[idx].playerWrap.classList.add('active');
           questions[idx].answerAudio.load();
