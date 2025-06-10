@@ -13,6 +13,51 @@
     .gradient-bg {
       background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
     }
+    .rules-widget {
+      position: fixed;
+      top: 90px;
+      left: 32px;
+      width: 340px;
+      max-width: 90vw;
+      background: linear-gradient(120deg, #6366f1 0%, #60a5fa 100%);
+      color: #fff;
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 32px 0 rgba(99,102,241,0.13);
+      padding: 1.5rem 1.3rem 1.3rem 1.3rem;
+      font-size: 1.08rem;
+      font-weight: 500;
+      line-height: 1.7;
+      z-index: 50;
+      transition: box-shadow 0.2s;
+      text-align: left;
+      opacity: 0.98;
+    }
+    .rules-widget strong {
+      font-size: 1.18rem;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      display: block;
+      margin-bottom: 0.7rem;
+      text-align: left;
+    }
+    .rules-widget ul {
+      margin-left: 1rem;
+      margin-bottom: 0;
+    }
+    .rules-widget li {
+      margin-bottom: 0.3em;
+    }
+    @media (max-width: 900px) {
+      .rules-widget {
+        position: static;
+        width: 100%;
+        margin-bottom: 1.5rem;
+        left: 0;
+        top: 0;
+        border-radius: 1.1rem;
+      }
+    }
+    /* Остальные стили (эквалайзер, плеер, вопросы) оставьте без изменений */
     .record-indicator {
       width: 24px;
       height: 24px;
@@ -117,34 +162,13 @@
       color: #3730a3;
       letter-spacing: 0.01em;
     }
-    .rules-banner {
-      background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
-      color: #fff;
-      border-radius: 2rem;
-      box-shadow: 0 4px 32px 0 rgba(99,102,241,0.13);
-      padding: 2.2rem 2rem 2rem 2rem;
-      margin-top: -2.5rem;
-      margin-bottom: 2.5rem;
-      text-align: center;
-      font-size: 1.18rem;
-      font-weight: 500;
-      line-height: 1.7;
-      position: relative;
-      z-index: 5;
-    }
-    .rules-banner strong {
-      font-size: 1.35rem;
-      font-weight: 800;
-      letter-spacing: 0.01em;
-      display: block;
-      margin-bottom: 0.7rem;
-    }
     @media (max-width: 700px) {
-      .question-block, .audio-player, .rules-banner {
+      .question-block, .audio-player, .rules-widget {
         padding: 1.1rem 0.7rem;
         border-radius: 1.1rem;
       }
       .audio-player { min-height: 56px; }
+      .rules-widget { font-size: 1rem; }
     }
   </style>
 </head>
@@ -168,9 +192,10 @@
       </nav>
     </div>
   </header>
-  <section class="rules-banner mx-auto max-w-2xl">
-    <strong>Правила управления опросником</strong>
-    <ul class="list-disc list-inside text-left mx-auto max-w-xl" style="font-size:1.08rem;">
+  <!-- Плавающий виджет с правилами -->
+  <aside class="rules-widget" aria-label="Правила управления опросником">
+    <strong>Правила управления</strong>
+    <ul>
       <li><b>1–9</b> — выбрать и озвучить вопрос, сразу начнётся запись ответа</li>
       <li><b>S</b> — остановить запись</li>
       <li><b>P</b> — повторно прослушать вопрос</li>
@@ -178,7 +203,7 @@
       <li>Во время записи эквалайзер реагирует на ваш голос</li>
       <li>Все элементы доступны с клавиатуры и озвучиваются</li>
     </ul>
-  </section>
+  </aside>
   <main class="max-w-2xl mx-auto relative z-10">
     <div id="questions"></div>
   </main>
@@ -199,6 +224,19 @@
     let audioChunks = [];
     let audios = Array(questions.length).fill(null);
     let analyser, audioCtx, source, dataArray, rafId;
+
+    // Приветствие и правила при открытии страницы
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        speak(
+          "Добро пожаловать! Вы находитесь на странице голосового опросника для резюме. " +
+          "Система поможет вам записать ответы на типовые вопросы для резюме. " +
+          "Для выбора вопроса нажмите цифру от 1 до 9. После озвучивания вопроса начнётся запись. " +
+          "Для остановки записи нажмите S. Для повторного прослушивания вопроса — P. Для прослушивания своего ответа — A. " +
+          "Во время записи эквалайзер реагирует на ваш голос. Все элементы доступны с клавиатуры и озвучиваются."
+        );
+      }, 600);
+    });
 
     // Генерация блоков вопросов
     questions.forEach((q, idx) => {
