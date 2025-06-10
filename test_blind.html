@@ -98,7 +98,7 @@
       box-shadow: 0 8px 32px 0 rgba(99,102,241,0.12);
       padding: 1.2rem 2rem;
       min-height: 72px;
-      transition: box-shadow 0.4s cubic-bezier(.4,2,.6,1), transform 0.4s cubic-bezier(.4,2,.6,1), background 0.3s;
+      transition: box-shadow 0.4s cubic-bezier(.4,2,.6,1), transform 0.4s cubic-bezier(.4,2,.6,1), background 0.3s, opacity 0.3s;
       position: relative;
       z-index: 2;
       opacity: 0;
@@ -162,6 +162,7 @@
       border: none;
       transition: box-shadow 0.2s;
       position: relative;
+      z-index: 1;
     }
     .question-block.active {
       box-shadow: 0 8px 32px 0 rgba(99,102,241,0.15), 0 2px 8px 0 rgba(0,0,0,0.07);
@@ -205,7 +206,7 @@
     </div>
   </header>
   <!-- Плавающий виджет с правилами -->
-  <aside class="rules-widget" aria-label="Правила управления опросником">
+  <aside class="rules-widget" aria-label="Правила управления опросником" id="rules-widget" style="display:none;">
     <strong>Правила управления</strong>
     <ul>
       <li><b>1–9</b> — выбрать и озвучить вопрос, сразу начнётся запись ответа</li>
@@ -237,18 +238,42 @@
     let audios = Array(questions.length).fill(null);
     let analyser, audioCtx, source, dataArray, rafId;
 
-    // Приветствие и правила при открытии страницы
+    // --- Приветствие и инструкция по нажатию 0/00 ---
+    let instructionMode = false;
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         speak(
-          "Добро пожаловать! Вы находитесь на странице голосового опросника для резюме. " +
-          "Система поможет вам записать ответы на типовые вопросы для резюме. " +
-          "Для выбора вопроса нажмите цифру от 1 до 9. После озвучивания вопроса начнётся запись. " +
-          "Для остановки записи нажмите S. Для повторного прослушивания вопроса — P. Для прослушивания своего ответа — A. " +
-          "Во время записи эквалайзер реагирует на ваш голос. Все элементы доступны с клавиатуры и озвучиваются."
+          "Вы хотите прослушать текст инструкции? Если да, нажмите ноль. Если нет, нажмите два раза ноль."
         );
       }, 600);
     });
+
+    document.addEventListener('keydown', handleInstructionKey);
+
+    function handleInstructionKey(e) {
+      if (instructionMode) return;
+      if (e.key === '0') {
+        if (window._zeroPressed) {
+          // Двойной 0 — не озвучивать инструкцию
+          window._zeroPressed = false;
+          instructionMode = true;
+          document.removeEventListener('keydown', handleInstructionKey);
+          document.getElementById('rules-widget').style.display = 'none';
+          return;
+        }
+        window._zeroPressed = true;
+        setTimeout(() => { window._zeroPressed = false; }, 400);
+        // Одинарный 0 — озвучить инструкцию и показать виджет
+        speak(
+          "Правила управления. Для выбора вопроса нажмите цифру от 1 до 9. После озвучивания вопроса начнётся запись. " +
+          "Для остановки записи нажмите S. Для повторного прослушивания вопроса — P. Для прослушивания своего ответа — A. " +
+          "Во время записи эквалайзер реагирует на ваш голос. Все элементы доступны с клавиатуры и озвучиваются."
+        );
+        document.getElementById('rules-widget').style.display = '';
+        instructionMode = true;
+        document.removeEventListener('keydown', handleInstructionKey);
+      }
+    }
 
     // Генерация блоков вопросов
     questions.forEach((q, idx) => {
@@ -373,6 +398,7 @@
       answerAudio.addEventListener('play', () => {
         answerPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
         playerWrap.classList.add('active');
+        playerWrap.style.display = 'flex';
         eqAnim = setInterval(() => {
           eqBars.forEach(bar => {
             bar.style.height = (8 + Math.random() * 20) + 'px';
@@ -393,13 +419,19 @@
         eqBars.forEach(bar => bar.style.height = '8px');
       });
       answerAudio.addEventListener('timeupdate', () => {
-        timeLabel.textContent = formatTime(answerAudio.currentTime);
+        // Исправление NaN/Infinity
+        if (isFinite(answerAudio.currentTime) && !isNaN(answerAudio.currentTime)) {
+          timeLabel.textContent = formatTime(answerAudio.currentTime);
+        } else {
+          timeLabel.textContent = '00:00';
+        }
       });
     });
 
     // Формат времени
     function formatTime(sec) {
       sec = Math.floor(sec);
+      if (!isFinite(sec) || isNaN(sec)) return '00:00';
       return `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
     }
 
@@ -441,11 +473,15 @@
       micDataArray = new Uint8Array(micAnalyser.frequencyBinCount);
       micSource.connect(micAnalyser);
 
+      // Плеер выплывает и меняет стиль при записи
+      questions[idx].playerWrap.classList.add('recording');
+      questions[idx].playerWrap.style.display = 'flex';
+
       function draw() {
         micAnalyser.getByteFrequencyData(micDataArray);
         for (let i = 0; i < questions[idx].eqBars.length; i++) {
           let val = micDataArray[i] || 0;
-          questions[idx].eqBars[i].style.height = (8 + val / 4) + 'px';
+          questions[idx].eqBars[i].style.height = (8 + val / 3) + 'px';
           questions[idx].eqBars[i].style.background = `linear-gradient(180deg, #ef4444 0%, #6366f1 100%)`;
         }
         micRafId = requestAnimationFrame(draw);
@@ -455,10 +491,13 @@
     function stopMicEq(idx) {
       if (micRafId) cancelAnimationFrame(micRafId);
       if (audioCtx) audioCtx.close();
-      if (questions[idx]) questions[idx].eqBars.forEach(bar => {
-        bar.style.height = '8px';
-        bar.style.background = '#6366f1';
-      });
+      if (questions[idx]) {
+        questions[idx].eqBars.forEach(bar => {
+          bar.style.height = '8px';
+          bar.style.background = '#6366f1';
+        });
+        questions[idx].playerWrap.classList.remove('recording');
+      }
     }
 
     // Запись ответа
@@ -480,6 +519,8 @@
           questions[idx].answerAudio.src = url;
           questions[idx].answerAudio.className = 'hidden';
           questions[idx].playerWrap.style.display = 'flex';
+          questions[idx].playerWrap.classList.remove('recording');
+          questions[idx].playerWrap.classList.add('active');
           questions[idx].answerAudio.load();
           questions[idx].answerAudio.onloadedmetadata = () => {
             questions[idx].timeLabel.textContent = formatTime(questions[idx].answerAudio.duration);
@@ -491,7 +532,7 @@
         questions[idx].indicator.classList.add('recording');
         questions[idx].recBtn.disabled = true;
         questions[idx].stopBtn.disabled = false;
-        questions[idx].playerWrap.classList.add('active');
+        questions[idx].playerWrap.classList.add('recording');
         questions[idx].block.classList.add('active');
         currentRecording = idx;
         speak('Запись началась. Для остановки нажмите S.');
@@ -509,6 +550,7 @@
       questions[idx].indicator.classList.remove('recording');
       questions[idx].recBtn.disabled = false;
       questions[idx].stopBtn.disabled = true;
+      questions[idx].playerWrap.classList.remove('recording');
       questions[idx].playerWrap.classList.remove('active');
       questions[idx].block.classList.remove('active');
       currentRecording = null;
