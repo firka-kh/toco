@@ -15,30 +15,33 @@
   }
   .rules-widget {
     position: fixed;
-    top: 90px;
+    top: 120px; /* увеличен отступ от шапки */
     left: 32px;
     width: 340px;
     max-width: 90vw;
-    background: linear-gradient(120deg, #6366f1 0%, #60a5fa 100%);
+    background: linear-gradient(135deg, #6366f1 0%, #60a5fa 40%, #38bdf8 80%, #818cf8 100%);
     color: #fff;
-    border-radius: 1.5rem;
-    box-shadow: 0 4px 32px 0 rgba(99,102,241,0.13);
-    padding: 1.5rem 1.3rem 1.3rem 1.3rem;
-    font-size: 1.08rem;
+    border-radius: 1.7rem;
+    box-shadow: 0 8px 40px 0 rgba(99,102,241,0.18), 0 2px 8px 0 rgba(0,0,0,0.07);
+    padding: 1.7rem 1.4rem 1.3rem 1.4rem;
+    font-size: 1.12rem;
     font-weight: 500;
     line-height: 1.7;
     z-index: 50;
-    transition: box-shadow 0.2s;
+    transition: box-shadow 0.2s, background 0.3s;
     text-align: left;
     opacity: 0.98;
+    backdrop-filter: blur(2px);
+    border: 1.5px solid rgba(99,102,241,0.13);
   }
   .rules-widget strong {
-    font-size: 1.18rem;
+    font-size: 1.22rem;
     font-weight: 800;
     letter-spacing: 0.01em;
     display: block;
     margin-bottom: 0.7rem;
     text-align: left;
+    text-shadow: 0 2px 8px rgba(60,80,200,0.10);
   }
   .rules-widget ul {
     margin-left: 1rem;
@@ -46,6 +49,7 @@
   }
   .rules-widget li {
     margin-bottom: 0.3em;
+    text-shadow: 0 1px 4px rgba(60,80,200,0.07);
   }
   @media (max-width: 900px) {
     .rules-widget {
@@ -55,6 +59,7 @@
       left: 0;
       top: 0;
       border-radius: 1.1rem;
+      box-shadow: 0 4px 24px 0 rgba(99,102,241,0.13);
     }
   }
   .record-indicator {
@@ -485,7 +490,7 @@
         alert('Ваш браузер не поддерживает запись голоса.');
         return;
       }
-      if (currentRecording !== null) stopRecording(currentRecording);
+      if currentRecording !== null) stopRecording(currentRecording);
 
       navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         micStream = stream;
