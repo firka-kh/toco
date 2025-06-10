@@ -7,133 +7,187 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
   <style>
-    body {
-      background: #f7f8fa;
-    }
-    .gradient-bg {
-      background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
-    }
+  body {
+    background: #f7f8fa;
+  }
+  .gradient-bg {
+    background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+  }
+  .rules-widget {
+    position: fixed;
+    top: 90px;
+    left: 32px;
+    width: 340px;
+    max-width: 90vw;
+    background: linear-gradient(120deg, #6366f1 0%, #60a5fa 100%);
+    color: #fff;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 32px 0 rgba(99,102,241,0.13);
+    padding: 1.5rem 1.3rem 1.3rem 1.3rem;
+    font-size: 1.08rem;
+    font-weight: 500;
+    line-height: 1.7;
+    z-index: 50;
+    transition: box-shadow 0.2s;
+    text-align: left;
+    opacity: 0.98;
+  }
+  .rules-widget strong {
+    font-size: 1.18rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    display: block;
+    margin-bottom: 0.7rem;
+    text-align: left;
+  }
+  .rules-widget ul {
+    margin-left: 1rem;
+    margin-bottom: 0;
+  }
+  .rules-widget li {
+    margin-bottom: 0.3em;
+  }
+  @media (max-width: 900px) {
     .rules-widget {
-      position: fixed;
-      top: 90px;
-      left: 32px;
-      width: 340px;
-      max-width: 90vw;
-      background: linear-gradient(120deg, #6366f1 0%, #60a5fa 100%);
-      color: #fff;
-      border-radius: 1.5rem;
-      box-shadow: 0 4px 32px 0 rgba(99,102,241,0.13);
-      padding: 1.5rem 1.3rem 1.3rem 1.3rem;
-      font-size: 1.08rem;
-      font-weight: 500;
-      line-height: 1.7;
-      z-index: 50;
-      transition: box-shadow 0.2s;
-      text-align: left;
-      opacity: 0.98;
+      position: static;
+      width: 100%;
+      margin-bottom: 1.5rem;
+      left: 0;
+      top: 0;
+      border-radius: 1.1rem;
     }
-    .rules-widget strong {
-      font-size: 1.18rem;
-      font-weight: 800;
-      letter-spacing: 0.01em;
-      display: block;
-      margin-bottom: 0.7rem;
-      text-align: left;
+  }
+  .record-indicator {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    display: inline-block;
+    border: 2.5px solid #6366f1;
+    transition: background 0.2s, box-shadow 0.2s;
+    margin-right: 1rem;
+    box-shadow: 0 0 0 0 #6366f1;
+  }
+  .recording {
+    background: #ef4444 !important;
+    box-shadow: 0 0 16px 2px #ef4444;
+    animation: pulse 1s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 #ef4444; }
+    70% { box-shadow: 0 0 0 16px rgba(239,68,68,0); }
+    100% { box-shadow: 0 0 0 0 #ef4444; }
+  }
+  .eq-bar {
+    width: 6px;
+    height: 18px;
+    background: #6366f1;
+    margin: 0 2px;
+    display: inline-block;
+    border-radius: 3px;
+    vertical-align: middle;
+    transition: height 0.1s, background 0.2s;
+  }
+  .audio-player {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-top: 1.2rem;
+    background: #f1f5f9;
+    border-radius: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(99,102,241,0.12);
+    padding: 1.1rem 1.5rem;
+    min-height: 64px;
+    transition: box-shadow 0.3s, transform 0.3s, background 0.3s, opacity 0.3s;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(30px) scale(0.98);
+    max-width: 100%;
+    width: 100%;
+  }
+  .audio-player.active {
+    opacity: 1;
+    pointer-events: auto;
+    box-shadow: 0 16px 48px 0 rgba(99,102,241,0.18), 0 2px 8px 0 rgba(0,0,0,0.07);
+    transform: translateY(0) scale(1.01);
+    background: #fff;
+  }
+  .audio-player.recording {
+    opacity: 1;
+    pointer-events: auto;
+    box-shadow: 0 24px 64px 0 rgba(239,68,68,0.18), 0 2px 8px 0 rgba(0,0,0,0.07);
+    background: linear-gradient(90deg, #f87171 0%, #6366f1 100%);
+    border: 2px solid #ef4444;
+  }
+  .audio-btn {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px 0 rgba(99,102,241,0.08);
+    outline: none;
+  }
+  .audio-btn:active, .audio-btn:focus {
+    background: #4338ca;
+  }
+  .audio-btn.bg-red-500 { background: #ef4444; }
+  .audio-btn.bg-red-500:hover, .audio-btn.bg-red-500:focus { background: #b91c1c; }
+  .audio-btn.bg-gray-400 { background: #9ca3af; }
+  .audio-btn.bg-gray-400:hover, .audio-btn.bg-gray-400:focus { background: #6b7280; }
+  .audio-btn.bg-blue-500 { background: #3b82f6; }
+  .audio-btn.bg-blue-500:hover, .audio-btn.bg-blue-500:focus { background: #1d4ed8; }
+  .audio-time {
+    font-size: 1.08rem;
+    color: #374151;
+    min-width: 48px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    margin-left: auto;
+  }
+  .question-block {
+    background: #fff;
+    border-radius: 2rem;
+    box-shadow: 0 2px 16px 0 rgba(99,102,241,0.07);
+    padding: 2.2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2.5rem;
+    border: none;
+    transition: box-shadow 0.2s;
+    position: relative;
+    z-index: 1;
+  }
+  .question-block.active {
+    box-shadow: 0 8px 32px 0 rgba(99,102,241,0.15), 0 2px 8px 0 rgba(0,0,0,0.07);
+    z-index: 3;
+  }
+  .question {
+    font-size: 1.18rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    color: #3730a3;
+    letter-spacing: 0.01em;
+  }
+  @media (max-width: 700px) {
+    .question-block, .audio-player, .rules-widget {
+      padding: 1.1rem 0.7rem;
+      border-radius: 1.1rem;
     }
-    .rules-widget ul {
-      margin-left: 1rem;
-      margin-bottom: 0;
-    }
-    .rules-widget li {
-      margin-bottom: 0.3em;
-    }
-    @media (max-width: 900px) {
-      .rules-widget {
-        position: static;
-        width: 100%;
-        margin-bottom: 1.5rem;
-        left: 0;
-        top: 0;
-        border-radius: 1.1rem;
-      }
-    }
-    .record-indicator {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #e5e7eb;
-      display: inline-block;
-      border: 2.5px solid #6366f1;
-      transition: background 0.2s, box-shadow 0.2s;
-      margin-right: 1rem;
-      box-shadow: 0 0 0 0 #6366f1;
-    }
-    .recording {
-      background: #ef4444 !important;
-      box-shadow: 0 0 16px 2px #ef4444;
-      animation: pulse 1s infinite;
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 #ef4444; }
-      70% { box-shadow: 0 0 0 16px rgba(239,68,68,0); }
-      100% { box-shadow: 0 0 0 0 #ef4444; }
-    }
-    .eq-bar {
-      width: 8px;
-      height: 20px;
-      background: #6366f1;
-      margin: 0 3px;
-      display: inline-block;
-      border-radius: 4px;
-      vertical-align: middle;
-      transition: height 0.1s, background 0.2s;
-    }
-    .audio-player {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-top: 1.2rem;
-      background: #f1f5f9;
-      border-radius: 2rem;
-      box-shadow: 0 8px 32px 0 rgba(99,102,241,0.12);
-      padding: 1.2rem 2rem;
-      min-height: 72px;
-      transition: box-shadow 0.4s cubic-bezier(.4,2,.6,1), transform 0.4s cubic-bezier(.4,2,.6,1), background 0.3s, opacity 0.3s;
-      position: relative;
-      z-index: 2;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(40px) scale(0.98);
-      max-width: 95%; /* Добавлено ограничение ширины */
-      width: 480px;    /* Фиксированная ширина для предотвращения выхода за края */
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .audio-player.active {
-      opacity: 1;
-      pointer-events: auto;
-      box-shadow: 0 24px 64px 0 rgba(99,102,241,0.25), 0 2px 8px 0 rgba(0,0,0,0.07);
-      transform: translateY(-18px) scale(1.04);
-      background: #fff;
-    }
-    .audio-player.recording {
-      opacity: 1;
-      pointer-events: auto;
-      box-shadow: 0 32px 80px 0 rgba(239,68,68,0.25), 0 2px 8px 0 rgba(0,0,0,0.07);
-      background: linear-gradient(90deg, #f87171 0%, #6366f1 100%);
-      transform: translateY(-32px) scale(1.07);
-      border: 2px solid #ef4444;
-    }
-    @media (max-width: 600px) {
-      .audio-player {
-        width: 98vw;
-        min-width: 0;
-        padding: 0.7rem 0.3rem;
-      }
-    }
-    .main-top-space {
-      margin-top: 3.5rem;
-    }
+    .audio-player { min-height: 56px; }
+    .rules-widget { font-size: 1rem; }
+  }
+  .main-top-space {
+    margin-top: 3.5rem;
+  }
   </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -157,7 +211,7 @@
     </div>
   </header>
   <!-- Плавающий виджет с правилами -->
-  <aside class="rules-widget" aria-label="Правила управления опросником" id="rules-widget" style="display:none;">
+  <aside class="rules-widget" aria-label="Правила управления опросником" id="rules-widget">
     <strong>Правила управления</strong>
     <ul>
       <li><b>1–9</b> — выбрать и озвучить вопрос, сразу начнётся запись ответа</li>
@@ -189,42 +243,16 @@
     let audios = Array(questions.length).fill(null);
     let analyser, audioCtx, source, dataArray, rafId;
 
-    // --- Приветствие и инструкция по нажатию 0/00 ---
-    let instructionMode = false;
+    // --- Приветствие и инструкция ---
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
-        speak(
-          "Вы хотите прослушать текст инструкции? Если да, нажмите ноль. Если нет, нажмите два раза ноль."
-        );
-      }, 600);
-    });
-
-    document.addEventListener('keydown', handleInstructionKey);
-
-    function handleInstructionKey(e) {
-      if (instructionMode) return;
-      if (e.key === '0') {
-        if (window._zeroPressed) {
-          // Двойной 0 — не озвучивать инструкцию
-          window._zeroPressed = false;
-          instructionMode = true;
-          document.removeEventListener('keydown', handleInstructionKey);
-          document.getElementById('rules-widget').style.display = 'none';
-          return;
-        }
-        window._zeroPressed = true;
-        setTimeout(() => { window._zeroPressed = false; }, 400);
-        // Одинарный 0 — озвучить инструкцию и показать виджет
         speak(
           "Правила управления. Для выбора вопроса нажмите цифру от 1 до 9. После озвучивания вопроса начнётся запись. " +
           "Для остановки записи нажмите S. Для повторного прослушивания вопроса — P. Для прослушивания своего ответа — A. " +
           "Во время записи эквалайзер реагирует на ваш голос. Все элементы доступны с клавиатуры и озвучиваются."
         );
-        document.getElementById('rules-widget').style.display = '';
-        instructionMode = true;
-        document.removeEventListener('keydown', handleInstructionKey);
-      }
-    }
+      }, 600);
+    });
 
     // Генерация блоков вопросов
     questions.forEach((q, idx) => {
@@ -296,7 +324,7 @@
       const eqWrap = document.createElement('div');
       eqWrap.style.display = 'flex';
       eqWrap.style.alignItems = 'center';
-      eqWrap.style.height = '28px';
+      eqWrap.style.height = '24px';
       eqWrap.style.gap = '2px';
       eqWrap.style.marginLeft = '8px';
       const eqBars = [];
@@ -352,7 +380,7 @@
         playerWrap.style.display = 'flex';
         eqAnim = setInterval(() => {
           eqBars.forEach(bar => {
-            bar.style.height = (8 + Math.random() * 20) + 'px';
+            bar.style.height = (8 + Math.random() * 14) + 'px';
             bar.style.background = `linear-gradient(180deg, #6366f1 0%, #60a5fa 100%)`;
           });
         }, 100);
@@ -432,7 +460,7 @@
         micAnalyser.getByteFrequencyData(micDataArray);
         for (let i = 0; i < questions[idx].eqBars.length; i++) {
           let val = micDataArray[i] || 0;
-          questions[idx].eqBars[i].style.height = (8 + val / 3) + 'px';
+          questions[idx].eqBars[i].style.height = (8 + val / 2.5) + 'px';
           questions[idx].eqBars[i].style.background = `linear-gradient(180deg, #ef4444 0%, #6366f1 100%)`;
         }
         micRafId = requestAnimationFrame(draw);
