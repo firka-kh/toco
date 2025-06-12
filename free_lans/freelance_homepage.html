@@ -132,29 +132,29 @@
 </head>
 <body class="bg-gray-50 text-gray-900">
     <header class="tech-gradient-bg text-white shadow-lg py-4">
-        <div class="container mx-auto px-4 flex items-center justify-between">
+        <div class="container mx-auto px-6 flex items-center justify-between">
             <!-- Логотип и название -->
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-3">
                 <img src="https://placehold.co/40x40/4f46e5/ffffff?text=FL" alt="Логотип фриланс-платформы" class="rounded-full border-2 border-indigo-500">
-                <a href="freelance_homepage.html" class="hover:underline focus:outline-none flex flex-col md:flex-row md:items-center">
-                    <h1 class="text-2xl font-bold mr-0 md:mr-2">FreelanceHub</h1>
-                    <span class="text-sm opacity-75">от Портала рынка труда РТ</span>
-                </a>
+                <div class="flex flex-col justify-center leading-tight">
+                    <span class="text-2xl font-bold">FreelanceHub</span>
+                    <span class="text-xs opacity-75">от Портала рынка труда РТ</span>
+                </div>
             </div>
             <!-- Навигация -->
-            <nav class="hidden md:flex space-x-6 items-center">
-                <a href="how_it_works.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Как это работает</a>
-                <a href="categories.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Категории задач</a>
-                <a href="benefits.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Преимущества</a>
-                <a href="cta.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Присоединиться</a>
-                <a href="find_tasks.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Найти задачи</a>
-                <a href="publish_service.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Опубликовать услугу</a>
+            <nav class="hidden md:flex items-center gap-x-8">
+                <a href="how_it_works.html" class="font-medium text-gray-200 hover:text-teal-300 transition-colors text-base">Как это работает</a>
+                <a href="categories.html" class="font-medium text-gray-200 hover:text-teal-300 transition-colors text-base">Категории задач</a>
+                <a href="benefits.html" class="font-medium text-gray-200 hover:text-teal-300 transition-colors text-base">Преимущества</a>
+                <a href="cta.html" class="font-medium text-gray-200 hover:text-teal-300 transition-colors text-base">Присоединиться</a>
+                <a href="find_tasks.html" class="font-medium text-gray-200 hover:text-teal-300 transition-colors text-base">Найти задачи</a>
+                <a href="publish_service.html" class="font-medium text-gray-200 hover:text-teal-300 transition-colors text-base">Опубликовать услугу</a>
                 <!-- Профиль и язык -->
-                <div class="relative flex items-center space-x-4 ml-6" id="profileDropdownContainer">
+                <div class="flex items-center gap-x-3 ml-4" id="profileDropdownContainer">
                     <!-- Профиль -->
                     <div class="relative">
                         <button id="profileMenuBtn" type="button" aria-haspopup="true" aria-expanded="false"
-                            class="hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
+                            class="hover:text-yellow-300 transition-colors flex items-center px-2 py-1 rounded focus:outline-none">
                             Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
                         <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
@@ -166,20 +166,20 @@
                     <!-- Язык -->
                     <div class="relative">
                         <button id="langMenuBtn" type="button" aria-haspopup="true" aria-expanded="false"
-                            class="px-3 py-1 rounded font-semibold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                            class="px-3 py-1 rounded font-medium bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400">
                             <span id="currentLangLabel">RUS</span>
                             <i class="fas fa-chevron-down ml-2 text-xs"></i>
                         </button>
                         <div id="langDropdown"
                             class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
                             <button type="button"
-                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-medium transition-colors"
                                 data-lang="ru">RUS</button>
                             <button type="button"
-                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-medium transition-colors"
                                 data-lang="tg">TAJ</button>
                             <button type="button"
-                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-medium transition-colors"
                                 data-lang="en">ENG</button>
                         </div>
                     </div>
