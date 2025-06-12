@@ -195,73 +195,6 @@
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
-<div id="freelanceBlobWidget"
-     class="fixed bottom-8 left-8 z-50 cursor-pointer transition-all duration-400 ease-in-out group"
-     onclick="window.location.href='free_lans/freelance_homepage.html'"
-     title="FreelanceHub — Где идеи обретают форму"
-     style="width: 64px; height: 64px;">
-    <div class="relative w-full h-full flex items-center justify-center">
-        <!-- SVG клякса -->
-        <svg viewBox="0 0 100 100" class="absolute inset-0 w-full h-full transition-all duration-400 ease-in-out"
-             style="z-index:1;">
-            <path id="blobPath"
-                  d="M60.6,17.7Q70,35.5,81.7,50.2Q93.4,64.9,77.2,77.2Q61,89.5,44.2,83.2Q27.5,76.9,18.7,63.4Q9.9,49.9,19.7,34.9Q29.5,19.9,45.7,13.6Q61.9,7.3,60.6,17.7Z"
-                  fill="#4f46e5" class="transition-all duration-400 ease-in-out group-hover:scale-110 group-hover:rotate-2"/>
-        </svg>
-        <!-- Буквы FL -->
-        <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-extrabold text-2xl select-none transition-all duration-400 ease-in-out"
-              style="z-index:2;">FL</span>
-        <!-- Надпись при ховере -->
-        <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-semibold text-base px-4 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-400 ease-in-out"
-              style="z-index:3; pointer-events:none;">
-            Где идеи<br class="sm:hidden"> обретают форму
-        </span>
-    </div>
-    <style>
-        #freelanceBlobWidget {
-            box-shadow: 0 8px 32px 0 rgba(79,70,229,0.25);
-            overflow: visible;
-        }
-        #freelanceBlobWidget:hover {
-            width: 260px;
-            height: 64px;
-            transition: width 0.4s cubic-bezier(.4,2,.6,1), height 0.3s;
-        }
-        #freelanceBlobWidget .group-hover\:opacity-100 {
-            transition: opacity 0.4s, transform 0.4s;
-        }
-        #freelanceBlobWidget:hover .group-hover\:opacity-100 {
-            opacity: 1 !important;
-            transform: scale(1.08);
-        }
-        #freelanceBlobWidget .group-hover\:scale-110 {
-            transition: transform 0.4s;
-        }
-        #freelanceBlobWidget:hover .group-hover\:scale-110 {
-            transform: scale(1.12);
-        }
-        #freelanceBlobWidget .group-hover\:rotate-2 {
-            transition: transform 0.4s;
-        }
-        #freelanceBlobWidget:hover .group-hover\:rotate-2 {
-            transform: rotate(2deg) scale(1.12);
-        }
-        #freelanceBlobWidget span.text-2xl {
-            opacity: 1;
-            transition: opacity 0.3s;
-        }
-        #freelanceBlobWidget:hover span.text-2xl {
-            opacity: 0;
-        }
-        #freelanceBlobWidget span.text-base {
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        #freelanceBlobWidget:hover span.text-base {
-            opacity: 1;
-        }
-    </style>
-</div>
     <header class="gradient-bg text-white shadow-lg">
         <div class="container mx-auto px-4 py-6">
             <div class="flex items-center justify-between">
@@ -909,6 +842,94 @@
         <i class="fas fa-robot"></i>
     </button>
 
+<div id="freelanceBlobWidget"
+     class="fixed z-50 cursor-pointer transition-all duration-400 ease-in-out group"
+     onclick="window.location.href='free_lans/freelance_homepage.html'"
+     title="FreelanceHub — Где идеи обретают форму"
+     style="width: 64px; height: 64px; background: transparent; right: 32px; bottom: 104px;">
+    <div class="relative w-full h-full flex items-center justify-center">
+        <!-- SVG клякса с анимацией градиента -->
+        <svg viewBox="0 0 100 100" class="absolute inset-0 w-full h-full transition-all duration-400 ease-in-out pointer-events-none"
+             style="z-index:1;">
+            <defs>
+                <linearGradient id="blobGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#4f46e5">
+                        <animate attributeName="stop-color" values="#4f46e5;#06b6d4;#f59e42;#4f46e5" dur="4s" repeatCount="indefinite"/>
+                    </stop>
+                    <stop offset="100%" stop-color="#06b6d4">
+                        <animate attributeName="stop-color" values="#06b6d4;#f59e42;#4f46e5;#06b6d4" dur="4s" repeatCount="indefinite"/>
+                    </stop>
+                </linearGradient>
+            </defs>
+            <path id="blobPath"
+                  d="M60.6,17.7Q70,35.5,81.7,50.2Q93.4,64.9,77.2,77.2Q61,89.5,44.2,83.2Q27.5,76.9,18.7,63.4Q9.9,49.9,19.7,34.9Q29.5,19.9,45.7,13.6Q61.9,7.3,60.6,17.7Z"
+                  fill="url(#blobGradient)" class="transition-all duration-400 ease-in-out group-hover:scale-110 group-hover:rotate-2"/>
+        </svg>
+        <!-- Буквы FL -->
+        <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-extrabold text-2xl select-none transition-all duration-400 ease-in-out"
+              style="z-index:2;">FL</span>
+        <!-- Надпись при ховере -->
+        <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-semibold text-base px-4 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-400 ease-in-out"
+              style="z-index:3; pointer-events:none;">
+            Где идеи<br class="sm:hidden"> обретают форму
+        </span>
+    </div>
+    <style>
+        #freelanceBlobWidget {
+            box-shadow: 0 8px 32px 0 rgba(79,70,229,0.25);
+            overflow: visible;
+            background: transparent !important;
+            right: 32px;
+            bottom: 104px; /* 64px (бот) + 32px отступ + 8px запас */
+            left: auto !important;
+        }
+        @media (max-width: 768px) {
+            #freelanceBlobWidget {
+                right: 12px;
+                bottom: 104px;
+                left: auto !important;
+            }
+        }
+        #freelanceBlobWidget:hover {
+            width: 260px;
+            height: 64px;
+            transition: width 0.4s cubic-bezier(.4,2,.6,1), height 0.3s;
+        }
+        #freelanceBlobWidget .group-hover\:opacity-100 {
+            transition: opacity 0.4s, transform 0.4s;
+        }
+        #freelanceBlobWidget:hover .group-hover\:opacity-100 {
+            opacity: 1 !important;
+            transform: scale(1.08);
+        }
+        #freelanceBlobWidget .group-hover\:scale-110 {
+            transition: transform 0.4s;
+        }
+        #freelanceBlobWidget:hover .group-hover\:scale-110 {
+            transform: scale(1.12);
+        }
+        #freelanceBlobWidget .group-hover\:rotate-2 {
+            transition: transform 0.4s;
+        }
+        #freelanceBlobWidget:hover .group-hover\:rotate-2 {
+            transform: rotate(2deg) scale(1.12);
+        }
+        #freelanceBlobWidget span.text-2xl {
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+        #freelanceBlobWidget:hover span.text-2xl {
+            opacity: 0;
+        }
+        #freelanceBlobWidget span.text-base {
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #freelanceBlobWidget:hover span.text-base {
+            opacity: 1;
+        }
+    </style>
+</div>
     <script>
         // Unemployment Chart
         const ctx1 = document.getElementById('unemploymentChart').getContext('2d');
