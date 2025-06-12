@@ -31,6 +31,28 @@
             80%  { transform: translateY(-2px) scale(1);}
             100% { transform: translateY(0) scale(1);}
         }
+        .gradient-card {
+            background: linear-gradient(135deg, #6366f1 0%, #f43f5e 100%);
+            color: #fff;
+            box-shadow: 0 8px 32px 0 rgba(44,62,80,0.10);
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+        .gradient-card .drop-shadow {
+            text-shadow: 0 2px 8px rgba(44,62,80,0.18);
+        }
+        .gradient-icon {
+            background: linear-gradient(135deg, #6366f1 0%, #f59e42 100%);
+        }
+        .gradient-icon2 {
+            background: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+        }
+        .gradient-icon3 {
+            background: linear-gradient(135deg, #f43f5e 0%, #f59e42 100%);
+        }
+        .gradient-card:hover {
+            box-shadow: 0 20px 40px 0 rgba(44,62,80,0.18);
+            animation: bounceOut 0.5s;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -75,26 +97,26 @@
         <div class="container mx-auto text-center">
             <h3 class="text-3xl font-bold mb-12 text-gray-800">Основные шаги</h3>
             <div class="grid md:grid-cols-3 gap-10">
-                <div class="flex flex-col items-center p-6 bg-gray-50 rounded-xl shadow-md hover-lift">
-                    <div class="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center text-3xl mb-4">
+                <div class="flex flex-col items-center p-6 rounded-xl shadow-md hover-lift gradient-card">
+                    <div class="gradient-icon rounded-full h-16 w-16 flex items-center justify-center text-3xl mb-4 text-white">
                         <i class="fas fa-user-plus"></i>
                     </div>
-                    <h4 class="text-xl font-semibold mb-3 text-gray-800">1. Зарегистрируйтесь</h4>
-                    <p class="text-gray-700">Создайте профиль, укажите навыки и опыт. Это бесплатно и займёт пару минут.</p>
+                    <h4 class="text-xl font-semibold mb-3 text-white drop-shadow">1. Зарегистрируйтесь</h4>
+                    <p class="text-white/90 drop-shadow">Создайте профиль, укажите навыки и опыт. Это бесплатно и займёт пару минут.</p>
                 </div>
-                <div class="flex flex-col items-center p-6 bg-gray-50 rounded-xl shadow-md hover-lift">
-                    <div class="bg-green-100 text-green-600 rounded-full h-16 w-16 flex items-center justify-center text-3xl mb-4">
+                <div class="flex flex-col items-center p-6 rounded-xl shadow-md hover-lift gradient-card">
+                    <div class="gradient-icon2 rounded-full h-16 w-16 flex items-center justify-center text-3xl mb-4 text-white">
                         <i class="fas fa-search"></i>
                     </div>
-                    <h4 class="text-xl font-semibold mb-3 text-gray-800">2. Найдите задачи или исполнителей</h4>
-                    <p class="text-gray-700">Используйте фильтры, чтобы быстро найти подходящие проекты или специалистов.</p>
+                    <h4 class="text-xl font-semibold mb-3 text-white drop-shadow">2. Найдите задачи или исполнителей</h4>
+                    <p class="text-white/90 drop-shadow">Используйте фильтры, чтобы быстро найти подходящие проекты или специалистов.</p>
                 </div>
-                <div class="flex flex-col items-center p-6 bg-gray-50 rounded-xl shadow-md hover-lift">
-                    <div class="bg-yellow-100 text-yellow-600 rounded-full h-16 w-16 flex items-center justify-center text-3xl mb-4">
+                <div class="flex flex-col items-center p-6 rounded-xl shadow-md hover-lift gradient-card">
+                    <div class="gradient-icon3 rounded-full h-16 w-16 flex items-center justify-center text-3xl mb-4 text-white">
                         <i class="fas fa-handshake"></i>
                     </div>
-                    <h4 class="text-xl font-semibold mb-3 text-gray-800">3. Сотрудничайте и получайте оплату</h4>
-                    <p class="text-gray-700">Обсуждайте детали, выполняйте задачи, сдавайте работу и получайте оплату безопасно.</p>
+                    <h4 class="text-xl font-semibold mb-3 text-white drop-shadow">3. Сотрудничайте и получайте оплату</h4>
+                    <p class="text-white/90 drop-shadow">Обсуждайте детали, выполняйте задачи, сдавайте работу и получайте оплату безопасно.</p>
                 </div>
             </div>
         </div>
