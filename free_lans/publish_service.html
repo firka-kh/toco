@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Опубликовать услугу — FreelanceHub</title>
+    <meta name="description" content="Публикация услуги для заказчиков и исполнителей.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .tech-gradient-bg { background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); }
+        .hover-lift { transition: transform 0.3s, box-shadow 0.3s; }
+        .hover-lift:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.2);}
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- ...header (копировать из других страниц, все ссылки рабочие)... -->
+
+    <main class="container mx-auto px-4 py-12 max-w-2xl">
+        <h2 class="text-3xl font-bold mb-8 text-gray-800 text-center">Опубликовать услугу</h2>
+        <form class="bg-white rounded-xl shadow-lg p-8 space-y-6" id="publishServiceForm" enctype="multipart/form-data">
+            <div>
+                <label class="block font-semibold mb-2">Название услуги</label>
+                <input type="text" name="title" class="w-full border rounded px-3 py-2" placeholder="Например, Дизайн сайта" required>
+            </div>
+            <div>
+                <label class="block font-semibold mb-2">Категория</label>
+                <select name="category" class="w-full border rounded px-3 py-2" required>
+                    <option value="">Выберите категорию</option>
+                    <option>Разработка ПО</option>
+                    <option>Дизайн</option>
+                    <option>Тексты и переводы</option>
+                    <option>Маркетинг</option>
+                    <option>Видео и анимация</option>
+                    <option>Поддержка клиентов</option>
+                    <option>Финансы и Бухгалтерия</option>
+                    <option>Инженерные услуги</option>
+                </select>
+            </div>
+            <div>
+                <label class="block font-semibold mb-2">Описание</label>
+                <textarea name="description" class="w-full border rounded px-3 py-2" rows="4" placeholder="Опишите услугу, сроки, условия" required></textarea>
+            </div>
+            <div>
+                <label class="block font-semibold mb-2">Бюджет (₽)</label>
+                <input type="number" name="budget" class="w-full border rounded px-3 py-2" placeholder="Укажите сумму" required>
+            </div>
+            <div>
+                <label class="block font-semibold mb-2">Прикрепить файлы</label>
+                <input type="file" name="attachments" class="w-full" multiple accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx,.zip,.rar,.txt">
+                <p class="text-xs text-gray-500 mt-1">Можно прикрепить изображения, документы, архивы и другие файлы.</p>
+                <div id="fileList" class="mt-2 space-y-1"></div>
+            </div>
+            <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded font-bold hover:bg-indigo-700 transition">Опубликовать</button>
+        </form>
+        <div id="publishResult" class="mt-6 text-center text-green-600 font-semibold hidden">Услуга успешно опубликована (эмуляция)!</div>
+    </main>
+
+    <!-- ...footer (копировать из других страниц)... -->
+    <!-- ...скрипты (копировать из других страниц)... -->
+    <script>
+        // Показывать имена выбранных файлов
+        document.querySelector('input[type="file"]').addEventListener('change', function() {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            for (const file of this.files) {
+                const div = document.createElement('div');
+                div.textContent = file.name;
+                fileList.appendChild(div);
+            }
+        });
+        // Эмуляция публикации
+        document.getElementById('publishServiceForm').onsubmit = function(e) {
+            e.preventDefault();
+            document.getElementById('publishResult').classList.remove('hidden');
+            this.reset();
+            document.getElementById('fileList').innerHTML = '';
+        };
+    </script>
+</body>
+</html>
