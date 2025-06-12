@@ -53,6 +53,32 @@
             box-shadow: 0 20px 40px 0 rgba(44,62,80,0.18);
             animation: bounceOut 0.5s;
         }
+        .modern-card {
+            background: #fff;
+            border: 1.5px solid #ececec;
+            box-shadow: 0 4px 24px 0 rgba(44,62,80,0.07);
+            transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+        }
+        .modern-card:hover {
+            border-color: #a5b4fc;
+            box-shadow: 0 12px 32px 0 rgba(99,102,241,0.10);
+            animation: bounceOut 0.5s;
+        }
+        .modern-icon {
+            background: linear-gradient(135deg, #6366f1 0%, #f59e42 100%);
+            color: #fff;
+            box-shadow: 0 2px 8px 0 rgba(99,102,241,0.10);
+        }
+        .modern-icon2 {
+            background: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+            color: #fff;
+            box-shadow: 0 2px 8px 0 rgba(6,182,212,0.10);
+        }
+        .modern-icon3 {
+            background: linear-gradient(135deg, #f43f5e 0%, #f59e42 100%);
+            color: #fff;
+            box-shadow: 0 2px 8px 0 rgba(244,63,94,0.10);
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -78,45 +104,42 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="bg-gray-800 text-white py-16 px-4 text-center">
+    <section class="bg-gray-50 py-12 px-4 text-center">
         <div class="container mx-auto">
-            <h2 class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight animate-fade-in">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight text-gray-900">
                 Как работает FreelanceHub?
             </h2>
-            <p class="text-xl md:text-2xl opacity-90 mb-8 max-w-2xl mx-auto">
-                Платформа для поиска задач, проектов и специалистов. Всё просто: регистрируйтесь, ищите задачи, сотрудничайте и получайте оплату!
+            <p class="text-lg md:text-xl opacity-80 mb-0 max-w-2xl mx-auto">
+                Всё просто: регистрируйтесь, ищите задачи, сотрудничайте и получайте оплату!
             </p>
-            <a href="freelance_homepage.html" class="inline-block bg-teal-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-teal-600 transition duration-300 hover-lift">
-                Вернуться на главную
-            </a>
         </div>
     </section>
 
     <!-- Этапы работы -->
-    <section class="py-16 px-4 bg-white">
+    <section class="py-12 px-4 bg-white">
         <div class="container mx-auto text-center">
-            <h3 class="text-3xl font-bold mb-12 text-gray-800">Основные шаги</h3>
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="flex flex-col items-center p-6 rounded-xl shadow-md hover-lift gradient-card">
-                    <div class="gradient-icon rounded-full h-16 w-16 flex items-center justify-center text-3xl mb-4 text-white">
+            <h3 class="text-3xl font-bold mb-10 text-gray-800">Основные шаги</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="flex flex-col items-center p-7 rounded-2xl shadow-md hover-lift modern-card">
+                    <div class="modern-icon rounded-xl h-14 w-14 flex items-center justify-center text-2xl mb-4">
                         <i class="fas fa-user-plus"></i>
                     </div>
-                    <h4 class="text-xl font-semibold mb-3 text-white drop-shadow">1. Зарегистрируйтесь</h4>
-                    <p class="text-white/90 drop-shadow">Создайте профиль, укажите навыки и опыт. Это бесплатно и займёт пару минут.</p>
+                    <h4 class="text-lg font-semibold mb-2 text-gray-900">1. Зарегистрируйтесь</h4>
+                    <p class="text-gray-700 text-base">Создайте профиль, укажите навыки и опыт. Это бесплатно и займёт пару минут.</p>
                 </div>
-                <div class="flex flex-col items-center p-6 rounded-xl shadow-md hover-lift gradient-card">
-                    <div class="gradient-icon2 rounded-full h-16 w-16 flex items-center justify-center text-3xl mb-4 text-white">
+                <div class="flex flex-col items-center p-7 rounded-2xl shadow-md hover-lift modern-card">
+                    <div class="modern-icon2 rounded-xl h-14 w-14 flex items-center justify-center text-2xl mb-4">
                         <i class="fas fa-search"></i>
                     </div>
-                    <h4 class="text-xl font-semibold mb-3 text-white drop-shadow">2. Найдите задачи или исполнителей</h4>
-                    <p class="text-white/90 drop-shadow">Используйте фильтры, чтобы быстро найти подходящие проекты или специалистов.</p>
+                    <h4 class="text-lg font-semibold mb-2 text-gray-900">2. Найдите задачи или исполнителей</h4>
+                    <p class="text-gray-700 text-base">Используйте фильтры, чтобы быстро найти подходящие проекты или специалистов.</p>
                 </div>
-                <div class="flex flex-col items-center p-6 rounded-xl shadow-md hover-lift gradient-card">
-                    <div class="gradient-icon3 rounded-full h-16 w-16 flex items-center justify-center text-3xl mb-4 text-white">
+                <div class="flex flex-col items-center p-7 rounded-2xl shadow-md hover-lift modern-card">
+                    <div class="modern-icon3 rounded-xl h-14 w-14 flex items-center justify-center text-2xl mb-4">
                         <i class="fas fa-handshake"></i>
                     </div>
-                    <h4 class="text-xl font-semibold mb-3 text-white drop-shadow">3. Сотрудничайте и получайте оплату</h4>
-                    <p class="text-white/90 drop-shadow">Обсуждайте детали, выполняйте задачи, сдавайте работу и получайте оплату безопасно.</p>
+                    <h4 class="text-lg font-semibold mb-2 text-gray-900">3. Сотрудничайте и получайте оплату</h4>
+                    <p class="text-gray-700 text-base">Обсуждайте детали, выполняйте задачи, сдавайте работу и получайте оплату безопасно.</p>
                 </div>
             </div>
         </div>
