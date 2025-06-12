@@ -20,6 +20,16 @@
             transform: translateY(-4px) scale(1.03);
             z-index: 10;
         }
+        .animated-gradient-bg {
+            background: linear-gradient(135deg, #06b6d4, #f59e42, #6366f1, #f43f5e);
+            background-size: 400% 400%;
+            animation: gradientMove 60s ease-in-out infinite alternate;
+        }
+        @keyframes gradientMove {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -47,7 +57,7 @@
 
     <main class="container mx-auto px-4 py-12 flex gap-8">
         <!-- Фильтр -->
-        <aside class="w-full max-w-xs bg-white rounded-xl shadow-md filter-panel p-6 sticky top-8 self-start hover-lift">
+        <aside class="w-full max-w-xs rounded-xl shadow-md filter-panel p-6 sticky top-8 self-start hover-lift animated-gradient-bg">
             <h3 class="text-xl font-bold mb-4 text-gray-800">Фильтр задач</h3>
             <form id="taskFilterForm" class="space-y-4">
                 <div>
@@ -66,11 +76,52 @@
                 </div>
                 <div>
                     <label class="block text-sm font-semibold mb-1">Бюджет</label>
-                    <input type="number" class="w-full border rounded px-3 py-2" name="budget" placeholder="от, ₽">
+                    <div class="flex gap-2">
+                        <input type="number" class="w-1/2 border rounded px-3 py-2" name="budget_min" placeholder="от, ₽">
+                        <input type="number" class="w-1/2 border rounded px-3 py-2" name="budget_max" placeholder="до, ₽">
+                    </div>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold mb-1">Ключевые слова</label>
                     <input type="text" class="w-full border rounded px-3 py-2" name="keywords" placeholder="например, дизайн, сайт">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Тип занятости</label>
+                    <select class="w-full border rounded px-3 py-2" name="employment">
+                        <option value="">Любой</option>
+                        <option>Разовая задача</option>
+                        <option>Долгосрочный проект</option>
+                        <option>Постоянная работа</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Срок выполнения</label>
+                    <select class="w-full border rounded px-3 py-2" name="deadline">
+                        <option value="">Не важно</option>
+                        <option>До 3 дней</option>
+                        <option>До недели</option>
+                        <option>До месяца</option>
+                        <option>Долгосрочно</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Требуемый опыт</label>
+                    <select class="w-full border rounded px-3 py-2" name="experience">
+                        <option value="">Не важно</option>
+                        <option>Без опыта</option>
+                        <option>1-3 года</option>
+                        <option>3-5 лет</option>
+                        <option>5+ лет</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Формат работы</label>
+                    <select class="w-full border rounded px-3 py-2" name="format">
+                        <option value="">Любой</option>
+                        <option>Удалённо</option>
+                        <option>Офис</option>
+                        <option>Гибрид</option>
+                    </select>
                 </div>
                 <button type="submit" class="w-full bg-teal-500 text-white py-2 rounded font-bold hover:bg-teal-600 transition">Применить</button>
             </form>
