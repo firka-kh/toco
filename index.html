@@ -218,6 +218,21 @@
                     <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
                     <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
                     <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                    <!-- Новое выпадающее меню "Премиум-подписка" -->
+                    <div class="relative">
+                        <button id="premiumMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors flex items-center focus:outline-none">
+                            Премиум-подписка <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="premiumDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Реклама</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Платные услуги для соискателей</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Комиссия центров</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Аналитика (Отчеты для бизнеса)</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">API-доступ для партнеров</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Ярмарки</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Фриланс-платформа</a>
+                        </div>
+                    </div>
                     <!-- Выпадающее меню профиля и языков -->
                     <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
                         <!-- Мой профиль -->
@@ -1024,12 +1039,15 @@
         const langMenuBtn = document.getElementById('langMenuBtn');
         const langDropdown = document.getElementById('langDropdown');
         const currentLangLabel = document.getElementById('currentLangLabel');
+        const premiumMenuBtn = document.getElementById('premiumMenuBtn');
+        const premiumDropdown = document.getElementById('premiumDropdown');
 
         // Открытие/закрытие меню "Мой профиль"
         profileMenuBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             profileDropdown.classList.toggle('hidden');
             langDropdown.classList.add('hidden');
+            premiumDropdown.classList.add('hidden');
         });
 
         // Открытие/закрытие меню языков
@@ -1037,6 +1055,15 @@
             e.stopPropagation();
             langDropdown.classList.toggle('hidden');
             profileDropdown.classList.add('hidden');
+            premiumDropdown.classList.add('hidden');
+        });
+
+        // Открытие/закрытие меню "Премиум-подписка"
+        premiumMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            premiumDropdown.classList.toggle('hidden');
+            profileDropdown.classList.add('hidden');
+            langDropdown.classList.add('hidden');
         });
 
         // Закрытие обоих меню при клике вне
@@ -1046,6 +1073,9 @@
             }
             if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
                 langDropdown.classList.add('hidden');
+            }
+            if (!premiumDropdown.contains(e.target) && !premiumMenuBtn.contains(e.target)) {
+                premiumDropdown.classList.add('hidden');
             }
         });
 
