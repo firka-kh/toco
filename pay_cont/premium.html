@@ -74,6 +74,66 @@
             margin-top: 1rem;
         }
 
+        /* New styles for feature-category-block */
+        .feature-category-block {
+            background: linear-gradient(120deg, #f8fafc 70%, #e0e7ff 100%);
+            border-radius: 1.25rem;
+            box-shadow: 0 6px 32px 0 rgba(79,70,229,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+            border: 1.5px solid #e0e7ff;
+            transition: transform 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.25s, border-color 0.25s;
+            will-change: transform, box-shadow;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-category-block:hover {
+            transform: translateY(-12px) scale(1.035);
+            box-shadow: 0 16px 48px 0 rgba(79,70,229,0.18), 0 2px 8px 0 rgba(0,0,0,0.06);
+            border-color: #6366f1;
+            animation: bounce 0.5s;
+        }
+        @keyframes bounce {
+            0%   { transform: translateY(0) scale(1.035);}
+            30%  { transform: translateY(-12px) scale(1.07);}
+            50%  { transform: translateY(-18px) scale(1.04);}
+            70%  { transform: translateY(-8px) scale(1.035);}
+            100% { transform: translateY(-12px) scale(1.035);}
+        }
+        .feature-category-block .tooltip-icon {
+            margin-left: 0.5em;
+            color: #6366f1;
+            cursor: pointer;
+            font-size: 1em;
+            transition: color 0.2s;
+        }
+        .feature-category-block .tooltip-icon:hover {
+            color: #4338ca;
+        }
+        .feature-category-block h3 {
+            letter-spacing: 0.01em;
+        }
+        .feature-category-block label {
+            font-size: 1.08rem;
+        }
+        .feature-category-block input[type="checkbox"] {
+            accent-color: #6366f1;
+        }
+        .feature-category-block .price-checkbox:focus {
+            outline: 2px solid #6366f1;
+            outline-offset: 2px;
+        }
+        .feature-category-block .price {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-top: 1rem;
+        }
+        .feature-category-block .text-sm {
+            font-size: 0.98rem;
+        }
+        .feature-category-block .ml-7 {
+            margin-left: 2.2rem;
+        }
+
         /* Tooltip styles */
         .tooltip {
             position: absolute;
@@ -96,13 +156,10 @@
             position: relative;
             display: inline-block;
         }
-        .tooltip-icon {
-            margin-left: 0.5em;
-            color: #6366f1;
-            cursor: pointer;
-            font-size: 1em;
+        /* Современный фон для секции */
+        .modern-bg {
+            background: linear-gradient(120deg, #f8fafc 60%, #e0e7ff 100%);
         }
-
         /* Print-specific styles for A4 format */
         @media print {
             /* Define A4 page size and margins */
@@ -269,13 +326,13 @@
     </header>
 
     <main class="container mx-auto px-4 py-8">
-        <section class="section-spacing bg-white rounded-lg shadow-xl">
+        <section class="section-spacing modern-bg rounded-2xl shadow-2xl">
             <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center mb-10 text-gray-800">Платные функции Портала рынка труда</h2>
-                <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+                <h2 class="text-4xl font-extrabold text-center mb-10 text-gray-800 tracking-tight">Платные функции Портала рынка труда</h2>
+                <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto text-lg">
                     Расширьте свои возможности на портале с нашими платными функциями. Наведите на <i class="fas fa-info-circle text-blue-500"></i> чтобы узнать подробности.
                 </p>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12">
                     <!-- 1. Премиум-подписки -->
                     <div class="feature-category-block bg-blue-50 p-6 rounded-lg shadow-md border border-blue-200">
                         <h3 class="text-xl font-bold text-blue-800 mb-4 flex items-center">
