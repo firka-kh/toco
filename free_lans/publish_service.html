@@ -3,80 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Опубликовать услугу — FreelanceHub</title>
-    <meta name="description" content="Публикация услуги для заказчиков и исполнителей.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .tech-gradient-bg { background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); }
-        .hover-lift { transition: transform 0.3s, box-shadow 0.3s; }
-        .hover-lift:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.2);}
-    </style>
+    <title>Опубликовать услугу | FreelanceHub - Портал рынка труда РТ</title>
+    <meta name="description" content="Разместите свою услугу на фриланс-платформе FreelanceHub. Найдите клиентов и развивайте свой бизнес на портале рынка труда Республики Татарстан.">
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <script src="../assets/js/common.js" defer></script>
 </head>
-<body class="bg-gray-50 text-gray-900">
-    <!-- ...скопировать header из freelance_homepage.html... -->
+<body>
+    <div id="header-container"></div>    <main class="min-h-screen py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-gray-800 mb-4">Опубликовать услугу</h1>
+                    <p class="text-lg text-gray-600">Предложите свои услуги и найдите новых клиентов</p>
+                </div>
 
-    <main class="container mx-auto px-4 py-12 max-w-2xl">
-        <h2 class="text-3xl font-bold mb-8 text-gray-800 text-center">Опубликовать услугу</h2>
-        <form class="bg-white rounded-xl shadow-lg p-8 space-y-6" id="publishServiceForm" enctype="multipart/form-data">
-            <div>
-                <label class="block font-semibold mb-2">Название услуги</label>
-                <input type="text" name="title" class="w-full border rounded px-3 py-2" placeholder="Например, Дизайн сайта" required>
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Форма публикации -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-lg shadow-lg p-8">
+                            <form id="publishServiceForm" class="space-y-6">
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="form-label">Название услуги *</label>
+                                        <input type="text" name="title" class="form-input" 
+                                               placeholder="Например: Разработка интернет-магазина" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Категория *</label>
+                                        <select name="category" class="form-input" required>
+                                            <option value="">Выберите категорию</option>
+                                            <option value="development">💻 Разработка ПО</option>
+                                            <option value="design">🎨 Дизайн и графика</option>
+                                            <option value="marketing">📈 Маркетинг и реклама</option>
+                                            <option value="writing">✍️ Тексты и переводы</option>
+                                            <option value="video">🎬 Видео и анимация</option>
+                                            <option value="audio">🎵 Аудио и музыка</option>
+                                            <option value="business">💼 Бизнес-консультирование</option>
+                                            <option value="education">📚 Образование и тренинги</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="form-label">Подробное описание *</label>
+                                    <textarea name="description" class="form-input" rows="6" 
+                                              placeholder="Опишите детально что вы предлагаете, какие преимущества, сроки выполнения..." required></textarea>
+                                </div>
+
+                                <div class="grid md:grid-cols-3 gap-6">
+                                    <div>
+                                        <label class="form-label">Стоимость от (₽) *</label>
+                                        <input type="number" name="price_from" class="form-input" 
+                                               placeholder="5000" min="0" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Стоимость до (₽)</label>
+                                        <input type="number" name="price_to" class="form-input" 
+                                               placeholder="50000" min="0">
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Срок выполнения (дней)</label>
+                                        <input type="number" name="delivery_time" class="form-input" 
+                                               placeholder="7" min="1">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="form-label">Теги услуги</label>
+                                    <input type="text" name="tags" class="form-input" 
+                                           placeholder="веб-разработка, интернет-магазин, PHP, MySQL">
+                                    <p class="text-sm text-gray-500 mt-1">Разделяйте теги запятыми</p>
+                                </div>
+
+                                <div>
+                                    <label class="form-label">Портфолио (изображения)</label>
+                                    <input type="file" name="portfolio" class="form-input" 
+                                           multiple accept="image/*" id="portfolioInput">
+                                    <div id="portfolioPreview" class="grid grid-cols-3 gap-4 mt-4"></div>
+                                </div>
+
+                                <div>
+                                    <label class="form-label">Дополнительные файлы</label>
+                                    <input type="file" name="attachments" class="form-input" 
+                                           multiple accept=".pdf,.doc,.docx,.txt,.zip,.rar">
+                                    <div id="fileList" class="mt-2 space-y-1"></div>
+                                </div>
+
+                                <div class="flex items-center space-x-4">
+                                    <input type="checkbox" id="urgent" name="urgent" class="form-checkbox">
+                                    <label for="urgent" class="text-sm font-medium text-gray-700">
+                                        🚀 Срочная услуга (+10% к видимости)
+                                    </label>
+                                </div>
+
+                                <div class="flex items-center space-x-4">
+                                    <input type="checkbox" id="featured" name="featured" class="form-checkbox">
+                                    <label for="featured" class="text-sm font-medium text-gray-700">
+                                        ⭐ Премиум размещение (+50% к видимости)
+                                    </label>
+                                </div>
+
+                                <div class="flex space-x-4">
+                                    <button type="submit" class="btn btn-primary flex-1">
+                                        <i class="fas fa-paper-plane mr-2"></i>
+                                        Опубликовать услугу
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="previewService()">
+                                        <i class="fas fa-eye mr-2"></i>
+                                        Предпросмотр
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Боковая панель с советами -->
+                    <div class="space-y-6">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-blue-800 mb-4">
+                                <i class="fas fa-lightbulb mr-2"></i>
+                                Советы для успешной публикации
+                            </h3>
+                            <ul class="space-y-3 text-sm text-blue-700">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                    Используйте четкое и понятное название
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                    Подробно опишите что входит в услугу
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                    Добавьте примеры работ из портфолио
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                    Укажите реалистичные сроки выполнения
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                    Добавьте релевантные теги для поиска
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-green-800 mb-4">
+                                <i class="fas fa-star mr-2"></i>
+                                Как увеличить заказы
+                            </h3>
+                            <ul class="space-y-3 text-sm text-green-700">
+                                <li>📸 Добавьте качественные изображения работ</li>
+                                <li>💰 Установите конкурентную цену</li>
+                                <li>⚡ Быстро отвечайте на сообщения</li>
+                                <li>🏆 Собирайте положительные отзывы</li>
+                                <li>📈 Регулярно обновляйте услуги</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-yellow-800 mb-4">
+                                <i class="fas fa-crown mr-2"></i>
+                                Премиум возможности
+                            </h3>
+                            <p class="text-sm text-yellow-700 mb-4">
+                                Увеличьте видимость своих услуг:
+                            </p>
+                            <ul class="space-y-2 text-sm text-yellow-700">
+                                <li>🔥 Топ-размещение в категории</li>
+                                <li>🎯 Выделение цветом в поиске</li>
+                                <li>📊 Расширенная аналитика</li>
+                                <li>💌 Приоритетная поддержка</li>
+                            </ul>
+                            <a href="../pay_cont/premium.html" class="btn btn-sm btn-secondary mt-4 w-full">
+                                Узнать больше
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div>
-                <label class="block font-semibold mb-2">Категория</label>
-                <select name="category" class="w-full border rounded px-3 py-2" required>
-                    <option value="">Выберите категорию</option>
-                    <option>Разработка ПО</option>
-                    <option>Дизайн</option>
-                    <option>Тексты и переводы</option>
-                    <option>Маркетинг</option>
-                    <option>Видео и анимация</option>
-                    <option>Поддержка клиентов</option>
-                    <option>Финансы и Бухгалтерия</option>
-                    <option>Инженерные услуги</option>
-                </select>
-            </div>
-            <div>
-                <label class="block font-semibold mb-2">Описание</label>
-                <textarea name="description" class="w-full border rounded px-3 py-2" rows="4" placeholder="Опишите услугу, сроки, условия" required></textarea>
-            </div>
-            <div>
-                <label class="block font-semibold mb-2">Бюджет (₽)</label>
-                <input type="number" name="budget" class="w-full border rounded px-3 py-2" placeholder="Укажите сумму" required>
-            </div>
-            <div>
-                <label class="block font-semibold mb-2">Прикрепить файлы</label>
-                <input type="file" name="attachments" class="w-full" multiple accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx,.zip,.rar,.txt">
-                <p class="text-xs text-gray-500 mt-1">Можно прикрепить изображения, документы, архивы и другие файлы.</p>
-                <div id="fileList" class="mt-2 space-y-1"></div>
-            </div>
-            <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded font-bold hover:bg-indigo-700 transition">Опубликовать</button>
-        </form>
-        <div id="publishResult" class="mt-6 text-center text-green-600 font-semibold hidden">Услуга успешно опубликована (эмуляция)!</div>
+        </div>
     </main>
 
-    <!-- ...скопировать footer из freelance_homepage.html... -->
-    <!-- ...скрипты (копировать из других страниц)... -->
+    <div id="footer-container"></div>
+
+    <!-- Модальное окно предпросмотра -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content max-w-4xl">
+            <div class="modal-header">
+                <h3 class="text-xl font-semibold">Предпросмотр услуги</h3>
+                <button class="modal-close" onclick="closePreview()">&times;</button>
+            </div>
+            <div class="modal-body" id="previewContent">
+                <!-- Здесь будет предпросмотр -->
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Показывать имена выбранных файлов
-        document.querySelector('input[type="file"]').addEventListener('change', function() {
-            const fileList = document.getElementById('fileList');
-            fileList.innerHTML = '';
-            for (const file of this.files) {
-                const div = document.createElement('div');
-                div.textContent = file.name;
-                fileList.appendChild(div);
-            }
+        document.addEventListener('DOMContentLoaded', () => {
+            // Инициализация приложения
+            window.portalApp = new PortalApp();
+
+            // Предпросмотр загруженных изображений
+            document.getElementById('portfolioInput').addEventListener('change', function() {
+                const preview = document.getElementById('portfolioPreview');
+                preview.innerHTML = '';
+                
+                for (const file of this.files) {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = 'w-full h-24 object-cover rounded border';
+                            preview.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+
+            // Показать список файлов
+            document.querySelector('input[name="attachments"]').addEventListener('change', function() {
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = '';
+                
+                for (const file of this.files) {
+                    const div = document.createElement('div');
+                    div.className = 'text-sm text-gray-600 flex items-center';
+                    div.innerHTML = `<i class="fas fa-file mr-2"></i> ${file.name}`;
+                    fileList.appendChild(div);
+                }
+            });
+
+            // Обработка формы
+            document.getElementById('publishServiceForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Показать уведомление об успехе
+                window.portalApp.showNotification('Услуга успешно опубликована!', 'success');
+                
+                // Очистить форму
+                this.reset();
+                document.getElementById('portfolioPreview').innerHTML = '';
+                document.getElementById('fileList').innerHTML = '';
+                
+                // Перенаправить на страницу услуг через 2 секунды
+                setTimeout(() => {
+                    window.location.href = 'find_tasks.html';
+                }, 2000);
+            });
         });
-        // Эмуляция публикации
-        document.getElementById('publishServiceForm').onsubmit = function(e) {
-            e.preventDefault();
-            document.getElementById('publishResult').classList.remove('hidden');
-            this.reset();
-            document.getElementById('fileList').innerHTML = '';
-        };
+
+        function previewService() {
+            const form = document.getElementById('publishServiceForm');
+            const formData = new FormData(form);
+            
+            const previewHTML = `
+                <div class="space-y-6">
+                    <div class="border-b pb-4">
+                        <h2 class="text-2xl font-bold text-gray-800">${formData.get('title') || 'Название услуги'}</h2>
+                        <div class="flex items-center mt-2 space-x-4">
+                            <span class="badge">${formData.get('category') || 'Категория'}</span>
+                            ${formData.get('urgent') ? '<span class="badge badge-warning">🚀 Срочно</span>' : ''}
+                            ${formData.get('featured') ? '<span class="badge badge-primary">⭐ Премиум</span>' : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2">
+                            <h3 class="font-semibold text-lg mb-3">Описание</h3>
+                            <p class="text-gray-600 whitespace-pre-line">${formData.get('description') || 'Описание услуги'}</p>
+                            
+                            ${formData.get('tags') ? `
+                                <div class="mt-4">
+                                    <h4 class="font-semibold mb-2">Теги</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${formData.get('tags').split(',').map(tag => 
+                                            `<span class="badge badge-outline">${tag.trim()}</span>`
+                                        ).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h3 class="font-semibold text-lg mb-3">Условия</h3>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between">
+                                        <span>Стоимость:</span>
+                                        <span class="font-semibold">
+                                            ${formData.get('price_from') ? 
+                                                `от ${parseInt(formData.get('price_from')).toLocaleString()} ₽` : 
+                                                'По договоренности'
+                                            }
+                                        </span>
+                                    </div>
+                                    ${formData.get('delivery_time') ? `
+                                        <div class="flex justify-between">
+                                            <span>Срок:</span>
+                                            <span class="font-semibold">${formData.get('delivery_time')} дней</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('previewContent').innerHTML = previewHTML;
+            document.getElementById('previewModal').style.display = 'flex';
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
     </script>
 </body>
 </html>

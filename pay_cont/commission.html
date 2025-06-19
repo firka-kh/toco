@@ -2,11 +2,345 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Комиссия центров</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Комиссионные программы | Портал рынка труда РТ</title>
+    <meta name="description" content="Комиссионные программы для партнеров портала рынка труда Республики Татарстан. Зарабатывайте на привлечении новых пользователей и успешных трудоустройствах.">
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <script src="../assets/js/common.js" defer></script>
 </head>
 <body>
-    <iframe src="../header.html" style="width:100%;border:none;" height="180"></iframe>
-    <!-- ...основной контент страницы... -->
-    <iframe src="../footer.html" style="width:100%;border:none;" height="100"></iframe>
+    <div id="header-container"></div>
+
+    <main class="min-h-screen py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-gray-800 mb-4">Комиссионные программы</h1>
+                    <p class="text-lg text-gray-600">Зарабатывайте на каждом привлеченном пользователе и успешном трудоустройстве</p>
+                </div>
+
+                <!-- Основные программы -->
+                <div class="grid lg:grid-cols-3 gap-8 mb-12">
+                    <div class="card hover-scale">
+                        <div class="card-header bg-blue-50">
+                            <div class="text-center">
+                                <i class="fas fa-users text-3xl text-blue-600 mb-3"></i>
+                                <h3 class="text-xl font-semibold text-blue-800">Партнерская программа</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-6">
+                                <div class="text-3xl font-bold text-blue-600">до 25%</div>
+                                <div class="text-gray-600">с каждого платежа</div>
+                            </div>
+                            <ul class="space-y-3 mb-6">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Комиссия с премиум подписок
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Процент с платных услуг
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Реферальные бонусы
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Многоуровневая система
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary w-full">Стать партнером</button>
+                        </div>
+                    </div>
+
+                    <div class="card hover-scale border-2 border-green-500">
+                        <div class="card-header bg-green-50">
+                            <div class="text-center">
+                                <i class="fas fa-briefcase text-3xl text-green-600 mb-3"></i>
+                                <h3 class="text-xl font-semibold text-green-800">HR-агентства</h3>
+                                <span class="badge badge-success">Специальные условия</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-6">
+                                <div class="text-3xl font-bold text-green-600">5,000-15,000 ₽</div>
+                                <div class="text-gray-600">за трудоустройство</div>
+                            </div>
+                            <ul class="space-y-3 mb-6">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Фиксированная оплата
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Бонусы за объем
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Персональный менеджер
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Приоритетная поддержка
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary w-full">Подключиться</button>
+                        </div>
+                    </div>
+
+                    <div class="card hover-scale">
+                        <div class="card-header bg-purple-50">
+                            <div class="text-center">
+                                <i class="fas fa-graduation-cap text-3xl text-purple-600 mb-3"></i>
+                                <h3 class="text-xl font-semibold text-purple-800">Образовательные центры</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-6">
+                                <div class="text-3xl font-bold text-purple-600">до 30%</div>
+                                <div class="text-gray-600">с курсов и тренингов</div>
+                            </div>
+                            <ul class="space-y-3 mb-6">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Продвижение курсов
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Совместные программы
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Размещение мероприятий
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    Сертификация специалистов
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary w-full">Узнать больше</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Система вознаграждений -->
+                <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">Система вознаграждений</h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="text-center p-6 bg-blue-50 rounded-lg">
+                            <i class="fas fa-user-plus text-3xl text-blue-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">Регистрация</h3>
+                            <div class="text-2xl font-bold text-blue-600 mb-2">500 ₽</div>
+                            <p class="text-sm text-gray-600">За каждого зарегистрированного пользователя</p>
+                        </div>
+                        <div class="text-center p-6 bg-green-50 rounded-lg">
+                            <i class="fas fa-crown text-3xl text-green-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">Премиум подписка</h3>
+                            <div class="text-2xl font-bold text-green-600 mb-2">25%</div>
+                            <p class="text-sm text-gray-600">Комиссия с каждого платежа</p>
+                        </div>
+                        <div class="text-center p-6 bg-purple-50 rounded-lg">
+                            <i class="fas fa-handshake text-3xl text-purple-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">Трудоустройство</h3>
+                            <div class="text-2xl font-bold text-purple-600 mb-2">10,000 ₽</div>
+                            <p class="text-sm text-gray-600">За успешное трудоустройство</p>
+                        </div>
+                        <div class="text-center p-6 bg-orange-50 rounded-lg">
+                            <i class="fas fa-chart-line text-3xl text-orange-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">Долгосрочная программа</h3>
+                            <div class="text-2xl font-bold text-orange-600 mb-2">5%</div>
+                            <p class="text-sm text-gray-600">Пожизненная комиссия</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Условия участия -->
+                <div class="grid lg:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Как стать партнером</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 mt-1 text-sm font-bold">1</div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Подача заявки</h3>
+                                    <p class="text-gray-600 text-sm">Заполните форму и отправьте документы</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 mt-1 text-sm font-bold">2</div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Проверка и одобрение</h3>
+                                    <p class="text-gray-600 text-sm">Рассмотрение заявки в течение 3 дней</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 mt-1 text-sm font-bold">3</div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Подписание договора</h3>
+                                    <p class="text-gray-600 text-sm">Оформление партнерского соглашения</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 mt-1 text-sm font-bold">4</div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Начало сотрудничества</h3>
+                                    <p class="text-gray-600 text-sm">Получение ссылок и материалов</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-100 rounded-lg p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Преимущества сотрудничества</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-money-bill-wave text-green-600 mr-3"></i>
+                                <span>Стабильный пассивный доход</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-chart-bar text-green-600 mr-3"></i>
+                                <span>Детальная отчетность в реальном времени</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-credit-card text-green-600 mr-3"></i>
+                                <span>Быстрые выплаты каждые 2 недели</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-tools text-green-600 mr-3"></i>
+                                <span>Готовые маркетинговые материалы</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-headset text-green-600 mr-3"></i>
+                                <span>Персональная поддержка менеджера</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-graduation-cap text-green-600 mr-3"></i>
+                                <span>Обучение и тренинги</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Калькулятор доходов -->
+                <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">Калькулятор потенциального дохода</h2>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="form-label">Количество привлеченных пользователей в месяц</label>
+                                <input type="range" id="usersSlider" min="1" max="100" value="10" 
+                                       class="w-full" oninput="calculateEarnings()">
+                                <div class="text-center font-semibold text-lg" id="usersValue">10</div>
+                            </div>
+                            <div>
+                                <label class="form-label">Процент перешедших на премиум (%)</label>
+                                <input type="range" id="conversionSlider" min="1" max="50" value="15" 
+                                       class="w-full" oninput="calculateEarnings()">
+                                <div class="text-center font-semibold text-lg" id="conversionValue">15%</div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-100 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Ваш потенциальный доход:</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span>Комиссия за регистрации:</span>
+                                    <span class="font-semibold" id="registrationEarnings">5,000 ₽</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Комиссия с премиум:</span>
+                                    <span class="font-semibold" id="premiumEarnings">2,250 ₽</span>
+                                </div>
+                                <hr class="border-gray-300">
+                                <div class="flex justify-between text-lg">
+                                    <span class="font-semibold">Итого в месяц:</span>
+                                    <span class="font-bold text-green-600" id="totalEarnings">7,250 ₽</span>
+                                </div>
+                                <div class="flex justify-between text-sm text-gray-600">
+                                    <span>В год:</span>
+                                    <span id="yearlyEarnings">87,000 ₽</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Форма заявки -->
+                <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-white">
+                    <div class="text-center mb-8">
+                        <h2 class="text-2xl font-bold mb-4">Готовы стать нашим партнером?</h2>
+                        <p class="text-lg">Заполните заявку и начните зарабатывать уже сегодня</p>
+                    </div>
+                    
+                    <form class="max-w-lg mx-auto space-y-4" id="partnerForm">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <input type="text" name="name" placeholder="Ваше имя" 
+                                   class="form-input bg-white text-gray-800" required>
+                            <input type="email" name="email" placeholder="Email" 
+                                   class="form-input bg-white text-gray-800" required>
+                        </div>
+                        <input type="tel" name="phone" placeholder="Телефон" 
+                               class="form-input bg-white text-gray-800 w-full" required>
+                        <select name="partner_type" class="form-input bg-white text-gray-800 w-full" required>
+                            <option value="">Тип партнерства</option>
+                            <option value="individual">Физическое лицо</option>
+                            <option value="agency">HR-агентство</option>
+                            <option value="education">Образовательный центр</option>
+                            <option value="corporate">Корпоративный партнер</option>
+                        </select>
+                        <textarea name="message" placeholder="Расскажите о себе и своих планах" 
+                                  class="form-input bg-white text-gray-800 w-full" rows="3"></textarea>
+                        <button type="submit" class="btn btn-white w-full">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Отправить заявку
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Инициализация приложения
+            window.portalApp = new PortalApp();
+            
+            // Инициализация калькулятора
+            calculateEarnings();
+        });
+
+        function calculateEarnings() {
+            const users = document.getElementById('usersSlider').value;
+            const conversion = document.getElementById('conversionSlider').value;
+            
+            document.getElementById('usersValue').textContent = users;
+            document.getElementById('conversionValue').textContent = conversion + '%';
+            
+            const registrationEarnings = users * 500;
+            const premiumUsers = Math.round(users * conversion / 100);
+            const premiumEarnings = premiumUsers * 600; // 25% от 2400₽
+            const totalMonthly = registrationEarnings + premiumEarnings;
+            const totalYearly = totalMonthly * 12;
+            
+            document.getElementById('registrationEarnings').textContent = 
+                registrationEarnings.toLocaleString() + ' ₽';
+            document.getElementById('premiumEarnings').textContent = 
+                premiumEarnings.toLocaleString() + ' ₽';
+            document.getElementById('totalEarnings').textContent = 
+                totalMonthly.toLocaleString() + ' ₽';
+            document.getElementById('yearlyEarnings').textContent = 
+                totalYearly.toLocaleString() + ' ₽';
+        }
+
+        // Обработка формы партнерства
+        document.getElementById('partnerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            window.portalApp.showNotification('Заявка отправлена! Мы свяжемся с вами в течение 24 часов.', 'success');
+            this.reset();
+        });
+    </script>
 </body>
 </html>
