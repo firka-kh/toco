@@ -307,7 +307,7 @@
                         Упростите процесс найма и найдите идеальных кандидатов быстрее.
                     </p>
                     <button class="bg-yellow-400 text-gray-800 px-8 py-4 rounded-lg font-bold text-xl hover:bg-yellow-300 transition-colors shadow-lg"
-                        onclick="openModal('Начать онлайн-собеседования', 'Благодарим за интерес! Для начала использования платформы онлайн-собеседований вам необходимо войти в личный кабинет работодателя. Если у вас его нет, пожалуйста, зарегистрируйтесь.', 'login_employer')">
+                        onclick="window.location.href='2_online_interview.html'">
                         <i class="fas fa-play-circle mr-2"></i>Начать сейчас
                     </button>
                 </div>
@@ -424,15 +424,6 @@
             };
         });
 
-        // Заглушка для Google Translate
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'ru',
-                includedLanguages: 'ru,en,tg',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-            }, 'google_translate_element');
-        }
-
         // --- Логика модального окна для этой страницы ---
         const infoModalOverlay = document.getElementById('infoModalOverlay');
         const modalTitle = document.getElementById('modalTitle');
@@ -456,6 +447,15 @@
         }
 
         function closeModal() {
+            infoModalOverlay.classList.remove('active');
+            // Добавляем hidden после завершения анимации, чтобы элементы не перекрывались
+            setTimeout(() => {
+                infoModalOverlay.classList.add('hidden');
+            }, 300); // Должно соответствовать длительности transition в CSS
+        }
+    </script>
+</body>
+</html>
             infoModalOverlay.classList.remove('active');
             // Добавляем hidden после завершения анимации, чтобы элементы не перекрывались
             setTimeout(() => {
