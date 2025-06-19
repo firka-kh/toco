@@ -2,164 +2,318 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Шапка сайта</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шапка сайта — Портал рынка труда</title>
+    <!-- Подключение стилей -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common.css">
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* Дополнительные стили для навигации */
+        .nav-dropdown {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
         }
-        .menu-link {
-            font-size: 1rem;
-            font-weight: 700;
-            transition: font-weight 0.2s;
+        
+        .nav-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
-        .menu-link:active {
-            font-weight: 400 !important;
+
+        /* Стили для мобильного меню */
+        .mobile-menu {
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
         }
-        #profileDropdown {
-            min-width: 180px;
-            transition: opacity 0.2s;
+        
+        .mobile-menu.show {
+            transform: translateY(0);
         }
-        @keyframes fade-in {
-            from { opacity: 0; transform: translateY(-10px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-        .animate-fade-in {
-            animation: fade-in 0.18s;
+
+        /* Индикатор уведомлений */
+        .notification-dot {
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            animation: pulse 2s infinite;
         }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
-<header class="gradient-bg text-white shadow-lg">
-    <div class="container mx-auto px-4 py-6">
+<header class="gradient-bg text-white shadow-lg relative">
+    <div class="container mx-auto px-4 py-4">
         <div class="flex items-center justify-between">
-            <!-- Левая часть: Лого и название -->
+            <!-- Логотип и название -->
             <div class="flex items-center space-x-4">
-                <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
+                <img src="https://placehold.co/40x40/ffffff/667eea?text=РТ" alt="Логотип Портала рынка труда РТ" class="rounded-full shadow-lg">
                 <div>
-                    <a href="index.html" class="hover:underline focus:outline-none">
-                        <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
-                        <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                    <a href="index.html" class="hover:underline focus:outline-none transition-all duration-300">
+                        <h1 class="text-xl lg:text-2xl font-bold">Портал рынка труда</h1>
+                        <span class="text-xs lg:text-sm opacity-90">Республика Таджикистан</span>
                     </a>
                 </div>
             </div>
-            <!-- Правая часть: Навигация, языки и профиль -->
-            <nav class="hidden md:flex space-x-6 items-center">
-                <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
-                <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
-                <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
-                <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
-                <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
-                <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
-                <!-- Новое выпадающее меню "Премиум-подписка" -->
-                <div class="relative">
-                    <button id="premiumMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors flex items-center focus:outline-none">
-                        Премиум-подписка <i class="fas fa-chevron-down ml-1 text-xs"></i>
+
+            <!-- Основная навигация (десктоп) -->
+            <nav class="hidden lg:flex items-center space-x-6">
+                <a href="index.html" class="nav-link text-white hover:text-yellow-300 font-semibold">
+                    <i class="fas fa-home mr-2"></i>Главная
+                </a>
+                
+                <!-- Dropdown: Поиск работы -->
+                <div class="dropdown relative">
+                    <button data-dropdown-trigger class="nav-link text-white hover:text-yellow-300 font-semibold">
+                        <i class="fas fa-search mr-2"></i>Поиск работы
+                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
                     </button>
-                    <div id="premiumDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
-                        <a href="pay_cont/ads.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Реклама</a>
-                        <a href="pay_cont/paid_services.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Платные услуги</a>
-                        <a href="pay_cont/commission.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Комиссия центров</a>
-                        <a href="pay_cont/analytics.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Аналитика</a>
-                        <a href="pay_cont/api_access.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">API-доступ</a>
-                        <a href="pay_cont/fairs.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Ярмарки</a>
-                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Фриланс</a>
+                    <div class="nav-dropdown dropdown-content absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50">
+                        <a href="serchwork.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-briefcase mr-3 text-blue-500"></i>Поиск вакансий
+                        </a>
+                        <a href="skill_serch.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-graduation-cap mr-3 text-green-500"></i>Образование
+                        </a>
+                        <a href="free_lans/freelance_homepage.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-laptop-code mr-3 text-purple-500"></i>Фриланс
+                        </a>
+                        <div class="border-t border-gray-200 my-2"></div>
+                        <a href="youth_programs.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-users mr-3 text-orange-500"></i>Молодежные программы
+                        </a>
                     </div>
                 </div>
-                <!-- Выпадающее меню профиля и языков -->
-                <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
-                    <!-- Мой профиль -->
-                    <div class="relative">
-                        <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
-                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                        </button>
-                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
-                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
-                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
-                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
-                        </div>
-                    </div>
-                    <!-- Выпадающее меню языков -->
-                    <div class="relative">
-                        <button id="langMenuBtn" type="button"
-                            class="px-4 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                            aria-haspopup="true" aria-expanded="false">
-                            <span id="currentLangLabel">RUS</span>
-                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
-                        </button>
-                        <div id="langDropdown"
-                            class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
-                            <button type="button"
-                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
-                                data-lang="ru">RUS</button>
-                            <button type="button"
-                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
-                                data-lang="tg">TAJ</button>
-                            <button type="button"
-                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
-                                data-lang="en">ENG</button>
-                        </div>
+
+                <!-- Dropdown: Работодателям -->
+                <div class="dropdown relative">
+                    <button data-dropdown-trigger class="nav-link text-white hover:text-yellow-300 font-semibold">
+                        <i class="fas fa-building mr-2"></i>Работодателям
+                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                    </button>
+                    <div class="nav-dropdown dropdown-content absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50">
+                        <a href="employer_profile.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-user-tie mr-3 text-blue-500"></i>Кабинет работодателя
+                        </a>
+                        <a href="employer_anons_work.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-plus-circle mr-3 text-green-500"></i>Разместить вакансию
+                        </a>
+                        <a href="talent_report.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-chart-line mr-3 text-purple-500"></i>Поиск кандидатов
+                        </a>
+                        <div class="border-t border-gray-200 my-2"></div>
+                        <a href="online_interviews.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-video mr-3 text-red-500"></i>Онлайн собеседования
+                        </a>
                     </div>
                 </div>
+
+                <!-- Dropdown: Статистика и аналитика -->
+                <div class="dropdown relative">
+                    <button data-dropdown-trigger class="nav-link text-white hover:text-yellow-300 font-semibold">
+                        <i class="fas fa-chart-bar mr-2"></i>Аналитика
+                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                    </button>
+                    <div class="nav-dropdown dropdown-content absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50">
+                        <a href="analitic_pg.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-chart-line mr-3 text-blue-500"></i>Статистика рынка труда
+                        </a>
+                        <a href="gov_pg.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-shield-alt mr-3 text-green-500"></i>Гос. панель
+                        </a>
+                        <a href="index.html#statistics" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-chart-pie mr-3 text-purple-500"></i>Обзор показателей
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Dropdown: Премиум услуги -->
+                <div class="dropdown relative">
+                    <button data-dropdown-trigger class="nav-link text-white hover:text-yellow-300 font-semibold">
+                        <i class="fas fa-crown mr-2"></i>Премиум
+                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                    </button>
+                    <div class="nav-dropdown dropdown-content absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50">
+                        <a href="pay_cont/paid_services.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-star mr-3 text-yellow-500"></i>Платные услуги
+                        </a>
+                        <a href="pay_cont/ads.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-bullhorn mr-3 text-red-500"></i>Реклама
+                        </a>
+                        <a href="pay_cont/analytics.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-chart-bar mr-3 text-blue-500"></i>Расширенная аналитика
+                        </a>
+                        <a href="pay_cont/api_access.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-code mr-3 text-green-500"></i>API-доступ
+                        </a>
+                        <div class="border-t border-gray-200 my-2"></div>
+                        <a href="pay_cont/fairs.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-handshake mr-3 text-purple-500"></i>Ярмарки вакансий
+                        </a>
+                        <a href="pay_cont/commission.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-percentage mr-3 text-orange-500"></i>Комиссии центров
+                        </a>
+                    </div>
+                </div>
+
+                <a href="about.html" class="nav-link text-white hover:text-yellow-300 font-semibold">
+                    <i class="fas fa-info-circle mr-2"></i>О портале
+                </a>
             </nav>
+
+            <!-- Правая часть: профиль, языки, настройки -->
+            <div class="flex items-center space-x-4">
+                <!-- Dropdown: Профиль -->
+                <div class="dropdown relative">
+                    <button data-dropdown-trigger class="nav-link text-white hover:text-yellow-300 font-semibold relative">
+                        <i class="fas fa-user-circle mr-2"></i>Профиль
+                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <div class="nav-dropdown dropdown-content absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50">
+                        <div class="px-4 py-3 border-b border-gray-200">
+                            <p class="text-sm font-semibold text-gray-700">Добро пожаловать!</p>
+                            <p class="text-xs text-gray-500">user@example.com</p>
+                        </div>
+                        <a href="user_dashboard.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-tachometer-alt mr-3 text-blue-500"></i>Личный кабинет
+                        </a>
+                        <a href="user_profile.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-cog mr-3 text-gray-500"></i>Настройки профиля
+                        </a>
+                        <a href="video_res.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-video mr-3 text-red-500"></i>Видео-резюме
+                        </a>
+                        <div class="border-t border-gray-200 my-2"></div>
+                        <a href="register.html" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-user-plus mr-3 text-green-500"></i>Регистрация
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Dropdown: Языки -->
+                <div class="dropdown relative">
+                    <button data-dropdown-trigger class="flex items-center px-3 py-2 rounded-lg font-semibold bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors">
+                        <span id="currentLangLabel">RUS</span>
+                        <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                    </button>
+                    <div class="nav-dropdown dropdown-content absolute right-0 top-full mt-2 w-32 bg-white rounded-lg shadow-xl py-2 z-50">
+                        <button data-lang="ru" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-semibold">
+                            🇷🇺 RUS
+                        </button>
+                        <button data-lang="tg" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-semibold">
+                            🇹🇯 TAJ
+                        </button>
+                        <button data-lang="en" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-semibold">
+                            🇬🇧 ENG
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Кнопка темы -->
+                <button id="themeToggle" class="p-2 rounded-lg bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors">
+                    <i class="fas fa-moon"></i>
+                </button>
+
+                <!-- Мобильное меню кнопка -->
+                <button id="mobileMenuToggle" class="lg:hidden p-2 rounded-lg bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Мобильное меню -->
+        <div id="mobileMenu" class="mobile-menu lg:hidden absolute top-full left-0 right-0 bg-white shadow-xl border-t border-gray-200 z-40">
+            <div class="px-4 py-6 space-y-4">
+                <!-- Мобильная навигация -->
+                <div class="space-y-2">
+                    <a href="index.html" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="fas fa-home mr-3 text-blue-500"></i>Главная
+                    </a>
+                    <a href="serchwork.html" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="fas fa-search mr-3 text-green-500"></i>Поиск вакансий
+                    </a>
+                    <a href="employer_profile.html" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="fas fa-building mr-3 text-purple-500"></i>Работодателям
+                    </a>
+                    <a href="analitic_pg.html" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="fas fa-chart-bar mr-3 text-orange-500"></i>Аналитика
+                    </a>
+                    <a href="about.html" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="fas fa-info-circle mr-3 text-gray-500"></i>О портале
+                    </a>
+                </div>
+
+                <!-- Мобильные кнопки действий -->
+                <div class="border-t border-gray-200 pt-4 space-y-2">
+                    <a href="user_dashboard.html" class="block w-full btn btn-primary text-center">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Личный кабинет
+                    </a>
+                    <a href="register.html" class="block w-full btn btn-secondary text-center">
+                        <i class="fas fa-user-plus mr-2"></i>Регистрация
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </header>
+
+<!-- Подключение скриптов -->
+<script src="assets/js/common.js"></script>
 <script>
-    // Выпадающее меню профиля и языков
-    const profileMenuBtn = document.getElementById('profileMenuBtn');
-    const profileDropdown = document.getElementById('profileDropdown');
-    const langMenuBtn = document.getElementById('langMenuBtn');
-    const langDropdown = document.getElementById('langDropdown');
-    const currentLangLabel = document.getElementById('currentLangLabel');
-    const premiumMenuBtn = document.getElementById('premiumMenuBtn');
-    const premiumDropdown = document.getElementById('premiumDropdown');
-
-    // Открытие/закрытие меню "Мой профиль"
-    profileMenuBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        profileDropdown.classList.toggle('hidden');
-        langDropdown.classList.add('hidden');
-        premiumDropdown.classList.add('hidden');
-    });
-
-    // Открытие/закрытие меню языков
-    langMenuBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        langDropdown.classList.toggle('hidden');
-        profileDropdown.classList.add('hidden');
-        premiumDropdown.classList.add('hidden');
-    });
-
-    // Открытие/закрытие меню "Премиум-подписка"
-    premiumMenuBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        premiumDropdown.classList.toggle('hidden');
-        profileDropdown.classList.add('hidden');
-        langDropdown.classList.add('hidden');
-    });
-
-    // Закрытие обоих меню при клике вне
-    document.addEventListener('click', function(e) {
-        if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
-            profileDropdown.classList.add('hidden');
+    // Дополнительная логика для header
+    document.addEventListener('DOMContentLoaded', function() {
+        // Мобильное меню
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (mobileMenuToggle && mobileMenu) {
+            mobileMenuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('show');
+                
+                // Анимация иконки
+                const icon = this.querySelector('i');
+                if (mobileMenu.classList.contains('show')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
         }
-        if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
-            langDropdown.classList.add('hidden');
-        }
-        if (!premiumDropdown.contains(e.target) && !premiumMenuBtn.contains(e.target)) {
-            premiumDropdown.classList.add('hidden');
-        }
-    });
 
-    // Переключение языка (только смена надписи, без перевода)
-    langDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
-        btn.onclick = function() {
-            currentLangLabel.textContent = this.textContent;
-            langDropdown.classList.add('hidden');
-        };
+        // Закрытие мобильного меню при клике на ссылку
+        const mobileLinks = mobileMenu?.querySelectorAll('a');
+        mobileLinks?.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('show');
+                const icon = mobileMenuToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+
+        // Установка активной страницы
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        const navLinks = document.querySelectorAll('nav a, #mobileMenu a');
+        
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && href.includes(currentPage)) {
+                link.classList.add('text-yellow-300', 'font-bold');
+            }
+        });
     });
 </script>
+
+<!-- Google Translate -->
+<div id="google_translate_element" style="display:none;"></div>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Как это работает — FreelanceHub</title>
+    <title>Как это работает - TOCO FreelanceHub</title>
     <meta name="description" content="Узнайте, как устроен процесс поиска работы и размещения проектов на платформе FreelanceHub.">
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <script src="../assets/js/common.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
@@ -82,26 +84,7 @@
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
-    <!-- Шапка сайта (как на freelance_homepage) -->
-    <header class="tech-gradient-bg text-white shadow-lg py-4">
-        <div class="container mx-auto px-6 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <img src="https://placehold.co/40x40/4f46e5/ffffff?text=FL" alt="Логотип фриланс-платформы" class="rounded-full border-2 border-indigo-500">
-                <div class="flex flex-col justify-center leading-tight">
-                    <span class="text-2xl font-bold">FreelanceHub</span>
-                    <span class="text-xs opacity-75">от Портала рынка труда РТ</span>
-                </div>
-            </div>
-            <nav class="hidden md:flex items-center gap-x-8">
-                <a href="how_it_works.html" class="font-medium text-teal-300 transition-colors text-base">Как это работает</a>
-                <a href="categories.html" class="font-medium text-gray-200 hover:text-teal-300 transition-colors text-base">Категории задач</a>
-                <a href="benefits.html" class="font-medium text-gray-200 hover:text-teal-300 transition-colors text-base">Преимущества</a>
-                <a href="cta.html" class="font-medium text-gray-200 hover:text-teal-300 transition-colors text-base">Присоединиться</a>
-                <a href="find_tasks.html" class="font-medium text-gray-200 hover:text-teal-300 transition-colors text-base">Найти задачи</a>
-                <a href="publish_service.html" class="font-medium text-gray-200 hover:text-teal-300 transition-colors text-base">Опубликовать услугу</a>
-            </nav>
-        </div>
-    </header>
+    <div id="header-container"></div>
 
     <!-- Hero Section -->
     <section class="bg-gray-50 py-12 px-4 text-center">
@@ -233,8 +216,7 @@
                         <a href="#" class="text-2xl opacity-90 hover:opacity-100" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
                         <a href="#" class="text-2xl opacity-90 hover:opacity-100" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                         <a href="#" class="text-2xl opacity-90 hover:opacity-100" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
-                        <a href="#" class="text-2xl opacity-90 hover:opacity-100" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    </div>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100" aria-label="Instagram"><i class="fab fa-instagram"></i></a>                    </div>
                 </div>
             </div>
             <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
@@ -242,5 +224,16 @@
             </div>
         </div>
     </footer>
+
+    <div id="footer-container"></div>
+
+    <script>
+        // Инициализация портала
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof PortalApp !== 'undefined') {
+                PortalApp.init();
+            }
+        });
+    </script>
 </body>
 </html>

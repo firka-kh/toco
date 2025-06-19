@@ -1,42 +1,226 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <!-- ...existing code from <head>... -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты - TOCO FreelanceHub</title>
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <script src="../assets/js/common.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 text-gray-900">
-    <!-- ...header из publish_service.html... -->
-    <header class="tech-gradient-bg text-white shadow-lg py-4">
-        <div class="container mx-auto px-4 flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <img src="https://placehold.co/40x40/4f46e5/ffffff?text=FL" alt="Логотип фриланс-платформы" class="rounded-full border-2 border-indigo-500">
-                <a href="freelance_homepage.html" class="hover:underline focus:outline-none">
-                    <h1 class="text-2xl font-bold inline-block mr-2">FreelanceHub</h1>
-                    <span class="text-sm opacity-75 block md:inline">от Портала рынка труда РТ</span>
-                </a>
+    <div id="header-container"></div>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="py-16 bg-gradient-to-br from-blue-600 via-purple-600 to-teal-600 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h1 class="text-5xl font-bold mb-6">Свяжитесь с нами</h1>
+                <p class="text-xl mb-8 max-w-3xl mx-auto">
+                    Мы всегда готовы помочь и ответить на ваши вопросы
+                </p>
             </div>
-            <nav class="hidden md:flex space-x-6 items-center">
-                <a href="how_it_works.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Как это работает</a>
-                <a href="categories.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Категории задач</a>
-                <a href="benefits.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Преимущества</a>
-                <a href="cta.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Присоединиться</a>
-                <a href="find_tasks.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Найти задачи</a>
-                <a href="publish_service.html" class="font-semibold text-gray-200 hover:text-teal-300 transition-colors">Опубликовать услугу</a>
-                <!-- ...profile/lang dropdown... -->
-            </nav>
-        </div>
-    </header>
+        </section>
 
-    <section class="py-16 px-4 bg-white">
-        <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-bold mb-6 text-gray-800">Связаться с нами</h2>
-            <p class="text-lg text-gray-700 mb-8">
-                Если у вас есть вопросы или предложения, напишите нам через форму обратной связи или по электронной почте.
-            </p>
-            <a href="freelance_homepage.html" class="text-teal-600 hover:underline">Вернуться на главную</a>
-        </div>
-    </section>
+        <!-- Contact Form & Info -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- Contact Form -->
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-6">Напишите нам</h2>
+                        <form class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Имя *</label>
+                                    <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Фамилия *</label>
+                                    <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                                <input type="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Телефон</label>
+                                <input type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+992 xxx xxx xxx">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Тема обращения *</label>
+                                <select required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Выберите тему</option>
+                                    <option value="technical">Техническая поддержка</option>
+                                    <option value="payment">Вопросы по оплате</option>
+                                    <option value="account">Проблемы с аккаунтом</option>
+                                    <option value="dispute">Решение споров</option>
+                                    <option value="partnership">Партнерство</option>
+                                    <option value="other">Другое</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Сообщение *</label>
+                                <textarea required rows="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Опишите ваш вопрос подробно..."></textarea>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <input type="checkbox" required class="mt-1 mr-3">
+                                <label class="text-sm text-gray-600">
+                                    Я согласен с обработкой персональных данных и принимаю 
+                                    <a href="privacy_policy.html" class="text-blue-600 hover:underline">политику конфиденциальности</a>
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                                Отправить сообщение
+                            </button>
+                        </form>
+                    </div>
 
-    <!-- ...скопировать footer из freelance_homepage.html... -->
-    <!-- ...скрипты... -->
+                    <!-- Contact Info -->
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-6">Контактная информация</h2>
+                        
+                        <div class="space-y-8">
+                            <!-- Office -->
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-map-marker-alt text-blue-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 mb-2">Наш офис</h3>
+                                    <p class="text-gray-600">
+                                        г. Душанбе, проспект Рудаки, 45<br>
+                                        Министерство труда, миграции и занятости населения РТ
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-phone text-green-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 mb-2">Телефон</h3>
+                                    <p class="text-gray-600">
+                                        +992 37 221-0505<br>
+                                        +992 91 500-0505 (WhatsApp)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-envelope text-purple-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 mb-2">Email</h3>
+                                    <p class="text-gray-600">
+                                        support@toco.tj<br>
+                                        freelance@toco.tj
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Working Hours -->
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-clock text-orange-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 mb-2">Часы работы</h3>
+                                    <p class="text-gray-600">
+                                        Пн-Пт: 9:00 - 18:00<br>
+                                        Сб-Вс: 10:00 - 16:00
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Social Media -->
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-share-alt text-pink-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 mb-2">Социальные сети</h3>
+                                    <div class="flex space-x-4">
+                                        <a href="#" class="text-blue-600 hover:text-blue-800">
+                                            <i class="fab fa-telegram text-2xl"></i>
+                                        </a>
+                                        <a href="#" class="text-blue-600 hover:text-blue-800">
+                                            <i class="fab fa-facebook text-2xl"></i>
+                                        </a>
+                                        <a href="#" class="text-blue-600 hover:text-blue-800">
+                                            <i class="fab fa-instagram text-2xl"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">Часто задаваемые вопросы</h2>
+                    <p class="text-xl text-gray-600">Возможно, ответ на ваш вопрос уже здесь</p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="font-semibold text-gray-800 mb-2">Как начать работать на платформе?</h3>
+                            <p class="text-gray-600">Зарегистрируйтесь, заполните профиль, подтвердите навыки и начните откликаться на проекты или публиковать свои услуги.</p>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="font-semibold text-gray-800 mb-2">Какую комиссию берет платформа?</h3>
+                            <p class="text-gray-600">Комиссия составляет 10% с суммы проекта для фрилансеров и 3% для заказчиков.</p>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="font-semibold text-gray-800 mb-2">Как происходит оплата?</h3>
+                            <p class="text-gray-600">Мы поддерживаем различные способы оплаты: банковские карты, электронные кошельки, банковские переводы.</p>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="font-semibold text-gray-800 mb-2">Что делать в случае спора?</h3>
+                            <p class="text-gray-600">Обратитесь в службу поддержки через форму выше или напишите на support@toco.tj. Мы поможем решить любой конфликт.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-8">
+                        <a href="help_faq.html" class="text-blue-600 hover:underline font-semibold">
+                            Посмотреть все вопросы и ответы →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script>
+        // Инициализация портала
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof PortalApp !== 'undefined') {
+                PortalApp.init();
+            }
+        });
+    </script>
 </body>
 </html>

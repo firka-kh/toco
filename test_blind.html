@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Опросник для резюме</title>
+  <title>Тестирование навыков - TOCO</title>
+  <link rel="stylesheet" href="assets/css/common.css">
+  <script src="assets/js/common.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
   <style>
@@ -196,25 +198,8 @@
   </style>
 </head>
 <body class="bg-gray-50 font-sans">
-  <header class="gradient-bg text-white shadow-lg">
-    <div class="container mx-auto px-4 py-6 flex items-center justify-between">
-      <div class="flex items-center space-x-4">
-        <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Логотип" class="rounded-full">
-        <a href="index.html" class="hover:underline focus:outline-none">
-          <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
-          <span class="text-sm opacity-90 block">Республика Таджикистан</span>
-        </a>
-      </div>
-      <nav class="hidden md:flex space-x-6 items-center">
-        <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
-        <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
-        <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
-        <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
-        <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
-        <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
-      </nav>
-    </div>
-  </header>
+  <div id="header-container"></div>
+  
   <!-- Плавающий виджет с правилами -->
   <aside class="rules-widget" aria-label="Правила управления опросником" id="rules-widget">
     <strong>Правила управления</strong>
@@ -551,8 +536,7 @@
         const idx = window.currentQuestionIdx;
         if (e.key.toLowerCase() === 's') {
           stopRecording(idx);
-        }
-        if (e.key.toLowerCase() === 'p') {
+        }        if (e.key.toLowerCase() === 'p') {
           speakQuestion(idx);
         }
         if (e.key.toLowerCase() === 'a' && questions[idx].answerAudio.src) {
@@ -563,6 +547,14 @@
         }
       }
     });
+
+    // Инициализация портала
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof PortalApp !== 'undefined') {
+        PortalApp.init();
+      }
+    });
   </script>
+  <div id="footer-container"></div>
 </body>
 </html>

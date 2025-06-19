@@ -2,11 +2,270 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Платные услуги для соискателей</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Платные услуги - TOCO</title>
+    <link rel="stylesheet" href="../assets/css/common.css">
+    <script src="../assets/js/common.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
 </head>
 <body>
-    <iframe src="../header.html" style="width:100%;border:none;" height="180"></iframe>
-    <!-- ...основной контент страницы... -->
-    <iframe src="../footer.html" style="width:100%;border:none;" height="100"></iframe>
+    <div id="header-container"></div>
+    
+    <main>
+        <!-- Hero Section -->
+        <section class="py-16 bg-gradient-to-br from-purple-600 via-blue-600 to-teal-600 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h1 class="text-5xl font-bold mb-6">Платные услуги TOCO</h1>
+                <p class="text-xl mb-8 max-w-3xl mx-auto">
+                    Получите преимущества в поиске работы и продвижении карьеры с нашими премиум-услугами
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="premium.html" class="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                        Премиум подписка
+                    </a>
+                    <a href="analytics.html" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                        Аналитика
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Grid -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">Все наши услуги</h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        Выберите подходящую услугу для достижения ваших карьерных целей
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Premium Service -->
+                    <div class="bg-gradient-to-br from-purple-500 to-pink-500 text-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-crown text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Премиум подписка</h3>
+                        <p class="mb-6 opacity-90">Полный доступ ко всем функциям портала, приоритетная поддержка и эксклюзивные возможности</p>
+                        <div class="text-3xl font-bold mb-4">1000 TJS <span class="text-lg font-normal">/месяц</span></div>
+                        <a href="premium.html" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
+                            Подробнее
+                        </a>
+                    </div>
+
+                    <!-- Analytics -->
+                    <div class="bg-gradient-to-br from-blue-500 to-cyan-500 text-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-chart-line text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Аналитика профиля</h3>
+                        <p class="mb-6 opacity-90">Детальная статистика просмотров, рейтинг профиля и рекомендации по улучшению</p>
+                        <div class="text-3xl font-bold mb-4">500 TJS <span class="text-lg font-normal">/месяц</span></div>
+                        <a href="analytics.html" class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
+                            Подробнее
+                        </a>
+                    </div>
+
+                    <!-- Job Fairs -->
+                    <div class="bg-gradient-to-br from-green-500 to-teal-500 text-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-users text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Ярмарки вакансий</h3>
+                        <p class="mb-6 opacity-90">Участие в эксклюзивных ярмарках вакансий и networking-мероприятиях</p>
+                        <div class="text-3xl font-bold mb-4">300 TJS <span class="text-lg font-normal">/событие</span></div>
+                        <a href="fairs.html" class="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
+                            Подробнее
+                        </a>
+                    </div>
+
+                    <!-- Resume Review -->
+                    <div class="bg-gradient-to-br from-orange-500 to-red-500 text-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-file-alt text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Проверка резюме</h3>
+                        <p class="mb-6 opacity-90">Профессиональная проверка и оптимизация резюме от HR-экспертов</p>
+                        <div class="text-3xl font-bold mb-4">200 TJS <span class="text-lg font-normal">/услуга</span></div>
+                        <a href="#" class="bg-white text-orange-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
+                            Заказать
+                        </a>
+                    </div>
+
+                    <!-- Interview Training -->
+                    <div class="bg-gradient-to-br from-indigo-500 to-purple-500 text-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-microphone text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Тренинг интервью</h3>
+                        <p class="mb-6 opacity-90">Индивидуальные тренинги и подготовка к собеседованиям с экспертами</p>
+                        <div class="text-3xl font-bold mb-4">400 TJS <span class="text-lg font-normal">/сессия</span></div>
+                        <a href="#" class="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
+                            Записаться
+                        </a>
+                    </div>
+
+                    <!-- Career Consulting -->
+                    <div class="bg-gradient-to-br from-pink-500 to-rose-500 text-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-route text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Карьерное консультирование</h3>
+                        <p class="mb-6 opacity-90">Персональные консультации по планированию карьеры и профессиональному развитию</p>
+                        <div class="text-3xl font-bold mb-4">600 TJS <span class="text-lg font-normal">/час</span></div>
+                        <a href="#" class="bg-white text-pink-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
+                            Консультация
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Comparison -->
+        <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">Сравнение тарифов</h2>
+                    <p class="text-xl text-gray-600">Выберите подходящий план</p>
+                </div>
+                
+                <div class="max-w-5xl mx-auto">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Free Plan -->
+                        <div class="bg-white p-8 rounded-xl shadow-lg border-2 border-gray-200">
+                            <div class="text-center mb-6">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-2">Бесплатный</h3>
+                                <div class="text-4xl font-bold text-gray-800">0 TJS</div>
+                                <div class="text-gray-600">навсегда</div>
+                            </div>
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Базовый поиск вакансий</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Создание профиля</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Отклики на вакансии</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-times text-gray-400 mr-3"></i>
+                                    <span class="text-gray-400">Приоритетная поддержка</span>
+                                </li>
+                            </ul>
+                            <button class="w-full bg-gray-200 text-gray-800 py-3 px-6 rounded-lg font-semibold">
+                                Текущий план
+                            </button>
+                        </div>
+
+                        <!-- Premium Plan -->
+                        <div class="bg-gradient-to-br from-purple-600 to-blue-600 text-white p-8 rounded-xl shadow-lg border-2 border-purple-600 transform scale-105">
+                            <div class="text-center mb-6">
+                                <div class="bg-yellow-400 text-purple-800 px-3 py-1 rounded-full text-sm font-semibold mb-2">
+                                    Рекомендуем
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2">Премиум</h3>
+                                <div class="text-4xl font-bold">1000 TJS</div>
+                                <div class="opacity-80">в месяц</div>
+                            </div>
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-yellow-400 mr-3"></i>
+                                    <span>Все функции бесплатного</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-yellow-400 mr-3"></i>
+                                    <span>Приоритетная поддержка</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-yellow-400 mr-3"></i>
+                                    <span>Расширенная аналитика</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-yellow-400 mr-3"></i>
+                                    <span>Доступ к ярмаркам</span>
+                                </li>
+                            </ul>
+                            <a href="premium.html" class="block w-full bg-white text-purple-600 py-3 px-6 rounded-lg font-semibold text-center hover:bg-gray-100 transition-colors">
+                                Выбрать план
+                            </a>
+                        </div>
+
+                        <!-- Enterprise Plan -->
+                        <div class="bg-white p-8 rounded-xl shadow-lg border-2 border-gray-200">
+                            <div class="text-center mb-6">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-2">Корпоративный</h3>
+                                <div class="text-4xl font-bold text-gray-800">от 5000 TJS</div>
+                                <div class="text-gray-600">в месяц</div>
+                            </div>
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Все функции премиум</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Персональный менеджер</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>API интеграция</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Белая метка</span>
+                                </li>
+                            </ul>
+                            <button class="w-full bg-gray-800 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-700 transition-colors">
+                                Связаться
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">Часто задаваемые вопросы</h2>
+                </div>
+                
+                <div class="max-w-3xl mx-auto space-y-6">
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-2">Как оплатить услуги?</h3>
+                        <p class="text-gray-600">Мы принимаем оплату банковскими картами, через мобильные платежи и банковские переводы.</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-2">Можно ли отменить подписку?</h3>
+                        <p class="text-gray-600">Да, вы можете отменить подписку в любое время в настройках аккаунта. Доступ к премиум функциям сохранится до конца оплаченного периода.</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-2">Есть ли скидки для студентов?</h3>
+                        <p class="text-gray-600">Да, студенты получают скидку 50% на все наши услуги при предъявлении студенческого билета.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script>
+        // Инициализация портала
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof PortalApp !== 'undefined') {
+                PortalApp.init();
+            }
+        });
+    </script>
 </body>
 </html>
