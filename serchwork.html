@@ -6,9 +6,8 @@
     <title>Поиск вакансий — Портал рынка труда</title>
     <meta name="description" content="Поиск вакансий на официальном портале рынка труда Республики Таджикистан. Фильтры, предложения по обучению, поддержка для людей с инвалидностью.">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/common.css">
-    <script src="assets/js/common.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">    <link rel="stylesheet" href="assets/css/common_fixed.css">
+    <script src="assets/js/common_fixed.js"></script>
     <style>
         /* Custom gradient background for header and hero sections */
         .gradient-bg {
@@ -143,17 +142,9 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans">    <!-- Подключение единого header -->
-    <div id="portal-header"></div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('header.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('portal-header').innerHTML = data;
-                    if (typeof window.PortalApp !== 'undefined') {
-                        window.PortalApp.init();
-                    }
+<body class="bg-gray-50 font-sans">
+    <!-- Динамический header -->
+    <div id="header-container"></div>
                 })
                 .catch(error => console.error('Ошибка загрузки header:', error));
         });
@@ -470,8 +461,10 @@
         btn.onclick = function() {
             currentLangLabel.textContent = this.textContent;
             langDropdown.classList.add('hidden');
-        };
-    });
+        };    });
 </script>
+
+    <!-- Динамический footer -->
+    <div id="footer-container"></div>
 </body>
 </html>

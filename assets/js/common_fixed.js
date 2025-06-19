@@ -59,9 +59,7 @@ window.PortalUtils = {
                 notification.remove();
             }
         }, 4000);
-    },
-
-    // Инициализация дропдаунов
+    },    // Инициализация дропдаунов
     initDropdowns: function() {
         const dropdowns = document.querySelectorAll('.dropdown');
         
@@ -90,11 +88,15 @@ window.PortalUtils = {
             }
         });
         
-        // Закрытие дропдаунов при клике вне
-        document.addEventListener('click', function() {
+        // Закрытие дропдаунов при клике вне (исправленная версия)
+        document.addEventListener('click', function(e) {
             dropdowns.forEach(dropdown => {
+                const trigger = dropdown.querySelector('[data-dropdown-trigger]');
                 const content = dropdown.querySelector('.dropdown-content');
-                if (content && !content.classList.contains('hidden')) {
+                
+                // Проверяем, что клик не был по триггеру или внутри дропдауна
+                if (content && !content.classList.contains('hidden') && 
+                    !dropdown.contains(e.target)) {
                     content.classList.add('hidden');
                 }
             });
