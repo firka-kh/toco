@@ -88,6 +88,18 @@
             background-color: #e2e8f0; /* gray-200 */
             align-self: flex-start;
         }
+        .chat-messages {
+            height: 220px;
+            min-height: 120px;
+            max-height: 220px;
+            overflow-y: auto;
+            background: #f3f4f6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            flex-direction: column; /* исправлено: теперь сообщения идут вниз */
+        }
         /* Другие стили */
         .verified-badge {
             color: #48bb78; /* green-500 */
