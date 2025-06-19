@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подача заявки на переподготовку - Портал рынка труда</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        /* Custom gradient background for header and hero sections */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        /* Enhanced hover effect for cards */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px); /* Slightly more pronounced lift */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Larger, softer shadow */
+        }
+        /* Consistent spacing for sections */
+        .section-spacing {
+            padding: 3rem 0; /* Increased vertical padding for more breathing room */
+        }
+        /* Basic spinner for loading states */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #667eea;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Input and select styling */
+        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select, textarea, input[type="file"] {
+            border-radius: 0.375rem; /* rounded-md */
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            padding: 0.5rem 0.75rem; /* px-3 py-2 */
+            width: 100%;
+            color: #374151; /* text-gray-800 */
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="date"]:focus, select:focus, textarea:focus, input[type="file"]:focus {
+            outline: none;
+            border-color: #2563eb; /* focus:border-blue-500 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* focus:ring-blue-500 */
+        }
+        /* Style for file input label */
+        input[type="file"]::file-selector-button {
+            background-color: #4f46e5; /* indigo-600 */
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            margin-right: 1rem;
+            transition: background-color 0.2s;
+        }
+        input[type="file"]::file-selector-button:hover {
+            background-color: #4338ca; /* indigo-700 */
+        }
+
+        /* Print-specific styles for A4 format */
+        @media print {
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+            body {
+                font-size: 10pt;
+                line-height: 1.5;
+                color: #000;
+                background-color: #fff !important;
+            }
+            header, nav, footer,
+            button,
+            input, select, textarea,
+            .spinner {
+                display: none !important;
+            }
+            input, select, textarea {
+                display: block !important;
+                color: #000 !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+            input[type="file"] {
+                display: none !important;
+            }
+            section {
+                display: block !important;
+                padding: 0.5cm 0 !important;
+                background: none !important;
+                box-shadow: none !important;
+            }
+            .gradient-bg {
+                background: none !important;
+                color: #000 !important;
+            }
+            .gradient-bg h2, .gradient-bg p {
+                color: #000 !important;
+            }
+            .gradient-bg .bg-opacity-20 {
+                background: none !important;
+                backdrop-filter: none !important;
+                border: 1px solid #ddd;
+            }
+            .chart-container {
+                height: auto !important;
+                width: 100% !important;
+                page-break-inside: avoid;
+            }
+            canvas {
+                max-width: 100% !important;
+                height: auto !important;
+                background: none !important;
+            }
+            .bg-white, .bg-gray-50, .bg-blue-50, .bg-yellow-50, .bg-green-50 {
+                background: #fff !important;
+                box-shadow: none !important;
+                border: 1px solid #eee;
+            }
+            .text-white {
+                color: #000 !important;
+            }
+            h1, h2, h3, h4, p, span, li, a {
+                color: #000 !important;
+            }
+            a {
+                text-decoration: underline;
+            }
+            a[href]:after {
+                content: " (" attr(href) ")";
+                font-size: 8pt;
+            }
+            a[href^="#"]:after {
+                content: "";
+            }
+            .section-spacing {
+                page-break-after: always;
+            }
+            .section-spacing:last-child {
+                page-break-after: auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <!-- Левая часть: Лого и название -->
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
+                    <div>
+                        <!-- Добавляем ссылку на главную страницу -->
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Правая часть: Навигация, языки и профиль -->
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <!-- Добавляем пункт меню "Главная" -->
+                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                    <!-- Выпадающее меню профиля и языков -->
+                    <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
+                        <!-- Мой профиль -->
+                        <div class="relative">
+                            <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
+                                Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                                <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
+                                <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
+                                <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                            </div>
+                        </div>
+                        <!-- Выпадающее меню языков -->
+                        <div class="relative">
+                            <button id="langMenuBtn" type="button"
+                                class="px-4 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span id="currentLangLabel">RUS</span>
+                                <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                            </button>
+                            <div id="langDropdown"
+                                class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="ru">RUS</button>
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="tg">TAJ</button>
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="en">ENG</button>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <section id="retraining-application" class="section-spacing bg-white rounded-lg shadow-xl">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-10 text-gray-800">Подача заявки на профессиональную переподготовку</h2>
+                <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">
+                    Заполните форму ниже, чтобы подать заявку на участие в одной из наших программ профессиональной переподготовки.
+                </p>
+
+                <div class="max-w-3xl mx-auto bg-gray-50 p-8 rounded-lg shadow-inner border border-gray-200">
+                    <form id="applicationForm" class="space-y-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Личные данные</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">Фамилия <span class="text-red-500">*</span></label>
+                                <input type="text" id="lastName" name="lastName" placeholder="Иванов" required>
+                            </div>
+                            <div>
+                                <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">Имя <span class="text-red-500">*</span></label>
+                                <input type="text" id="firstName" name="firstName" placeholder="Иван" required>
+                            </div>
+                            <div>
+                                <label for="middleName" class="block text-sm font-medium text-gray-700 mb-2">Отчество</label>
+                                <input type="text" id="middleName" name="middleName" placeholder="Иванович">
+                            </div>
+                            <div>
+                                <label for="dob" class="block text-sm font-medium text-gray-700 mb-2">Дата рождения <span class="text-red-500">*</span></label>
+                                <input type="date" id="dob" name="dob" required>
+                            </div>
+                            <div>
+                                <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">Пол <span class="text-red-500">*</span></label>
+                                <select id="gender" name="gender" required>
+                                    <option value="">Выберите пол</option>
+                                    <option value="male">Мужской</option>
+                                    <option value="female">Женский</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="phoneNumber" class="block text-sm font-medium text-gray-700 mb-2">Телефон <span class="text-red-500">*</span></label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+992 (XX) XXX-XX-XX" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email <span class="text-red-500">*</span></label>
+                                <input type="email" id="email" name="email" placeholder="example@mail.tj" required>
+                            </div>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mt-8 mb-4 text-gray-800">Образование и опыт</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="educationLevel" class="block text-sm font-medium text-gray-700 mb-2">Уровень образования <span class="text-red-500">*</span></label>
+                                <select id="educationLevel" name="educationLevel" required>
+                                    <option value="">Выберите уровень</option>
+                                    <option value="Primary">Начальное</option>
+                                    <option value="Secondary">Среднее</option>
+                                    <option value="Vocational">Профессиональное</option>
+                                    <option value="Higher">Высшее</option>
+                                    <option value="Postgraduate">Послевузовское</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="currentProfession" class="block text-sm font-medium text-gray-700 mb-2">Текущая/Последняя профессия</label>
+                                <input type="text" id="currentProfession" name="currentProfession" placeholder="Например: Бухгалтер">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="workExperience" class="block text-sm font-medium text-gray-700 mb-2">Опыт работы (лет)</label>
+                                <input type="number" id="workExperience" name="workExperience" min="0" max="50" placeholder="Например: 5">
+                            </div>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mt-8 mb-4 text-gray-800">Выбор программы переподготовки</h3>
+                        <div>
+                            <label for="retrainingArea" class="block text-sm font-medium text-gray-700 mb-2">Желаемая область переподготовки <span class="text-red-500">*</span></label>
+                            <select id="retrainingArea" name="retrainingArea" required>
+                                <option value="">Выберите область</option>
+                                <option value="IT">IT технологии</option>
+                                <option value="Accounting">Бухгалтерский учет</option>
+                                <option value="Tourism">Туризм и гостеприимство</option>
+                                <option value="Construction">Строительные специальности</option>
+                                <option value="Marketing">Маркетинг</option>
+                                <option value="Design">Графический дизайн</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="specificCourse" class="block text-sm font-medium text-gray-700 mb-2">Предпочтительный курс <span class="text-red-500">*</span></label>
+                            <select id="specificCourse" name="specificCourse" required disabled>
+                                <option value="">Сначала выберите область</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="motivation" class="block text-sm font-medium text-gray-700 mb-2">Мотивационное письмо (почему вы хотите пройти переподготовку)</label>
+                            <textarea id="motivation" name="motivation" rows="4" placeholder="Расскажите о вашей мотивации..."></textarea>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mt-8 mb-4 text-gray-800">Загрузка документов</h3>
+                        <p class="text-gray-600 text-sm mb-4">Пожалуйста, загрузите следующие документы. Максимальный размер файла: 5 МБ.</p>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="passportScan" class="block text-sm font-medium text-gray-700 mb-2">Скан паспорта (PDF, JPG, PNG) <span class="text-red-500">*</span></label>
+                                <input type="file" id="passportScan" name="passportScan" accept=".pdf,.jpg,.jpeg,.png" required>
+                            </div>
+                            <div>
+                                <label for="educationDoc" class="block text-sm font-medium text-gray-700 mb-2">Документ об образовании (PDF, JPG, PNG) <span class="text-red-500">*</span></label>
+                                <input type="file" id="educationDoc" name="educationDoc" accept=".pdf,.jpg,.jpeg,.png" required>
+                            </div>
+                            <div>
+                                <label for="workRecord" class="block text-sm font-medium text-gray-700 mb-2">Копия трудовой книжки (при наличии, PDF)</label>
+                                <input type="file" id="workRecord" name="workRecord" accept=".pdf">
+                            </div>
+                            <div>
+                                <label for="photo3x4" class="block text-sm font-medium text-gray-700 mb-2">Фотография 3x4 (JPG, PNG) <span class="text-red-500">*</span></label>
+                                <input type="file" id="photo3x4" name="photo3x4" accept=".jpg,.jpeg,.png" required>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 text-center">
+                            <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors shadow-md flex items-center justify-center mx-auto">
+                                <span id="submitSpinner" class="hidden spinner mr-2"></span>
+                                <i class="fas fa-paper-plane mr-2"></i>Подать заявку
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Вертикальная лента возможностей для роста (слева, с интерактивностью, 4 объявления одновременно) -->
+        <aside class="fixed top-36 left-0 z-40 hidden lg:block">
+            <div class="ml-6 bg-white rounded-2xl shadow-2xl border border-blue-100 w-80 overflow-hidden" id="growthOpportunities">
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-4 flex items-center space-x-3">
+                    <i class="fas fa-graduation-cap text-2xl"></i>
+                    <span class="font-bold text-lg">Возможности для роста</span>
+                </div>
+                <ul class="divide-y divide-blue-50" id="growthOpportunitiesList">
+                    <!-- Здесь будут 4 объявления -->
+                </ul>
+                <div class="bg-blue-50 text-center py-3">
+                    <a href="skill_serch.html" id="allCoursesBtn" class="text-blue-700 font-semibold hover:underline text-sm flex items-center justify-center">
+                        <i class="fas fa-external-link-alt mr-2"></i> Все курсы и мероприятия
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Футер портала (аналогичен главной странице) -->
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">О портале</h3>
+                    <p class="text-sm opacity-90">Официальный портал информационной системы рынка труда Республики Таджикистан</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Полезные ссылки</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Правительство РТ</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Министерство труда</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Налоговый комитет</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Нормативные акты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Поддержка</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Часто задаваемые вопросы</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Руководство пользователя</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Техническая поддержка</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Обратная связь</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Социальные сети</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2024 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно профиля (аналогично главной странице) -->
+    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg p-8 max-w-xs w-full text-center">
+            <h3 class="text-xl font-bold mb-6 text-gray-800">Вход или регистрация</h3>
+            <button id="demoLoginBtn" class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors mb-4">Войти (демо)</button>
+            <button id="goRegisterBtn" class="w-full bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors">Зарегистрироваться</button>
+            <button id="closeProfileModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
+    </div>
+
+    <!-- Кнопка AI-виджета (аналогична главной странице) -->
+    <button id="aiWidgetBtn" class="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl hover:scale-110 transition-transform" title="AI-ассистент (демо)">
+        <i class="fas fa-robot"></i>
+    </button>
+
+    <script>
+        // Data for dynamic dropdowns (can be fetched from backend in real app)
+        const retrainingCoursesData = {
+            "IT": ["Основы программирования на Python", "Веб-разработка (Frontend)", "Базы данных (SQL)", "Тестирование ПО"],
+            "Accounting": ["Бухгалтерский учет для начинающих", "1С: Бухгалтерия", "Финансовый анализ"],
+            "Tourism": ["Гид-экскурсовод", "Менеджер по туризму", "Основы гостиничного дела"],
+            "Construction": ["Мастер отделочных работ", "Электрик", "Сантехник", "Сварщик"],
+            "Marketing": ["Основы цифрового маркетинга", "SMM-специалист", "Контент-маркетинг"],
+            "Design": ["Основы графического дизайна", "UI/UX дизайн (базовый)", "Дизайн интерьера"],
+        };
+
+        // Function to populate courses dropdown based on selected area
+        function populateCoursesDropdown() {
+            const areaSelect = document.getElementById('retrainingArea');
+            const courseSelect = document.getElementById('specificCourse');
+            const selectedArea = areaSelect.value;
+
+            courseSelect.innerHTML = '<option value="">Выберите курс</option>'; // Default option
+            courseSelect.disabled = true; // Disable until an area is selected
+
+            const courses = retrainingCoursesData[selectedArea];
+            if (courses) {
+                courses.forEach(course => {
+                    const option = document.createElement('option');
+                    option.value = course;
+                    option.textContent = course;
+                    courseSelect.appendChild(option);
+                });
+                courseSelect.disabled = false; // Enable if courses are available
+            }
+        }
+
+        // Event listener for retraining area dropdown change
+        document.getElementById('retrainingArea').addEventListener('change', populateCoursesDropdown);
+
+        // Handle form submission (placeholder)
+        document.getElementById('applicationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const spinner = document.getElementById('submitSpinner');
+            spinner.classList.remove('hidden');
+            
+            // Basic client-side validation
+            let isValid = true;
+            this.querySelectorAll('[required]').forEach(input => {
+                if (!input.value) {
+                    isValid = false;
+                    input.style.borderColor = 'red'; // Simple visual feedback
+                } else {
+                    input.style.borderColor = ''; // Reset
+                }
+            });
+
+            // File input validation (check if files are selected for required fields)
+            this.querySelectorAll('input[type="file"][required]').forEach(input => {
+                if (input.files.length === 0) {
+                    isValid = false;
+                    input.style.borderColor = 'red';
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
+
+            if (!isValid) {
+                spinner.classList.add('hidden');
+                alert('Пожалуйста, заполните все обязательные поля!');
+                return;
+            }
+
+            // Simulate API call
+            setTimeout(() => {
+                spinner.classList.add('hidden');
+                alert('Ваша заявка на переподготовку успешно подана! Мы свяжемся с вами в ближайшее время.');
+                this.reset(); // Clear form fields
+                populateCoursesDropdown(); // Reset courses dropdown
+            }, 2000);
+        });
+
+        // Profile Dropdown Logic (from original index.html)
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+        const langMenuBtn = document.getElementById('langMenuBtn');
+        const langDropdown = document.getElementById('langDropdown');
+        const currentLangLabel = document.getElementById('currentLangLabel');
+
+        profileMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+            langDropdown.classList.add('hidden');
+        });
+        document.addEventListener('click', function(e) {
+            if (profileDropdownContainer && !profileDropdownContainer.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        // Language Dropdown Logic (from original index.html)
+        langMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            langDropdown.classList.toggle('hidden');
+            profileDropdown.classList.add('hidden');
+        });
+        document.addEventListener('click', function(e) {
+            if (langDropdown && !langDropdown.contains(e.target) && langMenuBtn && !langMenuBtn.contains(e.target)) {
+                langDropdown.classList.add('hidden');
+            }
+        });
+        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                currentLangLabel.textContent = this.textContent;
+                langDropdown.classList.add('hidden');
+            };
+        });
+
+        // Google Translate stub (prevent error if not loaded)
+        function googleTranslateElementInit() {}
+
+        // Initial population of courses dropdown on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            populateCoursesDropdown(); // Populate courses dropdown on initial load
+        });
+
+        // Вертикальная лента возможностей для роста (интерактивность)
+        const growthOpportunitiesData = [
+            {
+                icon: 'fas fa-laptop-code text-blue-500',
+                title: 'Курс: Frontend-разработчик',
+                desc: 'Старт: 15 июня • Онлайн',
+                action: 'Записаться &rarr;',
+                actionColor: 'text-blue-600'
+            },
+            {
+                icon: 'fas fa-chart-line text-green-500',
+                title: 'Вебинар: Современный маркетинг',
+                desc: '20 июня • Бесплатно',
+                action: 'Подробнее &rarr;',
+                actionColor: 'text-green-600'
+            },
+            {
+                icon: 'fas fa-user-tie text-yellow-500',
+                title: 'Мастер-класс: Лидерство и soft skills',
+                desc: '25 июня • Офлайн, Душанбе',
+                action: 'Узнать больше &rarr;',
+                actionColor: 'text-yellow-600'
+            },
+            {
+                icon: 'fas fa-network-wired text-purple-500',
+                title: 'Курс: Основы сетевых технологий',
+                desc: 'Июль • Онлайн',
+                action: 'Подробнее &rarr;',
+                actionColor: 'text-purple-600'
+            },
+            {
+                icon: 'fas fa-language text-pink-500',
+                title: 'Интенсив: Английский для IT',
+                desc: 'Август • Онлайн',
+                action: 'Записаться &rarr;',
+                actionColor: 'text-pink-600'
+            },
+            {
+                icon: 'fas fa-briefcase text-indigo-500',
+                title: 'Курс: Управление проектами',
+                desc: 'Сентябрь • Онлайн',
+                action: 'Подробнее &rarr;',
+                actionColor: 'text-indigo-600'
+            }
+        ];
+
+        let currentGrowthIndex = 0;
+        const growthList = document.getElementById('growthOpportunitiesList');
+
+        function renderGrowthOpportunities(startIdx) {
+            let html = '';
+            for (let i = 0; i < 4; i++) {
+                const idx = (startIdx + i) % growthOpportunitiesData.length;
+                const item = growthOpportunitiesData[idx];
+                html += `
+                    <li class="p-5 hover:bg-blue-50 transition">
+                        <div class="flex items-center space-x-3">
+                            <i class="${item.icon} text-xl"></i>
+                            <div>
+                                <div class="font-semibold text-gray-800">${item.title}</div>
+                                <div class="text-sm text-gray-500">${item.desc}</div>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-xs ${item.actionColor} font-semibold cursor-pointer hover:underline">${item.action}</div>
+                    </li>
+                `;
+            }
+            growthList.innerHTML = html;
+        }
+
+        // Первичная отрисовка
+        renderGrowthOpportunities(currentGrowthIndex);
+
+        // Автоматическая смена каждые 3 секунды (сдвиг на 1)
+        setInterval(() => {
+            currentGrowthIndex = (currentGrowthIndex + 1) % growthOpportunitiesData.length;
+            renderGrowthOpportunities(currentGrowthIndex);
+        }, 3000);
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div id="google_translate_element" style="display:none"></div>
+</body>
+</html>
