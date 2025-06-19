@@ -2,156 +2,434 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Онлайн-собеседование</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Онлайн-собеседование — Портал рынка труда</title>
+    <meta name="description" content="Платформа для проведения онлайн-собеседований на Портале рынка труда.">
+    <!-- Подключение Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <!-- Подключение Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
+        /* Общие стили из предыдущего кода для консистентности */
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        .video-placeholder {
-            background: linear-gradient(120deg, #e0e7ff 60%, #f8fafc 100%);
-            border-radius: 1.5rem;
-            box-shadow: 0 6px 32px 0 rgba(79,70,229,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.04);
-            border: 1.5px solid #e0e7ff;
-            min-height: 320px;
+        #profileDropdown, #langDropdown {
+            min-width: 180px;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.18s ease-out;
+        }
+
+        /* Стили для страницы собеседования */
+        .video-main-container {
+            background-color: #2d3748; /* темный фон */
+            aspect-ratio: 16 / 9;
+        }
+        .video-self-view {
+            width: 200px;
+            aspect-ratio: 16 / 9;
+            background-color: #4a5568;
+        }
+        .control-button {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
+            font-size: 24px;
+            transition: background-color 0.2s;
         }
-        .video-placeholder .fa-video {
-            font-size: 4rem;
-            color: #6366f1;
+        .control-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
-        .timer {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #6366f1;
-            letter-spacing: 0.05em;
+        .control-button.active {
+            background-color: white;
+            color: #4a5568;
         }
-        .chat-bubble {
-            background: #f3f4f6;
-            border-radius: 1.2em;
-            padding: 0.7em 1.2em;
-            margin-bottom: 0.5em;
+        .control-button.end-call {
+            background-color: #e53e3e; /* red-600 */
+        }
+        .control-button.end-call:hover {
+            background-color: #c53030; /* red-700 */
+        }
+        .tab-button {
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .chat-message {
             max-width: 80%;
-            word-break: break-word;
         }
-        .chat-bubble.user {
-            background: #6366f1;
-            color: #fff;
-            margin-left: auto;
+        .chat-message.self {
+            background-color: #ebf4ff; /* blue-100 */
+            align-self: flex-end;
         }
-        .chat-bubble.interviewer {
-            background: #f3f4f6;
-            color: #222;
-            margin-right: auto;
+        .chat-message.other {
+            background-color: #f7fafc; /* gray-100 */
+            align-self: flex-start;
         }
-        .chat-area {
-            max-height: 220px;
-            overflow-y: auto;
+        /* Стили для кастомного переключателя */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 28px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+        input:checked + .slider:before {
+            transform: translateX(22px);
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans">
-    <iframe src="../header.html" style="width:100%;border:none;" height="180"></iframe>
-    <main class="container mx-auto px-4 py-10">
-        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-8">
-            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800 tracking-tight">Онлайн-собеседование</h2>
-            <div class="flex flex-col md:flex-row gap-8">
-                <!-- Видео и таймер -->
-                <div class="flex-1 flex flex-col items-center">
-                    <div class="video-placeholder w-full mb-4 aspect-video relative">
-                        <i class="fas fa-video"></i>
-                        <span class="absolute top-4 right-4 bg-white bg-opacity-80 rounded-lg px-4 py-2 shadow timer" id="timer">00:00</span>
-                        <span class="absolute bottom-4 left-4 bg-white bg-opacity-80 rounded-lg px-3 py-1 text-sm text-gray-700 shadow">
-                            <i class="fas fa-user-tie mr-1"></i> Интервьюер: <span id="interviewerName">Алиев А.</span>
-                        </span>
-                        <span class="absolute bottom-4 right-4 bg-white bg-opacity-80 rounded-lg px-3 py-1 text-sm text-gray-700 shadow">
-                            <i class="fas fa-user mr-1"></i> Вы
-                        </span>
-                    </div>
-                    <div class="flex justify-center gap-4 mt-2">
-                        <button class="bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors shadow" id="startBtn">
-                            <i class="fas fa-play mr-2"></i>Начать собеседование
-                        </button>
-                        <button class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors shadow" id="leaveBtn">
-                            <i class="fas fa-sign-out-alt mr-2"></i>Выйти
-                        </button>
+<body class="bg-gray-100 font-sans flex flex-col min-h-screen">
+    <!-- Шапка портала (аналогична index.html) -->
+    <header class="gradient-bg text-white shadow-lg flex-shrink-0">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Логотип" class="rounded-full">
+                    <div>
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
                     </div>
                 </div>
-                <!-- Чат -->
-                <div class="flex-1 flex flex-col">
-                    <div class="bg-gray-50 rounded-xl p-4 flex-1 flex flex-col shadow-inner">
-                        <div class="font-semibold text-gray-700 mb-2 flex items-center">
-                            <i class="fas fa-comments text-blue-500 mr-2"></i>Чат собеседования
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="index.html" class="font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <div class="relative">
+                        <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none flex items-center">
+                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Кабинет работодателя</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Кабинет соискателя</a>
                         </div>
-                        <div class="chat-area flex-1 mb-2" id="chatArea">
-                            <div class="chat-bubble interviewer">Здравствуйте! Готовы начать собеседование?</div>
-                        </div>
-                        <form id="chatForm" class="flex gap-2 mt-2">
-                            <input type="text" id="chatInput" class="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите сообщение..." autocomplete="off">
-                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </form>
                     </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основное содержимое страницы собеседования -->
+    <main class="flex-grow container mx-auto p-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 h-full">
+
+            <!-- Левая часть: Основное видео и управление -->
+            <div class="lg:col-span-2 xl:col-span-3 bg-white rounded-lg shadow-xl flex flex-col p-4">
+                <div class="relative flex-grow w-full video-main-container rounded-lg overflow-hidden">
+                    <!-- Основное видео (кандидат) -->
+                    <video id="remoteVideo" class="w-full h-full object-cover" autoplay playsinline>
+                        <!-- Для демонстрации используется заглушка -->
+                    </video>
+                    <div class="absolute bottom-4 left-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-lg">
+                        <span id="candidateName">Имя Кандидата</span>
+                    </div>
+                    <div class="absolute top-4 right-4 video-self-view rounded-lg shadow-lg border-2 border-white overflow-hidden">
+                        <!-- Видео интервьюера (мое видео) -->
+                        <video id="localVideo" class="w-full h-full object-cover" autoplay playsinline muted></video>
+                    </div>
+                </div>
+                <!-- Панель управления звонком -->
+                <div class="flex-shrink-0 flex items-center justify-center space-x-4 mt-4">
+                    <button id="micBtn" class="control-button" title="Выключить микрофон">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button id="camBtn" class="control-button" title="Выключить камеру">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button id="screenShareBtn" class="control-button" title="Поделиться экраном">
+                        <i class="fas fa-desktop"></i>
+                    </button>
+                    <button id="endCallBtn" class="control-button end-call" title="Завершить звонок">
+                        <i class="fas fa-phone-slash"></i>
+                    </button>
                 </div>
             </div>
-            <div class="mt-8 text-center text-gray-500 text-sm">
-                <i class="fas fa-info-circle mr-1"></i>
-                Видеосвязь реализована в демо-режиме. Для реального интервью используйте Zoom, Teams или встроенные сервисы портала.
+
+            <!-- Правая часть: Панель с вкладками (информация, чат, инструменты) -->
+            <div class="lg:col-span-1 xl:col-span-1 bg-white rounded-lg shadow-xl flex flex-col h-full">
+                <!-- Вкладки -->
+                <div class="flex-shrink-0 border-b border-gray-200">
+                    <nav class="flex space-x-1 -mb-px px-4">
+                        <button class="tab-button active py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="info">
+                            <i class="fas fa-info-circle mr-2"></i>Инфо
+                        </button>
+                        <button class="tab-button py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="chat">
+                             <i class="fas fa-comments mr-2"></i>Чат
+                        </button>
+                        <button class="tab-button py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="tools">
+                             <i class="fas fa-tools mr-2"></i>Инструменты
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Содержимое вкладок -->
+                <div class="flex-grow p-4 overflow-y-auto">
+                    <!-- Вкладка: Информация -->
+                    <div id="tab-info" class="tab-content active space-y-4">
+                        <h3 class="text-lg font-bold text-gray-800">Информация о собеседовании</h3>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-600">Кандидат:</p>
+                            <p class="text-gray-800">Алиев Фарход</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-600">Вакансия:</p>
+                            <p class="text-gray-800">Ведущий Frontend-разработчик</p>
+                        </div>
+                         <div>
+                            <p class="text-sm font-semibold text-gray-600">Запланировано:</p>
+                            <p class="text-gray-800">19 июня 2025, 15:00</p>
+                        </div>
+                        <div class="pt-4 border-t">
+                            <h4 class="text-md font-bold text-gray-800 mb-2">Участники (2)</h4>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-user-tie text-blue-500"></i>
+                                <span class="text-gray-700">Иванов Иван (Вы)</span>
+                            </div>
+                             <div class="flex items-center space-x-3 mt-2">
+                                <i class="fas fa-user text-green-500"></i>
+                                <span class="text-gray-700">Алиев Фарход</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Вкладка: Чат -->
+                    <div id="tab-chat" class="tab-content flex flex-col h-full">
+                        <div id="chat-messages" class="flex-grow space-y-3 overflow-y-auto p-2 bg-gray-50 rounded-md flex flex-col mb-4">
+                            <!-- Сообщения чата будут добавляться сюда -->
+                            <div class="chat-message other p-3 rounded-lg">
+                                <p class="text-sm">Здравствуйте, Фарход! Готовы начать?</p>
+                                <p class="text-xs text-gray-500 mt-1">Иван, 15:01</p>
+                            </div>
+                            <div class="chat-message self p-3 rounded-lg">
+                                <p class="text-sm">Добрый день! Да, готов.</p>
+                                <p class="text-xs text-gray-500 mt-1 text-right">Фарход, 15:01</p>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0 flex space-x-2">
+                            <input type="text" id="chat-input" placeholder="Введите сообщение..." class="flex-grow border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <button id="send-chat-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Вкладка: Инструменты -->
+                    <div id="tab-tools" class="tab-content space-y-6">
+                         <div>
+                            <h4 class="text-md font-bold text-gray-800 mb-2">Запись звонка</h4>
+                            <div class="flex items-center justify-between bg-gray-100 p-3 rounded-lg">
+                                <span class="text-gray-700">Включить запись</span>
+                                <label class="switch">
+                                  <input type="checkbox" id="recordToggle">
+                                  <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-md font-bold text-gray-800 mb-2">Интеграции</h4>
+                            <div class="space-y-2">
+                               <button class="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors flex items-center justify-center">
+                                   <i class="fab fa-google mr-2"></i>Переключиться на Google Meet
+                               </button>
+                               <button class="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors flex items-center justify-center">
+                                   <i class="fas fa-video mr-2"></i>Переключиться на Zoom
+                               </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-md font-bold text-gray-800 mb-2">Личные заметки</h4>
+                            <textarea id="privateNotes" rows="6" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Здесь вы можете делать заметки, которые видны только вам..."></textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
-    <iframe src="../footer.html" style="width:100%;border:none;" height="100"></iframe>
-    <script>
-        // Таймер собеседования
-        let timerInterval = null;
-        let seconds = 0;
-        const timerEl = document.getElementById('timer');
-        document.getElementById('startBtn').onclick = function() {
-            if (timerInterval) return;
-            timerInterval = setInterval(() => {
-                seconds++;
-                const min = String(Math.floor(seconds / 60)).padStart(2, '0');
-                const sec = String(seconds % 60).padStart(2, '0');
-                timerEl.textContent = `${min}:${sec}`;
-            }, 1000);
-            this.disabled = true;
-            this.classList.add('opacity-60', 'cursor-not-allowed');
-        };
-        document.getElementById('leaveBtn').onclick = function() {
-            if (confirm('Вы действительно хотите выйти из собеседования?')) {
-                window.location.href = '../index.html';
-            }
-        };
 
-        // Чат
-        const chatArea = document.getElementById('chatArea');
-        const chatForm = document.getElementById('chatForm');
-        const chatInput = document.getElementById('chatInput');
-        chatForm.onsubmit = function(e) {
-            e.preventDefault();
-            const msg = chatInput.value.trim();
-            if (!msg) return;
-            const userBubble = document.createElement('div');
-            userBubble.className = 'chat-bubble user';
-            userBubble.textContent = msg;
-            chatArea.appendChild(userBubble);
-            chatArea.scrollTop = chatArea.scrollHeight;
-            chatInput.value = '';
-            // Имитация ответа интервьюера
-            setTimeout(() => {
-                const reply = document.createElement('div');
-                reply.className = 'chat-bubble interviewer';
-                reply.textContent = 'Спасибо за ваш ответ!';
-                chatArea.appendChild(reply);
-                chatArea.scrollTop = chatArea.scrollHeight;
-            }, 1200);
-        };
+    <!-- Футер портала (аналогичен index.html) -->
+    <footer class="gradient-bg text-white py-12 flex-shrink-0 mt-8">
+        <div class="container mx-auto px-4">
+             <div class="border-t border-white border-opacity-20 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2030 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно для подтверждения -->
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
+            <h3 id="modalTitle" class="text-xl font-bold text-gray-800 mb-4">Подтверждение</h3>
+            <p id="modalMessage" class="text-gray-700 mb-6">Вы уверены?</p>
+            <div class="flex justify-end space-x-4">
+                <button id="modalCancel" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400">Отмена</button>
+                <button id="modalConfirm" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Подтвердить</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Логика выпадающего меню в шапке ---
+            const profileMenuBtn = document.getElementById('profileMenuBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+
+            profileMenuBtn?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (profileMenuBtn && !profileMenuBtn.contains(e.target) && profileDropdown && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+            
+            // --- Логика страницы собеседования ---
+            
+            // Управление вкладками
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `tab-${tabId}`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Управление кнопками звонка (вкл/выкл)
+            const micBtn = document.getElementById('micBtn');
+            const camBtn = document.getElementById('camBtn');
+
+            micBtn.addEventListener('click', () => {
+                micBtn.classList.toggle('active');
+                const icon = micBtn.querySelector('i');
+                icon.classList.toggle('fa-microphone');
+                icon.classList.toggle('fa-microphone-slash');
+                micBtn.title = micBtn.classList.contains('active') ? 'Включить микрофон' : 'Выключить микрофон';
+            });
+
+            camBtn.addEventListener('click', () => {
+                camBtn.classList.toggle('active');
+                const icon = camBtn.querySelector('i');
+                icon.classList.toggle('fa-video');
+                icon.classList.toggle('fa-video-slash');
+                 camBtn.title = camBtn.classList.contains('active') ? 'Включить камеру' : 'Выключить камеру';
+            });
+
+            // Логика чата
+            const chatInput = document.getElementById('chat-input');
+            const sendChatBtn = document.getElementById('send-chat-btn');
+            const chatMessages = document.getElementById('chat-messages');
+
+            function sendMessage() {
+                const messageText = chatInput.value.trim();
+                if (messageText) {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'chat-message self p-3 rounded-lg';
+                    messageElement.innerHTML = `
+                        <p class="text-sm">${messageText}</p>
+                        <p class="text-xs text-gray-500 mt-1 text-right">Вы, ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
+                    `;
+                    chatMessages.appendChild(messageElement);
+                    chatInput.value = '';
+                    chatMessages.scrollTop = chatMessages.scrollHeight; // Прокрутка вниз
+                }
+            }
+
+            sendChatBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Логика модального окна для завершения звонка
+            const confirmModal = document.getElementById('confirmModal');
+            const modalTitle = confirmModal.querySelector('#modalTitle');
+            const modalMessage = confirmModal.querySelector('#modalMessage');
+            const modalConfirm = confirmModal.querySelector('#modalConfirm');
+            const modalCancel = confirmModal.querySelector('#modalCancel');
+
+            document.getElementById('endCallBtn').addEventListener('click', () => {
+                 modalTitle.textContent = 'Завершить собеседование?';
+                 modalMessage.textContent = 'Вы уверены, что хотите завершить звонок для всех участников?';
+                 modalConfirm.textContent = 'Завершить';
+                 confirmModal.classList.remove('hidden');
+            });
+            
+            modalCancel.addEventListener('click', () => {
+                 confirmModal.classList.add('hidden');
+            });
+             modalConfirm.addEventListener('click', () => {
+                 // Здесь должна быть логика завершения звонка
+                 console.log('Звонок завершен');
+                 alert('Собеседование завершено. Вы будете перенаправлены на страницу профиля.');
+                 window.location.href = 'employer_profile.html'; // Пример перенаправления
+            });
+
+        });
     </script>
 </body>
 </html>
