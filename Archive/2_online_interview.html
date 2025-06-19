@@ -70,8 +70,7 @@
             display: flex; /* Используем flex для управления высотой */
             flex-direction: column;
             height: 100%;
-        }
-        /* Стили для чата */
+        }        /* Стили для чата */
         #chat-messages {
             height: 300px;
             max-height: 300px;
@@ -145,8 +144,7 @@
                     <div class="absolute top-4 right-4 video-self-view rounded-lg shadow-lg border-2 border-white overflow-hidden">
                         <video id="localVideo" class="w-full h-full object-cover" autoplay playsinline muted></video>
                     </div>
-                </div>
-                <!-- Панель управления под видео -->
+                </div>                <!-- Панель управления под видео -->
                 <div class="flex-shrink-0 flex flex-wrap items-center justify-center gap-3 mt-4">
                     <button id="toggleMicBtn" class="control-button" title="Выключить микрофон"><i class="fas fa-microphone mr-2"></i>Микрофон</button>
                     <button id="toggleCamBtn" class="control-button" title="Выключить камеру"><i class="fas fa-video mr-2"></i>Камера</button>
@@ -205,9 +203,7 @@
                                 <div class="flex items-center space-x-3"><i class="fas fa-user text-green-500"></i><span class="text-gray-700">Алиев Фарход (Кандидат)</span></div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Вкладка: Чат -->
+                    </div>                    <!-- Вкладка: Чат -->
                     <div id="tab-chat" class="tab-content h-full">
                         <div class="flex flex-col h-full">
                             <div id="chat-messages" class="flex-1 overflow-y-auto p-3 bg-gray-50 rounded-md mb-3 min-h-0">
@@ -330,9 +326,7 @@
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
                 });
-            });
-
-            // Управление кнопками звонка (вкл/выкл)
+            });            // Управление кнопками звонка (вкл/выкл)
             const toggleMicBtn = document.getElementById('toggleMicBtn');
             const toggleCamBtn = document.getElementById('toggleCamBtn');
             const recordBtn = document.getElementById('recordBtn');
@@ -372,9 +366,7 @@
                 a.download = 'chat_history.txt';
                 a.click();
                 showToast('Чат сохранен');
-            });
-
-            // Видео и управление
+            });            // Видео и управление
             const localVideo = document.getElementById('localVideo');
             const remoteVideo = document.getElementById('remoteVideo');
             let mediaStream = null;
@@ -543,6 +535,147 @@
                 }, 2000);
                 confirmModal.classList.add('hidden');
             });
+            // Видео и управление
+            const localVideo = document.getElementById('localVideo');
+            const remoteVideo = document.getElementById('remoteVideo');
+            let mediaStream = null;
+            let mediaRecorder = null;
+            let recordedChunks = [];
+            let isRecording = false;
+            let camEnabled = true;
+            let micEnabled = true;
+
+            // Инициализация видео
+            async function initializeVideo() {
+                try {
+                    mediaStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+                    localVideo.srcObject = mediaStream;
+                    showToast('Камера и микрофон подключены');
+                } catch (error) {
+                    console.error('Ошибка доступа к камере/микрофону:', error);
+                    showToast('Не удалось подключить камеру или микрофон');
+                }
+            }
+
+            // Запуск видео при загрузке страницы
+            initializeVideo();
+
+            // Управление микрофоном
+            toggleMicBtn.addEventListener('click', () => {
+                if (!mediaStream) return;
+                micEnabled = !micEnabled;
+                mediaStream.getAudioTracks().forEach(track => track.enabled = micEnabled);
+                toggleMicBtn.classList.toggle('active', !micEnabled);
+                const icon = toggleMicBtn.querySelector('i');
+                if (micEnabled) {
+                    icon.className = 'fas fa-microphone mr-2';
+                    showToast('Микрофон включен');
+                } else {
+                    icon.className = 'fas fa-microphone-slash mr-2';
+                    showToast('Микрофон выключен');
+                }
+            });
+
+            // Управление камерой
+            toggleCamBtn.addEventListener('click', () => {
+                if (!mediaStream) return;
+                camEnabled = !camEnabled;
+                mediaStream.getVideoTracks().forEach(track => track.enabled = camEnabled);
+                toggleCamBtn.classList.toggle('active', !camEnabled);
+                const icon = toggleCamBtn.querySelector('i');
+                if (camEnabled) {
+                    icon.className = 'fas fa-video mr-2';
+                    showToast('Камера включена');
+                } else {
+                    icon.className = 'fas fa-video-slash mr-2';
+                    showToast('Камера выключена');
+                }
+            });
+
+            // Запись видео
+            recordBtn.addEventListener('click', () => {
+                if (!mediaStream) {
+                    showToast('Нет видеопотока для записи');
+                    return;
+                }
+                
+                if (!isRecording) {
+                    recordedChunks = [];
+                    mediaRecorder = new MediaRecorder(mediaStream);
+                    mediaRecorder.ondataavailable = e => {
+                        if (e.data.size > 0) recordedChunks.push(e.data);
+                    };
+                    mediaRecorder.onstop = () => {
+                        showToast('Запись завершена. Теперь можно сохранить видео');
+                    };
+                    mediaRecorder.start();
+                    isRecording = true;
+                    recordBtn.classList.add('active');
+                    recordBtn.style.backgroundColor = '#dc2626'; // red-600
+                    recordBtn.querySelector('i').className = 'fas fa-stop mr-2';
+                    showToast('Запись начата');
+                } else {
+                    mediaRecorder.stop();
+                    isRecording = false;
+                    recordBtn.classList.remove('active');
+                    recordBtn.style.backgroundColor = '#4a5568';
+                    recordBtn.querySelector('i').className = 'fas fa-record-vinyl mr-2';
+                    showToast('Запись остановлена');
+                }
+            });
+
+            // Сохранение видео
+            saveVideoBtn.addEventListener('click', () => {
+                if (!recordedChunks.length) {
+                    showToast('Нет записанного видео для сохранения');
+                    return;
+                }
+                const blob = new Blob(recordedChunks, {type: 'video/webm'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `interview_${new Date().toISOString().slice(0,10)}.webm`;
+                a.click();
+                showToast('Видео сохранено на компьютер');
+            });
+
+            // Приглашение участника
+            inviteBtn.addEventListener('click', () => {
+                const inviteUrl = `${window.location.origin}${window.location.pathname}?invite=${Math.random().toString(36).substring(2, 15)}`;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(inviteUrl).then(() => {
+                        showToast('Ссылка для приглашения скопирована в буфер обмена');
+                    }).catch(() => {
+                        fallbackCopyTextToClipboard(inviteUrl);
+                    });
+                } else {
+                    fallbackCopyTextToClipboard(inviteUrl);
+                }
+            });
+
+            function fallbackCopyTextToClipboard(text) {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('Ссылка для приглашения скопирована');
+                } catch (err) {
+                    prompt('Скопируйте ссылку для приглашения:', text);
+                }
+                document.body.removeChild(textArea);
+            }
+
+            // Toast-уведомления
+            function showToast(message) {
+                const toast = document.getElementById('toastMsg');                toast.textContent = message;
+                toast.style.opacity = '1';
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                }, 3000);
+            }
         });
     </script>
 </body>
