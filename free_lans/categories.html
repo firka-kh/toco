@@ -3,21 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Категории задач — Фриланс платформа</title>
+    <title>Категории задач | FreelanceHub - Портал рынка труда РТ</title>
     <meta name="description" content="Все категории фриланс-задач: разработка, дизайн, маркетинг, переводы, контент и многое другое. Найдите подходящие проекты.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/common.css">
-    <script src="../assets/js/common.js"></script>
+    <script src="../assets/js/common_fixed.js" defer></script>
 </head>
-<body class="bg-gray-50 font-sans">
-    <!-- Подключение единого header -->
-    <div id="portal-header"></div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('../header.html')
-                .then(response => response.text())
-                .then(data => {
+<body>
+    <div id="header-container"></div>
                     document.getElementById('portal-header').innerHTML = data;
                     if (typeof window.PortalApp !== 'undefined') {
                         window.PortalApp.init();

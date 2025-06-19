@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест - Портал рынка труда РТ</title>
+    <link rel="stylesheet" href="assets/css/common_fixed.css">
+    <script src="assets/js/common_fixed.js" defer></script>
+    <style>
+        /* Дополнительные стили для демонстрации */
+        .demo-section {
+            padding: 2rem;
+            margin: 1rem 0;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Загрузка header -->
+    <div id="header-container"></div>
+
+    <main class="min-h-screen py-4">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h1 class="text-xl font-bold text-gray-800">Тестовая страница</h1>
+                <p class="text-gray-600">Проверка работы исправленных компонентов</p>
+            </div>
+
+            <!-- Тест кнопок -->
+            <div class="demo-section">
+                <h2 class="font-bold mb-4">Тест кнопок</h2>
+                <div class="space-x-4">
+                    <button class="btn btn-primary">Основная кнопка</button>
+                    <button class="btn btn-secondary">Вторичная кнопка</button>
+                    <button class="btn btn-white">Белая кнопка</button>
+                    <button class="btn btn-sm btn-primary">Маленькая</button>
+                </div>
+            </div>
+
+            <!-- Тест дропдауна -->
+            <div class="demo-section">
+                <h2 class="font-bold mb-4">Тест дропдауна</h2>
+                <div class="dropdown">
+                    <button class="btn btn-secondary" data-dropdown-trigger>
+                        Выбрать язык <i class="fas fa-chevron-down ml-1"></i>
+                    </button>
+                    <div class="dropdown-content hidden">
+                        <button onclick="alert('Выбран русский')">🇷🇺 Русский</button>
+                        <button onclick="alert('Выбран татарский')">🇷🇺 Татарча</button>
+                        <button onclick="alert('Выбран английский')">🇺🇸 English</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Тест формы -->
+            <div class="demo-section">
+                <h2 class="font-bold mb-4">Тест формы</h2>
+                <form onsubmit="event.preventDefault(); alert('Форма отправлена!');">
+                    <div class="mb-4">
+                        <label class="form-label">Имя *</label>
+                        <input type="text" class="form-input" placeholder="Введите ваше имя" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-input" placeholder="example@mail.ru" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
+            </div>
+
+            <!-- Тест карточек -->
+            <div class="demo-section">
+                <h2 class="font-bold mb-4">Тест карточек</h2>
+                <div class="card hover-scale">
+                    <div class="card-header">
+                        <h3 class="font-bold">Заголовок карточки</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Содержимое карточки. Здесь может быть любая информация.</p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary btn-sm">Подробнее</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Тест уведомлений -->
+            <div class="demo-section">
+                <h2 class="font-bold mb-4">Тест уведомлений</h2>
+                <div class="space-x-4">
+                    <button class="btn btn-primary" onclick="window.PortalUtils && PortalUtils.showNotification('Успешно!', 'success')">
+                        Успех
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.PortalUtils && PortalUtils.showNotification('Ошибка!', 'error')">
+                        Ошибка
+                    </button>
+                    <button class="btn btn-white" onclick="window.PortalUtils && PortalUtils.showNotification('Информация', 'info')">
+                        Инфо
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Загрузка footer -->
+    <div id="footer-container"></div>
+
+    <script>
+        // Дополнительная инициализация для демонстрации
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Тестовая страница загружена');
+            
+            // Показать уведомление о загрузке
+            setTimeout(() => {
+                if (window.PortalUtils) {
+                    PortalUtils.showNotification('Страница загружена успешно!', 'success');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

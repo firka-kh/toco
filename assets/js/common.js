@@ -1,6 +1,6 @@
 /**
  * Общие JavaScript функции для портала рынка труда РТ
- * Версия: 2.0
+ * Версия: 2.1 (исправленная)
  * Дата: 19 июня 2025
  */
 
@@ -10,6 +10,7 @@ class PortalApp {
     }
 
     init() {
+        console.log('PortalApp: Инициализация...');
         this.initNavigation();
         this.initModals();
         this.initToasts();
@@ -18,6 +19,7 @@ class PortalApp {
         this.initThemeSupport();
         this.initFormValidation();
         this.initSearch();
+        console.log('PortalApp: Инициализация завершена');
     }
 
     // === НАВИГАЦИЯ ===
@@ -47,7 +49,32 @@ class PortalApp {
                     // Закрыть другие дропдауны
                     dropdowns.forEach(other => {
                         if (other !== dropdown) {
-                            other.querySelector('.dropdown-content')?.classList.remove('show');
+                            const otherContent = other.querySelector('.dropdown-content');
+                            if (otherContent) {
+                                otherContent.classList.add('hidden');
+                                otherContent.classList.remove('show');
+                            }
+                        }
+                    });
+                    
+                    // Переключить текущий дропдаун
+                    content.classList.toggle('hidden');
+                    content.classList.toggle('show');
+                });
+            }
+        });
+        
+        // Закрытие дропдаунов при клике вне
+        document.addEventListener('click', () => {
+            dropdowns.forEach(dropdown => {
+                const content = dropdown.querySelector('.dropdown-content');
+                if (content) {
+                    content.classList.add('hidden');
+                    content.classList.remove('show');
+                }
+            });
+        });
+    }
                         }
                     });
                     
