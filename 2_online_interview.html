@@ -15,13 +15,16 @@
             transition: background 0.2s, color 0.2s;
         }
         .chat-messages {
-            max-height: 260px;
+            height: 220px;
             min-height: 120px;
+            max-height: 220px;
             overflow-y: auto;
             background: #f3f4f6;
             border-radius: 0.5rem;
             padding: 1rem;
             margin-bottom: 0.5rem;
+            display: flex;
+            flex-direction: column-reverse;
         }
         .chat-input-row {
             display: flex;
@@ -72,15 +75,27 @@
         .video-controls button {
             margin-right: 0.5em;
         }
+        .video-shadow {
+            box-shadow: 0 8px 32px 0 rgba(79,70,229,0.13), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+        }
+        @media (max-width: 900px) {
+            .main-flex {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .video-col, .widget-col {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
-    <div class="flex flex-col md:flex-row items-start justify-center gap-8 py-10 px-4 max-w-6xl mx-auto">
+    <div class="flex main-flex items-start justify-center gap-8 py-10 px-4 max-w-5xl mx-auto">
         <!-- Видео -->
-        <div class="flex flex-col items-center w-full md:w-[420px]">
-            <div class="bg-black rounded-xl overflow-hidden shadow-lg mb-4 w-full" style="height: 260px; display: flex; align-items: center; justify-content: center;">
-                <!-- Здесь будет видео -->
-                <video id="videoWindow" width="100%" height="100%" autoplay muted style="background:#222;object-fit:cover;max-height:260px;max-width:100%;"></video>
+        <div class="flex flex-col items-center video-col w-full max-w-[400px]">
+            <div class="bg-black rounded-xl overflow-hidden video-shadow mb-4 w-full" style="height: 220px; display: flex; align-items: center; justify-content: center;">
+                <video id="videoWindow" width="100%" height="100%" autoplay muted playsinline style="background:#222;object-fit:cover;max-height:220px;max-width:100%;"></video>
             </div>
             <div class="flex flex-wrap gap-2 video-controls w-full justify-center">
                 <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-bold" id="endChatBtn"><i class="fas fa-phone-slash mr-2"></i>Завершить</button>
@@ -91,7 +106,7 @@
             </div>
         </div>
         <!-- Виджет справа -->
-        <div class="w-full md:w-[370px] bg-white rounded-xl shadow-xl p-0 flex flex-col">
+        <div class="widget-col w-full max-w-[370px] bg-white rounded-xl shadow-xl p-0 flex flex-col">
             <!-- Tabs -->
             <div class="flex border-b border-gray-200">
                 <button class="tab-btn flex-1 py-3 font-bold text-lg active" id="tabChatBtn"><i class="fas fa-comments mr-2"></i>Чат</button>
@@ -186,19 +201,31 @@
         function addChatMessage(sender, message) {
             const time = new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
             const msgHtml = `<div class="mb-2"><span class="font-bold">${sender}:</span> <span>${message}</span> <span class="text-xs text-gray-400 ml-2">${time}</span></div>`;
-            chatMessages.innerHTML += msgHtml;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            chatHistory.push({sender, message, time});
+            chatMessages.innerHTML = msgHtml + chatMessages.innerHTML;
+            chatMessages.scrollTop = 0;
+            chatHistory.unshift({sender, message, time});
         }
 
         saveChatBtn.addEventListener('click', function() {
-            let text = chatHistory.map(m => `[${m.time}] ${m.sender}: ${m.message.replace(/<[^>]+>/g, '')}`).join('\n');
+            let text = chatHistory.map(m => `[${m.time}] ${m.sender}: ${m.message.replace(/<[^>]+>/g, '')}`).reverse().join('\n');
             const blob = new Blob([text], {type: 'text/plain'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = 'chat.txt';
             a.click();
         });
+
+        // Видео-демо: подключение к webcam
+        const video = document.getElementById('videoWindow');
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({video: true, audio: false})
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(() => {
+                    video.poster = '';
+                });
+        }
 
         // Видео-контролы (заглушки)
         document.getElementById('endChatBtn').onclick = () => alert('Чат завершён');
@@ -215,33 +242,6 @@
     </script>
 </body>
 </html>
-                        <h3 class="text-lg font-bold text-gray-800">Информация о собеседовании</h3>
-                        <div>
-                            <p class="text-sm font-semibold text-gray-600">Кандидат:</p>
-                            <p class="text-gray-800">Алиев Фарход</p>
-                        </div>
-                        <div>
-                            <p class="text-sm font-semibold text-gray-600">Вакансия:</p>
-                            <p class="text-gray-800">Ведущий Frontend-разработчик</p>
-                        </div>
-                         <div>
-                            <p class="text-sm font-semibold text-gray-600">Запланировано:</p>
-                            <p class="text-gray-800">19 июня 2025, 15:00</p>
-                        </div>
-                        <div class="pt-4 border-t">
-                            <h4 class="text-md font-bold text-gray-800 mb-2">Участники (2)</h4>
-                            <div class="flex items-center space-x-3">
-                                <i class="fas fa-user-tie text-blue-500"></i>
-                                <span class="text-gray-700">Иванов Иван (Вы)</span>
-                            </div>
-                             <div class="flex items-center space-x-3 mt-2">
-                                <i class="fas fa-user text-green-500"></i>
-                                <span class="text-gray-700">Алиев Фарход</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Вкладка: Чат -->
                     <div id="tab-chat" class="tab-content flex flex-col h-full">
                         <div id="chat-messages" class="flex-grow space-y-3 overflow-y-auto p-2 bg-gray-50 rounded-md flex flex-col mb-4">
                             <!-- Сообщения чата будут добавляться сюда -->
