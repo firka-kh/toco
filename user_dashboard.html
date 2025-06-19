@@ -77,9 +77,7 @@
             height: 8px;
             border-radius: 4px;
             transition: width 0.3s ease;
-        }
-
-        /* Уведомления */
+        }        /* Уведомления */
         .notification-dot {
             width: 8px;
             height: 8px;
@@ -88,6 +86,42 @@
             position: absolute;
             top: -2px;
             right: -2px;
+        }
+
+        /* Кастомные файловые инпуты */
+        .custom-file-input {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .custom-file-input:hover {
+            border-color: #9ca3af;
+        }
+        .custom-file-input .file-name {
+            flex-grow: 1;
+            color: #6b7280;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .custom-file-input .file-button {
+            background-color: #e5e7eb;
+            color: #374151;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            margin-left: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .custom-file-input .file-button:hover {
+            background-color: #d1d5db;
         }
     </style>
 </head>
@@ -579,6 +613,176 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Раздел "Мое резюме" -->
+            <div id="resume-content" class="content-section hidden">
+                <form id="profileForm" autocomplete="off">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-3xl font-bold text-gray-800">Мое резюме</h1>
+                        <div class="space-x-2">
+                            <a href="video_res.html" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors inline-block">
+                                <i class="fas fa-video mr-2"></i>Видео-резюме
+                            </a>
+                            <button type="button" id="downloadResumeBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                <i class="fas fa-download mr-2"></i>Скачать PDF
+                            </button>
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-save mr-2"></i>Сохранить
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Основная информация -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <h3 class="text-xl font-semibold mb-6 text-gray-800">Основная информация</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">ФИО:</label>
+                                <input type="text" id="fullName" name="fullName" value="Иванов Иван Иванович" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email:</label>
+                                <input type="email" id="email" name="email" value="ivanov@example.com" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Телефон:</label>
+                                <input type="tel" id="phone" name="phone" value="+992 000 12 34 56" required pattern="^\+?\d{9,15}$" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="desiredPosition" class="block text-sm font-medium text-gray-700 mb-2">Желаемая должность:</label>
+                                <input type="text" id="desiredPosition" name="desiredPosition" value="Frontend разработчик" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="region" class="block text-sm font-medium text-gray-700 mb-2">Регион проживания:</label>
+                                <select id="region" name="region" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option>Душанбе</option>
+                                    <option>Худжанд</option>
+                                    <option>Куляб</option>
+                                    <option>ГБАО</option>
+                                    <option>Хатлонская область</option>
+                                    <option>Согдийская область</option>
+                                    <option>РРП</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">Пол:</label>
+                                <select id="gender" name="gender" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option>Выберите пол</option>
+                                    <option selected>Мужской</option>
+                                    <option>Женский</option>
+                                    <option>Другое</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Прикрепленные документы -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <h3 class="text-xl font-semibold mb-6 text-gray-800">Прикрепленные документы</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div></div>
+                                <label for="passportFile" class="block text-sm font-medium text-gray-700 mb-2">Паспорт гражданина РТ:</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="passportFileName">Файл не выбран</span>
+                                    <label for="passportFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="passportFile" name="passportFile" accept=".pdf,.doc,.docx,.jpg,.png" style="display: none;">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="tinFile" class="block text-sm font-medium text-gray-700 mb-2">ИНН:</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="tinFileName">Файл не выбран</span>
+                                    <label for="tinFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="tinFile" name="tinFile" accept=".pdf,.doc,.docx,.jpg,.png" style="display: none;">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="educationFile" class="block text-sm font-medium text-gray-700 mb-2">Документ об образовании:</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="educationFileName">Файл не выбран</span>
+                                    <label for="educationFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="educationFile" name="educationFile" accept=".pdf,.doc,.docx,.jpg,.png" style="display: none;">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="workBookFile" class="block text-sm font-medium text-gray-700 mb-2">Трудовая книжка (при наличии):</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="workBookFileName">Файл не выбран</span>
+                                    <label for="workBookFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="workBookFile" name="workBookFile" accept=".pdf,.doc,.docx,.jpg,.png" style="display: none;">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="photoFile" class="block text-sm font-medium text-gray-700 mb-2">Фотография 3x4:</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="photoFileName">Файл не выбран</span>
+                                    <label for="photoFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="photoFile" name="photoFile" accept=".jpg,.jpeg,.png" style="display: none;">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="otherFile" class="block text-sm font-medium text-gray-700 mb-2">Другие документы:</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="otherFileName">Файл не выбран</span>
+                                    <label for="otherFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="otherFile" name="otherFile" accept=".pdf,.doc,.docx,.jpg,.png" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Навыки -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <h3 class="text-xl font-semibold mb-6 text-gray-800">Навыки</h3>
+                        <p class="text-gray-700 mb-4">Перечислите ваши ключевые навыки через запятую:</p>
+                        <textarea class="w-full h-24 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="skills" id="skills" placeholder="Например: JavaScript, React, Python, UX/UI Дизайн">JavaScript, React, Python, UX/UI Дизайн, Коммуникация</textarea>
+                    </div>
+
+                    <!-- Опыт работы -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800">Опыт работы</h3>
+                            <button type="button" id="addWorkBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Добавить опыт работы
+                            </button>
+                        </div>
+                        <div id="workExperienceContainer" class="space-y-6"></div>
+                    </div>
+
+                    <!-- Образование -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800">Образование</h3>
+                            <button type="button" id="addEduBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Добавить образование
+                            </button>
+                        </div>
+                        <div id="educationContainer" class="space-y-6"></div>
+                    </div>
+
+                    <!-- Языки -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800">Языки</h3>
+                            <button type="button" id="addLangBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Добавить язык
+                            </button>
+                        </div>
+                        <div id="languagesContainer" class="space-y-6"></div>
+                    </div>
+
+                    <!-- Сертификаты -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800">Сертификаты</h3>
+                            <button type="button" id="addCertBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Добавить сертификат
+                            </button>
+                        </div>
+                        <div id="certificatesContainer" class="space-y-6"></div>
+                    </div>
+                </form>
+            </div>
         </main>
     </div>
 
@@ -695,9 +899,7 @@
                         document.body.removeChild(toast);
                     }, 300);
                 }, 3000);
-            }
-
-            // Обработка кнопок откликов
+            }            // Обработка кнопок откликов
             document.addEventListener('click', (e) => {
                 if (e.target.textContent.includes('Откликнуться')) {
                     e.preventDefault();
@@ -709,6 +911,237 @@
                     window.location.href = '2_online_interview.html';
                 }
             });
+
+            // === Функционал для редактирования резюме ===
+            
+            // Файловые инпуты
+            function handleFileInputChange(event) {
+                const input = event.target;
+                const fileNameSpan = document.getElementById(input.id + 'Name');
+                if (input.files && input.files.length > 0) {
+                    fileNameSpan.textContent = input.files[0].name;
+                } else {
+                    fileNameSpan.textContent = 'Файл не выбран';
+                }
+            }
+
+            // Инициализация файловых инпутов
+            ['passportFile','tinFile','educationFile','workBookFile','photoFile','otherFile'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('change', handleFileInputChange);
+            });
+
+            // Динамические блоки опыта работы
+            const workContainer = document.getElementById('workExperienceContainer');
+            const addWorkBtn = document.getElementById('addWorkBtn');
+            let workCount = 0;
+            
+            function addWorkBlock(data = {}) {
+                workCount++;
+                const idx = workCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-work"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Опыт работы ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Название компании:</label>
+                            <input type="text" name="companyName[]" value="${data.companyName||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Должность:</label>
+                            <input type="text" name="position[]" value="${data.position||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Дата начала (ММ.ГГГГ):</label>
+                            <input type="text" name="startDate[]" value="${data.startDate||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Дата окончания (ММ.ГГГГ или "Настоящее время"):</label>
+                            <input type="text" name="endDate[]" value="${data.endDate||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Обязанности и достижения:</label>
+                    <textarea name="responsibilities[]" class="w-full h-24 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">${data.responsibilities||''}</textarea>
+                `;
+                if (workContainer) {
+                    workContainer.appendChild(block);
+                    block.querySelector('.remove-work').onclick = () => { block.remove(); };
+                }
+            }
+            
+            if (addWorkBtn) {
+                addWorkBtn.onclick = () => addWorkBlock();
+                // Добавляем начальный блок
+                addWorkBlock({
+                    companyName: "ООО ТехноСофт",
+                    position: "Ведущий разработчик",
+                    startDate: "09.2022",
+                    endDate: "Настоящее время",
+                    responsibilities: "Разработка пользовательских интерфейсов на React, оптимизация производительности, участие в code-ревью."
+                });
+            }
+
+            // Динамические блоки образования
+            const eduContainer = document.getElementById('educationContainer');
+            const addEduBtn = document.getElementById('addEduBtn');
+            let eduCount = 0;
+            
+            function addEduBlock(data = {}) {
+                eduCount++;
+                const idx = eduCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-edu"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Учебное заведение ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Учебное заведение:</label>
+                            <input type="text" name="university[]" value="${data.university||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Специальность:</label>
+                            <input type="text" name="specialty[]" value="${data.specialty||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Годы обучения (ГГГГ-ГГГГ):</label>
+                            <input type="text" name="eduYears[]" value="${data.eduYears||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Степень:</label>
+                            <input type="text" name="degree[]" value="${data.degree||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                `;
+                if (eduContainer) {
+                    eduContainer.appendChild(block);
+                    block.querySelector('.remove-edu').onclick = () => { block.remove(); };
+                }
+            }
+            
+            if (addEduBtn) {
+                addEduBtn.onclick = () => addEduBlock();
+                // Добавляем начальный блок
+                addEduBlock({
+                    university: "Таджикский Национальный Университет",
+                    specialty: "Информационные технологии",
+                    eduYears: "2018-2022",
+                    degree: "Бакалавр"
+                });
+            }
+
+            // Динамические блоки языков
+            const langContainer = document.getElementById('languagesContainer');
+            const addLangBtn = document.getElementById('addLangBtn');
+            let langCount = 0;
+            
+            function addLangBlock(data = {}) {
+                langCount++;
+                const idx = langCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-lang"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Язык ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Язык:</label>
+                            <input type="text" name="languageName[]" value="${data.languageName||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Уровень владения:</label>
+                            <select name="languageLevel[]" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option ${data.languageLevel==="Начальный"?"selected":""}>Начальный</option>
+                                <option ${data.languageLevel==="Средний"?"selected":""}>Средний</option>
+                                <option ${data.languageLevel==="Выше среднего (B2)"?"selected":""}>Выше среднего (B2)</option>
+                                <option ${data.languageLevel==="Свободно"?"selected":""}>Свободно</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                if (langContainer) {
+                    langContainer.appendChild(block);
+                    block.querySelector('.remove-lang').onclick = () => { block.remove(); };
+                }
+            }
+            
+            if (addLangBtn) {
+                addLangBtn.onclick = () => addLangBlock();
+                // Добавляем начальный блок
+                addLangBlock({
+                    languageName: "Английский",
+                    languageLevel: "Выше среднего (B2)"
+                });
+            }
+
+            // Динамические блоки сертификатов
+            const certContainer = document.getElementById('certificatesContainer');
+            const addCertBtn = document.getElementById('addCertBtn');
+            let certCount = 0;
+            
+            function addCertBlock(data = {}) {
+                certCount++;
+                const idx = certCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-cert"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Сертификат ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Название сертификата:</label>
+                            <input type="text" name="certName[]" value="${data.certName||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Выдавшая организация:</label>
+                            <input type="text" name="issuingOrg[]" value="${data.issuingOrg||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Дата выдачи (ММ.ГГГГ):</label>
+                            <input type="text" name="issueDate[]" value="${data.issueDate||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                `;
+                if (certContainer) {
+                    certContainer.appendChild(block);
+                    block.querySelector('.remove-cert').onclick = () => { block.remove(); };
+                }
+            }
+            
+            if (addCertBtn) {
+                addCertBtn.onclick = () => addCertBlock();
+                // Добавляем начальный блок
+                addCertBlock({
+                    certName: "Сертификат по Python",
+                    issuingOrg: "Coursera",
+                    issueDate: "03.2023"
+                });
+            }
+
+            // Валидация и сохранение формы профиля
+            const profileForm = document.getElementById('profileForm');
+            if (profileForm) {
+                profileForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    if (!this.checkValidity()) {
+                        showToast('Пожалуйста, заполните все обязательные поля корректно.', 'error');
+                    } else {
+                        showToast('Профиль успешно сохранён!', 'success');
+                        // Здесь можно добавить отправку данных на сервер
+                    }
+                });
+            }
+
+            // Скачивание PDF резюме
+            const downloadResumeBtn = document.getElementById('downloadResumeBtn');
+            if (downloadResumeBtn) {
+                downloadResumeBtn.onclick = () => {
+                    showToast('Подготовка PDF резюме...', 'info');
+                    // Здесь можно добавить логику генерации PDF
+                };
+            }
         });
     </script>
 </body>
