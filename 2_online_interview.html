@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Онлайн-собеседование</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .video-placeholder {
+            background: linear-gradient(120deg, #e0e7ff 60%, #f8fafc 100%);
+            border-radius: 1.5rem;
+            box-shadow: 0 6px 32px 0 rgba(79,70,229,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+            border: 1.5px solid #e0e7ff;
+            min-height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .video-placeholder .fa-video {
+            font-size: 4rem;
+            color: #6366f1;
+        }
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #6366f1;
+            letter-spacing: 0.05em;
+        }
+        .chat-bubble {
+            background: #f3f4f6;
+            border-radius: 1.2em;
+            padding: 0.7em 1.2em;
+            margin-bottom: 0.5em;
+            max-width: 80%;
+            word-break: break-word;
+        }
+        .chat-bubble.user {
+            background: #6366f1;
+            color: #fff;
+            margin-left: auto;
+        }
+        .chat-bubble.interviewer {
+            background: #f3f4f6;
+            color: #222;
+            margin-right: auto;
+        }
+        .chat-area {
+            max-height: 220px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <iframe src="../header.html" style="width:100%;border:none;" height="180"></iframe>
+    <main class="container mx-auto px-4 py-10">
+        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-8">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800 tracking-tight">Онлайн-собеседование</h2>
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Видео и таймер -->
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="video-placeholder w-full mb-4 aspect-video relative">
+                        <i class="fas fa-video"></i>
+                        <span class="absolute top-4 right-4 bg-white bg-opacity-80 rounded-lg px-4 py-2 shadow timer" id="timer">00:00</span>
+                        <span class="absolute bottom-4 left-4 bg-white bg-opacity-80 rounded-lg px-3 py-1 text-sm text-gray-700 shadow">
+                            <i class="fas fa-user-tie mr-1"></i> Интервьюер: <span id="interviewerName">Алиев А.</span>
+                        </span>
+                        <span class="absolute bottom-4 right-4 bg-white bg-opacity-80 rounded-lg px-3 py-1 text-sm text-gray-700 shadow">
+                            <i class="fas fa-user mr-1"></i> Вы
+                        </span>
+                    </div>
+                    <div class="flex justify-center gap-4 mt-2">
+                        <button class="bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors shadow" id="startBtn">
+                            <i class="fas fa-play mr-2"></i>Начать собеседование
+                        </button>
+                        <button class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors shadow" id="leaveBtn">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Выйти
+                        </button>
+                    </div>
+                </div>
+                <!-- Чат -->
+                <div class="flex-1 flex flex-col">
+                    <div class="bg-gray-50 rounded-xl p-4 flex-1 flex flex-col shadow-inner">
+                        <div class="font-semibold text-gray-700 mb-2 flex items-center">
+                            <i class="fas fa-comments text-blue-500 mr-2"></i>Чат собеседования
+                        </div>
+                        <div class="chat-area flex-1 mb-2" id="chatArea">
+                            <div class="chat-bubble interviewer">Здравствуйте! Готовы начать собеседование?</div>
+                        </div>
+                        <form id="chatForm" class="flex gap-2 mt-2">
+                            <input type="text" id="chatInput" class="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите сообщение..." autocomplete="off">
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-gray-500 text-sm">
+                <i class="fas fa-info-circle mr-1"></i>
+                Видеосвязь реализована в демо-режиме. Для реального интервью используйте Zoom, Teams или встроенные сервисы портала.
+            </div>
+        </div>
+    </main>
+    <iframe src="../footer.html" style="width:100%;border:none;" height="100"></iframe>
+    <script>
+        // Таймер собеседования
+        let timerInterval = null;
+        let seconds = 0;
+        const timerEl = document.getElementById('timer');
+        document.getElementById('startBtn').onclick = function() {
+            if (timerInterval) return;
+            timerInterval = setInterval(() => {
+                seconds++;
+                const min = String(Math.floor(seconds / 60)).padStart(2, '0');
+                const sec = String(seconds % 60).padStart(2, '0');
+                timerEl.textContent = `${min}:${sec}`;
+            }, 1000);
+            this.disabled = true;
+            this.classList.add('opacity-60', 'cursor-not-allowed');
+        };
+        document.getElementById('leaveBtn').onclick = function() {
+            if (confirm('Вы действительно хотите выйти из собеседования?')) {
+                window.location.href = '../index.html';
+            }
+        };
+
+        // Чат
+        const chatArea = document.getElementById('chatArea');
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        chatForm.onsubmit = function(e) {
+            e.preventDefault();
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+            const userBubble = document.createElement('div');
+            userBubble.className = 'chat-bubble user';
+            userBubble.textContent = msg;
+            chatArea.appendChild(userBubble);
+            chatArea.scrollTop = chatArea.scrollHeight;
+            chatInput.value = '';
+            // Имитация ответа интервьюера
+            setTimeout(() => {
+                const reply = document.createElement('div');
+                reply.className = 'chat-bubble interviewer';
+                reply.textContent = 'Спасибо за ваш ответ!';
+                chatArea.appendChild(reply);
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }, 1200);
+        };
+    </script>
+</body>
+</html>
