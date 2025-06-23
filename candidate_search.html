@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск кандидатов — Портал рынка труда</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common_fixed.css">
+    <script src="assets/js/common_fixed.js"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .skill-tag {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0277bd;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            margin: 0.125rem;
+        }
+        .candidate-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Динамический header -->
+    <div id="header-container"></div>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl font-bold mb-6">Поиск кандидатов</h1>
+                <p class="text-xl mb-8 opacity-90">Найдите идеальных специалистов для вашей команды среди зарегистрированных соискателей</p>
+                
+                <!-- Поисковая форма -->
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="md:col-span-2">
+                            <input type="text" placeholder="Должность, навыки или ключевые слова..." 
+                                   class="w-full p-4 rounded-lg border-0 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white">
+                        </div>
+                        <div>
+                            <select class="w-full p-4 rounded-lg border-0 text-gray-800 focus:outline-none focus:ring-2 focus:ring-white">
+                                <option value="">Все города</option>
+                                <option value="dushanbe">Душанбе</option>
+                                <option value="khujand">Худжанд</option>
+                                <option value="kulob">Куляб</option>
+                                <option value="kurgan">Курган-Тюбе</option>
+                                <option value="remote">Удаленно</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg transition-colors">
+                                <i class="fas fa-search mr-2"></i>Найти
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Фильтры и результаты -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Боковая панель с фильтрами -->
+                <div class="lg:w-1/4">
+                    <div class="bg-white rounded-xl shadow-lg p-6 sticky top-4">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Фильтры поиска</h2>
+                        
+                        <!-- Опыт работы -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold text-gray-700 mb-3">Опыт работы</h3>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">Без опыта</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">1-3 года</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">3-6 лет</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">Более 6 лет</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Образование -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold text-gray-700 mb-3">Образование</h3>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">Высшее</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">Среднее специальное</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">Среднее</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Зарплатные ожидания -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold text-gray-700 mb-3">Зарплатные ожидания (сомони)</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-sm text-gray-600 mb-1">От</label>
+                                    <input type="number" placeholder="3000" class="w-full p-2 border border-gray-300 rounded-lg">
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-gray-600 mb-1">До</label>
+                                    <input type="number" placeholder="10000" class="w-full p-2 border border-gray-300 rounded-lg">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Специализация -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold text-gray-700 mb-3">Специализация</h3>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">IT и программирование</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">Дизайн</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">Маркетинг</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">Продажи</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2 text-blue-600">
+                                    <span class="text-gray-600">Финансы</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                            Применить фильтры
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Результаты поиска -->
+                <div class="lg:w-3/4">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800">Найдено кандидатов: 24</h2>
+                            <p class="text-gray-600">Результаты отсортированы по релевантности</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <select class="p-2 border border-gray-300 rounded-lg">
+                                <option>Сортировать по релевантности</option>
+                                <option>По дате регистрации</option>
+                                <option>По опыту работы</option>
+                                <option>По зарплатным ожиданиям</option>
+                            </select>
+                            <div class="flex bg-gray-200 rounded-lg p-1">
+                                <button class="p-2 bg-white rounded shadow-sm">
+                                    <i class="fas fa-th-list"></i>
+                                </button>
+                                <button class="p-2 text-gray-500">
+                                    <i class="fas fa-th-large"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Карточки кандидатов -->
+                    <div class="space-y-6">
+                        <!-- Кандидат 1 -->
+                        <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 card-hover">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-16 h-16 candidate-avatar rounded-full flex items-center justify-center text-white font-bold text-xl">
+                                        АН
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-3 mb-2">
+                                            <h3 class="text-xl font-bold text-gray-800">Алиев Нодир</h3>
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Онлайн</span>
+                                        </div>
+                                        <p class="text-lg text-gray-600 mb-2">Senior Java Developer</p>
+                                        <div class="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                                            <span><i class="fas fa-map-marker-alt mr-1"></i>Душанбе</span>
+                                            <span><i class="fas fa-briefcase mr-1"></i>5 лет опыта</span>
+                                            <span><i class="fas fa-graduation-cap mr-1"></i>Высшее</span>
+                                            <span><i class="fas fa-money-bill-wave mr-1"></i>8000-12000 сомони</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <span class="skill-tag">Java</span>
+                                            <span class="skill-tag">Spring Boot</span>
+                                            <span class="skill-tag">PostgreSQL</span>
+                                            <span class="skill-tag">Docker</span>
+                                            <span class="skill-tag">REST API</span>
+                                        </div>
+                                        <p class="text-gray-600 text-sm">Опытный разработчик с экспертизой в создании масштабируемых enterprise-приложений. Работал в финтех и e-commerce проектах...</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col space-y-2 ml-4">
+                                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                        <i class="fas fa-envelope mr-1"></i>Написать
+                                    </button>
+                                    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                        <i class="fas fa-heart mr-1"></i>В избранное
+                                    </button>
+                                    <button class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                        <i class="fas fa-eye mr-1"></i>Профиль
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-500">
+                                <span>Последняя активность: 2 часа назад</span>
+                                <span>Регистрация: Январь 2023</span>
+                            </div>
+                        </div>
+
+                        <!-- Кандидат 2 -->
+                        <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 card-hover">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-16 h-16 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                                        МС
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-3 mb-2">
+                                            <h3 class="text-xl font-bold text-gray-800">Мирзоева Сабрина</h3>
+                                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Недавно</span>
+                                        </div>
+                                        <p class="text-lg text-gray-600 mb-2">UI/UX Designer</p>
+                                        <div class="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                                            <span><i class="fas fa-map-marker-alt mr-1"></i>Душанбе/Удаленно</span>
+                                            <span><i class="fas fa-briefcase mr-1"></i>3 года опыта</span>
+                                            <span><i class="fas fa-graduation-cap mr-1"></i>Высшее</span>
+                                            <span><i class="fas fa-money-bill-wave mr-1"></i>5000-8000 сомони</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <span class="skill-tag">Figma</span>
+                                            <span class="skill-tag">Adobe XD</span>
+                                            <span class="skill-tag">Sketch</span>
+                                            <span class="skill-tag">Prototyping</span>
+                                            <span class="skill-tag">User Research</span>
+                                        </div>
+                                        <p class="text-gray-600 text-sm">Креативный UX/UI дизайнер с фокусом на пользовательский опыт. Специализируюсь на мобильных приложениях и веб-интерфейсах...</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col space-y-2 ml-4">
+                                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                        <i class="fas fa-envelope mr-1"></i>Написать
+                                    </button>
+                                    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                        <i class="fas fa-heart mr-1"></i>В избранное
+                                    </button>
+                                    <button class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                        <i class="fas fa-eye mr-1"></i>Профиль
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-500">
+                                <span>Последняя активность: 1 день назад</span>
+                                <span>Регистрация: Март 2023</span>
+                            </div>
+                        </div>
+
+                        <!-- Кандидат 3 -->
+                        <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 card-hover">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                                        РТ
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-3 mb-2">
+                                            <h3 class="text-xl font-bold text-gray-800">Рахмонов Тимур</h3>
+                                            <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs font-medium">Оффлайн</span>
+                                        </div>
+                                        <p class="text-lg text-gray-600 mb-2">Digital Marketing Specialist</p>
+                                        <div class="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                                            <span><i class="fas fa-map-marker-alt mr-1"></i>Худжанд</span>
+                                            <span><i class="fas fa-briefcase mr-1"></i>2 года опыта</span>
+                                            <span><i class="fas fa-graduation-cap mr-1"></i>Высшее</span>
+                                            <span><i class="fas fa-money-bill-wave mr-1"></i>3500-6000 сомони</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <span class="skill-tag">Google Ads</span>
+                                            <span class="skill-tag">Facebook Ads</span>
+                                            <span class="skill-tag">SEO</span>
+                                            <span class="skill-tag">Analytics</span>
+                                            <span class="skill-tag">Content Marketing</span>
+                                        </div>
+                                        <p class="text-gray-600 text-sm">Специалист по цифровому маркетингу с опытом ведения рекламных кампаний в Google и Facebook. Увеличил продажи клиентов на 40%...</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col space-y-2 ml-4">
+                                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                        <i class="fas fa-envelope mr-1"></i>Написать
+                                    </button>
+                                    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                        <i class="fas fa-heart mr-1"></i>В избранное
+                                    </button>
+                                    <button class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                                        <i class="fas fa-eye mr-1"></i>Профиль
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-500">
+                                <span>Последняя активность: 3 дня назад</span>
+                                <span>Регистрация: Май 2023</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Пагинация -->
+                    <div class="mt-12 flex justify-center">
+                        <nav class="flex items-center space-x-2">
+                            <button class="px-3 py-2 text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="px-3 py-2 bg-blue-500 text-white rounded">1</button>
+                            <button class="px-3 py-2 text-gray-700 hover:bg-gray-100 rounded">2</button>
+                            <button class="px-3 py-2 text-gray-700 hover:bg-gray-100 rounded">3</button>
+                            <span class="px-3 py-2 text-gray-500">...</span>
+                            <button class="px-3 py-2 text-gray-700 hover:bg-gray-100 rounded">8</button>
+                            <button class="px-3 py-2 text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Динамический footer -->
+    <div id="footer-container"></div>
+
+    <script>
+        // Фильтрация кандидатов
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Страница поиска кандидатов загружена');
+            
+            // Здесь можно добавить логику фильтрации
+            const filterButtons = document.querySelectorAll('input[type="checkbox"]');
+            filterButtons.forEach(button => {
+                button.addEventListener('change', function() {
+                    console.log('Фильтр изменен:', this.nextElementSibling.textContent);
+                    // Здесь будет логика применения фильтров
+                });
+            });
+        });
+    </script>
+</body>
+</html>
