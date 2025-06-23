@@ -139,66 +139,135 @@
                 page-break-after: auto; /* No page break after the last section */
             }
         }
+
+        /* Выпадающее меню профиля */
+        #profileDropdown {
+            min-width: 180px;
+        }
+
+        /* Анимация для выпадающих меню */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.18s;
+        }
+
+        /* Меню навигации */
+        .menu-link {
+            font-size: 0.95rem;
+        }
+        .menu-link:active {
+            transform: scale(0.98);
+        }
+
+        /* Адаптивная навигация */
+        @media (max-width: 1200px) {
+            .menu-link {
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .menu-link {
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
-<body class="bg-gray-50 font-sans">
-    <header class="gradient-bg text-white shadow-lg">
+<body class="bg-gray-50 font-sans">    <header class="gradient-bg text-white shadow-lg">
         <div class="container mx-auto px-4 py-6">
             <div class="flex items-center justify-between">
                 <!-- Левая часть: Лого и название -->
                 <div class="flex items-center space-x-4">
                     <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
                     <div>
+                        <!-- Добавляем ссылку на главную страницу -->
                         <a href="index.html" class="hover:underline focus:outline-none">
                             <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
                             <span class="text-sm opacity-90 block">Республика Таджикистан</span>
                         </a>
                     </div>
-                </div>
-                <!-- Правая часть: Навигация, языки и профиль -->
-                <nav class="hidden md:flex space-x-6 items-center">
-                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
-                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
-                    <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
-                    <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
-                    <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
-                    <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
-                    <!-- Выпадающее меню профиля и языков -->
-                    <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
-                        <!-- Мой профиль -->
-                        <div class="relative">
-                            <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
-                                Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                            </button>
-                            <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
-                                <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
-                                <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
-                                <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
-                            </div>
-                        </div>
-                        <!-- Выпадающее меню языков -->
-                        <div class="relative">
-                            <button id="langMenuBtn" type="button"
-                                class="px-4 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                                aria-haspopup="true" aria-expanded="false">
-                                <span id="currentLangLabel">RUS</span>
-                                <i class="fas fa-chevron-down ml-2 text-xs"></i>
-                            </button>
-                            <div id="langDropdown"
-                                class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
-                                <button type="button"
-                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
-                                    data-lang="ru">RUS</button>
-                                <button type="button"
-                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
-                                    data-lang="tg">TAJ</button>
-                                <button type="button"
-                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
-                                    data-lang="en">ENG</button>
-                            </div>
+                </div>                <!-- Правая часть: Навигация, языки и профиль -->
+                <nav class="hidden lg:flex space-x-4 xl:space-x-6 items-center flex-wrap">
+                    <!-- Основные пункты меню -->
+                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Главная</a>
+                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Поиск работы</a>
+                    
+                    <!-- Выпадающее меню "Больше" -->
+                    <div class="relative">
+                        <button id="moreMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors flex items-center focus:outline-none whitespace-nowrap">
+                            Больше <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="moreDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="index.html#statistics" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Статистика</a>
+                            <a href="index.html#programs" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Программы</a>
+                            <a href="index.html#education" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Образование</a>
+                            <a href="about.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">О портале</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Премиум-услуги</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Фриланс</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Аналитика</a>
                         </div>
                     </div>
-                </nav>
+                    
+                    <!-- Выпадающее меню профиля -->
+                    <div class="relative">
+                        <button id="profileMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors focus:outline-none flex items-center whitespace-nowrap">
+                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="user_dashboard.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 font-semibold">🏠 Личный кабинет</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">⚙️ Настройки профиля</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Кабинет работодателя</a>
+                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Выпадающее меню языков -->
+                    <div class="relative">
+                        <button id="langMenuBtn" type="button" class="px-3 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400 whitespace-nowrap" aria-haspopup="true" aria-expanded="false">
+                            <span id="currentLangLabel">RUS</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div id="langDropdown" class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="ru">RUS</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="tg">TAJ</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="en">ENG</button>
+                        </div>
+                    </div>                </nav>
+                
+                <!-- Мобильное меню (гамбургер) -->
+                <div class="lg:hidden">
+                    <button id="mobileMenuBtn" type="button" class="text-white p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Мобильная навигация -->
+            <div id="mobileMenu" class="lg:hidden hidden mt-4 pb-4 border-t border-white border-opacity-20">
+                <div class="flex flex-col space-y-3 mt-4">
+                    <a href="index.html" class="font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="font-bold hover:text-yellow-300 transition-colors">Поиск работы</a>
+                    <a href="index.html#statistics" class="font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <a href="employer_profile.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для работодателя</a>
+                        <a href="user_dashboard.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для соискателя</a>
+                        <a href="register.html" class="block font-bold hover:text-yellow-300 transition-colors">Регистрация</a>
+                    </div>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <div class="flex space-x-3">
+                            <button class="px-3 py-1 bg-white text-gray-800 rounded font-bold text-sm" data-lang="ru">RUS</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="tg">TAJ</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="en">ENG</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -480,27 +549,51 @@
                 }
             });
         });
-    </script>
-    <script>
+    </script>    <script>
     // Выпадающее меню профиля и языков
     const profileMenuBtn = document.getElementById('profileMenuBtn');
     const profileDropdown = document.getElementById('profileDropdown');
     const langMenuBtn = document.getElementById('langMenuBtn');
     const langDropdown = document.getElementById('langDropdown');
     const currentLangLabel = document.getElementById('currentLangLabel');
+    const moreMenuBtn = document.getElementById('moreMenuBtn');
+    const moreDropdown = document.getElementById('moreDropdown');
+    
+    // Мобильное меню
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
 
+    // Открытие/закрытие мобильного меню
+    mobileMenuBtn?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Открытие/закрытие меню "Мой профиль"
     profileMenuBtn?.addEventListener('click', function(e) {
         e.stopPropagation();
         profileDropdown.classList.toggle('hidden');
         langDropdown.classList.add('hidden');
+        moreDropdown.classList.add('hidden');
     });
 
+    // Открытие/закрытие меню языков
     langMenuBtn?.addEventListener('click', function(e) {
         e.stopPropagation();
         langDropdown.classList.toggle('hidden');
         profileDropdown.classList.add('hidden');
+        moreDropdown.classList.add('hidden');
     });
 
+    // Открытие/закрытие меню "Больше"
+    moreMenuBtn?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        moreDropdown.classList.toggle('hidden');
+        profileDropdown.classList.add('hidden');
+        langDropdown.classList.add('hidden');
+    });
+
+    // Закрытие всех меню при клике вне
     document.addEventListener('click', function(e) {
         if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
             profileDropdown.classList.add('hidden');
@@ -508,14 +601,44 @@
         if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
             langDropdown.classList.add('hidden');
         }
+        if (!moreDropdown.contains(e.target) && !moreMenuBtn.contains(e.target)) {
+            moreDropdown.classList.add('hidden');
+        }
+        if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+            mobileMenu.classList.add('hidden');
+        }
     });
 
-    langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
-        btn.onclick = function() {
-            currentLangLabel.textContent = this.textContent;
-            langDropdown.classList.add('hidden');
-        };
-    });
+    // Переключение языка (только смена надписи, без перевода)
+    function setupLanguageSwitching() {
+        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                currentLangLabel.textContent = this.textContent;
+                langDropdown.classList.add('hidden');
+            };
+        });
+        
+        // Мобильные кнопки языков
+        document.querySelectorAll('#mobileMenu button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                const lang = this.getAttribute('data-lang');
+                const langText = this.textContent;
+                // Обновляем основную кнопку языка
+                if (currentLangLabel) {
+                    currentLangLabel.textContent = langText;
+                }
+                // Обновляем состояние мобильных кнопок
+                document.querySelectorAll('#mobileMenu button[data-lang]').forEach(b => {
+                    b.className = 'px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm';
+                });
+                this.className = 'px-3 py-1 bg-white text-gray-800 rounded font-bold text-sm';
+                // Закрываем мобильное меню
+                mobileMenu.classList.add('hidden');
+            };
+        });
+    }
+    
+    setupLanguageSwitching();
 </script>
 </body>
 </html>
