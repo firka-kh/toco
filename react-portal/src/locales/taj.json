@@ -1,0 +1,112 @@
+{
+  "nav": {
+    "home": "Асосӣ",
+    "jobs": "Кор ёфтан",
+    "resume": "Резюме гузоштан",
+    "employers": "Кормандон ёфтан",
+    "postJob": "Корӣ гузоштан",
+    "courses": "Таълим",
+    "news": "Ахбор",
+    "contact": "Тамос",
+    "login": "Ворид шудан",
+    "register": "Сабти ном"
+  },
+  "hero": {
+    "title": "Портали кории Ҷумҳурии Тоҷикистон",
+    "subtitle": "Беҳтарин имкониятҳои корӣ ва мутахассисонро дар як ҷой пайдо кунед",
+    "searchPlaceholder": "Кор ё мутахассис ҷустуҷӯ кунед...",
+    "searchButton": "Ҷустуҷӯ",
+    "popularCategories": "Категорияҳои маъмул",
+    "featuredJobs": "Корҳои нишондодашуда"
+  },
+  "stats": {
+    "jobs": "Корҳо",
+    "companies": "Ширкатҳо",
+    "resumes": "Резюмеҳо",
+    "users": "Корбарон"
+  },
+  "jobTypes": {
+    "full-time": "Кори пурра",
+    "part-time": "Кори нимрӯза",
+    "remote": "Кори дурдаст",
+    "contract": "Кори шартнома",
+    "internship": "Амалиёт"
+  },
+  "experience": {
+    "entry": "Сар оғозӣ",
+    "junior": "Миёна",
+    "middle": "Боэътимод",
+    "senior": "Калон",
+    "lead": "Сарвар"
+  },
+  "common": {
+    "apply": "Дархост додан",
+    "save": "Захира кардан",
+    "share": "Мубодила кардан",
+    "edit": "Тағйир додан",
+    "delete": "Нест кардан",
+    "view": "Дидан",
+    "download": "Боргирӣ кардан",
+    "upload": "Бор кардан",
+    "submit": "Пешниҳод кардан",
+    "cancel": "Бекор кардан",
+    "confirm": "Тасдиқ кардан",
+    "loading": "Бор шуда истодааст...",
+    "error": "Хато",
+    "success": "Муваффақ",
+    "warning": "Огоҳӣ",
+    "info": "Маълумот",
+    "back": "Бозгашт",
+    "next": "Навбатӣ",
+    "previous": "Қаблӣ",
+    "showMore": "Бештар нишон додан",
+    "showLess": "Камтар нишон додан"
+  },
+  "filters": {
+    "location": "Макон",
+    "category": "Категория",
+    "salary": "Маош",
+    "type": "Навъ",
+    "experience": "Таҷриба",
+    "clearAll": "Ҳамаро пок кардан",
+    "apply": "Татбиқ кардан"
+  },
+  "forms": {
+    "name": "Ном",
+    "email": "Почтаи электронӣ",
+    "phone": "Телефон",
+    "password": "Рамз",
+    "confirmPassword": "Тасдиқи рамз",
+    "position": "Вазифа",
+    "company": "Ширkat",
+    "location": "Макон",
+    "description": "Тавсиф",
+    "requirements": "Талабот",
+    "benefits": "Бартариҳо",
+    "skills": "Малакаҳо",
+    "education": "Таҳсилот",
+    "workHistory": "Таърихи кор",
+    "languages": "Забонҳо",
+    "portfolio": "Портфолио",
+    "coverLetter": "Мактуби ҳамроҳ"
+  },
+  "profile": {
+    "dashboard": "Дашборд",
+    "myJobs": "Корҳои ман",
+    "myApplications": "Дархостҳои ман",
+    "savedJobs": "Корҳои захирашуда",
+    "profile": "Профил",
+    "settings": "Танзимот",
+    "logout": "Баромад"
+  },
+  "footer": {
+    "about": "Дар бораи мо",
+    "privacy": "Сиёсати махфият",
+    "terms": "Шартҳои истифода",
+    "support": "Дастгирӣ",
+    "subscribe": "Обуна шавед",
+    "subscribeText": "Ахбороти охирин дар бораи корҳои нав дастрас кунед",
+    "emailPlaceholder": "Почтаи электронии худро ворид кунед",
+    "subscribeButton": "Обуна шудан"
+  }
+}
