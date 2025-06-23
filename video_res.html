@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добро пожаловать на портал рынка труда</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .section-spacing {
+            padding: 3rem 0;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #667eea;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .video-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            background-color: #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+        .video-container.expanded {
+            width: 800px;
+            height: 800px;
+        }
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .sound-bar-container {
+            height: 28px;
+            background-color: #d1d5db;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 0 6px;
+            box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        .sound-bar {
+            height: 70%;
+            background-color: #34D399;
+            transition: width 0.05s ease-out;
+            border-radius: 2px;
+            width: 0%;
+        }
+        .expand-button-icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: background-color 0.2s ease;
+            z-index: 10;
+        }
+        .expand-button-icon:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .icon-button {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+        .icon-button:hover {
+            transform: translateY(-1px);
+        }
+        .icon-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        @media print {
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+            body {
+                font-size: 10pt;
+                line-height: 1.5;
+                color: #000;
+                background-color: #fff !important;
+            }
+            header, nav, footer,
+            .job-search-form-controls,
+            #ai-tools,
+            .card-hover,
+            button,
+            input, select, textarea,
+            .spinner,
+            .pagination,
+            #expandVideoButton,
+            #soundVisualizer
+             {
+                display: none !important;
+            }
+            section {
+                display: block !important;
+                padding: 0.5cm 0 !important;
+                background: none !important;
+                box-shadow: none !important;
+            }
+            .gradient-bg {
+                background: none !important;
+                color: #000 !important;
+            }
+            .gradient-bg h2, .gradient-bg p {
+                color: #000 !important;
+            }
+            .gradient-bg .bg-opacity-20 {
+                background: none !important;
+                backdrop-filter: none !important;
+                border: 1px solid #ddd;
+            }
+            .chart-container {
+                height: auto !important;
+                width: 100% !important;
+                page-break-inside: avoid;
+            }
+            canvas {
+                max-width: 100% !important;
+                height: auto !important;
+                background: none !important;
+            }
+            .bg-white, .bg-gray-50, .bg-blue-50, .bg-yellow-50, .bg-green-50 {
+                background: #fff !important;
+                box-shadow: none !important;
+                border: 1px solid #eee;
+            }
+            .text-white {
+                color: #000 !important;
+            }
+            h1, h2, h3, h4, p, span, li, a {
+                color: #000 !important;
+            }
+            a {
+                text-decoration: underline;
+            }
+            a[href]:after {
+                content: " (" attr(href) ")";
+                font-size: 8pt;
+            }
+            a[href^="#"]:after {
+                content: "";
+            }
+            .section-spacing {
+                page-break-after: always;
+            }
+            .section-spacing:last-child {
+                page-break-after: auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
+                    <div>
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                    <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
+                        <div class="relative">
+                            <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
+                                Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                                <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
+                                <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
+                                <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <button id="langMenuBtn" type="button"
+                                class="px-4 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span id="currentLangLabel">RUS</span>
+                                <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                            </button>
+                            <div id="langDropdown"
+                                class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="ru">RUS</button>
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="tg">TAJ</button>
+                                <button type="button"
+                                    class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                    data-lang="en">ENG</button>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section id="video-resume" class="section-spacing bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <div class="max-w-3xl mx-auto px-2 py-8">
+            <h2 class="text-3xl font-bold mb-4 text-indigo-800">Ваше видео-резюме</h2>
+            <p class="text-gray-700 mb-6 max-w-2xl">
+                Видеорезюме — это отличный способ представить себя работодателю. Вы можете записать его прямо на портале или загрузить готовое видео. Эта функция опциональна.
+            </p>
+
+            <!-- Табы -->
+            <div class="flex space-x-2 mb-6">
+                <button id="recordVideoTab" class="px-6 py-2 rounded-lg font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow hover:from-indigo-600 hover:to-purple-600 transition-colors">Записать видео</button>
+                <button id="uploadVideoTab" class="px-6 py-2 rounded-lg font-semibold bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors">Загрузить видео</button>
+            </div>
+
+            <!-- Контент: Запись видео -->
+            <div id="recordVideoContent" class="bg-white p-6 rounded-2xl shadow-xl">
+                <h3 class="text-xl font-semibold mb-4 text-indigo-700">Запись видео-резюме</h3>
+                <div class="flex flex-col lg:flex-row gap-6 items-start justify-center">
+                    <!-- Левая часть: видео и управление -->
+                    <div class="flex-1 flex flex-col items-center">
+                        <!-- Баннер с длительностью -->
+                        <div class="mb-3 w-full flex justify-center">
+                            <div class="inline-flex items-center bg-yellow-100 text-yellow-800 text-sm font-semibold px-4 py-1.5 rounded-lg shadow border border-yellow-300">
+                                <i class="fas fa-clock mr-2"></i>
+                                Максимальная длительность: 5 минут
+                            </div>
+                        </div>
+                        <!-- Видео -->
+                        <div class="relative w-80 h-80 bg-gray-100 rounded-xl overflow-hidden video-container mb-3 border-2 border-indigo-200 shadow">
+                            <div class="absolute inset-0 flex items-center justify-center text-gray-400 text-lg pointer-events-none">
+                                [Область для записи видео с веб-камеры]
+                            </div>
+                            <video id="webcamVideo" class="absolute inset-0 w-full h-full object-cover bg-black" autoplay muted></video>
+                            <i id="expandVideoButton" class="fas fa-expand-alt expand-button-icon" title="Развернуть видео"></i>
+                        </div>
+                        <!-- Визуализатор звука -->
+                        <div id="soundVisualizer" class="sound-bar-container w-80 mb-3">
+                            <div id="soundBar" class="sound-bar"></div>
+                        </div>
+                        <!-- Кнопки управления -->
+                        <div class="flex flex-row items-center justify-center gap-3 mb-3 w-full">
+                            <span id="timer" class="text-base font-mono text-indigo-700">Таймер: 00:00/05:00</span>
+                            <button id="startButton" class="icon-button bg-green-500 text-white hover:bg-green-600 shadow" title="Начать запись">
+                                <i class="fas fa-circle"></i>
+                            </button>
+                            <button id="stopButton" class="icon-button bg-red-500 text-white hover:bg-red-600 shadow" title="Остановить запись" disabled>
+                                <i class="fas fa-stop"></i>
+                            </button>
+                            <button id="retakeButton" class="icon-button bg-gray-400 text-white hover:bg-gray-500 shadow" title="Перезаписать видео" disabled>
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <a id="downloadButton" class="icon-button bg-blue-500 text-white hover:bg-blue-600 shadow" title="Скачать видео" style="display:none" download="video_resume.webm">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
+                        <!-- Кнопка "Опубликовать резюме" -->
+                        <button id="publishResumeBtn" class="bg-gradient-to-r from-yellow-400 to-yellow-300 hover:from-yellow-500 hover:to-yellow-400 text-gray-900 font-bold px-8 py-3 rounded-xl shadow transition-colors text-lg flex items-center gap-2 mb-2 mt-2">
+                            <i class="fas fa-paper-plane"></i>
+                            Опубликовать резюме
+                        </button>
+                    </div>
+                    <!-- Правая часть: рекомендации -->
+                    <div class="w-full lg:w-80 mt-6 lg:mt-0">
+                        <div class="bg-blue-50 p-5 rounded-xl text-blue-900 flex flex-col justify-between h-full border border-blue-100 shadow">
+                            <div>
+                                <h4 class="font-semibold mb-2 flex items-center text-blue-700"><i class="fas fa-lightbulb mr-2"></i>Рекомендации :</h4>
+                                <p class="text-sm mb-4">Говорите четко и уверенно. Расскажите о своих ключевых навыках и достижениях. Подготовьтесь заранее!</p>
+                            </div>
+                            <a href="#" class="text-blue-600 hover:underline text-sm mt-4 flex items-center"><i class="fas fa-download mr-2"></i>Скачать файл с вопросами для подготовки</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Контент: Загрузка видео -->
+            <div id="uploadVideoContent" class="bg-gray-50 p-8 rounded-lg shadow-md hidden">
+                <h3 class="text-xl font-semibold mb-6 text-gray-800">Загрузка видео-резюме</h3>
+                <p class="text-sm text-gray-600 mb-4">Загрузите готовое видео-резюме с вашего компьютера. Максимальный размер файла: 100 МБ. Поддерживаемые форматы: MP4, MOV, AVI.</p>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center text-gray-500 mb-6">
+                    <i class="fas fa-cloud-upload-alt text-5xl mb-4"></i>
+                    <p class="text-lg">Перетащите файл сюда или <span class="text-blue-500 cursor-pointer">выберите файл</span></p>
+                    <input type="file" id="videoUploadInput" accept="video/mp4,video/mov,video/avi" class="hidden">
+                </div>
+                <button id="uploadButton" class="w-full bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">Загрузить видео</button>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">О портале</h3>
+                    <p class="text-sm opacity-90">Официальный портал информационной системы рынка труда Республики Таджикистан</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Полезные ссылки</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Правительство РТ</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Министерство труда</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Налоговый комитет</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Нормативные акты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Поддержка</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Часто задаваемые вопросы</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Руководство пользователя</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Техническая поддержка</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Обратная связь</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Социальные сети</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2030 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const recordVideoTab = document.getElementById('recordVideoTab');
+            const uploadVideoTab = document.getElementById('uploadVideoTab');
+            const recordVideoContent = document.getElementById('recordVideoContent');
+            const uploadVideoContent = document.getElementById('uploadVideoContent');
+
+            const webcamVideo = document.getElementById('webcamVideo');
+            const startButton = document.getElementById('startButton');
+            const stopButton = document.getElementById('stopButton');
+            const retakeButton = document.getElementById('retakeButton');
+            const timerDisplay = document.getElementById('timer');
+            const videoUploadInput = document.getElementById('videoUploadInput');
+            const videoPlayerContainer = document.getElementById('videoPlayerContainer');
+            const expandVideoButton = document.getElementById('expandVideoButton');
+            const soundBar = document.getElementById('soundBar');
+            const downloadButton = document.getElementById('downloadButton');
+
+            let mediaRecorder;
+            let recordedChunks = [];
+            let timerInterval;
+            let seconds = 0;
+            const maxDuration = 300; // 5 минут
+
+            let audioContext;
+            let analyser;
+            let mediaStreamSource;
+            let animationFrameId;
+
+            function updateTimer() {
+                seconds++;
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                timerDisplay.textContent = `Таймер: ${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}/05:00`;
+
+                if (seconds >= maxDuration) {
+                    stopRecording();
+                }
+            }
+
+            function drawSoundVisualizer() {
+                if (!analyser) return;
+
+                const dataArray = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(dataArray);
+
+                let sum = 0;
+                for (let i = 0; i < dataArray.length; i++) {
+                    sum += dataArray[i];
+                }
+                const average = sum / dataArray.length;
+                const width = (average / 255) * 100;
+
+                soundBar.style.width = `${width}%`;
+
+                animationFrameId = requestAnimationFrame(drawSoundVisualizer);
+            }
+
+            async function startRecording() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    webcamVideo.srcObject = stream;
+                    webcamVideo.play();
+                    webcamVideo.controls = false;
+
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    mediaStreamSource = audioContext.createMediaStreamSource(stream);
+                    analyser = audioContext.createAnalyser();
+                    analyser.fftSize = 256;
+                    mediaStreamSource.connect(analyser);
+                    drawSoundVisualizer();
+
+                    mediaRecorder = new MediaRecorder(stream);
+                    recordedChunks = [];
+
+                    mediaRecorder.ondataavailable = (event) => {
+                        if (event.data.size > 0) {
+                            recordedChunks.push(event.data);
+                        }
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                        if (animationFrameId) {
+                            cancelAnimationFrame(animationFrameId);
+                        }
+                        if (audioContext) {
+                            audioContext.close();
+                        }
+                        webcamVideo.srcObject = null;
+                        webcamVideo.src = URL.createObjectURL(blob);
+                        webcamVideo.controls = true;
+                        webcamVideo.muted = false;
+                        webcamVideo.load();
+                        webcamVideo.play();
+
+                        // Показываем кнопку скачивания и задаём ссылку
+                        downloadButton.style.display = '';
+                        downloadButton.href = URL.createObjectURL(blob);
+                    };
+
+                    mediaRecorder.start();
+                    startButton.disabled = true;
+                    stopButton.disabled = false;
+                    retakeButton.disabled = true;
+
+                    seconds = 0;
+                    timerDisplay.textContent = `Таймер: 00:00/05:00`;
+                    timerInterval = setInterval(updateTimer, 1000);
+
+                    // Скрываем кнопку скачивания при новой записи
+                    downloadButton.style.display = 'none';
+                    downloadButton.href = '';
+                } catch (error) {
+                    console.error('Error accessing webcam:', error);
+                    alert('Не удалось получить доступ к веб-камере. Убедитесь, что она подключена и разрешите доступ.');
+                }
+            }
+
+            function stopRecording() {
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                    clearInterval(timerInterval);
+                    startButton.disabled = false;
+                    stopButton.disabled = true;
+                    retakeButton.disabled = false;
+                }
+            }
+
+            function retakeRecording() {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                }
+                if (audioContext) {
+                    audioContext.close();
+                }
+                recordedChunks = [];
+                webcamVideo.src = '';
+                webcamVideo.srcObject = null;
+                webcamVideo.controls = false;
+                webcamVideo.muted = true;
+                seconds = 0;
+                timerDisplay.textContent = `Таймер: 00:00/05:00`;
+                startButton.disabled = false;
+                stopButton.disabled = true;
+                retakeButton.disabled = true;
+                soundBar.style.width = '0%';
+                downloadButton.style.display = 'none';
+                downloadButton.href = '';
+            }
+
+            startButton.addEventListener('click', startRecording);
+            stopButton.addEventListener('click', stopRecording);
+            retakeButton.addEventListener('click', retakeRecording);
+
+            recordVideoTab.addEventListener('click', () => {
+                recordVideoTab.classList.add('bg-blue-500', 'text-white');
+                recordVideoTab.classList.remove('bg-gray-200', 'text-gray-800');
+                uploadVideoTab.classList.remove('bg-blue-500', 'text-white');
+                uploadVideoTab.classList.add('bg-gray-200', 'text-gray-800');
+                recordVideoContent.classList.remove('hidden');
+                uploadVideoContent.classList.add('hidden');
+                if (webcamVideo.srcObject) {
+                    webcamVideo.srcObject.getTracks().forEach(track => track.stop());
+                }
+                retakeRecording();
+            });
+
+            uploadVideoTab.addEventListener('click', () => {
+                uploadVideoTab.classList.add('bg-blue-500', 'text-white');
+                uploadVideoTab.classList.remove('bg-gray-200', 'text-gray-800');
+                recordVideoTab.classList.remove('bg-blue-500', 'text-white');
+                recordVideoTab.classList.add('bg-gray-200', 'text-gray-800');
+                uploadVideoContent.classList.remove('hidden');
+                recordVideoContent.classList.add('hidden');
+                if (webcamVideo.srcObject) {
+                    webcamVideo.srcObject.getTracks().forEach(track => track.stop());
+                    webcamVideo.srcObject = null;
+                    clearInterval(timerInterval);
+                    startButton.disabled = false;
+                    stopButton.disabled = true;
+                    retakeButton.disabled = true;
+                    seconds = 0;
+                    timerDisplay.textContent = `Таймер: 00:00/05:00`;
+                }
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                }
+                if (audioContext) {
+                    audioContext.close();
+                }
+                soundBar.style.width = '0%';
+                downloadButton.style.display = 'none';
+                downloadButton.href = '';
+            });
+
+            const dropArea = document.querySelector('#uploadVideoContent .border-dashed');
+            dropArea.addEventListener('click', () => {
+                videoUploadInput.click();
+            });
+
+            videoUploadInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    alert(`Файл "${file.name}" выбран для загрузки.`);
+                }
+            });
+
+            ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ;['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+
+            ;['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight(e) {
+                dropArea.classList.add('border-blue-500');
+            }
+
+            function unhighlight(e) {
+                dropArea.classList.remove('border-blue-500');
+            }
+
+            dropArea.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                videoUploadInput.files = files;
+                const changeEvent = new Event('change');
+                videoUploadInput.dispatchEvent(changeEvent);
+            }
+
+            expandVideoButton.addEventListener('click', () => {
+                videoPlayerContainer.classList.toggle('expanded');
+                if (videoPlayerContainer.classList.contains('expanded')) {
+                    expandVideoButton.title = 'Свернуть видео';
+                } else {
+                    expandVideoButton.title = 'Развернуть видео';
+                }
+            });
+        });
+    </script>
+    <script>
+        // Выпадающее меню профиля и языков
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const langMenuBtn = document.getElementById('langMenuBtn');
+        const langDropdown = document.getElementById('langDropdown');
+        const currentLangLabel = document.getElementById('currentLangLabel');
+
+        profileMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+            langDropdown.classList.add('hidden');
+        });
+
+        langMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            langDropdown.classList.toggle('hidden');
+            profileDropdown.classList.add('hidden');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+            if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
+                langDropdown.classList.add('hidden');
+            }
+        });
+
+        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                currentLangLabel.textContent = this.textContent;
+                langDropdown.classList.add('hidden');
+            };
+        });
+    </script>
+    <script>
+        document.getElementById('publishResumeBtn').addEventListener('click', function() {
+            alert('Ваше резюме опубликовано!');
+            // Здесь можно добавить отправку данных на сервер
+        });
+    </script>
+</body>
+</html>

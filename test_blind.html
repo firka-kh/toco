@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Опросник для резюме</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <style>
+  body {
+    background: #f7f8fa;
+  }
+  .gradient-bg {
+    background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+  }
+  .rules-widget {
+    position: fixed;
+    top: 120px; /* увеличен отступ от шапки */
+    left: 32px;
+    width: 340px;
+    max-width: 90vw;
+    background: linear-gradient(135deg, #6366f1 0%, #60a5fa 40%, #38bdf8 80%, #818cf8 100%);
+    color: #fff;
+    border-radius: 1.7rem;
+    box-shadow: 0 8px 40px 0 rgba(99,102,241,0.18), 0 2px 8px 0 rgba(0,0,0,0.07);
+    padding: 1.7rem 1.4rem 1.3rem 1.4rem;
+    font-size: 1.12rem;
+    font-weight: 500;
+    line-height: 1.7;
+    z-index: 50;
+    transition: box-shadow 0.2s, background 0.3s;
+    text-align: left;
+    opacity: 0.98;
+    backdrop-filter: blur(2px);
+    border: 1.5px solid rgba(99,102,241,0.13);
+  }
+  .rules-widget strong {
+    font-size: 1.22rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    display: block;
+    margin-bottom: 0.7rem;
+    text-align: left;
+    text-shadow: 0 2px 8px rgba(60,80,200,0.10);
+  }
+  .rules-widget ul {
+    margin-left: 1rem;
+    margin-bottom: 0;
+  }
+  .rules-widget li {
+    margin-bottom: 0.3em;
+    text-shadow: 0 1px 4px rgba(60,80,200,0.07);
+  }
+  @media (max-width: 900px) {
+    .rules-widget {
+      position: static;
+      width: 100%;
+      margin-bottom: 1.5rem;
+      left: 0;
+      top: 0;
+      border-radius: 1.1rem;
+      box-shadow: 0 4px 24px 0 rgba(99,102,241,0.13);
+    }
+  }
+  .record-indicator {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    display: inline-block;
+    border: 2.5px solid #6366f1;
+    transition: background 0.2s, box-shadow 0.2s;
+    margin-right: 1rem;
+    box-shadow: 0 0 0 0 #6366f1;
+  }
+  .recording {
+    background: #ef4444 !important;
+    box-shadow: 0 0 16px 2px #ef4444;
+    animation: pulse 1s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 #ef4444; }
+    70% { box-shadow: 0 0 0 16px rgba(239,68,68,0); }
+    100% { box-shadow: 0 0 0 0 #ef4444; }
+  }
+  .eq-bar {
+    width: 6px;
+    height: 18px;
+    background: #6366f1;
+    margin: 0 2px;
+    display: inline-block;
+    border-radius: 3px;
+    vertical-align: middle;
+    transition: height 0.1s, background 0.2s;
+  }
+  .audio-player {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-top: 1.2rem;
+    background: #f1f5f9;
+    border-radius: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(99,102,241,0.12);
+    padding: 1.1rem 1.5rem;
+    min-height: 64px;
+    transition: box-shadow 0.3s, transform 0.3s, background 0.3s, opacity 0.3s;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(30px) scale(0.98);
+    max-width: 100%;
+    width: 100%;
+  }
+  .audio-player.active {
+    opacity: 1;
+    pointer-events: auto;
+    box-shadow: 0 16px 48px 0 rgba(99,102,241,0.18), 0 2px 8px 0 rgba(0,0,0,0.07);
+    transform: translateY(0) scale(1.01);
+    background: #fff;
+  }
+  .audio-player.recording {
+    opacity: 1;
+    pointer-events: auto;
+    box-shadow: 0 24px 64px 0 rgba(239,68,68,0.18), 0 2px 8px 0 rgba(0,0,0,0.07);
+    background: linear-gradient(90deg, #f87171 0%, #6366f1 100%);
+    border: 2px solid #ef4444;
+  }
+  .audio-btn {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px 0 rgba(99,102,241,0.08);
+    outline: none;
+  }
+  .audio-btn:active, .audio-btn:focus {
+    background: #4338ca;
+  }
+  .audio-btn.bg-red-500 { background: #ef4444; }
+  .audio-btn.bg-red-500:hover, .audio-btn.bg-red-500:focus { background: #b91c1c; }
+  .audio-btn.bg-gray-400 { background: #9ca3af; }
+  .audio-btn.bg-gray-400:hover, .audio-btn.bg-gray-400:focus { background: #6b7280; }
+  .audio-btn.bg-blue-500 { background: #3b82f6; }
+  .audio-btn.bg-blue-500:hover, .audio-btn.bg-blue-500:focus { background: #1d4ed8; }
+  .audio-time {
+    font-size: 1.08rem;
+    color: #374151;
+    min-width: 48px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    margin-left: auto;
+  }
+  .question-block {
+    background: #fff;
+    border-radius: 2rem;
+    box-shadow: 0 2px 16px 0 rgba(99,102,241,0.07);
+    padding: 2.2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2.5rem;
+    border: none;
+    transition: box-shadow 0.2s;
+    position: relative;
+    z-index: 1;
+  }
+  .question-block.active {
+    box-shadow: 0 8px 32px 0 rgba(99,102,241,0.15), 0 2px 8px 0 rgba(0,0,0,0.07);
+    z-index: 3;
+  }
+  .question {
+    font-size: 1.18rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    color: #3730a3;
+    letter-spacing: 0.01em;
+  }
+  @media (max-width: 700px) {
+    .question-block, .audio-player, .rules-widget {
+      padding: 1.1rem 0.7rem;
+      border-radius: 1.1rem;
+    }
+    .audio-player { min-height: 56px; }
+    .rules-widget { font-size: 1rem; }
+  }
+  .main-top-space {
+    margin-top: 3.5rem;
+  }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
+  <header class="gradient-bg text-white shadow-lg">
+    <div class="container mx-auto px-4 py-6 flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Логотип" class="rounded-full">
+        <a href="index.html" class="hover:underline focus:outline-none">
+          <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+          <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+        </a>
+      </div>
+      <nav class="hidden md:flex space-x-6 items-center">
+        <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
+        <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+        <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+        <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
+        <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
+        <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
+      </nav>
+    </div>
+  </header>
+  <!-- Плавающий виджет с правилами -->
+  <aside class="rules-widget" aria-label="Правила управления опросником" id="rules-widget">
+    <strong>Правила управления</strong>
+    <ul>
+      <li><b>1–9</b> — выбрать и озвучить вопрос, сразу начнётся запись ответа</li>
+      <li><b>S</b> — остановить запись</li>
+      <li><b>P</b> — повторно прослушать вопрос</li>
+      <li><b>A</b> — прослушать свой ответ</li>
+      <li>Во время записи эквалайзер реагирует на ваш голос</li>
+      <li>Все элементы доступны с клавиатуры и озвучиваются</li>
+    </ul>
+  </aside>
+  <main class="max-w-2xl mx-auto relative z-10 main-top-space">
+    <div id="questions"></div>
+  </main>
+  <script>
+    // Вопросы
+    const questions = [
+      "Расскажите о себе.",
+      "Какие у вас сильные стороны?",
+      "Почему вы хотите работать у нас?",
+      "Опишите ваш опыт работы.",
+      "Какие ваши профессиональные цели?"
+    ];
+
+    // DOM
+    const questionsDiv = document.getElementById('questions');
+    let currentRecording = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let audios = Array(questions.length).fill(null);
+    let analyser, audioCtx, source, dataArray, rafId;
+
+    // --- Приветствие и инструкция ---
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        speak(
+          "Правила управления. Для выбора вопроса нажмите цифру от 1 до 9. После озвучивания вопроса начнётся запись. " +
+          "Для остановки записи нажмите S. Для повторного прослушивания вопроса — P. Для прослушивания своего ответа — A. " +
+          "Во время записи эквалайзер реагирует на ваш голос. Все элементы доступны с клавиатуры и озвучиваются."
+        );
+      }, 600);
+    });
+
+    // Генерация блоков вопросов
+    questions.forEach((q, idx) => {
+      const block = document.createElement('section');
+      block.className = 'question-block mb-8 pb-6';
+      block.tabIndex = 0;
+
+      const questionEl = document.createElement('div');
+      questionEl.className = 'question';
+      questionEl.textContent = `${idx + 1}. ${q}`;
+
+      // Controls
+      const controls = document.createElement('div');
+      controls.className = 'controls flex items-center gap-3 mb-2';
+
+      // Индикатор записи
+      const indicator = document.createElement('span');
+      indicator.className = 'record-indicator';
+      indicator.setAttribute('aria-label', 'Индикатор записи');
+      indicator.id = `rec-indicator-${idx}`;
+
+      // Кнопка прослушать вопрос
+      const playBtn = document.createElement('button');
+      playBtn.type = 'button';
+      playBtn.className = 'audio-btn';
+      playBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+      playBtn.setAttribute('aria-label', `Прослушать вопрос ${idx + 1}`);
+      playBtn.onclick = () => speakQuestion(idx);
+
+      // Кнопка запись
+      const recBtn = document.createElement('button');
+      recBtn.type = 'button';
+      recBtn.className = 'audio-btn bg-red-500 hover:bg-red-600';
+      recBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+      recBtn.setAttribute('aria-label', `Записать ответ на вопрос ${idx + 1}`);
+      recBtn.onclick = () => startRecording(idx);
+
+      // Кнопка стоп
+      const stopBtn = document.createElement('button');
+      stopBtn.type = 'button';
+      stopBtn.className = 'audio-btn bg-gray-400 hover:bg-gray-600';
+      stopBtn.innerHTML = '<i class="fas fa-stop"></i>';
+      stopBtn.setAttribute('aria-label', `Остановить запись ответа на вопрос ${idx + 1}`);
+      stopBtn.disabled = true;
+      stopBtn.onclick = () => stopRecording(idx);
+
+      controls.appendChild(indicator);
+      controls.appendChild(playBtn);
+      controls.appendChild(recBtn);
+      controls.appendChild(stopBtn);
+
+      // Аудио-плеер с эквалайзером
+      const playerWrap = document.createElement('div');
+      playerWrap.className = 'audio-player';
+
+      const answerAudio = document.createElement('audio');
+      answerAudio.className = 'hidden';
+      answerAudio.id = `audio-answer-${idx}`;
+
+      // Кнопка play/pause для ответа
+      const answerPlayBtn = document.createElement('button');
+      answerPlayBtn.type = 'button';
+      answerPlayBtn.className = 'audio-btn bg-blue-500 hover:bg-blue-600';
+      answerPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+      answerPlayBtn.setAttribute('aria-label', `Воспроизвести ответ на вопрос ${idx + 1}`);
+
+      // Эквалайзер
+      const eqWrap = document.createElement('div');
+      eqWrap.style.display = 'flex';
+      eqWrap.style.alignItems = 'center';
+      eqWrap.style.height = '24px';
+      eqWrap.style.gap = '2px';
+      eqWrap.style.marginLeft = '8px';
+      const eqBars = [];
+      for (let i = 0; i < 10; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'eq-bar';
+        eqWrap.appendChild(bar);
+        eqBars.push(bar);
+      }
+
+      // Время
+      const timeLabel = document.createElement('span');
+      timeLabel.className = 'audio-time';
+      timeLabel.textContent = '00:00';
+
+      playerWrap.appendChild(answerPlayBtn);
+      playerWrap.appendChild(eqWrap);
+      playerWrap.appendChild(timeLabel);
+      playerWrap.appendChild(answerAudio);
+
+      block.appendChild(questionEl);
+      block.appendChild(controls);
+      block.appendChild(playerWrap);
+
+      questionsDiv.appendChild(block);
+
+      // Сохраняем элементы для управления
+      questions[idx] = {
+        text: q,
+        indicator,
+        recBtn,
+        stopBtn,
+        answerAudio,
+        playerWrap,
+        answerPlayBtn,
+        eqBars,
+        timeLabel,
+        block
+      };
+
+      // Плеер: play/pause и эквалайзер
+      let eqAnim = null;
+      answerPlayBtn.onclick = () => {
+        if (answerAudio.paused) {
+          answerAudio.play();
+        } else {
+          answerAudio.pause();
+        }
+      };
+      answerAudio.addEventListener('play', () => {
+        answerPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        playerWrap.classList.add('active');
+        eqAnim = setInterval(() => {
+          eqBars.forEach(bar => {
+            bar.style.height = (8 + Math.random() * 14) + 'px';
+            bar.style.background = `linear-gradient(180deg, #6366f1 0%, #60a5fa 100%)`;
+          });
+        }, 100);
+      });
+      answerAudio.addEventListener('pause', () => {
+        answerPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+        playerWrap.classList.remove('active');
+        clearInterval(eqAnim);
+        eqBars.forEach(bar => bar.style.height = '8px');
+      });
+      answerAudio.addEventListener('ended', () => {
+        answerPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+        playerWrap.classList.remove('active');
+        clearInterval(eqAnim);
+        eqBars.forEach(bar => bar.style.height = '8px');
+      });
+      answerAudio.addEventListener('timeupdate', () => {
+        // Исправление NaN/Infinity
+        if (isFinite(answerAudio.currentTime) && !isNaN(answerAudio.currentTime)) {
+          timeLabel.textContent = formatTime(answerAudio.currentTime);
+        } else {
+          timeLabel.textContent = '00:00';
+        }
+      });
+    });
+
+    // Формат времени
+    function formatTime(sec) {
+      sec = Math.floor(sec);
+      if (!isFinite(sec) || isNaN(sec)) return '00:00';
+      return `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
+    }
+
+    // Озвучивание текста (улучшенная функция)
+    function speak(text) {
+      const synth = window.speechSynthesis;
+      function doSpeak() {
+        let voices = synth.getVoices();
+        let voice = voices.find(v =>
+          v.lang.startsWith('ru') &&
+          (v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('microsoft') || v.name.toLowerCase().includes('irina'))
+        );
+        if (!voice) voice = voices.find(v => v.lang.startsWith('ru'));
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'ru-RU';
+        if (voice) utter.voice = voice;
+        synth.speak(utter);
+      }
+      if (synth.getVoices().length === 0) {
+        synth.onvoiceschanged = doSpeak;
+      } else {
+        doSpeak();
+      }
+    }
+
+    // Озвучивание вопроса
+    function speakQuestion(idx) {
+      speak(questions[idx].text);
+    }
+
+    // --- Реактивный эквалайзер при записи ---
+    let micStream, micSource, micAnalyser, micDataArray, micRafId;
+    function startMicEq(idx) {
+      if (!window.AudioContext) return;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      micSource = audioCtx.createMediaStreamSource(micStream);
+      micAnalyser = audioCtx.createAnalyser();
+      micAnalyser.fftSize = 32;
+      micDataArray = new Uint8Array(micAnalyser.frequencyBinCount);
+      micSource.connect(micAnalyser);
+
+      // Плеер выплывает и меняет стиль при записи
+      questions[idx].playerWrap.classList.add('recording');
+
+      function draw() {
+        micAnalyser.getByteFrequencyData(micDataArray);
+        for (let i = 0; i < questions[idx].eqBars.length; i++) {
+          let val = micDataArray[i] || 0;
+          questions[idx].eqBars[i].style.height = (8 + val / 2.5) + 'px';
+          questions[idx].eqBars[i].style.background = `linear-gradient(180deg, #ef4444 0%, #6366f1 100%)`;
+        }
+        micRafId = requestAnimationFrame(draw);
+      }
+      draw();
+    }
+    function stopMicEq(idx) {
+      if (micRafId) cancelAnimationFrame(micRafId);
+      if (audioCtx) audioCtx.close();
+      if (questions[idx]) {
+        questions[idx].eqBars.forEach(bar => {
+          bar.style.height = '8px';
+          bar.style.background = '#6366f1';
+        });
+        questions[idx].playerWrap.classList.remove('recording');
+      }
+    }
+
+    // Запись ответа
+    function startRecording(idx) {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('Ваш браузер не поддерживает запись голоса.');
+        return;
+      }
+      if (currentRecording !== null) stopRecording(currentRecording);
+
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        micStream = stream;
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(audioChunks, { type: 'audio/webm' });
+          const url = URL.createObjectURL(blob);
+          questions[idx].answerAudio.src = url;
+          questions[idx].answerAudio.className = 'hidden';
+          questions[idx].playerWrap.classList.remove('recording');
+          questions[idx].playerWrap.classList.add('active');
+          questions[idx].answerAudio.load();
+          questions[idx].answerAudio.onloadedmetadata = () => {
+            questions[idx].timeLabel.textContent = formatTime(questions[idx].answerAudio.duration);
+          };
+          if (micStream) micStream.getTracks().forEach(track => track.stop());
+          stopMicEq(idx);
+        };
+        mediaRecorder.start();
+        questions[idx].indicator.classList.add('recording');
+        questions[idx].recBtn.disabled = true;
+        questions[idx].stopBtn.disabled = false;
+        questions[idx].playerWrap.classList.add('recording');
+        questions[idx].block.classList.add('active');
+        currentRecording = idx;
+        speak('Запись началась. Для остановки нажмите S.');
+        startMicEq(idx);
+      }).catch(() => {
+        alert('Не удалось получить доступ к микрофону.');
+      });
+    }
+
+    // Остановить запись
+    function stopRecording(idx) {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+      questions[idx].indicator.classList.remove('recording');
+      questions[idx].recBtn.disabled = false;
+      questions[idx].stopBtn.disabled = true;
+      questions[idx].playerWrap.classList.remove('recording');
+      questions[idx].playerWrap.classList.remove('active');
+      questions[idx].block.classList.remove('active');
+      currentRecording = null;
+      speak('Запись остановлена.');
+      stopMicEq(idx);
+    }
+
+    // Горячие клавиши: 1,2,3... для вопросов, S — стоп, P — прослушать вопрос, A — прослушать ответ
+    document.addEventListener('keydown', e => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const n = parseInt(e.key, 10);
+      if (n >= 1 && n <= questions.length) {
+        speakQuestion(n - 1);
+        setTimeout(() => startRecording(n - 1), 1200);
+        window.currentQuestionIdx = n - 1;
+      }
+      if (typeof window.currentQuestionIdx === 'number') {
+        const idx = window.currentQuestionIdx;
+        if (e.key.toLowerCase() === 's') {
+          stopRecording(idx);
+        }
+        if (e.key.toLowerCase() === 'p') {
+          speakQuestion(idx);
+        }
+        if (e.key.toLowerCase() === 'a' && questions[idx].answerAudio.src) {
+          questions[idx].playerWrap.style.display = 'flex';
+          questions[idx].playerWrap.classList.add('active');
+          questions[idx].answerAudio.play();
+          speak('Воспроизвожу ваш ответ.');
+        }
+      }
+    });
+  </script>
+</body>
+</html>

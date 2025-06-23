@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет соискателя — Портал рынка труда</title>
+    <meta name="description" content="Личный кабинет соискателя для отслеживания откликов, приглашений на собеседования и управления резюме.">
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* Общие стили */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fade-in 0.18s ease-out;
+        }
+
+        /* Стили для карточек */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+        }        /* Статусы */
+        .status-new { 
+            background-color: #dbeafe; 
+            color: #1e40af; 
+            border-color: #93c5fd; 
+        }
+        .status-viewed { 
+            background-color: #fef3c7; 
+            color: #92400e; 
+            border-color: #fcd34d; 
+        }
+        .status-interview { 
+            background-color: #d1fae5; 
+            color: #065f46; 
+            border-color: #6ee7b7; 
+        }
+        .status-rejected { 
+            background-color: #fee2e2; 
+            color: #991b1b; 
+            border-color: #fca5a5; 
+        }
+        .status-offer { 
+            background-color: #ede9fe; 
+            color: #6b21a8; 
+            border-color: #c4b5fd; 
+        }
+
+        /* Боковая панель */
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+        .sidebar-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+        .sidebar-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid #fbbf24;
+        }
+
+        /* Прогресс-бар */
+        .progress-bar {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+            height: 8px;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }        /* Уведомления */
+        .notification-dot {
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            position: absolute;
+            top: -2px;
+            right: -2px;
+        }
+
+        /* Кастомные файловые инпуты */
+        .custom-file-input {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .custom-file-input:hover {
+            border-color: #9ca3af;
+        }
+        .custom-file-input .file-name {
+            flex-grow: 1;
+            color: #6b7280;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .custom-file-input .file-button {
+            background-color: #e5e7eb;
+            color: #374151;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            margin-left: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .custom-file-input .file-button:hover {
+            background-color: #d1d5db;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Шапка портала -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Логотип" class="rounded-full">
+                    <div>
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="index.html" class="font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                    <div class="relative">
+                        <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none flex items-center">
+                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="user_dashboard.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 font-semibold">🏠 Личный кабинет</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">⚙️ Настройки профиля</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="index.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">🚪 Выйти</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Главный контейнер -->
+    <div class="min-h-screen flex">
+        <!-- Боковая панель навигации -->
+        <aside class="w-64 bg-white shadow-lg">
+            <div class="p-6">
+                <!-- Информация о пользователе -->
+                <div class="flex items-center space-x-3 mb-6 pb-6 border-b border-gray-200">
+                    <img src="https://placehold.co/60x60/667eea/ffffff?text=ИИ" alt="Аватар" class="rounded-full">
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Иванов Иван</h3>
+                        <p class="text-sm text-gray-600">Frontend разработчик</p>
+                        <div class="flex items-center mt-1">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            <span class="text-xs text-green-600">Онлайн</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Навигация -->
+                <nav class="space-y-2">
+                    <a href="#dashboard" class="sidebar-link active flex items-center px-4 py-3 text-gray-700 rounded-lg">
+                        <i class="fas fa-chart-line mr-3 w-5"></i>
+                        <span>Обзор</span>
+                    </a>
+                    <a href="#responses" class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg relative">
+                        <i class="fas fa-paper-plane mr-3 w-5"></i>
+                        <span>Мои отклики</span>
+                        <span class="notification-dot"></span>
+                        <span class="ml-auto bg-blue-500 text-white text-xs px-2 py-1 rounded-full">3</span>
+                    </a>
+                    <a href="#interviews" class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg relative">
+                        <i class="fas fa-video mr-3 w-5"></i>
+                        <span>Собеседования</span>
+                        <span class="ml-auto bg-green-500 text-white text-xs px-2 py-1 rounded-full">1</span>
+                    </a>
+                    <a href="#invitations" class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg">
+                        <i class="fas fa-envelope mr-3 w-5"></i>
+                        <span>Приглашения</span>
+                        <span class="ml-auto bg-purple-500 text-white text-xs px-2 py-1 rounded-full">2</span>
+                    </a>
+                    <a href="#resume" class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg">
+                        <i class="fas fa-file-alt mr-3 w-5"></i>
+                        <span>Мое резюме</span>
+                    </a>
+                    <a href="#favorites" class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg">
+                        <i class="fas fa-heart mr-3 w-5"></i>
+                        <span>Избранные вакансии</span>
+                        <span class="ml-auto text-gray-400 text-xs">12</span>
+                    </a>
+                    <a href="#analytics" class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg">
+                        <i class="fas fa-chart-bar mr-3 w-5"></i>
+                        <span>Аналитика</span>
+                    </a>
+                    <a href="#notifications" class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg">
+                        <i class="fas fa-bell mr-3 w-5"></i>
+                        <span>Уведомления</span>
+                    </a>
+                    <a href="#settings" class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg">
+                        <i class="fas fa-cog mr-3 w-5"></i>
+                        <span>Настройки</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Основной контент -->
+        <main class="flex-1 p-8">
+            <!-- Панель обзора -->
+            <div id="dashboard-content" class="content-section">
+                <!-- Заголовок и быстрые действия -->
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800">Добро пожаловать, Иван!</h1>
+                        <p class="text-gray-600 mt-1">Последний вход: сегодня в 14:32</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-search mr-2"></i>Поиск вакансий
+                        </button>
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-plus mr-2"></i>Создать резюме
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Статистические карточки -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-lg card-hover">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-blue-100 rounded-full">
+                                <i class="fas fa-paper-plane text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Всего откликов</h3>
+                                <p class="text-2xl font-bold text-gray-900">24</p>
+                                <p class="text-sm text-green-600">+3 за неделю</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg card-hover">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-green-100 rounded-full">
+                                <i class="fas fa-video text-green-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Собеседования</h3>
+                                <p class="text-2xl font-bold text-gray-900">5</p>
+                                <p class="text-sm text-blue-600">1 запланировано</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg card-hover">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-purple-100 rounded-full">
+                                <i class="fas fa-handshake text-purple-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Предложения</h3>
+                                <p class="text-2xl font-bold text-gray-900">2</p>
+                                <p class="text-sm text-purple-600">Ожидают ответа</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg card-hover">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-yellow-100 rounded-full">
+                                <i class="fas fa-eye text-yellow-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Просмотры резюме</h3>
+                                <p class="text-2xl font-bold text-gray-900">147</p>
+                                <p class="text-sm text-yellow-600">+12 за неделю</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Недавние действия и уведомления -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Недавние отклики -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-xl font-bold text-gray-800">Недавние отклики</h2>
+                            <a href="#responses" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">Все отклики →</a>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://placehold.co/40x40/4f46e5/ffffff?text=IT" alt="Компания" class="rounded-lg">
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">Frontend разработчик</h3>
+                                        <p class="text-sm text-gray-600">IT-Solutions LLC</p>
+                                    </div>
+                                </div>
+                                <span class="status-viewed px-2 py-1 rounded-full text-xs font-medium border">Просмотрено</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://placehold.co/40x40/059669/ffffff?text=TC" alt="Компания" class="rounded-lg">
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">React Developer</h3>
+                                        <p class="text-sm text-gray-600">TechCorp</p>
+                                    </div>
+                                </div>
+                                <span class="status-interview px-2 py-1 rounded-full text-xs font-medium border">Собеседование</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Предстоящие собеседования -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-xl font-bold text-gray-800">Предстоящие собеседования</h2>
+                            <a href="#interviews" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">Все собеседования →</a>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">Frontend разработчик</h3>
+                                        <p class="text-sm text-gray-600">IT-Solutions LLC</p>
+                                        <div class="flex items-center mt-2 text-sm text-gray-600">
+                                            <i class="fas fa-calendar mr-2"></i>
+                                            <span>Завтра, 15:00</span>
+                                        </div>
+                                    </div>
+                                    <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-colors">
+                                        <i class="fas fa-video mr-1"></i>
+                                        Подключиться
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Прогресс профиля -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Завершенность профиля</h2>
+                    <div class="flex items-center mb-4">
+                        <div class="flex-1 bg-gray-200 rounded-full h-2 mr-4">
+                            <div class="progress-bar" style="width: 78%"></div>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-600">78%</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span class="text-sm text-gray-600">Основная информация</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span class="text-sm text-gray-600">Опыт работы</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-circle text-yellow-500 mr-2"></i>
+                            <span class="text-sm text-gray-600">Видео-резюме</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Рекомендуемые вакансии -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-gray-800">Рекомендуемые вакансии</h2>
+                        <a href="serchwork.html" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">Смотреть все →</a>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-800">Senior Frontend Developer</h3>
+                                    <p class="text-sm text-gray-600 mb-2">WebDev Studio</p>
+                                    <p class="text-sm text-green-600 font-semibold">$1500 - $2000</p>
+                                    <div class="flex items-center mt-2 text-xs text-gray-500">
+                                        <i class="fas fa-map-marker-alt mr-1"></i>
+                                        <span>Душанбе</span>
+                                        <span class="mx-2">•</span>
+                                        <span>Полная занятость</span>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-red-500 transition-colors">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                            <div class="mt-3 flex space-x-2">
+                                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-colors">
+                                    Откликнуться
+                                </button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+                                    Подробнее
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-800">React JS Developer</h3>
+                                    <p class="text-sm text-gray-600 mb-2">Tech Innovations</p>
+                                    <p class="text-sm text-green-600 font-semibold">$1200 - $1800</p>
+                                    <div class="flex items-center mt-2 text-xs text-gray-500">
+                                        <i class="fas fa-map-marker-alt mr-1"></i>
+                                        <span>Худжанд</span>
+                                        <span class="mx-2">•</span>
+                                        <span>Удаленно</span>
+                                    </div>
+                                </div>
+                                <button class="text-red-500 hover:text-red-600 transition-colors">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                            <div class="mt-3 flex space-x-2">
+                                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-colors">
+                                    Откликнуться
+                                </button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+                                    Подробнее
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Контент для других разделов (скрыт по умолчанию) -->
+            <div id="responses-content" class="content-section hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Мои отклики</h1>
+                    <div class="flex space-x-3">
+                        <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                            <option>Все статусы</option>
+                            <option>Новые</option>
+                            <option>Просмотрено</option>
+                            <option>Собеседование</option>
+                            <option>Отказ</option>
+                        </select>
+                        <input type="text" placeholder="Поиск по компании..." class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="p-6 space-y-4">
+                        <!-- Отклик 1 -->
+                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <img src="https://placehold.co/60x60/4f46e5/ffffff?text=IT" alt="Компания" class="rounded-lg">
+                                    <div>
+                                        <h3 class="font-bold text-lg text-gray-800">Frontend разработчик</h3>
+                                        <p class="text-gray-600">IT-Solutions LLC</p>
+                                        <div class="flex items-center mt-1 text-sm text-gray-500">
+                                            <i class="fas fa-calendar mr-1"></i>
+                                            <span>Отклик отправлен 15 июня 2025</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="status-viewed px-3 py-1 rounded-full text-sm font-medium border inline-block mb-2">Просмотрено</span>
+                                    <p class="text-sm text-gray-500">2 дня назад</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex space-x-3">
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+                                    Посмотреть вакансию
+                                </button>
+                                <button class="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+                                    Отозвать отклик
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Отклик 2 -->
+                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <img src="https://placehold.co/60x60/059669/ffffff?text=TC" alt="Компания" class="rounded-lg">
+                                    <div>
+                                        <h3 class="font-bold text-lg text-gray-800">React Developer</h3>
+                                        <p class="text-gray-600">TechCorp</p>
+                                        <div class="flex items-center mt-1 text-sm text-gray-500">
+                                            <i class="fas fa-calendar mr-1"></i>
+                                            <span>Отклик отправлен 18 июня 2025</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="status-interview px-3 py-1 rounded-full text-sm font-medium border inline-block mb-2">Собеседование</span>
+                                    <p class="text-sm text-gray-500">Вчера</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex space-x-3">
+                                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+                                    <i class="fas fa-video mr-2"></i>Подключиться к собеседованию
+                                </button>
+                                <button class="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+                                    Детали
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Раздел собеседований -->
+            <div id="interviews-content" class="content-section hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Собеседования</h1>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Запланировать тестовое
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Предстоящие -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-clock text-blue-600 mr-2"></i>
+                            Предстоящие
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <h3 class="font-semibold text-gray-800">Frontend разработчик</h3>
+                                <p class="text-sm text-gray-600">IT-Solutions LLC</p>
+                                <div class="flex items-center mt-2 text-sm text-gray-600">
+                                    <i class="fas fa-calendar mr-2"></i>
+                                    <span>Завтра, 15:00</span>
+                                </div>
+                                <div class="flex items-center mt-1 text-sm text-gray-600">
+                                    <i class="fas fa-video mr-2"></i>
+                                    <span>Онлайн собеседование</span>
+                                </div>
+                                <div class="mt-3 flex space-x-2">
+                                    <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-colors">
+                                        Подключиться
+                                    </button>
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+                                        Перенести
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Завершенные -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                            Завершенные
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                                <h3 class="font-semibold text-gray-800">React Developer</h3>
+                                <p class="text-sm text-gray-600">TechCorp</p>
+                                <div class="flex items-center mt-2 text-sm text-gray-600">
+                                    <i class="fas fa-calendar mr-2"></i>
+                                    <span>17 июня, 14:00</span>
+                                </div>
+                                <span class="inline-block mt-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                                    Успешно завершено
+                                </span>
+                                <div class="mt-3">
+                                    <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-semibold transition-colors">
+                                        Посмотреть запись
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Отмененные -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-times-circle text-red-600 mr-2"></i>
+                            Отмененные
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                                <h3 class="font-semibold text-gray-800">Backend Developer</h3>
+                                <p class="text-sm text-gray-600">DevCompany</p>
+                                <div class="flex items-center mt-2 text-sm text-gray-600">
+                                    <i class="fas fa-calendar mr-2"></i>
+                                    <span>10 июня, 16:00</span>
+                                </div>
+                                <span class="inline-block mt-2 px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">
+                                    Отменено работодателем
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Раздел "Мое резюме" -->
+            <div id="resume-content" class="content-section hidden">
+                <form id="profileForm" autocomplete="off">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-3xl font-bold text-gray-800">Мое резюме</h1>
+                        <div class="space-x-2">
+                            <a href="video_res.html" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors inline-block">
+                                <i class="fas fa-video mr-2"></i>Видео-резюме
+                            </a>
+                            <button type="button" id="downloadResumeBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                <i class="fas fa-download mr-2"></i>Скачать PDF
+                            </button>
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-save mr-2"></i>Сохранить
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Основная информация -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <h3 class="text-xl font-semibold mb-6 text-gray-800">Основная информация</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">ФИО:</label>
+                                <input type="text" id="fullName" name="fullName" value="Иванов Иван Иванович" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email:</label>
+                                <input type="email" id="email" name="email" value="ivanov@example.com" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Телефон:</label>
+                                <input type="tel" id="phone" name="phone" value="+992 000 12 34 56" required pattern="^\+?\d{9,15}$" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="desiredPosition" class="block text-sm font-medium text-gray-700 mb-2">Желаемая должность:</label>
+                                <input type="text" id="desiredPosition" name="desiredPosition" value="Frontend разработчик" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="region" class="block text-sm font-medium text-gray-700 mb-2">Регион проживания:</label>
+                                <select id="region" name="region" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option>Душанбе</option>
+                                    <option>Худжанд</option>
+                                    <option>Куляб</option>
+                                    <option>ГБАО</option>
+                                    <option>Хатлонская область</option>
+                                    <option>Согдийская область</option>
+                                    <option>РРП</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">Пол:</label>
+                                <select id="gender" name="gender" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option>Выберите пол</option>
+                                    <option selected>Мужской</option>
+                                    <option>Женский</option>
+                                    <option>Другое</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Прикрепленные документы -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <h3 class="text-xl font-semibold mb-6 text-gray-800">Прикрепленные документы</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div></div>
+                                <label for="passportFile" class="block text-sm font-medium text-gray-700 mb-2">Паспорт гражданина РТ:</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="passportFileName">Файл не выбран</span>
+                                    <label for="passportFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="passportFile" name="passportFile" accept=".pdf,.doc,.docx,.jpg,.png" style="display: none;">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="tinFile" class="block text-sm font-medium text-gray-700 mb-2">ИНН:</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="tinFileName">Файл не выбран</span>
+                                    <label for="tinFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="tinFile" name="tinFile" accept=".pdf,.doc,.docx,.jpg,.png" style="display: none;">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="educationFile" class="block text-sm font-medium text-gray-700 mb-2">Документ об образовании:</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="educationFileName">Файл не выбран</span>
+                                    <label for="educationFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="educationFile" name="educationFile" accept=".pdf,.doc,.docx,.jpg,.png" style="display: none;">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="workBookFile" class="block text-sm font-medium text-gray-700 mb-2">Трудовая книжка (при наличии):</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="workBookFileName">Файл не выбран</span>
+                                    <label for="workBookFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="workBookFile" name="workBookFile" accept=".pdf,.doc,.docx,.jpg,.png" style="display: none;">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="photoFile" class="block text-sm font-medium text-gray-700 mb-2">Фотография 3x4:</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="photoFileName">Файл не выбран</span>
+                                    <label for="photoFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="photoFile" name="photoFile" accept=".jpg,.jpeg,.png" style="display: none;">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="otherFile" class="block text-sm font-medium text-gray-700 mb-2">Другие документы:</label>
+                                <div class="custom-file-input">
+                                    <span class="file-name" id="otherFileName">Файл не выбран</span>
+                                    <label for="otherFile" class="file-button">Выбрать файл</label>
+                                    <input type="file" id="otherFile" name="otherFile" accept=".pdf,.doc,.docx,.jpg,.png" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Навыки -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <h3 class="text-xl font-semibold mb-6 text-gray-800">Навыки</h3>
+                        <p class="text-gray-700 mb-4">Перечислите ваши ключевые навыки через запятую:</p>
+                        <textarea class="w-full h-24 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="skills" id="skills" placeholder="Например: JavaScript, React, Python, UX/UI Дизайн">JavaScript, React, Python, UX/UI Дизайн, Коммуникация</textarea>
+                    </div>
+
+                    <!-- Опыт работы -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800">Опыт работы</h3>
+                            <button type="button" id="addWorkBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Добавить опыт работы
+                            </button>
+                        </div>
+                        <div id="workExperienceContainer" class="space-y-6"></div>
+                    </div>
+
+                    <!-- Образование -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800">Образование</h3>
+                            <button type="button" id="addEduBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Добавить образование
+                            </button>
+                        </div>
+                        <div id="educationContainer" class="space-y-6"></div>
+                    </div>
+
+                    <!-- Языки -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800">Языки</h3>
+                            <button type="button" id="addLangBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Добавить язык
+                            </button>
+                        </div>
+                        <div id="languagesContainer" class="space-y-6"></div>
+                    </div>
+
+                    <!-- Сертификаты -->
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800">Сертификаты</h3>
+                            <button type="button" id="addCertBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Добавить сертификат
+                            </button>
+                        </div>
+                        <div id="certificatesContainer" class="space-y-6"></div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Футер -->
+    <footer class="gradient-bg text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm opacity-90">&copy; 2025 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Логика выпадающего меню в шапке
+            const profileMenuBtn = document.getElementById('profileMenuBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+
+            profileMenuBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (profileMenuBtn && !profileMenuBtn.contains(e.target) && profileDropdown && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+
+            // Навигация по разделам
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    
+                    // Убираем активный класс со всех ссылок
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Добавляем активный класс к текущей ссылке
+                    link.classList.add('active');
+                    
+                    // Скрываем все секции
+                    contentSections.forEach(section => section.classList.add('hidden'));
+                    
+                    // Показываем нужную секцию
+                    const targetSection = document.getElementById(targetId + '-content');
+                    if (targetSection) {
+                        targetSection.classList.remove('hidden');
+                    } else {
+                        // Если секция не найдена, показываем дашборд
+                        document.getElementById('dashboard-content').classList.remove('hidden');
+                    }
+                });
+            });
+
+            // Симуляция обновления данных
+            function updateNotificationCounts() {
+                const counts = document.querySelectorAll('.sidebar-link .bg-blue-500, .sidebar-link .bg-green-500, .sidebar-link .bg-purple-500');
+                counts.forEach(count => {
+                    const currentValue = parseInt(count.textContent);
+                    if (Math.random() > 0.8) { // 20% шанс обновления
+                        count.textContent = currentValue + Math.floor(Math.random() * 3);
+                    }
+                });
+            }
+
+            // Обновляем счетчики каждые 30 секунд
+            setInterval(updateNotificationCounts, 30000);
+
+            // Анимация прогресс-бара
+            const progressBar = document.querySelector('.progress-bar');
+            if (progressBar) {
+                setTimeout(() => {
+                    progressBar.style.width = '78%';
+                }, 500);
+            }
+
+            // Обработка кнопок "В избранное"
+            const favoriteButtons = document.querySelectorAll('.fa-heart');
+            favoriteButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (button.classList.contains('text-red-500')) {
+                        button.classList.remove('text-red-500');
+                        button.classList.add('text-gray-400');
+                    } else {
+                        button.classList.remove('text-gray-400');
+                        button.classList.add('text-red-500');
+                    }
+                });
+            });
+
+            // Toast уведомления
+            function showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white transform translate-x-full transition-transform duration-300 ${
+                    type === 'success' ? 'bg-green-500' : 
+                    type === 'error' ? 'bg-red-500' : 
+                    'bg-blue-500'
+                }`;
+                toast.textContent = message;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.classList.remove('translate-x-full');
+                }, 100);
+                
+                setTimeout(() => {
+                    toast.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 3000);
+            }            // Обработка кнопок откликов
+            document.addEventListener('click', (e) => {
+                if (e.target.textContent.includes('Откликнуться')) {
+                    e.preventDefault();
+                    showToast('Отклик успешно отправлен!', 'success');
+                }
+                
+                if (e.target.textContent.includes('Подключиться')) {
+                    e.preventDefault();
+                    window.location.href = '2_online_interview.html';
+                }
+            });
+
+            // === Функционал для редактирования резюме ===
+            
+            // Файловые инпуты
+            function handleFileInputChange(event) {
+                const input = event.target;
+                const fileNameSpan = document.getElementById(input.id + 'Name');
+                if (input.files && input.files.length > 0) {
+                    fileNameSpan.textContent = input.files[0].name;
+                } else {
+                    fileNameSpan.textContent = 'Файл не выбран';
+                }
+            }
+
+            // Инициализация файловых инпутов
+            ['passportFile','tinFile','educationFile','workBookFile','photoFile','otherFile'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('change', handleFileInputChange);
+            });
+
+            // Динамические блоки опыта работы
+            const workContainer = document.getElementById('workExperienceContainer');
+            const addWorkBtn = document.getElementById('addWorkBtn');
+            let workCount = 0;
+            
+            function addWorkBlock(data = {}) {
+                workCount++;
+                const idx = workCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-work"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Опыт работы ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Название компании:</label>
+                            <input type="text" name="companyName[]" value="${data.companyName||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Должность:</label>
+                            <input type="text" name="position[]" value="${data.position||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Дата начала (ММ.ГГГГ):</label>
+                            <input type="text" name="startDate[]" value="${data.startDate||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Дата окончания (ММ.ГГГГ или "Настоящее время"):</label>
+                            <input type="text" name="endDate[]" value="${data.endDate||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Обязанности и достижения:</label>
+                    <textarea name="responsibilities[]" class="w-full h-24 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">${data.responsibilities||''}</textarea>
+                `;
+                if (workContainer) {
+                    workContainer.appendChild(block);
+                    block.querySelector('.remove-work').onclick = () => { block.remove(); };
+                }
+            }
+            
+            if (addWorkBtn) {
+                addWorkBtn.onclick = () => addWorkBlock();
+                // Добавляем начальный блок
+                addWorkBlock({
+                    companyName: "ООО ТехноСофт",
+                    position: "Ведущий разработчик",
+                    startDate: "09.2022",
+                    endDate: "Настоящее время",
+                    responsibilities: "Разработка пользовательских интерфейсов на React, оптимизация производительности, участие в code-ревью."
+                });
+            }
+
+            // Динамические блоки образования
+            const eduContainer = document.getElementById('educationContainer');
+            const addEduBtn = document.getElementById('addEduBtn');
+            let eduCount = 0;
+            
+            function addEduBlock(data = {}) {
+                eduCount++;
+                const idx = eduCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-edu"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Учебное заведение ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Учебное заведение:</label>
+                            <input type="text" name="university[]" value="${data.university||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Специальность:</label>
+                            <input type="text" name="specialty[]" value="${data.specialty||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Годы обучения (ГГГГ-ГГГГ):</label>
+                            <input type="text" name="eduYears[]" value="${data.eduYears||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Степень:</label>
+                            <input type="text" name="degree[]" value="${data.degree||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                `;
+                if (eduContainer) {
+                    eduContainer.appendChild(block);
+                    block.querySelector('.remove-edu').onclick = () => { block.remove(); };
+                }
+            }
+            
+            if (addEduBtn) {
+                addEduBtn.onclick = () => addEduBlock();
+                // Добавляем начальный блок
+                addEduBlock({
+                    university: "Таджикский Национальный Университет",
+                    specialty: "Информационные технологии",
+                    eduYears: "2018-2022",
+                    degree: "Бакалавр"
+                });
+            }
+
+            // Динамические блоки языков
+            const langContainer = document.getElementById('languagesContainer');
+            const addLangBtn = document.getElementById('addLangBtn');
+            let langCount = 0;
+            
+            function addLangBlock(data = {}) {
+                langCount++;
+                const idx = langCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-lang"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Язык ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Язык:</label>
+                            <input type="text" name="languageName[]" value="${data.languageName||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Уровень владения:</label>
+                            <select name="languageLevel[]" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option ${data.languageLevel==="Начальный"?"selected":""}>Начальный</option>
+                                <option ${data.languageLevel==="Средний"?"selected":""}>Средний</option>
+                                <option ${data.languageLevel==="Выше среднего (B2)"?"selected":""}>Выше среднего (B2)</option>
+                                <option ${data.languageLevel==="Свободно"?"selected":""}>Свободно</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                if (langContainer) {
+                    langContainer.appendChild(block);
+                    block.querySelector('.remove-lang').onclick = () => { block.remove(); };
+                }
+            }
+            
+            if (addLangBtn) {
+                addLangBtn.onclick = () => addLangBlock();
+                // Добавляем начальный блок
+                addLangBlock({
+                    languageName: "Английский",
+                    languageLevel: "Выше среднего (B2)"
+                });
+            }
+
+            // Динамические блоки сертификатов
+            const certContainer = document.getElementById('certificatesContainer');
+            const addCertBtn = document.getElementById('addCertBtn');
+            let certCount = 0;
+            
+            function addCertBlock(data = {}) {
+                certCount++;
+                const idx = certCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-cert"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Сертификат ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Название сертификата:</label>
+                            <input type="text" name="certName[]" value="${data.certName||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Выдавшая организация:</label>
+                            <input type="text" name="issuingOrg[]" value="${data.issuingOrg||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Дата выдачи (ММ.ГГГГ):</label>
+                            <input type="text" name="issueDate[]" value="${data.issueDate||''}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                `;
+                if (certContainer) {
+                    certContainer.appendChild(block);
+                    block.querySelector('.remove-cert').onclick = () => { block.remove(); };
+                }
+            }
+            
+            if (addCertBtn) {
+                addCertBtn.onclick = () => addCertBlock();
+                // Добавляем начальный блок
+                addCertBlock({
+                    certName: "Сертификат по Python",
+                    issuingOrg: "Coursera",
+                    issueDate: "03.2023"
+                });
+            }
+
+            // Валидация и сохранение формы профиля
+            const profileForm = document.getElementById('profileForm');
+            if (profileForm) {
+                profileForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    if (!this.checkValidity()) {
+                        showToast('Пожалуйста, заполните все обязательные поля корректно.', 'error');
+                    } else {
+                        showToast('Профиль успешно сохранён!', 'success');
+                        // Здесь можно добавить отправку данных на сервер
+                    }
+                });
+            }
+
+            // Скачивание PDF резюме
+            const downloadResumeBtn = document.getElementById('downloadResumeBtn');
+            if (downloadResumeBtn) {
+                downloadResumeBtn.onclick = () => {
+                    showToast('Подготовка PDF резюме...', 'info');
+                    // Здесь можно добавить логику генерации PDF
+                };
+            }
+        });
+    </script>
+</body>
+</html>
