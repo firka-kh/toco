@@ -11,9 +11,78 @@
 			],
 			"group": "build",
 			"isBackground": true,
-			"problemMatcher": [
-				"$tsc"
-			]
+			"problemMatcher": [],
+			"options": {
+				"cwd": "${workspaceFolder}/react-portal"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "new",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"runOptions": {
+				"runOn": "default"
+			}
+		},
+		{
+			"label": "Install React Portal Dependencies",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"install"
+			],
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}/react-portal"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "new"
+			}
+		},
+		{
+			"label": "Build React Portal",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}/react-portal"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "new"
+			}
+		},
+		{
+			"label": "Preview React Portal",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"preview"
+			],
+			"group": "build",
+			"isBackground": true,
+			"options": {
+				"cwd": "${workspaceFolder}/react-portal"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "new"
+			}
 		}
 	]
 }
