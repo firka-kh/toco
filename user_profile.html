@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль соискателя</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .section-spacing {
+            padding: 3rem 0;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #667eea;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select, textarea, input[type="file"] {
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+            padding: 0.5rem 0.75rem;
+            width: 100%;
+            color: #374151;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="number"]:focus, select:focus, textarea:focus, input[type="file"]:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+        .custom-file-input {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .custom-file-input:hover {
+            border-color: #9ca3af;
+        }
+        .custom-file-input input[type="file"] {
+            display: none;
+        }
+        .custom-file-input .file-name {
+            flex-grow: 1;
+            color: #6b7280;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .custom-file-input .file-button {
+            background-color: #e5e7eb;
+            color: #374151;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            margin-left: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        @media print {
+            @page { size: A4; margin: 1cm; }
+            body { font-size: 10pt; line-height: 1.5; color: #000; background-color: #fff !important; }
+            header, nav, footer, .job-search-form-controls, #ai-tools, .card-hover, button, input[type="file"], .custom-file-input .file-button, .spinner, .pagination, #expandVideoButton, #soundVisualizer { display: none !important; }
+            .custom-file-input .file-name { display: block !important; color: #000 !important; border: none !important; padding: 0 !important; }
+            section { display: block !important; padding: 0.5cm 0 !important; background: none !important; box-shadow: none !important; }
+            .gradient-bg { background: none !important; color: #000 !important; }
+            .gradient-bg h2, .gradient-bg p { color: #000 !important; }
+            .gradient-bg .bg-opacity-20 { background: none !important; backdrop-filter: none !important; border: 1px solid #ddd; }
+            .chart-container { height: auto !important; width: 100% !important; page-break-inside: avoid; }
+            canvas { max-width: 100% !important; height: auto !important; background: none !important; }
+            .bg-white, .bg-gray-50, .bg-blue-50, .bg-yellow-50, .bg-green-50 { background: #fff !important; box-shadow: none !important; border: 1px solid #eee; }
+            .text-white { color: #000 !important; }
+            h1, h2, h3, h4, p, span, li, a { color: #000 !important; }
+            a { text-decoration: underline; }
+            a[href]:after { content: " (" attr(href) ")"; font-size: 8pt; }
+            a[href^="#"]:after { content: ""; }
+            .section-spacing { page-break-after: always; }
+            .section-spacing:last-child { page-break-after: auto; }
+        }
+
+        /* Контрастная тема */
+        .contrast {
+            background: #111 !important;
+            color: #fff !important;
+        }
+        .contrast .bg-white, .contrast .bg-gray-50, .contrast .bg-gray-100 {
+            background: #222 !important;
+            color: #fff !important;
+        }
+        .contrast input, .contrast select, .contrast textarea {
+            background: #222 !important;
+            color: #fff !important;
+            border-color: #fff !important;
+        }
+        /* Увеличенный шрифт */
+        .large-font, .large-font * {
+            font-size: 1.15em !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+<header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <!-- Левая часть: Лого и название -->
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
+                    <div>
+                        <!-- Добавляем ссылку на главную страницу -->
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
+                    </div>
+                </div>                <!-- Правая часть: Навигация, языки и профиль -->
+                <nav class="hidden lg:flex space-x-4 xl:space-x-6 items-center flex-wrap">
+                    <!-- Основные пункты меню -->
+                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Главная</a>
+                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Поиск работы</a>
+                    
+                    <!-- Выпадающее меню "Больше" -->
+                    <div class="relative">
+                        <button id="moreMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors flex items-center focus:outline-none whitespace-nowrap">
+                            Больше <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="moreDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="index.html#statistics" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Статистика</a>
+                            <a href="index.html#programs" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Программы</a>
+                            <a href="index.html#education" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Образование</a>
+                            <a href="about.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">О портале</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Премиум-услуги</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Фриланс</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Аналитика</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Выпадающее меню профиля -->
+                    <div class="relative">
+                        <button id="profileMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors focus:outline-none flex items-center whitespace-nowrap">
+                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="user_dashboard.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 font-semibold">🏠 Личный кабинет</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">⚙️ Настройки профиля</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Кабинет работодателя</a>
+                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Выпадающее меню языков -->
+                    <div class="relative">
+                        <button id="langMenuBtn" type="button" class="px-3 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400 whitespace-nowrap" aria-haspopup="true" aria-expanded="false">
+                            <span id="currentLangLabel">RUS</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div id="langDropdown" class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="ru">RUS</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="tg">TAJ</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="en">ENG</button>
+                        </div>
+                    </div>                </nav>
+                
+                <!-- Мобильное меню (гамбургер) -->
+                <div class="lg:hidden">
+                    <button id="mobileMenuBtn" type="button" class="text-white p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Мобильная навигация -->
+            <div id="mobileMenu" class="lg:hidden hidden mt-4 pb-4 border-t border-white border-opacity-20">
+                <div class="flex flex-col space-y-3 mt-4">
+                    <a href="index.html" class="font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="font-bold hover:text-yellow-300 transition-colors">Поиск работы</a>
+                    <a href="index.html#statistics" class="font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <a href="employer_profile.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для работодателя</a>
+                        <a href="user_dashboard.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для соискателя</a>
+                        <a href="register.html" class="block font-bold hover:text-yellow-300 transition-colors">Регистрация</a>
+                    </div>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <div class="flex space-x-3">
+                            <button class="px-3 py-1 bg-white text-gray-800 rounded font-bold text-sm" data-lang="ru">RUS</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="tg">TAJ</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="en">ENG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header><section id="candidate-profile" class="section-spacing bg-gray-100">
+        <div class="container mx-auto px-4">
+            <!-- Уведомление о переносе функционала -->
+            <div class="max-w-4xl mx-auto mb-8">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                    <div class="flex items-center justify-center mb-4">
+                        <i class="fas fa-info-circle text-blue-600 text-3xl mr-3"></i>
+                        <h2 class="text-2xl font-bold text-blue-800">Обновление личного кабинета</h2>
+                    </div>
+                    <p class="text-blue-700 mb-6 text-lg">
+                        Мы обновили личный кабинет! Теперь все функции редактирования профиля, управления откликами и собеседованиями объединены в одном удобном интерфейсе.
+                    </p>
+                    <div class="space-x-4">
+                        <a href="user_dashboard.html" class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-xl hover:bg-blue-700 transition-colors shadow-lg transform hover:scale-105">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Перейти в новый личный кабинет
+                        </a>
+                        <a href="video_res.html" class="inline-block bg-purple-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-purple-700 transition-colors shadow">
+                            <i class="fas fa-video mr-2"></i>Видео-резюме
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Профиль соискателя</h2>            
+            <!-- Видео-резюме, кабинет и вопросы по центру страницы -->
+            <div class="flex flex-col items-center mb-8 space-y-3">
+                <div class="flex space-x-4">
+                    <a href="user_dashboard.html" class="inline-block bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-300 shadow-lg transform hover:scale-105 text-center">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Личный кабинет
+                    </a>
+                    <a href="video_res.html" class="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors shadow text-center">
+                        <i class="fas fa-video mr-2"></i>Видео-резюме
+                    </a>
+                </div>
+                <a href="docs/video_interview_questions.pdf" target="_blank" class="text-blue-700 underline text-base hover:text-blue-900 transition-colors text-center">
+                    Вопросы для подготовки к видео-резюме
+                </a>
+            </div>
+            <form id="profileForm" autocomplete="off">
+            <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-xl">
+                <!-- Основная информация -->
+                <div class="mb-8 pb-8 border-b border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Основная информация</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">ФИО:</label>
+                            <input type="text" id="fullName" name="fullName" value="Иванов Иван Иванович" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email:</label>
+                            <input type="email" id="email" name="email" value="ivanov@example.com" required>
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Телефон:</label>
+                            <input type="tel" id="phone" name="phone" value="+992 000 12 34 56" required pattern="^\+?\d{9,15}$">
+                        </div>
+                        <div>
+                            <label for="desiredPosition" class="block text-sm font-medium text-gray-700 mb-2">Желаемая должность:</label>
+                            <input type="text" id="desiredPosition" name="desiredPosition" value="Инженер, Программист, Менеджер">
+                        </div>
+                        <div>
+                            <label for="region" class="block text-sm font-medium text-gray-700 mb-2">Регион проживания:</label>
+                            <select id="region" name="region" required>
+                                <option>Душанбе</option>
+                                <option>Худжанд</option>
+                                <option>Куляб</option>
+                                <option>ГБАО</option>
+                                <option>Хатлонская область</option>
+                                <option>Согдийская область</option>
+                                <option>РРП</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">Пол:</label>
+                            <select id="gender" name="gender" required>
+                                <option>Выберите пол</option>
+                                <option>Мужской</option>
+                                <option>Женский</option>
+                                <option>Другое</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Прикрепленные документы -->
+                <div class="mb-8 pb-8 border-b border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Прикрепленные документы</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="passportFile" class="block text-sm font-medium text-gray-700 mb-2">Паспорт гражданина РТ:</label>
+                            <div class="custom-file-input">
+                                <span class="file-name" id="passportFileName">Файл не выбран</span>
+                                <label for="passportFile" class="file-button">Выбрать файл</label>
+                                <input type="file" id="passportFile" name="passportFile" accept=".pdf,.doc,.docx,.jpg,.png">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="tinFile" class="block text-sm font-medium text-gray-700 mb-2">ИНН:</label>
+                            <div class="custom-file-input">
+                                <span class="file-name" id="tinFileName">Файл не выбран</span>
+                                <label for="tinFile" class="file-button">Выбрать файл</label>
+                                <input type="file" id="tinFile" name="tinFile" accept=".pdf,.doc,.docx,.jpg,.png">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="educationFile" class="block text-sm font-medium text-gray-700 mb-2">Документ об образовании:</label>
+                            <div class="custom-file-input">
+                                <span class="file-name" id="educationFileName">Файл не выбран</span>
+                                <label for="educationFile" class="file-button">Выбрать файл</label>
+                                <input type="file" id="educationFile" name="educationFile" accept=".pdf,.doc,.docx,.jpg,.png">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="workBookFile" class="block text-sm font-medium text-gray-700 mb-2">Трудовая книжка (при наличии):</label>
+                            <div class="custom-file-input">
+                                <span class="file-name" id="workBookFileName">Файл не выбран</span>
+                                <label for="workBookFile" class="file-button">Выбрать файл</label>
+                                <input type="file" id="workBookFile" name="workBookFile" accept=".pdf,.doc,.docx,.jpg,.png">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="photoFile" class="block text-sm font-medium text-gray-700 mb-2">Фотография 3x4:</label>
+                            <div class="custom-file-input">
+                                <span class="file-name" id="photoFileName">Файл не выбран</span>
+                                <label for="photoFile" class="file-button">Выбрать файл</label>
+                                <input type="file" id="photoFile" name="photoFile" accept=".jpg,.jpeg,.png">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="otherFile" class="block text-sm font-medium text-gray-700 mb-2">Другие документы:</label>
+                            <div class="custom-file-input">
+                                <span class="file-name" id="otherFileName">Файл не выбран</span>
+                                <label for="otherFile" class="file-button">Выбрать файл</label>
+                                <input type="file" id="otherFile" name="otherFile" accept=".pdf,.doc,.docx,.jpg,.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Навыки -->
+                <div class="mb-8 pb-8 border-b border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Навыки</h3>
+                    <p class="text-gray-700 mb-4">Перечислите ваши ключевые навыки через запятую:</p>
+                    <textarea class="w-full h-24 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="skills" id="skills">Python, Коммуникация, JavaScript, UX/UI Дизайн</textarea>
+                </div>
+
+                <!-- Опыт работы -->
+                <div class="mb-8 pb-8 border-b border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Опыт работы</h3>
+                    <div id="workExperienceContainer" class="space-y-6"></div>
+                    <button type="button" id="addWorkBtn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors"><i class="fas fa-plus mr-2"></i>Добавить опыт работы</button>
+                </div>
+
+                <!-- Образование -->
+                <div class="mb-8 pb-8 border-b border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Образование</h3>
+                    <div id="educationContainer" class="space-y-6"></div>
+                    <button type="button" id="addEduBtn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors"><i class="fas fa-plus mr-2"></i>Добавить образование</button>
+                </div>
+
+                <!-- Языки -->
+                <div class="mb-8 pb-8 border-b border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Языки</h3>
+                    <div id="languagesContainer" class="space-y-6"></div>
+                    <button type="button" id="addLangBtn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors"><i class="fas fa-plus mr-2"></i>Добавить язык</button>
+                </div>
+
+                <!-- Сертификаты -->
+                <div class="mb-8 pb-8 border-b border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Сертификаты</h3>
+                    <div id="certificatesContainer" class="space-y-6"></div>
+                    <button type="button" id="addCertBtn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors"><i class="fas fa-plus mr-2"></i>Добавить сертификат</button>
+                </div>
+
+                <!-- Видео-резюме -->
+                <!--
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Видео-резюме</h3>
+                    <p class="text-gray-700 mb-4">Записать или загрузить видео-резюме</p>
+                    <a href="#" class="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">Перейти к видео-резюме</a>
+                </div>
+                -->
+
+                <div class="text-center mt-10">
+                    <button type="submit" class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-xl hover:bg-green-700 transition-colors shadow-lg">Сохранить профиль</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </section>
+
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">О портале</h3>
+                    <p class="text-sm opacity-90">Официальный портал информационной системы рынка труда Республики Таджикистан</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Полезные ссылки</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Правительство РТ</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Министерство труда</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Налоговый комитет</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Нормативные акты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Поддержка</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Часто задаваемые вопросы</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Руководство пользователя</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Техническая поддержка</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Обратная связь</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Социальные сети</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2024 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>    <script>
+        // Автоматическое перенаправление через 5 секунд (опционально)
+        // setTimeout(() => {
+        //     window.location.href = 'user_dashboard.html';
+        // }, 5000);
+
+        // Файл-инпуты
+        function handleFileInputChange(event) {
+            const input = event.target;
+            const fileNameSpan = document.getElementById(input.id + 'Name');
+            if (input.files && input.files.length > 0) {
+                fileNameSpan.textContent = input.files[0].name;
+            } else {
+                fileNameSpan.textContent = 'Файл не выбран';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            ['passportFile','tinFile','educationFile','workBookFile','photoFile','otherFile'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('change', handleFileInputChange);
+            });
+
+            // --- Динамические блоки ---
+            // Опыт работы
+            const workContainer = document.getElementById('workExperienceContainer');
+            const addWorkBtn = document.getElementById('addWorkBtn');
+            let workCount = 0;
+            function addWorkBlock(data = {}) {
+                workCount++;
+                const idx = workCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-work"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Опыт работы ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Название компании:</label>
+                            <input type="text" name="companyName[]" value="${data.companyName||''}" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Должность:</label>
+                            <input type="text" name="position[]" value="${data.position||''}" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Дата начала (ММ.ГГГГ):</label>
+                            <input type="text" name="startDate[]" value="${data.startDate||''}" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Дата окончания (ММ.ГГГГ или "Настоящее время"):</label>
+                            <input type="text" name="endDate[]" value="${data.endDate||''}" required>
+                        </div>
+                    </div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Обязанности и достижения:</label>
+                    <textarea name="responsibilities[]" class="w-full h-24 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">${data.responsibilities||''}</textarea>
+                `;
+                workContainer.appendChild(block);
+                block.querySelector('.remove-work').onclick = () => { block.remove(); };
+            }
+            addWorkBtn.onclick = () => addWorkBlock();
+
+            // Пример начального блока
+            addWorkBlock({
+                companyName: "ООО ТехноСофт",
+                position: "Ведущий разработчик",
+                startDate: "09.2022",
+                endDate: "Настоящее время",
+                responsibilities: "Разработка пользовательских интерфейсов на React, оптимизация производительности, участие в code-ревью."
+            });
+
+            // Образование
+            const eduContainer = document.getElementById('educationContainer');
+            const addEduBtn = document.getElementById('addEduBtn');
+            let eduCount = 0;
+            function addEduBlock(data = {}) {
+                eduCount++;
+                const idx = eduCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-edu"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Учебное заведение ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Учебное заведение:</label>
+                            <input type="text" name="university[]" value="${data.university||''}" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Специальность:</label>
+                            <input type="text" name="specialty[]" value="${data.specialty||''}" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Годы обучения (ГГГГ-ГГГГ):</label>
+                            <input type="text" name="eduYears[]" value="${data.eduYears||''}" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Степень:</label>
+                            <input type="text" name="degree[]" value="${data.degree||''}" required>
+                        </div>
+                    </div>
+                `;
+                eduContainer.appendChild(block);
+                block.querySelector('.remove-edu').onclick = () => { block.remove(); };
+            }
+            addEduBtn.onclick = () => addEduBlock();
+            addEduBlock({
+                university: "Таджикский Национальный Университет",
+                specialty: "Информационные технологии",
+                eduYears: "2018-2022",
+                degree: "Бакалавр"
+            });
+
+            // Языки
+            const langContainer = document.getElementById('languagesContainer');
+            const addLangBtn = document.getElementById('addLangBtn');
+            let langCount = 0;
+            function addLangBlock(data = {}) {
+                langCount++;
+                const idx = langCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-lang"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Язык ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Язык:</label>
+                            <input type="text" name="languageName[]" value="${data.languageName||''}" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Уровень владения:</label>
+                            <select name="languageLevel[]" required>
+                                <option ${data.languageLevel==="Начальный"?"selected":""}>Начальный</option>
+                                <option ${data.languageLevel==="Средний"?"selected":""}>Средний</option>
+                                <option ${data.languageLevel==="Выше среднего (B2)"?"selected":""}>Выше среднего (B2)</option>
+                                <option ${data.languageLevel==="Свободно"?"selected":""}>Свободно</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                langContainer.appendChild(block);
+                block.querySelector('.remove-lang').onclick = () => { block.remove(); };
+            }
+            addLangBtn.onclick = () => addLangBlock();
+            addLangBlock({
+                languageName: "Английский",
+                languageLevel: "Выше среднего (B2)"
+            });
+
+            // Сертификаты
+            const certContainer = document.getElementById('certificatesContainer');
+            const addCertBtn = document.getElementById('addCertBtn');
+            let certCount = 0;
+            function addCertBlock(data = {}) {
+                certCount++;
+                const idx = certCount;
+                const block = document.createElement('div');
+                block.className = "bg-gray-50 p-6 rounded-lg border border-gray-200 relative";
+                block.innerHTML = `
+                    <button type="button" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm remove-cert"><i class="fas fa-trash-alt mr-1"></i></button>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800">Сертификат ${idx}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Название сертификата:</label>
+                            <input type="text" name="certName[]" value="${data.certName||''}" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Выдавшая организация:</label>
+                            <input type="text" name="issuingOrg[]" value="${data.issuingOrg||''}" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Дата выдачи (ММ.ГГГГ):</label>
+                            <input type="text" name="issueDate[]" value="${data.issueDate||''}" required>
+                        </div>
+                    </div>
+                `;
+                certContainer.appendChild(block);
+                block.querySelector('.remove-cert').onclick = () => { block.remove(); };
+            }
+            addCertBtn.onclick = () => addCertBlock();
+            addCertBlock({
+                certName: "Сертификат по Python",
+                issuingOrg: "Coursera",
+                issueDate: "03.2023"
+            });
+
+            // Языковое меню
+            document.getElementById('langBtn').onclick = function(e) {
+                e.stopPropagation();
+                document.getElementById('langDropdown').classList.toggle('hidden');
+            };
+            document.addEventListener('click', function(e) {
+                const dropdown = document.getElementById('langDropdown');
+                if (dropdown && !dropdown.contains(e.target) && e.target.id !== 'langBtn') {
+                    dropdown.classList.add('hidden');
+                }
+            });
+            function setLang(lang) {
+                document.getElementById('langBtn').innerHTML = lang + ' <i class="fas fa-chevron-down text-xs ml-1"></i>';
+                document.getElementById('langDropdown').classList.add('hidden');
+                // Здесь можно добавить смену языка сайта
+            }
+
+            // Контраст
+            document.getElementById('contrastBtn').onclick = function() {
+                document.body.classList.toggle('contrast');
+            };
+
+            // Размер шрифта
+            document.getElementById('fontSizeBtn').onclick = function() {
+                document.body.classList.toggle('large-font');
+            };
+
+            // Валидация формы (пример)
+            document.getElementById('profileForm').addEventListener('submit', function(e) {
+                // Можно добавить более сложную валидацию
+                if (!this.checkValidity()) {
+                    e.preventDefault();
+                    alert('Пожалуйста, заполните все обязательные поля корректно.');
+                } else {
+                    e.preventDefault();
+                    alert('Профиль успешно сохранён!');
+                }
+            });
+        });
+
+        // Выпадающее меню профиля и языков
+    const profileMenuBtn = document.getElementById('profileMenuBtn');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const langMenuBtn = document.getElementById('langMenuBtn');
+    const langDropdown = document.getElementById('langDropdown');
+    const currentLangLabel = document.getElementById('currentLangLabel');
+
+    profileMenuBtn?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('hidden');
+        langDropdown.classList.add('hidden');
+    });
+
+    langMenuBtn?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        langDropdown.classList.toggle('hidden');
+        profileDropdown.classList.add('hidden');
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+        if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
+            langDropdown.classList.add('hidden');
+        }
+    });
+
+    langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+        btn.onclick = function() {
+            currentLangLabel.textContent = this.textContent;
+            langDropdown.classList.add('hidden');
+        };
+    });
+    </script>
+</body>
+</html>

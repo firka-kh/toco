@@ -2,332 +2,164 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <title>Шапка сайта</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .menu-link {
+            font-size: 1rem;
+            font-weight: 700;
+            transition: font-weight 0.2s;
+        }
+        .menu-link:active {
+            font-weight: 400 !important;
+        }
+        #profileDropdown {
+            min-width: 180px;
+            transition: opacity 0.2s;
+        }
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .animate-fade-in {
+            animation: fade-in 0.18s;
+        }
+    </style>
 </head>
-<body>
-    <header class="header">
-        <div class="header-container">
-            <!-- Logo -->
-            <div class="logo">
-                <i class="fas fa-briefcase"></i>
-                <span class="logo-text">Портал Рынка Труда Республики Таджикистан</span>
+<body class="bg-gray-50 font-sans">
+<header class="gradient-bg text-white shadow-lg">
+    <div class="container mx-auto px-4 py-6">
+        <div class="flex items-center justify-between">
+            <!-- Левая часть: Лого и название -->
+            <div class="flex items-center space-x-4">
+                <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
+                <div>
+                    <a href="index.html" class="hover:underline focus:outline-none">
+                        <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                        <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                    </a>
+                </div>
             </div>
-
-            <!-- Mobile menu burger -->
-            <div class="mobile-menu-toggle" id="mobile-menu-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-
-            <!-- Navigation -->
-            <nav class="navigation" id="navigation">
-                <ul class="nav-menu">
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-search"></i>
-                            Поиск работы
-                            <i class="fas fa-chevron-down dropdown-icon"></i>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a href="vacancies.html" class="dropdown-link">Все вакансии</a>
-                            <a href="vacancies_by_region.html" class="dropdown-link">По регионам</a>
-                            <a href="vacancies_by_specialty.html" class="dropdown-link">По специальностям</a>
-                            <a href="remote_work.html" class="dropdown-link">Удаленная работа</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-building"></i>
-                            Для работодателей
-                            <i class="fas fa-chevron-down dropdown-icon"></i>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a href="post_vacancy.html" class="dropdown-link">Разместить вакансию</a>
-                            <a href="resume_database.html" class="dropdown-link">База резюме</a>
-                            <a href="market_analytics.html" class="dropdown-link">Аналитика рынка</a>
-                            <a href="company_branding.html" class="dropdown-link">Брендинг компании</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-graduation-cap"></i>
-                            Образование
-                            <i class="fas fa-chevron-down dropdown-icon"></i>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a href="courses.html" class="dropdown-link">Курсы и тренинги</a>
-                            <a href="certifications.html" class="dropdown-link">Сертификация</a>
-                            <a href="career_consulting.html" class="dropdown-link">Карьерное консультирование</a>
-                            <a href="internships.html" class="dropdown-link">Стажировки</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-chart-bar"></i>
-                            Аналитика
-                            <i class="fas fa-chevron-down dropdown-icon"></i>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a href="market_statistics.html" class="dropdown-link">Статистика рынка</a>
-                            <a href="salary_reports.html" class="dropdown-link">Зарплатные отчеты</a>
-                            <a href="forecasts.html" class="dropdown-link">Прогнозы</a>
-                            <a href="rankings.html" class="dropdown-link">Рейтинги</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-university"></i>
-                            Государственные услуги
-                            <i class="fas fa-chevron-down dropdown-icon"></i>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a href="electronic_labor.html" class="dropdown-link">Электронная трудовая</a>
-                            <a href="unemployment.html" class="dropdown-link">Регистрация безработных</a>
-                            <a href="certificates.html" class="dropdown-link">Справки</a>
-                            <a href="social_support.html" class="dropdown-link">Социальная поддержка</a>
-                        </div>
-                    </li>
-                </ul>
-
-                <!-- Header Actions -->
-                <div class="header-actions">
-                    <!-- Language Toggle -->
-                    <div class="language-toggle">
-                        <button class="language-btn active" data-lang="ru">RU</button>
-                        <button class="language-btn" data-lang="tj">TJ</button>
+            <!-- Правая часть: Навигация, языки и профиль -->
+            <nav class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">Поиск вакансий</a>
+                <a href="index.html#statistics" class="menu-link font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                <a href="index.html#programs" class="menu-link font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                <a href="index.html#education" class="menu-link font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                <a href="about.html" class="menu-link font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                <!-- Новое выпадающее меню "Премиум-подписка" -->
+                <div class="relative">
+                    <button id="premiumMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors flex items-center focus:outline-none">
+                        Премиум-подписка <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                    </button>
+                    <div id="premiumDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                        <a href="pay_cont/ads.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Реклама</a>
+                        <a href="pay_cont/paid_services.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Платные услуги</a>
+                        <a href="pay_cont/commission.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Комиссия центров</a>
+                        <a href="pay_cont/analytics.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Аналитика</a>
+                        <a href="pay_cont/api_access.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">API-доступ</a>
+                        <a href="pay_cont/fairs.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Ярмарки</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Фриланс</a>
                     </div>
-
-                    <!-- Auth Buttons -->
-                    <button class="btn btn-outline" id="login-btn">
-                        <i class="fas fa-sign-in-alt"></i>
-                        Войти
-                    </button>
-                    <button class="btn btn-primary" id="register-btn">
-                        <i class="fas fa-user-plus"></i>
-                        Регистрация
-                    </button>
+                </div>
+                <!-- Выпадающее меню профиля и языков -->
+                <div class="relative flex items-center space-x-4" id="profileDropdownContainer">
+                    <!-- Мой профиль -->
+                    <div class="relative">
+                        <button id="profileMenuBtn" type="button" class="relative hover:text-yellow-300 transition-colors focus:outline-none ml-2 flex items-center">
+                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для работодателя</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вход для соискателя</a>
+                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                        </div>
+                    </div>
+                    <!-- Выпадающее меню языков -->
+                    <div class="relative">
+                        <button id="langMenuBtn" type="button"
+                            class="px-4 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                            aria-haspopup="true" aria-expanded="false">
+                            <span id="currentLangLabel">RUS</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div id="langDropdown"
+                            class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                            <button type="button"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                data-lang="ru">RUS</button>
+                            <button type="button"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                data-lang="tg">TAJ</button>
+                            <button type="button"
+                                class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors"
+                                data-lang="en">ENG</button>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
-
-        <!-- Notification Bar -->
-        <div class="notification-bar" id="notification-bar">
-            <div class="container">
-                <i class="fas fa-info-circle"></i>
-                <span>Новые возможности портала: Видеоинтервью и AI-консультант теперь доступны!</span>
-                <button class="notification-close" id="notification-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Login Modal -->
-    <div class="modal" id="login-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Вход в систему</h3>
-                <button class="modal-close" id="login-modal-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="form" id="login-form">
-                    <div class="form-group">
-                        <label for="login-email">Email или телефон</label>
-                        <input type="text" id="login-email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login-password">Пароль</label>
-                        <input type="password" id="login-password" name="password" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="remember-me">
-                            <span class="checkmark"></span>
-                            Запомнить меня
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">
-                        <i class="fas fa-sign-in-alt"></i>
-                        Войти
-                    </button>
-                </form>
-                <div class="modal-footer">
-                    <a href="#" class="text-link">Забыли пароль?</a>
-                </div>
-            </div>
-        </div>
     </div>
+</header>
+<script>
+    // Выпадающее меню профиля и языков
+    const profileMenuBtn = document.getElementById('profileMenuBtn');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const langMenuBtn = document.getElementById('langMenuBtn');
+    const langDropdown = document.getElementById('langDropdown');
+    const currentLangLabel = document.getElementById('currentLangLabel');
+    const premiumMenuBtn = document.getElementById('premiumMenuBtn');
+    const premiumDropdown = document.getElementById('premiumDropdown');
 
-    <!-- Register Modal -->
-    <div class="modal" id="register-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Регистрация</h3>
-                <button class="modal-close" id="register-modal-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="form" id="register-form">
-                    <div class="form-group">
-                        <label for="register-name">Полное имя</label>
-                        <input type="text" id="register-name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-email">Email</label>
-                        <input type="email" id="register-email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-phone">Телефон</label>
-                        <input type="tel" id="register-phone" name="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-password">Пароль</label>
-                        <input type="password" id="register-password" name="password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-confirm-password">Подтвердите пароль</label>
-                        <input type="password" id="register-confirm-password" name="confirm-password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="user-type">Тип пользователя</label>
-                        <select id="user-type" name="user-type" required>
-                            <option value="">Выберите тип</option>
-                            <option value="job-seeker">Соискатель</option>
-                            <option value="employer">Работодатель</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="agree-terms" required>
-                            <span class="checkmark"></span>
-                            Согласен с <a href="#" class="text-link">условиями использования</a>
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">
-                        <i class="fas fa-user-plus"></i>
-                        Зарегистрироваться
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
+    // Открытие/закрытие меню "Мой профиль"
+    profileMenuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('hidden');
+        langDropdown.classList.add('hidden');
+        premiumDropdown.classList.add('hidden');
+    });
 
-    <script>
-        // Header functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu toggle
-            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-            const navigation = document.getElementById('navigation');
-            
-            mobileMenuToggle.addEventListener('click', function() {
-                navigation.classList.toggle('active');
-                mobileMenuToggle.classList.toggle('active');
-            });
+    // Открытие/закрытие меню языков
+    langMenuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        langDropdown.classList.toggle('hidden');
+        profileDropdown.classList.add('hidden');
+        premiumDropdown.classList.add('hidden');
+    });
 
-            // Dropdown menus
-            const dropdowns = document.querySelectorAll('.dropdown');
-            dropdowns.forEach(dropdown => {
-                const dropdownMenu = dropdown.querySelector('.dropdown-menu');
-                
-                dropdown.addEventListener('mouseenter', function() {
-                    dropdownMenu.classList.add('show');
-                });
-                
-                dropdown.addEventListener('mouseleave', function() {
-                    dropdownMenu.classList.remove('show');
-                });
-            });
+    // Открытие/закрытие меню "Премиум-подписка"
+    premiumMenuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        premiumDropdown.classList.toggle('hidden');
+        profileDropdown.classList.add('hidden');
+        langDropdown.classList.add('hidden');
+    });
 
-            // Language toggle
-            const languageBtns = document.querySelectorAll('.language-btn');
-            languageBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    languageBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    const lang = this.dataset.lang;
-                    // Mock language switch
-                    if (lang === 'tj') {
-                        // Replace some text with Tajik placeholders
-                        document.querySelector('.logo-text').textContent = 'Портали Бозори Мехнати Чумхурии Точикистон';
-                    } else {
-                        document.querySelector('.logo-text').textContent = 'Портал Рынка Труда Республики Таджикистан';
-                    }
-                });
-            });
+    // Закрытие обоих меню при клике вне
+    document.addEventListener('click', function(e) {
+        if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+        if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
+            langDropdown.classList.add('hidden');
+        }
+        if (!premiumDropdown.contains(e.target) && !premiumMenuBtn.contains(e.target)) {
+            premiumDropdown.classList.add('hidden');
+        }
+    });
 
-            // Modal handling
-            const loginBtn = document.getElementById('login-btn');
-            const registerBtn = document.getElementById('register-btn');
-            const loginModal = document.getElementById('login-modal');
-            const registerModal = document.getElementById('register-modal');
-            const loginModalClose = document.getElementById('login-modal-close');
-            const registerModalClose = document.getElementById('register-modal-close');
-
-            function openModal(modal) {
-                modal.classList.add('show');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeModal(modal) {
-                modal.classList.remove('show');
-                document.body.style.overflow = '';
-            }
-
-            loginBtn.addEventListener('click', () => openModal(loginModal));
-            registerBtn.addEventListener('click', () => openModal(registerModal));
-            loginModalClose.addEventListener('click', () => closeModal(loginModal));
-            registerModalClose.addEventListener('click', () => closeModal(registerModal));
-
-            // Close modal on backdrop click
-            [loginModal, registerModal].forEach(modal => {
-                modal.addEventListener('click', function(e) {
-                    if (e.target === modal) {
-                        closeModal(modal);
-                    }
-                });
-            });
-
-            // Notification bar close
-            const notificationClose = document.getElementById('notification-close');
-            const notificationBar = document.getElementById('notification-bar');
-            
-            notificationClose.addEventListener('click', function() {
-                notificationBar.style.display = 'none';
-            });
-
-            // Form validation
-            const loginForm = document.getElementById('login-form');
-            const registerForm = document.getElementById('register-form');
-
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                // Mock login
-                alert('Вход выполнен успешно!');
-                closeModal(loginModal);
-            });
-
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const password = document.getElementById('register-password').value;
-                const confirmPassword = document.getElementById('register-confirm-password').value;
-                
-                if (password !== confirmPassword) {
-                    alert('Пароли не совпадают!');
-                    return;
-                }
-                
-                // Mock registration
-                alert('Регистрация завершена успешно!');
-                closeModal(registerModal);
-            });
-        });
-    </script>
+    // Переключение языка (только смена надписи, без перевода)
+    langDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
+        btn.onclick = function() {
+            currentLangLabel.textContent = this.textContent;
+            langDropdown.classList.add('hidden');
+        };
+    });
+</script>
 </body>
 </html>
