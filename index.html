@@ -39,43 +39,31 @@
 
         /* AI Chat Bot Widget Styles */        .chat-widget {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 24px;
+            right: 24px;
             z-index: 1001;
         }
 
         .chat-toggle {
-            width: 60px;
-            height: 60px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(79,70,229,0.18);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 24px;
-            transition: all 0.3s ease;
+            font-size: 32px;
+            transition: all 0.3s cubic-bezier(.4,2,.6,1);
             animation: pulse-chat 2s infinite;
         }
 
         .chat-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
-        }
-
-        @keyframes pulse-chat {
-            0% {
-                box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-            }
-            50% {
-                box-shadow: 0 4px 30px rgba(102, 126, 234, 0.8);
-            }
-            100% {
-                box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-            }
+            transform: scale(1.08);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.25);
         }
 
         .chat-window {
@@ -87,7 +75,7 @@
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            display: none;
+            display: none !important;
             flex-direction: column;
             overflow: hidden;
             transform: scale(0);
@@ -95,7 +83,7 @@
         }
 
         .chat-window.active {
-            display: flex;
+            display: flex !important;
             transform: scale(1);
         }
 
@@ -1496,6 +1484,18 @@ const jobAds = [
         company: "HR Group",
         city: "Согдийская область",
         salary: "3500-5000 сомони",
+        label: "Новая",
+        labelClass: "bg-green-100 text-green-800",
+        desc: "Поиск и подбор персонала, проведение собеседований..."
+    }
+];
+
+const jobSliderTrack = document.getElementById('jobSliderTrack');
+const prevBtn = document.getElementById('jobSliderPrev');
+const nextBtn = document.getElementById('jobSliderNext');
+let jobSliderIndex = 0;
+const JOBS_PER_SLIDE = 3;
+let isSliding =
         label: "Новая",
         labelClass: "bg-green-100 text-green-800",
         desc: "Поиск и подбор персонала, проведение собеседований..."
