@@ -37,245 +37,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* AI Chat Bot Widget Styles */        .chat-widget {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 1001;
-        }
-
-        .chat-toggle {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 8px 32px 0 rgba(79,70,229,0.18);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 32px;
-            transition: all 0.3s cubic-bezier(.4,2,.6,1);
-            animation: pulse-chat 2s infinite;
-        }
-
-        .chat-toggle:hover {
-            transform: scale(1.08);
-            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.25);
-        }
-
-        .chat-window {
-            position: absolute;
-            bottom: 80px;
-            right: 0;
-            width: 350px;
-            height: 450px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            display: none !important;
-            flex-direction: column;
-            overflow: hidden;
-            transform: scale(0);
-            transition: all 0.3s ease;
-        }
-
-        .chat-window.active {
-            display: flex !important;
-            transform: scale(1);
-        }
-
-        .chat-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .chat-header h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .chat-status {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 12px;
-            opacity: 0.9;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #4ade80;
-            border-radius: 50%;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .message {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 14px;
-            line-height: 1.4;
-            animation: fadeInUp 0.3s ease;
-        }
-
-        .message.bot {
-            align-self: flex-start;
-            background: #f1f5f9;
-            color: #334155;
-        }
-
-        .message.user {
-            align-self: flex-end;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .typing-indicator {
-            align-self: flex-start;
-            background: #f1f5f9;
-            color: #334155;
-            padding: 12px 16px;
-            border-radius: 18px;
-            display: none;
-        }
-
-        .typing-dots {
-            display: flex;
-            gap: 4px;
-        }
-
-        .typing-dot {
-            width: 6px;
-            height: 6px;
-            background: #94a3b8;
-            border-radius: 50%;
-            animation: typing 1.4s infinite ease-in-out;
-        }
-
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        .typing-dot:nth-child(3) { animation-delay: 0s; }
-
-        @keyframes typing {
-            0%, 80%, 100% {
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-            40% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
-        }
-
-        .chat-input-area {
-            padding: 20px;
-            border-top: 1px solid #e2e8f0;
-            background: #f8fafc;
-        }
-
-        .quick-actions {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .quick-action {
-            background: white;
-            border: 1px solid #e2e8f0;
-            color: #64748b;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .quick-action:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .chat-input {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .chat-input input {
-            flex: 1;
-            border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 10px 15px;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s ease;
-        }
-
-        .chat-input input:focus {
-            border-color: #667eea;
-        }
-
-        .send-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #667eea;
-            border: none;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-
-        .send-btn:hover {
-            background: #5a67d8;
-            transform: scale(1.05);
-        }
-
-        .send-btn:disabled {
-            background: #cbd5e0;
-            cursor: not-allowed;
-            transform: none;
-        }
-
         /* Ensure canvas elements are responsive within their containers */
         .chart-container {
             position: relative;
@@ -1064,57 +825,6 @@
         </div>
     </footer>
 
-    <!-- AI Chat Bot Widget -->
-    <div class="chat-widget">
-        <button class="chat-toggle" id="chatToggle">
-            <i class="fas fa-robot"></i>
-        </button>
-        
-        <div class="chat-window" id="chatWindow">
-            <div class="chat-header">
-                <div>
-                    <h3>ИИ Помощник по трудоустройству</h3>
-                    <div class="chat-status">
-                        <div class="status-dot"></div>
-                        <span>В сети</span>
-                    </div>
-                </div>
-                <button id="chatClose" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="chat-messages" id="chatMessages">
-                <div class="message bot">
-                    Привет! 👋 Я ваш виртуальный помощник по трудоустройству. Могу помочь вам найти работу, подобрать курсы или ответить на вопросы о карьере. Чем могу быть полезен?
-                </div>
-            </div>
-            
-            <div class="typing-indicator" id="typingIndicator">
-                <div class="typing-dots">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            </div>
-            
-            <div class="chat-input-area">
-                <div class="quick-actions">
-                    <button class="quick-action" data-action="job-search">🔍 Найти работу</button>
-                    <button class="quick-action" data-action="courses">📚 Курсы</button>
-                    <button class="quick-action" data-action="resume">📄 Помощь с резюме</button>
-                    <button class="quick-action" data-action="salary">💰 Зарплаты</button>
-                </div>
-                <div class="chat-input">
-                    <input type="text" id="chatInput" placeholder="Напишите ваш вопрос...">
-                    <button class="send-btn" id="sendBtn">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Модальное окно профиля -->
 <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
   <div class="bg-white rounded-lg shadow-lg p-8 max-w-xs w-full text-center">
@@ -1195,8 +905,16 @@
                 right: 12px !important;
                 bottom: 112px !important;
             }
-        }    </style>
+        }
+    </style>
 </div>
+
+<!-- Затем виджет ИИ, строго под FL -->
+<button id="aiWidgetBtn"
+        class="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl hover:scale-110 transition-transform"
+        title="AI-ассистент (демо)">
+    <i class="fas fa-robot"></i>
+</button>
 
     <script>
         // Unemployment Chart
@@ -1204,23 +922,36 @@
         new Chart(ctx1, {
             type: 'bar',
             data: {
-                labels: ['Душанбе', 'Согдийская обл.', 'Хатлонская обл.', 'РРП', 'ГБАО'],
+                labels: ['Душанбе', 'Худжанд', 'Куляб', 'Курган-Тюбе', 'ГБАО'],
                 datasets: [{
-                    label: 'Безработица (%)',
-                    data: [5.2, 7.1, 6.3, 4.8, 8.0],
-                    backgroundColor: [
-                        '#6366f1', '#f59e42', '#10b981', '#f43f5e', '#a78bfa'
-                    ]
+                    label: 'Уровень безработицы (%)',
+                    data: [4.2, 5.8, 7.1, 6.3, 8.9],
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    title: { display: true, text: 'Уровень безработицы по регионам' }
-                },
+                maintainAspectRatio: false,
                 scales: {
-                    y: { beginAtZero: true, max: 10 }
+                    y: {
+                        beginAtZero: true,
+                        max: 10
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y + '%';
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -1230,20 +961,42 @@
         new Chart(ctx2, {
             type: 'doughnut',
             data: {
-                labels: ['IT', 'Медицина', 'Образование', 'Строительство', 'Торговля'],
+                labels: ['IT', 'Строительство', 'Торговля', 'Образование', 'Здравоохранение', 'Другие'],
                 datasets: [{
-                    label: 'Популярные профессии',
-                    data: [32, 18, 15, 20, 15],
+                    data: [18, 22, 25, 12, 8, 15],
                     backgroundColor: [
-                        '#6366f1', '#f59e42', '#10b981', '#f43f5e', '#a78bfa'
-                    ]
+                        '#3B82F6',
+                        '#10B981',
+                        '#F59E0B',
+                        '#EF4444',
+                        '#8B5CF6',
+                        '#6B7280'
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom' },
-                    title: { display: true, text: 'Популярные профессии' }
+                    legend: {
+                        position: 'right',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -1435,67 +1188,66 @@ const jobAds = [
         label: "Актуальная",
         labelClass: "bg-blue-100 text-blue-800",
         desc: "Ищем активного менеджера для развития продаж в северном регионе..."
-    },    {
+    },
+    {
         title: "Бухгалтер",
         company: "ФинЭксперт",
+        city: "Куляб",
+        salary: "3000-4500 сомони",
+        label: "Срочно",
+        labelClass: "bg-red-100 text-red-800",
+        desc: "В компанию требуется бухгалтер с опытом работы не менее 2 лет..."
+    },
+    {
+        title: "Водитель",
+        company: "Логистик Плюс",
         city: "Душанбе",
-        salary: "2500-4000 сомони",
+        salary: "2500-3500 сомони",
+        label: "Новая",
+        labelClass: "bg-green-100 text-green-800",
+        desc: "Требуется водитель категории B, C для доставки товаров по городу..."
+    },
+    {
+        title: "Учитель английского языка",
+        company: "Школа №12",
+        city: "Курган-Тюбе",
+        salary: "2800-4000 сомони",
         label: "Актуальная",
         labelClass: "bg-blue-100 text-blue-800",
-        desc: "Ведение учета, составление отчетности, работа с налогами..."
+        desc: "В школу требуется учитель английского языка с высшим образованием..."
     },
     {
-        title: "HR-менеджер",
-        company: "HR Group",
-        city: "Согдийская область",
-        salary: "3500-5000 сомони",
+        title: "Системный администратор",
+        company: "IT Solutions",
+        city: "Душанбе",
+        salary: "4000-6000 сомони",
         label: "Новая",
         labelClass: "bg-green-100 text-green-800",
-        desc: "Поиск и подбор персонала, проведение собеседований..."
-    }
-];
-
-const jobSliderTrack = document.getElementById('jobSliderTrack');
-const prevBtn = document.getElementById('jobSliderPrev');
-const nextBtn = document.getElementById('jobSliderNext');
-let jobSliderIndex = 0;
-const JOBS_PER_SLIDE = 3;
-let isSliding =
-        label: "Новая",
-        labelClass: "bg-green-100 text-green-800",
-        desc: "Поиск и подбор персонала, проведение собеседований..."
-    }
-];
-
-const jobSliderTrack = document.getElementById('jobSliderTrack');
-const prevBtn = document.getElementById('jobSliderPrev');
-const nextBtn = document.getElementById('jobSliderNext');
-let jobSliderIndex = 0;
-const JOBS_PER_SLIDE = 3;
-let isSliding = false;
-
-// Генерация HTML для 3 объявлений
-function renderJobSlide(startIdx)
+        desc: "Обслуживание серверов и сетей, поддержка пользователей..."
+    },
+    {
+        title: "Маркетолог",
+        company: "MarketPro",
+        city: "Худжанд",
+        salary: "3200-4800 сомони",
+        label: "Актуальная",
         labelClass: "bg-blue-100 text-blue-800",
-        desc: "Ведение учета, составление отчетности, работа с налогами..."
+        desc: "Разработка и реализация маркетинговых стратегий компании..."
+    },
+    {
+        title: "Оператор call-центра",
+        company: "СвязьТелеком",
+        city: "Душанбе",
+        salary: "2200-3000 сомони",
+        label: "Срочно",
+        labelClass: "bg-red-100 text-red-800",
+        desc: "Работа с клиентами, обработка звонков, консультации..."
     },
     {
         title: "HR-менеджер",
         company: "HR Group",
         city: "Согдийская область",
         salary: "3500-5000 сомони",
-        label: "Новая",
-        labelClass: "bg-green-100 text-green-800",
-        desc: "Поиск и подбор персонала, проведение собеседований..."
-    }
-];
-
-const jobSliderTrack = document.getElementById('jobSliderTrack');
-const prevBtn = document.getElementById('jobSliderPrev');
-const nextBtn = document.getElementById('jobSliderNext');
-let jobSliderIndex = 0;
-const JOBS_PER_SLIDE = 3;
-let isSliding =
         label: "Новая",
         labelClass: "bg-green-100 text-green-800",
         desc: "Поиск и подбор персонала, проведение собеседований..."
@@ -1595,227 +1347,6 @@ function updateArrowVisibility() {
 }
 window.addEventListener('resize', updateArrowVisibility);
 updateArrowVisibility();
-
-// AI Chat Bot Functionality
-class AIJobChatBot {
-    constructor() {
-        this.isOpen = false;
-        this.isTyping = false;
-        this.init();
-        this.responses = {
-            'job-search': [
-                "Отлично! Давайте найдем для вас подходящую работу. 🎯",
-                "Какая сфера деятельности вас интересует? (IT, медицина, образование, торговля, строительство)",
-                "Также укажите ваш опыт работы и желаемую зарплату."
-            ],
-            'courses': [
-                "Прекрасный выбор! Обучение - ключ к успешной карьере. 📚",
-                "У нас есть курсы по:",
-                "• Программированию (Python, Java, JavaScript)",
-                "• Цифровому маркетингу",
-                "• Бухгалтерскому учету", 
-                "• Дизайну и графике",
-                "• Языкам (английский, русский)",
-                "Какое направление вас интересует?"
-            ],
-            'resume': [
-                "Помогу составить эффективное резюме! ✍️",
-                "Основные принципы хорошего резюме:",
-                "• Четкая структура и читаемость",
-                "• Акцент на достижениях, а не обязанностях", 
-                "• Ключевые навыки для вашей сферы",
-                "• Контактная информация",
-                "Расскажите о вашей профессии - дам персональные советы!"
-            ],
-            'salary': [
-                "Актуальная информация о зарплатах в Таджикистане 💰",
-                "Средние зарплаты по профессиям:",
-                "• IT-специалист: 3000-8000 сомони",
-                "• Бухгалтер: 1500-3500 сомони",
-                "• Учитель: 1200-2500 сомони",
-                "• Врач: 2000-4500 сомони",
-                "• Инженер: 2500-5000 сомони",
-                "О какой профессии хотите узнать подробнее?"
-            ]
-        };
-        
-        this.contextualResponses = {
-            'программист': "Отличный выбор! В IT сфере сейчас много возможностей. Рекомендую изучить: React, Node.js, Python или Java. Зарплаты от 3000 до 8000+ сомони.",
-            'учитель': "Благородная профессия! Сейчас востребованы учителя математики, физики, английского языка. Средняя зарплата 1200-2500 сомони + доп. занятия.",
-            'врач': "Очень важная профессия! Особенно нужны семейные врачи, хирурги, анестезиологи. Зарплата 2000-4500 сомони + частная практика.",
-            'бухгалтер': "Стабильная профессия с постоянным спросом. Важно знать 1С, налогообложение РТ. Зарплата 1500-3500 сомони.",
-            'дизайнер': "Креативная сфера развивается! Нужны веб-дизайнеры, UX/UI специалисты. Изучайте Figma, Adobe Creative Suite.",
-            'менеджер': "Широкие возможности! Менеджеры по продажам, проектам, HR очень востребованы. Зарплата зависит от сферы: 1800-5000 сомони."
-        };
-        
-        this.init();
-    }
-    
-    init() {
-        this.chatToggle = document.getElementById('chatToggle');
-        this.chatWindow = document.getElementById('chatWindow');
-        this.chatClose = document.getElementById('chatClose');
-        this.chatMessages = document.getElementById('chatMessages');
-        this.chatInput = document.getElementById('chatInput');
-        this.sendBtn = document.getElementById('sendBtn');
-        this.typingIndicator = document.getElementById('typingIndicator');
-        
-        this.bindEvents();
-    }
-      bindEvents() {
-        console.log('Привязка событий для чат-бота...');
-        if (this.chatToggle) {
-            this.chatToggle.addEventListener('click', () => {
-                console.log('Клик по кнопке чата');
-                this.toggleChat();
-            });
-        } else {
-            console.error('Кнопка chatToggle не найдена!');
-        }
-        
-        if (this.chatClose) {
-            this.chatClose.addEventListener('click', () => this.closeChat());
-        }
-        
-        if (this.sendBtn) {
-            this.sendBtn.addEventListener('click', () => this.sendMessage());
-        }
-        
-        if (this.chatInput) {
-            this.chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') this.sendMessage();
-            });
-        }
-        
-        // Quick actions
-        document.querySelectorAll('.quick-action').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const action = e.target.dataset.action;
-                this.handleQuickAction(action);
-            });
-        });
-    }
-      toggleChat() {
-        console.log('toggleChat вызван, текущее состояние:', this.isOpen);
-        this.isOpen = !this.isOpen;
-        if (this.isOpen) {
-            console.log('Открываем чат');
-            this.chatWindow.classList.add('active');
-            if (this.chatInput) this.chatInput.focus();
-        } else {
-            console.log('Закрываем чат');
-            this.chatWindow.classList.remove('active');
-        }
-    }
-    
-    closeChat() {
-        this.isOpen = false;
-        this.chatWindow.classList.remove('active');
-    }
-    
-    async sendMessage() {
-        const message = this.chatInput.value.trim();
-        if (!message || this.isTyping) return;
-        
-        this.addMessage(message, 'user');
-        this.chatInput.value = '';
-        
-        await this.generateResponse(message);
-    }
-    
-    async handleQuickAction(action) {
-        if (this.isTyping) return;
-        
-        const responses = this.responses[action];
-        if (responses) {
-            this.showTyping();
-            for (let i = 0; i < responses.length; i++) {
-                await this.delay(800 + Math.random() * 600);
-                this.addMessage(responses[i], 'bot');
-                if (i < responses.length - 1) {
-                    await this.delay(500);
-                }
-            }
-            this.hideTyping();
-        }
-    }
-    
-    async generateResponse(userMessage) {
-        this.showTyping();
-        
-        await this.delay(1000 + Math.random() * 1000);
-        
-        const message = userMessage.toLowerCase();
-        let response = this.getContextualResponse(message);
-        
-        if (!response) {
-            if (message.includes('привет') || message.includes('здравствуй')) {
-                response = "Привет! Рад вас видеть! 👋 Я помогу вам с поиском работы, курсами и карьерными вопросами. Что вас интересует?";
-            } else if (message.includes('спасибо') || message.includes('благодар')) {
-                response = "Пожалуйста! Всегда рад помочь! 😊 Если есть еще вопросы - обращайтесь!";
-            } else if (message.includes('работа') || message.includes('вакан')) {
-                response = "Ищете работу? Отлично! 🎯 У нас есть свежие вакансии по всем сферам. Укажите вашу специальность и опыт работы, и я подберу подходящие варианты!";
-            } else if (message.includes('курс') || message.includes('обуч')) {
-                response = "Хотите освоить новые навыки? 📚 У нас есть бесплатные и платные курсы по IT, языкам, дизайну, бизнесу. Какая сфера вас интересует?";
-            } else if (message.includes('зарплат') || message.includes('оклад')) {
-                response = "Вопрос о зарплате очень важен! 💰 Расскажите о вашей профессии и опыте - дам актуальную информацию по рынку Таджикистана.";
-            } else if (message.includes('резюме') || message.includes('cv')) {
-                response = "Составление резюме - это искусство! ✍️ Правильное резюме увеличивает шансы на собеседование в 3 раза. Расскажите о вашей сфере деятельности?";
-            } else {
-                response = "Интересный вопрос! 🤔 Я специализируюсь на помощи с трудоустройством. Могу помочь найти работу, подобрать курсы, составить резюме или рассказать о зарплатах. Что вас больше всего интересует?";
-            }
-        }
-        
-        this.hideTyping();
-        this.addMessage(response, 'bot');
-    }
-    
-    getContextualResponse(message) {
-        for (const [key, response] of Object.entries(this.contextualResponses)) {
-            if (message.includes(key)) {
-                return response;
-            }
-        }
-        return null;
-    }
-    
-    addMessage(text, sender) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${sender}`;
-        messageDiv.textContent = text;
-        
-        this.chatMessages.appendChild(messageDiv);
-        this.scrollToBottom();
-    }
-    
-    showTyping() {
-        this.isTyping = true;
-        this.typingIndicator.style.display = 'block';
-        this.scrollToBottom();
-    }
-    
-    hideTyping() {
-        this.isTyping = false;
-        this.typingIndicator.style.display = 'none';
-    }
-    
-    scrollToBottom() {
-        setTimeout(() => {
-            this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
-        }, 100);
-    }
-    
-    delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-}
-
-// Initialize AI Chat Bot
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Инициализация чат-бота...');
-    const aiChatBot = new AIJobChatBot();
-    console.log('Чат-бот инициализирован:', aiChatBot);
-});
 
 
 
