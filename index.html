@@ -1204,36 +1204,23 @@
         new Chart(ctx1, {
             type: 'bar',
             data: {
-                labels: ['Душанбе', 'Худжанд', 'Куляб', 'Курган-Тюбе', 'ГБАО'],
+                labels: ['Душанбе', 'Согдийская обл.', 'Хатлонская обл.', 'РРП', 'ГБАО'],
                 datasets: [{
-                    label: 'Уровень безработицы (%)',
-                    data: [4.2, 5.8, 7.1, 6.3, 8.9],
-                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                    borderColor: 'rgba(59, 130, 246, 1)',
-                    borderWidth: 1
+                    label: 'Безработица (%)',
+                    data: [5.2, 7.1, 6.3, 4.8, 8.0],
+                    backgroundColor: [
+                        '#6366f1', '#f59e42', '#10b981', '#f43f5e', '#a78bfa'
+                    ]
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 10
-                    }
-                },
                 plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + context.parsed.y + '%';
-                            }
-                        }
-                    }
+                    legend: { display: false },
+                    title: { display: true, text: 'Уровень безработицы по регионам' }
+                },
+                scales: {
+                    y: { beginAtZero: true, max: 10 }
                 }
             }
         });
@@ -1243,42 +1230,20 @@
         new Chart(ctx2, {
             type: 'doughnut',
             data: {
-                labels: ['IT', 'Строительство', 'Торговля', 'Образование', 'Здравоохранение', 'Другие'],
+                labels: ['IT', 'Медицина', 'Образование', 'Строительство', 'Торговля'],
                 datasets: [{
-                    data: [18, 22, 25, 12, 8, 15],
+                    label: 'Популярные профессии',
+                    data: [32, 18, 15, 20, 15],
                     backgroundColor: [
-                        '#3B82F6',
-                        '#10B981',
-                        '#F59E0B',
-                        '#EF4444',
-                        '#8B5CF6',
-                        '#6B7280'
-                    ],
-                    borderColor: '#ffffff',
-                    borderWidth: 2
+                        '#6366f1', '#f59e42', '#10b981', '#f43f5e', '#a78bfa'
+                    ]
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        position: 'right',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed !== null) {
-                                    label += context.parsed + '%';
-                                }
-                                return label;
-                            }
-                        }
-                    }
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'Популярные профессии' }
                 }
             }
         });
@@ -1476,6 +1441,41 @@ const jobAds = [
         city: "Душанбе",
         salary: "2500-4000 сомони",
         label: "Актуальная",
+        labelClass: "bg-blue-100 text-blue-800",
+        desc: "Ведение учета, составление отчетности, работа с налогами..."
+    },
+    {
+        title: "HR-менеджер",
+        company: "HR Group",
+        city: "Согдийская область",
+        salary: "3500-5000 сомони",
+        label: "Новая",
+        labelClass: "bg-green-100 text-green-800",
+        desc: "Поиск и подбор персонала, проведение собеседований..."
+    }
+];
+
+const jobSliderTrack = document.getElementById('jobSliderTrack');
+const prevBtn = document.getElementById('jobSliderPrev');
+const nextBtn = document.getElementById('jobSliderNext');
+let jobSliderIndex = 0;
+const JOBS_PER_SLIDE = 3;
+let isSliding =
+        label: "Новая",
+        labelClass: "bg-green-100 text-green-800",
+        desc: "Поиск и подбор персонала, проведение собеседований..."
+    }
+];
+
+const jobSliderTrack = document.getElementById('jobSliderTrack');
+const prevBtn = document.getElementById('jobSliderPrev');
+const nextBtn = document.getElementById('jobSliderNext');
+let jobSliderIndex = 0;
+const JOBS_PER_SLIDE = 3;
+let isSliding = false;
+
+// Генерация HTML для 3 объявлений
+function renderJobSlide(startIdx)
         labelClass: "bg-blue-100 text-blue-800",
         desc: "Ведение учета, составление отчетности, работа с налогами..."
     },
