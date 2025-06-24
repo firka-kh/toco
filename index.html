@@ -23,19 +23,79 @@
         /* Consistent spacing for sections */
         .section-spacing {
             padding: 3rem 0; /* Increased vertical padding for more breathing room */
-        }
-        /* Basic spinner for loading states */
+        }        /* Basic spinner for loading states */
         .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: #667eea;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-left-color: #ffffff;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }        /* Enhanced loading animation for AI tools */
+        .ai-loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ai-dots {
+            display: inline-flex;
+            gap: 4px;
+        }
+        
+        .ai-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.7);
+            animation: ai-pulse 1.4s ease-in-out infinite both;
+        }
+        
+        .ai-dot:nth-child(1) { animation-delay: -0.32s; }
+        .ai-dot:nth-child(2) { animation-delay: -0.16s; }
+        .ai-dot:nth-child(3) { animation-delay: 0s; }
+        
+        @keyframes ai-pulse {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            border-left: 4px solid #10B981;
+            max-width: 300px;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.error {
+            border-left-color: #EF4444;
+        }
+        
+        .toast.warning {
+            border-left-color: #F59E0B;
         }
 
         /* Ensure canvas elements are responsive within their containers */
@@ -674,49 +734,125 @@
                 </div>
             </div>
         </div>
-    </section>
-
-    <section id="ai-tools" class="section-spacing bg-gray-100">
+    </section>    <section id="ai-tools" class="section-spacing bg-gradient-to-br from-indigo-50 to-purple-50">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">ИИ Инструменты для рынка труда</h2>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">ИИ Инструменты для рынка труда</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Современные ИИ-технологии помогут вам создать привлекательные описания вакансий 
+                    и найти новые карьерные возможности. Попробуйте наши инновационные инструменты!
+                </p>
+            </div>
             <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-                <div class="bg-white rounded-lg p-6 shadow-lg">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-800">✨ Генератор описания вакансии</h3>
+                <div class="bg-white rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-300">
+                    <div class="text-center mb-6">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                            <i class="fas fa-magic text-2xl text-blue-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800">✨ Генератор описания вакансии</h3>
+                        <p class="text-sm text-gray-500 mt-2">ИИ создаст профессиональное описание за несколько секунд</p>
+                    </div>
                     <div class="mb-4">
                         <label for="jobTitleInput" class="block text-sm font-medium text-gray-700 mb-2">Название должности</label>
                         <input type="text" id="jobTitleInput" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Например: Менеджер по продажам">
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label for="jobKeywordsInput" class="block text-sm font-medium text-gray-700 mb-2">Ключевые навыки/обязанности (через запятую)</label>
                         <textarea id="jobKeywordsInput" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Например: активные продажи, CRM, ведение переговоров"></textarea>
                     </div>
-                    <button id="generateJobDescriptionBtn" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors flex items-center justify-center">
+                    <button id="generateJobDescriptionBtn" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center shadow-md">
                         <span id="jobDescriptionLoading" class="hidden spinner mr-2"></span>
-                        ✨ Сгенерировать описание
-                    </button>
-                    <div id="jobDescriptionOutput" class="mt-6 p-4 bg-blue-50 rounded-lg text-gray-800 hidden">
-                        <h4 class="font-semibold mb-2">Сгенерированное описание:</h4>
-                        <p class="text-sm whitespace-pre-wrap"></p>
+                        <i class="fas fa-wand-magic-sparkles mr-2"></i>
+                        <span>Сгенерировать описание</span>
+                    </button>                    <div id="jobDescriptionOutput" class="mt-6 p-4 bg-blue-50 rounded-lg text-gray-800 hidden border border-blue-200">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-semibold flex items-center text-blue-800">
+                                <i class="fas fa-file-alt mr-2"></i>
+                                Сгенерированное описание:
+                            </h4>
+                            <div class="flex space-x-2">
+                                <button id="copyJobDescription" class="text-blue-600 hover:text-blue-800 text-sm" title="Копировать">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button id="clearJobDescription" class="text-gray-500 hover:text-red-600 text-sm" title="Очистить">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-sm whitespace-pre-wrap leading-relaxed"></p>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg p-6 shadow-lg">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-800">✨ Предложение карьерных путей</h3>
+                <div class="bg-white rounded-xl p-6 shadow-lg border border-purple-100 hover:shadow-xl transition-all duration-300">
+                    <div class="text-center mb-6">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
+                            <i class="fas fa-route text-2xl text-purple-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800">✨ Предложение карьерных путей</h3>
+                        <p class="text-sm text-gray-500 mt-2">Персональные рекомендации для развития карьеры</p>
+                    </div>
                     <div class="mb-4">
                         <label for="currentProfessionInput" class="block text-sm font-medium text-gray-700 mb-2">Текущая профессия</label>
                         <input type="text" id="currentProfessionInput" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Например: Учитель">
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label for="careerInterestsInput" class="block text-sm font-medium text-gray-700 mb-2">Интересы (через запятую)</label>
                         <textarea id="careerInterestsInput" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Например: технологии, менеджмент, творчество"></textarea>
                     </div>
-                    <button id="suggestCareerPathsBtn" class="w-full bg-purple-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-600 transition-colors flex items-center justify-center">
+                    <button id="suggestCareerPathsBtn" class="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-3 rounded-lg font-semibold hover:from-purple-600 hover:to-purple-700 transition-all duration-300 flex items-center justify-center shadow-md">
                         <span id="careerPathsLoading" class="hidden spinner mr-2"></span>
-                        ✨ Предложить пути
-                    </button>
-                    <div id="careerPathsOutput" class="mt-6 p-4 bg-purple-50 rounded-lg text-gray-800 hidden">
-                        <h4 class="font-semibold mb-2">Предложенные карьерные пути:</h4>
-                        <p class="text-sm whitespace-pre-wrap"></p>
+                        <i class="fas fa-compass mr-2"></i>
+                        <span>Предложить пути</span>
+                    </button>                    <div id="careerPathsOutput" class="mt-6 p-4 bg-purple-50 rounded-lg text-gray-800 hidden border border-purple-200">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-semibold flex items-center text-purple-800">
+                                <i class="fas fa-map-marked-alt mr-2"></i>
+                                Предложенные карьерные пути:
+                            </h4>
+                            <div class="flex space-x-2">
+                                <button id="copyCareerPaths" class="text-purple-600 hover:text-purple-800 text-sm" title="Копировать">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button id="clearCareerPaths" class="text-gray-500 hover:text-red-600 text-sm" title="Очистить">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-sm whitespace-pre-wrap leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+              <!-- Добавляем секцию с примерами и советами -->
+            <div class="mt-12 max-w-4xl mx-auto">
+                <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="text-lg font-semibold text-gray-800 flex items-center">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                            Советы по использованию ИИ-инструментов
+                        </h4>
+                        <button id="showDemoBtn" class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-600 transition-colors">
+                            <i class="fas fa-play mr-2"></i>Демо
+                        </button>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-medium text-blue-800 mb-2">Генератор вакансий:</h5>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Указывайте точное название должности</li>
+                                <li>• Перечисляйте ключевые навыки через запятую</li>
+                                <li>• Можно использовать технические термины</li>
+                                <li>• Генератор адаптирует описание под рынок РТ</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-medium text-purple-800 mb-2">Карьерные пути:</h5>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Будьте честны в текущей профессии</li>
+                                <li>• Опишите реальные интересы и увлечения</li>
+                                <li>• Рассмотрите смежные области деятельности</li>
+                                <li>• Используйте рекомендации для планирования</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1399,6 +1535,749 @@ function updateArrowVisibility() {
 }
 window.addEventListener('resize', updateArrowVisibility);
 updateArrowVisibility();
+
+// ИИ Инструменты для рынка труда
+class AIJobTools {
+    constructor() {
+        this.initializeJobDescriptionGenerator();
+        this.initializeCareerPathSuggester();
+    }    // Данные для генерации описаний вакансий
+    jobTemplates = {
+        'менеджер': {
+            base: 'Ищем активного и целеустремленного менеджера',
+            responsibilities: [
+                'Развитие и поддержание отношений с клиентами',
+                'Планирование и достижение поставленных целей',
+                'Участие в разработке стратегии развития',
+                'Подготовка отчетов и анализ показателей',
+                'Координация работы с различными отделами'
+            ],
+            requirements: [
+                'Высшее образование',
+                'Опыт работы от 2 лет',
+                'Знание ПК (MS Office)',
+                'Коммуникативные навыки',
+                'Ответственность и инициативность'
+            ]
+        },
+        'программист': {
+            base: 'В IT-компанию требуется опытный программист',
+            responsibilities: [
+                'Разработка и поддержка программных решений',
+                'Написание чистого и документированного кода',
+                'Участие в код-ревью и технических обсуждениях',
+                'Тестирование и отладка приложений',
+                'Работа в команде разработчиков'
+            ],
+            requirements: [
+                'Высшее техническое образование',
+                'Опыт программирования от 3 лет',
+                'Знание современных языков программирования',
+                'Понимание принципов ООП',
+                'Опыт работы с базами данных'
+            ]
+        },
+        'учитель': {
+            base: 'В образовательное учреждение требуется квалифицированный учитель',
+            responsibilities: [
+                'Проведение уроков согласно учебной программе',
+                'Подготовка и проверка контрольных работ',
+                'Работа с родителями и классное руководство',
+                'Участие в методических объединениях',
+                'Повышение квалификации и саморазвитие'
+            ],
+            requirements: [
+                'Высшее педагогическое образование',
+                'Знание предметной области',
+                'Опыт работы с детьми',
+                'Коммуникативные навыки',
+                'Терпение и креативность'
+            ]
+        },
+        'водитель': {
+            base: 'Транспортной компании требуется ответственный водитель',
+            responsibilities: [
+                'Безопасная перевозка пассажиров/грузов',
+                'Соблюдение правил дорожного движения',
+                'Контроль технического состояния автомобиля',
+                'Ведение путевых листов и документации',
+                'Поддержание чистоты транспортного средства'
+            ],
+            requirements: [
+                'Водительские права категории B/C/D',
+                'Опыт вождения от 3 лет',
+                'Знание города и маршрутов',
+                'Ответственность и пунктуальность',
+                'Отсутствие нарушений ПДД'
+            ]
+        },
+        'бухгалтер': {
+            base: 'В финансовую компанию требуется опытный бухгалтер',
+            responsibilities: [
+                'Ведение бухгалтерского учета организации',
+                'Составление первичных документов и отчетности',
+                'Расчет налогов и взносов',
+                'Работа с банковскими операциями',
+                'Контроль за соблюдением финансовой дисциплины'
+            ],
+            requirements: [
+                'Высшее экономическое образование',
+                'Знание 1С:Бухгалтерии',
+                'Опыт работы от 2 лет',
+                'Знание налогового законодательства РТ',
+                'Внимательность и ответственность'
+            ]
+        },
+        'дизайнер': {
+            base: 'В креативное агентство требуется талантливый дизайнер',
+            responsibilities: [
+                'Создание графических материалов и макетов',
+                'Разработка фирменного стиля и логотипов',
+                'Работа над печатной и веб-продукцией',
+                'Взаимодействие с клиентами и командой',
+                'Презентация концепций и проектов'
+            ],
+            requirements: [
+                'Профильное образование в области дизайна',
+                'Владение Adobe Creative Suite',
+                'Портфолио выполненных работ',
+                'Креативность и художественный вкус',
+                'Умение работать в сжатые сроки'
+            ]
+        },
+        'продавец': {
+            base: 'В торговую сеть требуется активный продавец-консультант',
+            responsibilities: [
+                'Консультирование покупателей по товарам',
+                'Работа с кассовым аппаратом',
+                'Выкладка и презентация товара',
+                'Достижение плановых показателей продаж',
+                'Поддержание порядка в торговом зале'
+            ],
+            requirements: [
+                'Среднее или высшее образование',
+                'Коммуникативные навыки',
+                'Стрессоустойчивость',
+                'Ответственность и честность',
+                'Желание работать с людьми'
+            ]
+        }
+    };    // Данные для карьерных путей
+    careerPaths = {
+        'учитель': {
+            paths: [
+                {
+                    title: 'Образовательные технологии',
+                    description: 'Переход в сферу EdTech - разработка образовательных платформ и курсов',
+                    steps: ['Изучение цифровых инструментов', 'Курсы по дизайну обучения', 'Создание онлайн-курсов']
+                },
+                {
+                    title: 'Управление образованием',
+                    description: 'Карьерный рост до завуча, директора школы или специалиста министерства',
+                    steps: ['Курсы менеджмента', 'Магистратура по управлению', 'Опыт административной работы']
+                },
+                {
+                    title: 'Корпоративное обучение',
+                    description: 'Работа тренером или специалистом по развитию персонала в компаниях',
+                    steps: ['Изучение бизнес-процессов', 'Сертификация тренера', 'Опыт работы с взрослыми']
+                }
+            ]
+        },
+        'программист': {
+            paths: [
+                {
+                    title: 'Техническое лидерство',
+                    description: 'Развитие в роли тимлида, архитектора или CTO',
+                    steps: ['Менеджмент команд', 'Системное мышление', 'Бизнес-понимание']
+                },
+                {
+                    title: 'Продуктовое направление',
+                    description: 'Переход в продуктовые роли - Product Manager, Product Owner',
+                    steps: ['Изучение UX/UI', 'Аналитические навыки', 'Работа с пользователями']
+                },
+                {
+                    title: 'Предпринимательство',
+                    description: 'Создание собственного IT-продукта или стартапа',
+                    steps: ['Бизнес-планирование', 'Поиск инвестиций', 'Команда и нетворкинг']
+                }
+            ]
+        },
+        'менеджер': {
+            paths: [
+                {
+                    title: 'Высшее руководство',
+                    description: 'Развитие до позиций топ-менеджмента - директор, CEO',
+                    steps: ['MBA или аналогичное образование', 'Опыт P&L управления', 'Стратегическое мышление']
+                },
+                {
+                    title: 'Консалтинг',
+                    description: 'Переход в управленческий консалтинг',
+                    steps: ['Специализация в отрасли', 'Сертификации консультанта', 'Портфолио проектов']
+                },
+                {
+                    title: 'Собственный бизнес',
+                    description: 'Создание и развитие собственной компании',
+                    steps: ['Изучение предпринимательства', 'Бизнес-план', 'Поиск финансирования']
+                }
+            ]
+        },
+        'бухгалтер': {
+            paths: [
+                {
+                    title: 'Финансовое управление',
+                    description: 'Карьерный рост до финансового директора или главного бухгалтера',
+                    steps: ['Сертификация ACCA/CPA', 'Управленческие навыки', 'Стратегическое планирование']
+                },
+                {
+                    title: 'Аудит и консалтинг',
+                    description: 'Переход в аудиторские компании или финансовый консалтинг',
+                    steps: ['Аудиторская лицензия', 'Международные стандарты', 'Клиентский сервис']
+                },
+                {
+                    title: 'FinTech направление',
+                    description: 'Работа в финтех-стартапах и цифровых банках',
+                    steps: ['Изучение IT-технологий', 'Блокчейн и криптовалюты', 'Цифровые платежи']
+                }
+            ]
+        },
+        'дизайнер': {
+            paths: [
+                {
+                    title: 'UX/UI дизайн',
+                    description: 'Специализация на пользовательском опыте и интерфейсах',
+                    steps: ['Изучение пользовательского опыта', 'Прототипирование', 'Тестирование интерфейсов']
+                },
+                {
+                    title: 'Арт-директор',
+                    description: 'Руководство креативными проектами и командами',
+                    steps: ['Лидерские навыки', 'Управление проектами', 'Стратегическое мышление']
+                },
+                {
+                    title: 'Фриланс и агентство',
+                    description: 'Создание собственной дизайн-студии или работа на фрилансе',
+                    steps: ['Портфолио и бренд', 'Клиентская база', 'Бизнес-навыки']
+                }
+            ]
+        },
+        'продавец': {
+            paths: [
+                {
+                    title: 'Менеджмент продаж',
+                    description: 'Карьерный рост до руководителя отдела продаж',
+                    steps: ['Курсы по продажам', 'Управление командой', 'Аналитика продаж']
+                },
+                {
+                    title: 'Маркетинг',
+                    description: 'Переход в маркетинговое направление',
+                    steps: ['Цифровой маркетинг', 'Исследование рынка', 'Брендинг']
+                },
+                {
+                    title: 'Интернет-торговля',
+                    description: 'Развитие в сфере электронной коммерции',
+                    steps: ['E-commerce платформы', 'Интернет-маркетинг', 'Логистика']
+                }
+            ]
+        },
+        'водитель': {
+            paths: [
+                {
+                    title: 'Логистика и управление',
+                    description: 'Переход в логистическое планирование и управление',
+                    steps: ['Курсы логистики', 'Планирование маршрутов', 'Управление автопарком']
+                },
+                {
+                    title: 'Автосервис',
+                    description: 'Открытие собственного автосервиса или станции ТО',
+                    steps: ['Техническое обучение', 'Бизнес-планирование', 'Сертификация услуг']
+                },
+                {
+                    title: 'Инструктор вождения',
+                    description: 'Обучение других водителей в автошколах',
+                    steps: ['Инструкторские курсы', 'Педагогические навыки', 'Лицензирование']
+                }
+            ]
+        }
+    };
+
+    initializeJobDescriptionGenerator() {
+        const generateBtn = document.getElementById('generateJobDescriptionBtn');
+        const loading = document.getElementById('jobDescriptionLoading');
+        const output = document.getElementById('jobDescriptionOutput');
+        const jobTitleInput = document.getElementById('jobTitleInput');
+        const jobKeywordsInput = document.getElementById('jobKeywordsInput');
+
+        if (!generateBtn) return;
+
+        generateBtn.addEventListener('click', async () => {
+            const jobTitle = jobTitleInput.value.trim();
+            const keywords = jobKeywordsInput.value.trim();            if (!jobTitle) {
+                this.showToast('Пожалуйста, введите название должности', 'error');
+                return;
+            }// Показываем процесс загрузки
+            generateBtn.disabled = true;
+            loading.classList.remove('hidden');
+            const originalText = generateBtn.querySelector('span:last-child').textContent;
+            output.classList.add('hidden');
+
+            // Симуляция работы ИИ с этапами
+            await this.simulateAIGeneration(jobTitle, keywords, output);
+
+            // Скрываем загрузку
+            loading.classList.add('hidden');
+            generateBtn.disabled = false;
+            generateBtn.querySelector('span:last-child').textContent = originalText;
+        });
+    }    async simulateAIGeneration(jobTitle, keywords, output) {
+        const stages = [
+            'Анализирую должность...',
+            'Изучаю требования рынка...',
+            'Подбираю ключевые навыки...',
+            'Формирую описание...',
+            'Финализирую текст...'
+        ];
+
+        const button = document.getElementById('generateJobDescriptionBtn');
+        const buttonText = button.querySelector('span:last-child');
+        const loadingSpinner = document.getElementById('jobDescriptionLoading');
+
+        // Показываем анимацию загрузки
+        loadingSpinner.innerHTML = `
+            <div class="ai-loading">
+                <div class="spinner"></div>
+                <div class="ai-dots">
+                    <div class="ai-dot"></div>
+                    <div class="ai-dot"></div>
+                    <div class="ai-dot"></div>
+                </div>
+            </div>
+        `;
+
+        // Проходим через этапы
+        for (let i = 0; i < stages.length; i++) {
+            buttonText.textContent = stages[i];
+            await this.delay(800 + Math.random() * 600); // 800-1400ms на этап
+        }
+
+        // Генерируем реалистичное описание
+        const description = this.generateJobDescription(jobTitle, keywords);
+          // Показываем результат с эффектом печатания
+        output.classList.remove('hidden');
+        const outputText = output.querySelector('p');
+        outputText.textContent = '';        await this.typeText(outputText, description, 30); // Печатаем со скоростью 30ms/символ
+        
+        // Подсвечиваем результат и прокручиваем к нему
+        this.highlightResult(output);
+        this.scrollToResult(output);
+        this.playNotificationSound();
+        this.showToast('Описание вакансии сгенерировано! ✨');
+    }
+
+    generateJobDescription(jobTitle, keywords) {
+        const title = jobTitle.toLowerCase();
+        let template = null;
+
+        // Найдем подходящий шаблон
+        for (const key in this.jobTemplates) {
+            if (title.includes(key)) {
+                template = this.jobTemplates[key];
+                break;
+            }
+        }
+
+        // Если шаблон не найден, используем универсальный
+        if (!template) {
+            template = {
+                base: `Компания ищет квалифицированного специалиста на позицию ${jobTitle}`,
+                responsibilities: [
+                    'Выполнение основных рабочих обязанностей',
+                    'Соблюдение стандартов качества работы',
+                    'Взаимодействие с коллегами и клиентами',
+                    'Участие в рабочих процессах компании',
+                    'Повышение профессиональных навыков'
+                ],
+                requirements: [
+                    'Соответствующее образование',
+                    'Опыт работы в данной сфере',
+                    'Профессиональные навыки',
+                    'Коммуникативные способности',
+                    'Ответственность и надежность'
+                ]
+            };
+        }
+
+        // Интегрируем ключевые слова
+        let keywordsList = [];
+        if (keywords) {
+            keywordsList = keywords.split(',').map(k => k.trim()).filter(k => k.length > 0);
+        }
+
+        let description = `${template.base}.\n\n`;
+        description += `**Обязанности:**\n`;
+        template.responsibilities.forEach(resp => {
+            description += `• ${resp}\n`;
+        });
+
+        if (keywordsList.length > 0) {
+            description += `• Работа с: ${keywordsList.join(', ')}\n`;
+        }
+
+        description += `\n**Требования:**\n`;
+        template.requirements.forEach(req => {
+            description += `• ${req}\n`;
+        });
+
+        if (keywordsList.length > 0) {
+            description += `• Знание/опыт работы с: ${keywordsList.join(', ')}\n`;
+        }
+
+        description += `\n**Мы предлагаем:**\n`;
+        description += `• Конкурентную заработную плату\n`;
+        description += `• Официальное трудоустройство\n`;
+        description += `• Возможности профессионального развития\n`;
+        description += `• Дружный коллектив\n`;
+        description += `• Стабильную занятость\n\n`;
+        description += `Отправляйте резюме на нашу электронную почту или звоните по указанному телефону.`;
+
+        return description;
+    }
+
+    initializeCareerPathSuggester() {
+        const suggestBtn = document.getElementById('suggestCareerPathsBtn');
+        const loading = document.getElementById('careerPathsLoading');
+        const output = document.getElementById('careerPathsOutput');
+        const currentProfessionInput = document.getElementById('currentProfessionInput');
+        const careerInterestsInput = document.getElementById('careerInterestsInput');
+
+        if (!suggestBtn) return;
+
+        suggestBtn.addEventListener('click', async () => {
+            const currentProfession = currentProfessionInput.value.trim();
+            const interests = careerInterestsInput.value.trim();            if (!currentProfession) {
+                this.showToast('Пожалуйста, введите текущую профессию', 'error');
+                return;
+            }// Показываем процесс загрузки
+            suggestBtn.disabled = true;
+            loading.classList.remove('hidden');
+            const originalText = suggestBtn.querySelector('span:last-child').textContent;
+            output.classList.add('hidden');
+
+            // Симуляция анализа карьерных путей
+            await this.simulateCareerAnalysis(currentProfession, interests, output);
+
+            // Скрываем загрузку
+            loading.classList.add('hidden');
+            suggestBtn.disabled = false;
+            suggestBtn.querySelector('span:last-child').textContent = originalText;
+        });
+    }    async simulateCareerAnalysis(profession, interests, output) {
+        const stages = [
+            'Анализирую вашу профессию...',
+            'Изучаю рынок труда...',
+            'Учитываю ваши интересы...',
+            'Ищу подходящие направления...',
+            'Составляю рекомендации...'
+        ];
+
+        const button = document.getElementById('suggestCareerPathsBtn');
+        const buttonText = button.querySelector('span:last-child');
+        const loadingSpinner = document.getElementById('careerPathsLoading');
+
+        // Показываем анимацию загрузки
+        loadingSpinner.innerHTML = `
+            <div class="ai-loading">
+                <div class="spinner"></div>
+                <div class="ai-dots">
+                    <div class="ai-dot"></div>
+                    <div class="ai-dot"></div>
+                    <div class="ai-dot"></div>
+                </div>
+            </div>
+        `;
+
+        // Проходим через этапы анализа
+        for (let i = 0; i < stages.length; i++) {
+            buttonText.textContent = stages[i];
+            await this.delay(700 + Math.random() * 500);
+        }
+
+        // Генерируем карьерные пути
+        const suggestions = this.generateCareerPaths(profession, interests);
+          // Показываем результат
+        output.classList.remove('hidden');
+        const outputText = output.querySelector('p');
+        outputText.textContent = '';        await this.typeText(outputText, suggestions, 25);
+        
+        // Подсвечиваем результат и прокручиваем к нему
+        this.highlightResult(output);
+        this.scrollToResult(output);
+        this.playNotificationSound();
+        this.showToast('Карьерные пути предложены! 🚀');
+    }
+
+    generateCareerPaths(profession, interests) {
+        const prof = profession.toLowerCase();
+        let relevantPaths = [];
+
+        // Найдем подходящие пути
+        for (const key in this.careerPaths) {
+            if (prof.includes(key)) {
+                relevantPaths = this.careerPaths[key].paths;
+                break;
+            }
+        }
+
+        // Если специфичные пути не найдены, создаем универсальные
+        if (relevantPaths.length === 0) {
+            relevantPaths = [
+                {
+                    title: 'Управленческое направление',
+                    description: `Развитие руководящих навыков в сфере ${profession}`,
+                    steps: ['Курсы менеджмента', 'Опыт руководства проектами', 'Развитие лидерских качеств']
+                },
+                {
+                    title: 'Экспертное направление',
+                    description: `Углубление экспертизы и консультирование в области ${profession}`,
+                    steps: ['Специализированные сертификации', 'Участие в конференциях', 'Наставничество коллег']
+                },
+                {
+                    title: 'Предпринимательское направление',
+                    description: `Создание собственного бизнеса в сфере ${profession}`,
+                    steps: ['Бизнес-планирование', 'Изучение рынка', 'Поиск инвестиций']
+                }
+            ];
+        }
+
+        // Учитываем интересы пользователя
+        const interestsList = interests ? interests.split(',').map(i => i.trim()).filter(i => i.length > 0) : [];
+        
+        let response = `На основе анализа вашей профессии "${profession}"`;
+        if (interestsList.length > 0) {
+            response += ` и ваших интересов (${interestsList.join(', ')})`;
+        }
+        response += `, рекомендую следующие карьерные пути:\n\n`;
+
+        relevantPaths.forEach((path, index) => {
+            response += `**${index + 1}. ${path.title}**\n`;
+            response += `${path.description}\n\n`;
+            response += `Необходимые шаги:\n`;
+            path.steps.forEach(step => {
+                response += `• ${step}\n`;
+            });
+            response += `\n`;
+        });
+
+        if (interestsList.length > 0) {
+            response += `**Дополнительные рекомендации:**\n`;
+            response += `Учитывая ваши интересы к ${interestsList.join(', ')}, рекомендую:\n`;
+            response += `• Изучить смежные области, связанные с данными интересами\n`;
+            response += `• Пройти профориентационное тестирование\n`;
+            response += `• Найти ментора в интересующей области\n`;
+            response += `• Посетить мероприятия и нетворкинги по данным направлениям\n\n`;
+        }
+
+        response += `**Полезные ресурсы:**\n`;
+        response += `• Портал профессиональной переподготовки РТ\n`;
+        response += `• Центры карьерного консультирования\n`;
+        response += `• Онлайн-платформы для обучения\n`;
+        response += `• Профессиональные ассоциации\n\n`;
+        response += `Удачи в развитии карьеры! 🚀`;
+
+        return response;
+    }
+
+    // Утилиты
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }    async typeText(element, text, speed = 50) {
+        for (let i = 0; i < text.length; i++) {
+            element.textContent += text.charAt(i);
+            await this.delay(speed);
+        }
+    }
+
+    // Добавляем функцию для подсветки результата
+    highlightResult(element) {
+        element.classList.add('animate-pulse');
+        setTimeout(() => {
+            element.classList.remove('animate-pulse');
+        }, 1000);
+    }    // Добавляем функцию для прокрутки к результату
+    scrollToResult(element) {
+        setTimeout(() => {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 500);
+    }
+
+    // Звуковые уведомления
+    playNotificationSound() {
+        // Создаем простой звуковой сигнал
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            oscillator.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
+            
+            gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        } catch (e) {            // Если Web Audio API не поддерживается, ничего не делаем
+            console.log('Web Audio API не поддерживается');
+        }
+    }
+
+    // Toast уведомления
+    showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icon = type === 'success' ? 'check-circle' : 
+                    type === 'error' ? 'exclamation-circle' : 'info-circle';
+        const color = type === 'success' ? 'text-green-600' : 
+                     type === 'error' ? 'text-red-600' : 'text-yellow-600';
+        
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas fa-${icon} ${color} mr-3"></i>
+                <div class="text-sm text-gray-800">${message}</div>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Показываем уведомление
+        setTimeout(() => toast.classList.add('show'), 100);
+        
+        // Скрываем через 3 секунды
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => document.body.removeChild(toast), 300);
+        }, 3000);
+    }
+}
+
+// Инициализация ИИ инструментов
+document.addEventListener('DOMContentLoaded', function() {
+    const aiTools = new AIJobTools();
+    window.aiToolsInstance = aiTools; // Сохраняем ссылку для доступа из других функций
+    
+    // Обработчики для кнопок копирования и очистки
+    const copyJobDescBtn = document.getElementById('copyJobDescription');
+    const clearJobDescBtn = document.getElementById('clearJobDescription');
+    const copyCareerBtn = document.getElementById('copyCareerPaths');
+    const clearCareerBtn = document.getElementById('clearCareerPaths');
+      if (copyJobDescBtn) {
+        copyJobDescBtn.addEventListener('click', function() {
+            const text = document.querySelector('#jobDescriptionOutput p').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                this.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-copy"></i>';
+                }, 2000);
+                // Используем экземпляр класса для показа toast
+                window.aiToolsInstance?.showToast('Описание скопировано в буфер обмена!');
+            }).catch(() => {
+                window.aiToolsInstance?.showToast('Ошибка копирования', 'error');
+            });
+        });
+    }
+    
+    if (clearJobDescBtn) {
+        clearJobDescBtn.addEventListener('click', function() {
+            document.getElementById('jobDescriptionOutput').classList.add('hidden');
+            document.getElementById('jobTitleInput').value = '';
+            document.getElementById('jobKeywordsInput').value = '';
+        });
+    }
+      if (copyCareerBtn) {
+        copyCareerBtn.addEventListener('click', function() {
+            const text = document.querySelector('#careerPathsOutput p').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                this.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-copy"></i>';
+                }, 2000);
+                window.aiToolsInstance?.showToast('Карьерные пути скопированы в буфер обмена!');
+            }).catch(() => {
+                window.aiToolsInstance?.showToast('Ошибка копирования', 'error');
+            });
+        });
+    }
+      if (clearCareerBtn) {
+        clearCareerBtn.addEventListener('click', function() {
+            document.getElementById('careerPathsOutput').classList.add('hidden');
+            document.getElementById('currentProfessionInput').value = '';
+            document.getElementById('careerInterestsInput').value = '';
+        });
+    }
+      // Демо-режим
+    const showDemoBtn = document.getElementById('showDemoBtn');
+    if (showDemoBtn) {        showDemoBtn.addEventListener('click', async function() {
+            window.aiToolsInstance?.showToast('Запускаем демо-режим...', 'warning');
+            
+            this.disabled = true;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Демо...';
+            
+            // Функция для печатания текста в поле
+            const typeInField = async (field, text, speed = 100) => {
+                field.value = '';
+                field.focus();
+                for (let i = 0; i < text.length; i++) {
+                    field.value += text.charAt(i);
+                    await new Promise(resolve => setTimeout(resolve, speed));
+                }
+            };
+            
+            // Демо для генератора вакансий
+            const jobTitleInput = document.getElementById('jobTitleInput');
+            const jobKeywordsInput = document.getElementById('jobKeywordsInput');
+            const generateBtn = document.getElementById('generateJobDescriptionBtn');
+            
+            // Очищаем предыдущие результаты
+            document.getElementById('jobDescriptionOutput').classList.add('hidden');
+            document.getElementById('careerPathsOutput').classList.add('hidden');
+            
+            // Прокручиваем к ИИ секции
+            document.getElementById('ai-tools').scrollIntoView({ behavior: 'smooth' });
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await typeInField(jobTitleInput, 'Программист Java');
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await typeInField(jobKeywordsInput, 'Spring Boot, PostgreSQL, REST API, Git');
+            
+            // Имитируем нажатие кнопки
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            generateBtn.click();
+            
+            // Через 8 секунд демо для карьерных путей
+            setTimeout(async () => {
+                const professionInput = document.getElementById('currentProfessionInput');
+                const interestsInput = document.getElementById('careerInterestsInput');
+                const suggestBtn = document.getElementById('suggestCareerPathsBtn');
+                
+                await typeInField(professionInput, 'Учитель');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await typeInField(interestsInput, 'технологии, онлайн-обучение, менеджмент');
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                suggestBtn.click();
+                
+                // Восстанавливаем кнопку демо
+                setTimeout(() => {
+                    this.disabled = false;
+                    this.innerHTML = '<i class="fas fa-play mr-2"></i>Демо';
+                }, 8000);
+            }, 8000);
+        });
+    }
+});
 
     </script>
 </body>
