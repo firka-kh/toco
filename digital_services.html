@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цифровые госуслуги - TOCO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown a:hover {
+            background-color: #f8f9fa;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .lang-switch {
+            display: flex;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .lang-switch button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .lang-switch button.active {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            border-left: 5px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card.employment {
+            border-left-color: #4CAF50;
+        }
+
+        .service-card.documents {
+            border-left-color: #2196F3;
+        }
+
+        .service-card.benefits {
+            border-left-color: #FF9800;
+        }
+
+        .service-card.education {
+            border-left-color: #9C27B0;
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .service-icon.employment { background: #4CAF50; }
+        .service-icon.documents { background: #2196F3; }
+        .service-icon.benefits { background: #FF9800; }
+        .service-icon.education { background: #9C27B0; }
+
+        .service-title {
+            font-size: 1.4rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .service-description {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .service-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .service-features i {
+            color: #4CAF50;
+            width: 16px;
+        }
+
+        .service-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .integration-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .integration-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .integration-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .integration-item:hover {
+            background: #e9ecef;
+        }
+
+        .integration-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+
+        .integration-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .integration-desc {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .status-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .status-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .status-item {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .status-item.active {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+
+        .status-item.pending {
+            background: linear-gradient(135deg, #FF9800 0%, #f57c00 100%);
+        }
+
+        .status-item.completed {
+            background: linear-gradient(135deg, #2196F3 0%, #1976d2 100%);
+        }
+
+        .status-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .quick-actions {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .quick-actions-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 2rem 1rem;
+            background: #f8f9fa;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            border-color: #667eea;
+            background: #fff;
+            transform: translateY(-2px);
+        }
+
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        .action-text {
+            text-align: center;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .integration-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .service-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-briefcase"></i>
+                TOCO
+            </a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="serchwork.html" class="nav-link">
+                        <i class="fas fa-search"></i>
+                        Поиск работы
+                    </a>
+                    <div class="dropdown">
+                        <a href="serchwork.html">Все вакансии</a>
+                        <a href="skill_serch.html">Поиск по навыкам</a>
+                        <a href="salary_calculator.html">Калькулятор зарплат</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="employer_profile.html" class="nav-link">
+                        <i class="fas fa-building"></i>
+                        Работодателям
+                    </a>
+                    <div class="dropdown">
+                        <a href="employer_profile.html">Профиль компании</a>
+                        <a href="employer_dashboard.html">Панель управления</a>
+                        <a href="employer_anons_work.html">Разместить вакансию</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="gov_pg.html" class="nav-link">
+                        <i class="fas fa-university"></i>
+                        Госуслуги
+                    </a>
+                    <div class="dropdown">
+                        <a href="digital_services.html">Цифровые услуги</a>
+                        <a href="gov_pg.html">Государственные программы</a>
+                        <a href="social_programs.html">Социальные программы</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="ai_career_consultant.html" class="nav-link">
+                        <i class="fas fa-robot"></i>
+                        AI-Консультант
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                </li>
+            </ul>
+
+            <div class="user-actions">
+                <div class="lang-switch">
+                    <button class="active">RU</button>
+                    <button>EN</button>
+                    <button>UZ</button>
+                </div>
+                <a href="register.html" class="btn">Войти</a>
+            </div>
+
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h1 class="page-title">Цифровые госуслуги</h1>
+            <p class="page-subtitle">
+                Онлайн-сервисы для трудоустройства, получения документов и государственной поддержки
+            </p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card employment">
+                <div class="service-header">
+                    <div class="service-icon employment">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="service-title">Содействие трудоустройству</div>
+                </div>
+                <div class="service-description">
+                    Получите официальную поддержку в поиске работы через государственные службы занятости
+                </div>
+                <ul class="service-features">
+                    <li><i class="fas fa-check"></i> Регистрация в качестве соискателя</li>
+                    <li><i class="fas fa-check"></i> Доступ к государственным вакансиям</li>
+                    <li><i class="fas fa-check"></i> Бесплатные курсы переквалификации</li>
+                    <li><i class="fas fa-check"></i> Консультации по трудоустройству</li>
+                    <li><i class="fas fa-check"></i> Помощь в составлении резюме</li>
+                </ul>
+                <div class="service-actions">
+                    <a href="#" class="btn">
+                        <i class="fas fa-user-plus"></i>
+                        Зарегистрироваться
+                    </a>
+                    <a href="#" class="btn-outline btn">
+                        <i class="fas fa-info-circle"></i>
+                        Подробнее
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card documents">
+                <div class="service-header">
+                    <div class="service-icon documents">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="service-title">Трудовые документы</div>
+                </div>
+                <div class="service-description">
+                    Оформление и получение необходимых документов для трудоустройства в электронном виде
+                </div>
+                <ul class="service-features">
+                    <li><i class="fas fa-check"></i> Справка о трудовом стаже</li>
+                    <li><i class="fas fa-check"></i> Справка о зарплате</li>
+                    <li><i class="fas fa-check"></i> Выписка из трудовой книжки</li>
+                    <li><i class="fas fa-check"></i> Справка об отсутствии судимости</li>
+                    <li><i class="fas fa-check"></i> Медицинские справки</li>
+                </ul>
+                <div class="service-actions">
+                    <a href="#" class="btn">
+                        <i class="fas fa-download"></i>
+                        Заказать справку
+                    </a>
+                    <a href="#" class="btn-outline btn">
+                        <i class="fas fa-list"></i>
+                        Все документы
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card benefits">
+                <div class="service-header">
+                    <div class="service-icon benefits">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <div class="service-title">Пособия и льготы</div>
+                </div>
+                <div class="service-description">
+                    Подача заявлений на получение социальных пособий и льгот для безработных
+                </div>
+                <ul class="service-features">
+                    <li><i class="fas fa-check"></i> Пособие по безработице</li>
+                    <li><i class="fas fa-check"></i> Единовременная помощь</li>
+                    <li><i class="fas fa-check"></i> Льготы на обучение</li>
+                    <li><i class="fas fa-check"></i> Субсидии молодым специалистам</li>
+                    <li><i class="fas fa-check"></i> Поддержка предпринимательства</li>
+                </ul>
+                <div class="service-actions">
+                    <a href="#" class="btn btn-secondary">
+                        <i class="fas fa-clipboard-check"></i>
+                        Подать заявление
+                    </a>
+                    <a href="#" class="btn-outline btn">
+                        <i class="fas fa-calculator"></i>
+                        Рассчитать пособие
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card education">
+                <div class="service-header">
+                    <div class="service-icon education">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="service-title">Образование и курсы</div>
+                </div>
+                <div class="service-description">
+                    Бесплатные государственные программы обучения и повышения квалификации
+                </div>
+                <ul class="service-features">
+                    <li><i class="fas fa-check"></i> Курсы IT и цифровых навыков</li>
+                    <li><i class="fas fa-check"></i> Языковые программы</li>
+                    <li><i class="fas fa-check"></i> Профессиональная переподготовка</li>
+                    <li><i class="fas fa-check"></i> Предпринимательские навыки</li>
+                    <li><i class="fas fa-check"></i> Сертификация компетенций</li>
+                </ul>
+                <div class="service-actions">
+                    <a href="#" class="btn">
+                        <i class="fas fa-book-open"></i>
+                        Записаться на курс
+                    </a>
+                    <a href="#" class="btn-outline btn">
+                        <i class="fas fa-search"></i>
+                        Найти программу
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="integration-section">
+            <h2 class="integration-title">
+                <i class="fas fa-link"></i>
+                Интеграция с государственными системами
+            </h2>
+            <div class="integration-grid">
+                <div class="integration-item">
+                    <div class="integration-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <div class="integration-name">MyGov.uz</div>
+                    <div class="integration-desc">Единая система государственных услуг</div>
+                </div>
+                <div class="integration-item">
+                    <div class="integration-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="integration-name">Служба занятости</div>
+                    <div class="integration-desc">Министерство занятости и трудовых отношений</div>
+                </div>
+                <div class="integration-item">
+                    <div class="integration-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="integration-name">Минобразования</div>
+                    <div class="integration-desc">Система образовательных учреждений</div>
+                </div>
+                <div class="integration-item">
+                    <div class="integration-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="integration-name">Соцзащита</div>
+                    <div class="integration-desc">Министерство социальной защиты</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-section">
+            <h2 class="status-title">
+                <i class="fas fa-chart-bar"></i>
+                Статистика услуг
+            </h2>
+            <div class="status-grid">
+                <div class="status-item active">
+                    <div class="status-number">2,847</div>
+                    <div class="status-label">Активных заявлений</div>
+                </div>
+                <div class="status-item completed">
+                    <div class="status-number">15,234</div>
+                    <div class="status-label">Выданных документов</div>
+                </div>
+                <div class="status-item pending">
+                    <div class="status-number">456</div>
+                    <div class="status-label">На рассмотрении</div>
+                </div>
+                <div class="status-item active">
+                    <div class="status-number">89%</div>
+                    <div class="status-label">Довольных клиентов</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <h2 class="quick-actions-title">
+                <i class="fas fa-bolt"></i>
+                Быстрые действия
+            </h2>
+            <div class="actions-grid">
+                <a href="#" class="action-btn">
+                    <div class="action-icon">
+                        <i class="fas fa-file-download"></i>
+                    </div>
+                    <div class="action-text">Скачать справку о стаже</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="action-text">Проверить статус заявления</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="action-text">Записаться на прием</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <div class="action-text">Получить консультацию</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="action-text">Рассчитать пособие</div>
+                </a>
+                <a href="#" class="action-btn">
+                    <div class="action-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="action-text">Найти курсы</div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Мобильное меню
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Языковой переключатель
+        document.querySelectorAll('.lang-switch button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Анимация карточек при загрузке
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.service-card, .integration-item, .status-item');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Анимация счетчиков
+        function animateCounters() {
+            const counters = document.querySelectorAll('.status-number');
+            counters.forEach(counter => {
+                const target = counter.textContent;
+                let currentValue = 0;
+                const increment = target.replace(/[^\d]/g, '') / 100;
+                
+                const timer = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= target.replace(/[^\d]/g, '')) {
+                        clearInterval(timer);
+                        counter.textContent = target;
+                    } else {
+                        if (target.includes('%')) {
+                            counter.textContent = Math.floor(currentValue) + '%';
+                        } else {
+                            counter.textContent = Math.floor(currentValue).toLocaleString();
+                        }
+                    }
+                }, 50);
+            });
+        }
+
+        // Запуск анимации счетчиков при прокрутке к секции
+        const statusSection = document.querySelector('.status-section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        if (statusSection) {
+            observer.observe(statusSection);
+        }
+    </script>
+</body>
+</html>

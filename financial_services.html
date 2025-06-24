@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Финансовые сервисы - TOCO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown a:hover {
+            background-color: #f8f9fa;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .lang-switch {
+            display: flex;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .lang-switch button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .lang-switch button.active {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            border-left: 5px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card.loans {
+            border-left-color: #28a745;
+        }
+
+        .service-card.insurance {
+            border-left-color: #007bff;
+        }
+
+        .service-card.investments {
+            border-left-color: #ffc107;
+        }
+
+        .service-card.banking {
+            border-left-color: #dc3545;
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .service-icon.loans { background: #28a745; }
+        .service-icon.insurance { background: #007bff; }
+        .service-icon.investments { background: #ffc107; color: #333; }
+        .service-icon.banking { background: #dc3545; }
+
+        .service-title {
+            font-size: 1.4rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .service-description {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .service-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: #333;
+        }
+
+        .service-features i {
+            color: #28a745;
+            width: 16px;
+        }
+
+        .service-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.3rem;
+        }
+
+        .service-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .calculator-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .calculator-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .calculator-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e1e5e9;
+            background: white;
+            color: #666;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active,
+        .tab-btn:hover {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .calculator-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select {
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .slider-container {
+            margin: 1rem 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+
+        .slider-value {
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 0.5rem;
+        }
+
+        .calculation-result {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .result-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .partners-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .partners-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .partner-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .partner-item:hover {
+            background: #e9ecef;
+        }
+
+        .partner-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+
+        .partner-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .partner-desc {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .news-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .news-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .news-item {
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .news-date {
+            color: #666;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-headline {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-excerpt {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .calculator-form {
+                grid-template-columns: 1fr;
+            }
+
+            .partners-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-actions {
+                flex-direction: column;
+            }
+
+            .calculator-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-briefcase"></i>
+                TOCO
+            </a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="serchwork.html" class="nav-link">
+                        <i class="fas fa-search"></i>
+                        Поиск работы
+                    </a>
+                    <div class="dropdown">
+                        <a href="serchwork.html">Все вакансии</a>
+                        <a href="skill_serch.html">Поиск по навыкам</a>
+                        <a href="salary_calculator.html">Калькулятор зарплат</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="employer_profile.html" class="nav-link">
+                        <i class="fas fa-building"></i>
+                        Работодателям
+                    </a>
+                    <div class="dropdown">
+                        <a href="employer_profile.html">Профиль компании</a>
+                        <a href="employer_dashboard.html">Панель управления</a>
+                        <a href="employer_anons_work.html">Разместить вакансию</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="financial_services.html" class="nav-link">
+                        <i class="fas fa-money-bill-wave"></i>
+                        Финансы
+                    </a>
+                    <div class="dropdown">
+                        <a href="financial_services.html">Финансовые услуги</a>
+                        <a href="micro_credit.html">Микрокредиты</a>
+                        <a href="salary_calculator.html">Калькулятор зарплат</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="ai_career_consultant.html" class="nav-link">
+                        <i class="fas fa-robot"></i>
+                        AI-Консультант
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                </li>
+            </ul>
+
+            <div class="user-actions">
+                <div class="lang-switch">
+                    <button class="active">RU</button>
+                    <button>EN</button>
+                    <button>UZ</button>
+                </div>
+                <a href="register.html" class="btn">Войти</a>
+            </div>
+
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h1 class="page-title">Финансовые сервисы</h1>
+            <p class="page-subtitle">
+                Кредиты, страхование, инвестиции и банковские услуги для карьерного развития и финансового благополучия
+            </p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card loans">
+                <div class="service-header">
+                    <div class="service-icon loans">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <div class="service-title">Кредиты и займы</div>
+                </div>
+                <div class="service-description">
+                    Специальные кредитные программы для трудоустройства, обучения, покупки техники и развития карьеры
+                </div>
+                <ul class="service-features">
+                    <li><i class="fas fa-check"></i> Кредиты на образование и курсы</li>
+                    <li><i class="fas fa-check"></i> Займы на рабочую технику</li>
+                    <li><i class="fas fa-check"></i> Кредиты для предпринимателей</li>
+                    <li><i class="fas fa-check"></i> Льготные программы для молодежи</li>
+                    <li><i class="fas fa-check"></i> Быстрое оформление онлайн</li>
+                </ul>
+                <div class="service-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">3.5%</div>
+                        <div class="stat-label">Мин. ставка</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24 мес</div>
+                        <div class="stat-label">Макс. срок</div>
+                    </div>
+                </div>
+                <div class="service-actions">
+                    <a href="#" class="btn">
+                        <i class="fas fa-calculator"></i>
+                        Рассчитать кредит
+                    </a>
+                    <a href="#" class="btn-outline btn">
+                        <i class="fas fa-file-alt"></i>
+                        Подать заявку
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card insurance">
+                <div class="service-header">
+                    <div class="service-icon insurance">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="service-title">Страхование</div>
+                </div>
+                <div class="service-description">
+                    Комплексные страховые программы для защиты карьеры, здоровья и финансового благополучия
+                </div>
+                <ul class="service-features">
+                    <li><i class="fas fa-check"></i> Страхование от потери работы</li>
+                    <li><i class="fas fa-check"></i> Медицинское страхование</li>
+                    <li><i class="fas fa-check"></i> Страхование профессиональной ответственности</li>
+                    <li><i class="fas fa-check"></i> Накопительное страхование жизни</li>
+                    <li><i class="fas fa-check"></i> Льготы для сотрудников компаний</li>
+                </ul>
+                <div class="service-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Выплат</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Поддержка</div>
+                    </div>
+                </div>
+                <div class="service-actions">
+                    <a href="#" class="btn btn-secondary">
+                        <i class="fas fa-shield-alt"></i>
+                        Выбрать полис
+                    </a>
+                    <a href="#" class="btn-outline btn">
+                        <i class="fas fa-info-circle"></i>
+                        Узнать больше
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card investments">
+                <div class="service-header">
+                    <div class="service-icon investments">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="service-title">Инвестиции и накопления</div>
+                </div>
+                <div class="service-description">
+                    Инвестиционные продукты для долгосрочного финансового планирования и накопления средств
+                </div>
+                <ul class="service-features">
+                    <li><i class="fas fa-check"></i> Депозиты с высокой доходностью</li>
+                    <li><i class="fas fa-check"></i> Инвестиционные фонды</li>
+                    <li><i class="fas fa-check"></i> Пенсионные накопления</li>
+                    <li><i class="fas fa-check"></i> Валютные операции</li>
+                    <li><i class="fas fa-check"></i> Консультации финансовых советников</li>
+                </ul>
+                <div class="service-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">12%</div>
+                        <div class="stat-label">Годовых</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1,000</div>
+                        <div class="stat-label">Мин. сумма</div>
+                    </div>
+                </div>
+                <div class="service-actions">
+                    <a href="#" class="btn">
+                        <i class="fas fa-coins"></i>
+                        Начать инвестировать
+                    </a>
+                    <a href="#" class="btn-outline btn">
+                        <i class="fas fa-chart-pie"></i>
+                        Портфель
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card banking">
+                <div class="service-header">
+                    <div class="service-icon banking">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="service-title">Банковские услуги</div>
+                </div>
+                <div class="service-description">
+                    Полный спектр банковских услуг для работников, включая зарплатные карты и корпоративные счета
+                </div>
+                <ul class="service-features">
+                    <li><i class="fas fa-check"></i> Зарплатные карты с льготами</li>
+                    <li><i class="fas fa-check"></i> Корпоративные счета</li>
+                    <li><i class="fas fa-check"></i> Переводы и платежи</li>
+                    <li><i class="fas fa-check"></i> Мобильный банкинг</li>
+                    <li><i class="fas fa-check"></i> Кэшбэк и бонусы</li>
+                </ul>
+                <div class="service-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">0₽</div>
+                        <div class="stat-label">Обслуживание</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">5%</div>
+                        <div class="stat-label">Кэшбэк</div>
+                    </div>
+                </div>
+                <div class="service-actions">
+                    <a href="#" class="btn">
+                        <i class="fas fa-credit-card"></i>
+                        Оформить карту
+                    </a>
+                    <a href="#" class="btn-outline btn">
+                        <i class="fas fa-mobile-alt"></i>
+                        Мобильный банк
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-section">
+            <h2 class="calculator-title">
+                <i class="fas fa-calculator"></i>
+                Финансовые калькуляторы
+            </h2>
+            
+            <div class="calculator-tabs">
+                <button class="tab-btn active" data-tab="loan">Кредитный калькулятор</button>
+                <button class="tab-btn" data-tab="deposit">Депозитный калькулятор</button>
+                <button class="tab-btn" data-tab="insurance">Калькулятор страховки</button>
+            </div>
+
+            <div id="loanCalculator" class="calculator-content">
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <label class="form-label">Сумма кредита</label>
+                        <input type="number" class="form-input" id="loanAmount" placeholder="Введите сумму" value="5000000">
+                        <div class="slider-container">
+                            <input type="range" class="slider" id="loanAmountSlider" min="500000" max="50000000" value="5000000">
+                            <div class="slider-value" id="loanAmountValue">5,000,000 сум</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Срок кредита (месяцы)</label>
+                        <input type="number" class="form-input" id="loanTerm" placeholder="Срок в месяцах" value="12">
+                        <div class="slider-container">
+                            <input type="range" class="slider" id="loanTermSlider" min="3" max="60" value="12">
+                            <div class="slider-value" id="loanTermValue">12 месяцев</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Процентная ставка (%)</label>
+                        <input type="number" class="form-input" id="loanRate" placeholder="Ставка в %" value="15" step="0.1">
+                        <div class="slider-container">
+                            <input type="range" class="slider" id="loanRateSlider" min="3" max="30" value="15" step="0.1">
+                            <div class="slider-value" id="loanRateValue">15%</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Тип кредита</label>
+                        <select class="form-select" id="loanType">
+                            <option value="education">Образовательный кредит</option>
+                            <option value="tech">Кредит на технику</option>
+                            <option value="business">Бизнес-кредит</option>
+                            <option value="personal">Потребительский кредит</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="calculation-result" id="loanResult">
+                    <div class="result-amount" id="monthlyPayment">486,755 сум</div>
+                    <div class="result-label">Ежемесячный платеж</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="partners-section">
+            <h2 class="partners-title">
+                <i class="fas fa-handshake"></i>
+                Наши партнеры
+            </h2>
+            <div class="partners-grid">
+                <div class="partner-item">
+                    <div class="partner-logo">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="partner-name">Народный банк</div>
+                    <div class="partner-desc">Ведущий банк Узбекистана</div>
+                </div>
+                <div class="partner-item">
+                    <div class="partner-logo">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="partner-name">Узкард</div>
+                    <div class="partner-desc">Национальная платежная система</div>
+                </div>
+                <div class="partner-item">
+                    <div class="partner-logo">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="partner-name">Узбекистан Страхование</div>
+                    <div class="partner-desc">Страховая компания</div>
+                </div>
+                <div class="partner-item">
+                    <div class="partner-logo">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="partner-name">InvestUZ</div>
+                    <div class="partner-desc">Инвестиционный фонд</div>
+                </div>
+                <div class="partner-item">
+                    <div class="partner-logo">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="partner-name">Payme</div>
+                    <div class="partner-desc">Система электронных платежей</div>
+                </div>
+                <div class="partner-item">
+                    <div class="partner-logo">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="partner-name">Click</div>
+                    <div class="partner-desc">Мобильные платежи</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="news-section">
+            <h2 class="news-title">
+                <i class="fas fa-newspaper"></i>
+                Финансовые новости
+            </h2>
+            <div class="news-grid">
+                <div class="news-item">
+                    <div class="news-date">24 июня 2025</div>
+                    <div class="news-headline">Центробанк снизил ключевую ставку до 12%</div>
+                    <div class="news-excerpt">
+                        Решение принято в рамках мер по стимулированию экономического роста и доступности кредитования для населения и бизнеса.
+                    </div>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">23 июня 2025</div>
+                    <div class="news-headline">Новые льготы для IT-сферы</div>
+                    <div class="news-excerpt">
+                        Правительство утвердило дополнительные налоговые льготы и преференции для работников IT-индустрии.
+                    </div>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">22 июня 2025</div>
+                    <div class="news-headline">Запуск программы микрокредитования</div>
+                    <div class="news-excerpt">
+                        Новая государственная программа предоставления микрокредитов для малого бизнеса и самозанятых граждан.
+                    </div>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">21 июня 2025</div>
+                    <div class="news-headline">Цифровизация банковских услуг</div>
+                    <div class="news-excerpt">
+                        Банки активно внедряют новые цифровые технологии для улучшения качества обслуживания клиентов.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Мобильное меню
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Языковой переключатель
+        document.querySelectorAll('.lang-switch button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Слайдеры кредитного калькулятора
+        const loanAmountSlider = document.getElementById('loanAmountSlider');
+        const loanAmountInput = document.getElementById('loanAmount');
+        const loanAmountValue = document.getElementById('loanAmountValue');
+
+        const loanTermSlider = document.getElementById('loanTermSlider');
+        const loanTermInput = document.getElementById('loanTerm');
+        const loanTermValue = document.getElementById('loanTermValue');
+
+        const loanRateSlider = document.getElementById('loanRateSlider');
+        const loanRateInput = document.getElementById('loanRate');
+        const loanRateValue = document.getElementById('loanRateValue');
+
+        function updateLoanAmount(value) {
+            loanAmountInput.value = value;
+            loanAmountSlider.value = value;
+            loanAmountValue.textContent = Number(value).toLocaleString() + ' сум';
+            calculateLoan();
+        }
+
+        function updateLoanTerm(value) {
+            loanTermInput.value = value;
+            loanTermSlider.value = value;
+            loanTermValue.textContent = value + ' месяцев';
+            calculateLoan();
+        }
+
+        function updateLoanRate(value) {
+            loanRateInput.value = value;
+            loanRateSlider.value = value;
+            loanRateValue.textContent = value + '%';
+            calculateLoan();
+        }
+
+        loanAmountSlider.addEventListener('input', function() {
+            updateLoanAmount(this.value);
+        });
+
+        loanAmountInput.addEventListener('input', function() {
+            updateLoanAmount(this.value);
+        });
+
+        loanTermSlider.addEventListener('input', function() {
+            updateLoanTerm(this.value);
+        });
+
+        loanTermInput.addEventListener('input', function() {
+            updateLoanTerm(this.value);
+        });
+
+        loanRateSlider.addEventListener('input', function() {
+            updateLoanRate(this.value);
+        });
+
+        loanRateInput.addEventListener('input', function() {
+            updateLoanRate(this.value);
+        });
+
+        // Расчет кредита
+        function calculateLoan() {
+            const amount = parseFloat(loanAmountInput.value) || 0;
+            const term = parseInt(loanTermInput.value) || 1;
+            const rate = parseFloat(loanRateInput.value) || 0;
+
+            const monthlyRate = rate / 100 / 12;
+            const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
+
+            document.getElementById('monthlyPayment').textContent = Math.round(monthlyPayment).toLocaleString() + ' сум';
+        }
+
+        // Переключение вкладок калькулятора
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Здесь можно добавить логику переключения калькуляторов
+                console.log('Переключение на:', this.dataset.tab);
+            });
+        });
+
+        // Анимация карточек при загрузке
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.service-card, .partner-item, .news-item');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Инициализация расчетов
+        calculateLoan();
+    </script>
+</body>
+</html>

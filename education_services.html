@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Образовательные сервисы - TOCO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown a:hover {
+            background-color: #f8f9fa;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .lang-switch {
+            display: flex;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .lang-switch button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .lang-switch button.active {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .categories-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e1e5e9;
+            background: white;
+            color: #666;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            padding: 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            overflow: hidden;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .course-level {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .course-content {
+            padding: 2rem;
+        }
+
+        .course-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .course-provider {
+            color: #667eea;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .course-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .course-price {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .price.free {
+            color: #007bff;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .stars {
+            color: #ffc107;
+        }
+
+        .course-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s;
+            font-size: 0.95rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .learning-paths {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .paths-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .paths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .path-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-left: 5px solid #667eea;
+        }
+
+        .path-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .path-steps {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .path-steps li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .path-duration {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .certificates-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .certificates-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .certificate-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .certificate-item:hover {
+            background: #e9ecef;
+        }
+
+        .certificate-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+
+        .certificate-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .certificate-desc {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .stats-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stats-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stats-item {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .stats-item.students {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stats-item.courses {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .stats-item.certificates {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .stats-item.satisfaction {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .paths-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .categories-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .course-actions {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-briefcase"></i>
+                TOCO
+            </a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="serchwork.html" class="nav-link">
+                        <i class="fas fa-search"></i>
+                        Поиск работы
+                    </a>
+                    <div class="dropdown">
+                        <a href="serchwork.html">Все вакансии</a>
+                        <a href="skill_serch.html">Поиск по навыкам</a>
+                        <a href="salary_calculator.html">Калькулятор зарплат</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="employer_profile.html" class="nav-link">
+                        <i class="fas fa-building"></i>
+                        Работодателям
+                    </a>
+                    <div class="dropdown">
+                        <a href="employer_profile.html">Профиль компании</a>
+                        <a href="employer_dashboard.html">Панель управления</a>
+                        <a href="employer_anons_work.html">Разместить вакансию</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="education_services.html" class="nav-link">
+                        <i class="fas fa-graduation-cap"></i>
+                        Образование
+                    </a>
+                    <div class="dropdown">
+                        <a href="education_services.html">Онлайн-курсы</a>
+                        <a href="youth_programs.html">Молодежные программы</a>
+                        <a href="professional_network.html">Профсеть</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="ai_career_consultant.html" class="nav-link">
+                        <i class="fas fa-robot"></i>
+                        AI-Консультант
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                </li>
+            </ul>
+
+            <div class="user-actions">
+                <div class="lang-switch">
+                    <button class="active">RU</button>
+                    <button>EN</button>
+                    <button>UZ</button>
+                </div>
+                <a href="register.html" class="btn">Войти</a>
+            </div>
+
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h1 class="page-title">Образовательные сервисы</h1>
+            <p class="page-subtitle">
+                Онлайн-курсы, программы переквалификации и сертификации для карьерного развития
+            </p>
+        </div>
+
+        <div class="categories-nav">
+            <a href="#" class="category-btn active" data-category="all">
+                <i class="fas fa-th"></i>
+                Все курсы
+            </a>
+            <a href="#" class="category-btn" data-category="it">
+                <i class="fas fa-code"></i>
+                IT и программирование
+            </a>
+            <a href="#" class="category-btn" data-category="business">
+                <i class="fas fa-chart-line"></i>
+                Бизнес и менеджмент
+            </a>
+            <a href="#" class="category-btn" data-category="design">
+                <i class="fas fa-paint-brush"></i>
+                Дизайн
+            </a>
+            <a href="#" class="category-btn" data-category="languages">
+                <i class="fas fa-language"></i>
+                Языки
+            </a>
+            <a href="#" class="category-btn" data-category="finance">
+                <i class="fas fa-calculator"></i>
+                Финансы
+            </a>
+        </div>
+
+        <div class="courses-grid" id="coursesGrid">
+            <div class="course-card" data-category="it">
+                <div class="course-image">
+                    <i class="fas fa-code"></i>
+                    <div class="course-level">Начальный</div>
+                </div>
+                <div class="course-content">
+                    <h3 class="course-title">Frontend разработка с React</h3>
+                    <p class="course-provider">Академия IT</p>
+                    <p class="course-description">
+                        Полный курс по изучению React.js с нуля. Изучите современную разработку веб-приложений, компоненты, hooks и многое другое.
+                    </p>
+                    <div class="course-stats">
+                        <div class="stat">
+                            <i class="fas fa-clock"></i>
+                            <span>40 часов</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-users"></i>
+                            <span>1,234 студента</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-play"></i>
+                            <span>45 уроков</span>
+                        </div>
+                    </div>
+                    <div class="course-price">
+                        <div class="price">2,500,000 сум</div>
+                        <div class="rating">
+                            <div class="stars">★★★★★</div>
+                            <span>4.8</span>
+                        </div>
+                    </div>
+                    <div class="course-actions">
+                        <a href="#" class="btn">
+                            <i class="fas fa-play"></i>
+                            Начать обучение
+                        </a>
+                        <a href="#" class="btn-outline btn">
+                            <i class="fas fa-info-circle"></i>
+                            Подробнее
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" data-category="business">
+                <div class="course-image">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="course-level">Средний</div>
+                </div>
+                <div class="course-content">
+                    <h3 class="course-title">Управление проектами</h3>
+                    <p class="course-provider">Бизнес-школа ТГЭУ</p>
+                    <p class="course-description">
+                        Изучите основы управления проектами, методологии Agile и Scrum, планирование и контроль проектов.
+                    </p>
+                    <div class="course-stats">
+                        <div class="stat">
+                            <i class="fas fa-clock"></i>
+                            <span>30 часов</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-users"></i>
+                            <span>892 студента</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-play"></i>
+                            <span>35 уроков</span>
+                        </div>
+                    </div>
+                    <div class="course-price">
+                        <div class="price">1,800,000 сум</div>
+                        <div class="rating">
+                            <div class="stars">★★★★☆</div>
+                            <span>4.6</span>
+                        </div>
+                    </div>
+                    <div class="course-actions">
+                        <a href="#" class="btn">
+                            <i class="fas fa-play"></i>
+                            Начать обучение
+                        </a>
+                        <a href="#" class="btn-outline btn">
+                            <i class="fas fa-info-circle"></i>
+                            Подробнее
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" data-category="languages">
+                <div class="course-image">
+                    <i class="fas fa-language"></i>
+                    <div class="course-level">Начальный</div>
+                </div>
+                <div class="course-content">
+                    <h3 class="course-title">Английский для IT</h3>
+                    <p class="course-provider">LinguaTech</p>
+                    <p class="course-description">
+                        Специализированный курс английского языка для IT-специалистов. Техническая терминология и деловое общение.
+                    </p>
+                    <div class="course-stats">
+                        <div class="stat">
+                            <i class="fas fa-clock"></i>
+                            <span>60 часов</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-users"></i>
+                            <span>2,156 студентов</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-play"></i>
+                            <span>80 уроков</span>
+                        </div>
+                    </div>
+                    <div class="course-price">
+                        <div class="price free">Бесплатно</div>
+                        <div class="rating">
+                            <div class="stars">★★★★★</div>
+                            <span>4.9</span>
+                        </div>
+                    </div>
+                    <div class="course-actions">
+                        <a href="#" class="btn">
+                            <i class="fas fa-play"></i>
+                            Начать обучение
+                        </a>
+                        <a href="#" class="btn-outline btn">
+                            <i class="fas fa-info-circle"></i>
+                            Подробнее
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" data-category="design">
+                <div class="course-image">
+                    <i class="fas fa-paint-brush"></i>
+                    <div class="course-level">Средний</div>
+                </div>
+                <div class="course-content">
+                    <h3 class="course-title">UI/UX дизайн</h3>
+                    <p class="course-provider">DesignHub</p>
+                    <p class="course-description">
+                        Изучите принципы пользовательского интерфейса, создание прототипов в Figma, UX-исследования и тестирование.
+                    </p>
+                    <div class="course-stats">
+                        <div class="stat">
+                            <i class="fas fa-clock"></i>
+                            <span>50 часов</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-users"></i>
+                            <span>756 студентов</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-play"></i>
+                            <span>60 уроков</span>
+                        </div>
+                    </div>
+                    <div class="course-price">
+                        <div class="price">3,200,000 сум</div>
+                        <div class="rating">
+                            <div class="stars">★★★★★</div>
+                            <span>4.7</span>
+                        </div>
+                    </div>
+                    <div class="course-actions">
+                        <a href="#" class="btn">
+                            <i class="fas fa-play"></i>
+                            Начать обучение
+                        </a>
+                        <a href="#" class="btn-outline btn">
+                            <i class="fas fa-info-circle"></i>
+                            Подробнее
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" data-category="finance">
+                <div class="course-image">
+                    <i class="fas fa-calculator"></i>
+                    <div class="course-level">Продвинутый</div>
+                </div>
+                <div class="course-content">
+                    <h3 class="course-title">Финансовая аналитика</h3>
+                    <p class="course-provider">ФинансАкадемия</p>
+                    <p class="course-description">
+                        Глубокий анализ финансовых показателей, работа с Excel, создание финансовых моделей и прогнозирование.
+                    </p>
+                    <div class="course-stats">
+                        <div class="stat">
+                            <i class="fas fa-clock"></i>
+                            <span>35 часов</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-users"></i>
+                            <span>423 студента</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-play"></i>
+                            <span>40 уроков</span>
+                        </div>
+                    </div>
+                    <div class="course-price">
+                        <div class="price">2,800,000 сум</div>
+                        <div class="rating">
+                            <div class="stars">★★★★☆</div>
+                            <span>4.5</span>
+                        </div>
+                    </div>
+                    <div class="course-actions">
+                        <a href="#" class="btn">
+                            <i class="fas fa-play"></i>
+                            Начать обучение
+                        </a>
+                        <a href="#" class="btn-outline btn">
+                            <i class="fas fa-info-circle"></i>
+                            Подробнее
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" data-category="it">
+                <div class="course-image">
+                    <i class="fas fa-database"></i>
+                    <div class="course-level">Средний</div>
+                </div>
+                <div class="course-content">
+                    <h3 class="course-title">Анализ данных с Python</h3>
+                    <p class="course-provider">DataScience Pro</p>
+                    <p class="course-description">
+                        Изучите Python для анализа данных, работу с pandas, numpy, matplotlib и создание машинного обучения.
+                    </p>
+                    <div class="course-stats">
+                        <div class="stat">
+                            <i class="fas fa-clock"></i>
+                            <span>70 часов</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-users"></i>
+                            <span>1,845 студентов</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-play"></i>
+                            <span>90 уроков</span>
+                        </div>
+                    </div>
+                    <div class="course-price">
+                        <div class="price">4,500,000 сум</div>
+                        <div class="rating">
+                            <div class="stars">★★★★★</div>
+                            <span>4.8</span>
+                        </div>
+                    </div>
+                    <div class="course-actions">
+                        <a href="#" class="btn">
+                            <i class="fas fa-play"></i>
+                            Начать обучение
+                        </a>
+                        <a href="#" class="btn-outline btn">
+                            <i class="fas fa-info-circle"></i>
+                            Подробнее
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="learning-paths">
+            <h2 class="paths-title">
+                <i class="fas fa-route"></i>
+                Карьерные треки
+            </h2>
+            <div class="paths-grid">
+                <div class="path-card">
+                    <h3 class="path-title">Трек "Fullstack Developer"</h3>
+                    <div class="path-duration">
+                        <i class="fas fa-clock"></i>
+                        6-12 месяцев
+                    </div>
+                    <ul class="path-steps">
+                        <li><i class="fas fa-check-circle"></i> HTML/CSS основы</li>
+                        <li><i class="fas fa-check-circle"></i> JavaScript ES6+</li>
+                        <li><i class="fas fa-check-circle"></i> React.js</li>
+                        <li><i class="fas fa-circle"></i> Node.js и Express</li>
+                        <li><i class="fas fa-circle"></i> Базы данных</li>
+                        <li><i class="fas fa-circle"></i> Деплой и DevOps</li>
+                    </ul>
+                    <a href="#" class="btn">
+                        <i class="fas fa-play"></i>
+                        Начать трек
+                    </a>
+                </div>
+
+                <div class="path-card">
+                    <h3 class="path-title">Трек "Data Scientist"</h3>
+                    <div class="path-duration">
+                        <i class="fas fa-clock"></i>
+                        8-14 месяцев
+                    </div>
+                    <ul class="path-steps">
+                        <li><i class="fas fa-check-circle"></i> Python основы</li>
+                        <li><i class="fas fa-check-circle"></i> Статистика и математика</li>
+                        <li><i class="fas fa-circle"></i> Pandas и NumPy</li>
+                        <li><i class="fas fa-circle"></i> Машинное обучение</li>
+                        <li><i class="fas fa-circle"></i> Deep Learning</li>
+                        <li><i class="fas fa-circle"></i> Проектная работа</li>
+                    </ul>
+                    <a href="#" class="btn">
+                        <i class="fas fa-play"></i>
+                        Начать трек
+                    </a>
+                </div>
+
+                <div class="path-card">
+                    <h3 class="path-title">Трек "Digital Marketer"</h3>
+                    <div class="path-duration">
+                        <i class="fas fa-clock"></i>
+                        4-8 месяцев
+                    </div>
+                    <ul class="path-steps">
+                        <li><i class="fas fa-check-circle"></i> Основы маркетинга</li>
+                        <li><i class="fas fa-check-circle"></i> Google Analytics</li>
+                        <li><i class="fas fa-circle"></i> SMM и контент</li>
+                        <li><i class="fas fa-circle"></i> SEO и SEM</li>
+                        <li><i class="fas fa-circle"></i> Email-маркетинг</li>
+                        <li><i class="fas fa-circle"></i> Аналитика и отчеты</li>
+                    </ul>
+                    <a href="#" class="btn">
+                        <i class="fas fa-play"></i>
+                        Начать трек
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="certificates-section">
+            <h2 class="certificates-title">
+                <i class="fas fa-certificate"></i>
+                Сертификации и дипломы
+            </h2>
+            <div class="certificates-grid">
+                <div class="certificate-item">
+                    <div class="certificate-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="certificate-name">Certified Developer</div>
+                    <div class="certificate-desc">Международный сертификат разработчика</div>
+                </div>
+                <div class="certificate-item">
+                    <div class="certificate-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="certificate-name">Business Analyst</div>
+                    <div class="certificate-desc">Сертификация бизнес-аналитика</div>
+                </div>
+                <div class="certificate-item">
+                    <div class="certificate-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <div class="certificate-name">UX Designer</div>
+                    <div class="certificate-desc">Профессиональный UX-дизайнер</div>
+                </div>
+                <div class="certificate-item">
+                    <div class="certificate-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <div class="certificate-name">English Proficiency</div>
+                    <div class="certificate-desc">Сертификат владения английским</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h2 class="stats-title">
+                <i class="fas fa-chart-bar"></i>
+                Статистика платформы
+            </h2>
+            <div class="stats-grid">
+                <div class="stats-item students">
+                    <div class="stats-number">25,847</div>
+                    <div class="stats-label">Активных студентов</div>
+                </div>
+                <div class="stats-item courses">
+                    <div class="stats-number">156</div>
+                    <div class="stats-label">Доступных курсов</div>
+                </div>
+                <div class="stats-item certificates">
+                    <div class="stats-number">8,234</div>
+                    <div class="stats-label">Выданных сертификатов</div>
+                </div>
+                <div class="stats-item satisfaction">
+                    <div class="stats-number">94%</div>
+                    <div class="stats-label">Довольных студентов</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Мобильное меню
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Языковой переключатель
+        document.querySelectorAll('.lang-switch button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Фильтрация курсов по категориям
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Обновление активной кнопки
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const category = this.dataset.category;
+                const courses = document.querySelectorAll('.course-card');
+                
+                courses.forEach(course => {
+                    if (category === 'all' || course.dataset.category === category) {
+                        course.style.display = 'block';
+                        setTimeout(() => {
+                            course.style.opacity = '1';
+                            course.style.transform = 'translateY(0)';
+                        }, 100);
+                    } else {
+                        course.style.opacity = '0';
+                        course.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            course.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Анимация карточек при загрузке
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.course-card, .path-card, .certificate-item');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Анимация счетчиков статистики
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stats-number');
+            counters.forEach(counter => {
+                const target = counter.textContent;
+                let currentValue = 0;
+                const increment = target.replace(/[^\d]/g, '') / 100;
+                
+                const timer = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= target.replace(/[^\d]/g, '')) {
+                        clearInterval(timer);
+                        counter.textContent = target;
+                    } else {
+                        if (target.includes('%')) {
+                            counter.textContent = Math.floor(currentValue) + '%';
+                        } else {
+                            counter.textContent = Math.floor(currentValue).toLocaleString();
+                        }
+                    }
+                }, 50);
+            });
+        }
+
+        // Запуск анимации при прокрутке к секции статистики
+        const statsSection = document.querySelector('.stats-section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+
+        // Обработка кликов на кнопки курсов
+        document.querySelectorAll('.course-card .btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.textContent.includes('Начать обучение')) {
+                    e.preventDefault();
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Загрузка...';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-check"></i> Записаны!';
+                        this.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+                        
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.style.background = '';
+                        }, 2000);
+                    }, 1500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

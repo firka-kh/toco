@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квесты и достижения - TOCO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(0,0,0,0.1);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown a:hover {
+            background-color: #f8f9fa;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .lang-switch {
+            display: flex;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .lang-switch button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .lang-switch button.active {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .user-level {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .level-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .level-details h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .level-progress {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 10px;
+            width: 200px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #333;
+            text-align: center;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .quests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .quest-card {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quest-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .quest-card.epic {
+            border-color: #f093fb;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.1), rgba(245, 87, 108, 0.1));
+        }
+
+        .quest-card.legendary {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 140, 0, 0.1));
+        }
+
+        .quest-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .quest-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .quest-difficulty {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .easy { background: #4caf50; }
+        .medium { background: #ff9800; }
+        .hard { background: #f44336; }
+        .epic { background: #9c27b0; }
+        .legendary { background: #ffd700; color: #333; }
+
+        .quest-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .quest-progress {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .quest-progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .quest-progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .quest-rewards {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+        }
+
+        .reward-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .reward-text {
+            flex: 1;
+        }
+
+        .reward-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+
+        .reward-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .quest-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .achievements-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .achievement-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement-card.unlocked {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 2px solid #667eea;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .achievement-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+            transition: all 0.3s;
+        }
+
+        .achievement-card.unlocked .achievement-icon {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .achievement-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .achievement-progress {
+            font-size: 0.8rem;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .leaderboard-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .leaderboard-item:hover {
+            background: #f8f9fa;
+        }
+
+        .leaderboard-item.current-user {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 2px solid #667eea;
+        }
+
+        .rank {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .rank.gold { background: linear-gradient(45deg, #ffd700, #ffb347); color: #333; }
+        .rank.silver { background: linear-gradient(45deg, #c0c0c0, #a8a8a8); }
+        .rank.bronze { background: linear-gradient(45deg, #cd7f32, #b87333); }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+
+        .user-level {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .user-score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .user-level {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .level-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .quests-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quest-actions {
+                flex-direction: column;
+            }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .sparkle {
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-briefcase"></i>
+                TOCO
+            </a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="serchwork.html" class="nav-link">
+                        <i class="fas fa-search"></i>
+                        Поиск работы
+                    </a>
+                    <div class="dropdown">
+                        <a href="serchwork.html">Все вакансии</a>
+                        <a href="skill_serch.html">Поиск по навыкам</a>
+                        <a href="salary_calculator.html">Калькулятор зарплат</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="employer_profile.html" class="nav-link">
+                        <i class="fas fa-building"></i>
+                        Работодателям
+                    </a>
+                    <div class="dropdown">
+                        <a href="employer_profile.html">Профиль компании</a>
+                        <a href="employer_dashboard.html">Панель управления</a>
+                        <a href="employer_anons_work.html">Разместить вакансию</a>
+                        <a href="employer_ratings.html">Рейтинг работодателей</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="education_services.html" class="nav-link">
+                        <i class="fas fa-graduation-cap"></i>
+                        Образование
+                    </a>
+                    <div class="dropdown">
+                        <a href="education_services.html">Курсы и тренинги</a>
+                        <a href="youth_programs_new.html">Молодежные программы</a>
+                        <a href="professional_network.html">Профессиональная сеть</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="gamification.html" class="nav-link">
+                        <i class="fas fa-trophy"></i>
+                        Квесты
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                </li>
+            </ul>
+
+            <div class="user-actions">
+                <div class="lang-switch">
+                    <button class="active">RU</button>
+                    <button>EN</button>
+                    <button>UZ</button>
+                </div>
+                <a href="register.html" class="btn btn-primary">Войти</a>
+            </div>
+
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">
+                <i class="fas fa-gamepad bounce"></i>
+                Квесты и достижения
+            </h1>
+            <p class="hero-subtitle">
+                Превратите поиск работы в увлекательную игру!
+            </p>
+            
+            <div class="user-level">
+                <div class="level-info">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="level-details">
+                        <h3>Анна Кузнецова</h3>
+                        <p>Уровень 15 - "Опытный соискатель"</p>
+                        <div class="level-progress">
+                            <div class="progress-bar" style="width: 75%"></div>
+                        </div>
+                        <p>2,250 / 3,000 XP до следующего уровня</p>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">2,250</div>
+                        <div class="stat-label">Очки опыта</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">15</div>
+                        <div class="stat-label">Уровень</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">23</div>
+                        <div class="stat-label">Достижения</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Активных квестов</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container">
+        <div class="main-content">
+            <h2 class="section-title">
+                <i class="fas fa-map"></i>
+                Активные квесты
+            </h2>
+            
+            <div class="quests-grid">
+                <div class="quest-card">
+                    <div class="quest-header">
+                        <div>
+                            <h3 class="quest-title">Мастер CV</h3>
+                            <span class="quest-difficulty easy">Легко</span>
+                        </div>
+                    </div>
+                    <p class="quest-description">
+                        Создайте профессиональное резюме, добавьте фото, заполните все разделы и получите положительные отзывы.
+                    </p>
+                    <div class="quest-progress">
+                        <div class="progress-text">
+                            <span>Прогресс</span>
+                            <span>3/4</span>
+                        </div>
+                        <div class="quest-progress-bar">
+                            <div class="quest-progress-fill" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <div class="quest-rewards">
+                        <div class="reward-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="reward-text">
+                            <div class="reward-title">+200 XP</div>
+                            <div class="reward-description">Значок "Профессионал"</div>
+                        </div>
+                    </div>
+                    <div class="quest-actions">
+                        <button class="btn btn-primary">Продолжить</button>
+                    </div>
+                </div>
+
+                <div class="quest-card epic">
+                    <div class="quest-header">
+                        <div>
+                            <h3 class="quest-title">Карьерный рывок</h3>
+                            <span class="quest-difficulty epic">Эпический</span>
+                        </div>
+                    </div>
+                    <p class="quest-description">
+                        Получите приглашение на собеседование в 5 разных компаниях в течение месяца.
+                    </p>
+                    <div class="quest-progress">
+                        <div class="progress-text">
+                            <span>Прогресс</span>
+                            <span>2/5</span>
+                        </div>
+                        <div class="quest-progress-bar">
+                            <div class="quest-progress-fill" style="width: 40%"></div>
+                        </div>
+                    </div>
+                    <div class="quest-rewards">
+                        <div class="reward-icon">
+                            <i class="fas fa-crown sparkle"></i>
+                        </div>
+                        <div class="reward-text">
+                            <div class="reward-title">+1000 XP</div>
+                            <div class="reward-description">Премиум доступ на месяц</div>
+                        </div>
+                    </div>
+                    <div class="quest-actions">
+                        <button class="btn btn-primary">Продолжить</button>
+                        <button class="btn btn-secondary">Подсказка</button>
+                    </div>
+                </div>
+
+                <div class="quest-card">
+                    <div class="quest-header">
+                        <div>
+                            <h3 class="quest-title">Сетевик</h3>
+                            <span class="quest-difficulty medium">Средне</span>
+                        </div>
+                    </div>
+                    <p class="quest-description">
+                        Подключитесь к 10 профессионалам в своей области и получите 3 рекомендации.
+                    </p>
+                    <div class="quest-progress">
+                        <div class="progress-text">
+                            <span>Прогресс</span>
+                            <span>7/10</span>
+                        </div>
+                        <div class="quest-progress-bar">
+                            <div class="quest-progress-fill" style="width: 70%"></div>
+                        </div>
+                    </div>
+                    <div class="quest-rewards">
+                        <div class="reward-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="reward-text">
+                            <div class="reward-title">+300 XP</div>
+                            <div class="reward-description">Расширенный поиск контактов</div>
+                        </div>
+                    </div>
+                    <div class="quest-actions">
+                        <button class="btn btn-primary">Продолжить</button>
+                    </div>
+                </div>
+
+                <div class="quest-card legendary">
+                    <div class="quest-header">
+                        <div>
+                            <h3 class="quest-title">Мечта стала реальностью</h3>
+                            <span class="quest-difficulty legendary">Легендарный</span>
+                        </div>
+                    </div>
+                    <p class="quest-description">
+                        Получите предложение о работе в компании мечты с зарплатой выше ожиданий.
+                    </p>
+                    <div class="quest-progress">
+                        <div class="progress-text">
+                            <span>Прогресс</span>
+                            <span>0/1</span>
+                        </div>
+                        <div class="quest-progress-bar">
+                            <div class="quest-progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="quest-rewards">
+                        <div class="reward-icon">
+                            <i class="fas fa-trophy sparkle"></i>
+                        </div>
+                        <div class="reward-text">
+                            <div class="reward-title">+5000 XP</div>
+                            <div class="reward-description">Титул "Легенда карьеры"</div>
+                        </div>
+                    </div>
+                    <div class="quest-actions">
+                        <button class="btn btn-primary">Начать квест</button>
+                        <button class="btn btn-secondary">Требования</button>
+                    </div>
+                </div>
+
+                <div class="quest-card">
+                    <div class="quest-header">
+                        <div>
+                            <h3 class="quest-title">Эксперт навыков</h3>
+                            <span class="quest-difficulty hard">Сложно</span>
+                        </div>
+                    </div>
+                    <p class="quest-description">
+                        Пройдите сертификацию по 3 востребованным навыкам в вашей области.
+                    </p>
+                    <div class="quest-progress">
+                        <div class="progress-text">
+                            <span>Прогресс</span>
+                            <span>1/3</span>
+                        </div>
+                        <div class="quest-progress-bar">
+                            <div class="quest-progress-fill" style="width: 33%"></div>
+                        </div>
+                    </div>
+                    <div class="quest-rewards">
+                        <div class="reward-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="reward-text">
+                            <div class="reward-title">+500 XP</div>
+                            <div class="reward-description">Значок "Сертифицированный эксперт"</div>
+                        </div>
+                    </div>
+                    <div class="quest-actions">
+                        <button class="btn btn-primary">Продолжить</button>
+                    </div>
+                </div>
+
+                <div class="quest-card">
+                    <div class="quest-header">
+                        <div>
+                            <h3 class="quest-title">Ментор</h3>
+                            <span class="quest-difficulty medium">Средне</span>
+                        </div>
+                    </div>
+                    <p class="quest-description">
+                        Помогите 5 новичкам в поиске работы, дайте советы и поделитесь опытом.
+                    </p>
+                    <div class="quest-progress">
+                        <div class="progress-text">
+                            <span>Прогресс</span>
+                            <span>2/5</span>
+                        </div>
+                        <div class="quest-progress-bar">
+                            <div class="quest-progress-fill" style="width: 40%"></div>
+                        </div>
+                    </div>
+                    <div class="quest-rewards">
+                        <div class="reward-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="reward-text">
+                            <div class="reward-title">+400 XP</div>
+                            <div class="reward-description">Статус "Наставник"</div>
+                        </div>
+                    </div>
+                    <div class="quest-actions">
+                        <button class="btn btn-primary">Продолжить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="achievements-section">
+            <h2 class="section-title">
+                <i class="fas fa-medal"></i>
+                Достижения
+            </h2>
+            
+            <div class="achievements-grid">
+                <div class="achievement-card unlocked">
+                    <div class="achievement-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h3 class="achievement-title">Первый шаг</h3>
+                    <p class="achievement-description">Создали профиль на платформе</p>
+                    <p class="achievement-progress">Разблокировано</p>
+                </div>
+
+                <div class="achievement-card unlocked">
+                    <div class="achievement-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="achievement-title">Автор резюме</h3>
+                    <p class="achievement-description">Создали первое резюме</p>
+                    <p class="achievement-progress">Разблокировано</p>
+                </div>
+
+                <div class="achievement-card unlocked">
+                    <div class="achievement-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="achievement-title">Исследователь</h3>
+                    <p class="achievement-description">Просмотрели 50 вакансий</p>
+                    <p class="achievement-progress">Разблокировано</p>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <h3 class="achievement-title">Активный соискатель</h3>
+                    <p class="achievement-description">Откликнитесь на 10 вакансий</p>
+                    <p class="achievement-progress">7/10</p>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="achievement-title">Коммуникатор</h3>
+                    <p class="achievement-description">Пройдите 5 собеседований</p>
+                    <p class="achievement-progress">2/5</p>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="achievement-title">Суперзвезда</h3>
+                    <p class="achievement-description">Получите 5 положительных отзывов</p>
+                    <p class="achievement-progress">1/5</p>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="achievement-title">Вечный студент</h3>
+                    <p class="achievement-description">Пройдите 3 курса повышения квалификации</p>
+                    <p class="achievement-progress">1/3</p>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="achievement-title">Чемпион</h3>
+                    <p class="achievement-description">Войдите в топ-10 рейтинга</p>
+                    <p class="achievement-progress">Рейтинг: 15</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="leaderboard-section">
+            <h2 class="section-title">
+                <i class="fas fa-crown"></i>
+                Рейтинг игроков
+            </h2>
+            
+            <div class="leaderboard-item">
+                <div class="rank gold">1</div>
+                <div class="user-info">
+                    <div class="user-name">Дмитрий Петров</div>
+                    <div class="user-level">Уровень 28 - "Карьерный гуру"</div>
+                </div>
+                <div class="user-score">8,950 XP</div>
+            </div>
+
+            <div class="leaderboard-item">
+                <div class="rank silver">2</div>
+                <div class="user-info">
+                    <div class="user-name">Елена Сидорова</div>
+                    <div class="user-level">Уровень 25 - "Мастер нетворкинга"</div>
+                </div>
+                <div class="user-score">7,230 XP</div>
+            </div>
+
+            <div class="leaderboard-item">
+                <div class="rank bronze">3</div>
+                <div class="user-info">
+                    <div class="user-name">Алексей Иванов</div>
+                    <div class="user-level">Уровень 22 - "Профессиональный охотник"</div>
+                </div>
+                <div class="user-score">6,100 XP</div>
+            </div>
+
+            <div class="leaderboard-item">
+                <div class="rank">4</div>
+                <div class="user-info">
+                    <div class="user-name">Мария Козлова</div>
+                    <div class="user-level">Уровень 20 - "Карьерный стратег"</div>
+                </div>
+                <div class="user-score">5,450 XP</div>
+            </div>
+
+            <div class="leaderboard-item current-user">
+                <div class="rank">15</div>
+                <div class="user-info">
+                    <div class="user-name">Анна Кузнецова (Вы)</div>
+                    <div class="user-level">Уровень 15 - "Опытный соискатель"</div>
+                </div>
+                <div class="user-score">2,250 XP</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Мобильное меню
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Языковой переключатель
+        document.querySelectorAll('.lang-switch button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Система уведомлений о достижениях
+        function showAchievementNotification(title, description, icon) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 10000;
+                transform: translateX(400px);
+                transition: transform 0.5s ease;
+                max-width: 300px;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 2rem;">${icon}</div>
+                    <div>
+                        <div style="font-weight: bold; margin-bottom: 0.3rem;">Достижение разблокировано!</div>
+                        <div style="font-size: 1.1rem; margin-bottom: 0.2rem;">${title}</div>
+                        <div style="font-size: 0.9rem; opacity: 0.9;">${description}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => notification.remove(), 500);
+            }, 4000);
+        }
+
+        // Симуляция получения достижения
+        setTimeout(() => {
+            showAchievementNotification(
+                'Активный пользователь',
+                'Провели на сайте более 30 минут',
+                '⏰'
+            );
+        }, 3000);
+
+        // Анимация прогресс-баров
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.quest-progress-fill, .progress-bar');
+            
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 200);
+            });
+        }
+
+        // Запуск анимации при загрузке
+        window.addEventListener('load', animateProgressBars);
+
+        // Интерактивность квестов
+        document.querySelectorAll('.quest-card .btn-primary').forEach(button => {
+            button.addEventListener('click', function() {
+                const questCard = this.closest('.quest-card');
+                const progressFill = questCard.querySelector('.quest-progress-fill');
+                const progressText = questCard.querySelector('.progress-text span:last-child');
+                
+                // Имитация прогресса
+                if (progressFill && progressText) {
+                    const currentProgress = parseInt(progressFill.style.width) || 0;
+                    const newProgress = Math.min(currentProgress + 25, 100);
+                    
+                    progressFill.style.width = newProgress + '%';
+                    
+                    // Обновляем текст прогресса
+                    const [current, total] = progressText.textContent.split('/');
+                    const newCurrent = Math.min(parseInt(current) + 1, parseInt(total));
+                    progressText.textContent = `${newCurrent}/${total}`;
+                    
+                    // Если квест завершен
+                    if (newProgress >= 100) {
+                        this.textContent = 'Завершено!';
+                        this.style.background = '#4caf50';
+                        
+                        setTimeout(() => {
+                            showAchievementNotification(
+                                'Квест завершен!',
+                                questCard.querySelector('.quest-title').textContent,
+                                '🎉'
+                            );
+                        }, 500);
+                    }
+                }
+            });
+        });
+
+        // Эффекты при наведении на достижения
+        document.querySelectorAll('.achievement-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                if (!this.classList.contains('unlocked')) {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                }
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Анимация появления элементов при прокрутке
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Применяем анимацию к элементам
+        document.querySelectorAll('.quest-card, .achievement-card, .leaderboard-item').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'all 0.6s ease';
+            observer.observe(element);
+        });
+
+        // Случайные подсказки
+        const tips = [
+            'Совет: Обновляйте резюме каждую неделю для получения бонусного опыта!',
+            'Подсказка: Участие в обсуждениях форума дает дополнительные очки.',
+            'Лайфхак: Завершите профиль на 100% и получите двойной опыт.',
+            'Секрет: Ранние отклики на вакансии увеличивают шансы на собеседование.'
+        ];
+
+        function showRandomTip() {
+            const tip = tips[Math.floor(Math.random() * tips.length)];
+            showAchievementNotification('💡 Совет', tip, '💡');
+        }
+
+        // Показываем случайный совет каждые 2 минуты
+        setInterval(showRandomTip, 120000);
+    </script>
+</body>
+</html>

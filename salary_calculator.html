@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор зарплат - TOCO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown a:hover {
+            background-color: #f8f9fa;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .lang-switch {
+            display: flex;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .lang-switch button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .lang-switch button.active {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .calculator-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .calculator-form {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .slider-container {
+            margin: 1rem 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+
+        .slider-value {
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .results-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .salary-result {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .salary-amount {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .salary-period {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .comparison-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .insights-list {
+            list-style: none;
+        }
+
+        .insights-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .insights-list i {
+            color: #667eea;
+            margin-top: 0.2rem;
+        }
+
+        .market-data {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .market-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .market-stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .market-stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .share-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .share-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .share-telegram {
+            background: #0088cc;
+        }
+
+        .share-linkedin {
+            background: #0077b5;
+        }
+
+        .share-copy {
+            background: #666;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .calculator-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .market-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-briefcase"></i>
+                TOCO
+            </a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="serchwork.html" class="nav-link">
+                        <i class="fas fa-search"></i>
+                        Поиск работы
+                    </a>
+                    <div class="dropdown">
+                        <a href="serchwork.html">Все вакансии</a>
+                        <a href="skill_serch.html">Поиск по навыкам</a>
+                        <a href="salary_calculator.html">Калькулятор зарплат</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="employer_profile.html" class="nav-link">
+                        <i class="fas fa-building"></i>
+                        Работодателям
+                    </a>
+                    <div class="dropdown">
+                        <a href="employer_profile.html">Профиль компании</a>
+                        <a href="employer_dashboard.html">Панель управления</a>
+                        <a href="employer_anons_work.html">Разместить вакансию</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="market_analytics.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        Аналитика
+                    </a>
+                    <div class="dropdown">
+                        <a href="market_analytics.html">Рынок труда</a>
+                        <a href="salary_calculator.html">Зарплаты</a>
+                        <a href="talent_report.html">Отчеты</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="ai_career_consultant.html" class="nav-link">
+                        <i class="fas fa-robot"></i>
+                        AI-Консультант
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                </li>
+            </ul>
+
+            <div class="user-actions">
+                <div class="lang-switch">
+                    <button class="active">RU</button>
+                    <button>EN</button>
+                    <button>UZ</button>
+                </div>
+                <a href="register.html" class="btn">Войти</a>
+            </div>
+
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h1 class="page-title">Калькулятор зарплат</h1>
+            <p class="page-subtitle">
+                Узнайте среднюю зарплату для вашей профессии и региона на основе реальных данных рынка
+            </p>
+        </div>
+
+        <div class="calculator-container">
+            <div class="calculator-form">
+                <h2 class="form-title">
+                    <i class="fas fa-calculator"></i>
+                    Параметры расчета
+                </h2>
+
+                <form id="salaryCalculator">
+                    <div class="form-group">
+                        <label class="form-label" for="profession">Профессия/Должность</label>
+                        <select id="profession" class="form-select" required>
+                            <option value="">Выберите профессию</option>
+                            <option value="developer">Разработчик ПО</option>
+                            <option value="designer">Дизайнер</option>
+                            <option value="manager">Менеджер</option>
+                            <option value="accountant">Бухгалтер</option>
+                            <option value="engineer">Инженер</option>
+                            <option value="teacher">Преподаватель</option>
+                            <option value="doctor">Врач</option>
+                            <option value="lawyer">Юрист</option>
+                            <option value="marketer">Маркетолог</option>
+                            <option value="analyst">Аналитик</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="region">Регион</label>
+                        <select id="region" class="form-select" required>
+                            <option value="">Выберите регион</option>
+                            <option value="tashkent">Ташкент</option>
+                            <option value="samarkand">Самарканд</option>
+                            <option value="bukhara">Бухара</option>
+                            <option value="andijan">Андижан</option>
+                            <option value="namangan">Наманган</option>
+                            <option value="fergana">Фергана</option>
+                            <option value="nukus">Нукус</option>
+                            <option value="urgench">Ургенч</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="experience">Опыт работы (лет)</label>
+                        <div class="slider-container">
+                            <input type="range" id="experience" class="slider" min="0" max="20" value="3">
+                            <div class="slider-value" id="experienceValue">3 года</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="education">Образование</label>
+                        <select id="education" class="form-select">
+                            <option value="secondary">Среднее</option>
+                            <option value="vocational">Среднее специальное</option>
+                            <option value="bachelor">Высшее (бакалавр)</option>
+                            <option value="master">Высшее (магистр)</option>
+                            <option value="phd">Ученая степень</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="company-size">Размер компании</label>
+                        <select id="company-size" class="form-select">
+                            <option value="startup">Стартап (1-10 человек)</option>
+                            <option value="small">Малая (11-50 человек)</option>
+                            <option value="medium">Средняя (51-250 человек)</option>
+                            <option value="large">Крупная (250+ человек)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Дополнительные навыки</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="english" value="english">
+                                <label for="english">Английский язык</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="management" value="management">
+                                <label for="management">Управление командой</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="certification" value="certification">
+                                <label for="certification">Сертификации</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="remote" value="remote">
+                                <label for="remote">Удаленная работа</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="calculate-btn">
+                        <i class="fas fa-calculator"></i>
+                        Рассчитать зарплату
+                    </button>
+                </form>
+            </div>
+
+            <div class="results-container">
+                <h2 class="results-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Результаты расчета
+                </h2>
+
+                <div id="salaryResults" style="display: none;">
+                    <div class="salary-result">
+                        <div class="salary-amount" id="calculatedSalary">8,500,000</div>
+                        <div class="salary-period">сум в месяц</div>
+                    </div>
+
+                    <div class="comparison-grid">
+                        <div class="comparison-item">
+                            <div class="comparison-label">Минимум</div>
+                            <div class="comparison-value" id="minSalary">6,800,000</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">Медиана</div>
+                            <div class="comparison-value" id="medianSalary">8,200,000</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">Максимум</div>
+                            <div class="comparison-value" id="maxSalary">12,500,000</div>
+                        </div>
+                    </div>
+
+                    <ul class="insights-list">
+                        <li>
+                            <i class="fas fa-info-circle"></i>
+                            <span>Ваша зарплата выше среднерыночной на 15%</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-chart-line"></i>
+                            <span>Спрос на эту профессию растет на 8% в год</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-star"></i>
+                            <span>Знание английского увеличивает зарплату на 20-30%</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Дополнительные курсы могут повысить доход на 25%</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="placeholder" class="text-center" style="padding: 3rem;">
+                    <i class="fas fa-calculator" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                    <p style="color: #666;">Заполните форму для расчета зарплаты</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="market-data">
+            <h3 class="market-title">
+                <i class="fas fa-chart-pie"></i>
+                Статистика рынка труда
+            </h3>
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="market-stat-number">8.5М</div>
+                    <div class="market-stat-label">Средняя зарплата по стране</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-number">15,246</div>
+                    <div class="market-stat-label">Активных вакансий</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-number">+12%</div>
+                    <div class="market-stat-label">Рост зарплат за год</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-number">2,156</div>
+                    <div class="market-stat-label">Работодателей на портале</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="share-section">
+            <h3 class="share-title">
+                <i class="fas fa-share-alt"></i>
+                Поделиться результатами
+            </h3>
+            <div class="share-buttons">
+                <a href="#" class="share-btn share-telegram">
+                    <i class="fab fa-telegram"></i>
+                    Telegram
+                </a>
+                <a href="#" class="share-btn share-linkedin">
+                    <i class="fab fa-linkedin"></i>
+                    LinkedIn
+                </a>
+                <button class="share-btn share-copy" onclick="copyResults()">
+                    <i class="fas fa-copy"></i>
+                    Копировать ссылку
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Мобильное меню
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Языковой переключатель
+        document.querySelectorAll('.lang-switch button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Слайдер опыта работы
+        const experienceSlider = document.getElementById('experience');
+        const experienceValue = document.getElementById('experienceValue');
+
+        experienceSlider.addEventListener('input', function() {
+            const years = this.value;
+            experienceValue.textContent = years == 1 ? '1 год' : years + ' лет';
+        });
+
+        // Калькулятор зарплат
+        const salaryData = {
+            developer: { base: 12000000, multiplier: 1.2 },
+            designer: { base: 8000000, multiplier: 1.0 },
+            manager: { base: 10000000, multiplier: 1.1 },
+            accountant: { base: 6000000, multiplier: 0.8 },
+            engineer: { base: 9000000, multiplier: 1.0 },
+            teacher: { base: 4500000, multiplier: 0.6 },
+            doctor: { base: 8500000, multiplier: 0.9 },
+            lawyer: { base: 11000000, multiplier: 1.1 },
+            marketer: { base: 7500000, multiplier: 0.9 },
+            analyst: { base: 9500000, multiplier: 1.0 }
+        };
+
+        const regionMultipliers = {
+            tashkent: 1.0,
+            samarkand: 0.8,
+            bukhara: 0.7,
+            andijan: 0.7,
+            namangan: 0.6,
+            fergana: 0.65,
+            nukus: 0.6,
+            urgench: 0.65
+        };
+
+        const educationMultipliers = {
+            secondary: 0.7,
+            vocational: 0.8,
+            bachelor: 1.0,
+            master: 1.2,
+            phd: 1.4
+        };
+
+        const companySizeMultipliers = {
+            startup: 0.8,
+            small: 0.9,
+            medium: 1.0,
+            large: 1.3
+        };
+
+        document.getElementById('salaryCalculator').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const profession = document.getElementById('profession').value;
+            const region = document.getElementById('region').value;
+            const experience = parseInt(document.getElementById('experience').value);
+            const education = document.getElementById('education').value;
+            const companySize = document.getElementById('company-size').value;
+            
+            if (!profession || !region) {
+                alert('Пожалуйста, выберите профессию и регион');
+                return;
+            }
+
+            // Базовый расчет
+            let baseSalary = salaryData[profession].base;
+            
+            // Применяем мультипликаторы
+            baseSalary *= regionMultipliers[region];
+            baseSalary *= educationMultipliers[education];
+            baseSalary *= companySizeMultipliers[companySize];
+            
+            // Опыт работы
+            const experienceBonus = Math.min(experience * 0.1, 1.0);
+            baseSalary *= (1 + experienceBonus);
+            
+            // Дополнительные навыки
+            const skills = document.querySelectorAll('input[type="checkbox"]:checked');
+            let skillsBonus = 0;
+            skills.forEach(skill => {
+                switch(skill.value) {
+                    case 'english': skillsBonus += 0.25; break;
+                    case 'management': skillsBonus += 0.2; break;
+                    case 'certification': skillsBonus += 0.15; break;
+                    case 'remote': skillsBonus += 0.1; break;
+                }
+            });
+            baseSalary *= (1 + skillsBonus);
+
+            // Диапазон зарплат
+            const minSalary = Math.round(baseSalary * 0.8);
+            const maxSalary = Math.round(baseSalary * 1.5);
+            const medianSalary = Math.round(baseSalary * 0.95);
+            const calculatedSalary = Math.round(baseSalary);
+
+            // Отображение результатов
+            document.getElementById('calculatedSalary').textContent = calculatedSalary.toLocaleString();
+            document.getElementById('minSalary').textContent = minSalary.toLocaleString();
+            document.getElementById('medianSalary').textContent = medianSalary.toLocaleString();
+            document.getElementById('maxSalary').textContent = maxSalary.toLocaleString();
+            
+            document.getElementById('placeholder').style.display = 'none';
+            document.getElementById('salaryResults').style.display = 'block';
+
+            // Анимация результата
+            animateNumber(document.getElementById('calculatedSalary'), calculatedSalary);
+        });
+
+        function animateNumber(element, targetValue) {
+            let currentValue = 0;
+            const increment = targetValue / 50;
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    clearInterval(timer);
+                    element.textContent = targetValue.toLocaleString();
+                } else {
+                    element.textContent = Math.floor(currentValue).toLocaleString();
+                }
+            }, 30);
+        }
+
+        function copyResults() {
+            const salary = document.getElementById('calculatedSalary').textContent;
+            const profession = document.getElementById('profession').options[document.getElementById('profession').selectedIndex].text;
+            const region = document.getElementById('region').options[document.getElementById('region').selectedIndex].text;
+            
+            const text = `Расчет зарплаты на TOCO:\n${profession} в ${region}: ${salary} сум/месяц\n\nРассчитайте свою зарплату: ${window.location.href}`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Результаты скопированы в буфер обмена!');
+            });
+        }
+    </script>
+</body>
+</html>
