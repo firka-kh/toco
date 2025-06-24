@@ -37,12 +37,11 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* AI Chat Bot Widget Styles */
-        .chat-widget {
+        /* AI Chat Bot Widget Styles */        .chat-widget {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            z-index: 1000;
+            z-index: 1001;
         }
 
         .chat-toggle {
@@ -1208,16 +1207,8 @@
                 right: 12px !important;
                 bottom: 112px !important;
             }
-        }
-    </style>
+        }    </style>
 </div>
-
-<!-- Затем виджет ИИ, строго под FL -->
-<button id="aiWidgetBtn"
-        class="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl hover:scale-110 transition-transform"
-        title="AI-ассистент (демо)">
-    <i class="fas fa-robot"></i>
-</button>
 
     <script>
         // Unemployment Chart
@@ -1610,6 +1601,7 @@ class AIJobChatBot {
     constructor() {
         this.isOpen = false;
         this.isTyping = false;
+        this.init();
         this.responses = {
             'job-search': [
                 "Отлично! Давайте найдем для вас подходящую работу. 🎯",
@@ -1670,14 +1662,30 @@ class AIJobChatBot {
         
         this.bindEvents();
     }
-    
-    bindEvents() {
-        this.chatToggle.addEventListener('click', () => this.toggleChat());
-        this.chatClose.addEventListener('click', () => this.closeChat());
-        this.sendBtn.addEventListener('click', () => this.sendMessage());
-        this.chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.sendMessage();
-        });
+      bindEvents() {
+        console.log('Привязка событий для чат-бота...');
+        if (this.chatToggle) {
+            this.chatToggle.addEventListener('click', () => {
+                console.log('Клик по кнопке чата');
+                this.toggleChat();
+            });
+        } else {
+            console.error('Кнопка chatToggle не найдена!');
+        }
+        
+        if (this.chatClose) {
+            this.chatClose.addEventListener('click', () => this.closeChat());
+        }
+        
+        if (this.sendBtn) {
+            this.sendBtn.addEventListener('click', () => this.sendMessage());
+        }
+        
+        if (this.chatInput) {
+            this.chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.sendMessage();
+            });
+        }
         
         // Quick actions
         document.querySelectorAll('.quick-action').forEach(btn => {
@@ -1687,13 +1695,15 @@ class AIJobChatBot {
             });
         });
     }
-    
-    toggleChat() {
+      toggleChat() {
+        console.log('toggleChat вызван, текущее состояние:', this.isOpen);
         this.isOpen = !this.isOpen;
         if (this.isOpen) {
+            console.log('Открываем чат');
             this.chatWindow.classList.add('active');
-            this.chatInput.focus();
+            if (this.chatInput) this.chatInput.focus();
         } else {
+            console.log('Закрываем чат');
             this.chatWindow.classList.remove('active');
         }
     }
@@ -1802,7 +1812,9 @@ class AIJobChatBot {
 
 // Initialize AI Chat Bot
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Инициализация чат-бота...');
     const aiChatBot = new AIJobChatBot();
+    console.log('Чат-бот инициализирован:', aiChatBot);
 });
 
 
