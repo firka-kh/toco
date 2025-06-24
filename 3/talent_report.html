@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчет по найденным соискателям</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS для стилей -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        /* Custom gradient background for header and hero sections */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* Анимация для выпадающих меню */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fade-in 0.18s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <!-- Левая часть: Лого и название -->
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
+                    <div>
+                        <!-- Добавляем ссылку на главную страницу -->
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
+                    </div>
+                </div>                <!-- Правая часть: Навигация, языки и профиль -->
+                <nav class="hidden lg:flex space-x-4 xl:space-x-6 items-center flex-wrap">
+                    <!-- Основные пункты меню -->
+                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Главная</a>
+                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Поиск работы</a>
+                    
+                    <!-- Выпадающее меню "Больше" -->
+                    <div class="relative">
+                        <button id="moreMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors flex items-center focus:outline-none whitespace-nowrap">
+                            Больше <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="moreDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="index.html#statistics" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Статистика</a>
+                            <a href="index.html#programs" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Программы</a>
+                            <a href="index.html#education" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Образование</a>
+                            <a href="about.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">О портале</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Премиум-услуги</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Фриланс</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Аналитика</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Выпадающее меню профиля -->
+                    <div class="relative">
+                        <button id="profileMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors focus:outline-none flex items-center whitespace-nowrap">
+                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="user_dashboard.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 font-semibold">🏠 Личный кабинет</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">⚙️ Настройки профиля</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Кабинет работодателя</a>
+                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Выпадающее меню языков -->
+                    <div class="relative">
+                        <button id="langMenuBtn" type="button" class="px-3 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400 whitespace-nowrap" aria-haspopup="true" aria-expanded="false">
+                            <span id="currentLangLabel">RUS</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div id="langDropdown" class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="ru">RUS</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="tg">TAJ</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="en">ENG</button>
+                        </div>
+                    </div>                </nav>
+                
+                <!-- Мобильное меню (гамбургер) -->
+                <div class="lg:hidden">
+                    <button id="mobileMenuBtn" type="button" class="text-white p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Мобильная навигация -->
+            <div id="mobileMenu" class="lg:hidden hidden mt-4 pb-4 border-t border-white border-opacity-20">
+                <div class="flex flex-col space-y-3 mt-4">
+                    <a href="index.html" class="font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="font-bold hover:text-yellow-300 transition-colors">Поиск работы</a>
+                    <a href="index.html#statistics" class="font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <a href="employer_profile.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для работодателя</a>
+                        <a href="user_dashboard.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для соискателя</a>
+                        <a href="register.html" class="block font-bold hover:text-yellow-300 transition-colors">Регистрация</a>
+                    </div>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <div class="flex space-x-3">
+                            <button class="px-3 py-1 bg-white text-gray-800 rounded font-bold text-sm" data-lang="ru">RUS</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="tg">TAJ</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="en">ENG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">Отчет по найденным соискателям</h1>
+        <div class="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow mb-8">
+            <table id="talentReportTable" class="min-w-full text-sm text-gray-800">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-3 py-2">ФИО</th>
+                        <th class="px-3 py-2">Возраст</th>
+                        <th class="px-3 py-2">Пол</th>
+                        <th class="px-3 py-2">Регион</th>
+                        <th class="px-3 py-2">Город/Район</th>
+                        <th class="px-3 py-2">Джамоат</th>
+                        <th class="px-3 py-2">Образование</th>
+                        <th class="px-3 py-2">Профессия</th>
+                        <th class="px-3 py-2">Опыт</th>
+                        <th class="px-3 py-2">Навыки</th>
+                        <th class="px-3 py-2">Статус занятости</th>
+                        <th class="px-3 py-2">Социальная уязвимость</th>
+                        <th class="px-3 py-2">Желаемая зарплата</th>
+                        <th class="px-3 py-2">Готов к переезду</th>
+                        <th class="px-3 py-2">Готов к командировкам</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Данные будут добавлены скриптом -->
+                </tbody>
+            </table>
+        </div>
+        <div class="flex flex-wrap gap-4 items-center justify-center">
+            <button id="downloadPdfBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors flex items-center">
+                <i class="fas fa-file-pdf mr-2"></i>Скачать PDF
+            </button>
+            <button id="downloadExcelBtn" class="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors flex items-center">
+                <i class="fas fa-file-excel mr-2"></i>Скачать Excel
+            </button>
+        </div>
+    </div>
+    <!-- Подключение библиотек экспорта -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        // Получаем данные из localStorage
+        const candidates = JSON.parse(localStorage.getItem('talentReportData') || '[]');
+        function renderTalentReportTable(candidates) {
+            const tbody = document.querySelector('#talentReportTable tbody');
+            tbody.innerHTML = '';
+            candidates.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="border px-3 py-2">${c.fullName}</td>
+                    <td class="border px-3 py-2">${c.age}</td>
+                    <td class="border px-3 py-2">${c.gender}</td>
+                    <td class="border px-3 py-2">${c.region}</td>
+                    <td class="border px-3 py-2">${c.cityDistrict}</td>
+                    <td class="border px-3 py-2">${c.jamoat}</td>
+                    <td class="border px-3 py-2">${c.education}</td>
+                    <td class="border px-3 py-2">${c.profession}</td>
+                    <td class="border px-3 py-2">${c.experienceYears}</td>
+                    <td class="border px-3 py-2">${c.skills}</td>
+                    <td class="border px-3 py-2">${c.employmentStatus}</td>
+                    <td class="border px-3 py-2">${c.socialVulnerability}</td>
+                    <td class="border px-3 py-2">${c.desiredSalary}</td>
+                    <td class="border px-3 py-2">${c.readyForRelocation}</td>
+                    <td class="border px-3 py-2">${c.readyForBusinessTrips}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        renderTalentReportTable(candidates);
+
+        // PDF export
+        document.getElementById('downloadPdfBtn').onclick = function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: "landscape" });
+            doc.setFontSize(10);
+            doc.text("Отчет по найденным соискателям", 14, 10);
+
+            const rows = candidates.map(c => [
+                c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
+                c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
+            ]);
+            const headers = [["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"]];
+
+            if (doc.autoTable) {
+                doc.autoTable({
+                    head: headers,
+                    body: rows,
+                    startY: 16,
+                    styles: { fontSize: 8 }
+                });
+            } else {
+                let y = 16;
+                rows.forEach(row => {
+                    doc.text(row.join(" | "), 14, y);
+                    y += 6;
+                });
+            }
+            doc.save("talent_report.pdf");
+        };
+
+        // Excel export
+        document.getElementById('downloadExcelBtn').onclick = function() {
+            const ws_data = [
+                ["ФИО", "Возраст", "Пол", "Регион", "Город/Район", "Джамоат", "Образование", "Профессия", "Опыт", "Навыки", "Статус занятости", "Социальная уязвимость", "Желаемая зарплата", "Готов к переезду", "Готов к командировкам"],
+                ...candidates.map(c => [
+                    c.fullName, c.age, c.gender, c.region, c.cityDistrict, c.jamoat, c.education, c.profession,
+                    c.experienceYears, c.skills, c.employmentStatus, c.socialVulnerability, c.desiredSalary, c.readyForRelocation, c.readyForBusinessTrips
+                ])
+            ];
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            XLSX.utils.book_append_sheet(wb, ws, "Отчет");
+            XLSX.writeFile(wb, "talent_report.xlsx");
+        };
+
+        // Выпадающее меню профиля и языков
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const langMenuBtn = document.getElementById('langMenuBtn');
+        const langDropdown = document.getElementById('langDropdown');
+        const currentLangLabel = document.getElementById('currentLangLabel');
+
+        profileMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+            langDropdown.classList.add('hidden');
+        });
+
+        langMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            langDropdown.classList.toggle('hidden');
+            profileDropdown.classList.add('hidden');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+            if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
+                langDropdown.classList.add('hidden');
+            }
+        });
+
+        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                currentLangLabel.textContent = this.textContent;
+                langDropdown.classList.add('hidden');
+            };
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Молодежные программы — Портал рынка труда</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 16px 32px -8px rgba(59, 130, 246, 0.15);
+        }
+        /* Стили для модального окна */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280; /* gray-500 */
+            cursor: pointer;
+        }
+        .modal-close-btn:hover {
+            color: #1f2937; /* gray-800 */
+        }
+        @keyframes ticker-move {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+        .animate-ticker {
+            transition: transform 0.6s cubic-bezier(.4,2,.6,1);
+        }
+        .news-item {
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem 1rem 1rem;
+            background: transparent;
+            border-bottom: 1px solid #e0e7ff;
+            font-size: 1rem;
+        }
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        .news-org {
+            font-weight: 600;
+            color: #6366f1;
+            background: #e0e7ff;
+            border-radius: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            margin-right: 1rem;
+            font-size: 0.95em;
+            display: inline-block;
+        }
+        .news-date {
+            color: #818cf8;
+            font-size: 0.9em;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+        /* Анимация для выпадающих меню */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fade-in 0.18s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <!-- Левая часть: Лого и название -->
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
+                    <div>
+                        <!-- Добавляем ссылку на главную страницу -->
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
+                    </div>
+                </div>                <!-- Правая часть: Навигация, языки и профиль -->
+                <nav class="hidden lg:flex space-x-4 xl:space-x-6 items-center flex-wrap">
+                    <!-- Основные пункты меню -->
+                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Главная</a>
+                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Поиск работы</a>
+                    
+                    <!-- Выпадающее меню "Больше" -->
+                    <div class="relative">
+                        <button id="moreMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors flex items-center focus:outline-none whitespace-nowrap">
+                            Больше <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="moreDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="index.html#statistics" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Статистика</a>
+                            <a href="index.html#programs" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Программы</a>
+                            <a href="index.html#education" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Образование</a>
+                            <a href="about.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">О портале</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Премиум-услуги</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Фриланс</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Аналитика</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Выпадающее меню профиля -->
+                    <div class="relative">
+                        <button id="profileMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors focus:outline-none flex items-center whitespace-nowrap">
+                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="user_dashboard.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 font-semibold">🏠 Личный кабинет</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">⚙️ Настройки профиля</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Кабинет работодателя</a>
+                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Выпадающее меню языков -->
+                    <div class="relative">
+                        <button id="langMenuBtn" type="button" class="px-3 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400 whitespace-nowrap" aria-haspopup="true" aria-expanded="false">
+                            <span id="currentLangLabel">RUS</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div id="langDropdown" class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="ru">RUS</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="tg">TAJ</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="en">ENG</button>
+                        </div>
+                    </div>                </nav>
+                
+                <!-- Мобильное меню (гамбургер) -->
+                <div class="lg:hidden">
+                    <button id="mobileMenuBtn" type="button" class="text-white p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Мобильная навигация -->
+            <div id="mobileMenu" class="lg:hidden hidden mt-4 pb-4 border-t border-white border-opacity-20">
+                <div class="flex flex-col space-y-3 mt-4">
+                    <a href="index.html" class="font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="font-bold hover:text-yellow-300 transition-colors">Поиск работы</a>
+                    <a href="index.html#statistics" class="font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <a href="employer_profile.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для работодателя</a>
+                        <a href="user_dashboard.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для соискателя</a>
+                        <a href="register.html" class="block font-bold hover:text-yellow-300 transition-colors">Регистрация</a>
+                    </div>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <div class="flex space-x-3">
+                            <button class="px-3 py-1 bg-white text-gray-800 rounded font-bold text-sm" data-lang="ru">RUS</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="tg">TAJ</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="en">ENG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-4">Молодежные программы</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Возможности для молодых специалистов: развитие, стажировки, наставничество и карьерный рост.</p>
+        </div>
+    </section>
+
+    <!-- Добавьте этот блок сразу после секции с заголовком (после </section> с gradient-bg): -->
+    <section class="bg-white py-8">
+        <div class="max-w-4xl mx-auto px-4">
+            <h3 class="text-2xl font-bold text-indigo-700 mb-4 flex items-center justify-center">
+                <i class="fas fa-newspaper mr-3 text-indigo-400"></i>
+                Новости молодежных программ от партнеров
+            </h3>
+            <div id="newsTicker" class="relative overflow-hidden rounded-xl shadow border border-indigo-100 bg-indigo-50">
+                <div id="newsList" class="flex flex-col gap-0 animate-ticker">
+                    <!-- Новости будут добавлены скриптом -->
+                </div>
+                <!-- Кнопки управления -->
+                <div class="absolute right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-2 z-10">
+                    <button id="prevNews" class="bg-white bg-opacity-80 hover:bg-indigo-100 text-indigo-600 rounded-full p-2 shadow transition"><i class="fas fa-chevron-up"></i></button>
+                    <button id="nextNews" class="bg-white bg-opacity-80 hover:bg-indigo-100 text-indigo-600 rounded-full p-2 shadow transition"><i class="fas fa-chevron-down"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-spacing bg-white">
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Карточка: Стажировки -->
+                <div class="bg-blue-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-briefcase text-4xl text-blue-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-blue-800">Стажировки в госучреждениях</h3>
+                    <p class="text-gray-700 mb-4">Получите ценный опыт работы в государственных организациях и начните свою карьеру с реальных задач.</p>
+                    <button class="action-button mt-auto bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+                        data-action="apply_internship"
+                        data-title="Заявка на стажировку"
+                        data-message="Для подачи заявки на стажировку, пожалуйста, перейдите на страницу оформления.">
+                        Подать заявку
+                    </button>
+                </div>
+                <!-- Карточка: Наставничество -->
+                <div class="bg-purple-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-user-friends text-4xl text-purple-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-purple-800">Программы наставничества</h3>
+                    <p class="text-gray-700 mb-4">Работайте с опытными наставниками, получайте советы и поддержку для профессионального и личностного роста.</p>
+                    <button class="action-button mt-auto bg-purple-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-600 transition-colors"
+                        data-action="join_mentorship"
+                        data-title="Присоединиться к программе наставничества"
+                        data-message="Ваш запрос на присоединение к программе наставничества отправлен. Мы свяжемся с вами в ближайшее время!">
+                        Присоединиться
+                    </button>
+                </div>
+                <!-- Карточка: Карьерное консультирование -->
+                <div class="bg-green-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-chalkboard-teacher text-4xl text-green-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-green-800">Карьерное консультирование</h3>
+                    <p class="text-gray-700 mb-4">Индивидуальные консультации по построению карьеры, выбору профессии и развитию навыков.</p>
+                    <button class="action-button mt-auto bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors"
+                        data-action="book_consultation"
+                        data-title="Запись на карьерное консультирование"
+                        data-message="Ваш запрос на карьерное консультирование успешно отправлен. Ожидайте подтверждения записи!">
+                        Записаться
+                    </button>
+                </div>
+                <!-- Карточка: Soft Skills -->
+                <div class="bg-yellow-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
+                    <i class="fas fa-lightbulb text-4xl text-yellow-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-yellow-800">Развитие soft skills</h3>
+                    <p class="text-gray-700 mb-4">Тренинги и мастер-классы по развитию коммуникации, лидерства, критического мышления и других навыков.</p>
+                    <button class="action-button mt-auto bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors"
+                        data-action="enroll_softskills"
+                        data-title="Запись на тренинг по soft skills"
+                        data-message="Вы успешно записаны на тренинг по развитию soft skills! Мы отправили детали на вашу почту.">
+                        Записаться
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="gradient-bg text-white py-12 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">О портале</h3>
+                    <p class="text-sm opacity-90">Официальный портал информационной системы рынка труда Республики Таджикистан</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Полезные ссылки</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Правительство РТ</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Министерство труда</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Налоговый комитет</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Нормативные акты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Поддержка</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Часто задаваемые вопросы</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Руководство пользователя</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Техническая поддержка</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Обратная связь</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Социальные сети</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2025 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно -->
+    <div id="infoModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="closeModalBtn">&times;</button>
+            <h3 class="text-xl font-bold mb-4 text-gray-800" id="modalTitle"></h3>
+            <p class="text-gray-700 mb-6" id="modalMessage"></p>
+            <div class="text-center">
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" id="modalActionBtn">ОК</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Профиль и языки (стандартная логика, как в других файлах)
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+        const langMenuBtn = document.getElementById('langMenuBtn');
+        const langDropdown = document.getElementById('langDropdown');
+        const currentLangLabel = document.getElementById('currentLangLabel');
+
+        profileMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+            langDropdown.classList.add('hidden');
+        });
+        document.addEventListener('click', function(e) {
+            if (profileDropdownContainer && !profileDropdownContainer.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        langMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            langDropdown.classList.toggle('hidden');
+            profileDropdown.classList.add('hidden');
+        });
+        document.addEventListener('click', function(e) {
+            if (langDropdown && !langDropdown.contains(e.target) && langMenuBtn && !langMenuBtn.contains(e.target)) {
+                langDropdown.classList.add('hidden');
+            }
+        });
+        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                currentLangLabel.textContent = this.textContent;
+                langDropdown.classList.add('hidden');
+            };
+        });
+
+        // Google Translate stub (prevent error if not loaded)
+        function googleTranslateElementInit() {}
+
+        // --- Логика модального окна ---
+        const infoModalOverlay = document.getElementById('infoModalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalActionBtn = document.getElementById('modalActionBtn');
+
+        function openModal(title, message, actionType) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            infoModalOverlay.classList.add('active');
+
+            // Настройка кнопки действия в модальном окне
+            modalActionBtn.onclick = () => {
+                closeModal();
+                if (actionType === 'apply_internship_redirect') {
+                    // Перенаправление только для стажировок
+                    window.location.href = 'professional_retraining_application.html';
+                }
+            };
+        }
+
+        function closeModal() {
+            infoModalOverlay.classList.remove('active');
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        infoModalOverlay.addEventListener('click', (e) => {
+            if (e.target === infoModalOverlay) {
+                closeModal();
+            }
+        });
+
+        // Обработчики для кнопок на карточках программ
+        document.querySelectorAll('.action-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const action = this.dataset.action;
+                const title = this.dataset.title;
+                const message = this.dataset.message;
+
+                if (action === 'apply_internship') {
+                    // Для стажировок, предлагаем перейти на страницу заявки
+                    openModal(title, message, 'apply_internship_redirect');
+                } else {
+                    // Для остальных программ - просто сообщение о принятии запроса
+                    openModal(title, message, 'generic_confirmation');
+                }
+            });
+        });
+
+        // Новости
+        const newsData = [
+            {
+                org: "UNICEF",
+                text: "Открыт набор на бесплатные курсы цифровых навыков для молодежи 16-25 лет.",
+                date: "09.06.2025",
+                link: "#"
+            },
+            {
+                org: "USAID",
+                text: "Стартует программа стажировок в IT-компаниях Душанбе. Подайте заявку до 20 июня!",
+                date: "08.06.2025",
+                link: "#"
+            },
+            {
+                org: "British Council",
+                text: "Мастер-класс по развитию soft skills для студентов вузов. Регистрация открыта.",
+                date: "07.06.2025",
+                link: "#"
+            },
+            {
+                org: "Aga Khan Foundation",
+                text: "Программа наставничества для молодых женщин. Участие бесплатное.",
+                date: "06.06.2025",
+                link: "#"
+            },
+            {
+                org: "World Bank",
+                text: "Гранты на обучение и карьерное консультирование для выпускников колледжей.",
+                date: "05.06.2025",
+                link: "#"
+            }
+        ];
+
+        const newsList = document.getElementById('newsList');
+        let currentIndex = 0;
+        const visibleCount = 2; // сколько новостей видно одновременно
+
+        function renderNews() {
+            newsList.innerHTML = '';
+            for (let i = 0; i < visibleCount; i++) {
+                const idx = (currentIndex + i) % newsData.length;
+                const news = newsData[idx];
+                const item = document.createElement('a');
+                item.href = news.link;
+                item.className = 'news-item hover:bg-indigo-100 transition-colors';
+                item.innerHTML = `
+                    <span class="news-org">${news.org}</span>
+                    <span>${news.text}</span>
+                    <span class="news-date"><i class="far fa-calendar-alt mr-1"></i>${news.date}</span>
+                `;
+                newsList.appendChild(item);
+            }
+        }
+        renderNews();
+
+        function nextNews() {
+            currentIndex = (currentIndex + 1) % newsData.length;
+            newsList.style.transform = 'translateY(32px)';
+            setTimeout(() => {
+                newsList.style.transition = 'transform 0.6s cubic-bezier(.4,2,.6,1)';
+                newsList.style.transform = 'translateY(0)';
+                renderNews();
+            }, 100);
+        }
+        function prevNews() {
+            currentIndex = (currentIndex - 1 + newsData.length) % newsData.length;
+            newsList.style.transform = 'translateY(-32px)';
+            setTimeout(() => {
+                newsList.style.transition = 'transform 0.6s cubic-bezier(.4,2,.6,1)';
+                newsList.style.transform = 'translateY(0)';
+                renderNews();
+            }, 100);
+        }
+
+        document.getElementById('nextNews').onclick = nextNews;
+        document.getElementById('prevNews').onclick = prevNews;
+
+        // Автоматическая прокрутка
+        let tickerInterval = setInterval(nextNews, 5000);
+        newsList.onmouseenter = () => clearInterval(tickerInterval);
+        newsList.onmouseleave = () => tickerInterval = setInterval(nextNews, 5000);
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div id="google_translate_element" style="display:none"></div>
+</body>
+</html>

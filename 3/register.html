@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация — Портал рынка труда</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .section-spacing {
+            padding: 3rem 0;
+        }
+        .focus-outline {
+            outline: 3px solid #667eea !important;
+            outline-offset: 2px;
+        }
+        .aria-error {
+            color: #dc2626;
+            font-size: 1rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-[17px]">    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <!-- Левая часть: Лого и название -->
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
+                    <div>
+                        <!-- Добавляем ссылку на главную страницу -->
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
+                    </div>
+                </div>                <!-- Правая часть: Навигация, языки и профиль -->
+                <nav class="hidden lg:flex space-x-4 xl:space-x-6 items-center flex-wrap">
+                    <!-- Основные пункты меню -->
+                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Главная</a>
+                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Поиск работы</a>
+                    
+                    <!-- Выпадающее меню "Больше" -->
+                    <div class="relative">
+                        <button id="moreMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors flex items-center focus:outline-none whitespace-nowrap">
+                            Больше <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="moreDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="index.html#statistics" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Статистика</a>
+                            <a href="index.html#programs" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Программы</a>
+                            <a href="index.html#education" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Образование</a>
+                            <a href="about.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">О портале</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Премиум-услуги</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Фриланс</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Аналитика</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Выпадающее меню профиля -->
+                    <div class="relative">
+                        <button id="profileMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors focus:outline-none flex items-center whitespace-nowrap">
+                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="user_dashboard.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 font-semibold">🏠 Личный кабинет</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">⚙️ Настройки профиля</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Кабинет работодателя</a>
+                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Выпадающее меню языков -->
+                    <div class="relative">
+                        <button id="langMenuBtn" type="button" class="px-3 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400 whitespace-nowrap" aria-haspopup="true" aria-expanded="false">
+                            <span id="currentLangLabel">RUS</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div id="langDropdown" class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="ru">RUS</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="tg">TAJ</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="en">ENG</button>
+                        </div>
+                    </div>                </nav>
+                
+                <!-- Мобильное меню (гамбургер) -->
+                <div class="lg:hidden">
+                    <button id="mobileMenuBtn" type="button" class="text-white p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Мобильная навигация -->
+            <div id="mobileMenu" class="lg:hidden hidden mt-4 pb-4 border-t border-white border-opacity-20">
+                <div class="flex flex-col space-y-3 mt-4">
+                    <a href="index.html" class="font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="font-bold hover:text-yellow-300 transition-colors">Поиск работы</a>
+                    <a href="index.html#statistics" class="font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <a href="employer_profile.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для работодателя</a>
+                        <a href="user_dashboard.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для соискателя</a>
+                        <a href="register.html" class="block font-bold hover:text-yellow-300 transition-colors">Регистрация</a>
+                    </div>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <div class="flex space-x-3">
+                            <button class="px-3 py-1 bg-white text-gray-800 rounded font-bold text-sm" data-lang="ru">RUS</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="tg">TAJ</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="en">ENG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+    <section class="section-spacing bg-white">
+        <div class="container mx-auto px-4 max-w-lg">
+            <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Регистрация на портале</h2>
+            <form class="bg-gray-50 rounded-lg shadow-lg p-8 space-y-6" id="registerForm" autocomplete="off" aria-label="Форма регистрации">
+                <div>
+                    <label for="registerMethod" class="block text-gray-700 font-medium mb-2">Способ регистрации <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <select id="registerMethod" name="registerMethod" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" aria-required="true" aria-describedby="registerMethodHelp">
+                        <option value="">-- Выберите --</option>
+                        <option value="email">По Email</option>
+                        <option value="phone">По номеру телефона</option>
+                        <option value="nsz">По номеру социальной защиты (НСЗ)</option>
+                    </select>
+                    <div id="registerMethodHelp" class="text-sm text-gray-500 mt-1">Выберите удобный способ регистрации</div>
+                </div>
+                <div id="dynamicFields"></div>
+                <div>
+                    <label for="fullname" class="block text-gray-700 font-medium mb-2">ФИО <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <input type="text" id="fullname" name="fullname" required aria-required="true" aria-label="Введите ваше полное имя" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите ваше ФИО">
+                </div>
+                <div>
+                    <label for="role" class="block text-gray-700 font-medium mb-2">Тип пользователя <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <select id="role" name="role" required aria-required="true" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">-- Выберите --</option>
+                        <option value="jobseeker">Ищу работу</option>
+                        <option value="employer">Работодатель</option>
+                        <option value="gov">Госслужащий</option>
+                        <option value="student">Учебный центр/Студент</option>
+                        <option value="other">Другое</option>
+                    </select>
+                </div>
+                <div id="roleFields"></div>
+                <div>
+                    <label for="region" class="block text-gray-700 font-medium mb-2">Регион</label>
+                    <select id="region" name="region" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">-- Выберите регион --</option>
+                        <option>Душанбе</option>
+                        <option>ГБАО</option>
+                        <option>Согдийская область</option>
+                        <option>Хатлонская область</option>
+                        <option>РРП</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="desiredPosition" class="block text-gray-700 font-medium mb-2">Желаемая должность</label>
+                    <input type="text" id="desiredPosition" name="desiredPosition" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Например, программист">
+                </div>
+                <div>
+                    <label for="password" class="block text-gray-700 font-medium mb-2">Пароль <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <input type="password" id="password" name="password" required minlength="8" aria-required="true" aria-label="Введите пароль" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Минимум 8 символов, буквы, цифры, спецзнаки">
+                </div>
+                <div>
+                    <label for="confirmPassword" class="block text-gray-700 font-medium mb-2">Подтвердите пароль <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" aria-required="true" aria-label="Повторите пароль" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Повторите пароль">
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="agree" name="agree" required class="h-4 w-4 text-blue-600 border-gray-300 rounded" aria-required="true">
+                    <label for="agree" class="ml-2 block text-sm text-gray-700">Я принимаю <a href="#" class="text-blue-600 underline">условия использования</a></label>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4 mt-2">
+                    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                        Зарегистрироваться
+                    </button>
+                    <button type="button" id="saveDraft" class="w-full bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
+                        Сохранить и продолжить позже
+                    </button>
+                </div>
+            </form>
+            <div id="successMessage" class="hidden mt-6 text-green-600 text-center font-semibold" aria-live="polite">
+                Регистрация прошла успешно! Проверьте email или телефон для подтверждения.
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4 text-center text-sm opacity-90">
+            &copy; 2024 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.
+        </div>
+    </footer>
+    <script>
+        // Голосовые подсказки (доступность)
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = 'ru-RU';
+                window.speechSynthesis.speak(utter);
+            }
+        }
+        document.querySelectorAll('input, select').forEach(el => {
+            el.addEventListener('focus', () => {
+                if (el.getAttribute('aria-label')) speak(el.getAttribute('aria-label'));
+                else if (el.labels && el.labels.length > 0) speak(el.labels[0].innerText);
+            });
+        });
+
+        // Динамические поля для разных способов регистрации
+        const methodSelect = document.getElementById('registerMethod');
+        const dynamicFields = document.getElementById('dynamicFields');
+        methodSelect.addEventListener('change', function() {
+            dynamicFields.innerHTML = '';
+            if (this.value === 'email') {
+                dynamicFields.innerHTML = `
+                    <label for="email" class="block text-gray-700 font-medium mb-2">Email <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <input type="email" id="email" name="email" required aria-required="true" aria-label="Введите ваш email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="example@email.com">
+                    <div id="emailError" class="aria-error hidden"></div>
+                `;
+            }
+            if (this.value === 'phone') {
+                dynamicFields.innerHTML = `
+                    <label for="phone" class="block text-gray-700 font-medium mb-2">Телефон <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <input type="tel" id="phone" name="phone" required aria-required="true" aria-label="Введите номер телефона" pattern="^\\+?\\d{9,15}$" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="+992 900 00 00 00">
+                    <div id="phoneError" class="aria-error hidden"></div>
+                `;
+            }
+            if (this.value === 'nsz') {
+                dynamicFields.innerHTML = `
+                    <label for="nsz" class="block text-gray-700 font-medium mb-2">Номер социальной защиты (НСЗ) <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <input type="text" id="nsz" name="nsz" required aria-required="true" aria-label="Введите номер социальной защиты" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="XXXXXXXXXXXX">
+                    <div id="nszError" class="aria-error hidden"></div>
+                    <div class="text-sm text-gray-500 mt-1">Данные будут автоматически заполнены из НРСЗ</div>
+                `;
+            }
+        });
+
+        // Динамические поля для ролей
+        const roleSelect = document.getElementById('role');
+        const roleFields = document.getElementById('roleFields');
+        roleSelect.addEventListener('change', function() {
+            roleFields.innerHTML = '';
+            if (this.value === 'employer') {
+                roleFields.innerHTML = `
+                    <label for="company" class="block text-gray-700 font-medium mb-2">Название организации <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <input type="text" id="company" name="company" required aria-required="true" aria-label="Введите название организации" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" placeholder="Введите название организации">
+                    <label for="inn" class="block text-gray-700 font-medium mb-2">ИНН организации <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <input type="text" id="inn" name="inn" required aria-required="true" aria-label="Введите ИНН" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите ИНН">
+                `;
+            }
+            if (this.value === 'gov') {
+                roleFields.innerHTML = `
+                    <label for="department" class="block text-gray-700 font-medium mb-2">Ведомство/организация <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <input type="text" id="department" name="department" required aria-required="true" aria-label="Введите название ведомства" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" placeholder="Введите название ведомства">
+                    <label for="position" class="block text-gray-700 font-medium mb-2">Должность <span aria-hidden="true" class="text-red-500">*</span></label>
+                    <input type="text" id="position" name="position" required aria-required="true" aria-label="Введите вашу должность" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите вашу должность">
+                `;
+            }
+        });
+
+        // Валидация email/phone/nsz
+        document.addEventListener('input', function(e) {
+            if (e.target.id === 'email') {
+                const email = e.target.value;
+                const error = document.getElementById('emailError');
+                if (email && !/^[\w-.]+@[\w-]+\.[a-z]{2,}$/i.test(email)) {
+                    error.textContent = 'Неверный формат email';
+                    error.classList.remove('hidden');
+                    speak('Неверный формат email');
+                } else {
+                    error.classList.add('hidden');
+                }
+            }
+            if (e.target.id === 'phone') {
+                const phone = e.target.value;
+                const error = document.getElementById('phoneError');
+                if (phone && !/^\+?\d{9,15}$/.test(phone.replace(/\s/g, ''))) {
+                    error.textContent = 'Неверный формат телефона';
+                    error.classList.remove('hidden');
+                    speak('Неверный формат телефона');
+                } else {
+                    error.classList.add('hidden');
+                }
+            }
+            if (e.target.id === 'nsz') {
+                const nsz = e.target.value;
+                const error = document.getElementById('nszError');
+                if (nsz && !/^\d{8,12}$/.test(nsz)) {
+                    error.textContent = 'Неверный формат НСЗ';
+                    error.classList.remove('hidden');
+                    speak('Неверный формат НСЗ');
+                } else {
+                    error.classList.add('hidden');
+                }
+            }
+        });
+
+        // Сохранить и продолжить позже (имитация)
+        document.getElementById('saveDraft').addEventListener('click', function() {
+            alert('Черновик формы сохранён. Вы сможете продолжить регистрацию позже.');
+        });
+
+        // Простая имитация успешной регистрации
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('successMessage').classList.remove('hidden');
+            speak('Регистрация прошла успешно! Проверьте email или телефон для подтверждения.');
+        });
+
+        // Клавиатурная навигация: выделение фокуса
+        document.querySelectorAll('input, select, button').forEach(el => {
+            el.addEventListener('focus', () => el.classList.add('focus-outline'));
+            el.addEventListener('blur', () => el.classList.remove('focus-outline'));
+        });
+
+        // Выпадающее меню профиля и языков (как на index.html)
+        const profileMenuBtn = document.getElementById('profileMenuBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const langMenuBtn = document.getElementById('langMenuBtn');
+        const langDropdown = document.getElementById('langDropdown');
+        const currentLangLabel = document.getElementById('currentLangLabel');
+
+        profileMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+            langDropdown.classList.add('hidden');
+        });
+
+        langMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            langDropdown.classList.toggle('hidden');
+            profileDropdown.classList.add('hidden');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+            if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
+                langDropdown.classList.add('hidden');
+            }
+        });
+
+        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.onclick = function() {
+                currentLangLabel.textContent = this.textContent;
+                langDropdown.classList.add('hidden');
+            };
+        });
+    </script>
+    <!-- Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'ru',
+                includedLanguages: 'ru,en,tg',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div id="google_translate_element" style="display:none"></div>
+</body>
+</html>
