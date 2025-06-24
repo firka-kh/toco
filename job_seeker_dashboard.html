@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Портал Рынка Труда Республики Таджикистан</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- User Profile Header -->
+            <div class="dashboard-header">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-info">
+                        <h1>Али Рахимов</h1>
+                        <p>Frontend разработчик</p>
+                        <div class="user-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> Душанбе</span>
+                            <span><i class="fas fa-clock"></i> Последний вход: сегодня</span>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn btn-outline">
+                            <i class="fas fa-edit"></i> Редактировать профиль
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-file-alt"></i> Мое резюме
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Profile Completion -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-tasks"></i> Завершение профиля</h3>
+                        <span class="completion-score">75%</span>
+                    </div>
+                    <div class="profile-completion">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                        <div class="completion-tasks">
+                            <div class="task completed">
+                                <i class="fas fa-check"></i>
+                                <span>Основная информация</span>
+                            </div>
+                            <div class="task completed">
+                                <i class="fas fa-check"></i>
+                                <span>Опыт работы</span>
+                            </div>
+                            <div class="task completed">
+                                <i class="fas fa-check"></i>
+                                <span>Образование</span>
+                            </div>
+                            <div class="task">
+                                <i class="fas fa-circle"></i>
+                                <span>Навыки и сертификаты</span>
+                            </div>
+                            <div class="task">
+                                <i class="fas fa-circle"></i>
+                                <span>Портфолио</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline btn-small">Завершить профиль</button>
+                    </div>
+                </div>
+
+                <!-- AI Recommendations -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-robot"></i> AI Рекомендации</h3>
+                        <span class="badge">Новые</span>
+                    </div>
+                    <div class="ai-recommendations">
+                        <div class="recommendation-item">
+                            <i class="fas fa-briefcase"></i>
+                            <div>
+                                <h4>React разработчик</h4>
+                                <p>TechSolutions • 3,000-4,000 TJS</p>
+                                <span class="match-score">95% совпадение</span>
+                            </div>
+                            <button class="btn btn-small btn-primary">Откликнуться</button>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fas fa-briefcase"></i>
+                            <div>
+                                <h4>Frontend Developer</h4>
+                                <p>WebStudio • 2,500-3,500 TJS</p>
+                                <span class="match-score">87% совпадение</span>
+                            </div>
+                            <button class="btn btn-small btn-primary">Откликнуться</button>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fas fa-briefcase"></i>
+                            <div>
+                                <h4>UI/UX дизайнер</h4>
+                                <p>DesignHub • 2,800-3,800 TJS</p>
+                                <span class="match-score">78% совпадение</span>
+                            </div>
+                            <button class="btn btn-small btn-primary">Откликнуться</button>
+                        </div>
+                        <a href="vacancies.html" class="view-all-link">Посмотреть все рекомендации</a>
+                    </div>
+                </div>
+
+                <!-- Application Status -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-paper-plane"></i> Мои заявки</h3>
+                        <span class="count-badge">7</span>
+                    </div>
+                    <div class="applications-list">
+                        <div class="application-item">
+                            <div class="application-info">
+                                <h4>Frontend разработчик</h4>
+                                <p>TechSolutions</p>
+                                <span class="application-date">5 дней назад</span>
+                            </div>
+                            <span class="status-badge under-review">На рассмотрении</span>
+                        </div>
+                        <div class="application-item">
+                            <div class="application-info">
+                                <h4>React разработчик</h4>
+                                <p>WebDev Agency</p>
+                                <span class="application-date">1 неделя назад</span>
+                            </div>
+                            <span class="status-badge interview">Приглашение на собеседование</span>
+                        </div>
+                        <div class="application-item">
+                            <div class="application-info">
+                                <h4>UI Designer</h4>
+                                <p>CreativeStudio</p>
+                                <span class="application-date">2 недели назад</span>
+                            </div>
+                            <span class="status-badge rejected">Отказ</span>
+                        </div>
+                        <button class="btn btn-outline btn-small">Все заявки</button>
+                    </div>
+                </div>
+
+                <!-- Saved Jobs -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bookmark"></i> Избранные вакансии</h3>
+                        <span class="count-badge">12</span>
+                    </div>
+                    <div class="saved-jobs">
+                        <div class="saved-job-item">
+                            <i class="fas fa-briefcase"></i>
+                            <div>
+                                <h4>Python Developer</h4>
+                                <p>DataTech • Душанбе</p>
+                                <span class="salary">4,000-5,000 TJS</span>
+                            </div>
+                            <button class="btn btn-small btn-primary">Откликнуться</button>
+                        </div>
+                        <div class="saved-job-item">
+                            <i class="fas fa-briefcase"></i>
+                            <div>
+                                <h4>Full Stack Developer</h4>
+                                <p>StartupHub • Душанбе</p>
+                                <span class="salary">5,000-7,000 TJS</span>
+                            </div>
+                            <button class="btn btn-small btn-primary">Откликнуться</button>
+                        </div>
+                        <div class="saved-job-item">
+                            <i class="fas fa-briefcase"></i>
+                            <div>
+                                <h4>UX Researcher</h4>
+                                <p>DesignLab • Худжанд</p>
+                                <span class="salary">3,500-4,500 TJS</span>
+                            </div>
+                            <button class="btn btn-small btn-primary">Откликнуться</button>
+                        </div>
+                        <a href="vacancies.html" class="view-all-link">Все избранные</a>
+                    </div>
+                </div>
+
+                <!-- Skills Assessment -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar"></i> Оценка навыков</h3>
+                        <button class="btn btn-small btn-outline">Пройти тест</button>
+                    </div>
+                    <div class="skills-assessment">
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>JavaScript</span>
+                                <span class="skill-level">Средний</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>React</span>
+                                <span class="skill-level">Продвинутый</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>CSS</span>
+                                <span class="skill-level">Экспертный</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Node.js</span>
+                                <span class="skill-level">Начинающий</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline btn-small">Добавить навык</button>
+                    </div>
+                </div>
+
+                <!-- Upcoming Events -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar"></i> Предстоящие события</h3>
+                    </div>
+                    <div class="upcoming-events">
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">25</span>
+                                <span class="month">ЯНВ</span>
+                            </div>
+                            <div class="event-info">
+                                <h4>Собеседование</h4>
+                                <p>React разработчик • WebDev Agency</p>
+                                <span class="event-time">14:00 - 15:00</span>
+                            </div>
+                            <button class="btn btn-small btn-outline">Детали</button>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">28</span>
+                                <span class="month">ЯНВ</span>
+                            </div>
+                            <div class="event-info">
+                                <h4>Вебинар</h4>
+                                <p>Карьера в IT</p>
+                                <span class="event-time">19:00 - 20:30</span>
+                            </div>
+                            <button class="btn btn-small btn-outline">Участвовать</button>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">02</span>
+                                <span class="month">ФЕВ</span>
+                            </div>
+                            <div class="event-info">
+                                <h4>Курс</h4>
+                                <p>Advanced React</p>
+                                <span class="event-time">Начало курса</span>
+                            </div>
+                            <button class="btn btn-small btn-outline">Подробнее</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-trophy"></i> Достижения</h3>
+                        <span class="count-badge">8</span>
+                    </div>
+                    <div class="achievements">
+                        <div class="achievement-item earned">
+                            <i class="fas fa-medal"></i>
+                            <div>
+                                <h4>Первая заявка</h4>
+                                <p>Отправили первую заявку на вакансию</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item earned">
+                            <i class="fas fa-star"></i>
+                            <div>
+                                <h4>Заполненный профиль</h4>
+                                <p>Заполнили профиль на 75%</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item earned">
+                            <i class="fas fa-certificate"></i>
+                            <div>
+                                <h4>Первый сертификат</h4>
+                                <p>Получили сертификат Frontend Developer</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item locked">
+                            <i class="fas fa-lock"></i>
+                            <div>
+                                <h4>Активный соискатель</h4>
+                                <p>Отправьте 10 заявок на вакансии</p>
+                                <span class="progress">7/10</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline btn-small">Все достижения</button>
+                    </div>
+                </div>
+
+                <!-- Career Statistics -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-line"></i> Статистика</h3>
+                    </div>
+                    <div class="career-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <div>
+                                <h4>156</h4>
+                                <p>Просмотров профиля</p>
+                                <span class="change positive">+12% за неделю</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-paper-plane"></i>
+                            <div>
+                                <h4>23</h4>
+                                <p>Отправленных заявок</p>
+                                <span class="change positive">+5 за неделю</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-handshake"></i>
+                            <div>
+                                <h4>3</h4>
+                                <p>Приглашений на собеседование</p>
+                                <span class="change neutral">Без изменений</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-chart-bar"></i>
+                            <div>
+                                <h4>13%</h4>
+                                <p>Отклик на заявки</p>
+                                <span class="change positive">+2% за месяц</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-lightning-bolt"></i> Быстрые действия</h3>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-search"></i>
+                            <span>Поиск вакансий</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Обновить резюме</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Найти курсы</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-certificate"></i>
+                            <span>Пройти сертификацию</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Карьерное консультирование</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Аналитика рынка</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bell"></i> Уведомления</h3>
+                        <span class="count-badge">3</span>
+                    </div>
+                    <div class="notifications">
+                        <div class="notification-item unread">
+                            <i class="fas fa-briefcase"></i>
+                            <div>
+                                <h4>Новая подходящая вакансия</h4>
+                                <p>Senior Frontend Developer в TechCorp</p>
+                                <span class="notification-time">2 часа назад</span>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <i class="fas fa-calendar"></i>
+                            <div>
+                                <h4>Напоминание о собеседовании</h4>
+                                <p>Завтра в 14:00 • WebDev Agency</p>
+                                <span class="notification-time">1 день назад</span>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <i class="fas fa-star"></i>
+                            <div>
+                                <h4>Новое достижение</h4>
+                                <p>Вы получили бейдж "Активный поиск"</p>
+                                <span class="notification-time">3 дня назад</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline btn-small">Все уведомления</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Dashboard functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Quick actions navigation
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const action = this.querySelector('span').textContent;
+                    
+                    const routes = {
+                        'Поиск вакансий': 'vacancies.html',
+                        'Обновить резюме': '#',
+                        'Найти курсы': 'courses.html',
+                        'Пройти сертификацию': 'certifications.html',
+                        'Карьерное консультирование': 'career_consulting.html',
+                        'Аналитика рынка': 'market_analytics.html'
+                    };
+                    
+                    if (routes[action] && routes[action] !== '#') {
+                        window.location.href = routes[action];
+                    } else {
+                        showNotification(`Функция "${action}" будет доступна в следующей версии`, 'info');
+                    }
+                });
+            });
+
+            // Application buttons
+            document.querySelectorAll('.btn-primary').forEach(btn => {
+                if (btn.textContent.includes('Откликнуться')) {
+                    btn.addEventListener('click', function() {
+                        showNotification('Заявка отправлена!', 'success');
+                    });
+                }
+            });
+
+            // Profile completion tasks
+            document.querySelectorAll('.task:not(.completed)').forEach(task => {
+                task.addEventListener('click', function() {
+                    showNotification('Переход к редактированию профиля...', 'info');
+                });
+            });
+
+            // Skill assessment
+            document.querySelector('.skills-assessment .btn').addEventListener('click', function() {
+                showNotification('Тест навыков будет доступен в следующей версии', 'info');
+            });
+
+            // Event buttons
+            document.querySelectorAll('.event-item .btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const eventTitle = this.closest('.event-item').querySelector('h4').textContent;
+                    if (btn.textContent.includes('Детали')) {
+                        showNotification(`Детали события "${eventTitle}" отправлены на email`, 'success');
+                    } else if (btn.textContent.includes('Участвовать')) {
+                        showNotification(`Регистрация на "${eventTitle}" прошла успешно!`, 'success');
+                    } else {
+                        showNotification(`Переход к "${eventTitle}"...`, 'info');
+                    }
+                });
+            });
+
+            // Mark notifications as read
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.remove('unread');
+                    const badge = document.querySelector('.notifications .count-badge');
+                    const currentCount = parseInt(badge.textContent);
+                    if (currentCount > 0) {
+                        badge.textContent = Math.max(0, currentCount - 1);
+                    }
+                });
+            });
+
+            // Profile actions
+            document.querySelectorAll('.profile-actions .btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (btn.textContent.includes('Редактировать')) {
+                        showNotification('Переход к редактированию профиля...', 'info');
+                    } else if (btn.textContent.includes('резюме')) {
+                        showNotification('Открытие конструктора резюме...', 'info');
+                    }
+                });
+            });
+
+            // Achievement interactions
+            document.querySelectorAll('.achievement-item.locked').forEach(item => {
+                item.addEventListener('click', function() {
+                    const title = this.querySelector('h4').textContent;
+                    showNotification(`Для получения достижения "${title}" выполните указанные условия`, 'info');
+                });
+            });
+
+            // Generic button handlers
+            document.querySelectorAll('.btn').forEach(btn => {
+                if (!btn.hasAttribute('data-handled')) {
+                    btn.setAttribute('data-handled', 'true');
+                    
+                    if (btn.textContent.includes('Завершить профиль')) {
+                        btn.addEventListener('click', function() {
+                            showNotification('Переход к завершению профиля...', 'info');
+                        });
+                    } else if (btn.textContent.includes('Все заявки')) {
+                        btn.addEventListener('click', function() {
+                            showNotification('Переход к списку всех заявок...', 'info');
+                        });
+                    } else if (btn.textContent.includes('Все избранные')) {
+                        btn.addEventListener('click', function() {
+                            window.location.href = 'vacancies.html';
+                        });
+                    } else if (btn.textContent.includes('Добавить навык')) {
+                        btn.addEventListener('click', function() {
+                            showNotification('Форма добавления навыка будет доступна в следующей версии', 'info');
+                        });
+                    } else if (btn.textContent.includes('достижения')) {
+                        btn.addEventListener('click', function() {
+                            showNotification('Переход к полному списку достижений...', 'info');
+                        });
+                    } else if (btn.textContent.includes('уведомления')) {
+                        btn.addEventListener('click', function() {
+                            showNotification('Переход к центру уведомлений...', 'info');
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карьерное консультирование - Портал Рынка Труда Республики Таджикистан</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-user-tie"></i> Карьерное консультирование</h1>
+                <p>Профессиональная помощь в планировании и развитии карьеры</p>
+            </div>
+
+            <!-- Consultation Types -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Виды консультаций</h2>
+                </div>
+                <div class="consultation-types">
+                    <div class="consultation-card">
+                        <div class="consultation-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <h3>Планирование карьеры</h3>
+                        <p>Определите свой карьерный путь и поставьте достижимые цели</p>
+                        <ul>
+                            <li>Анализ навыков и интересов</li>
+                            <li>Составление карьерного плана</li>
+                            <li>Выбор направления развития</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="openModal('booking-modal', 'career-planning')">
+                            Записаться
+                        </button>
+                    </div>
+                    
+                    <div class="consultation-card">
+                        <div class="consultation-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>Составление резюме</h3>
+                        <p>Создайте эффективное резюме, которое привлечет работодателей</p>
+                        <ul>
+                            <li>Анализ текущего резюме</li>
+                            <li>Структурирование информации</li>
+                            <li>Оптимизация под вакансии</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="openModal('booking-modal', 'resume-help')">
+                            Записаться
+                        </button>
+                    </div>
+                    
+                    <div class="consultation-card">
+                        <div class="consultation-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>Подготовка к собеседованию</h3>
+                        <p>Научитесь уверенно проходить собеседования любого формата</p>
+                        <ul>
+                            <li>Тренировка ответов на вопросы</li>
+                            <li>Работа над презентацией себя</li>
+                            <li>Преодоление стресса</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="openModal('booking-modal', 'interview-prep')">
+                            Записаться
+                        </button>
+                    </div>
+                    
+                    <div class="consultation-card">
+                        <div class="consultation-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Смена профессии</h3>
+                        <p>Планируйте переход в новую профессиональную область</p>
+                        <ul>
+                            <li>Анализ рынка труда</li>
+                            <li>План переквалификации</li>
+                            <li>Стратегия поиска работы</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="openModal('booking-modal', 'career-change')">
+                            Записаться
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Our Consultants -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Наши консультанты</h2>
+                </div>
+                <div class="consultants-grid">
+                    <div class="consultant-card">
+                        <div class="consultant-photo">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="consultant-info">
+                            <h3>Зарина Рахимова</h3>
+                            <p class="consultant-title">Старший карьерный консультант</p>
+                            <div class="consultant-experience">
+                                <span><i class="fas fa-medal"></i> 8 лет опыта</span>
+                                <span><i class="fas fa-users"></i> 1200+ клиентов</span>
+                            </div>
+                            <div class="consultant-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span>5.0 (89 отзывов)</span>
+                            </div>
+                            <div class="consultant-specializations">
+                                <span class="spec-tag">IT-карьера</span>
+                                <span class="spec-tag">Руководители</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">Выбрать консультанта</button>
+                    </div>
+                    
+                    <div class="consultant-card">
+                        <div class="consultant-photo">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="consultant-info">
+                            <h3>Алишер Каримов</h3>
+                            <p class="consultant-title">Консультант по IT-карьере</p>
+                            <div class="consultant-experience">
+                                <span><i class="fas fa-medal"></i> 6 лет опыта</span>
+                                <span><i class="fas fa-users"></i> 890+ клиентов</span>
+                            </div>
+                            <div class="consultant-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span>4.8 (67 отзывов)</span>
+                            </div>
+                            <div class="consultant-specializations">
+                                <span class="spec-tag">Программисты</span>
+                                <span class="spec-tag">Стартапы</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">Выбрать консультанта</button>
+                    </div>
+                    
+                    <div class="consultant-card">
+                        <div class="consultant-photo">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="consultant-info">
+                            <h3>Нигора Саидова</h3>
+                            <p class="consultant-title">Специалист по смене карьеры</p>
+                            <div class="consultant-experience">
+                                <span><i class="fas fa-medal"></i> 10 лет опыта</span>
+                                <span><i class="fas fa-users"></i> 1500+ клиентов</span>
+                            </div>
+                            <div class="consultant-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span>4.9 (124 отзыва)</span>
+                            </div>
+                            <div class="consultant-specializations">
+                                <span class="spec-tag">Смена профессии</span>
+                                <span class="spec-tag">40+ лет</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">Выбрать консультанта</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consultation Formats -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Форматы консультаций</h2>
+                </div>
+                <div class="formats-grid">
+                    <div class="format-card">
+                        <i class="fas fa-video"></i>
+                        <h3>Онлайн встреча</h3>
+                        <p>Видеоконференция через Zoom/Skype</p>
+                        <div class="format-price">
+                            <span>150 TJS</span>
+                            <small>за 1 час</small>
+                        </div>
+                    </div>
+                    <div class="format-card">
+                        <i class="fas fa-handshake"></i>
+                        <h3>Личная встреча</h3>
+                        <p>В офисе консультанта в Душанбе</p>
+                        <div class="format-price">
+                            <span>200 TJS</span>
+                            <small>за 1 час</small>
+                        </div>
+                    </div>
+                    <div class="format-card">
+                        <i class="fas fa-phone"></i>
+                        <h3>Телефонная консультация</h3>
+                        <p>Быстрая консультация по телефону</p>
+                        <div class="format-price">
+                            <span>100 TJS</span>
+                            <small>за 30 мин</small>
+                        </div>
+                    </div>
+                    <div class="format-card">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email консультация</h3>
+                        <p>Анализ резюме и рекомендации письменно</p>
+                        <div class="format-price">
+                            <span>80 TJS</span>
+                            <small>в течение 2 дней</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Stories -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Истории успеха</h2>
+                </div>
+                <div class="success-stories">
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="client-info">
+                                <i class="fas fa-user-circle"></i>
+                                <div>
+                                    <h4>Мухаммад Р.</h4>
+                                    <p>Переход из продаж в IT</p>
+                                </div>
+                            </div>
+                            <div class="story-result">
+                                <span class="success-metric">+180%</span>
+                                <small>рост зарплаты</small>
+                            </div>
+                        </div>
+                        <blockquote>
+                            "Благодаря консультациям смог четко понять, как перейти в IT. За 6 месяцев освоил программирование и нашел работу junior разработчика. Зарплата выросла почти в 3 раза!"
+                        </blockquote>
+                        <div class="story-footer">
+                            <span>Консультант: Алишер Каримов</span>
+                            <span>Декабрь 2024</span>
+                        </div>
+                    </div>
+                    
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="client-info">
+                                <i class="fas fa-user-circle"></i>
+                                <div>
+                                    <h4>Фарида Н.</h4>
+                                    <p>Возвращение после декрета</p>
+                                </div>
+                            </div>
+                            <div class="story-result">
+                                <span class="success-metric">3 недели</span>
+                                <small>до трудоустройства</small>
+                            </div>
+                        </div>
+                        <blockquote>
+                            "После 3 лет декрета было страшно искать работу. Консультант помогла обновить резюме, подготовиться к собеседованиям. Уже через 3 недели вышла на новую должность маркетолога."
+                        </blockquote>
+                        <div class="story-footer">
+                            <span>Консультант: Зарина Рахимова</span>
+                            <span>Январь 2025</span>
+                        </div>
+                    </div>
+                    
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="client-info">
+                                <i class="fas fa-user-circle"></i>
+                                <div>
+                                    <h4>Джамшед А.</h4>
+                                    <p>Карьерный рост в компании</p>
+                                </div>
+                            </div>
+                            <div class="story-result">
+                                <span class="success-metric">2 повышения</span>
+                                <small>за год</small>
+                            </div>
+                        </div>
+                        <blockquote>
+                            "Работал на одной позиции 4 года без продвижения. Консультант помогла составить план развития и эффективно презентовать достижения руководству. За год получил 2 повышения!"
+                        </blockquote>
+                        <div class="story-footer">
+                            <span>Консультант: Нигора Саидова</span>
+                            <span>Ноябрь 2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Modal -->
+            <div id="booking-modal" class="modal">
+                <div class="modal-content large">
+                    <span class="close">&times;</span>
+                    <h3><i class="fas fa-calendar-plus"></i> Записаться на консультацию</h3>
+                    <form class="booking-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Тип консультации</label>
+                                <select id="consultation-type" required>
+                                    <option value="">Выберите тип</option>
+                                    <option value="career-planning">Планирование карьеры</option>
+                                    <option value="resume-help">Составление резюме</option>
+                                    <option value="interview-prep">Подготовка к собеседованию</option>
+                                    <option value="career-change">Смена профессии</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Консультант</label>
+                                <select id="consultant" required>
+                                    <option value="">Выберите консультанта</option>
+                                    <option value="zarina">Зарина Рахимова</option>
+                                    <option value="alisher">Алишер Каримов</option>
+                                    <option value="nigora">Нигора Саидова</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Формат встречи</label>
+                                <select id="consultation-format" required>
+                                    <option value="">Выберите формат</option>
+                                    <option value="online">Онлайн встреча (150 TJS)</option>
+                                    <option value="offline">Личная встреча (200 TJS)</option>
+                                    <option value="phone">Телефонная консультация (100 TJS)</option>
+                                    <option value="email">Email консультация (80 TJS)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Дата и время</label>
+                                <input type="datetime-local" id="consultation-datetime" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Ваше имя</label>
+                            <input type="text" placeholder="Введите полное имя" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Телефон</label>
+                                <input type="tel" placeholder="+992 XX XXX XXXX" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" placeholder="email@example.com" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Текущая ситуация</label>
+                            <textarea placeholder="Кратко опишите вашу текущую ситуацию и что хотели бы обсудить..." rows="4"></textarea>
+                        </div>
+                        
+                        <div class="booking-summary">
+                            <div class="summary-item">
+                                <span>Стоимость:</span>
+                                <span id="consultation-cost">0 TJS</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-large">
+                                <i class="fas fa-calendar-check"></i> Забронировать консультацию
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('booking-modal')">
+                                Отмена
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Modal functions
+        function openModal(modalId, consultationType = null) {
+            if (consultationType) {
+                document.getElementById('consultation-type').value = consultationType;
+                updateConsultationCost();
+            }
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Update consultation cost based on format
+        function updateConsultationCost() {
+            const format = document.getElementById('consultation-format').value;
+            const costElement = document.getElementById('consultation-cost');
+            
+            const costs = {
+                'online': 150,
+                'offline': 200,
+                'phone': 100,
+                'email': 80
+            };
+            
+            const cost = costs[format] || 0;
+            costElement.textContent = `${cost} TJS`;
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Format selection cost update
+            document.getElementById('consultation-format').addEventListener('change', updateConsultationCost);
+
+            // Consultant selection
+            document.querySelectorAll('.consultant-card .btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const consultantName = this.closest('.consultant-card').querySelector('h3').textContent;
+                    const consultantSelect = document.getElementById('consultant');
+                    
+                    // Map names to values
+                    const nameToValue = {
+                        'Зарина Рахимова': 'zarina',
+                        'Алишер Каримов': 'alisher',
+                        'Нигора Саидова': 'nigora'
+                    };
+                    
+                    consultantSelect.value = nameToValue[consultantName] || '';
+                    openModal('booking-modal');
+                });
+            });
+
+            // Booking form submission
+            document.querySelector('.booking-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const consultationType = document.getElementById('consultation-type').value;
+                const consultant = document.getElementById('consultant').value;
+                const format = document.getElementById('consultation-format').value;
+                const datetime = document.getElementById('consultation-datetime').value;
+                
+                if (!consultationType || !consultant || !format || !datetime) {
+                    showNotification('Пожалуйста, заполните все обязательные поля', 'error');
+                    return;
+                }
+                
+                const cost = document.getElementById('consultation-cost').textContent;
+                showNotification(`Консультация забронирована! Стоимость: ${cost}. Мы свяжемся с вами для подтверждения.`, 'success');
+                closeModal('booking-modal');
+                
+                // Reset form
+                this.reset();
+                updateConsultationCost();
+            });
+
+            // Set minimum datetime to current time
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('consultation-datetime').min = now.toISOString().slice(0, 16);
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Close modal when clicking X
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электронная трудовая книжка - Портал Рынка Труда РТ</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <div class="hero-section electronic-labor-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1><i class="fas fa-book-open"></i> Электронная трудовая книжка</h1>
+                    <p>Современный цифровой сервис ведения трудовых книжек граждан Республики Таджикистан</p>
+                    <div class="hero-buttons">
+                        <button class="btn primary" onclick="showModal('loginModal')">
+                            <i class="fas fa-sign-in-alt"></i> Войти в личный кабинет
+                        </button>
+                        <button class="btn secondary" onclick="showModal('registerModal')">
+                            <i class="fas fa-user-plus"></i> Зарегистрироваться
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <section class="services-grid">
+                <h2>Доступные услуги</h2>
+                <div class="grid-3">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3>Просмотр трудовой книжки</h3>
+                        <p>Доступ к полной истории трудовой деятельности в электронном виде</p>
+                        <button class="btn primary">Открыть книжку</button>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3>Выписка из трудовой</h3>
+                        <p>Получение справки о трудовом стаже в формате PDF с электронной подписью</p>
+                        <button class="btn primary">Заказать выписку</button>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h3>История изменений</h3>
+                        <p>Отслеживание всех изменений и дополнений в трудовой книжке</p>
+                        <button class="btn primary">Посмотреть историю</button>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Верификация данных</h3>
+                        <p>Проверка подлинности записей с использованием блокчейн технологий</p>
+                        <button class="btn primary">Проверить данные</button>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>Справка для работодателя</h3>
+                        <p>Предоставление работодателю доступа к проверенным данным о стаже</p>
+                        <button class="btn primary">Предоставить доступ</button>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3>Расчет стажа</h3>
+                        <p>Автоматический расчет общего и специального трудового стажа</p>
+                        <button class="btn primary">Рассчитать стаж</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="labor-book-preview">
+                <h2>Электронная трудовая книжка - образец</h2>
+                <div class="labor-book">
+                    <div class="book-header">
+                        <h3>ТРУДОВАЯ КНИЖКА</h3>
+                        <div class="book-number">№ 0123456789</div>
+                    </div>
+                    
+                    <div class="personal-data">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="data-fields">
+                            <div class="field">
+                                <label>Фамилия:</label>
+                                <span>Рахимов</span>
+                            </div>
+                            <div class="field">
+                                <label>Имя:</label>
+                                <span>Алишер</span>
+                            </div>
+                            <div class="field">
+                                <label>Отчество:</label>
+                                <span>Абдуллоевич</span>
+                            </div>
+                            <div class="field">
+                                <label>Дата рождения:</label>
+                                <span>15.03.1985</span>
+                            </div>
+                            <div class="field">
+                                <label>Образование:</label>
+                                <span>Высшее</span>
+                            </div>
+                            <div class="field">
+                                <label>Общий стаж:</label>
+                                <span>12 лет 8 месяцев</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="work-history">
+                        <h4>Сведения о работе</h4>
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Сведения о приеме на работу, переводе на другую работу, увольнении</th>
+                                    <th>Наименование, дата и номер документа</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>12.09.2010</td>
+                                    <td>Принят на должность программиста в ООО "ИнфоТех"</td>
+                                    <td>Приказ от 12.09.2010 №45</td>
+                                </tr>
+                                <tr>
+                                    <td>15.03.2015</td>
+                                    <td>Переведен на должность ведущего программиста</td>
+                                    <td>Приказ от 15.03.2015 №78</td>
+                                </tr>
+                                <tr>
+                                    <td>20.06.2018</td>
+                                    <td>Уволен по собственному желанию</td>
+                                    <td>Приказ от 20.06.2018 №156</td>
+                                </tr>
+                                <tr>
+                                    <td>02.07.2018</td>
+                                    <td>Принят на должность IT-менеджера в ОсОО "ТехСолюшнс"</td>
+                                    <td>Приказ от 02.07.2018 №23</td>
+                                </tr>
+                                <tr>
+                                    <td>10.01.2023</td>
+                                    <td>Принят на должность руководителя IT-отдела в ОАО "ДигиталПро"</td>
+                                    <td>Приказ от 10.01.2023 №5</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="digital-signature">
+                        <i class="fas fa-certificate"></i>
+                        <span>Документ подписан электронной цифровой подписью</span>
+                        <small>Проверить подпись можно в разделе "Верификация данных"</small>
+                    </div>
+                </div>
+            </section>
+
+            <section class="statistics-section">
+                <h2>Статистика использования</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">245,678</div>
+                        <div class="stat-label">Пользователей системы</div>
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1,234,567</div>
+                        <div class="stat-label">Записей в базе</div>
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">98.7%</div>
+                        <div class="stat-label">Время доступности</div>
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15,432</div>
+                        <div class="stat-label">Справок за месяц</div>
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                </div>
+            </section>
+
+            <section class="faq-section">
+                <h2>Часто задаваемые вопросы</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <h4>Как получить доступ к электронной трудовой книжке?</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Для получения доступа необходимо зарегистрироваться на портале, используя паспортные данные и номер социального страхования. После верификации личности вы получите доступ к своей электронной трудовой книжке.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <h4>Имеет ли электронная трудовая книжка юридическую силу?</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Да, электронная трудовая книжка имеет полную юридическую силу согласно Трудовому кодексу Республики Таджикистан. Все записи заверяются электронной цифровой подписью и хранятся в защищенной государственной базе данных.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <h4>Можно ли получить бумажную копию трудовой книжки?</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Да, вы можете в любое время заказать официальную справку-выписку из электронной трудовой книжки в формате PDF с электронной подписью или получить бумажную копию в отделениях Агентства по трудоустройству.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <h4>Что делать, если обнаружена ошибка в записях?</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>При обнаружении ошибки обратитесь в службу поддержки через личный кабинет или по телефону горячей линии. Все исправления вносятся только на основании официальных документов от работодателя или по решению суда.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Модальные окна -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('loginModal')">&times;</span>
+            <h3><i class="fas fa-sign-in-alt"></i> Вход в личный кабинет</h3>
+            <form class="modal-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email или номер телефона:</label>
+                    <input type="text" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Пароль:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">Запомнить меня</label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn primary">Войти</button>
+                    <a href="#" class="forgot-password">Забыли пароль?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('registerModal')">&times;</span>
+            <h3><i class="fas fa-user-plus"></i> Регистрация</h3>
+            <form class="modal-form">
+                <div class="form-group">
+                    <label for="regLastName">Фамилия:</label>
+                    <input type="text" id="regLastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="regFirstName">Имя:</label>
+                    <input type="text" id="regFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPatronymic">Отчество:</label>
+                    <input type="text" id="regPatronymic">
+                </div>
+                <div class="form-group">
+                    <label for="regPassport">Серия и номер паспорта:</label>
+                    <input type="text" id="regPassport" placeholder="AA1234567" required>
+                </div>
+                <div class="form-group">
+                    <label for="regSocial">Номер социального страхования:</label>
+                    <input type="text" id="regSocial" placeholder="123-456-789" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email:</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPhone">Номер телефона:</label>
+                    <input type="tel" id="regPhone" placeholder="+992 XX XXX XXXX" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Пароль:</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="regConfirmPassword">Подтвердите пароль:</label>
+                    <input type="password" id="regConfirmPassword" required>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="agreeTerms" required>
+                    <label for="agreeTerms">Согласен с условиями использования и политикой конфиденциальности</label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn primary">Зарегистрироваться</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Загрузка компонентов
+        fetch('header.html').then(response => response.text()).then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+            initializeHeader();
+        });
+        
+        fetch('footer.html').then(response => response.text()).then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        });
+
+        // FAQ функциональность
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // Закрыть все остальные
+                document.querySelectorAll('.faq-answer').forEach(ans => {
+                    ans.style.display = 'none';
+                });
+                document.querySelectorAll('.faq-question i').forEach(ic => {
+                    ic.style.transform = 'rotate(0deg)';
+                });
+                
+                answer.style.display = 'block';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Обработка форм
+        document.querySelector('#loginModal form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('Успешный вход в систему! Перенаправление в личный кабинет...', 'success');
+            setTimeout(() => {
+                hideModal('loginModal');
+                window.location.href = 'job_seeker_dashboard.html';
+            }, 2000);
+        });
+
+        document.querySelector('#registerModal form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showNotification('Пароли не совпадают!', 'error');
+                return;
+            }
+            
+            showNotification('Регистрация успешна! На ваш email отправлено письмо для подтверждения.', 'success');
+            setTimeout(() => {
+                hideModal('registerModal');
+            }, 2000);
+        });
+
+        // Анимации при скролле
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.service-card, .stat-card, .faq-item');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Инициализация анимаций
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.service-card, .stat-card, .faq-item');
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                element.style.transition = 'all 0.6s ease';
+            });
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll();
+        });
+    </script>
+</body>
+</html>

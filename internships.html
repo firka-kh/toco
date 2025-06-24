@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Стажировки - Портал Рынка Труда Республики Таджикистан</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-graduation-cap"></i> Программы стажировок</h1>
+                <p>Получите практический опыт и начните карьеру в ведущих компаниях</p>
+            </div>
+
+            <!-- Internship Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-handshake"></i>
+                    <div class="stat-info">
+                        <h3>234</h3>
+                        <p>Активных стажировок</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-building"></i>
+                    <div class="stat-info">
+                        <h3>89</h3>
+                        <p>Компаний-партнеров</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-user-graduate"></i>
+                    <div class="stat-info">
+                        <h3>1,567</h3>
+                        <p>Успешных стажеров</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-percent"></i>
+                    <div class="stat-info">
+                        <h3>78%</h3>
+                        <p>Трудоустройство после стажировки</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="search-filter-section">
+                <div class="search-box">
+                    <input type="text" placeholder="Поиск стажировок..." id="internship-search">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="quick-filters">
+                    <button class="filter-btn active" data-filter="all">Все стажировки</button>
+                    <button class="filter-btn" data-filter="it">ИТ</button>
+                    <button class="filter-btn" data-filter="finance">Финансы</button>
+                    <button class="filter-btn" data-filter="marketing">Маркетинг</button>
+                    <button class="filter-btn" data-filter="design">Дизайн</button>
+                    <button class="filter-btn" data-filter="paid">Оплачиваемые</button>
+                </div>
+            </div>
+
+            <!-- Featured Internships -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Рекомендуемые стажировки</h2>
+                    <div class="sort-controls">
+                        <select id="sort-select">
+                            <option value="relevance">По релевантности</option>
+                            <option value="date">По дате публикации</option>
+                            <option value="company">По компании</option>
+                            <option value="duration">По продолжительности</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="internships-grid" id="internships-grid">
+                    <!-- Internship cards will be populated by JavaScript -->
+                </div>
+
+                <div class="pagination">
+                    <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                    <span class="pagination-numbers">
+                        <button class="pagination-number active">1</button>
+                        <button class="pagination-number">2</button>
+                        <button class="pagination-number">3</button>
+                    </span>
+                    <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Partner Companies -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Наши партнеры</h2>
+                </div>
+                <div class="partners-grid">
+                    <div class="partner-card">
+                        <div class="partner-logo">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>TechSolutions</h3>
+                        <p>IT-компания</p>
+                        <span class="internship-count">12 стажировок</span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-logo">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>FinanceBank</h3>
+                        <p>Банковские услуги</p>
+                        <span class="internship-count">8 стажировок</span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-logo">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>DesignStudio</h3>
+                        <p>Дизайн-агентство</p>
+                        <span class="internship-count">6 стажировок</span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-logo">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>MarketingPro</h3>
+                        <p>Маркетинговое агентство</p>
+                        <span class="internship-count">9 стажировок</span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-logo">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>StartupHub</h3>
+                        <p>Инкубатор стартапов</p>
+                        <span class="internship-count">15 стажировок</span>
+                    </div>
+                    <div class="partner-card">
+                        <div class="partner-logo">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>EduCenter</h3>
+                        <p>Образовательный центр</p>
+                        <span class="internship-count">7 стажировок</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Stories -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Истории успеха стажеров</h2>
+                </div>
+                <div class="success-stories">
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="intern-info">
+                                <i class="fas fa-user-circle"></i>
+                                <div>
+                                    <h4>Али Рахимов</h4>
+                                    <p>Стажер → Junior Developer</p>
+                                </div>
+                            </div>
+                            <div class="company-logo">
+                                <i class="fas fa-building"></i>
+                                <span>TechSolutions</span>
+                            </div>
+                        </div>
+                        <blockquote>
+                            "Стажировка в TechSolutions дала мне возможность применить знания на практике. Ментор помогал развиваться, и через 3 месяца мне предложили постоянную позицию junior разработчика."
+                        </blockquote>
+                        <div class="story-footer">
+                            <span>3 месяца стажировки</span>
+                            <span>Декабрь 2024</span>
+                        </div>
+                    </div>
+                    
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="intern-info">
+                                <i class="fas fa-user-circle"></i>
+                                <div>
+                                    <h4>Фарида Назарова</h4>
+                                    <p>Стажер → UX Designer</p>
+                                </div>
+                            </div>
+                            <div class="company-logo">
+                                <i class="fas fa-building"></i>
+                                <span>DesignStudio</span>
+                            </div>
+                        </div>
+                        <blockquote>
+                            "Стажировка в DesignStudio позволила мне понять весь процесс создания дизайна. Работала над реальными проектами для клиентов. Сейчас работаю UX дизайнером в этой же компании."
+                        </blockquote>
+                        <div class="story-footer">
+                            <span>4 месяца стажировки</span>
+                            <span>Январь 2025</span>
+                        </div>
+                    </div>
+                    
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="intern-info">
+                                <i class="fas fa-user-circle"></i>
+                                <div>
+                                    <h4>Джамшед Азизов</h4>
+                                    <p>Стажер → Marketing Specialist</p>
+                                </div>
+                            </div>
+                            <div class="company-logo">
+                                <i class="fas fa-building"></i>
+                                <span>MarketingPro</span>
+                            </div>
+                        </div>
+                        <blockquote>
+                            "Благодаря стажировке освоил цифровой маркетинг на практике. Участвовал в реальных кампаниях, работал с клиентами. После стажировки получил оффер на постоянную работу."
+                        </blockquote>
+                        <div class="story-footer">
+                            <span>6 месяцев стажировки</span>
+                            <span>Ноябрь 2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application Modal -->
+            <div id="application-modal" class="modal">
+                <div class="modal-content large">
+                    <span class="close">&times;</span>
+                    <h3><i class="fas fa-paper-plane"></i> Подать заявку на стажировку</h3>
+                    <form class="application-form">
+                        <div class="internship-info">
+                            <h4 id="modal-internship-title">Frontend разработчик</h4>
+                            <p id="modal-company-name">TechSolutions</p>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Имя и фамилия</label>
+                                <input type="text" placeholder="Введите полное имя" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" placeholder="email@example.com" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Телефон</label>
+                                <input type="tel" placeholder="+992 XX XXX XXXX" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Возраст</label>
+                                <input type="number" min="16" max="35" placeholder="23" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Образование</label>
+                            <select required>
+                                <option value="">Выберите уровень образования</option>
+                                <option value="student">Студент (текущий)</option>
+                                <option value="bachelor">Бакалавр</option>
+                                <option value="master">Магистр</option>
+                                <option value="other">Другое</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Университет/Учебное заведение</label>
+                            <input type="text" placeholder="Название учебного заведения">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Опыт работы</label>
+                            <textarea placeholder="Опишите ваш опыт работы (если есть) или учебные проекты..." rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Мотивация</label>
+                            <textarea placeholder="Почему вы хотите пройти стажировку в этой компании? Что ожидаете получить?" rows="4" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Резюме (необязательно)</label>
+                            <div class="file-upload">
+                                <input type="file" accept=".pdf,.doc,.docx">
+                                <span>Загрузить файл</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-large">
+                                <i class="fas fa-paper-plane"></i> Отправить заявку
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('application-modal')">
+                                Отмена
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Internship data
+        const internshipsData = [
+            {
+                id: 1,
+                title: "Frontend разработчик",
+                company: "TechSolutions",
+                category: "it",
+                location: "Душанбе",
+                duration: "3 месяца",
+                paid: true,
+                salary: "800 TJS/месяц",
+                requirements: ["HTML/CSS", "JavaScript", "React basics"],
+                description: "Стажировка для начинающих frontend разработчиков",
+                spots: 3,
+                totalSpots: 5,
+                deadline: "2025-02-15",
+                startDate: "2025-03-01",
+                featured: true
+            },
+            {
+                id: 2,
+                title: "UX/UI дизайнер",
+                company: "DesignStudio",
+                category: "design",
+                location: "Душанбе",
+                duration: "4 месяца",
+                paid: true,
+                salary: "600 TJS/месяц",
+                requirements: ["Figma", "Photoshop", "Creativity"],
+                description: "Изучение пользовательского опыта и интерфейсов",
+                spots: 2,
+                totalSpots: 3,
+                deadline: "2025-02-20",
+                startDate: "2025-03-05",
+                featured: true
+            },
+            {
+                id: 3,
+                title: "Цифровой маркетинг",
+                company: "MarketingPro",
+                category: "marketing",
+                location: "Худжанд",
+                duration: "6 месяцев",
+                paid: true,
+                salary: "700 TJS/месяц",
+                requirements: ["SMM", "Google Ads", "Analytics"],
+                description: "Практика в области интернет-маркетинга",
+                spots: 1,
+                totalSpots: 4,
+                deadline: "2025-02-10",
+                startDate: "2025-02-25",
+                featured: false
+            },
+            {
+                id: 4,
+                title: "Python разработчик",
+                company: "DataTech",
+                category: "it",
+                location: "Душанбе",
+                duration: "5 месяцев",
+                paid: true,
+                salary: "900 TJS/месяц",
+                requirements: ["Python", "Django", "PostgreSQL"],
+                description: "Backend разработка и работа с данными",
+                spots: 4,
+                totalSpots: 6,
+                deadline: "2025-03-01",
+                startDate: "2025-03-15",
+                featured: true
+            },
+            {
+                id: 5,
+                title: "Финансовый аналитик",
+                company: "FinanceBank",
+                category: "finance",
+                location: "Душанбе",
+                duration: "4 месяца",
+                paid: true,
+                salary: "750 TJS/месяц",
+                requirements: ["Excel", "Financial modeling", "Economics"],
+                description: "Анализ финансовых данных и отчетность",
+                spots: 2,
+                totalSpots: 3,
+                deadline: "2025-02-25",
+                startDate: "2025-03-10",
+                featured: false
+            },
+            {
+                id: 6,
+                title: "Мобильная разработка",
+                company: "AppDev",
+                category: "it",
+                location: "Душанбе",
+                duration: "6 месяцев",
+                paid: true,
+                salary: "850 TJS/месяц",
+                requirements: ["React Native", "JavaScript", "Mobile design"],
+                description: "Создание мобильных приложений",
+                spots: 3,
+                totalSpots: 4,
+                deadline: "2025-02-18",
+                startDate: "2025-03-08",
+                featured: false
+            },
+            {
+                id: 7,
+                title: "Графический дизайн",
+                company: "CreativeAgency",
+                category: "design",
+                location: "Худжанд",
+                duration: "3 месяца",
+                paid: false,
+                salary: "Неоплачиваемая",
+                requirements: ["Photoshop", "Illustrator", "Portfolio"],
+                description: "Создание визуального контента",
+                spots: 5,
+                totalSpots: 6,
+                deadline: "2025-03-05",
+                startDate: "2025-03-20",
+                featured: false
+            },
+            {
+                id: 8,
+                title: "Data Science",
+                company: "AnalyticsCorp",
+                category: "it",
+                location: "Душанбе",
+                duration: "6 месяцев",
+                paid: true,
+                salary: "1000 TJS/месяц",
+                requirements: ["Python", "Machine Learning", "Statistics"],
+                description: "Анализ данных и машинное обучение",
+                spots: 1,
+                totalSpots: 2,
+                deadline: "2025-02-12",
+                startDate: "2025-03-01",
+                featured: true
+            },
+            {
+                id: 9,
+                title: "Контент-маркетинг",
+                company: "ContentHub",
+                category: "marketing",
+                location: "Душанбе",
+                duration: "4 месяца",
+                paid: false,
+                salary: "Неоплачиваемая",
+                requirements: ["Copywriting", "SMM", "Content strategy"],
+                description: "Создание и продвижение контента",
+                spots: 6,
+                totalSpots: 8,
+                deadline: "2025-02-28",
+                startDate: "2025-03-15",
+                featured: false
+            },
+            {
+                id: 10,
+                title: "Бухгалтерский учет",
+                company: "AccountingPro",
+                category: "finance",
+                location: "Курган-Тюбе",
+                duration: "3 месяца",
+                paid: true,
+                salary: "500 TJS/месяц",
+                requirements: ["1C", "Excel", "Accounting basics"],
+                description: "Практика в области учета и отчетности",
+                spots: 3,
+                totalSpots: 4,
+                deadline: "2025-03-10",
+                startDate: "2025-03-25",
+                featured: false
+            }
+        ];
+
+        // Render internships
+        function renderInternships(internships = internshipsData) {
+            const grid = document.getElementById('internships-grid');
+            grid.innerHTML = internships.map(internship => `
+                <div class="internship-card ${internship.featured ? 'featured' : ''}" data-category="${internship.category}">
+                    ${internship.featured ? '<div class="featured-badge">Рекомендуемая</div>' : ''}
+                    <div class="internship-header">
+                        <div class="company-logo">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="internship-basic-info">
+                            <h3>${internship.title}</h3>
+                            <p class="company-name">${internship.company}</p>
+                            <div class="internship-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> ${internship.location}</span>
+                                <span><i class="fas fa-clock"></i> ${internship.duration}</span>
+                            </div>
+                        </div>
+                        <div class="internship-salary">
+                            <span class="salary ${internship.paid ? 'paid' : 'unpaid'}">${internship.salary}</span>
+                            ${internship.paid ? '<i class="fas fa-money-bill-wave"></i>' : '<i class="fas fa-heart"></i>'}
+                        </div>
+                    </div>
+                    
+                    <div class="internship-content">
+                        <p class="internship-description">${internship.description}</p>
+                        <div class="requirements">
+                            <strong>Требования:</strong>
+                            <div class="requirement-tags">
+                                ${internship.requirements.map(req => `<span class="req-tag">${req}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="internship-timeline">
+                            <div class="timeline-item">
+                                <span>Дедлайн заявок:</span>
+                                <span>${formatDate(internship.deadline)}</span>
+                            </div>
+                            <div class="timeline-item">
+                                <span>Начало стажировки:</span>
+                                <span>${formatDate(internship.startDate)}</span>
+                            </div>
+                        </div>
+                        <div class="spots-info">
+                            <div class="spots-bar">
+                                <div class="spots-fill" style="width: ${(internship.totalSpots - internship.spots) / internship.totalSpots * 100}%"></div>
+                            </div>
+                            <span>Осталось мест: ${internship.spots} из ${internship.totalSpots}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="internship-actions">
+                        <button class="btn btn-primary" onclick="openApplicationModal(${internship.id})">
+                            <i class="fas fa-paper-plane"></i> Подать заявку
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-bookmark"></i> Сохранить
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-share"></i> Поделиться
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                let filtered = internshipsData;
+                
+                if (filter === 'paid') {
+                    filtered = internshipsData.filter(internship => internship.paid);
+                } else if (filter !== 'all') {
+                    filtered = internshipsData.filter(internship => internship.category === filter);
+                }
+                
+                renderInternships(filtered);
+            });
+        });
+
+        // Search functionality
+        document.getElementById('internship-search').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filtered = internshipsData.filter(internship => 
+                internship.title.toLowerCase().includes(searchTerm) ||
+                internship.company.toLowerCase().includes(searchTerm) ||
+                internship.description.toLowerCase().includes(searchTerm)
+            );
+            renderInternships(filtered);
+        });
+
+        // Sort functionality
+        document.getElementById('sort-select').addEventListener('change', function() {
+            const sortBy = this.value;
+            let sorted = [...internshipsData];
+            
+            switch(sortBy) {
+                case 'date':
+                    sorted.sort((a, b) => new Date(b.deadline) - new Date(a.deadline));
+                    break;
+                case 'company':
+                    sorted.sort((a, b) => a.company.localeCompare(b.company));
+                    break;
+                case 'duration':
+                    sorted.sort((a, b) => {
+                        const getDurationMonths = (str) => parseInt(str.split(' ')[0]);
+                        return getDurationMonths(a.duration) - getDurationMonths(b.duration);
+                    });
+                    break;
+                default:
+                    sorted.sort((a, b) => b.featured - a.featured);
+            }
+            
+            renderInternships(sorted);
+        });
+
+        // Open application modal
+        function openApplicationModal(internshipId) {
+            const internship = internshipsData.find(i => i.id === internshipId);
+            if (internship) {
+                document.getElementById('modal-internship-title').textContent = internship.title;
+                document.getElementById('modal-company-name').textContent = internship.company;
+                document.getElementById('application-modal').style.display = 'block';
+            }
+        }
+
+        // Modal functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            renderInternships();
+
+            // Application form submission
+            document.querySelector('.application-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                showNotification('Заявка на стажировку отправлена! Мы рассмотрим её в течение 3-5 рабочих дней.', 'success');
+                closeModal('application-modal');
+                this.reset();
+            });
+
+            // Bookmark internships
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('fa-bookmark')) {
+                    e.target.classList.toggle('fas');
+                    e.target.classList.toggle('far');
+                    
+                    const action = e.target.classList.contains('fas') ? 'добавлена в' : 'удалена из';
+                    showNotification(`Стажировка ${action} закладки`, 'success');
+                }
+            });
+
+            // Share internships
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('fa-share') || e.target.textContent.includes('Поделиться')) {
+                    showNotification('Ссылка на стажировку скопирована в буфер обмена!', 'success');
+                }
+            });
+
+            // File upload styling
+            document.querySelector('.file-upload input').addEventListener('change', function() {
+                const fileName = this.files[0]?.name || 'Загрузить файл';
+                this.nextElementSibling.textContent = fileName;
+            });
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Close modal when clicking X
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

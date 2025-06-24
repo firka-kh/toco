@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>База резюме - Портал Рынка Труда Республики Таджикистан</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-user-tie"></i> База резюме</h1>
+                <p>Найдите подходящих кандидатов для вашей компании</p>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="search-filter-section">
+                <div class="search-box">
+                    <input type="text" placeholder="Поиск по навыкам, должности..." id="resume-search">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="quick-filters">
+                    <button class="filter-btn active" data-filter="all">Все резюме</button>
+                    <button class="filter-btn" data-filter="it">ИТ-специалисты</button>
+                    <button class="filter-btn" data-filter="education">Образование</button>
+                    <button class="filter-btn" data-filter="healthcare">Здравоохранение</button>
+                    <button class="filter-btn" data-filter="sales">Продажи</button>
+                </div>
+            </div>
+
+            <!-- Resume Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-info">
+                        <h3>15,432</h3>
+                        <p>Активных резюме</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-info">
+                        <h3>3,210</h3>
+                        <p>Обновлено сегодня</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-eye"></i>
+                    <div class="stat-info">
+                        <h3>892</h3>
+                        <p>Премиум резюме</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-video"></i>
+                    <div class="stat-info">
+                        <h3>456</h3>
+                        <p>С видео-презентацией</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resume List -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Список кандидатов</h2>
+                    <div class="sort-controls">
+                        <select id="sort-select">
+                            <option value="relevance">По релевантности</option>
+                            <option value="date">По дате обновления</option>
+                            <option value="experience">По опыту работы</option>
+                            <option value="salary">По зарплатным ожиданиям</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="resume-list" id="resume-list">
+                    <!-- Resume items will be populated by JavaScript -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                    <span class="pagination-numbers">
+                        <button class="pagination-number active">1</button>
+                        <button class="pagination-number">2</button>
+                        <button class="pagination-number">3</button>
+                        <span>...</span>
+                        <button class="pagination-number">25</button>
+                    </span>
+                    <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Contact Modal -->
+            <div id="contact-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3><i class="fas fa-envelope"></i> Связаться с кандидатом</h3>
+                    <form class="contact-form">
+                        <div class="form-group">
+                            <label>Сообщение кандидату</label>
+                            <textarea placeholder="Здравствуйте! Мы заинтересованы в вашей кандидатуре..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Предлагаемая должность</label>
+                            <input type="text" placeholder="Введите название должности">
+                        </div>
+                        <div class="form-group">
+                            <label>Предлагаемая зарплата (TJS)</label>
+                            <input type="number" placeholder="3000">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Отправить предложение
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('contact-modal')">
+                                Отмена
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Video Interview Modal -->
+            <div id="video-interview-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3><i class="fas fa-video"></i> Пригласить на видеоинтервью</h3>
+                    <form class="interview-form">
+                        <div class="form-group">
+                            <label>Дата и время</label>
+                            <input type="datetime-local" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Продолжительность</label>
+                            <select>
+                                <option value="30">30 минут</option>
+                                <option value="45">45 минут</option>
+                                <option value="60">1 час</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Сопроводительное сообщение</label>
+                            <textarea placeholder="Уважаемый кандидат, приглашаем вас на собеседование..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-calendar-plus"></i> Запланировать интервью
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('video-interview-modal')">
+                                Отмена
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Resume data
+        const resumeData = [
+            {
+                id: 1,
+                name: "Али Рахимов",
+                position: "Frontend разработчик",
+                experience: "3 года",
+                salary: "3000-4000 TJS",
+                location: "Душанбе",
+                skills: ["React", "JavaScript", "CSS", "HTML"],
+                education: "Высшее техническое",
+                lastActivity: "2 дня назад",
+                avatar: "fas fa-user-circle",
+                premium: true,
+                hasVideo: true,
+                rating: 4.8
+            },
+            {
+                id: 2,
+                name: "Фарида Назарова",
+                position: "UI/UX дизайнер",
+                experience: "2 года",
+                salary: "2500-3500 TJS",
+                location: "Худжанд",
+                skills: ["Figma", "Photoshop", "Sketch", "Illustrator"],
+                education: "Высшее",
+                lastActivity: "1 день назад",
+                avatar: "fas fa-user-circle",
+                premium: false,
+                hasVideo: false,
+                rating: 4.6
+            },
+            {
+                id: 3,
+                name: "Джамшед Азизов",
+                position: "Backend разработчик",
+                experience: "5 лет",
+                salary: "4000-6000 TJS",
+                location: "Душанбе",
+                skills: ["Python", "Django", "PostgreSQL", "Docker"],
+                education: "Высшее техническое",
+                lastActivity: "3 часа назад",
+                avatar: "fas fa-user-circle",
+                premium: true,
+                hasVideo: true,
+                rating: 4.9
+            },
+            {
+                id: 4,
+                name: "Нигора Саидова",
+                position: "Учитель математики",
+                experience: "7 лет",
+                salary: "1800-2500 TJS",
+                location: "Куляб",
+                skills: ["Математика", "Педагогика", "MS Office", "Онлайн обучение"],
+                education: "Высшее педагогическое",
+                lastActivity: "1 неделя назад",
+                avatar: "fas fa-user-circle",
+                premium: false,
+                hasVideo: false,
+                rating: 4.7
+            },
+            {
+                id: 5,
+                name: "Рустам Бободжонов",
+                position: "Менеджер по продажам",
+                experience: "4 года",
+                salary: "2000-3000 TJS",
+                location: "Душанбе",
+                skills: ["Продажи", "CRM", "Переговоры", "Клиентский сервис"],
+                education: "Высшее экономическое",
+                lastActivity: "5 дней назад",
+                avatar: "fas fa-user-circle",
+                premium: false,
+                hasVideo: true,
+                rating: 4.5
+            },
+            {
+                id: 6,
+                name: "Мунира Хакимова",
+                position: "Врач-терапевт",
+                experience: "8 лет",
+                salary: "2500-3500 TJS",
+                location: "Худжанд",
+                skills: ["Терапия", "Диагностика", "Консультирование", "Медицинская документация"],
+                education: "Высшее медицинское",
+                lastActivity: "2 дня назад",
+                avatar: "fas fa-user-circle",
+                premium: true,
+                hasVideo: false,
+                rating: 4.8
+            },
+            {
+                id: 7,
+                name: "Бахтиёр Рахматов",
+                position: "DevOps инженер",
+                experience: "6 лет",
+                salary: "5000-7000 TJS",
+                location: "Душанбе",
+                skills: ["AWS", "Kubernetes", "Jenkins", "Terraform"],
+                education: "Высшее техническое",
+                lastActivity: "1 день назад",
+                avatar: "fas fa-user-circle",
+                premium: true,
+                hasVideo: true,
+                rating: 4.9
+            },
+            {
+                id: 8,
+                name: "Зарина Махмудова",
+                position: "Бухгалтер",
+                experience: "10 лет",
+                salary: "2200-3000 TJS",
+                location: "Курган-Тюбе",
+                skills: ["1С", "Налогообложение", "Отчетность", "Excel"],
+                education: "Высшее экономическое",
+                lastActivity: "4 дня назад",
+                avatar: "fas fa-user-circle",
+                premium: false,
+                hasVideo: false,
+                rating: 4.6
+            },
+            {
+                id: 9,
+                name: "Санжар Юсупов",
+                position: "Data Scientist",
+                experience: "3 года",
+                salary: "4500-6000 TJS",
+                location: "Душанбе",
+                skills: ["Python", "Machine Learning", "SQL", "Tableau"],
+                education: "Высшее техническое",
+                lastActivity: "6 часов назад",
+                avatar: "fas fa-user-circle",
+                premium: true,
+                hasVideo: true,
+                rating: 4.7
+            },
+            {
+                id: 10,
+                name: "Гулноза Исмоилова",
+                position: "HR-специалист",
+                experience: "5 лет",
+                salary: "2800-3800 TJS",
+                location: "Худжанд",
+                skills: ["Рекрутинг", "HR-процессы", "Психология", "Английский язык"],
+                education: "Высшее",
+                lastActivity: "2 дня назад",
+                avatar: "fas fa-user-circle",
+                premium: false,
+                hasVideo: true,
+                rating: 4.5
+            }
+        ];
+
+        // Render resume list
+        function renderResumeList(resumes = resumeData) {
+            const resumeList = document.getElementById('resume-list');
+            resumeList.innerHTML = resumes.map(resume => `
+                <div class="resume-card ${resume.premium ? 'premium' : ''}" data-category="${getCategoryFromPosition(resume.position)}">
+                    <div class="resume-header">
+                        <div class="candidate-info">
+                            <div class="avatar">
+                                <i class="${resume.avatar}"></i>
+                            </div>
+                            <div class="basic-info">
+                                <h3>${resume.name} ${resume.premium ? '<span class="premium-badge"><i class="fas fa-crown"></i></span>' : ''}</h3>
+                                <p class="position">${resume.position}</p>
+                                <div class="experience-salary">
+                                    <span><i class="fas fa-briefcase"></i> ${resume.experience}</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> ${resume.location}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resume-actions">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <span>${resume.rating}</span>
+                            </div>
+                            <div class="badges">
+                                ${resume.hasVideo ? '<span class="video-badge"><i class="fas fa-video"></i></span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="resume-details">
+                        <div class="salary-expectation">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Зарплатные ожидания: ${resume.salary}</span>
+                        </div>
+                        <div class="education">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>${resume.education}</span>
+                        </div>
+                        <div class="skills">
+                            <i class="fas fa-tags"></i>
+                            <div class="skill-tags">
+                                ${resume.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="last-activity">
+                            <i class="fas fa-clock"></i>
+                            <span>Был(а) в сети: ${resume.lastActivity}</span>
+                        </div>
+                    </div>
+                    <div class="resume-footer">
+                        <button class="btn btn-outline" onclick="openModal('contact-modal')">
+                            <i class="fas fa-envelope"></i> Связаться
+                        </button>
+                        <button class="btn btn-primary" onclick="openModal('video-interview-modal')">
+                            <i class="fas fa-video"></i> Видеоинтервью
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-eye"></i> Подробнее
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getCategoryFromPosition(position) {
+            position = position.toLowerCase();
+            if (position.includes('разработчик') || position.includes('devops') || position.includes('data')) return 'it';
+            if (position.includes('учитель') || position.includes('преподаватель')) return 'education';
+            if (position.includes('врач') || position.includes('медсестра')) return 'healthcare';
+            if (position.includes('продаж') || position.includes('менеджер')) return 'sales';
+            return 'other';
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                if (filter === 'all') {
+                    renderResumeList(resumeData);
+                } else {
+                    const filtered = resumeData.filter(resume => getCategoryFromPosition(resume.position) === filter);
+                    renderResumeList(filtered);
+                }
+            });
+        });
+
+        // Search functionality
+        document.getElementById('resume-search').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filtered = resumeData.filter(resume => 
+                resume.name.toLowerCase().includes(searchTerm) ||
+                resume.position.toLowerCase().includes(searchTerm) ||
+                resume.skills.some(skill => skill.toLowerCase().includes(searchTerm))
+            );
+            renderResumeList(filtered);
+        });
+
+        // Sort functionality
+        document.getElementById('sort-select').addEventListener('change', function() {
+            const sortBy = this.value;
+            let sorted = [...resumeData];
+            
+            switch(sortBy) {
+                case 'date':
+                    // Mock sort by date (using lastActivity)
+                    sorted.sort((a, b) => {
+                        const getHoursAgo = (str) => {
+                            if (str.includes('час')) return parseInt(str);
+                            if (str.includes('день')) return parseInt(str) * 24;
+                            if (str.includes('неделя')) return parseInt(str) * 24 * 7;
+                            return 1000; // Default for older entries
+                        };
+                        return getHoursAgo(a.lastActivity) - getHoursAgo(b.lastActivity);
+                    });
+                    break;
+                case 'experience':
+                    sorted.sort((a, b) => parseInt(b.experience) - parseInt(a.experience));
+                    break;
+                case 'salary':
+                    sorted.sort((a, b) => {
+                        const getSalaryMax = (str) => parseInt(str.split('-')[1]);
+                        return getSalaryMax(b.salary) - getSalaryMax(a.salary);
+                    });
+                    break;
+                default:
+                    sorted.sort((a, b) => b.rating - a.rating);
+            }
+            
+            renderResumeList(sorted);
+        });
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Close modal when clicking X
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+
+        // Form submissions
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('Сообщение отправлено кандидату!', 'success');
+            closeModal('contact-modal');
+        });
+
+        document.querySelector('.interview-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('Приглашение на видеоинтервью отправлено!', 'success');
+            closeModal('video-interview-modal');
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderResumeList();
+        });
+    </script>
+</body>
+</html>

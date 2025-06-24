@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сертификация - Портал Рынка Труда Республики Таджикистан</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-certificate"></i> Профессиональная сертификация</h1>
+                <p>Подтвердите свои навыки и получите признанные сертификаты</p>
+            </div>
+
+            <!-- Certification Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-award"></i>
+                    <div class="stat-info">
+                        <h3>5,678</h3>
+                        <p>Сертификатов выдано</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-info">
+                        <h3>3,421</h3>
+                        <p>Сертифицированных специалистов</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-briefcase"></i>
+                    <div class="stat-info">
+                        <h3>89%</h3>
+                        <p>Трудоустройство после сертификации</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-info">
+                        <h3>+35%</h3>
+                        <p>Средний рост зарплаты</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Certifications -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Доступные сертификации</h2>
+                    <div class="cert-filters">
+                        <button class="filter-btn active" data-filter="all">Все</button>
+                        <button class="filter-btn" data-filter="it">ИТ</button>
+                        <button class="filter-btn" data-filter="business">Бизнес</button>
+                        <button class="filter-btn" data-filter="finance">Финансы</button>
+                        <button class="filter-btn" data-filter="languages">Языки</button>
+                    </div>
+                </div>
+
+                <div class="certifications-grid" id="certifications-grid">
+                    <!-- Certification cards will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Certification Process -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Как получить сертификат</h2>
+                </div>
+                <div class="process-steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Выберите сертификацию</h3>
+                            <p>Изучите доступные программы и выберите подходящую для ваших целей</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Подготовьтесь</h3>
+                            <p>Изучите материалы, пройдите подготовительные курсы или тренинги</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Сдайте экзамен</h3>
+                            <p>Пройдите онлайн-тестирование или практическое задание</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Получите сертификат</h3>
+                            <p>При успешной сдаче получите цифровой сертификат и добавьте в профиль</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Certificates -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Мои сертификаты</h2>
+                    <button class="btn btn-primary" onclick="openModal('verification-modal')">
+                        <i class="fas fa-shield-alt"></i> Проверить сертификат
+                    </button>
+                </div>
+
+                <div class="my-certificates">
+                    <div class="certificate-card earned">
+                        <div class="certificate-badge">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="certificate-info">
+                            <h3>Frontend разработчик</h3>
+                            <p>Выдан: 15 декабря 2024</p>
+                            <p>Действителен до: 15 декабря 2027</p>
+                            <div class="certificate-score">
+                                <span>Результат: 92/100</span>
+                            </div>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-download"></i> Скачать
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-share"></i> Поделиться
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card earned">
+                        <div class="certificate-badge">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="certificate-info">
+                            <h3>Управление проектами</h3>
+                            <p>Выдан: 8 ноября 2024</p>
+                            <p>Действителен до: 8 ноября 2027</p>
+                            <div class="certificate-score">
+                                <span>Результат: 88/100</span>
+                            </div>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-download"></i> Скачать
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-share"></i> Поделиться
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card in-progress">
+                        <div class="certificate-badge">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="certificate-info">
+                            <h3>Data Science</h3>
+                            <p>Подготовка к экзамену</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                            <p>Прогресс: 65% завершено</p>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-play"></i> Продолжить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exam Schedule -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Расписание экзаменов</h2>
+                </div>
+                <div class="exam-schedule">
+                    <div class="exam-item">
+                        <div class="exam-date">
+                            <span class="day">28</span>
+                            <span class="month">ЯНВ</span>
+                        </div>
+                        <div class="exam-info">
+                            <h3>Сертификация "UI/UX дизайнер"</h3>
+                            <p><i class="fas fa-clock"></i> 10:00 - 13:00</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Онлайн экзамен</p>
+                            <p><i class="fas fa-users"></i> Доступно мест: 15/20</p>
+                        </div>
+                        <button class="btn btn-primary">Записаться</button>
+                    </div>
+
+                    <div class="exam-item">
+                        <div class="exam-date">
+                            <span class="day">05</span>
+                            <span class="month">ФЕВ</span>
+                        </div>
+                        <div class="exam-info">
+                            <h3>Сертификация "Python разработчик"</h3>
+                            <p><i class="fas fa-clock"></i> 14:00 - 17:00</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Технопарк, Душанбе</p>
+                            <p><i class="fas fa-users"></i> Доступно мест: 8/12</p>
+                        </div>
+                        <button class="btn btn-primary">Записаться</button>
+                    </div>
+
+                    <div class="exam-item">
+                        <div class="exam-date">
+                            <span class="day">12</span>
+                            <span class="month">ФЕВ</span>
+                        </div>
+                        <div class="exam-info">
+                            <h3>Сертификация "Цифровой маркетинг"</h3>
+                            <p><i class="fas fa-clock"></i> 09:00 - 12:00</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Онлайн экзамен</p>
+                            <p><i class="fas fa-users"></i> Доступно мест: 25/30</p>
+                        </div>
+                        <button class="btn btn-primary">Записаться</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificate Verification Modal -->
+            <div id="verification-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3><i class="fas fa-shield-alt"></i> Проверка сертификата</h3>
+                    <form class="verification-form">
+                        <div class="form-group">
+                            <label>Номер сертификата</label>
+                            <input type="text" placeholder="Введите номер сертификата" required>
+                        </div>
+                        <div class="form-group">
+                            <label>ФИО держателя</label>
+                            <input type="text" placeholder="Введите полное имя" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Проверить
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('verification-modal')">
+                                Отмена
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Certification Detail Modal -->
+            <div id="cert-detail-modal" class="modal">
+                <div class="modal-content large">
+                    <span class="close">&times;</span>
+                    <div class="cert-detail-header">
+                        <div class="cert-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="cert-info">
+                            <h2 id="modal-cert-title">Frontend разработчик</h2>
+                            <p id="modal-cert-description">Сертификация подтверждает навыки разработки пользовательских интерфейсов</p>
+                            <div class="cert-meta">
+                                <span><i class="fas fa-clock"></i> Продолжительность: 3 часа</span>
+                                <span><i class="fas fa-tasks"></i> Практические задания</span>
+                                <span><i class="fas fa-certificate"></i> Действителен 3 года</span>
+                            </div>
+                        </div>
+                        <div class="cert-price">
+                            <span class="price">500 TJS</span>
+                        </div>
+                    </div>
+                    
+                    <div class="cert-detail-content">
+                        <h3>Что вы изучите</h3>
+                        <ul id="modal-cert-skills">
+                            <li>HTML5 и семантическая разметка</li>
+                            <li>CSS3, Flexbox и Grid</li>
+                            <li>JavaScript ES6+ и DOM</li>
+                            <li>React и современные библиотеки</li>
+                            <li>Адаптивная верстка и кроссбраузерность</li>
+                        </ul>
+                        
+                        <h3>Требования</h3>
+                        <ul>
+                            <li>Базовые знания HTML и CSS</li>
+                            <li>Понимание основ программирования</li>
+                            <li>Опыт работы с браузерными инструментами разработчика</li>
+                        </ul>
+                        
+                        <h3>Структура экзамена</h3>
+                        <div class="exam-structure">
+                            <div class="exam-part">
+                                <h4>Теоретическая часть (30%)</h4>
+                                <p>40 вопросов с вариантами ответов</p>
+                            </div>
+                            <div class="exam-part">
+                                <h4>Практическая часть (70%)</h4>
+                                <p>2 практических задания по верстке</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="cert-actions">
+                        <button class="btn btn-primary btn-large">
+                            <i class="fas fa-pen"></i> Записаться на экзамен
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-book"></i> Подготовительные материалы
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Certification data
+        const certificationsData = [
+            {
+                id: 1,
+                title: "Frontend разработчик",
+                category: "it",
+                description: "Подтвердите навыки создания пользовательских интерфейсов",
+                duration: "3 часа",
+                price: 500,
+                difficulty: "Средний",
+                icon: "fas fa-code",
+                skills: ["HTML5", "CSS3", "JavaScript", "React", "Адаптивная верстка"],
+                candidates: 234
+            },
+            {
+                id: 2,
+                title: "Python разработчик",
+                category: "it",
+                description: "Сертификация по разработке на языке Python",
+                duration: "4 часа",
+                price: 600,
+                difficulty: "Средний",
+                icon: "fab fa-python",
+                skills: ["Python", "Django", "FastAPI", "PostgreSQL", "API"],
+                candidates: 189
+            },
+            {
+                id: 3,
+                title: "UI/UX дизайнер",
+                category: "it",
+                description: "Подтвердите навыки проектирования интерфейсов",
+                duration: "3 часа",
+                price: 450,
+                difficulty: "Начинающий",
+                icon: "fas fa-palette",
+                skills: ["Figma", "Photoshop", "Прототипирование", "UX Research"],
+                candidates: 156
+            },
+            {
+                id: 4,
+                title: "Управление проектами",
+                category: "business",
+                description: "Сертификация по методологиям управления проектами",
+                duration: "2.5 часа",
+                price: 400,
+                difficulty: "Средний",
+                icon: "fas fa-tasks",
+                skills: ["Agile", "Scrum", "Kanban", "Project Management"],
+                candidates: 312
+            },
+            {
+                id: 5,
+                title: "Цифровой маркетинг",
+                category: "business",
+                description: "Подтвердите знания в области интернет-маркетинга",
+                duration: "2 часа",
+                price: 350,
+                difficulty: "Начинающий",
+                icon: "fas fa-bullhorn",
+                skills: ["SEO", "SMM", "Google Ads", "Analytics", "Email Marketing"],
+                candidates: 278
+            },
+            {
+                id: 6,
+                title: "Data Science",
+                category: "it",
+                description: "Сертификация по анализу данных и машинному обучению",
+                duration: "5 часов",
+                price: 800,
+                difficulty: "Продвинутый",
+                icon: "fas fa-chart-bar",
+                skills: ["Python", "Machine Learning", "SQL", "Tableau", "Statistics"],
+                candidates: 98
+            },
+            {
+                id: 7,
+                title: "Финансовый аналитик",
+                category: "finance",
+                description: "Подтвердите навыки финансового анализа",
+                duration: "3 часа",
+                price: 550,
+                difficulty: "Средний",
+                icon: "fas fa-chart-line",
+                skills: ["Excel", "Financial Modeling", "Valuation", "Risk Management"],
+                candidates: 145
+            },
+            {
+                id: 8,
+                title: "Английский язык B2",
+                category: "languages",
+                description: "Международный сертификат знания английского языка",
+                duration: "2 часа",
+                price: 300,
+                difficulty: "Средний",
+                icon: "fas fa-language",
+                skills: ["Speaking", "Listening", "Reading", "Writing", "Grammar"],
+                candidates: 456
+            }
+        ];
+
+        // Render certifications
+        function renderCertifications(certs = certificationsData) {
+            const grid = document.getElementById('certifications-grid');
+            grid.innerHTML = certs.map(cert => `
+                <div class="certification-card" data-category="${cert.category}">
+                    <div class="cert-header">
+                        <div class="cert-icon">
+                            <i class="${cert.icon}"></i>
+                        </div>
+                        <div class="cert-difficulty">${cert.difficulty}</div>
+                    </div>
+                    <div class="cert-content">
+                        <h3>${cert.title}</h3>
+                        <p>${cert.description}</p>
+                        <div class="cert-meta">
+                            <span><i class="fas fa-clock"></i> ${cert.duration}</span>
+                            <span><i class="fas fa-users"></i> ${cert.candidates} кандидатов</span>
+                        </div>
+                        <div class="cert-skills">
+                            ${cert.skills.slice(0, 3).map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                            ${cert.skills.length > 3 ? `<span class="skill-tag more">+${cert.skills.length - 3}</span>` : ''}
+                        </div>
+                        <div class="cert-price">
+                            <span class="price">${cert.price} TJS</span>
+                        </div>
+                    </div>
+                    <div class="cert-actions">
+                        <button class="btn btn-primary" onclick="openCertModal(${cert.id})">
+                            Подробнее
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter certifications
+        document.querySelectorAll('.cert-filters .filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.cert-filters .filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                if (filter === 'all') {
+                    renderCertifications(certificationsData);
+                } else {
+                    const filtered = certificationsData.filter(cert => cert.category === filter);
+                    renderCertifications(filtered);
+                }
+            });
+        });
+
+        // Open certification modal
+        function openCertModal(certId) {
+            const cert = certificationsData.find(c => c.id === certId);
+            if (cert) {
+                document.getElementById('modal-cert-title').textContent = cert.title;
+                document.getElementById('modal-cert-description').textContent = cert.description;
+                document.getElementById('modal-cert-skills').innerHTML = cert.skills.map(skill => `<li>${skill}</li>`).join('');
+                document.querySelector('#cert-detail-modal .cert-icon i').className = cert.icon;
+                document.querySelector('#cert-detail-modal .price').textContent = `${cert.price} TJS`;
+                document.getElementById('cert-detail-modal').style.display = 'block';
+            }
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCertifications();
+
+            // Exam registration
+            document.querySelectorAll('.exam-item .btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const examTitle = this.closest('.exam-item').querySelector('h3').textContent;
+                    showNotification(`Регистрация на "${examTitle}" прошла успешно!`, 'success');
+                });
+            });
+
+            // Certificate actions
+            document.querySelectorAll('.certificate-card .btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const action = this.textContent.trim();
+                    if (action.includes('Скачать')) {
+                        showNotification('Сертификат загружен!', 'success');
+                    } else if (action.includes('Поделиться')) {
+                        showNotification('Ссылка на сертификат скопирована!', 'success');
+                    } else if (action.includes('Продолжить')) {
+                        window.location.href = 'courses.html';
+                    }
+                });
+            });
+
+            // Verification form
+            document.querySelector('.verification-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                showNotification('Сертификат подтвержден! Статус: Действителен', 'success');
+                closeModal('verification-modal');
+            });
+
+            // Certification enrollment
+            document.querySelector('#cert-detail-modal .btn-primary').addEventListener('click', function() {
+                showNotification('Регистрация на экзамен прошла успешно!', 'success');
+                closeModal('cert-detail-modal');
+            });
+
+            // Bookmark certifications
+            document.querySelectorAll('.certification-card .fa-bookmark').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    this.classList.toggle('fas');
+                    this.classList.toggle('far');
+                    
+                    if (this.classList.contains('fas')) {
+                        showNotification('Сертификация добавлена в закладки', 'success');
+                    } else {
+                        showNotification('Сертификация удалена из закладок', 'info');
+                    }
+                });
+            });
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Close modal when clicking X
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

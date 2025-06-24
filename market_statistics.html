@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика рынка труда - Портал Рынка Труда Республики Таджикистан</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-chart-bar"></i> Статистика рынка труда</h1>
+                <p>Актуальные данные и тенденции рынка труда Республики Таджикистан</p>
+            </div>
+
+            <!-- Key Indicators -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Ключевые показатели</h2>
+                    <div class="time-filter">
+                        <button class="filter-btn active" data-period="month">Месяц</button>
+                        <button class="filter-btn" data-period="quarter">Квартал</button>
+                        <button class="filter-btn" data-period="year">Год</button>
+                    </div>
+                </div>
+                <div class="key-indicators">
+                    <div class="indicator-card">
+                        <div class="indicator-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="indicator-content">
+                            <h3>Активные вакансии</h3>
+                            <div class="indicator-value">12,450</div>
+                            <div class="indicator-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+8.5% за месяц</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="indicator-content">
+                            <h3>Соискатели</h3>
+                            <div class="indicator-value">89,320</div>
+                            <div class="indicator-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+12.3% за месяц</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="indicator-content">
+                            <h3>Трудоустройства</h3>
+                            <div class="indicator-value">1,567</div>
+                            <div class="indicator-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+5.2% за месяц</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="indicator-content">
+                            <h3>Компании</h3>
+                            <div class="indicator-value">3,780</div>
+                            <div class="indicator-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+3.1% за месяц</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Regional Statistics -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Статистика по регионам</h2>
+                </div>
+                <div class="chart-container">
+                    <canvas id="regionalChart"></canvas>
+                </div>
+                <div class="regional-details">
+                    <div class="region-stat">
+                        <h4>Город Душанбе</h4>
+                        <div class="region-metrics">
+                            <span>Вакансии: 5,230</span>
+                            <span>Соискатели: 23,450</span>
+                            <span>Средняя зарплата: 3,200 TJS</span>
+                        </div>
+                    </div>
+                    <div class="region-stat">
+                        <h4>Согдийская область</h4>
+                        <div class="region-metrics">
+                            <span>Вакансии: 3,120</span>
+                            <span>Соискатели: 18,760</span>
+                            <span>Средняя зарплата: 2,450 TJS</span>
+                        </div>
+                    </div>
+                    <div class="region-stat">
+                        <h4>Хатлонская область</h4>
+                        <div class="region-metrics">
+                            <span>Вакансии: 2,890</span>
+                            <span>Соискатели: 16,230</span>
+                            <span>Средняя зарплата: 2,100 TJS</span>
+                        </div>
+                    </div>
+                    <div class="region-stat">
+                        <h4>РРП</h4>
+                        <div class="region-metrics">
+                            <span>Вакансии: 1,010</span>
+                            <span>Соискатели: 4,890</span>
+                            <span>Средняя зарплата: 2,800 TJS</span>
+                        </div>
+                    </div>
+                    <div class="region-stat">
+                        <h4>ГБАО</h4>
+                        <div class="region-metrics">
+                            <span>Вакансии: 200</span>
+                            <span>Соискатели: 990</span>
+                            <span>Средняя зарплата: 2,300 TJS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Industry Analysis -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Анализ по отраслям</h2>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Распределение вакансий по отраслям</h3>
+                        <canvas id="industryVacanciesChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Средние зарплаты по отраслям</h3>
+                        <canvas id="industrySalariesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employment Trends -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Тенденции трудоустройства</h2>
+                </div>
+                <div class="trend-chart-container">
+                    <canvas id="employmentTrendChart"></canvas>
+                </div>
+                <div class="trend-insights">
+                    <div class="insight-card">
+                        <i class="fas fa-trending-up"></i>
+                        <div>
+                            <h4>Рост спроса на IT-специалистов</h4>
+                            <p>Количество IT-вакансий выросло на 45% за последний год</p>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <h4>Увеличение удаленных позиций</h4>
+                            <p>28% новых вакансий предлагают возможность удаленной работы</p>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <i class="fas fa-graduation-cap"></i>
+                        <div>
+                            <h4>Востребованность образования</h4>
+                            <p>Спрос на преподавателей и тренеров вырос на 23%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Age and Gender Statistics -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Демографическая статистика</h2>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Распределение по возрасту</h3>
+                        <canvas id="ageDistributionChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Гендерное распределение</h3>
+                        <canvas id="genderDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Demand -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Востребованные навыки</h2>
+                </div>
+                <div class="skills-demand">
+                    <div class="skill-category">
+                        <h3>IT и технологии</h3>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <span>JavaScript</span>
+                                <div class="skill-demand-bar">
+                                    <div class="demand-fill" style="width: 95%"></div>
+                                </div>
+                                <span class="demand-count">1,234 вакансий</span>
+                            </div>
+                            <div class="skill-item">
+                                <span>Python</span>
+                                <div class="skill-demand-bar">
+                                    <div class="demand-fill" style="width: 87%"></div>
+                                </div>
+                                <span class="demand-count">1,089 вакансий</span>
+                            </div>
+                            <div class="skill-item">
+                                <span>React</span>
+                                <div class="skill-demand-bar">
+                                    <div class="demand-fill" style="width: 78%"></div>
+                                </div>
+                                <span class="demand-count">892 вакансии</span>
+                            </div>
+                            <div class="skill-item">
+                                <span>SQL</span>
+                                <div class="skill-demand-bar">
+                                    <div class="demand-fill" style="width: 69%"></div>
+                                </div>
+                                <span class="demand-count">756 вакансий</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Языки</h3>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <span>Английский язык</span>
+                                <div class="skill-demand-bar">
+                                    <div class="demand-fill" style="width: 92%"></div>
+                                </div>
+                                <span class="demand-count">2,345 вакансий</span>
+                            </div>
+                            <div class="skill-item">
+                                <span>Русский язык</span>
+                                <div class="skill-demand-bar">
+                                    <div class="demand-fill" style="width: 85%"></div>
+                                </div>
+                                <span class="demand-count">1,987 вакансий</span>
+                            </div>
+                            <div class="skill-item">
+                                <span>Китайский язык</span>
+                                <div class="skill-demand-bar">
+                                    <div class="demand-fill" style="width: 34%"></div>
+                                </div>
+                                <span class="demand-count">234 вакансии</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Общие навыки</h3>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <span>Управление проектами</span>
+                                <div class="skill-demand-bar">
+                                    <div class="demand-fill" style="width: 76%"></div>
+                                </div>
+                                <span class="demand-count">823 вакансии</span>
+                            </div>
+                            <div class="skill-item">
+                                <span>Аналитическое мышление</span>
+                                <div class="skill-demand-bar">
+                                    <div class="demand-fill" style="width: 71%"></div>
+                                </div>
+                                <span class="demand-count">745 вакансий</span>
+                            </div>
+                            <div class="skill-item">
+                                <span>Коммуникативные навыки</span>
+                                <div class="skill-demand-bar">
+                                    <div class="demand-fill" style="width: 68%"></div>
+                                </div>
+                                <span class="demand-count">692 вакансии</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Options -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Экспорт данных</h2>
+                </div>
+                <div class="export-options">
+                    <button class="btn btn-outline" onclick="exportData('pdf')">
+                        <i class="fas fa-file-pdf"></i> Экспорт в PDF
+                    </button>
+                    <button class="btn btn-outline" onclick="exportData('excel')">
+                        <i class="fas fa-file-excel"></i> Экспорт в Excel
+                    </button>
+                    <button class="btn btn-outline" onclick="exportData('csv')">
+                        <i class="fas fa-file-csv"></i> Экспорт в CSV
+                    </button>
+                    <button class="btn btn-primary" onclick="generateReport()">
+                        <i class="fas fa-chart-bar"></i> Создать отчет
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Chart configurations and data
+        const chartColors = {
+            primary: '#00A1F1',
+            secondary: '#0078D4',
+            accent: '#4FC3F7',
+            success: '#28a745',
+            warning: '#ffc107',
+            danger: '#dc3545',
+            info: '#17a2b8'
+        };
+
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            setupTimeFilters();
+        });
+
+        function initializeCharts() {
+            // Regional Chart
+            const regionalCtx = document.getElementById('regionalChart').getContext('2d');
+            new Chart(regionalCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Душанбе', 'Согдийская обл.', 'Хатлонская обл.', 'РРП', 'ГБАО'],
+                    datasets: [{
+                        label: 'Активные вакансии',
+                        data: [5230, 3120, 2890, 1010, 200],
+                        backgroundColor: chartColors.primary,
+                        borderColor: chartColors.secondary,
+                        borderWidth: 1
+                    }, {
+                        label: 'Соискатели',
+                        data: [23450, 18760, 16230, 4890, 990],
+                        backgroundColor: chartColors.accent,
+                        borderColor: chartColors.info,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Industry Vacancies Chart
+            const industryVacanciesCtx = document.getElementById('industryVacanciesChart').getContext('2d');
+            new Chart(industryVacanciesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['ИТ', 'Образование', 'Здравоохранение', 'Финансы', 'Торговля', 'Производство', 'Другое'],
+                    datasets: [{
+                        data: [2340, 1890, 1560, 1340, 1120, 980, 3220],
+                        backgroundColor: [
+                            chartColors.primary,
+                            chartColors.secondary,
+                            chartColors.accent,
+                            chartColors.success,
+                            chartColors.warning,
+                            chartColors.danger,
+                            chartColors.info
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Industry Salaries Chart
+            const industrySalariesCtx = document.getElementById('industrySalariesChart').getContext('2d');
+            new Chart(industrySalariesCtx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: ['ИТ', 'Финансы', 'Энергетика', 'Телеком', 'Образование', 'Здравоохранение', 'Торговля'],
+                    datasets: [{
+                        label: 'Средняя зарплата (TJS)',
+                        data: [4200, 3800, 3500, 3200, 2500, 2300, 2100],
+                        backgroundColor: chartColors.primary,
+                        borderColor: chartColors.secondary,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Employment Trend Chart
+            const employmentTrendCtx = document.getElementById('employmentTrendChart').getContext('2d');
+            new Chart(employmentTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                    datasets: [{
+                        label: 'Количество вакансий',
+                        data: [8900, 9200, 9800, 10500, 11200, 11800, 12100, 12300, 12600, 12800, 12400, 12450],
+                        borderColor: chartColors.primary,
+                        backgroundColor: 'rgba(0, 161, 241, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Трудоустройства',
+                        data: [1200, 1350, 1450, 1560, 1680, 1720, 1650, 1580, 1620, 1670, 1590, 1567],
+                        borderColor: chartColors.success,
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Age Distribution Chart
+            const ageCtx = document.getElementById('ageDistributionChart').getContext('2d');
+            new Chart(ageCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['18-25', '26-35', '36-45', '46-55', '55+'],
+                    datasets: [{
+                        label: 'Соискатели',
+                        data: [28450, 35670, 18230, 6120, 850],
+                        backgroundColor: chartColors.primary,
+                        borderColor: chartColors.secondary,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Gender Distribution Chart
+            const genderCtx = document.getElementById('genderDistributionChart').getContext('2d');
+            new Chart(genderCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Мужчины', 'Женщины'],
+                    datasets: [{
+                        data: [52340, 36980],
+                        backgroundColor: [chartColors.primary, chartColors.accent]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Time filter functionality
+        function setupTimeFilters() {
+            document.querySelectorAll('.time-filter .filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.time-filter .filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const period = this.dataset.period;
+                    updateStatistics(period);
+                });
+            });
+        }
+
+        function updateStatistics(period) {
+            // Mock data update based on period
+            const multipliers = {
+                month: 1,
+                quarter: 3.2,
+                year: 12.5
+            };
+            
+            const multiplier = multipliers[period] || 1;
+            
+            // Update indicator values (mock)
+            document.querySelectorAll('.indicator-value').forEach((element, index) => {
+                const baseValues = [12450, 89320, 1567, 3780];
+                element.textContent = Math.round(baseValues[index] * multiplier).toLocaleString();
+            });
+            
+            showNotification(`Статистика обновлена для периода: ${period}`, 'success');
+        }
+
+        // Export functions
+        function exportData(format) {
+            const formatNames = {
+                pdf: 'PDF',
+                excel: 'Excel',
+                csv: 'CSV'
+            };
+            
+            showNotification(`Экспорт данных в формате ${formatNames[format]} начат. Файл будет готов через несколько секунд.`, 'success');
+            
+            // Mock file download
+            setTimeout(() => {
+                showNotification(`Файл статистики.${format} готов к скачиванию!`, 'success');
+            }, 2000);
+        }
+
+        function generateReport() {
+            showNotification('Создание комплексного отчета... Это может занять несколько минут.', 'info');
+            
+            setTimeout(() => {
+                showNotification('Комплексный отчет "Статистика рынка труда" готов к скачиванию!', 'success');
+            }, 3000);
+        }
+
+        // Skill demand interactions
+        document.querySelectorAll('.skill-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const skillName = this.querySelector('span').textContent;
+                showNotification(`Детальная информация по навыку "${skillName}" будет доступна в следующей версии`, 'info');
+            });
+        });
+
+        // Regional statistics interactions
+        document.querySelectorAll('.region-stat').forEach(item => {
+            item.addEventListener('click', function() {
+                const regionName = this.querySelector('h4').textContent;
+                showNotification(`Переход к детальной статистике региона "${regionName}"`, 'info');
+            });
+        });
+
+        // Insight card interactions
+        document.querySelectorAll('.insight-card').forEach(item => {
+            item.addEventListener('click', function() {
+                const insightTitle = this.querySelector('h4').textContent;
+                showNotification(`Подробная аналитика: "${insightTitle}"`, 'info');
+            });
+        });
+    </script>
+</body>
+</html>

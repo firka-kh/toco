@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Зарплатные отчеты - Портал Рынка Труда Республики Таджикистан</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-money-bill-wave"></i> Зарплатные отчеты</h1>
+                <p>Анализ уровня зарплат по профессиям, регионам и отраслям</p>
+            </div>
+
+            <!-- Salary Calculator -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Калькулятор зарплат</h2>
+                    <p>Узнайте рыночную стоимость вашей профессии</p>
+                </div>
+                <div class="salary-calculator">
+                    <form class="calculator-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Профессия</label>
+                                <select id="profession" required>
+                                    <option value="">Выберите профессию</option>
+                                    <option value="frontend">Frontend разработчик</option>
+                                    <option value="backend">Backend разработчик</option>
+                                    <option value="fullstack">Fullstack разработчик</option>
+                                    <option value="designer">UI/UX дизайнер</option>
+                                    <option value="pm">Project Manager</option>
+                                    <option value="qa">QA инженер</option>
+                                    <option value="devops">DevOps инженер</option>
+                                    <option value="analyst">Бизнес-аналитик</option>
+                                    <option value="teacher">Преподаватель</option>
+                                    <option value="accountant">Бухгалтер</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Опыт работы</label>
+                                <select id="experience" required>
+                                    <option value="">Выберите опыт</option>
+                                    <option value="junior">0-2 года (Junior)</option>
+                                    <option value="middle">2-5 лет (Middle)</option>
+                                    <option value="senior">5+ лет (Senior)</option>
+                                    <option value="lead">8+ лет (Lead/Team Lead)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Регион</label>
+                                <select id="region" required>
+                                    <option value="">Выберите регион</option>
+                                    <option value="dushanbe">Город Душанбе</option>
+                                    <option value="sughd">Согдийская область</option>
+                                    <option value="khatlon">Хатлонская область</option>
+                                    <option value="rrp">РРП</option>
+                                    <option value="gbao">ГБАО</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-calculator"></i> Рассчитать
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="calculator-result" id="calculator-result">
+                        <!-- Result will be displayed here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Average Salaries by Industry -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Средние зарплаты по отраслям</h2>
+                </div>
+                <div class="salary-chart-container">
+                    <canvas id="industrySalaryChart"></canvas>
+                </div>
+                <div class="salary-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Отрасль</th>
+                                <th>Минимальная</th>
+                                <th>Средняя</th>
+                                <th>Максимальная</th>
+                                <th>Изменение</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><i class="fas fa-code"></i> Информационные технологии</td>
+                                <td>2,500 TJS</td>
+                                <td>4,200 TJS</td>
+                                <td>8,000 TJS</td>
+                                <td class="positive">+12%</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-chart-line"></i> Финансы и банковское дело</td>
+                                <td>2,000 TJS</td>
+                                <td>3,800 TJS</td>
+                                <td>7,500 TJS</td>
+                                <td class="positive">+8%</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-industry"></i> Энергетика</td>
+                                <td>2,200 TJS</td>
+                                <td>3,500 TJS</td>
+                                <td>6,000 TJS</td>
+                                <td class="positive">+5%</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-phone"></i> Телекоммуникации</td>
+                                <td>1,800 TJS</td>
+                                <td>3,200 TJS</td>
+                                <td>5,500 TJS</td>
+                                <td class="positive">+6%</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-graduation-cap"></i> Образование</td>
+                                <td>1,200 TJS</td>
+                                <td>2,500 TJS</td>
+                                <td>4,500 TJS</td>
+                                <td class="positive">+3%</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-heartbeat"></i> Здравоохранение</td>
+                                <td>1,500 TJS</td>
+                                <td>2,300 TJS</td>
+                                <td>4,000 TJS</td>
+                                <td class="positive">+4%</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-shopping-cart"></i> Торговля</td>
+                                <td>1,000 TJS</td>
+                                <td>2,100 TJS</td>
+                                <td>3,500 TJS</td>
+                                <td class="positive">+2%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Salary by Experience -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Зарплаты по уровню опыта</h2>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>IT-сфера</h3>
+                        <canvas id="itExperienceChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Все отрасли</h3>
+                        <canvas id="allExperienceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Regional Salary Comparison -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Сравнение зарплат по регионам</h2>
+                </div>
+                <div class="regional-salary-chart">
+                    <canvas id="regionalSalaryChart"></canvas>
+                </div>
+                <div class="regional-insights">
+                    <div class="insight-item">
+                        <h4>Душанбе - лидер по зарплатам</h4>
+                        <p>Средняя зарплата в столице на 35% выше общереспубликанского уровня</p>
+                    </div>
+                    <div class="insight-item">
+                        <h4>Согдийская область - второе место</h4>
+                        <p>Промышленный регион показывает стабильный рост зарплат</p>
+                    </div>
+                    <div class="insight-item">
+                        <h4>Растущий потенциал РРП</h4>
+                        <p>Районы республиканского подчинения демонстрируют рост на 15%</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Paying Companies -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Компании с высокими зарплатами</h2>
+                </div>
+                <div class="companies-list">
+                    <div class="company-salary-card">
+                        <div class="company-info">
+                            <i class="fas fa-building"></i>
+                            <div>
+                                <h4>TechSolutions International</h4>
+                                <p>IT-разработка • 150+ сотрудников</p>
+                            </div>
+                        </div>
+                        <div class="salary-range">
+                            <span class="min-salary">3,000 TJS</span>
+                            <span class="avg-salary">5,500 TJS</span>
+                            <span class="max-salary">9,000 TJS</span>
+                        </div>
+                    </div>
+                    <div class="company-salary-card">
+                        <div class="company-info">
+                            <i class="fas fa-building"></i>
+                            <div>
+                                <h4>National Bank of Tajikistan</h4>
+                                <p>Банковское дело • 500+ сотрудников</p>
+                            </div>
+                        </div>
+                        <div class="salary-range">
+                            <span class="min-salary">2,500 TJS</span>
+                            <span class="avg-salary">4,800 TJS</span>
+                            <span class="max-salary">8,500 TJS</span>
+                        </div>
+                    </div>
+                    <div class="company-salary-card">
+                        <div class="company-info">
+                            <i class="fas fa-building"></i>
+                            <div>
+                                <h4>Tajik Telecom</h4>
+                                <p>Телекоммуникации • 200+ сотрудников</p>
+                            </div>
+                        </div>
+                        <div class="salary-range">
+                            <span class="min-salary">2,200 TJS</span>
+                            <span class="avg-salary">4,200 TJS</span>
+                            <span class="max-salary">7,000 TJS</span>
+                        </div>
+                    </div>
+                    <div class="company-salary-card">
+                        <div class="company-info">
+                            <i class="fas fa-building"></i>
+                            <div>
+                                <h4>Tajik Air</h4>
+                                <p>Авиация • 800+ сотрудников</p>
+                            </div>
+                        </div>
+                        <div class="salary-range">
+                            <span class="min-salary">2,000 TJS</span>
+                            <span class="avg-salary">3,800 TJS</span>
+                            <span class="max-salary">6,500 TJS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Salary Trends -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Тенденции изменения зарплат</h2>
+                </div>
+                <div class="trends-chart-container">
+                    <canvas id="salaryTrendsChart"></canvas>
+                </div>
+                <div class="trend-analysis">
+                    <div class="trend-card positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <div>
+                            <h4>Общий рост зарплат</h4>
+                            <p>Средняя зарплата выросла на 8.5% за последний год</p>
+                        </div>
+                    </div>
+                    <div class="trend-card positive">
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <h4>IT-сектор лидирует</h4>
+                            <p>Зарплаты в IT выросли на 15% - максимальный рост среди отраслей</p>
+                        </div>
+                    </div>
+                    <div class="trend-card neutral">
+                        <i class="fas fa-balance-scale"></i>
+                        <div>
+                            <h4>Стабилизация в госсекторе</h4>
+                            <p>Зарплаты в государственном секторе растут умеренно - 4% в год</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Generation -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Создать персональный отчет</h2>
+                </div>
+                <div class="report-generator">
+                    <form class="report-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Тип отчета</label>
+                                <select required>
+                                    <option value="">Выберите тип</option>
+                                    <option value="personal">Персональный зарплатный анализ</option>
+                                    <option value="industry">Отраслевой обзор</option>
+                                    <option value="regional">Региональный анализ</option>
+                                    <option value="company">Анализ по компаниям</option>
+                                    <option value="trends">Трендовый анализ</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Период</label>
+                                <select required>
+                                    <option value="">Выберите период</option>
+                                    <option value="month">Последний месяц</option>
+                                    <option value="quarter">Последний квартал</option>
+                                    <option value="year">Последний год</option>
+                                    <option value="custom">Произвольный период</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email для отправки</label>
+                                <input type="email" placeholder="email@example.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Формат отчета</label>
+                                <select required>
+                                    <option value="pdf">PDF</option>
+                                    <option value="excel">Excel</option>
+                                    <option value="word">Word</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <i class="fas fa-file-download"></i> Создать отчет
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Salary data
+        const salaryData = {
+            frontend: { junior: [2000, 3000], middle: [3000, 4500], senior: [4500, 7000], lead: [6000, 8500] },
+            backend: { junior: [2200, 3200], middle: [3200, 4800], senior: [4800, 7500], lead: [6500, 9000] },
+            fullstack: { junior: [2500, 3500], middle: [3500, 5000], senior: [5000, 8000], lead: [7000, 10000] },
+            designer: { junior: [1800, 2800], middle: [2800, 4000], senior: [4000, 6000], lead: [5500, 8000] },
+            pm: { junior: [2000, 3000], middle: [3000, 4500], senior: [4500, 7000], lead: [6000, 9000] },
+            qa: { junior: [1500, 2500], middle: [2500, 3500], senior: [3500, 5500], lead: [5000, 7500] },
+            devops: { junior: [2500, 3500], middle: [3500, 5000], senior: [5000, 8000], lead: [7000, 10000] },
+            analyst: { junior: [2000, 3000], middle: [3000, 4000], senior: [4000, 6000], lead: [5500, 8000] },
+            teacher: { junior: [1000, 1800], middle: [1800, 2500], senior: [2500, 3500], lead: [3000, 4500] },
+            accountant: { junior: [1200, 2000], middle: [2000, 2800], senior: [2800, 4000], lead: [3500, 5000] }
+        };
+
+        const regionMultipliers = {
+            dushanbe: 1.0,
+            sughd: 0.75,
+            khatlon: 0.65,
+            rrp: 0.80,
+            gbao: 0.70
+        };
+
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            setupSalaryCalculator();
+            setupReportGenerator();
+        });
+
+        function initializeCharts() {
+            // Industry Salary Chart
+            const industryCtx = document.getElementById('industrySalaryChart').getContext('2d');
+            new Chart(industryCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['ИТ', 'Финансы', 'Энергетика', 'Телеком', 'Образование', 'Здравоохранение', 'Торговля'],
+                    datasets: [{
+                        label: 'Средняя зарплата (TJS)',
+                        data: [4200, 3800, 3500, 3200, 2500, 2300, 2100],
+                        backgroundColor: '#00A1F1',
+                        borderColor: '#0078D4',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // IT Experience Chart
+            const itExpCtx = document.getElementById('itExperienceChart').getContext('2d');
+            new Chart(itExpCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Junior', 'Middle', 'Senior', 'Lead'],
+                    datasets: [{
+                        label: 'Зарплата (TJS)',
+                        data: [2500, 4000, 6000, 8000],
+                        backgroundColor: '#4FC3F7',
+                        borderColor: '#0078D4',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // All Experience Chart
+            const allExpCtx = document.getElementById('allExperienceChart').getContext('2d');
+            new Chart(allExpCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Junior', 'Middle', 'Senior', 'Lead'],
+                    datasets: [{
+                        label: 'Зарплата (TJS)',
+                        data: [1800, 2800, 4200, 6000],
+                        backgroundColor: '#00A1F1',
+                        borderColor: '#0078D4',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Regional Salary Chart
+            const regionalCtx = document.getElementById('regionalSalaryChart').getContext('2d');
+            new Chart(regionalCtx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: ['Душанбе', 'РРП', 'Согдийская обл.', 'ГБАО', 'Хатлонская обл.'],
+                    datasets: [{
+                        label: 'Средняя зарплата (TJS)',
+                        data: [3200, 2560, 2400, 2240, 2080],
+                        backgroundColor: '#00A1F1',
+                        borderColor: '#0078D4',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { beginAtZero: true } }
+                }
+            });
+
+            // Salary Trends Chart
+            const trendsCtx = document.getElementById('salaryTrendsChart').getContext('2d');
+            new Chart(trendsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2020', '2021', '2022', '2023', '2024'],
+                    datasets: [{
+                        label: 'ИТ',
+                        data: [2800, 3200, 3600, 4000, 4200],
+                        borderColor: '#00A1F1',
+                        backgroundColor: 'rgba(0, 161, 241, 0.1)',
+                        fill: false,
+                        tension: 0.4
+                    }, {
+                        label: 'Финансы',
+                        data: [2500, 2800, 3200, 3500, 3800],
+                        borderColor: '#4FC3F7',
+                        backgroundColor: 'rgba(79, 195, 247, 0.1)',
+                        fill: false,
+                        tension: 0.4
+                    }, {
+                        label: 'Все отрасли',
+                        data: [1800, 2000, 2200, 2400, 2600],
+                        borderColor: '#0078D4',
+                        backgroundColor: 'rgba(0, 120, 212, 0.1)',
+                        fill: false,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function setupSalaryCalculator() {
+            document.querySelector('.calculator-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const profession = document.getElementById('profession').value;
+                const experience = document.getElementById('experience').value;
+                const region = document.getElementById('region').value;
+                
+                if (!profession || !experience || !region) {
+                    showNotification('Пожалуйста, заполните все поля', 'error');
+                    return;
+                }
+                
+                calculateSalary(profession, experience, region);
+            });
+        }
+
+        function calculateSalary(profession, experience, region) {
+            const baseSalary = salaryData[profession][experience];
+            const multiplier = regionMultipliers[region];
+            
+            const minSalary = Math.round(baseSalary[0] * multiplier);
+            const maxSalary = Math.round(baseSalary[1] * multiplier);
+            const avgSalary = Math.round((minSalary + maxSalary) / 2);
+            
+            const resultHtml = `
+                <div class="salary-result">
+                    <h3>Результаты расчета</h3>
+                    <div class="salary-breakdown">
+                        <div class="salary-item">
+                            <span>Минимальная:</span>
+                            <span class="salary-value">${minSalary.toLocaleString()} TJS</span>
+                        </div>
+                        <div class="salary-item">
+                            <span>Средняя:</span>
+                            <span class="salary-value highlighted">${avgSalary.toLocaleString()} TJS</span>
+                        </div>
+                        <div class="salary-item">
+                            <span>Максимальная:</span>
+                            <span class="salary-value">${maxSalary.toLocaleString()} TJS</span>
+                        </div>
+                    </div>
+                    <div class="salary-insights">
+                        <p><i class="fas fa-info-circle"></i> Данные основаны на анализе ${Math.floor(Math.random() * 500 + 200)} вакансий</p>
+                        <p><i class="fas fa-chart-line"></i> Средний рост зарплат в этой сфере: +${Math.floor(Math.random() * 10 + 5)}% в год</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('calculator-result').innerHTML = resultHtml;
+            showNotification('Расчет зарплаты завершен!', 'success');
+        }
+
+        function setupReportGenerator() {
+            document.querySelector('.report-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const reportType = this.querySelector('select').value;
+                const email = this.querySelector('input[type="email"]').value;
+                
+                if (!reportType || !email) {
+                    showNotification('Пожалуйста, заполните все обязательные поля', 'error');
+                    return;
+                }
+                
+                generateSalaryReport(reportType, email);
+            });
+        }
+
+        function generateSalaryReport(type, email) {
+            showNotification('Создание зарплатного отчета... Это может занять несколько минут.', 'info');
+            
+            setTimeout(() => {
+                showNotification(`Отчет создан и отправлен на ${email}!`, 'success');
+            }, 3000);
+        }
+
+        // Table interactions
+        document.querySelectorAll('.salary-table tbody tr').forEach(row => {
+            row.addEventListener('click', function() {
+                const industry = this.querySelector('td').textContent.trim();
+                showNotification(`Детальная информация по отрасли "${industry}" будет доступна в следующей версии`, 'info');
+            });
+        });
+
+        // Company card interactions
+        document.querySelectorAll('.company-salary-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const companyName = this.querySelector('h4').textContent;
+                showNotification(`Переход к профилю компании "${companyName}"`, 'info');
+            });
+        });
+
+        // Trend card interactions
+        document.querySelectorAll('.trend-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const trendTitle = this.querySelector('h4').textContent;
+                showNotification(`Подробный анализ тренда: "${trendTitle}"`, 'info');
+            });
+        });
+
+        // Insight item interactions
+        document.querySelectorAll('.insight-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const insightTitle = this.querySelector('h4').textContent;
+                showNotification(`Детальная аналитика: "${insightTitle}"`, 'info');
+            });
+        });
+    </script>
+</body>
+</html>

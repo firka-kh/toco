@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="logo">
+                <i class="fas fa-briefcase"></i>
+                <span class="logo-text">Портал Рынка Труда Республики Таджикистан</span>
+            </div>
+
+            <!-- Mobile menu burger -->
+            <div class="mobile-menu-toggle" id="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="navigation" id="navigation">
+                <ul class="nav-menu">
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-search"></i>
+                            Поиск работы
+                            <i class="fas fa-chevron-down dropdown-icon"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="vacancies.html" class="dropdown-link">Все вакансии</a>
+                            <a href="vacancies_by_region.html" class="dropdown-link">По регионам</a>
+                            <a href="vacancies_by_specialty.html" class="dropdown-link">По специальностям</a>
+                            <a href="remote_work.html" class="dropdown-link">Удаленная работа</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-building"></i>
+                            Для работодателей
+                            <i class="fas fa-chevron-down dropdown-icon"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="post_vacancy.html" class="dropdown-link">Разместить вакансию</a>
+                            <a href="resume_database.html" class="dropdown-link">База резюме</a>
+                            <a href="market_analytics.html" class="dropdown-link">Аналитика рынка</a>
+                            <a href="company_branding.html" class="dropdown-link">Брендинг компании</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-graduation-cap"></i>
+                            Образование
+                            <i class="fas fa-chevron-down dropdown-icon"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="courses.html" class="dropdown-link">Курсы и тренинги</a>
+                            <a href="certifications.html" class="dropdown-link">Сертификация</a>
+                            <a href="career_consulting.html" class="dropdown-link">Карьерное консультирование</a>
+                            <a href="internships.html" class="dropdown-link">Стажировки</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-chart-bar"></i>
+                            Аналитика
+                            <i class="fas fa-chevron-down dropdown-icon"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="market_statistics.html" class="dropdown-link">Статистика рынка</a>
+                            <a href="salary_reports.html" class="dropdown-link">Зарплатные отчеты</a>
+                            <a href="forecasts.html" class="dropdown-link">Прогнозы</a>
+                            <a href="rankings.html" class="dropdown-link">Рейтинги</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-university"></i>
+                            Государственные услуги
+                            <i class="fas fa-chevron-down dropdown-icon"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="electronic_labor.html" class="dropdown-link">Электронная трудовая</a>
+                            <a href="unemployment.html" class="dropdown-link">Регистрация безработных</a>
+                            <a href="certificates.html" class="dropdown-link">Справки</a>
+                            <a href="social_support.html" class="dropdown-link">Социальная поддержка</a>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- Header Actions -->
+                <div class="header-actions">
+                    <!-- Language Toggle -->
+                    <div class="language-toggle">
+                        <button class="language-btn active" data-lang="ru">RU</button>
+                        <button class="language-btn" data-lang="tj">TJ</button>
+                    </div>
+
+                    <!-- Auth Buttons -->
+                    <button class="btn btn-outline" id="login-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Войти
+                    </button>
+                    <button class="btn btn-primary" id="register-btn">
+                        <i class="fas fa-user-plus"></i>
+                        Регистрация
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Notification Bar -->
+        <div class="notification-bar" id="notification-bar">
+            <div class="container">
+                <i class="fas fa-info-circle"></i>
+                <span>Новые возможности портала: Видеоинтервью и AI-консультант теперь доступны!</span>
+                <button class="notification-close" id="notification-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Вход в систему</h3>
+                <button class="modal-close" id="login-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form" id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email или телефон</label>
+                        <input type="text" id="login-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Пароль</label>
+                        <input type="password" id="login-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember-me">
+                            <span class="checkmark"></span>
+                            Запомнить меня
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Войти
+                    </button>
+                </form>
+                <div class="modal-footer">
+                    <a href="#" class="text-link">Забыли пароль?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="register-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Регистрация</h3>
+                <button class="modal-close" id="register-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form" id="register-form">
+                    <div class="form-group">
+                        <label for="register-name">Полное имя</label>
+                        <input type="text" id="register-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-phone">Телефон</label>
+                        <input type="tel" id="register-phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Пароль</label>
+                        <input type="password" id="register-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">Подтвердите пароль</label>
+                        <input type="password" id="register-confirm-password" name="confirm-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-type">Тип пользователя</label>
+                        <select id="user-type" name="user-type" required>
+                            <option value="">Выберите тип</option>
+                            <option value="job-seeker">Соискатель</option>
+                            <option value="employer">Работодатель</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agree-terms" required>
+                            <span class="checkmark"></span>
+                            Согласен с <a href="#" class="text-link">условиями использования</a>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-user-plus"></i>
+                        Зарегистрироваться
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Header functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const navigation = document.getElementById('navigation');
+            
+            mobileMenuToggle.addEventListener('click', function() {
+                navigation.classList.toggle('active');
+                mobileMenuToggle.classList.toggle('active');
+            });
+
+            // Dropdown menus
+            const dropdowns = document.querySelectorAll('.dropdown');
+            dropdowns.forEach(dropdown => {
+                const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+                
+                dropdown.addEventListener('mouseenter', function() {
+                    dropdownMenu.classList.add('show');
+                });
+                
+                dropdown.addEventListener('mouseleave', function() {
+                    dropdownMenu.classList.remove('show');
+                });
+            });
+
+            // Language toggle
+            const languageBtns = document.querySelectorAll('.language-btn');
+            languageBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    languageBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const lang = this.dataset.lang;
+                    // Mock language switch
+                    if (lang === 'tj') {
+                        // Replace some text with Tajik placeholders
+                        document.querySelector('.logo-text').textContent = 'Портали Бозори Мехнати Чумхурии Точикистон';
+                    } else {
+                        document.querySelector('.logo-text').textContent = 'Портал Рынка Труда Республики Таджикистан';
+                    }
+                });
+            });
+
+            // Modal handling
+            const loginBtn = document.getElementById('login-btn');
+            const registerBtn = document.getElementById('register-btn');
+            const loginModal = document.getElementById('login-modal');
+            const registerModal = document.getElementById('register-modal');
+            const loginModalClose = document.getElementById('login-modal-close');
+            const registerModalClose = document.getElementById('register-modal-close');
+
+            function openModal(modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal(modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+
+            loginBtn.addEventListener('click', () => openModal(loginModal));
+            registerBtn.addEventListener('click', () => openModal(registerModal));
+            loginModalClose.addEventListener('click', () => closeModal(loginModal));
+            registerModalClose.addEventListener('click', () => closeModal(registerModal));
+
+            // Close modal on backdrop click
+            [loginModal, registerModal].forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closeModal(modal);
+                    }
+                });
+            });
+
+            // Notification bar close
+            const notificationClose = document.getElementById('notification-close');
+            const notificationBar = document.getElementById('notification-bar');
+            
+            notificationClose.addEventListener('click', function() {
+                notificationBar.style.display = 'none';
+            });
+
+            // Form validation
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Mock login
+                alert('Вход выполнен успешно!');
+                closeModal(loginModal);
+            });
+
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+                
+                if (password !== confirmPassword) {
+                    alert('Пароли не совпадают!');
+                    return;
+                }
+                
+                // Mock registration
+                alert('Регистрация завершена успешно!');
+                closeModal(registerModal);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кабинет работодателя - Портал Рынка Труда Республики Таджикистан</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Company Profile Header -->
+            <div class="dashboard-header">
+                <div class="company-profile">
+                    <div class="company-avatar">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="company-info">
+                        <h1>TechSolutions Tajikistan</h1>
+                        <p>IT-разработка и консалтинг</p>
+                        <div class="company-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> Душанбе, Таджикистан</span>
+                            <span><i class="fas fa-users"></i> 150+ сотрудников</span>
+                            <span><i class="fas fa-star"></i> 4.6 рейтинг</span>
+                        </div>
+                    </div>
+                    <div class="company-actions">
+                        <button class="btn btn-outline">
+                            <i class="fas fa-edit"></i> Редактировать профиль
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Разместить вакансию
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Overview Stats -->
+                <div class="dashboard-card wide">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar"></i> Обзор за месяц</h3>
+                        <div class="period-selector">
+                            <button class="period-btn active">Месяц</button>
+                            <button class="period-btn">Квартал</button>
+                            <button class="period-btn">Год</button>
+                        </div>
+                    </div>
+                    <div class="overview-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-briefcase"></i>
+                            <div class="stat-info">
+                                <h3>12</h3>
+                                <p>Активных вакансий</p>
+                                <span class="change positive">+3 за месяц</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-users"></i>
+                            <div class="stat-info">
+                                <h3>234</h3>
+                                <p>Заявок получено</p>
+                                <span class="change positive">+15% за месяц</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-eye"></i>
+                            <div class="stat-info">
+                                <h3>1,567</h3>
+                                <p>Просмотров вакансий</p>
+                                <span class="change positive">+22% за месяц</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-handshake"></i>
+                            <div class="stat-info">
+                                <h3>8</h3>
+                                <p>Новых сотрудников</p>
+                                <span class="change positive">+2 за месяц</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Vacancies -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-briefcase"></i> Активные вакансии</h3>
+                        <button class="btn btn-small btn-primary">Добавить вакансию</button>
+                    </div>
+                    <div class="vacancies-list">
+                        <div class="vacancy-item">
+                            <div class="vacancy-info">
+                                <h4>Frontend разработчик</h4>
+                                <p>3,000-4,000 TJS • Душанбе</p>
+                                <div class="vacancy-stats">
+                                    <span><i class="fas fa-eye"></i> 156 просмотров</span>
+                                    <span><i class="fas fa-users"></i> 23 заявки</span>
+                                </div>
+                            </div>
+                            <div class="vacancy-actions">
+                                <button class="btn btn-small btn-outline">Редактировать</button>
+                                <button class="btn btn-small btn-primary">Кандидаты</button>
+                            </div>
+                        </div>
+                        <div class="vacancy-item">
+                            <div class="vacancy-info">
+                                <h4>UI/UX дизайнер</h4>
+                                <p>2,500-3,500 TJS • Душанбе</p>
+                                <div class="vacancy-stats">
+                                    <span><i class="fas fa-eye"></i> 89 просмотров</span>
+                                    <span><i class="fas fa-users"></i> 12 заявок</span>
+                                </div>
+                            </div>
+                            <div class="vacancy-actions">
+                                <button class="btn btn-small btn-outline">Редактировать</button>
+                                <button class="btn btn-small btn-primary">Кандидаты</button>
+                            </div>
+                        </div>
+                        <div class="vacancy-item">
+                            <div class="vacancy-info">
+                                <h4>Python разработчик</h4>
+                                <p>4,000-5,000 TJS • Душанбе</p>
+                                <div class="vacancy-stats">
+                                    <span><i class="fas fa-eye"></i> 203 просмотра</span>
+                                    <span><i class="fas fa-users"></i> 35 заявок</span>
+                                </div>
+                            </div>
+                            <div class="vacancy-actions">
+                                <button class="btn btn-small btn-outline">Редактировать</button>
+                                <button class="btn btn-small btn-primary">Кандидаты</button>
+                            </div>
+                        </div>
+                        <a href="post_vacancy.html" class="view-all-link">Все вакансии</a>
+                    </div>
+                </div>
+
+                <!-- Recent Applications -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-inbox"></i> Новые заявки</h3>
+                        <span class="count-badge">15</span>
+                    </div>
+                    <div class="applications-list">
+                        <div class="application-item">
+                            <div class="candidate-info">
+                                <i class="fas fa-user-circle"></i>
+                                <div>
+                                    <h4>Али Рахимов</h4>
+                                    <p>Frontend разработчик</p>
+                                    <span class="application-time">2 часа назад</span>
+                                </div>
+                            </div>
+                            <div class="candidate-match">
+                                <span class="match-score">95%</span>
+                                <small>совпадение</small>
+                            </div>
+                            <div class="application-actions">
+                                <button class="btn btn-small btn-outline">Резюме</button>
+                                <button class="btn btn-small btn-primary">Интервью</button>
+                            </div>
+                        </div>
+                        <div class="application-item">
+                            <div class="candidate-info">
+                                <i class="fas fa-user-circle"></i>
+                                <div>
+                                    <h4>Фарида Назарова</h4>
+                                    <p>UI/UX дизайнер</p>
+                                    <span class="application-time">5 часов назад</span>
+                                </div>
+                            </div>
+                            <div class="candidate-match">
+                                <span class="match-score">87%</span>
+                                <small>совпадение</small>
+                            </div>
+                            <div class="application-actions">
+                                <button class="btn btn-small btn-outline">Резюме</button>
+                                <button class="btn btn-small btn-primary">Интервью</button>
+                            </div>
+                        </div>
+                        <div class="application-item">
+                            <div class="candidate-info">
+                                <i class="fas fa-user-circle"></i>
+                                <div>
+                                    <h4>Джамшед Азизов</h4>
+                                    <p>Python разработчик</p>
+                                    <span class="application-time">1 день назад</span>
+                                </div>
+                            </div>
+                            <div class="candidate-match">
+                                <span class="match-score">92%</span>
+                                <small>совпадение</small>
+                            </div>
+                            <div class="application-actions">
+                                <button class="btn btn-small btn-outline">Резюме</button>
+                                <button class="btn btn-small btn-primary">Интервью</button>
+                            </div>
+                        </div>
+                        <a href="resume_database.html" class="view-all-link">Все заявки</a>
+                    </div>
+                </div>
+
+                <!-- Interview Schedule -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-video"></i> Запланированные интервью</h3>
+                        <button class="btn btn-small btn-primary">Запланировать</button>
+                    </div>
+                    <div class="interviews-list">
+                        <div class="interview-item">
+                            <div class="interview-date">
+                                <span class="day">25</span>
+                                <span class="month">ЯНВ</span>
+                            </div>
+                            <div class="interview-info">
+                                <h4>Али Рахимов</h4>
+                                <p>Frontend разработчик</p>
+                                <span class="interview-time">14:00 - 15:00</span>
+                                <span class="interview-type">Видеоинтервью</span>
+                            </div>
+                            <div class="interview-actions">
+                                <button class="btn btn-small btn-primary">Присоединиться</button>
+                            </div>
+                        </div>
+                        <div class="interview-item">
+                            <div class="interview-date">
+                                <span class="day">26</span>
+                                <span class="month">ЯНВ</span>
+                            </div>
+                            <div class="interview-info">
+                                <h4>Мадина Рахимова</h4>
+                                <p>UX дизайнер</p>
+                                <span class="interview-time">10:00 - 11:00</span>
+                                <span class="interview-type">Личная встреча</span>
+                            </div>
+                            <div class="interview-actions">
+                                <button class="btn btn-small btn-outline">Детали</button>
+                            </div>
+                        </div>
+                        <div class="interview-item">
+                            <div class="interview-date">
+                                <span class="day">27</span>
+                                <span class="month">ЯНВ</span>
+                            </div>
+                            <div class="interview-info">
+                                <h4>Санжар Юсупов</h4>
+                                <p>Data Scientist</p>
+                                <span class="interview-time">16:00 - 17:30</span>
+                                <span class="interview-type">Техническое интервью</span>
+                            </div>
+                            <div class="interview-actions">
+                                <button class="btn btn-small btn-primary">Присоединиться</button>
+                            </div>
+                        </div>
+                        <a href="video_interview.html" class="view-all-link">Все интервью</a>
+                    </div>
+                </div>
+
+                <!-- Company Analytics -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-line"></i> Аналитика компании</h3>
+                        <button class="btn btn-small btn-outline">Подробная аналитика</button>
+                    </div>
+                    <div class="company-analytics">
+                        <div class="analytics-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="metric-info">
+                                <h4>Профиль компании</h4>
+                                <div class="metric-value">2,345</div>
+                                <div class="metric-label">просмотров за месяц</div>
+                                <div class="metric-change positive">+18%</div>
+                            </div>
+                        </div>
+                        <div class="analytics-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="metric-info">
+                                <h4>Рейтинг</h4>
+                                <div class="metric-value">4.6</div>
+                                <div class="metric-label">из 5 звезд</div>
+                                <div class="metric-change positive">+0.2</div>
+                            </div>
+                        </div>
+                        <div class="analytics-metric">
+                            <div class="metric-icon">
+                                <i class="fas fa-share"></i>
+                            </div>
+                            <div class="metric-info">
+                                <h4>Репосты</h4>
+                                <div class="metric-value">89</div>
+                                <div class="metric-label">вакансий поделились</div>
+                                <div class="metric-change positive">+25%</div>
+                            </div>
+                        </div>
+                        <a href="company_branding.html" class="view-all-link">Брендинг компании</a>
+                    </div>
+                </div>
+
+                <!-- Recruitment Pipeline -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-funnel-dollar"></i> Воронка найма</h3>
+                    </div>
+                    <div class="recruitment-pipeline">
+                        <div class="pipeline-stage">
+                            <div class="stage-info">
+                                <h4>Заявки</h4>
+                                <span class="stage-count">234</span>
+                            </div>
+                            <div class="stage-bar">
+                                <div class="stage-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="pipeline-stage">
+                            <div class="stage-info">
+                                <h4>Скрининг</h4>
+                                <span class="stage-count">89</span>
+                            </div>
+                            <div class="stage-bar">
+                                <div class="stage-fill" style="width: 38%"></div>
+                            </div>
+                        </div>
+                        <div class="pipeline-stage">
+                            <div class="stage-info">
+                                <h4>Интервью</h4>
+                                <span class="stage-count">34</span>
+                            </div>
+                            <div class="stage-bar">
+                                <div class="stage-fill" style="width: 15%"></div>
+                            </div>
+                        </div>
+                        <div class="pipeline-stage">
+                            <div class="stage-info">
+                                <h4>Оффер</h4>
+                                <span class="stage-count">12</span>
+                            </div>
+                            <div class="stage-bar">
+                                <div class="stage-fill" style="width: 5%"></div>
+                            </div>
+                        </div>
+                        <div class="pipeline-stage">
+                            <div class="stage-info">
+                                <h4>Приняли</h4>
+                                <span class="stage-count">8</span>
+                            </div>
+                            <div class="stage-bar">
+                                <div class="stage-fill" style="width: 3.4%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-history"></i> Последняя активность</h3>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <i class="fas fa-plus-circle"></i>
+                            <div>
+                                <h4>Новая вакансия опубликована</h4>
+                                <p>Senior Python Developer</p>
+                                <span class="activity-time">2 часа назад</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-user-check"></i>
+                            <div>
+                                <h4>Кандидат принял оффер</h4>
+                                <p>Али Рахимов • Frontend разработчик</p>
+                                <span class="activity-time">1 день назад</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-calendar-plus"></i>
+                            <div>
+                                <h4>Интервью запланировано</h4>
+                                <p>Фарида Назарова • 26 января, 10:00</p>
+                                <span class="activity-time">2 дня назад</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-edit"></i>
+                            <div>
+                                <h4>Профиль компании обновлен</h4>
+                                <p>Добавлены фотографии офиса</p>
+                                <span class="activity-time">1 неделя назад</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-lightning-bolt"></i> Быстрые действия</h3>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-plus"></i>
+                            <span>Разместить вакансию</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-search"></i>
+                            <span>Поиск кандидатов</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-video"></i>
+                            <span>Запланировать интервью</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Аналитика рынка</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-award"></i>
+                            <span>Брендинг компании</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-file-contract"></i>
+                            <span>Управление офферами</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Subscription Status -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-crown"></i> Статус подписки</h3>
+                    </div>
+                    <div class="subscription-info">
+                        <div class="subscription-plan">
+                            <h4>Профессиональный план</h4>
+                            <p>До 50 активных вакансий • Премиум размещение</p>
+                            <div class="subscription-usage">
+                                <div class="usage-bar">
+                                    <div class="usage-fill" style="width: 24%"></div>
+                                </div>
+                                <span>Использовано: 12 из 50 вакансий</span>
+                            </div>
+                        </div>
+                        <div class="subscription-actions">
+                            <div class="renewal-date">
+                                <span>Продление: 15 февраля 2025</span>
+                            </div>
+                            <button class="btn btn-outline btn-small">Изменить план</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Dashboard functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Period selector
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    showNotification(`Статистика обновлена для периода: ${this.textContent}`, 'info');
+                });
+            });
+
+            // Quick actions navigation
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const action = this.querySelector('span').textContent;
+                    
+                    const routes = {
+                        'Разместить вакансию': 'post_vacancy.html',
+                        'Поиск кандидатов': 'resume_database.html',
+                        'Запланировать интервью': 'video_interview.html',
+                        'Аналитика рынка': 'market_analytics.html',
+                        'Брендинг компании': 'company_branding.html',
+                        'Управление офферами': '#'
+                    };
+                    
+                    if (routes[action] && routes[action] !== '#') {
+                        window.location.href = routes[action];
+                    } else {
+                        showNotification(`Функция "${action}" будет доступна в следующей версии`, 'info');
+                    }
+                });
+            });
+
+            // Vacancy actions
+            document.querySelectorAll('.vacancy-item .btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const vacancyTitle = this.closest('.vacancy-item').querySelector('h4').textContent;
+                    
+                    if (btn.textContent.includes('Редактировать')) {
+                        showNotification(`Переход к редактированию вакансии "${vacancyTitle}"`, 'info');
+                    } else if (btn.textContent.includes('Кандидаты')) {
+                        window.location.href = 'resume_database.html';
+                    }
+                });
+            });
+
+            // Application actions
+            document.querySelectorAll('.application-item .btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const candidateName = this.closest('.application-item').querySelector('h4').textContent;
+                    
+                    if (btn.textContent.includes('Резюме')) {
+                        showNotification(`Просмотр резюме кандидата ${candidateName}`, 'info');
+                    } else if (btn.textContent.includes('Интервью')) {
+                        showNotification(`Приглашение на интервью отправлено кандидату ${candidateName}`, 'success');
+                    }
+                });
+            });
+
+            // Interview actions
+            document.querySelectorAll('.interview-item .btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const candidateName = this.closest('.interview-item').querySelector('h4').textContent;
+                    
+                    if (btn.textContent.includes('Присоединиться')) {
+                        window.location.href = 'video_interview.html';
+                    } else if (btn.textContent.includes('Детали')) {
+                        showNotification(`Детали интервью с ${candidateName} отправлены на email`, 'success');
+                    }
+                });
+            });
+
+            // Company actions
+            document.querySelectorAll('.company-actions .btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (btn.textContent.includes('Редактировать профиль')) {
+                        window.location.href = 'company_branding.html';
+                    } else if (btn.textContent.includes('Разместить вакансию')) {
+                        window.location.href = 'post_vacancy.html';
+                    }
+                });
+            });
+
+            // Add vacancy buttons
+            document.querySelectorAll('.btn').forEach(btn => {
+                if (btn.textContent.includes('Добавить вакансию')) {
+                    btn.addEventListener('click', function() {
+                        window.location.href = 'post_vacancy.html';
+                    });
+                }
+                
+                if (btn.textContent.includes('Запланировать') && btn.textContent.includes('интервью')) {
+                    btn.addEventListener('click', function() {
+                        window.location.href = 'video_interview.html';
+                    });
+                }
+                
+                if (btn.textContent.includes('Подробная аналитика')) {
+                    btn.addEventListener('click', function() {
+                        window.location.href = 'market_analytics.html';
+                    });
+                }
+                
+                if (btn.textContent.includes('Изменить план')) {
+                    btn.addEventListener('click', function() {
+                        showNotification('Переход к управлению подпиской...', 'info');
+                    });
+                }
+            });
+
+            // View all links
+            document.querySelectorAll('.view-all-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const text = this.textContent;
+                    
+                    if (text.includes('вакансии')) {
+                        window.location.href = 'post_vacancy.html';
+                    } else if (text.includes('заявки')) {
+                        window.location.href = 'resume_database.html';
+                    } else if (text.includes('интервью')) {
+                        window.location.href = 'video_interview.html';
+                    } else if (text.includes('Брендинг')) {
+                        window.location.href = 'company_branding.html';
+                    }
+                });
+            });
+
+            // Pipeline stage interactions
+            document.querySelectorAll('.pipeline-stage').forEach(stage => {
+                stage.addEventListener('click', function() {
+                    const stageName = this.querySelector('h4').textContent;
+                    const count = this.querySelector('.stage-count').textContent;
+                    showNotification(`Стадия "${stageName}": ${count} кандидатов. Переход к детальному просмотру...`, 'info');
+                });
+            });
+
+            // Activity item interactions
+            document.querySelectorAll('.activity-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const title = this.querySelector('h4').textContent;
+                    showNotification(`Переход к деталям: ${title}`, 'info');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рейтинги и топы - Портал Рынка Труда РТ</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <div class="hero-section rankings-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1><i class="fas fa-trophy"></i> Рейтинги и топы</h1>
+                    <p>Актуальные рейтинги работодателей, профессий, регионов и образовательных программ</p>
+                    <div class="hero-buttons">
+                        <button class="btn primary" onclick="scrollToSection('employers-rating')">
+                            <i class="fas fa-building"></i> Топ работодателей
+                        </button>
+                        <button class="btn secondary" onclick="scrollToSection('professions-rating')">
+                            <i class="fas fa-briefcase"></i> Топ профессий
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <section class="rating-tabs-section">
+                <div class="rating-tabs">
+                    <button class="tab-button active" onclick="showRating('employers')">
+                        <i class="fas fa-building"></i> Работодатели
+                    </button>
+                    <button class="tab-button" onclick="showRating('professions')">
+                        <i class="fas fa-briefcase"></i> Профессии
+                    </button>
+                    <button class="tab-button" onclick="showRating('regions')">
+                        <i class="fas fa-map-marker-alt"></i> Регионы
+                    </button>
+                    <button class="tab-button" onclick="showRating('universities')">
+                        <i class="fas fa-graduation-cap"></i> Образование
+                    </button>
+                    <button class="tab-button" onclick="showRating('skills')">
+                        <i class="fas fa-cogs"></i> Навыки
+                    </button>
+                </div>
+            </section>
+
+            <section id="employers-rating" class="rating-content active">
+                <div class="rating-header">
+                    <h2>Топ-20 лучших работодателей Таджикистана</h2>
+                    <p>Рейтинг основан на отзывах сотрудников, условиях работы, социальных пакетах и развитии персонала</p>
+                    <div class="rating-filters">
+                        <select id="employerCategory" onchange="filterEmployers()">
+                            <option value="all">Все отрасли</option>
+                            <option value="it">IT и технологии</option>
+                            <option value="finance">Финансы и банки</option>
+                            <option value="production">Производство</option>
+                            <option value="education">Образование</option>
+                            <option value="healthcare">Здравоохранение</option>
+                        </select>
+                        <select id="employerSize" onchange="filterEmployers()">
+                            <option value="all">Любой размер</option>
+                            <option value="large">Крупные (500+ сотрудников)</option>
+                            <option value="medium">Средние (100-500)</option>
+                            <option value="small">Малые (до 100)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="top-employers">
+                    <div class="podium">
+                        <div class="podium-place second">
+                            <div class="company-logo">
+                                <i class="fas fa-landmark"></i>
+                            </div>
+                            <h3>Национальный банк Таджикистана</h3>
+                            <div class="place-number">2</div>
+                            <div class="rating-score">9.1/10</div>
+                            <div class="company-stats">
+                                <span><i class="fas fa-users"></i> 1,200 сотрудников</span>
+                                <span><i class="fas fa-star"></i> 4.8 рейтинг</span>
+                            </div>
+                        </div>
+                        
+                        <div class="podium-place first">
+                            <div class="company-logo">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <h3>TajSoft Solutions</h3>
+                            <div class="place-number">1</div>
+                            <div class="rating-score">9.4/10</div>
+                            <div class="company-stats">
+                                <span><i class="fas fa-users"></i> 450 сотрудников</span>
+                                <span><i class="fas fa-star"></i> 4.9 рейтинг</span>
+                            </div>
+                            <div class="crown">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="podium-place third">
+                            <div class="company-logo">
+                                <i class="fas fa-hospital"></i>
+                            </div>
+                            <h3>Республиканский медицинский центр</h3>
+                            <div class="place-number">3</div>
+                            <div class="rating-score">8.9/10</div>
+                            <div class="company-stats">
+                                <span><i class="fas fa-users"></i> 2,100 сотрудников</span>
+                                <span><i class="fas fa-star"></i> 4.7 рейтинг</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="employers-list">
+                        <div class="employer-item" data-rank="4">
+                            <div class="rank">4</div>
+                            <div class="company-info">
+                                <div class="company-logo-small">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div class="company-details">
+                                    <h4>Таджикский национальный университет</h4>
+                                    <span class="company-category">Образование</span>
+                                </div>
+                            </div>
+                            <div class="company-metrics">
+                                <span class="rating">8.7/10</span>
+                                <span class="employees">3,500 сотр.</span>
+                                <span class="salary">2,800 TJS</span>
+                            </div>
+                            <div class="trend positive">
+                                <i class="fas fa-arrow-up"></i> +2
+                            </div>
+                        </div>
+
+                        <div class="employer-item" data-rank="5">
+                            <div class="rank">5</div>
+                            <div class="company-info">
+                                <div class="company-logo-small">
+                                    <i class="fas fa-industry"></i>
+                                </div>
+                                <div class="company-details">
+                                    <h4>ТАЛКО (Таджикская алюминиевая компания)</h4>
+                                    <span class="company-category">Промышленность</span>
+                                </div>
+                            </div>
+                            <div class="company-metrics">
+                                <span class="rating">8.5/10</span>
+                                <span class="employees">8,200 сотр.</span>
+                                <span class="salary">3,200 TJS</span>
+                            </div>
+                            <div class="trend neutral">
+                                <i class="fas fa-minus"></i> 0
+                            </div>
+                        </div>
+
+                        <div class="employer-item" data-rank="6">
+                            <div class="rank">6</div>
+                            <div class="company-info">
+                                <div class="company-logo-small">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="company-details">
+                                    <h4>Теле2 Таджикистан</h4>
+                                    <span class="company-category">Телекоммуникации</span>
+                                </div>
+                            </div>
+                            <div class="company-metrics">
+                                <span class="rating">8.4/10</span>
+                                <span class="employees">890 сотр.</span>
+                                <span class="salary">3,800 TJS</span>
+                            </div>
+                            <div class="trend positive">
+                                <i class="fas fa-arrow-up"></i> +3
+                            </div>
+                        </div>
+
+                        <div class="employer-item" data-rank="7">
+                            <div class="rank">7</div>
+                            <div class="company-info">
+                                <div class="company-logo-small">
+                                    <i class="fas fa-plane"></i>
+                                </div>
+                                <div class="company-details">
+                                    <h4>Таджик Эйр</h4>
+                                    <span class="company-category">Авиаперевозки</span>
+                                </div>
+                            </div>
+                            <div class="company-metrics">
+                                <span class="rating">8.2/10</span>
+                                <span class="employees">650 сотр.</span>
+                                <span class="salary">3,500 TJS</span>
+                            </div>
+                            <div class="trend positive">
+                                <i class="fas fa-arrow-up"></i> +1
+                            </div>
+                        </div>
+
+                        <div class="employer-item" data-rank="8">
+                            <div class="rank">8</div>
+                            <div class="company-info">
+                                <div class="company-logo-small">
+                                    <i class="fas fa-hotel"></i>
+                                </div>
+                                <div class="company-details">
+                                    <h4>Serena Hotels Dushanbe</h4>
+                                    <span class="company-category">Гостиничный бизнес</span>
+                                </div>
+                            </div>
+                            <div class="company-metrics">
+                                <span class="rating">8.1/10</span>
+                                <span class="employees">320 сотр.</span>
+                                <span class="salary">2,900 TJS</span>
+                            </div>
+                            <div class="trend negative">
+                                <i class="fas fa-arrow-down"></i> -2
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="professions-rating" class="rating-content">
+                <div class="rating-header">
+                    <h2>Самые востребованные профессии 2024 года</h2>
+                    <p>Рейтинг основан на количестве вакансий, росте зарплат и перспективах развития</p>
+                </div>
+
+                <div class="professions-chart-container">
+                    <canvas id="professionsChart"></canvas>
+                </div>
+
+                <div class="professions-grid">
+                    <div class="profession-card rank-1">
+                        <div class="profession-rank">1</div>
+                        <div class="profession-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Программист</h3>
+                        <div class="profession-metrics">
+                            <div class="metric">
+                                <span class="label">Вакансий:</span>
+                                <span class="value">2,340</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Средняя зарплата:</span>
+                                <span class="value">4,500 TJS</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Рост зарплаты:</span>
+                                <span class="value positive">+18%</span>
+                            </div>
+                        </div>
+                        <div class="demand-level high">Очень высокий спрос</div>
+                    </div>
+
+                    <div class="profession-card rank-2">
+                        <div class="profession-rank">2</div>
+                        <div class="profession-icon">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <h3>Врач</h3>
+                        <div class="profession-metrics">
+                            <div class="metric">
+                                <span class="label">Вакансий:</span>
+                                <span class="value">1,890</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Средняя зарплата:</span>
+                                <span class="value">3,200 TJS</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Рост зарплаты:</span>
+                                <span class="value positive">+12%</span>
+                            </div>
+                        </div>
+                        <div class="demand-level high">Высокий спрос</div>
+                    </div>
+
+                    <div class="profession-card rank-3">
+                        <div class="profession-rank">3</div>
+                        <div class="profession-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h3>Учитель</h3>
+                        <div class="profession-metrics">
+                            <div class="metric">
+                                <span class="label">Вакансий:</span>
+                                <span class="value">1,650</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Средняя зарплата:</span>
+                                <span class="value">2,200 TJS</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Рост зарплаты:</span>
+                                <span class="value positive">+8%</span>
+                            </div>
+                        </div>
+                        <div class="demand-level high">Высокий спрос</div>
+                    </div>
+
+                    <div class="profession-card rank-4">
+                        <div class="profession-rank">4</div>
+                        <div class="profession-icon">
+                            <i class="fas fa-wrench"></i>
+                        </div>
+                        <h3>Инженер</h3>
+                        <div class="profession-metrics">
+                            <div class="metric">
+                                <span class="label">Вакансий:</span>
+                                <span class="value">1,420</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Средняя зарплата:</span>
+                                <span class="value">3,000 TJS</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Рост зарплаты:</span>
+                                <span class="value positive">+10%</span>
+                            </div>
+                        </div>
+                        <div class="demand-level medium">Средний спрос</div>
+                    </div>
+
+                    <div class="profession-card rank-5">
+                        <div class="profession-rank">5</div>
+                        <div class="profession-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Менеджер по продажам</h3>
+                        <div class="profession-metrics">
+                            <div class="metric">
+                                <span class="label">Вакансий:</span>
+                                <span class="value">1,280</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Средняя зарплата:</span>
+                                <span class="value">2,800 TJS</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Рост зарплаты:</span>
+                                <span class="value positive">+7%</span>
+                            </div>
+                        </div>
+                        <div class="demand-level medium">Средний спрос</div>
+                    </div>
+
+                    <div class="profession-card rank-6">
+                        <div class="profession-rank">6</div>
+                        <div class="profession-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3>Бухгалтер</h3>
+                        <div class="profession-metrics">
+                            <div class="metric">
+                                <span class="label">Вакансий:</span>
+                                <span class="value">1,180</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Средняя зарплата:</span>
+                                <span class="value">2,400 TJS</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Рост зарплаты:</span>
+                                <span class="value positive">+5%</span>
+                            </div>
+                        </div>
+                        <div class="demand-level medium">Средний спрос</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="regions-rating" class="rating-content">
+                <div class="rating-header">
+                    <h2>Рейтинг регионов по привлекательности для работы</h2>
+                    <p>Оценка по уровню зарплат, количеству вакансий, качеству жизни и карьерным возможностям</p>
+                </div>
+
+                <div class="regions-comparison">
+                    <canvas id="regionsChart"></canvas>
+                </div>
+
+                <div class="regions-ranking">
+                    <div class="region-item rank-1">
+                        <div class="region-rank">1</div>
+                        <div class="region-info">
+                            <h3>Душанбе</h3>
+                            <span class="region-type">Столица</span>
+                        </div>
+                        <div class="region-scores">
+                            <div class="score-item">
+                                <span class="score-label">Зарплаты</span>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: 95%"></div>
+                                </div>
+                                <span class="score-value">9.5</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-label">Вакансии</span>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: 90%"></div>
+                                </div>
+                                <span class="score-value">9.0</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-label">Качество жизни</span>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: 85%"></div>
+                                </div>
+                                <span class="score-value">8.5</span>
+                            </div>
+                        </div>
+                        <div class="overall-score">9.0</div>
+                    </div>
+
+                    <div class="region-item rank-2">
+                        <div class="region-rank">2</div>
+                        <div class="region-info">
+                            <h3>Худжанд</h3>
+                            <span class="region-type">Согдийская область</span>
+                        </div>
+                        <div class="region-scores">
+                            <div class="score-item">
+                                <span class="score-label">Зарплаты</span>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: 75%"></div>
+                                </div>
+                                <span class="score-value">7.5</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-label">Вакансии</span>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: 70%"></div>
+                                </div>
+                                <span class="score-value">7.0</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-label">Качество жизни</span>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: 80%"></div>
+                                </div>
+                                <span class="score-value">8.0</span>
+                            </div>
+                        </div>
+                        <div class="overall-score">7.5</div>
+                    </div>
+
+                    <div class="region-item rank-3">
+                        <div class="region-rank">3</div>
+                        <div class="region-info">
+                            <h3>Куляб</h3>
+                            <span class="region-type">Хатлонская область</span>
+                        </div>
+                        <div class="region-scores">
+                            <div class="score-item">
+                                <span class="score-label">Зарплаты</span>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: 65%"></div>
+                                </div>
+                                <span class="score-value">6.5</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-label">Вакансии</span>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: 60%"></div>
+                                </div>
+                                <span class="score-value">6.0</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-label">Качество жизни</span>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: 70%"></div>
+                                </div>
+                                <span class="score-value">7.0</span>
+                            </div>
+                        </div>
+                        <div class="overall-score">6.5</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="universities-rating" class="rating-content">
+                <div class="rating-header">
+                    <h2>Рейтинг образовательных учреждений</h2>
+                    <p>Оценка по трудоустройству выпускников, качеству образования и связям с работодателями</p>
+                </div>
+
+                <div class="universities-list">
+                    <div class="university-item rank-1">
+                        <div class="university-rank">1</div>
+                        <div class="university-info">
+                            <h3>Таджикский национальный университет</h3>
+                            <span class="university-type">Государственный</span>
+                        </div>
+                        <div class="university-metrics">
+                            <span class="metric">Трудоустройство: 89%</span>
+                            <span class="metric">Средняя зарплата: 2,800 TJS</span>
+                        </div>
+                        <div class="university-score">9.2/10</div>
+                    </div>
+
+                    <div class="university-item rank-2">
+                        <div class="university-rank">2</div>
+                        <div class="university-info">
+                            <h3>Таджикский технический университет</h3>
+                            <span class="university-type">Государственный</span>
+                        </div>
+                        <div class="university-metrics">
+                            <span class="metric">Трудоустройство: 92%</span>
+                            <span class="metric">Средняя зарплата: 3,200 TJS</span>
+                        </div>
+                        <div class="university-score">8.9/10</div>
+                    </div>
+
+                    <div class="university-item rank-3">
+                        <div class="university-rank">3</div>
+                        <div class="university-info">
+                            <h3>Таджикский государственный медицинский университет</h3>
+                            <span class="university-type">Государственный</span>
+                        </div>
+                        <div class="university-metrics">
+                            <span class="metric">Трудоустройство: 94%</span>
+                            <span class="metric">Средняя зарплата: 3,000 TJS</span>
+                        </div>
+                        <div class="university-score">8.7/10</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="skills-rating" class="rating-content">
+                <div class="rating-header">
+                    <h2>Топ-навыки 2024 года</h2>
+                    <p>Самые востребованные навыки на рынке труда Таджикистана</p>
+                </div>
+
+                <div class="skills-ranking">
+                    <div class="skills-chart-container">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+
+                    <div class="skills-list">
+                        <div class="skill-category">
+                            <h4>Технические навыки</h4>
+                            <div class="skill-items">
+                                <div class="skill-item">
+                                    <span class="skill-name">Python</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" style="width: 95%"></div>
+                                    </div>
+                                    <span class="skill-demand">95%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">JavaScript</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" style="width: 88%"></div>
+                                    </div>
+                                    <span class="skill-demand">88%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">SQL</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" style="width: 82%"></div>
+                                    </div>
+                                    <span class="skill-demand">82%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="skill-category">
+                            <h4>Мягкие навыки</h4>
+                            <div class="skill-items">
+                                <div class="skill-item">
+                                    <span class="skill-name">Коммуникация</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" style="width: 92%"></div>
+                                    </div>
+                                    <span class="skill-demand">92%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">Управление проектами</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" style="width: 78%"></div>
+                                    </div>
+                                    <span class="skill-demand">78%</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-name">Лидерство</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" style="width: 73%"></div>
+                                    </div>
+                                    <span class="skill-demand">73%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="methodology-section">
+                <h2>Методология составления рейтингов</h2>
+                <div class="methodology-grid">
+                    <div class="method-card">
+                        <i class="fas fa-chart-bar"></i>
+                        <h4>Анализ данных</h4>
+                        <p>Обработка статистики по вакансиям, зарплатам, отзывам и трудоустройству</p>
+                    </div>
+                    <div class="method-card">
+                        <i class="fas fa-users"></i>
+                        <h4>Опросы</h4>
+                        <p>Исследования среди сотрудников, студентов и работодателей</p>
+                    </div>
+                    <div class="method-card">
+                        <i class="fas fa-balance-scale"></i>
+                        <h4>Объективные критерии</h4>
+                        <p>Использование проверяемых показателей и метрик</p>
+                    </div>
+                    <div class="method-card">
+                        <i class="fas fa-sync"></i>
+                        <h4>Регулярное обновление</h4>
+                        <p>Ежемесячное обновление данных и пересчет рейтингов</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Загрузка компонентов
+        fetch('header.html').then(response => response.text()).then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+            initializeHeader();
+        });
+        
+        fetch('footer.html').then(response => response.text()).then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        });
+
+        let professionsChart, regionsChart, skillsChart;
+
+        // Переключение между рейтингами
+        function showRating(type) {
+            // Убрать активный класс со всех кнопок и секций
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.rating-content').forEach(section => section.classList.remove('active'));
+            
+            // Добавить активный класс к выбранным элементам
+            event.target.classList.add('active');
+            document.getElementById(type + '-rating').classList.add('active');
+            
+            // Инициализировать графики для активной вкладки
+            setTimeout(() => {
+                if (type === 'professions') initProfessionsChart();
+                if (type === 'regions') initRegionsChart();
+                if (type === 'skills') initSkillsChart();
+            }, 100);
+        }
+
+        // График профессий
+        function initProfessionsChart() {
+            if (professionsChart) professionsChart.destroy();
+            
+            const ctx = document.getElementById('professionsChart').getContext('2d');
+            professionsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Программист', 'Врач', 'Учитель', 'Инженер', 'Менеджер', 'Бухгалтер'],
+                    datasets: [{
+                        label: 'Количество вакансий',
+                        data: [2340, 1890, 1650, 1420, 1280, 1180],
+                        backgroundColor: [
+                            '#0078D4',
+                            '#4FC3F7',
+                            '#00ACC1',
+                            '#26A69A',
+                            '#66BB6A',
+                            '#9CCC65'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Количество вакансий по профессиям'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Количество вакансий'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // График регионов
+        function initRegionsChart() {
+            if (regionsChart) regionsChart.destroy();
+            
+            const ctx = document.getElementById('regionsChart').getContext('2d');
+            regionsChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Зарплаты', 'Вакансии', 'Качество жизни', 'Карьерный рост', 'Инфраструктура'],
+                    datasets: [{
+                        label: 'Душанбе',
+                        data: [9.5, 9.0, 8.5, 9.2, 8.8],
+                        borderColor: '#0078D4',
+                        backgroundColor: 'rgba(0, 120, 212, 0.2)'
+                    }, {
+                        label: 'Худжанд',
+                        data: [7.5, 7.0, 8.0, 7.3, 7.5],
+                        borderColor: '#4FC3F7',
+                        backgroundColor: 'rgba(79, 195, 247, 0.2)'
+                    }, {
+                        label: 'Куляб',
+                        data: [6.5, 6.0, 7.0, 6.2, 6.8],
+                        borderColor: '#00ACC1',
+                        backgroundColor: 'rgba(0, 172, 193, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Сравнение регионов по ключевым показателям'
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10
+                        }
+                    }
+                }
+            });
+        }
+
+        // График навыков
+        function initSkillsChart() {
+            if (skillsChart) skillsChart.destroy();
+            
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            skillsChart = new Chart(ctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: ['Python', 'Коммуникация', 'JavaScript', 'SQL', 'Управление проектами', 'Лидерство'],
+                    datasets: [{
+                        label: 'Уровень спроса (%)',
+                        data: [95, 92, 88, 82, 78, 73],
+                        backgroundColor: [
+                            '#0078D4',
+                            '#4FC3F7',
+                            '#00ACC1',
+                            '#26A69A',
+                            '#66BB6A',
+                            '#9CCC65'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Топ-6 самых востребованных навыков'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Уровень спроса (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Фильтрация работодателей
+        function filterEmployers() {
+            const category = document.getElementById('employerCategory').value;
+            const size = document.getElementById('employerSize').value;
+            
+            // Логика фильтрации (демо)
+            showNotification('Фильтры применены. Обновление рейтинга...', 'info');
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Анимации при скролле
+            const elements = document.querySelectorAll('.podium-place, .employer-item, .profession-card, .region-item, .university-item, .method-card');
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                element.style.transition = 'all 0.6s ease';
+            });
+            
+            function animateOnScroll() {
+                elements.forEach((element, index) => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        setTimeout(() => {
+                            element.style.opacity = '1';
+                            element.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll();
+        });
+    </script>
+</body>
+</html>

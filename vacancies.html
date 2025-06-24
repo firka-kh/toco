@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Все вакансии - Портал Рынка Труда</title>
+    <meta name="description" content="Найдите работу среди 12,450+ актуальных вакансий в Таджикистане. Фильтры по зарплате, опыту, региону.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <div class="page-header-content">
+                    <div class="breadcrumb">
+                        <a href="index.html">Главная</a>
+                        <i class="fas fa-chevron-right"></i>
+                        <span>Все вакансии</span>
+                    </div>
+                    <h1 class="page-title">
+                        <i class="fas fa-briefcase"></i>
+                        Все вакансии
+                    </h1>
+                    <p class="page-subtitle">Найдите работу среди 12,450+ актуальных предложений</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search and Filters -->
+        <section class="search-section">
+            <div class="container">
+                <div class="search-panel">
+                    <form class="search-form" id="vacancy-search-form">
+                        <div class="search-input-group">
+                            <div class="search-field">
+                                <i class="fas fa-search"></i>
+                                <input 
+                                    type="text" 
+                                    placeholder="Должность, компания или ключевые слова"
+                                    id="search-input"
+                                    autocomplete="off"
+                                >
+                                <div class="search-suggestions" id="search-suggestions"></div>
+                            </div>
+                            <div class="search-field">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <select id="search-location">
+                                    <option value="">Все регионы</option>
+                                    <option value="dushanbe">Душанбе</option>
+                                    <option value="sughd">Согдийская область</option>
+                                    <option value="khatlon">Хатлонская область</option>
+                                    <option value="gbao">ГБАО</option>
+                                    <option value="rrp">РРП</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary search-btn">
+                                <i class="fas fa-search"></i>
+                                Найти
+                            </button>
+                            <button type="button" class="btn btn-outline filter-btn" id="filter-btn">
+                                <i class="fas fa-filter"></i>
+                                Фильтры
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Active Filters -->
+                    <div class="active-filters" id="active-filters" style="display: none;">
+                        <span class="filters-label">Активные фильтры:</span>
+                        <div class="filter-tags" id="filter-tags"></div>
+                        <button class="btn btn-text btn-sm" id="clear-all-filters">
+                            <i class="fas fa-times"></i>
+                            Очистить все
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <div class="container">
+                <div class="results-header">
+                    <div class="results-info">
+                        <h2 id="results-count">Найдено 127 вакансий</h2>
+                        <p id="results-description">Показаны наиболее релевантные предложения</p>
+                    </div>
+                    <div class="results-controls">
+                        <div class="sort-group">
+                            <label>Сортировать:</label>
+                            <select id="sort-select">
+                                <option value="relevance">По релевантности</option>
+                                <option value="date">По дате публикации</option>
+                                <option value="salary-desc">По зарплате (убывание)</option>
+                                <option value="salary-asc">По зарплате (возрастание)</option>
+                                <option value="company">По компании</option>
+                            </select>
+                        </div>
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="grid">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button class="view-btn" data-view="list">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vacancies Grid -->
+                <div class="vacancies-container" id="vacancies-container">
+                    <div class="vacancies-grid" id="vacancies-grid">
+                        <!-- Vacancy cards will be generated here -->
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="pagination" id="pagination">
+                        <button class="pagination-btn" id="prev-page" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                            Предыдущая
+                        </button>
+                        <div class="pagination-numbers" id="pagination-numbers">
+                            <!-- Page numbers will be generated here -->
+                        </div>
+                        <button class="pagination-btn" id="next-page">
+                            Следующая
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- No Results -->
+                <div class="no-results" id="no-results" style="display: none;">
+                    <div class="no-results-content">
+                        <i class="fas fa-search"></i>
+                        <h3>Ничего не найдено</h3>
+                        <p>Попробуйте изменить параметры поиска или фильтры</p>
+                        <div class="no-results-actions">
+                            <button class="btn btn-primary" id="clear-search">
+                                <i class="fas fa-eraser"></i>
+                                Очистить поиск
+                            </button>
+                            <a href="job_seeker_dashboard.html" class="btn btn-outline">
+                                <i class="fas fa-bell"></i>
+                                Настроить уведомления
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats -->
+        <section class="quick-stats">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Топ регион</h4>
+                            <span>Душанбе (5,420 вакансий)</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <div>
+                            <h4>Средняя зарплата</h4>
+                            <span>3,250 TJS</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Новые сегодня</h4>
+                            <span>89 вакансий</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-video"></i>
+                        <div>
+                            <h4>С видеоинтервью</h4>
+                            <span>247 вакансий</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Filter Sidebar -->
+    <div class="filter-sidebar" id="filter-sidebar">
+        <div class="sidebar-header">
+            <h3>
+                <i class="fas fa-filter"></i>
+                Фильтры поиска
+            </h3>
+            <button class="sidebar-close" id="sidebar-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="sidebar-content">
+            <div class="filter-group">
+                <h4>Тип занятости</h4>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="full-time">
+                        <span class="checkmark"></span>
+                        Полная занятость
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="part-time">
+                        <span class="checkmark"></span>
+                        Частичная занятость
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="remote">
+                        <span class="checkmark"></span>
+                        Удаленная работа
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="project">
+                        <span class="checkmark"></span>
+                        Проектная работа
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4>Уровень зарплаты (TJS)</h4>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="500-1000">
+                        <span class="checkmark"></span>
+                        500 - 1,000
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="1000-3000">
+                        <span class="checkmark"></span>
+                        1,000 - 3,000
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="3000-5000">
+                        <span class="checkmark"></span>
+                        3,000 - 5,000
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="5000+">
+                        <span class="checkmark"></span>
+                        5,000+
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4>Опыт работы</h4>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="no-experience">
+                        <span class="checkmark"></span>
+                        Без опыта
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="1-3">
+                        <span class="checkmark"></span>
+                        1-3 года
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="3-6">
+                        <span class="checkmark"></span>
+                        3-6 лет
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="6+">
+                        <span class="checkmark"></span>
+                        6+ лет
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4>Регион</h4>
+                <select id="region-select" class="filter-select">
+                    <option value="">Выберите регион</option>
+                    <option value="dushanbe">Город Душанбе</option>
+                    <option value="sughd">Согдийская область</option>
+                    <option value="khatlon">Хатлонская область</option>
+                    <option value="gbao">ГБАО</option>
+                    <option value="rrp">РРП</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <h4>Город</h4>
+                <select id="city-select" class="filter-select" disabled>
+                    <option value="">Сначала выберите регион</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <h4>Сфера деятельности</h4>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="it">
+                        <span class="checkmark"></span>
+                        ИТ и программирование
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="education">
+                        <span class="checkmark"></span>
+                        Образование
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="healthcare">
+                        <span class="checkmark"></span>
+                        Здравоохранение
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="finance">
+                        <span class="checkmark"></span>
+                        Финансы и банки
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="sales">
+                        <span class="checkmark"></span>
+                        Продажи и маркетинг
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4>Тип компании</h4>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="private">
+                        <span class="checkmark"></span>
+                        Частная
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="government">
+                        <span class="checkmark"></span>
+                        Государственная
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="ngo">
+                        <span class="checkmark"></span>
+                        НКО
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <button class="btn btn-outline" id="clear-filters">
+                <i class="fas fa-eraser"></i>
+                Очистить
+            </button>
+            <button class="btn btn-primary" id="apply-filters">
+                <i class="fas fa-search"></i>
+                Применить
+            </button>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Mock vacancy data
+        const mockVacancies = [
+            {
+                id: 1,
+                title: "Frontend разработчик",
+                company: "TajSoft",
+                logo: "https://via.placeholder.com/50x50",
+                location: "Душанбе",
+                salary: "3,000 - 5,000 TJS",
+                type: "Полная занятость",
+                experience: "2-5 лет",
+                description: "Разработка современных веб-приложений с использованием React, TypeScript и других передовых технологий.",
+                date: "Вчера",
+                badges: ["Видеоинтервью"],
+                skills: ["React", "TypeScript", "CSS3", "Git"]
+            },
+            {
+                id: 2,
+                title: "UX/UI Дизайнер",
+                company: "DushanbeTech",
+                logo: "https://via.placeholder.com/50x50",
+                location: "Удаленно",
+                salary: "2,500 - 4,000 TJS",
+                type: "Полная занятость",
+                experience: "3+ лет",
+                description: "Создание интуитивных и привлекательных пользовательских интерфейсов для мобильных и веб-приложений.",
+                date: "2 дня назад",
+                badges: ["Удаленно"],
+                skills: ["Figma", "Sketch", "Adobe XD", "Prototyping"]
+            },
+            {
+                id: 3,
+                title: "Финансовый аналитик",
+                company: "Tajik Bank",
+                logo: "https://via.placeholder.com/50x50",
+                location: "Душанбе",
+                salary: "2,200 - 3,500 TJS",
+                type: "Полная занятость",
+                experience: "1-3 года",
+                description: "Анализ финансовых данных, подготовка отчетов и рекомендаций для принятия стратегических решений.",
+                date: "3 дня назад",
+                badges: ["Видеоинтервью"],
+                skills: ["Excel", "SQL", "Power BI", "Финансовое планирование"]
+            },
+            {
+                id: 4,
+                title: "Преподаватель английского",
+                company: "EduTaj",
+                logo: "https://via.placeholder.com/50x50",
+                location: "Худжанд",
+                salary: "1,800 - 2,800 TJS",
+                type: "Частичная занятость",
+                experience: "2+ лет",
+                description: "Преподавание английского языка для студентов различных уровней подготовки в современной языковой школе.",
+                date: "5 дней назад",
+                badges: [],
+                skills: ["TESOL", "IELTS", "Cambridge", "Методика преподавания"]
+            },
+            {
+                id: 5,
+                title: "Медицинская сестра",
+                company: "HealthCare+",
+                logo: "https://via.placeholder.com/50x50",
+                location: "Куляб",
+                salary: "1,500 - 2,200 TJS",
+                type: "Полная занятость",
+                experience: "Опыт приветствуется",
+                description: "Работа в современной частной клинике. Обеспечение качественного ухода за пациентами и поддержка врачей.",
+                date: "Сегодня",
+                badges: ["Срочно"],
+                skills: ["Медицинские процедуры", "Уход за пациентами", "Документооборот"]
+            },
+            {
+                id: 6,
+                title: "Менеджер по продажам",
+                company: "LogisTaj",
+                logo: "https://via.placeholder.com/50x50",
+                location: "Душанбе",
+                salary: "2,000 - 4,000 TJS",
+                type: "Полная занятость",
+                experience: "1+ лет",
+                description: "Развитие клиентской базы, работа с крупными корпоративными клиентами в сфере логистических услуг.",
+                date: "1 неделю назад",
+                badges: ["Видеоинтервью"],
+                skills: ["Продажи", "CRM", "Переговоры", "Клиентский сервис"]
+            },
+            {
+                id: 7,
+                title: "Backend разработчик",
+                company: "TechSolutions",
+                logo: "https://via.placeholder.com/50x50",
+                location: "Душанбе",
+                salary: "3,500 - 6,000 TJS",
+                type: "Полная занятость",
+                experience: "3-7 лет",
+                description: "Разработка серверной части веб-приложений, API, работа с базами данных и микросервисной архитектурой.",
+                date: "4 дня назад",
+                badges: ["Видеоинтервью"],
+                skills: ["Python", "Django", "PostgreSQL", "Docker", "AWS"]
+            },
+            {
+                id: 8,
+                title: "Маркетолог",
+                company: "BrandTaj",
+                logo: "https://via.placeholder.com/50x50",
+                location: "Душанбе",
+                salary: "2,000 - 3,200 TJS",
+                type: "Полная занятость",
+                experience: "1-4 года",
+                description: "Разработка и реализация маркетинговых стратегий, управление социальными сетями, анализ эффективности кампаний.",
+                date: "6 дней назад",
+                badges: [],
+                skills: ["Digital Marketing", "SMM", "Google Analytics", "Content Marketing"]
+            },
+            {
+                id: 9,
+                title: "Бухгалтер",
+                company: "FinanceGroup",
+                logo: "https://via.placeholder.com/50x50",
+                location: "Худжанд",
+                salary: "1,800 - 2,500 TJS",
+                type: "Полная занятость",
+                experience: "2+ лет",
+                description: "Ведение бухгалтерского учета, составление отчетности, работа с налоговыми органами, контроль финансовых операций.",
+                date: "1 неделю назад",
+                badges: [],
+                skills: ["1C", "Налоговое планирование", "МСФО", "Финансовая отчетность"]
+            },
+            {
+                id: 10,
+                title: "DevOps инженер",
+                company: "CloudTech",
+                logo: "https://via.placeholder.com/50x50",
+                location: "Удаленно",
+                salary: "4,000 - 7,000 TJS",
+                type: "Полная занятость",
+                experience: "3+ лет",
+                description: "Настройка и поддержка инфраструктуры, автоматизация процессов развертывания, мониторинг систем.",
+                date: "2 дня назад",
+                badges: ["Удаленно", "Видеоинтервью"],
+                skills: ["Kubernetes", "Docker", "Jenkins", "Terraform", "AWS"]
+            }
+        ];
+
+        let currentPage = 1;
+        const vacanciesPerPage = 6;
+        let filteredVacancies = [...mockVacancies];
+        let currentView = 'grid';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePage();
+        });
+
+        function initializePage() {
+            renderVacancies();
+            setupEventListeners();
+            loadFiltersFromURL();
+            updateResultsInfo();
+        }
+
+        function setupEventListeners() {
+            // View toggle
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentView = this.dataset.view;
+                    renderVacancies();
+                });
+            });
+
+            // Sort
+            document.getElementById('sort-select').addEventListener('change', function() {
+                sortVacancies(this.value);
+                renderVacancies();
+            });
+
+            // Pagination
+            document.getElementById('prev-page').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderVacancies();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+
+            document.getElementById('next-page').addEventListener('click', () => {
+                const maxPages = Math.ceil(filteredVacancies.length / vacanciesPerPage);
+                if (currentPage < maxPages) {
+                    currentPage++;
+                    renderVacancies();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+
+            // Clear search
+            document.getElementById('clear-search').addEventListener('click', function() {
+                document.getElementById('search-input').value = '';
+                document.getElementById('search-location').value = '';
+                filteredVacancies = [...mockVacancies];
+                currentPage = 1;
+                renderVacancies();
+                updateResultsInfo();
+            });
+        }
+
+        function renderVacancies() {
+            const container = document.getElementById('vacancies-grid');
+            const startIndex = (currentPage - 1) * vacanciesPerPage;
+            const endIndex = startIndex + vacanciesPerPage;
+            const vacancies = filteredVacancies.slice(startIndex, endIndex);
+
+            container.className = currentView === 'grid' ? 'vacancies-grid' : 'vacancies-list';
+            
+            if (vacancies.length === 0) {
+                container.innerHTML = '';
+                document.getElementById('no-results').style.display = 'block';
+                document.getElementById('pagination').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('no-results').style.display = 'none';
+            document.getElementById('pagination').style.display = 'flex';
+
+            container.innerHTML = vacancies.map(vacancy => createVacancyCard(vacancy)).join('');
+            renderPagination();
+            updateResultsInfo();
+        }
+
+        function createVacancyCard(vacancy) {
+            const badgesHtml = vacancy.badges.map(badge => {
+                const badgeClass = badge === 'Видеоинтервью' ? 'badge-primary' : 
+                                  badge === 'Удаленно' ? 'badge-success' : 
+                                  badge === 'Срочно' ? 'badge-warning' : 'badge-secondary';
+                const icon = badge === 'Видеоинтервью' ? 'fas fa-video' : '';
+                return `<span class="badge ${badgeClass}">
+                    ${icon ? `<i class="${icon}"></i>` : ''}
+                    ${badge}
+                </span>`;
+            }).join('');
+
+            const skillsHtml = vacancy.skills.map(skill => 
+                `<span class="skill-tag">${skill}</span>`
+            ).join('');
+
+            return `
+                <div class="vacancy-card">
+                    <div class="vacancy-header">
+                        <div class="vacancy-company">
+                            <img src="${vacancy.logo}" alt="${vacancy.company}">
+                            <div>
+                                <h4>${vacancy.title}</h4>
+                                <span>${vacancy.company}</span>
+                            </div>
+                        </div>
+                        <div class="vacancy-badges">
+                            ${badgesHtml}
+                        </div>
+                    </div>
+                    <div class="vacancy-details">
+                        <div class="vacancy-info">
+                            <span><i class="fas fa-map-marker-alt"></i> ${vacancy.location}</span>
+                            <span><i class="fas fa-clock"></i> ${vacancy.type}</span>
+                            <span><i class="fas fa-user-tie"></i> ${vacancy.experience}</span>
+                        </div>
+                        <div class="vacancy-salary">${vacancy.salary}</div>
+                    </div>
+                    <div class="vacancy-description">
+                        ${vacancy.description}
+                    </div>
+                    <div class="vacancy-skills">
+                        ${skillsHtml}
+                    </div>
+                    <div class="vacancy-footer">
+                        <div class="vacancy-date">${vacancy.date}</div>
+                        <div class="vacancy-actions">
+                            <button class="btn btn-outline btn-sm" onclick="toggleFavorite(${vacancy.id})">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="applyToVacancy(${vacancy.id})">
+                                Откликнуться
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderPagination() {
+            const maxPages = Math.ceil(filteredVacancies.length / vacanciesPerPage);
+            const numbersContainer = document.getElementById('pagination-numbers');
+            const prevBtn = document.getElementById('prev-page');
+            const nextBtn = document.getElementById('next-page');
+
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === maxPages;
+
+            let numbersHtml = '';
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(maxPages, currentPage + 2);
+
+            if (startPage > 1) {
+                numbersHtml += `<button class="pagination-number" onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) {
+                    numbersHtml += `<span class="pagination-ellipsis">...</span>`;
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                numbersHtml += `<button class="pagination-number ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+
+            if (endPage < maxPages) {
+                if (endPage < maxPages - 1) {
+                    numbersHtml += `<span class="pagination-ellipsis">...</span>`;
+                }
+                numbersHtml += `<button class="pagination-number" onclick="goToPage(${maxPages})">${maxPages}</button>`;
+            }
+
+            numbersContainer.innerHTML = numbersHtml;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderVacancies();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function sortVacancies(sortBy) {
+            switch (sortBy) {
+                case 'date':
+                    filteredVacancies.sort((a, b) => {
+                        const dateA = parseDateString(a.date);
+                        const dateB = parseDateString(b.date);
+                        return dateB - dateA;
+                    });
+                    break;
+                case 'salary-desc':
+                    filteredVacancies.sort((a, b) => {
+                        const salaryA = extractMaxSalary(a.salary);
+                        const salaryB = extractMaxSalary(b.salary);
+                        return salaryB - salaryA;
+                    });
+                    break;
+                case 'salary-asc':
+                    filteredVacancies.sort((a, b) => {
+                        const salaryA = extractMaxSalary(a.salary);
+                        const salaryB = extractMaxSalary(b.salary);
+                        return salaryA - salaryB;
+                    });
+                    break;
+                case 'company':
+                    filteredVacancies.sort((a, b) => a.company.localeCompare(b.company));
+                    break;
+                default:
+                    // Relevance - keep original order
+                    break;
+            }
+        }
+
+        function extractMaxSalary(salaryString) {
+            const matches = salaryString.match(/(\d+,?\d*)/g);
+            if (matches) {
+                return Math.max(...matches.map(m => parseInt(m.replace(',', ''))));
+            }
+            return 0;
+        }
+
+        function parseDateString(dateString) {
+            const now = new Date();
+            if (dateString === 'Сегодня') return now;
+            if (dateString === 'Вчера') return new Date(now - 24 * 60 * 60 * 1000);
+            if (dateString.includes('дня назад')) {
+                const days = parseInt(dateString);
+                return new Date(now - days * 24 * 60 * 60 * 1000);
+            }
+            if (dateString.includes('неделю назад')) {
+                return new Date(now - 7 * 24 * 60 * 60 * 1000);
+            }
+            return now;
+        }
+
+        function updateResultsInfo() {
+            document.getElementById('results-count').textContent = `Найдено ${filteredVacancies.length} вакансий`;
+            document.getElementById('results-description').textContent = 
+                filteredVacancies.length > 0 ? 'Показаны наиболее релевантные предложения' : '';
+        }
+
+        function loadFiltersFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+            const location = urlParams.get('location');
+
+            if (query) {
+                document.getElementById('search-input').value = query;
+                applySearch();
+            }
+
+            if (location) {
+                document.getElementById('search-location').value = location;
+                applySearch();
+            }
+        }
+
+        function applySearch() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const location = document.getElementById('search-location').value;
+
+            filteredVacancies = mockVacancies.filter(vacancy => {
+                const matchesQuery = !query || 
+                    vacancy.title.toLowerCase().includes(query) ||
+                    vacancy.company.toLowerCase().includes(query) ||
+                    vacancy.description.toLowerCase().includes(query) ||
+                    vacancy.skills.some(skill => skill.toLowerCase().includes(query));
+
+                const matchesLocation = !location || vacancy.location.toLowerCase().includes(location);
+
+                return matchesQuery && matchesLocation;
+            });
+
+            currentPage = 1;
+            renderVacancies();
+        }
+
+        function toggleFavorite(vacancyId) {
+            // Mock favorite functionality
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const index = favorites.indexOf(vacancyId);
+            
+            if (index > -1) {
+                favorites.splice(index, 1);
+                PortalUtils.showNotification('Вакансия удалена из избранного', 'info');
+            } else {
+                favorites.push(vacancyId);
+                PortalUtils.showNotification('Вакансия добавлена в избранное', 'success');
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        function applyToVacancy(vacancyId) {
+            // Mock application
+            PortalUtils.showNotification('Ваш отклик отправлен работодателю!', 'success');
+        }
+
+        // Make functions available globally for onclick handlers
+        window.goToPage = goToPage;
+        window.toggleFavorite = toggleFavorite;
+        window.applyToVacancy = applyToVacancy;
+
+        // Apply filters function for filter sidebar
+        window.applyFilters = function(filters) {
+            // Apply the filters to vacancies
+            filteredVacancies = mockVacancies.filter(vacancy => {
+                // Implement filter logic here
+                return true; // Simplified for demo
+            });
+            currentPage = 1;
+            renderVacancies();
+        };
+    </script>
+</body>
+</html>

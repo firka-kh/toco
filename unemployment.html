@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация безработных - Портал Рынка Труда РТ</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <div class="hero-section unemployment-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1><i class="fas fa-user-check"></i> Регистрация безработных</h1>
+                    <p>Получите официальный статус безработного и доступ к государственным программам поддержки</p>
+                    <div class="hero-buttons">
+                        <button class="btn primary" onclick="scrollToSection('registration-form')">
+                            <i class="fas fa-edit"></i> Подать заявление
+                        </button>
+                        <button class="btn secondary" onclick="scrollToSection('benefits')">
+                            <i class="fas fa-info-circle"></i> Узнать о льготах
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <section class="info-section">
+                <div class="grid-2">
+                    <div class="info-card">
+                        <h3><i class="fas fa-question-circle"></i> Кто может зарегистрироваться?</h3>
+                        <ul>
+                            <li>Граждане РТ в возрасте от 16 до 62 лет (мужчины) и до 57 лет (женщины)</li>
+                            <li>Трудоспособные лица, не имеющие работы и заработка</li>
+                            <li>Готовые приступить к работе</li>
+                            <li>Ищущие работу и состоящие на учете в центре занятости</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-clock"></i> Сроки рассмотрения</h3>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-number">1</div>
+                                <div class="timeline-content">
+                                    <h4>Подача документов</h4>
+                                    <p>В день обращения</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-number">2</div>
+                                <div class="timeline-content">
+                                    <h4>Рассмотрение</h4>
+                                    <p>В течение 11 дней</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-number">3</div>
+                                <div class="timeline-content">
+                                    <h4>Решение</h4>
+                                    <p>Уведомление о статусе</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="benefits" class="benefits-section">
+                <h2>Льготы и поддержка для безработных</h2>
+                <div class="grid-3">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <h3>Пособие по безработице</h3>
+                        <div class="benefit-amount">до 500 TJS</div>
+                        <p>Ежемесячное пособие в зависимости от стажа работы и размера предыдущей заработной платы</p>
+                        <ul>
+                            <li>Первые 3 месяца: 75% от средней зарплаты</li>
+                            <li>Следующие 4 месяца: 60%</li>
+                            <li>Далее: минимальное пособие</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>Бесплатное обучение</h3>
+                        <div class="benefit-amount">100% оплата</div>
+                        <p>Профессиональная переподготовка и повышение квалификации</p>
+                        <ul>
+                            <li>Курсы по востребованным профессиям</li>
+                            <li>Компьютерная грамотность</li>
+                            <li>Языковые курсы</li>
+                            <li>Сертификация навыков</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <h3>Дополнительная поддержка</h3>
+                        <div class="benefit-amount">Индивидуально</div>
+                        <p>Социальная поддержка и консультации</p>
+                        <ul>
+                            <li>Карьерное консультирование</li>
+                            <li>Психологическая поддержка</li>
+                            <li>Помощь в составлении резюме</li>
+                            <li>Содействие в трудоустройстве</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3>Программы самозанятости</h3>
+                        <div class="benefit-amount">до 15,000 TJS</div>
+                        <p>Единовременная выплата для организации собственного дела</p>
+                        <ul>
+                            <li>Стартовый капитал</li>
+                            <li>Бизнес-консультации</li>
+                            <li>Сопровождение проекта</li>
+                            <li>Льготы по налогам</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-hard-hat"></i>
+                        </div>
+                        <h3>Общественные работы</h3>
+                        <div class="benefit-amount">ежедневная оплата</div>
+                        <p>Временное трудоустройство на социально значимых объектах</p>
+                        <ul>
+                            <li>Благоустройство территорий</li>
+                            <li>Социальные проекты</li>
+                            <li>Экологические программы</li>
+                            <li>Гибкий график работы</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>Цифровые навыки</h3>
+                        <div class="benefit-amount">бесплатно</div>
+                        <p>Обучение современным IT-технологиям и цифровой грамотности</p>
+                        <ul>
+                            <li>Основы программирования</li>
+                            <li>Работа с офисными программами</li>
+                            <li>Интернет-маркетинг</li>
+                            <li>Электронная коммерция</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="documents-section">
+                <h2>Необходимые документы</h2>
+                <div class="documents-grid">
+                    <div class="document-item">
+                        <i class="fas fa-id-card"></i>
+                        <h4>Документ, удостоверяющий личность</h4>
+                        <p>Паспорт гражданина РТ</p>
+                    </div>
+                    <div class="document-item">
+                        <i class="fas fa-book"></i>
+                        <h4>Трудовая книжка</h4>
+                        <p>Оригинал или электронная версия</p>
+                    </div>
+                    <div class="document-item">
+                        <i class="fas fa-file-alt"></i>
+                        <h4>Справка о доходах</h4>
+                        <p>За последние 3 месяца работы</p>
+                    </div>
+                    <div class="document-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h4>Документ об образовании</h4>
+                        <p>Диплом, аттестат или сертификат</p>
+                    </div>
+                    <div class="document-item">
+                        <i class="fas fa-user-md"></i>
+                        <h4>Медицинская справка</h4>
+                        <p>При необходимости (для отдельных профессий)</p>
+                    </div>
+                    <div class="document-item">
+                        <i class="fas fa-child"></i>
+                        <h4>Документы о детях</h4>
+                        <p>Свидетельства о рождении (при наличии)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="registration-form" class="registration-section">
+                <h2>Подача заявления на регистрацию</h2>
+                <div class="form-container">
+                    <form class="registration-form">
+                        <div class="form-steps">
+                            <div class="step active" data-step="1">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Личные данные</span>
+                            </div>
+                            <div class="step" data-step="2">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Образование и опыт</span>
+                            </div>
+                            <div class="step" data-step="3">
+                                <span class="step-number">3</span>
+                                <span class="step-text">Предпочтения</span>
+                            </div>
+                            <div class="step" data-step="4">
+                                <span class="step-number">4</span>
+                                <span class="step-text">Подтверждение</span>
+                            </div>
+                        </div>
+
+                        <div class="form-step active" id="step1">
+                            <h3>Личные данные</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="lastName">Фамилия *</label>
+                                    <input type="text" id="lastName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="firstName">Имя *</label>
+                                    <input type="text" id="firstName" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="patronymic">Отчество</label>
+                                    <input type="text" id="patronymic">
+                                </div>
+                                <div class="form-group">
+                                    <label for="birthDate">Дата рождения *</label>
+                                    <input type="date" id="birthDate" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="passport">Серия и номер паспорта *</label>
+                                    <input type="text" id="passport" placeholder="AA1234567" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Номер телефона *</label>
+                                    <input type="tel" id="phone" placeholder="+992 XX XXX XXXX" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Адрес проживания *</label>
+                                <textarea id="address" rows="3" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-step" id="step2">
+                            <h3>Образование и трудовой опыт</h3>
+                            <div class="form-group">
+                                <label for="education">Уровень образования *</label>
+                                <select id="education" required>
+                                    <option value="">Выберите уровень образования</option>
+                                    <option value="basic">Основное общее (9 классов)</option>
+                                    <option value="secondary">Среднее общее (11 классов)</option>
+                                    <option value="vocational">Среднее профессиональное</option>
+                                    <option value="higher">Высшее</option>
+                                    <option value="postgraduate">Послевузовское</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="specialty">Специальность по образованию</label>
+                                <input type="text" id="specialty">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastJob">Последнее место работы</label>
+                                <input type="text" id="lastJob">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastPosition">Последняя должность</label>
+                                <input type="text" id="lastPosition">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="workExperience">Общий стаж работы (лет)</label>
+                                    <input type="number" id="workExperience" min="0" max="50">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastSalary">Размер последней заработной платы (TJS)</label>
+                                    <input type="number" id="lastSalary" min="0">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dismissalReason">Причина увольнения</label>
+                                <select id="dismissalReason">
+                                    <option value="">Выберите причину</option>
+                                    <option value="own_will">По собственному желанию</option>
+                                    <option value="agreement">По соглашению сторон</option>
+                                    <option value="reduction">Сокращение штата</option>
+                                    <option value="liquidation">Ликвидация предприятия</option>
+                                    <option value="other">Другая причина</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-step" id="step3">
+                            <h3>Предпочтения по трудоустройству</h3>
+                            <div class="form-group">
+                                <label for="desiredPosition">Желаемая должность *</label>
+                                <input type="text" id="desiredPosition" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="desiredSalary">Желаемая зарплата (TJS)</label>
+                                    <input type="number" id="desiredSalary" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="employmentType">Тип занятости</label>
+                                    <select id="employmentType">
+                                        <option value="">Любой</option>
+                                        <option value="full">Полная занятость</option>
+                                        <option value="part">Частичная занятость</option>
+                                        <option value="remote">Удаленная работа</option>
+                                        <option value="project">Проектная работа</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="workRegion">Предпочитаемый регион работы</label>
+                                <select id="workRegion">
+                                    <option value="">Любой регион</option>
+                                    <option value="dushanbe">Душанбе</option>
+                                    <option value="sughd">Согдийская область</option>
+                                    <option value="khatlon">Хатлонская область</option>
+                                    <option value="gbao">ГБАО</option>
+                                    <option value="rrp">РРП</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Готовность к переобучению</label>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="retraining">
+                                    <label for="retraining">Готов/готова пройти переобучение</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Готовность к общественным работам</label>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="publicWorks">
+                                    <label for="publicWorks">Готов/готова участвовать в общественных работах</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-step" id="step4">
+                            <h3>Подтверждение заявления</h3>
+                            <div class="confirmation-content">
+                                <div class="confirmation-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Все данные заполнены корректно</span>
+                                </div>
+                                <div class="confirmation-item">
+                                    <i class="fas fa-file-signature"></i>
+                                    <span>Заявление будет подписано электронной подписью</span>
+                                </div>
+                                <div class="confirmation-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Рассмотрение в течение 11 рабочих дней</span>
+                                </div>
+                                <div class="confirmation-item">
+                                    <i class="fas fa-bell"></i>
+                                    <span>Уведомление о решении придет на указанные контакты</span>
+                                </div>
+                            </div>
+                            
+                            <div class="agreement-section">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="dataProcessing" required>
+                                    <label for="dataProcessing">Согласен на обработку персональных данных</label>
+                                </div>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="truthfulness" required>
+                                    <label for="truthfulness">Подтверждаю достоверность предоставленных данных</label>
+                                </div>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="obligations" required>
+                                    <label for="obligations">Ознакомлен с правами и обязанностями безработного</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-navigation">
+                            <button type="button" class="btn secondary" id="prevBtn" onclick="changeStep(-1)" style="display: none;">Назад</button>
+                            <button type="button" class="btn primary" id="nextBtn" onclick="changeStep(1)">Далее</button>
+                            <button type="submit" class="btn primary" id="submitBtn" style="display: none;">Подать заявление</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="statistics-section">
+                <h2>Статистика по безработице в РТ</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">24,567</div>
+                        <div class="stat-label">Зарегистрированных безработных</div>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-down"></i> -8.2% за год
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">18,234</div>
+                        <div class="stat-label">Трудоустроено в этом году</div>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i> +12.5% к прошлому году
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">5,432</div>
+                        <div class="stat-label">Прошли переобучение</div>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i> +25.1% за год
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">892</div>
+                        <div class="stat-label">Открыли собственное дело</div>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i> +15.8% за год
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Загрузка компонентов
+        fetch('header.html').then(response => response.text()).then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+            initializeHeader();
+        });
+        
+        fetch('footer.html').then(response => response.text()).then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        });
+
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function changeStep(direction) {
+            if (direction === 1 && currentStep < totalSteps) {
+                if (validateCurrentStep()) {
+                    currentStep++;
+                    updateStep();
+                }
+            } else if (direction === -1 && currentStep > 1) {
+                currentStep--;
+                updateStep();
+            }
+        }
+
+        function updateStep() {
+            // Скрыть все шаги
+            document.querySelectorAll('.form-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            // Показать текущий шаг
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            document.querySelector(`[data-step="${currentStep}"]`).classList.add('active');
+
+            // Управление кнопками
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+
+            prevBtn.style.display = currentStep === 1 ? 'none' : 'inline-block';
+            nextBtn.style.display = currentStep === totalSteps ? 'none' : 'inline-block';
+            submitBtn.style.display = currentStep === totalSteps ? 'inline-block' : 'none';
+        }
+
+        function validateCurrentStep() {
+            const currentStepElement = document.getElementById(`step${currentStep}`);
+            const requiredInputs = currentStepElement.querySelectorAll('[required]');
+            
+            for (let input of requiredInputs) {
+                if (!input.value.trim()) {
+                    input.focus();
+                    showNotification('Пожалуйста, заполните все обязательные поля', 'error');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Обработка отправки формы
+        document.querySelector('.registration-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateCurrentStep()) {
+                return;
+            }
+
+            // Проверка согласий на последнем шаге
+            const agreements = ['dataProcessing', 'truthfulness', 'obligations'];
+            for (let agreement of agreements) {
+                if (!document.getElementById(agreement).checked) {
+                    showNotification('Необходимо согласиться со всеми условиями', 'error');
+                    return;
+                }
+            }
+
+            // Симуляция отправки
+            showNotification('Заявление успешно подано! Номер заявления: РБ-2024-001234', 'success');
+            
+            setTimeout(() => {
+                showNotification('В течение 11 рабочих дней вы получите уведомление о решении', 'info');
+            }, 2000);
+        });
+
+        // Анимации при скролле
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.benefit-card, .stat-card, .document-item');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.benefit-card, .stat-card, .document-item');
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                element.style.transition = 'all 0.6s ease';
+            });
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll();
+        });
+    </script>
+</body>
+</html>
