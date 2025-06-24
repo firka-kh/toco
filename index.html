@@ -14,88 +14,39 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-background">
-                <div class="hero-shapes">
-                    <div class="shape shape-1"></div>
-                    <div class="shape shape-2"></div>
-                    <div class="shape shape-3"></div>
+        <!-- Новый HERO -->
+        <section class="hero-modern">
+            <div class="hero-bg">
+                <svg class="hero-wave" viewBox="0 0 1440 320"><path fill="#00A1F1" fill-opacity="0.18" d="M0,224L60,197.3C120,171,240,117,360,117.3C480,117,600,171,720,197.3C840,224,960,224,1080,197.3C1200,171,1320,117,1380,90.7L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
+                <div class="hero-illustration">
+                    <img src="https://undraw.co/api/illustrations/undraw_job_hunt_re_q203.svg" alt="Иллюстрация поиска работы" loading="lazy">
                 </div>
             </div>
-            <div class="container">
-                <div class="hero-content">
-                    <div class="hero-text">
-                        <h1 class="hero-title">
-                            Найдите работу мечты в Таджикистане
-                        </h1>
-                        <p class="hero-subtitle">
-                            Современный портал рынка труда с AI-консультантом, видеоинтервью и персональными рекомендациями
-                        </p>
-                        <div class="hero-features">
-                            <div class="hero-feature">
-                                <i class="fas fa-robot"></i>
-                                <span>AI-Консультант</span>
-                            </div>
-                            <div class="hero-feature">
-                                <i class="fas fa-video"></i>
-                                <span>Видеоинтервью</span>
-                            </div>
-                            <div class="hero-feature">
-                                <i class="fas fa-chart-line"></i>
-                                <span>Аналитика</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="hero-search">
-                        <div class="search-container">
-                            <h3>Начните поиск прямо сейчас</h3>
-                            <form class="search-form" id="hero-search-form">
-                                <div class="search-input-group">
-                                    <div class="search-field">
-                                        <i class="fas fa-search"></i>
-                                        <input 
-                                            type="text" 
-                                            placeholder="Должность, компания или ключевые слова"
-                                            id="search-input"
-                                            autocomplete="off"
-                                        >
-                                        <div class="search-suggestions" id="search-suggestions"></div>
-                                    </div>
-                                    <div class="search-field">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        <select id="search-location">
-                                            <option value="">Все регионы</option>
-                                            <option value="dushanbe">Душанбе</option>
-                                            <option value="sughd">Согдийская область</option>
-                                            <option value="khatlon">Хатлонская область</option>
-                                            <option value="gbao">ГБАО</option>
-                                            <option value="rrp">РРП</option>
-                                        </select>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary search-btn">
-                                        <i class="fas fa-search"></i>
-                                        Найти
-                                    </button>
-                                    <button type="button" class="btn btn-outline filter-btn" id="filter-btn">
-                                        <i class="fas fa-filter"></i>
-                                        Фильтры
-                                    </button>
-                                </div>
-                            </form>
-                            <div class="search-stats">
-                                <div class="search-stat">
-                                    <i class="fas fa-briefcase"></i>
-                                    <span>12,450 активных вакансий</span>
-                                </div>
-                                <div class="search-stat">
-                                    <i class="fas fa-building"></i>
-                                    <span>3,780 компаний</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="hero-center">
+                <h1>Найдите работу мечты в Таджикистане</h1>
+                <p class="hero-sub">Современный портал рынка труда с AI-консультантом, видеоинтервью и персональными рекомендациями</p>
+                <div class="hero-features">
+                    <span><i class="fas fa-robot"></i> AI-Консультант</span>
+                    <span><i class="fas fa-video"></i> Видеоинтервью</span>
+                    <span><i class="fas fa-chart-line"></i> Аналитика</span>
                 </div>
+                <form class="hero-search-form">
+                    <div class="search-group">
+                        <span class="search-icon"><i class="fas fa-search"></i></span>
+                        <input type="text" placeholder="Должность, компания или ключевые слова" autocomplete="off">
+                        <span class="search-icon"><i class="fas fa-map-marker-alt"></i></span>
+                        <select>
+                            <option value="">Все регионы</option>
+                            <option value="dushanbe">Душанбе</option>
+                            <option value="sughd">Согдийская область</option>
+                            <option value="khatlon">Хатлонская область</option>
+                            <option value="gbao">ГБАО</option>
+                            <option value="rrp">РРП</option>
+                        </select>
+                        <button type="submit" class="btn hero-btn"><i class="fas fa-search"></i> Найти</button>
+                        <button type="button" class="btn hero-btn-outline"><i class="fas fa-sliders-h"></i> Фильтры</button>
+                    </div>
+                </form>
             </div>
         </section>
 
