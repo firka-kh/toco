@@ -104,7 +104,199 @@
             animation: fade-in 0.18s;
         }
         
-        /* Responsive design */
+        /* AI Features Widgets */
+        .ai-features-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 400px; /* Соответствует высоте чата */
+        }
+        
+        .ai-widget {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ai-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .ai-widget:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .ai-widget:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #cbd5e1;
+        }
+        
+        .ai-widget-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            transition: transform 0.3s ease;
+        }
+        
+        .ai-widget:hover .ai-widget-icon {
+            transform: scale(1.1);
+        }
+        
+        .ai-widget-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        
+        .ai-widget-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .ai-widget-item {
+            display: flex;
+            align-items: center;
+            padding: 6px 0;
+            font-size: 13px;
+            color: #64748b;
+            transition: color 0.2s ease;
+        }
+        
+        .ai-widget:hover .ai-widget-item {
+            color: #475569;
+        }
+        
+        .ai-widget-check {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            font-size: 10px;
+        }
+        
+        /* Градиенты для иконок */
+        .widget-search { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+        .widget-education { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
+        .widget-freelance { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+        
+        /* AI Widget улучшенные стили */
+        .ai-widget {
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ai-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.3));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 1rem;
+        }
+        
+        .ai-widget:hover::before {
+            opacity: 1;
+        }
+        
+        .ai-widget:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Анимация пульсации для статусных меток */
+        @keyframes pulse-soft {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
+        
+        .ai-widget .bg-blue-200,
+        .ai-widget .bg-emerald-200,
+        .ai-widget .bg-purple-200,
+        .ai-widget .bg-orange-200 {
+            animation: pulse-soft 2s infinite;
+        }
+        
+        /* Стили для точек списка */
+        .ai-widget .w-2.h-2 {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Улучшенная типографика */
+        .ai-widget h4 {
+            background: linear-gradient(135deg, #1f2937, #374151);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Адаптивность для виджетов */
+        @media (max-width: 1024px) {
+            .ai-widget {
+                margin-bottom: 1.5rem;
+                transform: none !important;
+            }
+            
+            .ai-widget:hover {
+                transform: translateY(-4px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .ai-widget {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .ai-widget .w-14.h-14 {
+                width: 3rem;
+                height: 3rem;
+            }
+            
+            .ai-widget h4 {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Responsive grid и общая адаптивность */
         @media (max-width: 1200px) {
             nav .space-x-6 { gap: 0.75rem; }
             .menu-link { font-size: 0.9rem; }
@@ -113,6 +305,61 @@
         @media (max-width: 1024px) {
             nav .space-x-6 { gap: 0.5rem; }
             .menu-link { font-size: 0.85rem; }
+            
+            /* Изменение сетки на планшетах */
+            .grid.lg\\:grid-cols-3 {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .lg\\:col-span-2, .lg\\:col-span-1 {
+                grid-column: span 1;
+            }
+            
+            /* Убираем sticky на мобильных */
+            .sticky {
+                position: static;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .py-12 {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+            
+            /* Адаптация чата на мобильных */
+            .chat-container {
+                height: 300px;
+            }
+            
+            .message-bubble {
+                max-width: 90%;
+            }
+            
+            /* Центрирование содержимого виджетов на мобильных */
+            .ai-widget .flex.items-start {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .ai-widget .w-14.h-14 {
+                margin: 0 auto 1rem auto;
+            }
+            
+            .ai-widget .flex-1 {
+                text-align: center;
+            }
+            
+            .ai-widget p {
+                text-align: left;
+                font-size: 0.875rem;
+            }
         }
     </style>
 </head>
@@ -221,7 +468,7 @@
     <!-- Main Chat Interface -->
     <section class="py-12 bg-white">
         <div class="container mx-auto px-4">
-            <div class="grid lg:grid-cols-3 gap-8">
+            <div class="grid lg:grid-cols-3 gap-8 items-start">
                 <!-- Chat Interface - левая часть (2/3 ширины) -->
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-lg shadow-2xl overflow-hidden">
@@ -293,78 +540,180 @@
                     </div>
                 </div>
                 
-                <!-- AI Features - правая часть (1/3 ширины) -->
+                <!-- AI Capabilities Widgets - правая часть (1/3 ширины) -->
                 <div class="lg:col-span-1">
-                    <div class="bg-white rounded-lg shadow-lg p-4 sticky top-4">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">Возможности AI-Ассистента</h3>
-                        <div class="space-y-4">
-                            <div class="border rounded-lg p-3">
-                                <div class="text-center mb-3">
-                                    <div class="bg-blue-100 rounded-full p-2 inline-block mb-2">
-                                        <i class="fas fa-search text-lg text-blue-500"></i>
-                                    </div>
-                                    <h4 class="text-sm font-semibold text-gray-800">Умный поиск работы</h4>
+                    <div class="sticky top-8 space-y-6">
+                        <!-- Заголовок секции -->
+                        <div class="text-center mb-8">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Возможности AI-Ассистента</h3>
+                            <p class="text-gray-600 text-sm">Персональные решения для вашей карьеры</p>
+                        </div>
+
+                        <!-- Widget 1: Умный поиск работы -->
+                        <div class="ai-widget group bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer">
+                            <div class="flex items-start mb-4">
+                                <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
                                 </div>
-                                <ul class="space-y-1 text-xs text-gray-700">
-                                    <li class="flex items-center space-x-1">
-                                        <i class="fas fa-check text-green-500 text-xs"></i>
-                                        <span>Анализ навыков и опыта</span>
-                                    </li>
-                                    <li class="flex items-center space-x-1">
-                                        <i class="fas fa-check text-green-500 text-xs"></i>
-                                        <span>Подбор релевантных вакансий</span>
-                                    </li>
-                                    <li class="flex items-center space-x-1">
-                                        <i class="fas fa-check text-green-500 text-xs"></i>
-                                        <span>Оптимизация резюме</span>
-                                    </li>
-                                </ul>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-2">Умный поиск работы</h4>
+                                    <p class="text-gray-600 text-sm leading-relaxed">
+                                        AI анализирует ваши навыки и опыт, предлагая персонализированные вакансии с учетом зарплатных ожиданий и карьерных целей.
+                                    </p>
+                                </div>
                             </div>
-                            
-                            <div class="border rounded-lg p-3">
-                                <div class="text-center mb-3">
-                                    <div class="bg-green-100 rounded-full p-2 inline-block mb-2">
-                                        <i class="fas fa-graduation-cap text-lg text-green-500"></i>
-                                    </div>
-                                    <h4 class="text-sm font-semibold text-gray-800">Персональное обучение</h4>
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>Анализ навыков и опыта</span>
                                 </div>
-                                <ul class="space-y-1 text-xs text-gray-700">
-                                    <li class="flex items-center space-x-1">
-                                        <i class="fas fa-check text-green-500 text-xs"></i>
-                                        <span>Рекомендации курсов</span>
-                                    </li>
-                                    <li class="flex items-center space-x-1">
-                                        <i class="fas fa-check text-green-500 text-xs"></i>
-                                        <span>Карьерные траектории</span>
-                                    </li>
-                                    <li class="flex items-center space-x-1">
-                                        <i class="fas fa-check text-green-500 text-xs"></i>
-                                        <span>Анализ пробелов в навыках</span>
-                                    </li>
-                                </ul>
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>Подбор релевантных вакансий</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>Оптимизация резюме</span>
+                                </div>
                             </div>
-                            
-                            <div class="border rounded-lg p-3">
-                                <div class="text-center mb-3">
-                                    <div class="bg-purple-100 rounded-full p-2 inline-block mb-2">
-                                        <i class="fas fa-laptop text-lg text-purple-500"></i>
-                                    </div>
-                                    <h4 class="text-sm font-semibold text-gray-800">Фриланс-возможности</h4>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center text-blue-600 font-semibold text-sm group-hover:text-blue-700 transition-colors">
+                                    <span class="mr-2">Попробовать сейчас</span>
+                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
                                 </div>
-                                <ul class="space-y-1 text-xs text-gray-700">
-                                    <li class="flex items-center space-x-1">
-                                        <i class="fas fa-check text-green-500 text-xs"></i>
-                                        <span>Подбор проектов</span>
-                                    </li>
-                                    <li class="flex items-center space-x-1">
-                                        <i class="fas fa-check text-green-500 text-xs"></i>
-                                        <span>Расчет стоимости услуг</span>
-                                    </li>
-                                    <li class="flex items-center space-x-1">
-                                        <i class="fas fa-check text-green-500 text-xs"></i>
-                                        <span>Интеграция с Freelance Hub</span>
-                                    </li>
-                                </ul>
+                                <div class="bg-blue-200 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
+                                    Популярно
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Widget 2: Персональное обучение -->
+                        <div class="ai-widget group bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer">
+                            <div class="flex items-start mb-4">
+                                <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-2">Персональное обучение</h4>
+                                    <p class="text-gray-600 text-sm leading-relaxed">
+                                        Рекомендации курсов и тренингов на основе пробелов в навыках и трендов рынка труда для вашей сферы деятельности.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>Рекомендации курсов</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>Карьерные траектории</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>Анализ пробелов в навыках</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center text-emerald-600 font-semibold text-sm group-hover:text-emerald-700 transition-colors">
+                                    <span class="mr-2">Получить план обучения</span>
+                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                                <div class="bg-emerald-200 text-emerald-700 px-2 py-1 rounded-full text-xs font-medium">
+                                    Новое
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Widget 3: Фриланс возможности -->
+                        <div class="ai-widget group bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer">
+                            <div class="flex items-start mb-4">
+                                <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-2">Фриланс возможности</h4>
+                                    <p class="text-gray-600 text-sm leading-relaxed">
+                                        Подбор проектов и заказов, соответствующих вашему профилю и опыту. Оценка стоимости услуг на рынке.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>Подбор проектов</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>Расчет стоимости услуг</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>Интеграция с Freelance Hub</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center text-purple-600 font-semibold text-sm group-hover:text-purple-700 transition-colors">
+                                    <span class="mr-2">Найти проекты</span>
+                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                                <div class="bg-purple-200 text-purple-700 px-2 py-1 rounded-full text-xs font-medium">
+                                    AI-подбор
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Widget 4: Карьерное планирование -->
+                        <div class="ai-widget group bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer">
+                            <div class="flex items-start mb-4">
+                                <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-2">Карьерное планирование</h4>
+                                    <p class="text-gray-600 text-sm leading-relaxed">
+                                        Составление индивидуального плана развития карьеры с учетом рыночных трендов и ваших амбиций.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>Анализ карьерных целей</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>План профессионального роста</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-700">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <span>Рыночные тренды и прогнозы</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center text-orange-600 font-semibold text-sm group-hover:text-orange-700 transition-colors">
+                                    <span class="mr-2">Создать план</span>
+                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                                <div class="bg-orange-200 text-orange-700 px-2 py-1 rounded-full text-xs font-medium">
+                                    Скоро
+                                </div>
                             </div>
                         </div>
                     </div>
