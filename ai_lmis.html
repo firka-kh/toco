@@ -206,12 +206,38 @@
         .widget-education { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
         .widget-freelance { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
         
-        /* AI Widget улучшенные стили */
+        /* Стили для скроллируемого контейнера виджетов */
+        .widgets-container {
+            /* Custom scrollbar для WebKit browsers */
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 #f1f5f9;
+        }
+        
+        .widgets-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .widgets-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        
+        .widgets-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        
+        .widgets-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* AI Widget компактные стили */
         .ai-widget {
             border: 2px solid transparent;
             background-clip: padding-box;
             position: relative;
             overflow: hidden;
+            height: 220px; /* Фиксированная высота для равномерности */
         }
         
         .ai-widget::before {
@@ -224,7 +250,7 @@
             background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.3));
             opacity: 0;
             transition: opacity 0.3s ease;
-            border-radius: 1rem;
+            border-radius: 0.75rem;
         }
         
         .ai-widget:hover::before {
@@ -232,8 +258,8 @@
         }
         
         .ai-widget:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.2);
         }
         
         /* Анимация пульсации для статусных меток */
@@ -542,178 +568,181 @@
                 
                 <!-- AI Capabilities Widgets - правая часть (1/3 ширины) -->
                 <div class="lg:col-span-1">
-                    <div class="sticky top-8 space-y-6">
+                    <div class="sticky top-8">
                         <!-- Заголовок секции -->
-                        <div class="text-center mb-8">
-                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Возможности AI-Ассистента</h3>
+                        <div class="text-center mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Возможности AI-Ассистента</h3>
                             <p class="text-gray-600 text-sm">Персональные решения для вашей карьеры</p>
                         </div>
-
-                        <!-- Widget 1: Умный поиск работы -->
-                        <div class="ai-widget group bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer">
-                            <div class="flex items-start mb-4">
-                                <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        
+                        <!-- Скроллируемый контейнер для виджетов -->
+                        <div class="widgets-container overflow-y-auto space-y-4" style="height: 480px; scrollbar-width: thin; scrollbar-color: #cbd5e1 #f1f5f9;">
+                            <div class="pr-2">                        <!-- Widget 1: Умный поиск работы -->
+                        <div class="ai-widget group bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                            <div class="flex items-start mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mr-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                     </svg>
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="text-lg font-bold text-gray-800 mb-2">Умный поиск работы</h4>
-                                    <p class="text-gray-600 text-sm leading-relaxed">
-                                        AI анализирует ваши навыки и опыт, предлагая персонализированные вакансии с учетом зарплатных ожиданий и карьерных целей.
+                                    <h4 class="text-base font-bold text-gray-800 mb-2">Умный поиск работы</h4>
+                                    <p class="text-gray-600 text-xs leading-relaxed">
+                                        AI анализирует ваши навыки и предлагает персонализированные вакансии.
                                     </p>
                                 </div>
                             </div>
-                            <div class="space-y-2 mb-4">
+                            <div class="space-y-1 mb-3">
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>Анализ навыков и опыта</span>
                                 </div>
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>Подбор релевантных вакансий</span>
                                 </div>
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>Оптимизация резюме</span>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between">
-                                <div class="flex items-center text-blue-600 font-semibold text-sm group-hover:text-blue-700 transition-colors">
-                                    <span class="mr-2">Попробовать сейчас</span>
-                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="flex items-center text-blue-600 font-semibold text-xs group-hover:text-blue-700 transition-colors">
+                                    <span class="mr-1">Попробовать</span>
+                                    <svg class="w-3 h-3 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                     </svg>
                                 </div>
-                                <div class="bg-blue-200 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
+                                <div class="bg-blue-200 text-blue-700 px-2 py-0.5 rounded-full text-xs font-medium">
                                     Популярно
                                 </div>
                             </div>
                         </div>
 
                         <!-- Widget 2: Персональное обучение -->
-                        <div class="ai-widget group bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer">
-                            <div class="flex items-start mb-4">
-                                <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="ai-widget group bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200 rounded-xl p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                            <div class="flex items-start mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center mr-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                                     </svg>
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="text-lg font-bold text-gray-800 mb-2">Персональное обучение</h4>
-                                    <p class="text-gray-600 text-sm leading-relaxed">
-                                        Рекомендации курсов и тренингов на основе пробелов в навыках и трендов рынка труда для вашей сферы деятельности.
+                                    <h4 class="text-base font-bold text-gray-800 mb-2">Персональное обучение</h4>
+                                    <p class="text-gray-600 text-xs leading-relaxed">
+                                        Рекомендации курсов на основе пробелов в навыках и трендов рынка.
                                     </p>
                                 </div>
                             </div>
-                            <div class="space-y-2 mb-4">
+                            <div class="space-y-1 mb-3">
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>Рекомендации курсов</span>
                                 </div>
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>Карьерные траектории</span>
                                 </div>
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>Анализ пробелов в навыках</span>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between">
-                                <div class="flex items-center text-emerald-600 font-semibold text-sm group-hover:text-emerald-700 transition-colors">
-                                    <span class="mr-2">Получить план обучения</span>
-                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="flex items-center text-emerald-600 font-semibold text-xs group-hover:text-emerald-700 transition-colors">
+                                    <span class="mr-1">Получить план</span>
+                                    <svg class="w-3 h-3 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                     </svg>
                                 </div>
-                                <div class="bg-emerald-200 text-emerald-700 px-2 py-1 rounded-full text-xs font-medium">
+                                <div class="bg-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full text-xs font-medium">
                                     Новое
                                 </div>
                             </div>
                         </div>
 
                         <!-- Widget 3: Фриланс возможности -->
-                        <div class="ai-widget group bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer">
-                            <div class="flex items-start mb-4">
-                                <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="ai-widget group bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                            <div class="flex items-start mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mr-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                     </svg>
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="text-lg font-bold text-gray-800 mb-2">Фриланс возможности</h4>
-                                    <p class="text-gray-600 text-sm leading-relaxed">
-                                        Подбор проектов и заказов, соответствующих вашему профилю и опыту. Оценка стоимости услуг на рынке.
+                                    <h4 class="text-base font-bold text-gray-800 mb-2">Фриланс возможности</h4>
+                                    <p class="text-gray-600 text-xs leading-relaxed">
+                                        Подбор проектов и заказов, соответствующих вашему профилю.
                                     </p>
                                 </div>
                             </div>
-                            <div class="space-y-2 mb-4">
+                            <div class="space-y-1 mb-3">
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>Подбор проектов</span>
                                 </div>
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>Расчет стоимости услуг</span>
                                 </div>
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>Интеграция с Freelance Hub</span>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between">
-                                <div class="flex items-center text-purple-600 font-semibold text-sm group-hover:text-purple-700 transition-colors">
-                                    <span class="mr-2">Найти проекты</span>
-                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="flex items-center text-purple-600 font-semibold text-xs group-hover:text-purple-700 transition-colors">
+                                    <span class="mr-1">Найти проекты</span>
+                                    <svg class="w-3 h-3 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                     </svg>
                                 </div>
-                                <div class="bg-purple-200 text-purple-700 px-2 py-1 rounded-full text-xs font-medium">
+                                <div class="bg-purple-200 text-purple-700 px-2 py-0.5 rounded-full text-xs font-medium">
                                     AI-подбор
                                 </div>
                             </div>
                         </div>
 
                         <!-- Widget 4: Карьерное планирование -->
-                        <div class="ai-widget group bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer">
-                            <div class="flex items-start mb-4">
-                                <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="ai-widget group bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                            <div class="flex items-start mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mr-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                                     </svg>
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="text-lg font-bold text-gray-800 mb-2">Карьерное планирование</h4>
-                                    <p class="text-gray-600 text-sm leading-relaxed">
-                                        Составление индивидуального плана развития карьеры с учетом рыночных трендов и ваших амбиций.
+                                    <h4 class="text-base font-bold text-gray-800 mb-2">Карьерное планирование</h4>
+                                    <p class="text-gray-600 text-xs leading-relaxed">
+                                        Индивидуальный план развития карьеры с учетом рыночных трендов.
                                     </p>
                                 </div>
                             </div>
-                            <div class="space-y-2 mb-4">
+                            <div class="space-y-1 mb-3">
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>Анализ карьерных целей</span>
                                 </div>
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>План профессионального роста</span>
                                 </div>
                                 <div class="flex items-center text-xs text-gray-700">
-                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
                                     <span>Рыночные тренды и прогнозы</span>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between">
-                                <div class="flex items-center text-orange-600 font-semibold text-sm group-hover:text-orange-700 transition-colors">
-                                    <span class="mr-2">Создать план</span>
-                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="flex items-center text-orange-600 font-semibold text-xs group-hover:text-orange-700 transition-colors">
+                                    <span class="mr-1">Создать план</span>
+                                    <svg class="w-3 h-3 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                     </svg>
                                 </div>
-                                <div class="bg-orange-200 text-orange-700 px-2 py-1 rounded-full text-xs font-medium">
+                                <div class="bg-orange-200 text-orange-700 px-2 py-0.5 rounded-full text-xs font-medium">
                                     Скоро
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </div>
