@@ -207,18 +207,20 @@
             .job-slide { min-width: 240px; max-width: 100%; }
         }
 
-        /* Стили для Simple Commenter - перемещаем его выше виджетов */
+        /* Стили для Simple Commenter - перемещаем его в левый нижний угол */
         .sc-container {
-            bottom: 200px !important; /* Поднимаем выше виджетов FL и AI */
-            right: 24px !important;
+            bottom: 48px !important; /* Такая же высота как у AI виджета */
+            left: 24px !important; /* Левый нижний угол */
+            right: auto !important; /* Убираем привязку к правому краю */
             z-index: 40 !important; /* Меньше z-index чем у виджетов (z-50) */
         }
         
-        /* На мобильных устройствах тоже поднимаем */
+        /* На мобильных устройствах тоже в левый угол */
         @media (max-width: 768px) {
             .sc-container {
-                bottom: 180px !important;
-                right: 12px !important;
+                bottom: 40px !important;
+                left: 12px !important;
+                right: auto !important;
             }
         }
     </style>
