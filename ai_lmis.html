@@ -32,7 +32,7 @@
         
         /* Chat styles */
         .chat-container {
-            height: 600px;
+            height: 400px;
             overflow-y: auto;
             scroll-behavior: smooth;
         }
@@ -221,148 +221,153 @@
     <!-- Main Chat Interface -->
     <section class="py-12 bg-white">
         <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto">
-                <div class="bg-white rounded-lg shadow-2xl overflow-hidden">
-                    <!-- Chat Header -->
-                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-3">
-                                <div class="bg-white bg-opacity-20 rounded-full p-2">
-                                    <i class="fas fa-robot text-2xl"></i>
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Chat Interface - левая часть (2/3 ширины) -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-2xl overflow-hidden">
+                        <!-- Chat Header -->
+                        <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-white bg-opacity-20 rounded-full p-2">
+                                        <i class="fas fa-robot text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-bold">AI-Консультант LMIS</h3>
+                                        <p class="text-xs opacity-90">В сети • Готов помочь</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 class="text-xl font-bold">AI-Консультант LMIS</h3>
-                                    <p class="text-sm opacity-90">В сети • Готов помочь</p>
+                                <div class="text-green-400">
+                                    <i class="fas fa-circle text-xs"></i>
                                 </div>
                             </div>
-                            <div class="text-green-400">
-                                <i class="fas fa-circle text-xs"></i>
-                            </div>
                         </div>
-                    </div>
-                    
-                    <!-- Chat Messages -->
-                    <div id="chatMessages" class="chat-container p-6 bg-gray-50">
-                        <div class="flex justify-start mb-4">
-                            <div class="message-bubble bg-white rounded-lg p-4 shadow">
-                                <div class="flex items-center space-x-2 mb-2">
-                                    <i class="fas fa-robot text-blue-500"></i>
-                                    <span class="font-semibold text-gray-800">AI-Консультант LMIS</span>
+                        
+                        <!-- Chat Messages -->
+                        <div id="chatMessages" class="chat-container p-4 bg-gray-50">
+                            <div class="flex justify-start mb-4">
+                                <div class="message-bubble bg-white rounded-lg p-3 shadow">
+                                    <div class="flex items-center space-x-2 mb-2">
+                                        <i class="fas fa-robot text-blue-500"></i>
+                                        <span class="font-semibold text-gray-800 text-sm">AI-Консультант LMIS</span>
+                                    </div>
+                                    <p class="text-gray-700 text-sm">Добро пожаловать! Я ваш AI-консультант по трудоустройству.</p>
+                                    <p class="text-gray-700 text-sm mt-2"><strong>Все мои рекомендации будут основаны на заполненных вами резюме и данных из вашего профиля. Если вы работодатель - я буду использовать данные с вашего профиля для поиска сотрудников.</strong></p>
+                                    <p class="text-gray-700 text-sm mt-1">В любом случае вы можете уточнить вопрос. Чем могу помочь?</p>
                                 </div>
-                                <p class="text-gray-700">Добро пожаловать в систему управления информацией о рынке труда (LMIS)! Я ваш персональный AI-консультант по трудоустройству. Расскажите, чем могу помочь:</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Suggestions -->
+                        <div class="p-4 bg-gray-100 border-t">
+                            <p class="text-xs text-gray-600 mb-2">Быстрые вопросы:</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button class="suggestion-card bg-white p-2 rounded-lg text-left shadow hover:shadow-md text-sm" data-message="Помоги найти работу">
+                                    <i class="fas fa-briefcase text-blue-500 mr-1 text-xs"></i>
+                                    Поиск работы
+                                </button>
+                                <button class="suggestion-card bg-white p-2 rounded-lg text-left shadow hover:shadow-md text-sm" data-message="Какие курсы мне подойдут?">
+                                    <i class="fas fa-graduation-cap text-green-500 mr-1 text-xs"></i>
+                                    Обучение и курсы
+                                </button>
+                                <button class="suggestion-card bg-white p-2 rounded-lg text-left shadow hover:shadow-md text-sm" data-message="Хочу подработать на фрилансе">
+                                    <i class="fas fa-laptop text-purple-500 mr-1 text-xs"></i>
+                                    Фриланс
+                                </button>
+                                <button class="suggestion-card bg-white p-2 rounded-lg text-left shadow hover:shadow-md text-sm" data-message="Нужна консультация по выбору профессии">
+                                    <i class="fas fa-user-tie text-orange-500 mr-1 text-xs"></i>
+                                    Консультант
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Input -->
+                        <div class="p-4 bg-white border-t">
+                            <div class="flex items-center space-x-2">
+                                <input type="text" id="chatInput" placeholder="Напишите ваш вопрос..." class="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                <button id="sendBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                                    <i class="fas fa-paper-plane text-sm"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Quick Suggestions -->
-                    <div class="p-6 bg-gray-100 border-t">
-                        <p class="text-sm text-gray-600 mb-3">Быстрые вопросы:</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <button class="suggestion-card bg-white p-3 rounded-lg text-left shadow hover:shadow-md" data-message="Помоги найти работу">
-                                <i class="fas fa-briefcase text-blue-500 mr-2"></i>
-                                Поиск работы
-                            </button>
-                            <button class="suggestion-card bg-white p-3 rounded-lg text-left shadow hover:shadow-md" data-message="Какие курсы мне подойдут?">
-                                <i class="fas fa-graduation-cap text-green-500 mr-2"></i>
-                                Обучение и курсы
-                            </button>
-                            <button class="suggestion-card bg-white p-3 rounded-lg text-left shadow hover:shadow-md" data-message="Хочу подработать на фрилансе">
-                                <i class="fas fa-laptop text-purple-500 mr-2"></i>
-                                Фриланс и подработка
-                            </button>
-                            <button class="suggestion-card bg-white p-3 rounded-lg text-left shadow hover:shadow-md" data-message="Нужна консультация по выбору профессии">
-                                <i class="fas fa-user-tie text-orange-500 mr-2"></i>
-                                Карьерный консультант
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Chat Input -->
-                    <div class="p-6 bg-white border-t">
-                        <div class="flex items-center space-x-3">
-                            <input type="text" id="chatInput" placeholder="Напишите ваш вопрос..." class="flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <button id="sendBtn" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- AI Features Section -->
-    <section class="py-12 bg-gray-100">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Возможности AI-Ассистента LMIS</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white rounded-lg p-6 shadow-lg card-hover">
-                    <div class="text-center mb-6">
-                        <div class="bg-blue-100 rounded-full p-4 inline-block mb-4">
-                            <i class="fas fa-search text-3xl text-blue-500"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Умный поиск работы</h3>
-                    </div>
-                    <ul class="space-y-3 text-gray-700">
-                        <li class="flex items-center space-x-2">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Анализ навыков и опыта</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Подбор релевантных вакансий</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Оптимизация резюме</span>
-                        </li>
-                    </ul>
                 </div>
                 
-                <div class="bg-white rounded-lg p-6 shadow-lg card-hover">
-                    <div class="text-center mb-6">
-                        <div class="bg-green-100 rounded-full p-4 inline-block mb-4">
-                            <i class="fas fa-graduation-cap text-3xl text-green-500"></i>
+                <!-- AI Features - правая часть (1/3 ширины) -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-4 sticky top-4">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">Возможности AI-Ассистента</h3>
+                        <div class="space-y-4">
+                            <div class="border rounded-lg p-3">
+                                <div class="text-center mb-3">
+                                    <div class="bg-blue-100 rounded-full p-2 inline-block mb-2">
+                                        <i class="fas fa-search text-lg text-blue-500"></i>
+                                    </div>
+                                    <h4 class="text-sm font-semibold text-gray-800">Умный поиск работы</h4>
+                                </div>
+                                <ul class="space-y-1 text-xs text-gray-700">
+                                    <li class="flex items-center space-x-1">
+                                        <i class="fas fa-check text-green-500 text-xs"></i>
+                                        <span>Анализ навыков и опыта</span>
+                                    </li>
+                                    <li class="flex items-center space-x-1">
+                                        <i class="fas fa-check text-green-500 text-xs"></i>
+                                        <span>Подбор релевантных вакансий</span>
+                                    </li>
+                                    <li class="flex items-center space-x-1">
+                                        <i class="fas fa-check text-green-500 text-xs"></i>
+                                        <span>Оптимизация резюме</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border rounded-lg p-3">
+                                <div class="text-center mb-3">
+                                    <div class="bg-green-100 rounded-full p-2 inline-block mb-2">
+                                        <i class="fas fa-graduation-cap text-lg text-green-500"></i>
+                                    </div>
+                                    <h4 class="text-sm font-semibold text-gray-800">Персональное обучение</h4>
+                                </div>
+                                <ul class="space-y-1 text-xs text-gray-700">
+                                    <li class="flex items-center space-x-1">
+                                        <i class="fas fa-check text-green-500 text-xs"></i>
+                                        <span>Рекомендации курсов</span>
+                                    </li>
+                                    <li class="flex items-center space-x-1">
+                                        <i class="fas fa-check text-green-500 text-xs"></i>
+                                        <span>Карьерные траектории</span>
+                                    </li>
+                                    <li class="flex items-center space-x-1">
+                                        <i class="fas fa-check text-green-500 text-xs"></i>
+                                        <span>Анализ пробелов в навыках</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border rounded-lg p-3">
+                                <div class="text-center mb-3">
+                                    <div class="bg-purple-100 rounded-full p-2 inline-block mb-2">
+                                        <i class="fas fa-laptop text-lg text-purple-500"></i>
+                                    </div>
+                                    <h4 class="text-sm font-semibold text-gray-800">Фриланс-возможности</h4>
+                                </div>
+                                <ul class="space-y-1 text-xs text-gray-700">
+                                    <li class="flex items-center space-x-1">
+                                        <i class="fas fa-check text-green-500 text-xs"></i>
+                                        <span>Подбор проектов</span>
+                                    </li>
+                                    <li class="flex items-center space-x-1">
+                                        <i class="fas fa-check text-green-500 text-xs"></i>
+                                        <span>Расчет стоимости услуг</span>
+                                    </li>
+                                    <li class="flex items-center space-x-1">
+                                        <i class="fas fa-check text-green-500 text-xs"></i>
+                                        <span>Интеграция с Freelance Hub</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Персональное обучение</h3>
                     </div>
-                    <ul class="space-y-3 text-gray-700">
-                        <li class="flex items-center space-x-2">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Рекомендации курсов</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Карьерные траектории</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Анализ пробелов в навыках</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white rounded-lg p-6 shadow-lg card-hover">
-                    <div class="text-center mb-6">
-                        <div class="bg-purple-100 rounded-full p-4 inline-block mb-4">
-                            <i class="fas fa-laptop text-3xl text-purple-500"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Фриланс-возможности</h3>
-                    </div>
-                    <ul class="space-y-3 text-gray-700">
-                        <li class="flex items-center space-x-2">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Подбор проектов</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Расчет стоимости услуг</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Интеграция с Freelance Hub</span>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
