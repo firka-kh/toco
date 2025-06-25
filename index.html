@@ -208,7 +208,11 @@
         }
 
         /* Стили для Simple Commenter - перемещаем его в левый нижний угол */
-        .sc-container {
+        .sc-container,
+        [id*="simplecommenter"],
+        [class*="simplecommenter"],
+        [class*="sc-"],
+        div[style*="position: fixed"][style*="bottom"][style*="right"] {
             bottom: 48px !important; /* Такая же высота как у AI виджета */
             left: 24px !important; /* Левый нижний угол */
             right: auto !important; /* Убираем привязку к правому краю */
@@ -217,7 +221,11 @@
         
         /* На мобильных устройствах тоже в левый угол */
         @media (max-width: 768px) {
-            .sc-container {
+            .sc-container,
+            [id*="simplecommenter"],
+            [class*="simplecommenter"],
+            [class*="sc-"],
+            div[style*="position: fixed"][style*="bottom"][style*="right"] {
                 bottom: 40px !important;
                 left: 12px !important;
                 right: auto !important;
@@ -1480,6 +1488,51 @@ setInterval(pulseAIWidget, 4000);
 
 // Первая пульсация через 2 секунды после загрузки страницы
 setTimeout(pulseAIWidget, 2000);
+
+// Принудительное перемещение Simple Commenter в левый нижний угол
+function moveSimpleCommenter() {
+    // Ищем все возможные элементы Simple Commenter
+    const selectors = [
+        '.sc-container',
+        '[id*="simplecommenter"]',
+        '[class*="simplecommenter"]',
+        '[class*="sc-"]',
+        'div[style*="position: fixed"][style*="bottom"][style*="right"]'
+    ];
+    
+    selectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(element => {
+            if (element && element.style) {
+                element.style.bottom = '48px';
+                element.style.left = '24px'; 
+                element.style.right = 'auto';
+                element.style.zIndex = '40';
+            }
+        });
+    });
+}
+
+// Запускаем перемещение после загрузки скрипта
+setTimeout(moveSimpleCommenter, 1000);
+setTimeout(moveSimpleCommenter, 3000);
+setTimeout(moveSimpleCommenter, 5000);
+
+// Наблюдаем за изменениями DOM для перехвата динамически добавляемых элементов
+if (window.MutationObserver) {
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                moveSimpleCommenter();
+            }
+        });
+    });
+    
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+}
 
 
 
