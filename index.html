@@ -206,6 +206,21 @@
         @media (max-width: 1024px) {
             .job-slide { min-width: 240px; max-width: 100%; }
         }
+
+        /* Стили для Simple Commenter - перемещаем его выше виджетов */
+        .sc-container {
+            bottom: 200px !important; /* Поднимаем выше виджетов FL и AI */
+            right: 24px !important;
+            z-index: 40 !important; /* Меньше z-index чем у виджетов (z-50) */
+        }
+        
+        /* На мобильных устройствах тоже поднимаем */
+        @media (max-width: 768px) {
+            .sc-container {
+                bottom: 180px !important;
+                right: 12px !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
