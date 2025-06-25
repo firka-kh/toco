@@ -205,108 +205,6 @@
         @media (max-width: 1024px) {
             .job-slide { min-width: 240px; max-width: 100%; }
         }
-
-        /* Стили для выделения AI-ассистента в меню */
-        .ai-menu-item {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            color: white !important;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-            border: 2px solid transparent;
-        }
-        .ai-menu-item:hover {
-            background: linear-gradient(45deg, #ff5252, #ff9800);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-            color: white !important;
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Стили для плавающей кнопки AI-ассистента */
-        .ai-fab {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-decoration: none;
-            font-size: 24px;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-        }
-        .ai-fab:hover {
-            transform: scale(1.1) translateY(-2px);
-            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
-            background: linear-gradient(45deg, #5a6fd8, #6a4c93);
-            color: white;
-        }
-        .ai-fab:active {
-            transform: scale(0.95);
-        }
-
-        /* Пульсирующая анимация для FAB */
-        @keyframes pulse-ring {
-            0% {
-                transform: scale(0.8);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.2);
-                opacity: 0;
-            }
-        }
-        .ai-fab::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 2px solid rgba(102, 126, 234, 0.6);
-            border-radius: 50%;
-            animation: pulse-ring 2s infinite;
-        }
-
-        /* Тултип для FAB */
-        .ai-fab-tooltip {
-            position: absolute;
-            right: 70px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        .ai-fab:hover .ai-fab-tooltip {
-            opacity: 1;
-        }
-
-        /* Адаптивность FAB */
-        @media (max-width: 768px) {
-            .ai-fab {
-                width: 55px;
-                height: 55px;
-                bottom: 20px;
-                right: 20px;
-                font-size: 20px;
-            }
-        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -328,7 +226,6 @@
                     <!-- Основные пункты меню -->
                     <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Главная</a>
                     <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Поиск работы</a>
-                    <a href="ai_lmis.html" class="ai-menu-item whitespace-nowrap">🤖 AI-Ассистент</a>
                     
                     <!-- Выпадающее меню "Больше" -->
                     <div class="relative">
@@ -385,7 +282,6 @@
                 <div class="flex flex-col space-y-3 mt-4">
                     <a href="index.html" class="font-bold hover:text-yellow-300 transition-colors">Главная</a>
                     <a href="serchwork.html" class="font-bold hover:text-yellow-300 transition-colors">Поиск работы</a>
-                    <a href="ai_lmis.html" class="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold py-2 px-4 rounded-full hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 transform hover:scale-105">🤖 AI-Ассистент</a>
                     <a href="index.html#statistics" class="font-bold hover:text-yellow-300 transition-colors">Статистика</a>
                     <a href="index.html#programs" class="font-bold hover:text-yellow-300 transition-colors">Программы</a>
                     <a href="index.html#education" class="font-bold hover:text-yellow-300 transition-colors">Образование</a>
@@ -1013,11 +909,78 @@
 </div>
 
 <!-- Затем виджет ИИ, строго под FL -->
-<button id="aiWidgetBtn"
-        class="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl hover:scale-110 transition-transform"
-        title="AI-ассистент (демо)">
-    <i class="fas fa-robot"></i>
-</button>
+<div id="aiAssistantWidget"
+     class="fixed z-50 cursor-pointer group transition-all duration-400 ease-in-out"
+     onclick="window.location.href='ai_lmis.html'"
+     style="width: 64px; height: 64px; right: 24px; bottom: 48px;">
+    <div class="relative w-full h-full flex items-center justify-center">
+        <span class="absolute inset-0 shadow-lg transition-all duration-400 ease-in-out ai-blob-bg"></span>
+        <span class="relative z-10 text-white font-extrabold text-2xl select-none transition-all duration-400 ease-in-out flex items-center justify-center h-full w-full"
+              style="letter-spacing: 0.05em;">AI</span>
+        <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-semibold text-base px-4 opacity-0 group-hover:opacity-100 transition-all duration-400 ease-in-out z-20"
+              style="pointer-events:none; white-space:nowrap;">
+            ИИ-консультант
+        </span>
+    </div>
+    <style>
+        @keyframes ai-blob-gradient-anim {
+            0% { filter: hue-rotate(0deg);}
+            100% { filter: hue-rotate(360deg);}
+        }
+        #aiAssistantWidget {
+            box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
+            overflow: visible;
+            background: transparent !important;
+            border-radius: 50%;
+            transition: width 0.4s cubic-bezier(.4,2,.6,1), height 0.3s, border-radius 0.4s;
+        }
+        #aiAssistantWidget .ai-blob-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            animation: ai-blob-gradient-anim 6s ease-in-out infinite alternate;
+            transition: border-radius 0.4s, width 0.4s, height 0.4s;
+            display: block;
+        }
+        #aiAssistantWidget:hover {
+            width: 260px !important;
+            height: 64px !important;
+            border-radius: 32px / 50%;
+        }
+        #aiAssistantWidget:hover .ai-blob-bg {
+            border-radius: 32px / 50%;
+            width: 100%;
+            height: 100%;
+        }
+        #aiAssistantWidget span.text-2xl {
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+        #aiAssistantWidget:hover span.text-2xl {
+            opacity: 0;
+        }
+        #aiAssistantWidget span.text-base {
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #aiAssistantWidget:hover span.text-base {
+            opacity: 1;
+        }
+        #aiAssistantWidget .group-hover\:opacity-100 {
+            transition: opacity 0.4s;
+        }
+        #aiAssistantWidget:hover .group-hover\:opacity-100 {
+            opacity: 1 !important;
+        }
+        @media (max-width: 768px) {
+            #aiAssistantWidget {
+                right: 12px !important;
+                bottom: 40px !important;
+            }
+        }
+    </style>
+</div>
 
     <script>
         // Unemployment Chart
@@ -1454,11 +1417,5 @@ updateArrowVisibility();
 
 
     </script>
-
-    <!-- Плавающая кнопка AI-ассистента -->
-    <a href="ai_lmis.html" class="ai-fab" title="Открыть AI-ассистента">
-        <div class="ai-fab-tooltip">AI-Ассистент</div>
-        <i class="fas fa-robot"></i>
-    </a>
 </body>
 </html>
