@@ -207,29 +207,25 @@
             .job-slide { min-width: 240px; max-width: 100%; }
         }
 
-        /* Стили для Simple Commenter - перемещаем его в левый нижний угол */
+        /* Полное скрытие Simple Commenter - если не можем переместить, то скроем */
         .sc-container,
         [id*="simplecommenter"],
         [class*="simplecommenter"],
         [class*="sc-"],
-        div[style*="position: fixed"][style*="bottom"][style*="right"] {
-            bottom: 48px !important; /* Такая же высота как у AI виджета */
-            left: 24px !important; /* Левый нижний угол */
-            right: auto !important; /* Убираем привязку к правому краю */
-            z-index: 40 !important; /* Меньше z-index чем у виджетов (z-50) */
-        }
-        
-        /* На мобильных устройствах тоже в левый угол */
-        @media (max-width: 768px) {
-            .sc-container,
-            [id*="simplecommenter"],
-            [class*="simplecommenter"],
-            [class*="sc-"],
-            div[style*="position: fixed"][style*="bottom"][style*="right"] {
-                bottom: 40px !important;
-                left: 12px !important;
-                right: auto !important;
-            }
+        div[style*="position: fixed"][style*="bottom"][style*="right"],
+        div[style*="position:fixed"][style*="bottom"][style*="right"],
+        iframe[src*="simplecommenter"],
+        script[src*="simplecommenter"] + *,
+        *[class*="comment"],
+        *[id*="comment"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+            top: -9999px !important;
+            left: -9999px !important;
+            z-index: -1 !important;
         }
     </style>
 </head>
@@ -862,8 +858,6 @@
   </div>
 </div>
 
-<!-- Simple Commenter Script -->
-<script src="https://simplecommenter.com/js/comments.min.js?domain=firka-kh.github.io" defer></script>
 
 <!-- Сначала виджет FL, строго над ИИ -->
 <div id="freelanceBlobWidget"
@@ -1489,41 +1483,63 @@ setInterval(pulseAIWidget, 4000);
 // Первая пульсация через 2 секунды после загрузки страницы
 setTimeout(pulseAIWidget, 2000);
 
-// Принудительное перемещение Simple Commenter в левый нижний угол
-function moveSimpleCommenter() {
+// Принудительное скрытие Simple Commenter
+function hideSimpleCommenter() {
     // Ищем все возможные элементы Simple Commenter
     const selectors = [
         '.sc-container',
         '[id*="simplecommenter"]',
         '[class*="simplecommenter"]',
         '[class*="sc-"]',
-        'div[style*="position: fixed"][style*="bottom"][style*="right"]'
+        'div[style*="position: fixed"][style*="bottom"][style*="right"]',
+        'div[style*="position:fixed"][style*="bottom"][style*="right"]',
+        'iframe[src*="simplecommenter"]',
+        '*[class*="comment"]',
+        '*[id*="comment"]'
     ];
     
     selectors.forEach(selector => {
-        const elements = document.querySelectorAll(selector);
-        elements.forEach(element => {
-            if (element && element.style) {
-                element.style.bottom = '48px';
-                element.style.left = '24px'; 
-                element.style.right = 'auto';
-                element.style.zIndex = '40';
-            }
-        });
+        try {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(element => {
+                if (element && element.style) {
+                    element.style.display = 'none';
+                    element.style.visibility = 'hidden';
+                    element.style.opacity = '0';
+                    element.style.pointerEvents = 'none';
+                    element.style.position = 'absolute';
+                    element.style.top = '-9999px';
+                    element.style.left = '-9999px';
+                    element.style.zIndex = '-1';
+                    
+                    // Также скрываем родительские элементы, если они кажутся связанными с Simple Commenter
+                    if (element.parentElement && 
+                        (element.parentElement.style.position === 'fixed' || 
+                         element.parentElement.classList.toString().includes('comment') ||
+                         element.parentElement.id.includes('comment'))) {
+                        element.parentElement.style.display = 'none';
+                    }
+                }
+            });
+        } catch (e) {
+            // Игнорируем ошибки селекторов
+        }
     });
 }
 
-// Запускаем перемещение после загрузки скрипта
-setTimeout(moveSimpleCommenter, 1000);
-setTimeout(moveSimpleCommenter, 3000);
-setTimeout(moveSimpleCommenter, 5000);
+// Запускаем скрытие несколько раз с разными интервалами
+setTimeout(hideSimpleCommenter, 500);
+setTimeout(hideSimpleCommenter, 1000);
+setTimeout(hideSimpleCommenter, 2000);
+setTimeout(hideSimpleCommenter, 3000);
+setTimeout(hideSimpleCommenter, 5000);
 
-// Наблюдаем за изменениями DOM для перехвата динамически добавляемых элементов
+// Постоянное наблюдение за изменениями DOM
 if (window.MutationObserver) {
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.type === 'childList') {
-                moveSimpleCommenter();
+                hideSimpleCommenter();
             }
         });
     });
