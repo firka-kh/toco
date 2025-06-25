@@ -927,12 +927,30 @@
             0% { filter: hue-rotate(0deg);}
             100% { filter: hue-rotate(360deg);}
         }
+        
+        /* Пульсирующая анимация для AI виджета */
+        @keyframes ai-pulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
+            }
+            50% { 
+                transform: scale(1.1);
+                box-shadow: 0 12px 40px 0 rgba(102, 126, 234, 0.4);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
+            }
+        }
+        
         #aiAssistantWidget {
             box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
             overflow: visible;
             background: transparent !important;
             border-radius: 50%;
             transition: width 0.4s cubic-bezier(.4,2,.6,1), height 0.3s, border-radius 0.4s;
+            animation: ai-pulse 0.8s ease-in-out;
         }
         #aiAssistantWidget .ai-blob-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
@@ -1413,6 +1431,32 @@ function updateArrowVisibility() {
 }
 window.addEventListener('resize', updateArrowVisibility);
 updateArrowVisibility();
+
+// Пульсация AI виджета каждые 4 секунды
+function pulseAIWidget() {
+    const aiWidget = document.getElementById('aiAssistantWidget');
+    if (aiWidget) {
+        // Удаляем анимацию, если она уже есть
+        aiWidget.style.animation = 'none';
+        
+        // Форсируем reflow для перезапуска анимации
+        aiWidget.offsetHeight;
+        
+        // Добавляем анимацию пульсации
+        aiWidget.style.animation = 'ai-pulse 0.8s ease-in-out';
+        
+        // Удаляем анимацию после завершения, чтобы она могла повториться
+        setTimeout(() => {
+            aiWidget.style.animation = 'none';
+        }, 800);
+    }
+}
+
+// Запускаем пульсацию каждые 4 секунды
+setInterval(pulseAIWidget, 4000);
+
+// Первая пульсация через 2 секунды после загрузки страницы
+setTimeout(pulseAIWidget, 2000);
 
 
 
