@@ -7,8 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://simplecommenter.com/js/comments.min.js?domain=firka-kh.github.io" defer></script>
-    <script src="https://simplecommenter.com/js/comments.min.js?domain=firka-kh.github.io" defer></script>
 
     <style>
         /* Custom gradient background for header and hero sections */
@@ -207,32 +205,6 @@
         }
         @media (max-width: 1024px) {
             .job-slide { min-width: 240px; max-width: 100%; }
-        }
-
-        /* Позиционирование Simple Commenter так, чтобы не перекрывать виджеты FL и AI */
-        .sc-container,
-        [id*="simplecommenter"],
-        [class*="simplecommenter"],
-        [class*="sc-"] {
-            /* Перемещаем Simple Commenter в левый нижний угол */
-            position: fixed !important;
-            bottom: 20px !important;
-            left: 20px !important;
-            right: auto !important;
-            top: auto !important;
-            z-index: 999 !important; /* Ниже наших виджетов (z-index: 1000) */
-        }
-        
-        /* Мобильная адаптация Simple Commenter */
-        @media (max-width: 768px) {
-            .sc-container,
-            [id*="simplecommenter"],
-            [class*="simplecommenter"],
-            [class*="sc-"] {
-                bottom: 10px !important;
-                left: 10px !important;
-                max-width: calc(100vw - 120px) !important; /* Оставляем место для виджетов справа */
-            }
         }
     </style>
 </head>
@@ -1489,57 +1461,6 @@ setInterval(pulseAIWidget, 4000);
 
 // Первая пульсация через 2 секунды после загрузки страницы
 setTimeout(pulseAIWidget, 2000);
-
-// Принудительное скрытие Simple Commenter
-function hideSimpleCommenter() {
-    // Ищем все возможные элементы Simple Commenter
-    const selectors = [
-        '.sc-container',
-        '[id*="simplecommenter"]',
-        '[class*="simplecommenter"]',
-        '[class*="sc-"]',
-        'div[style*="position: fixed"][style*="bottom"][style*="right"]',
-        'div[style*="position:fixed"][style*="bottom"][style*="right"]',
-        'iframe[src*="simplecommenter"]',
-        '*[class*="comment"]',
-        '*[id*="comment"]'
-    ];
-    
-    selectors.forEach(selector => {
-        try {
-            const elements = document.querySelectorAll(selector);
-            elements.forEach(element => {
-                if (element && element.style) {
-                    element.style.display = 'none';
-                    element.style.visibility = 'hidden';
-                    element.style.opacity = '0';
-                    element.style.pointerEvents = 'none';
-                    element.style.position = 'absolute';
-                    element.style.top = '-9999px';
-                    element.style.left = '-9999px';
-                    element.style.zIndex = '-1';
-                    
-                    // Также скрываем родительские элементы, если они кажутся связанными с Simple Commenter
-                    if (element.parentElement && 
-                        (element.parentElement.style.position === 'fixed' || 
-                         element.parentElement.classList.toString().includes('comment') ||
-                         element.parentElement.id.includes('comment'))) {
-                        element.parentElement.style.display = 'none';
-                    }
-                }
-            });
-        } catch (e) {
-            // Игнорируем ошибки селекторов
-        }
-    });
-}
-
-// Запускаем скрытие несколько раз с разными интервалами
-setTimeout(hideSimpleCommenter, 500);
-setTimeout(hideSimpleCommenter, 1000);
-setTimeout(hideSimpleCommenter, 2000);
-setTimeout(hideSimpleCommenter, 3000);
-setTimeout(hideSimpleCommenter, 5000);
 
         // Пульсация AI виджета каждые 4 секунды
         setInterval(function() {
