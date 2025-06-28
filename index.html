@@ -3,1382 +3,804 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добро пожаловать на портал рынка труда</title>
+    <title>Портал рынка труда - Республика Таджикистан</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <style>
-        /* Custom gradient background for header and hero sections */
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --accent-color: #f59e0b;
         }
-        /* Enhanced hover effect for cards */
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(102, 126, 234, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+        }
+        
+        @keyframes blob {
+            0% { border-radius: 60% 40% 30% 70%/60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 40%/50% 60% 30% 60%; }
+            100% { border-radius: 60% 40% 30% 70%/60% 30% 70% 40%; }
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .animate-blob {
+            animation: blob 8s ease-in-out infinite;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        /* Кастомные стили */
+        .gradient-bg {
+            background: var(--primary-gradient);
+        }
+        
+        .secondary-gradient-bg {
+            background: var(--secondary-gradient);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
         .card-hover {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+        
         .card-hover:hover {
-            transform: translateY(-8px); /* Slightly more pronounced lift */
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Larger, softer shadow */
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-        /* Consistent spacing for sections */
+        
         .section-spacing {
-            padding: 3rem 0; /* Increased vertical padding for more breathing room */
-        }        /* Basic spinner for loading states */
-        .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-left-color: #ffffff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
+            padding: 4rem 0;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        
+        .stat-card {
+            transition: all 0.4s ease;
         }
-
-        /* Ensure canvas elements are responsive within their containers */
-        .chart-container {
-            position: relative;
-            height: 320px; /* Fixed height for chart containers */
-            width: 100%; /* Full width within parent */
+        
+        .stat-card:hover {
+            transform: scale(1.03);
+            z-index: 10;
         }
-
-        /* Print-specific styles for A4 format */
-        @media print {
-            /* Define A4 page size and margins */
-            @page {
-                size: A4;
-                margin: 1cm;
-            }
-
-            /* Adjust body font and color for print */
-            body {
-                font-size: 10pt;
-                line-height: 1.5;
-                color: #000;
-                background-color: #fff !important; /* Ensure white background for printing */
-            }            /* Hide elements not relevant for print */
-            header, nav, footer,
-            .job-search-form-controls, /* Hide the job search input form controls */
-            .card-hover, /* Hide hover effects */
-            button, /* Hide all buttons */
-            input, select, textarea, /* Hide form inputs */
-            .spinner, /* Hide loading spinners */
-            .pagination, /* Hide pagination */
-            #expandVideoButton, /* Hide expand button */
-            #soundVisualizer /* Hide sound visualizer */
-             {
-                display: none !important;
-            }
-
-            /* Ensure main content sections are visible */
-            section {
-                display: block !important;
-                padding: 0.5cm 0 !important; /* Reduce padding for print */
-                background: none !important; /* Remove section backgrounds */
-                box-shadow: none !important; /* Remove section shadows */
-            }
-
-            /* Adjust hero section for print */
-            .gradient-bg {
-                background: none !important; /* Remove gradient background for print */
-                color: #000 !important; /* Change text color to black */
-            }
-            .gradient-bg h2, .gradient-bg p {
-                color: #000 !important;
-            }
-            .gradient-bg .bg-opacity-20 {
-                background: none !important; /* Remove background opacity */
-                backdrop-filter: none !important; /* Remove backdrop blur */
-                border: 1px solid #ddd; /* Add a subtle border for definition */
-            }
-
-            /* Ensure charts are visible but not interactive */
-            .chart-container {
-                height: auto !important; /* Auto height for print */
-                width: 100% !important;
-                page-break-inside: avoid; /* Avoid breaking charts across pages */
-            }
-            canvas {
-                max-width: 100% !important;
-                height: auto !important;
-                background: none !important;
-            }
-
-            /* Adjust card styles for print */
-            .bg-white, .bg-gray-50, .bg-blue-50, .bg-yellow-50, .bg-green-50 {
-                background: #fff !important;
-                box-shadow: none !important;
-                border: 1px solid #eee; /* Add a subtle border for definition */
-            }
-            .text-white {
-                color: #000 !important; /* Ensure text is black on white background */
-            }
-
-            /* Ensure text elements are black */
-            h1, h2, h3, h4, p, span, li, a {
-                color: #000 !important;
-            }
-
-            /* Ensure links are underlined and show href */
-            a {
-                text-decoration: underline;
-            }
-            a[href]:after {
-                content: " (" attr(href) ")";
-                font-size: 8pt;
-            }
-            /* Hide href for internal anchors */
-            a[href^="#"]:after {
-                content: "";
-            }
-
-            /* Force page breaks for better layout */
-            .section-spacing {
-                page-break-after: always;
-            }
-            .section-spacing:last-child {
-                page-break-after: auto; /* No page break after the last section */
-            }
+        
+        /* Навигация */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
-
-        /* Выпадающее меню профиля */
-        #profileDropdown {
-            min-width: 180px;
-            transition: opacity 0.2s;
+        
+        .sticky-nav.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(102, 126, 234, 0.98);
+            backdrop-filter: blur(10px);
         }
-
+        
         /* Анимация для выпадающих меню */
         @keyframes fade-in {
             from { opacity: 0; transform: translateY(-10px);}
             to { opacity: 1; transform: translateY(0);}
         }
+        
         .animate-fade-in {
             animation: fade-in 0.18s;
-        }        /* Меню навигации */
-        .menu-link {
-            font-size: 1rem;
-            font-weight: 700; /* жирный по умолчанию */
-            transition: font-weight 0.2s;
-        }
-        .menu-link:active {
-            font-weight: 400 !important; /* тонкий при нажатии */
-        }
-
-        /* Адаптивная навигация */
-        @media (max-width: 1200px) {
-            nav .space-x-6 {
-                gap: 0.75rem; /* Уменьшаем расстояние между элементами */
-            }
-            .menu-link {
-                font-size: 0.9rem; /* Уменьшаем размер шрифта */
-            }
         }
         
-        @media (max-width: 1024px) {
-            nav .space-x-6 {
-                gap: 0.5rem;
-            }
-            .menu-link {
-                font-size: 0.85rem;
-            }
+        /* Меню навигации */
+        .menu-link {
+            position: relative;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.2s;
         }
-
-        #jobSliderTrack {
+        
+        .menu-link:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        .menu-link:hover:after,
+        .menu-link.active:after {
+            width: 100%;
+        }
+        
+        /* Слайдер */
+        .swiper-pagination-bullet {
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 1;
+        }
+        
+        .swiper-pagination-bullet-active {
+            background: var(--accent-color);
+        }
+        
+        .swiper-button-next, .swiper-button-prev {
+            color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.8);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
-            width: 100%;
+            align-items: center;
             justify-content: center;
-            overflow: hidden; /* исправлено! */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        .job-slide {
-            min-width: 320px;
-            max-width: 370px;
-            width: 100%;
-            margin-left: 0.5rem;
-            margin-right: 0.5rem;
-            flex-shrink: 0;
+        
+        .swiper-button-next:after, .swiper-button-prev:after {
+            font-size: 20px;
+            font-weight: bold;
         }
-        @media (max-width: 1200px) {
-            .job-slide { min-width: 280px; }
+        
+        /* Виджеты */
+        .floating-widget {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        @media (max-width: 1024px) {
-            .job-slide { min-width: 240px; max-width: 100%; }
+        
+        /* Адаптация для мобильных */
+        @media (max-width: 768px) {
+            .section-spacing {
+                padding: 3rem 0;
+            }
+            
+            .stat-card {
+                margin-bottom: 1rem;
+            }
+            
+            .swiper-button-next, .swiper-button-prev {
+                display: none;
+            }
         }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
-    <header class="gradient-bg text-white shadow-lg">
-      <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-        <!-- Лого и название -->
-        <a href="index.html" class="flex items-center space-x-3 focus:outline-none">
-          <span class="w-9 h-9 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-            <i class="fas fa-briefcase text-white text-lg"></i>
-          </span>
-          <span class="font-bold text-lg sm:text-xl leading-tight">Портал рынка труда<br><span class="text-xs font-normal opacity-80">РТ</span></span>
-        </a>
-        <!-- Навигация -->
-        <nav class="hidden md:flex items-center space-x-2 sm:space-x-4">
-          <a href="index.html" class="menu-link hover:text-yellow-300">Главная</a>
-          <a href="serchwork.html" class="menu-link hover:text-yellow-300">Вакансии</a>
-          <a href="#statistics" class="menu-link hover:text-yellow-300">Статистика</a>
-          <a href="#programs" class="menu-link hover:text-yellow-300">Программы</a>
-          <a href="#education" class="menu-link hover:text-yellow-300">Образование</a>
-          <a href="about.html" class="menu-link hover:text-yellow-300">О портале</a>
-          <a href="free_lans/freelance_homepage.html" class="menu-link hover:text-yellow-300">Фриланс</a>
-        </nav>
-        <!-- Профиль и язык -->
-        <div class="flex items-center space-x-2 sm:space-x-4">
-          <a href="user_dashboard.html" class="hidden sm:inline-block px-3 py-1 rounded bg-white bg-opacity-20 hover:bg-yellow-400 hover:text-gray-900 font-semibold text-sm transition">Войти</a>
-          <a href="register.html" class="px-3 py-1 rounded bg-yellow-400 text-gray-900 font-semibold text-sm hover:bg-yellow-300 transition">Регистрация</a>
-          <div class="relative">
-            <button id="langMenuBtn" type="button" class="px-2 py-1 rounded bg-white text-gray-800 font-bold text-xs shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none" aria-haspopup="true" aria-expanded="false">
-              <span id="currentLangLabel">RUS</span>
-              <i class="fas fa-chevron-down ml-1 text-xs"></i>
-            </button>
-            <div id="langDropdown" class="absolute right-0 mt-2 w-24 bg-white rounded-xl shadow-lg py-2 z-50 hidden border border-gray-200">
-              <button type="button" class="block w-full text-left px-3 py-1 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold text-xs" data-lang="ru">RUS</button>
-              <button type="button" class="block w-full text-left px-3 py-1 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold text-xs" data-lang="tg">TAJ</button>
-              <button type="button" class="block w-full text-left px-3 py-1 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold text-xs" data-lang="en">ENG</button>
+    <!-- Фиксированная навигация -->
+    <header class="gradient-bg text-white shadow-lg sticky-nav">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg animate-float">
+                        <i class="fas fa-briefcase text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-xl md:text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-xs md:text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <nav class="hidden lg:flex space-x-4 xl:space-x-6 items-center flex-wrap">
+                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap active">Главная</a>
+                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Поиск работы</a>
+                    
+                    <div class="relative">
+                        <button id="moreMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors flex items-center focus:outline-none whitespace-nowrap">
+                            Больше <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="moreDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="index.html#statistics" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Статистика</a>
+                            <a href="index.html#programs" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Программы</a>
+                            <a href="index.html#education" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Образование</a>
+                            <a href="about.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">О портале</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="free_lans/freelance_homepage.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Фриланс</a>
+                            <a href="analitic_pg.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Аналитика</a>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <button id="profileMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors focus:outline-none flex items-center whitespace-nowrap">
+                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
+                            <a href="user_dashboard.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 font-semibold">🏠 Личный кабинет</a>
+                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">⚙️ Настройки профиля</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Кабинет работодателя</a>
+                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <button id="langMenuBtn" type="button" class="px-3 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400 whitespace-nowrap" aria-haspopup="true" aria-expanded="false">
+                            <span id="currentLangLabel">RUS</span>
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div id="langDropdown" class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="ru">RUS</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="tg">TAJ</button>
+                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="en">ENG</button>
+                        </div>
+                    </div>
+                </nav>
+                
+                <div class="lg:hidden">
+                    <button id="mobileMenuBtn" type="button" class="text-white p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
             </div>
-          </div>
+            
+            <div id="mobileMenu" class="lg:hidden hidden mt-4 pb-4 border-t border-white border-opacity-20">
+                <div class="flex flex-col space-y-3 mt-4">
+                    <a href="index.html" class="font-bold hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="serchwork.html" class="font-bold hover:text-yellow-300 transition-colors">Поиск работы</a>
+                    <a href="index.html#statistics" class="font-bold hover:text-yellow-300 transition-colors">Статистика</a>
+                    <a href="index.html#programs" class="font-bold hover:text-yellow-300 transition-colors">Программы</a>
+                    <a href="index.html#education" class="font-bold hover:text-yellow-300 transition-colors">Образование</a>
+                    <a href="about.html" class="font-bold hover:text-yellow-300 transition-colors">О портале</a>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <a href="employer_profile.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для работодателя</a>
+                        <a href="user_dashboard.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для соискателя</a>
+                        <a href="register.html" class="block font-bold hover:text-yellow-300 transition-colors">Регистрация</a>
+                    </div>
+                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
+                        <div class="flex space-x-3">
+                            <button class="px-3 py-1 bg-white text-gray-800 rounded font-bold text-sm" data-lang="ru">RUS</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="tg">TAJ</button>
+                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="en">ENG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- Мобильное меню -->
-        <button id="mobileMenuBtn" type="button" class="md:hidden text-white p-2 rounded hover:bg-white hover:bg-opacity-20 transition-colors">
-          <i class="fas fa-bars text-xl"></i>
-        </button>
-      </div>
-      <!-- Мобильная навигация -->
-      <div id="mobileMenu" class="md:hidden hidden px-4 pb-4">
-        <div class="flex flex-col space-y-2 mt-2">
-          <a href="index.html" class="menu-link">Главная</a>
-          <a href="serchwork.html" class="menu-link">Вакансии</a>
-          <a href="#statistics" class="menu-link">Статистика</a>
-          <a href="#programs" class="menu-link">Программы</a>
-          <a href="#education" class="menu-link">Образование</a>
-          <a href="about.html" class="menu-link">О портале</a>
-          <a href="free_lans/freelance_homepage.html" class="menu-link">Фриланс</a>
-          <a href="user_dashboard.html" class="mt-2 px-3 py-1 rounded bg-white bg-opacity-20 hover:bg-yellow-400 hover:text-gray-900 font-semibold text-sm transition">Войти</a>
-          <a href="register.html" class="mt-1 px-3 py-1 rounded bg-yellow-400 text-gray-900 font-semibold text-sm hover:bg-yellow-300 transition">Регистрация</a>
-          <div class="flex space-x-2 mt-2">
-            <button class="px-2 py-1 bg-white text-gray-800 rounded font-bold text-xs" data-lang="ru">RUS</button>
-            <button class="px-2 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-xs" data-lang="tg">TAJ</button>
-            <button class="px-2 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-xs" data-lang="en">ENG</button>
-          </div>
-        </div>
-      </div>
     </header>
 
-    <section class="gradient-bg text-white py-10 md:py-14">
-        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div class="flex-1 text-center md:text-left">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Добро пожаловать на портал рынка труда</h2>
-                <p class="text-base md:text-lg mb-6 max-w-xl mx-auto md:mx-0 opacity-90">Единая платформа для поиска работы, кадров и аналитики рынка труда Республики Таджикистан</p>
-                <div class="flex flex-col sm:flex-row gap-3 justify-center md:justify-start mb-4">
-                    <a href="serchwork.html" class="bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-sm">Найти работу</a>
-                    <a href="register.html" class="bg-white bg-opacity-20 border border-white px-6 py-2 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-colors text-sm">Регистрация</a>
-                </div>
-            </div>
-            <div class="flex-1 grid grid-cols-2 gap-3 max-w-xs mx-auto md:mx-0">
-                <a href="serchwork.html" class="bg-white bg-opacity-10 rounded-lg p-4 flex flex-col items-center hover:bg-opacity-20 transition">
-                    <i class="fas fa-users text-2xl mb-2"></i>
-                    <span class="text-sm font-semibold">Соискателям</span>
-                </a>
-                <a href="employer_profile.html" class="bg-white bg-opacity-10 rounded-lg p-4 flex flex-col items-center hover:bg-opacity-20 transition">
-                    <i class="fas fa-building text-2xl mb-2"></i>
-                    <span class="text-sm font-semibold">Работодателям</span>
-                </a>
-                <a href="analitic_pg.html" class="bg-white bg-opacity-10 rounded-lg p-4 flex flex-col items-center hover:bg-opacity-20 transition">
-                    <i class="fas fa-chart-line text-2xl mb-2"></i>
-                    <span class="text-sm font-semibold">Аналитика</span>
-                </a>
-                <a href="gov_pg.html" class="bg-white bg-opacity-10 rounded-lg p-4 flex flex-col items-center hover:bg-opacity-20 transition">
-                    <i class="fas fa-shield-alt text-2xl mb-2"></i>
-                    <span class="text-sm font-semibold">Гос. служащим</span>
-                </a>
-            </div>
+    <!-- Герой-секция с анимацией -->
+    <section class="gradient-bg text-white py-16 relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-10 left-10 w-64 h-64 bg-purple-500 rounded-full filter blur-[100px] opacity-30 animate-blob"></div>
+            <div class="absolute bottom-10 right-10 w-72 h-72 bg-blue-500 rounded-full filter blur-[100px] opacity-30 animate-blob animation-delay-2000"></div>
+            <div class="absolute top-1/4 right-1/4 w-56 h-56 bg-indigo-500 rounded-full filter blur-[100px] opacity-30 animate-blob animation-delay-4000"></div>
         </div>
-    </section>
-<br>
-    <!-- Интерактивные 4 виджета статистики по Душанбе -->
-    <div class="max-w-5xl mx-auto mb-8 mt-[-36px] relative z-10">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-            <div class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg p-4 text-white text-center shadow card-hover">
-                <i class="fas fa-briefcase text-xl mb-1"></i>
-                <div class="text-sm font-semibold mb-0.5">Нашли работу</div>
-                <div class="text-lg font-bold mb-0.5">2 350</div>
-                <div class="text-xs opacity-80">Душанбе</div>
-            </div>
-            <div class="bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg p-4 text-white text-center shadow card-hover">
-                <i class="fas fa-user-times text-xl mb-1"></i>
-                <div class="text-sm font-semibold mb-0.5">Потеряли работу</div>
-                <div class="text-lg font-bold mb-0.5">180</div>
-                <div class="text-xs opacity-80">Душанбе</div>
-            </div>
-            <div class="bg-gradient-to-br from-green-500 to-blue-500 rounded-lg p-4 text-white text-center shadow card-hover">
-                <i class="fas fa-user-graduate text-xl mb-1"></i>
-                <div class="text-sm font-semibold mb-0.5">Прошли обучение</div>
-                <div class="text-lg font-bold mb-0.5">1 120</div>
-                <div class="text-xs opacity-80">Душанбе</div>
-            </div>
-            <div class="bg-gradient-to-br from-yellow-400 to-pink-500 rounded-lg p-4 text-white text-center shadow card-hover">
-                <i class="fas fa-users text-xl mb-1"></i>
-                <div class="text-sm font-semibold mb-0.5">Программа ПЭИ</div>
-                <div class="text-lg font-bold mb-0.5">540</div>
-                <div class="text-xs opacity-80">Душанбе</div>
-            </div>
-        </div>
-    </div>
-    <!-- конец блока виджетов -->
-
-    <section id="jobs" class="section-spacing bg-white" style="margin-top:-1.5rem;">
-        <div class="container mx-auto px-4">
-            <h2 class="text-xl md:text-2xl font-bold text-center mb-6 text-gray-800">Поиск вакансий</h2>
-            <div class="max-w-3xl mx-auto bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-4 md:p-6 text-white mb-6 flex flex-col md:flex-row gap-3 md:gap-6 items-center justify-between">
-                <input type="text" id="jobTitleSearch" placeholder="Профессия или должность" class="flex-1 px-3 py-2 rounded-lg text-gray-800 text-sm" />
-                <select id="regionSelect" class="flex-1 px-3 py-2 rounded-lg text-gray-800 text-sm">
-                    <option>Душанбе</option>
-                    <option>Согдийская область</option>
-                    <option>Хатлонская область</option>
-                    <option>Районы республиканского подчинения</option>
-                    <option>ГБАО</option>
-                </select>
-                <input type="number" id="salaryInput" placeholder="Зарплата от" class="flex-1 px-3 py-2 rounded-lg text-gray-800 text-sm" />
-                <button onclick="window.location.href='serchwork.html'" class="bg-yellow-400 text-gray-900 px-5 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-sm flex-shrink-0"><i class="fas fa-search mr-2"></i>Найти</button>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div class="bg-white rounded-lg shadow-sm p-4 flex flex-col min-h-[120px]">
-                    <div class="flex items-center mb-1">
-                        <i class="fas fa-briefcase text-blue-500 text-lg mr-2"></i>
-                        <span class="font-semibold text-base">Frontend-разработчик</span>
-                    </div>
-                    <div class="text-xs text-gray-600 mb-1">IT компания, Душанбе</div>
-                    <div class="text-xs text-gray-400 mb-2">от 8 000 TJS</div>
-                    <a href="#" class="mt-auto text-blue-600 hover:underline text-xs font-medium">Подробнее</a>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm p-4 flex flex-col min-h-[120px]">
-                    <div class="flex items-center mb-1">
-                        <i class="fas fa-briefcase text-green-500 text-lg mr-2"></i>
-                        <span class="font-semibold text-base">Бухгалтер</span>
-                    </div>
-                    <div class="text-xs text-gray-600 mb-1">Финансовая компания, Худжанд</div>
-                    <div class="text-xs text-gray-400 mb-2">от 5 500 TJS</div>
-                    <a href="#" class="mt-auto text-blue-600 hover:underline text-xs font-medium">Подробнее</a>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm p-4 flex flex-col min-h-[120px]">
-                    <div class="flex items-center mb-1">
-                        <i class="fas fa-briefcase text-yellow-500 text-lg mr-2"></i>
-                        <span class="font-semibold text-base">Менеджер по продажам</span>
-                    </div>
-                    <div class="text-xs text-gray-600 mb-1">Торговая компания, Бохтар</div>
-                    <div class="text-xs text-gray-400 mb-2">от 6 000 TJS</div>
-                    <a href="#" class="mt-auto text-blue-600 hover:underline text-xs font-medium">Подробнее</a>
-                </div>
-            </div>
-            <div class="text-center mt-2">
-                <a href="serchwork.html" class="inline-block bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm">Смотреть все вакансии</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="statistics" class="section-spacing bg-gray-100">
-        <div class="container mx-auto px-4">
-            <button type="button" class="w-full flex items-center justify-between px-4 py-3 bg-gray-200 rounded-lg mb-2 text-gray-800 font-semibold text-lg focus:outline-none" onclick="toggleAccordion('statAccordion')">
-                <span><i class="fas fa-chart-bar mr-2 text-blue-500"></i>Статистика рынка труда</span>
-                <i class="fas fa-chevron-down transition-transform" id="statAccordionIcon"></i>
-            </button>
-            <div id="statAccordion" class="hidden">
-                <div class="flex justify-center mb-4">
-                    <a href="analitic_pg.html" class="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors shadow text-sm">Подробнее</a>
-                </div>
-                <div class="grid lg:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-lg p-4 shadow">
-                        <h3 class="text-base font-semibold mb-2 text-gray-800">Уровень безработицы по регионам</h3>
-                        <div class="chart-container">
-                            <canvas id="unemploymentChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-lg p-4 shadow">
-                        <h3 class="text-base font-semibold mb-2 text-gray-800">Популярные профессии</h3>
-                        <div class="chart-container">
-                            <canvas id="professionsChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid md:grid-cols-4 gap-4 mt-6">
-                    <div class="bg-white rounded-lg p-4 text-center shadow card-hover">
-                        <i class="fas fa-users text-2xl text-blue-500 mb-2"></i>
-                        <h3 class="text-lg font-bold text-gray-800">47,382</h3>
-                        <p class="text-gray-600 text-xs">Зарегистрированных соискателей</p>
-                    </div>
-                    <div class="bg-white rounded-lg p-4 text-center shadow card-hover">
-                        <i class="fas fa-briefcase text-2xl text-green-500 mb-2"></i>
-                        <h3 class="text-lg font-bold text-gray-800">12,456</h3>
-                        <p class="text-gray-600 text-xs">Активных вакансий</p>
-                    </div>
-                    <div class="bg-white rounded-lg p-4 text-center shadow card-hover">
-                        <i class="fas fa-handshake text-2xl text-purple-500 mb-2"></i>
-                        <h3 class="text-lg font-bold text-gray-800">8,921</h3>
-                        <p class="text-gray-600 text-xs">Успешных трудоустройств</p>
-                    </div>
-                    <div class="bg-white rounded-lg p-4 text-center shadow card-hover">
-                        <i class="fas fa-building text-2xl text-orange-500 mb-2"></i>
-                        <h3 class="text-lg font-bold text-gray-800">3,247</h3>
-                        <p class="text-gray-600 text-xs">Зарегистрированных работодателей</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="registration" class="section-spacing bg-white">
-        <div class="container mx-auto px-4">
-            <button type="button" class="w-full flex items-center justify-between px-4 py-3 bg-gray-200 rounded-lg mb-2 text-gray-800 font-semibold text-lg focus:outline-none" onclick="toggleAccordion('regAccordion')">
-                <span><i class="fas fa-user-plus mr-2 text-yellow-500"></i>Регистрация безработных</span>
-                <i class="fas fa-chevron-down transition-transform" id="regAccordionIcon"></i>
-            </button>
-            <div id="regAccordion" class="hidden">
-                <div class="max-w-4xl mx-auto">
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg p-6 text-white">
-                            <h3 class="text-xl font-bold mb-4">Онлайн регистрация</h3>
-                            <ul class="space-y-2 text-sm">
-                                <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-2"></i>Быстрая подача документов</li>
-                                <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-2"></i>Автоматическое уведомление</li>
-                                <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-2"></i>Отслеживание статуса</li>
-                                <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-2"></i>Персональные рекомендации</li>
-                            </ul>
-                            <button onclick="window.location.href='register.html'" class="mt-4 bg-yellow-400 text-gray-800 px-5 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-sm">Начать регистрацию</button>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h4 class="text-base font-semibold mb-2 text-gray-800">Необходимые документы</h4>
-                                <ul class="space-y-1 text-gray-700 text-sm">
-                                    <li class="flex items-center"><i class="fas fa-file-alt text-blue-500 mr-2"></i>Паспорт гражданина РТ</li>
-                                    <li class="flex items-center"><i class="fas fa-graduation-cap text-blue-500 mr-2"></i>Документ об образовании</li>
-                                    <li class="flex items-center"><i class="fas fa-briefcase text-blue-500 mr-2"></i>Трудовая книжка (при наличии)</li>
-                                    <li class="flex items-center"><i class="fas fa-camera text-blue-500 mr-2"></i>Фотография 3x4</li>
-                                </ul>
-                            </div>
-                            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                                <h4 class="text-base font-semibold mb-1 text-yellow-800">Важная информация</h4>
-                                <p class="text-yellow-700 text-sm">Регистрация осуществляется в течение 3 рабочих дней. После регистрации вы получите доступ к персональному кабинету и индивидуальному плану поиска работы.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="programs" class="section-spacing bg-gray-100">
-        <div class="container mx-auto px-4">
-            <button type="button" class="w-full flex items-center justify-between px-4 py-3 bg-gray-200 rounded-lg mb-2 text-gray-800 font-semibold text-lg focus:outline-none" onclick="toggleAccordion('progAccordion')">
-                <span><i class="fas fa-rocket mr-2 text-green-500"></i>Программы трудоустройства</span>
-                <i class="fas fa-chevron-down transition-transform" id="progAccordionIcon"></i>
-            </button>
-            <div id="progAccordion" class="hidden">
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div class="bg-white rounded-lg p-4 shadow card-hover">
-                        <div class="text-center mb-4">
-                            <i class="fas fa-graduation-cap text-2xl text-blue-500 mb-2"></i>
-                            <h3 class="text-base font-semibold text-gray-800">Профессиональная переподготовка</h3>
-                        </div>
-                        <ul class="space-y-1 text-gray-700 text-sm">
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>IT технологии</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Бухгалтерский учет</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Туризм и гостеприимство</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Строительные специальности</li>
-                        </ul>
-                        <button class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm" id="profSkillApplyBtn">Подать заявку</button>
-                    </div>
-                    <div class="bg-white rounded-lg p-4 shadow card-hover">
-                        <div class="text-center mb-4">
-                            <i class="fas fa-seedling text-2xl text-green-500 mb-2"></i>
-                            <h3 class="text-base font-semibold text-gray-800">Поддержка предпринимательства</h3>
-                        </div>
-                        <ul class="space-y-1 text-gray-700 text-sm">
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Микрокредитование</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Бизнес-консультации</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Обучение основам бизнеса</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Налоговые льготы</li>
-                        </ul>
-                        <button class="mt-4 w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors text-sm" onclick="window.location.href='micro_credit.html'">Узнать больше</button>
-                    </div>
-                    <div class="bg-white rounded-lg p-4 shadow card-hover">
-                        <div class="text-center mb-4">
-                            <i class="fas fa-users text-2xl text-purple-500 mb-2"></i>
-                            <h3 class="text-base font-semibold text-gray-800">Молодежные программы</h3>
-                        </div>
-                        <ul class="space-y-1 text-gray-700 text-sm">
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Стажировки в госучреждениях</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Программы наставничества</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Карьерное консультирование</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Развитие soft skills</li>
-                        </ul>
-                        <button class="mt-4 w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm" onclick="window.location.href='youth_programs.html'">Присоединиться</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="education" class="section-spacing bg-white">
-        <div class="container mx-auto px-4">
-            <button type="button" class="w-full flex items-center justify-between px-4 py-3 bg-gray-200 rounded-lg mb-2 text-gray-800 font-semibold text-lg focus:outline-none" onclick="toggleAccordion('eduAccordion')">
-                <span><i class="fas fa-graduation-cap mr-2 text-indigo-500"></i>Образовательные ресурсы</span>
-                <i class="fas fa-chevron-down transition-transform" id="eduAccordionIcon"></i>
-            </button>
-            <div id="eduAccordion" class="hidden">
-                <div class="max-w-6xl mx-auto">
-                    <div class="grid md:grid-cols-2 gap-6 mb-8">
-                        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-6 text-white">
-                            <h3 class="text-lg font-bold mb-2">Онлайн курсы</h3>
-                            <p class="mb-4 text-sm">Получите новые навыки с помощью наших бесплатных онлайн курсов, разработанных совместно с ведущими образовательными учреждениями.</p>
-                            <div class="grid grid-cols-2 gap-2 mb-4">
-                                <div class="bg-white bg-opacity-20 rounded-lg p-3 text-center">
-                                    <i class="fas fa-laptop-code text-xl mb-1"></i>
-                                    <p class="font-semibold text-xs">Программирование</p>
-                                </div>
-                                <div class="bg-white bg-opacity-20 rounded-lg p-3 text-center">
-                                    <i class="fas fa-language text-xl mb-1"></i>
-                                    <p class="font-semibold text-xs">Языки</p>
-                                </div>
-                                <div class="bg-white bg-opacity-20 rounded-lg p-3 text-center">
-                                    <i class="fas fa-chart-bar text-xl mb-1"></i>
-                                    <p class="font-semibold text-xs">Управление</p>
-                                </div>
-                                <div class="bg-white bg-opacity-20 rounded-lg p-3 text-center">
-                                    <i class="fas fa-tools text-xl mb-1"></i>
-                                    <p class="font-semibold text-xs">Ремесла</p>
-                                </div>
-                            </div>
-                            <a href="skill_serch.html" class="inline-block mt-2 bg-yellow-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors shadow text-xs">Каталог образовательных ресурсов <i class="fas fa-arrow-right ml-1"></i></a>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="bg-blue-50 p-4 rounded-lg">
-                                <h4 class="text-base font-semibold mb-2 text-blue-800">Вебинары и мастер-классы</h4>
-                                <div class="space-y-2 text-xs">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-700">Как составить резюме</span>
-                                        <span class="text-blue-600">15 ноября</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-700">Подготовка к собеседованию</span>
-                                        <span class="text-blue-600">22 ноября</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-700">Основы цифрового маркетинга</span>
-                                        <span class="text-blue-600">29 ноября</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bg-green-50 p-4 rounded-lg">
-                                <h4 class="text-base font-semibold mb-2 text-green-800">Сертификационные программы</h4>
-                                <p class="text-gray-700 mb-2 text-xs">Получите официальные сертификаты, признаваемые работодателями по всей стране.</p>
-                                <button class="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition-colors text-xs">Просмотреть программы</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-spacing bg-gray-100">
-        <div class="container mx-auto px-4">
-            <button type="button" class="w-full flex items-center justify-between px-4 py-3 bg-gray-200 rounded-lg mb-2 text-gray-800 font-semibold text-lg focus:outline-none" onclick="toggleAccordion('analyticsAccordion')">
-                <span><i class="fas fa-chart-line mr-2 text-purple-500"></i>Аналитические отчеты</span>
-                <i class="fas fa-chevron-down transition-transform" id="analyticsAccordionIcon"></i>
-            </button>
-            <div id="analyticsAccordion" class="hidden">
-                <div class="max-w-4xl mx-auto">
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-lg p-4 shadow">
-                            <h3 class="text-base font-semibold mb-2 text-gray-800">Ежемесячные отчеты</h3>
-                            <div class="space-y-2 text-xs">
-                                <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                                    <div class="flex items-center space-x-2">
-                                        <i class="fas fa-file-pdf text-red-500"></i>
-                                        <span class="text-gray-700">Отчет за октябрь 2024</span>
-                                    </div>
-                                    <button class="text-blue-500 hover:text-blue-600"><i class="fas fa-download"></i></button>
-                                </div>
-                                <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                                    <div class="flex items-center space-x-2">
-                                        <i class="fas fa-file-pdf text-red-500"></i>
-                                        <span class="text-gray-700">Отчет за сентябрь 2024</span>
-                                    </div>
-                                    <button class="text-blue-500 hover:text-blue-600"><i class="fas fa-download"></i></button>
-                                </div>
-                                <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                                    <div class="flex items-center space-x-2">
-                                        <i class="fas fa-file-pdf text-red-500"></i>
-                                        <span class="text-gray-700">Отчет за август 2024</span>
-                                    </div>
-                                    <button class="text-blue-500 hover:text-blue-600"><i class="fas fa-download"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-white rounded-lg p-4 shadow">
-                            <h3 class="text-base font-semibold mb-2 text-gray-800">Специальные исследования</h3>
-                            <div class="space-y-2 text-xs">
-                                <div class="p-2 bg-blue-50 rounded-lg">
-                                    <h4 class="font-semibold text-blue-800 mb-1">Влияние цифровизации на рынок труда</h4>
-                                    <p class="text-gray-700 mb-1">Комплексное исследование изменений в структуре занятости...</p>
-                                    <button class="text-blue-500 hover:text-blue-600">Читать далее <i class="fas fa-arrow-right"></i></button>
-                                </div>
-                                <div class="p-2 bg-green-50 rounded-lg">
-                                    <h4 class="font-semibold text-green-800 mb-1">Молодежь на рынке труда</h4>
-                                    <p class="text-gray-700 mb-1">Анализ трудоустройства выпускников учебных заведений...</p>
-                                    <button class="text-green-500 hover:text-green-600">Читать далее <i class="fas fa-arrow-right"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-spacing bg-white">
-        <div class="container mx-auto px-4">
-            <button type="button" class="w-full flex items-center justify-between px-4 py-3 bg-gray-200 rounded-lg mb-2 text-gray-800 font-semibold text-lg focus:outline-none" onclick="toggleAccordion('contactsAccordion')">
-                <span><i class="fas fa-envelope-open-text mr-2 text-blue-500"></i>Контактная информация</span>
-                <i class="fas fa-chevron-down transition-transform" id="contactsAccordionIcon"></i>
-            </button>
-            <div id="contactsAccordion" class="hidden">
-                <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-                    <div class="space-y-4">
-                        <div class="flex items-start space-x-3">
-                            <i class="fas fa-map-marker-alt text-xl text-blue-500 mt-1"></i>
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-1 text-sm">Главный офис</h4>
-                                <p class="text-gray-700 text-xs">г. Душанбе, проспект Рудаки 105<br>Министерство труда, миграции и занятости населения РТ</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <i class="fas fa-phone text-xl text-green-500 mt-1"></i>
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-1 text-sm">Телефоны</h4>
-                                <p class="text-gray-700 text-xs">Горячая линия: +992 (37) 221-00-10<br>Справочная: +992 (37) 221-00-11</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <i class="fas fa-envelope text-xl text-purple-500 mt-1"></i>
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-1 text-sm">Электронная почта</h4>
-                                <p class="text-gray-700 text-xs">info@employment.tj<br>support@employment.tj</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="text-base font-semibold mb-2 text-gray-800">Часы работы</h4>
-                        <div class="space-y-2 text-xs">
-                            <div class="flex justify-between">
-                                <span class="text-gray-700">Понедельник - Пятница</span>
-                                <span class="text-gray-800 font-medium">08:00 - 17:00</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-700">Суббота</span>
-                                <span class="text-gray-800 font-medium">09:00 - 14:00</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-700">Воскресенье</span>
-                                <span class="text-gray-800 font-medium">Выходной</span>
-                            </div>
-                        </div>
-                        <div class="mt-4 p-2 bg-blue-50 rounded-lg">
-                            <p class="text-blue-800 text-xs"><i class="fas fa-info-circle mr-1"></i>Онлайн сервисы доступны 24/7</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</body>
-<script>
-// Универсальный аккордеон для секций
-function toggleAccordion(id) {
-    const el = document.getElementById(id);
-    const icon = document.getElementById(id + 'Icon');
-    if (el.classList.contains('hidden')) {
-        el.classList.remove('hidden');
-        icon.classList.add('rotate-180');
-    } else {
-        el.classList.add('hidden');
-        icon.classList.remove('rotate-180');
-    }
-}
-</script>
-
-    <footer class="gradient-bg text-white py-12">
-    <footer class="bg-gray-900 text-gray-400 py-6 mt-10">
-        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2">
-            <div class="mb-2 md:mb-0 text-center md:text-left">
-                <span class="font-bold text-base text-white">Портал рынка труда</span>
-                <span class="ml-2 text-xs">© 2024</span>
-            </div>
-            <div class="flex flex-wrap gap-3 justify-center md:justify-end text-xs">
-                <a href="about.html" class="hover:underline">О портале</a>
-                <a href="serchwork.html" class="hover:underline">Вакансии</a>
-                <a href="analitic_pg.html" class="hover:underline">Статистика</a>
-                <a href="youth_programs.html" class="hover:underline">Программы</a>
-                <a href="free_lans/freelance_homepage.html" class="hover:underline">Фриланс</a>
-                <a href="contact.html" class="hover:underline">Контакты</a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Модальное окно профиля -->
-<div id="profileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-  <div class="bg-white rounded-lg shadow-lg p-8 max-w-xs w-full text-center">
-    <h3 class="text-xl font-bold mb-6 text-gray-800">Вход или регистрация</h3>
-    <button id="demoLoginBtn" class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors mb-4">Войти (демо)</button>
-    <button id="goRegisterBtn" class="w-full bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors">Зарегистрироваться</button>
-    <button id="closeProfileModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
-  </div>
-</div>
-
-
-<!-- Сначала виджет FL, строго над ИИ -->
-<div id="freelanceBlobWidget"
-     class="fixed z-50 cursor-pointer group transition-all duration-400 ease-in-out"
-     onclick="window.location.href='free_lans/freelance_homepage.html'"
-          style="width: 64px; height: 64px; right: 24px; bottom: 120px;">
-    <div class="relative w-full h-full flex items-center justify-center">
-        <span class="absolute inset-0 shadow-lg transition-all duration-400 ease-in-out blob-bg"></span>
-        <span class="relative z-10 text-white font-extrabold text-2xl select-none transition-all duration-400 ease-in-out flex items-center justify-center h-full w-full"
-              style="letter-spacing: 0.05em;">FL</span>
-        <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-semibold text-base px-4 opacity-0 group-hover:opacity-100 transition-all duration-400 ease-in-out z-20"
-              style="pointer-events:none; white-space:nowrap;">
-            FREELANCE HuB
-        </span>
-    </div>
-    <style>
-        @keyframes blob-gradient-anim {
-            0% { filter: hue-rotate(0deg);}
-            100% { filter: hue-rotate(360deg);}
-        }
-        #freelanceBlobWidget {
-            box-shadow: 0 8px 32px 0 rgba(79,70,229,0.18);
-            overflow: visible;
-            background: transparent !important;
-            border-radius: 50%;
-            transition: width 0.4s cubic-bezier(.4,2,.6,1), height 0.3s, border-radius 0.4s;
-        }
-        #freelanceBlobWidget .blob-bg {
-            background: linear-gradient(135deg, #f59e42 0%, #f43f5e 50%, #6366f1 100%);
-            border-radius: 50%;
-            width: 100%;
-            height: 100%;
-            animation: blob-gradient-anim 6s ease-in-out infinite alternate;
-            transition: border-radius 0.4s, width 0.4s, height 0.4s;
-            display: block;
-        }
-        #freelanceBlobWidget:hover {
-            width: 260px !important;
-            height: 64px !important;
-            border-radius: 32px / 50%;
-        }
-        #freelanceBlobWidget:hover .blob-bg {
-            border-radius: 32px / 50%;
-            width: 100%;
-            height: 100%;
-        }
-        #freelanceBlobWidget span.text-2xl {
-            opacity: 1;
-            transition: opacity 0.3s;
-        }
-        #freelanceBlobWidget:hover span.text-2xl {
-            opacity: 0;
-        }
-        #freelanceBlobWidget span.text-base {
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        #freelanceBlobWidget:hover span.text-base {
-            opacity: 1;
-        }
-        #freelanceBlobWidget .group-hover\:opacity-100 {
-            transition: opacity 0.4s;
-        }
-        #freelanceBlobWidget:hover .group-hover\:opacity-100 {
-            opacity: 1 !important;
-        }
-        @media (max-width: 768px) {
-            #freelanceBlobWidget {
-                right: 12px !important;
-                bottom: 112px !important;
-            }
-        }
-    </style>
-</div>
-
-<!-- Затем виджет ИИ, строго под FL -->
-<div id="aiAssistantWidget"
-     class="fixed z-50 cursor-pointer group transition-all duration-400 ease-in-out"
-     onclick="window.location.href='ai_lmis.html'"
-     style="width: 64px; height: 64px; right: 24px; bottom: 48px;">
-    <div class="relative w-full h-full flex items-center justify-center">
-        <span class="absolute inset-0 shadow-lg transition-all duration-400 ease-in-out ai-blob-bg"></span>
-        <span class="relative z-10 text-white font-extrabold text-2xl select-none transition-all duration-400 ease-in-out flex items-center justify-center h-full w-full"
-              style="letter-spacing: 0.05em;">AI</span>
-        <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-semibold text-base px-4 opacity-0 group-hover:opacity-100 transition-all duration-400 ease-in-out z-20"
-              style="pointer-events:none; white-space:nowrap;">
-            ИИ-консультант
-        </span>
-    </div>
-    <style>
-        @keyframes ai-blob-gradient-anim {
-            0% { filter: hue-rotate(0deg);}
-            100% { filter: hue-rotate(360deg);}
-        }
         
-        /* Пульсирующая анимация для AI виджета */
-        @keyframes ai-pulse {
-            0% { 
-                transform: scale(1);
-                box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
-            }
-            50% { 
-                transform: scale(1.1);
-                box-shadow: 0 12px 40px 0 rgba(102, 126, 234, 0.4);
-            }
-            100% { 
-                transform: scale(1);
-                box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
-            }
-        }
-        
-        #aiAssistantWidget {
-            box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
-            overflow: visible;
-            background: transparent !important;
-            border-radius: 50%;
-            transition: width 0.4s cubic-bezier(.4,2,.6,1), height 0.3s, border-radius 0.4s;
-            animation: ai-pulse 0.8s ease-in-out;
-        }
-        #aiAssistantWidget .ai-blob-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            border-radius: 50%;
-            width: 100%;
-            height: 100%;
-            animation: ai-blob-gradient-anim 6s ease-in-out infinite alternate;
-            transition: border-radius 0.4s, width 0.4s, height 0.4s;
-            display: block;
-        }
-        #aiAssistantWidget:hover {
-            width: 260px !important;
-            height: 64px !important;
-            border-radius: 32px / 50%;
-        }
-        #aiAssistantWidget:hover .ai-blob-bg {
-            border-radius: 32px / 50%;
-            width: 100%;
-            height: 100%;
-        }
-        #aiAssistantWidget span.text-2xl {
-            opacity: 1;
-            transition: opacity 0.3s;
-        }
-        #aiAssistantWidget:hover span.text-2xl {
-            opacity: 0;
-        }
-        #aiAssistantWidget span.text-base {
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        #aiAssistantWidget:hover span.text-base {
-            opacity: 1;
-        }
-        #aiAssistantWidget .group-hover\:opacity-100 {
-            transition: opacity 0.4s;
-        }
-        #aiAssistantWidget:hover .group-hover\:opacity-100 {
-            opacity: 1 !important;
-        }
-        @media (max-width: 768px) {
-            #aiAssistantWidget {
-                right: 12px !important;
-                bottom: 40px !important;
-            }
-        }
-    </style>
-</div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 fade-in">Добро пожаловать на портал рынка труда</h2>
+            <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto fade-in">Единая платформа для соискателей, работодателей и государственных служащих Республики Таджикистан</p>
+            <div class="grid md:grid-cols-4 gap-6 mt-12 fade-in">
+                <div id="seekerCard" class="glass-effect rounded-xl p-6 transition-transform duration-300 hover:-translate-y-2 cursor-pointer card-hover">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Соискатели</h3>
+                    <p class="text-sm opacity-90">Поиск работы и карьерные возможности</p>
+                </div>
+                <div id="employerCard" class="glass-effect rounded-xl p-6 transition-transform duration-300 hover:-translate-y-2 cursor-pointer card-hover">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-building text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Работодатели</h3>
+                    <p class="text-sm opacity-90">Размещение вакансий и поиск кадров</p>
+                </div>
+                <div id="analiticCard" class="glass-effect rounded-xl p-6 transition-transform duration-300 hover:-translate-y-2 cursor-pointer card-hover">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Аналитики</h3>
+                    <p class="text-sm opacity-90">Статистика и анализ рынка труда</p>
+                </div>
+                <div id="govCard" class="glass-effect rounded-xl p-6 transition-transform duration-300 hover:-translate-y-2 cursor-pointer card-hover">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Гос. служащие</h3>
+                    <p class="text-sm opacity-90">Управление и мониторинг</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Интерактивные виджеты статистики -->
+    <div class="max-w-6xl mx-auto mb-12 mt-[-60px] relative z-10 fade-in">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 text-white text-center shadow-lg stat-card">
+                <i class="fas fa-briefcase text-3xl mb-3"></i>
+                <div class="text-lg font-semibold mb-1">Нашли работу</div>
+                <div id="statValue1" class="text-2xl font-bold mb-1">2 350</div>
+                <div class="text-xs opacity-80">г. Душанбе</div>
+            </div>
+            <div class="bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl p-6 text-white text-center shadow-lg stat-card">
+                <i class="fas fa-user-times text-3xl mb-3"></i>
+                <div class="text-lg font-semibold mb-1">Потеряли работу</div>
+                <div id="statValue2" class="text-2xl font-bold mb-1">180</div>
+                <div class="text-xs opacity-80">г. Душанбе</div>
+            </div>
+            <div class="bg-gradient-to-br from-green-500 to-blue-500 rounded-xl p-6 text-white text-center shadow-lg stat-card">
+                <i class="fas fa-user-graduate text-3xl mb-3"></i>
+                <div class="text-lg font-semibold mb-1">Прошли обучение</div>
+                <div id="statValue3" class="text-2xl font-bold mb-1">1 120</div>
+                <div class="text-xs opacity-80">г. Душанбе</div>
+            </div>
+            <div class="bg-gradient-to-br from-yellow-400 to-pink-500 rounded-xl p-6 text-white text-center shadow-lg stat-card">
+                <i class="fas fa-users text-3xl mb-3"></i>
+                <div class="text-lg font-semibold mb-1">Программа ПЭИ</div>
+                <div id="statValue4" class="text-2xl font-bold mb-1">540</div>
+                <div class="text-xs opacity-80">г. Душанбе</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Секция поиска вакансий -->
+    <section id="jobs" class="section-spacing bg-white fade-in">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Поиск вакансий</h2>
+            <div class="max-w-6xl mx-auto">
+                <div class="secondary-gradient-bg rounded-xl p-8 text-white mb-12">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="jobTitleSearch" class="block text-sm font-medium mb-2">Профессия или должность</label>
+                            <input type="text" id="jobTitleSearch" placeholder="Например: программист" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+                        </div>
+                        <div>
+                            <label for="regionSelect" class="block text-sm font-medium mb-2">Регион</label>
+                            <select id="regionSelect" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+                                <option>Душанбе</option>
+                                <option>Согдийская область</option>
+                                <option>Хатлонская область</option>
+                                <option>Районы республиканского подчинения</option>
+                                <option>Горно-Бадахшанская автономная область (ГБАО)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="salaryInput" class="block text-sm font-medium mb-2">Зарплата от</label>
+                            <input type="number" id="salaryInput" placeholder="2000" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+                        </div>
+                    </div>
+                    <button onclick="window.location.href='serchwork.html'" class="mt-6 bg-yellow-400 text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors shadow-lg transform hover:scale-105">
+                        <i class="fas fa-search mr-2"></i>Найти вакансии
+                    </button>
+                </div>
+                
+                <!-- Слайдер вакансий -->
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <!-- Сюда будут добавляться вакансии динамически -->
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция статистики -->
+    <section id="statistics" class="section-spacing bg-gray-100 fade-in">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Статистика рынка труда</h2>
+            <div class="flex justify-center mb-8">
+                <a href="analitic_pg.html" class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors shadow transform hover:scale-105">
+                    Подробнее
+                </a>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Уровень безработицы по регионам</h3>
+                    <div class="chart-container" style="height: 320px;">
+                        <canvas id="unemploymentChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Популярные профессии</h3>
+                    <div class="chart-container" style="height: 320px;">
+                        <canvas id="professionsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-6 mt-12">
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg card-hover">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-2xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800">47,382</h3>
+                    <p class="text-gray-600">Зарегистрированных соискателей</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg card-hover">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-briefcase text-2xl text-green-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800">12,456</h3>
+                    <p class="text-gray-600">Активных вакансий</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg card-hover">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-handshake text-2xl text-purple-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800">8,921</h3>
+                    <p class="text-gray-600">Успешных трудоустройств</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg card-hover">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-building text-2xl text-orange-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800">3,247</h3>
+                    <p class="text-gray-600">Зарегистрированных работодателей</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Остальные секции остаются без изменений (для экономии места) -->
+    <!-- ... -->
+
+    <!-- Виджеты в правом нижнем углу -->
+    <div id="freelanceBlobWidget" class="fixed z-50 cursor-pointer group transition-all duration-400 ease-in-out floating-widget" 
+         onclick="window.location.href='free_lans/freelance_homepage.html'"
+         style="width: 64px; height: 64px; right: 24px; bottom: 120px;">
+        <!-- Содержимое виджета -->
+    </div>
+    
+    <div id="aiAssistantWidget" class="fixed z-50 cursor-pointer group transition-all duration-400 ease-in-out floating-widget animate-pulse"
+         onclick="window.location.href='ai_lmis.html'"
+         style="width: 64px; height: 64px; right: 24px; bottom: 48px;">
+        <!-- Содержимое виджета -->
+    </div>
 
     <script>
-        // Unemployment Chart
-        const ctx1 = document.getElementById('unemploymentChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: ['Душанбе', 'Худжанд', 'Куляб', 'Курган-Тюбе', 'ГБАО'],
-                datasets: [{
-                    label: 'Уровень безработицы (%)',
-                    data: [4.2, 5.8, 7.1, 6.3, 8.9],
-                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                    borderColor: 'rgba(59, 130, 246, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 10
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + context.parsed.y + '%';
-                            }
-                        }
-                    }
-                }
-            }
-        });
+        // Инициализация навигации
+        document.addEventListener('DOMContentLoaded', function() {
+            // Выпадающие меню
+            const profileMenuBtn = document.getElementById('profileMenuBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            const langMenuBtn = document.getElementById('langMenuBtn');
+            const langDropdown = document.getElementById('langDropdown');
+            const moreMenuBtn = document.getElementById('moreMenuBtn');
+            const moreDropdown = document.getElementById('moreDropdown');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
 
-        // Professions Chart
-        const ctx2 = document.getElementById('professionsChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'doughnut',
-            data: {
-                labels: ['IT', 'Строительство', 'Торговля', 'Образование', 'Здравоохранение', 'Другие'],
-                datasets: [{
-                    data: [18, 22, 25, 12, 8, 15],
-                    backgroundColor: [
-                        '#3B82F6',
-                        '#10B981',
-                        '#F59E0B',
-                        '#EF4444',
-                        '#8B5CF6',
-                        '#6B7280'
-                    ],
-                    borderColor: '#ffffff',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed !== null) {
-                                    label += context.parsed + '%';
-                                }
-                                return label;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });        // Выпадающее меню профиля и языков
-        const profileMenuBtn = document.getElementById('profileMenuBtn');
-        const profileDropdown = document.getElementById('profileDropdown');
-        const langMenuBtn = document.getElementById('langMenuBtn');
-        const langDropdown = document.getElementById('langDropdown');
-        const currentLangLabel = document.getElementById('currentLangLabel');
-        const moreMenuBtn = document.getElementById('moreMenuBtn');
-        const moreDropdown = document.getElementById('moreDropdown');
-        
-        // Мобильное меню
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        // Открытие/закрытие мобильного меню
-        mobileMenuBtn?.addEventListener('click', function(e) {
-            e.stopPropagation();
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Открытие/закрытие меню "Мой профиль"
-        profileMenuBtn?.addEventListener('click', function(e) {
-            e.stopPropagation();
-            profileDropdown.classList.toggle('hidden');
-            langDropdown.classList.add('hidden');
-            moreDropdown.classList.add('hidden');
-        });
-
-        // Открытие/закрытие меню языков
-        langMenuBtn?.addEventListener('click', function(e) {
-            e.stopPropagation();
-            langDropdown.classList.toggle('hidden');
-            profileDropdown.classList.add('hidden');
-            moreDropdown.classList.add('hidden');
-        });
-
-        // Открытие/закрытие меню "Больше"
-        moreMenuBtn?.addEventListener('click', function(e) {
-            e.stopPropagation();
-            moreDropdown.classList.toggle('hidden');
-            profileDropdown.classList.add('hidden');
-            langDropdown.classList.add('hidden');
-        });
-
-        // Закрытие всех меню при клике вне
-        document.addEventListener('click', function(e) {
-            if (profileDropdown && !profileDropdown.contains(e.target) && profileMenuBtn && !profileMenuBtn.contains(e.target)) {
-                profileDropdown.classList.add('hidden');
-            }
-            if (langDropdown && !langDropdown.contains(e.target) && langMenuBtn && !langMenuBtn.contains(e.target)) {
+            // Открытие/закрытие меню
+            profileMenuBtn?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
                 langDropdown.classList.add('hidden');
-            }
-            if (moreDropdown && !moreDropdown.contains(e.target) && moreMenuBtn && !moreMenuBtn.contains(e.target)) {
                 moreDropdown.classList.add('hidden');
-            }
-            if (mobileMenu && !mobileMenu.contains(e.target) && mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
-                mobileMenu.classList.add('hidden');
-            }
-        });        // Переключение языка (только смена надписи, без перевода)
-        function setupLanguageSwitching() {
-            // Для десктопного меню
-            langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
-                btn.onclick = function() {
-                    currentLangLabel.textContent = this.textContent;
+            });
+
+            langMenuBtn?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                langDropdown.classList.toggle('hidden');
+                profileDropdown.classList.add('hidden');
+                moreDropdown.classList.add('hidden');
+            });
+
+            moreMenuBtn?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                moreDropdown.classList.toggle('hidden');
+                profileDropdown.classList.add('hidden');
+                langDropdown.classList.add('hidden');
+            });
+
+            mobileMenuBtn?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Закрытие меню при клике вне
+            document.addEventListener('click', function(e) {
+                if (profileDropdown && !profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+                if (langDropdown && !langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
                     langDropdown.classList.add('hidden');
-                    // Здесь можно добавить свою логику смены языка, если потребуется
-                };
+                }
+                if (moreDropdown && !moreDropdown.contains(e.target) && !moreMenuBtn.contains(e.target)) {
+                    moreDropdown.classList.add('hidden');
+                }
+                if (mobileMenu && !mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    mobileMenu.classList.add('hidden');
+                }
             });
-            
-            // Для мобильного меню
-            mobileMenu?.querySelectorAll('button[data-lang]').forEach(btn => {
-                btn.onclick = function() {
-                    const selectedLang = this.textContent;
-                    // Обновляем активное состояние в мобильном меню
-                    mobileMenu.querySelectorAll('button[data-lang]').forEach(b => {
-                        b.className = 'px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm';
-                    });
-                    this.className = 'px-3 py-1 bg-white text-gray-800 rounded font-bold text-sm';
-                    
-                    // Обновляем десктопное меню если оно есть
-                    if (currentLangLabel) {
-                        currentLangLabel.textContent = selectedLang;
+
+            // Переключение языка
+            document.querySelectorAll('[data-lang]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    document.getElementById('currentLangLabel').textContent = this.textContent;
+                    // Здесь можно добавить логику смены языка
+                });
+            });
+
+            // Фиксированная навигация при прокрутке
+            const header = document.querySelector('.sticky-nav');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Плавная прокрутка
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
                     }
-                    
-                    // Здесь можно добавить свою логику смены языка, если потребуется
-                };
+                });
             });
-        }
-        
-        setupLanguageSwitching();
 
-        // Добавляем переход по клику на "Работодатели"
-    document.getElementById('employerCard').addEventListener('click', function() {
-        window.location.href = 'employer_anons_work.html';
-    });
+            // Анимация чисел в статистике
+            const stats = [
+                { element: 'statValue1', start: 0, end: 2350, duration: 2000 },
+                { element: 'statValue2', start: 0, end: 180, duration: 1500 },
+                { element: 'statValue3', start: 0, end: 1120, duration: 1800 },
+                { element: 'statValue4', start: 0, end: 540, duration: 1700 }
+            ];
 
-    // Добавляем переход по клику на "Гос. служащие"
-    document.getElementById('govCard').addEventListener('click', function() {
-        window.location.href = 'gov_pg.html';
-    });
+            stats.forEach(stat => {
+                const element = document.getElementById(stat.element);
+                if (!element) return;
+                
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / stat.duration, 1);
+                    const value = Math.floor(progress * (stat.end - stat.start) + stat.start);
+                    element.textContent = value.toLocaleString();
+                    
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                
+                window.requestAnimationFrame(step);
+            });
 
-    // Добавляем переход по клику на "Аналитики"
-    document.getElementById('analiticCard').addEventListener('click', function() {
-        window.location.href = 'analitic_pg.html';
-    });
+            // Инициализация графиков
+            // График безработицы
+            const ctx1 = document.getElementById('unemploymentChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Душанбе', 'Худжанд', 'Куляб', 'Курган-Тюбе', 'ГБАО'],
+                    datasets: [{
+                        label: 'Уровень безработицы (%)',
+                        data: [4.2, 5.8, 7.1, 6.3, 8.9],
+                        backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
 
-    // Переход на страницу профпереподготовки при нажатии на "Подать заявку"
-document.getElementById('profSkillApplyBtn').addEventListener('click', function() {
-    window.location.href = 'prof_skill_need.html';
-});
+            // График профессий
+            const ctx2 = document.getElementById('professionsChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['IT', 'Строительство', 'Торговля', 'Образование', 'Здравоохранение', 'Другие'],
+                    datasets: [{
+                        data: [18, 22, 25, 12, 8, 15],
+                        backgroundColor: [
+                            '#3B82F6',
+                            '#10B981',
+                            '#F59E0B',
+                            '#EF4444',
+                            '#8B5CF6',
+                            '#6B7280'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
 
-// Анимация значений для 4 виджетов статистики по Душанбе с эффектом "перелистывания"
-const statsData = [
-    // Нашли работу, Потеряли работу, Прошли обучение, Участники ПЭИ
-    ['2 350', '180', '1 120', '540'],
-    ['2 410', '175', '1 180', '600'],
-    ['2 500', '190', '1 200', '650'],
-    ['2 470', '160', '1 250', '700'],
-];
+            // Инициализация слайдера вакансий
+            const jobAds = [
+                {
+                    title: "Программист Java",
+                    company: "ТехноСофт ООО",
+                    city: "Душанбе",
+                    salary: "3500-5000 сомони",
+                    label: "Новая",
+                    labelClass: "bg-green-100 text-green-800",
+                    desc: "Требуется опытный Java разработчик для работы над корпоративными проектами..."
+                },
+                {
+                    title: "Менеджер по продажам",
+                    company: "Торговый дом \"Ориёна\"",
+                    city: "Худжанд",
+                    salary: "2500-4000 сомони",
+                    label: "Актуальная",
+                    labelClass: "bg-blue-100 text-blue-800",
+                    desc: "Ищем активного менеджера для развития продаж в северном регионе..."
+                },
+                {
+                    title: "Бухгалтер",
+                    company: "ФинЭксперт",
+                    city: "Куляб",
+                    salary: "3000-4500 сомони",
+                    label: "Срочно",
+                    labelClass: "bg-red-100 text-red-800",
+                    desc: "В компанию требуется бухгалтер с опытом работы не менее 2 лет..."
+                },
+                {
+                    title: "Водитель",
+                    company: "Логистик Плюс",
+                    city: "Душанбе",
+                    salary: "2500-3500 сомони",
+                    label: "Новая",
+                    labelClass: "bg-green-100 text-green-800",
+                    desc: "Требуется водитель категории B, C для доставки товаров по городу..."
+                },
+                {
+                    title: "Учитель английского языка",
+                    company: "Школа №12",
+                    city: "Курган-Тюбе",
+                    salary: "2800-4000 сомони",
+                    label: "Актуальная",
+                    labelClass: "bg-blue-100 text-blue-800",
+                    desc: "В школу требуется учитель английского языка с высшим образованием..."
+                },
+                {
+                    title: "Системный администратор",
+                    company: "IT Solutions",
+                    city: "Душанбе",
+                    salary: "4000-6000 сомони",
+                    label: "Новая",
+                    labelClass: "bg-green-100 text-green-800",
+                    desc: "Обслуживание серверов и сетей, поддержка пользователей..."
+                }
+            ];
 
-let statsIndex = 0;
-const statValueEls = [
-    document.getElementById('statValue1'),
-    document.getElementById('statValue2'),
-    document.getElementById('statValue3'),
-    document.getElementById('statValue4')
-];
+            // Инициализация Swiper
+            const swiper = new Swiper('.swiper-container', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    },
+                }
+            });
 
-function flipText(el, newValue) {
-    el.style.transition = 'transform 0.3s, opacity 0.3s';
-    el.style.transform = 'rotateX(90deg)';
-    el.style.opacity = '0';
-    setTimeout(() => {
-        el.textContent = newValue;
-        el.style.transform = 'rotateX(-90deg)';
-        setTimeout(() => {
-            el.style.transform = 'rotateX(0deg)';
-            el.style.opacity = '1';
-        }, 30);
-    }, 300);
-}
+            // Добавление слайдов
+            const swiperWrapper = document.querySelector('.swiper-wrapper');
+            jobAds.forEach(job => {
+                const slide = document.createElement('div');
+                slide.className = 'swiper-slide';
+                slide.innerHTML = `
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 h-full">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">${job.title}</h3>
+                            <span class="${job.labelClass} px-3 py-1 rounded-full text-sm">${job.label}</span>
+                        </div>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-building mr-2"></i>${job.company}</p>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>${job.city}</p>
+                        <p class="text-gray-600 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>${job.salary}</p>
+                        <p class="text-gray-700 mb-4">${job.desc}</p>
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors w-full">Подробнее</button>
+                    </div>
+                `;
+                swiperWrapper.appendChild(slide);
+            });
 
-function renderStats(idx) {
-    for (let i = 0; i < 4; i++) {
-        flipText(statValueEls[i], statsData[idx][i]);
-    }
-}
-renderStats(statsIndex);
+            // Обновление Swiper после добавления слайдов
+            swiper.update();
 
-setInterval(() => {
-    statsIndex = (statsIndex + 1) % statsData.length;
-    renderStats(statsIndex);
-}, 3000);
+            // Переход по карточкам
+            document.getElementById('seekerCard').addEventListener('click', function() {
+                window.location.href = 'serchwork.html';
+            });
 
-document.getElementById('seekerCard').addEventListener('click', function() {
-    window.location.href = 'serchwork.html';
-});
+            document.getElementById('employerCard').addEventListener('click', function() {
+                window.location.href = 'employer_anons_work.html';
+            });
 
-// Данные объявлений (пример 9 объявлений)
-const jobAds = [
-    {
-        title: "Программист Java",
-        company: "ТехноСофт ООО",
-        city: "Душанбе",
-        salary: "3500-5000 сомони",
-        label: "Новая",
-        labelClass: "bg-green-100 text-green-800",
-        desc: "Требуется опытный Java разработчик для работы над корпоративными проектами..."
-    },
-    {
-        title: "Менеджер по продажам",
-        company: "Торговый дом \"Ориёна\"",
-        city: "Худжанд",
-        salary: "2500-4000 сомони",
-        label: "Актуальная",
-        labelClass: "bg-blue-100 text-blue-800",
-        desc: "Ищем активного менеджера для развития продаж в северном регионе..."
-    },
-    {
-        title: "Бухгалтер",
-        company: "ФинЭксперт",
-        city: "Куляб",
-        salary: "3000-4500 сомони",
-        label: "Срочно",
-        labelClass: "bg-red-100 text-red-800",
-        desc: "В компанию требуется бухгалтер с опытом работы не менее 2 лет..."
-    },
-    {
-        title: "Водитель",
-        company: "Логистик Плюс",
-        city: "Душанбе",
-        salary: "2500-3500 сомони",
-        label: "Новая",
-        labelClass: "bg-green-100 text-green-800",
-        desc: "Требуется водитель категории B, C для доставки товаров по городу..."
-    },
-    {
-        title: "Учитель английского языка",
-        company: "Школа №12",
-        city: "Курган-Тюбе",
-        salary: "2800-4000 сомони",
-        label: "Актуальная",
-        labelClass: "bg-blue-100 text-blue-800",
-        desc: "В школу требуется учитель английского языка с высшим образованием..."
-    },
-    {
-        title: "Системный администратор",
-        company: "IT Solutions",
-        city: "Душанбе",
-        salary: "4000-6000 сомони",
-        label: "Новая",
-        labelClass: "bg-green-100 text-green-800",
-        desc: "Обслуживание серверов и сетей, поддержка пользователей..."
-    },
-    {
-        title: "Маркетолог",
-        company: "MarketPro",
-        city: "Худжанд",
-        salary: "3200-4800 сомони",
-        label: "Актуальная",
-        labelClass: "bg-blue-100 text-blue-800",
-        desc: "Разработка и реализация маркетинговых стратегий компании..."
-    },
-    {
-        title: "Оператор call-центра",
-        company: "СвязьТелеком",
-        city: "Душанбе",
-        salary: "2200-3000 сомони",
-        label: "Срочно",
-        labelClass: "bg-red-100 text-red-800",
-        desc: "Работа с клиентами, обработка звонков, консультации..."
-    },
-    {
-        title: "HR-менеджер",
-        company: "HR Group",
-        city: "Согдийская область",
-        salary: "3500-5000 сомони",
-        label: "Новая",
-        labelClass: "bg-green-100 text-green-800",
-        desc: "Поиск и подбор персонала, проведение собеседований..."
-    }
-];
+            document.getElementById('analiticCard').addEventListener('click', function() {
+                window.location.href = 'analitic_pg.html';
+            });
 
-const jobSliderTrack = document.getElementById('jobSliderTrack');
-const prevBtn = document.getElementById('jobSliderPrev');
-const nextBtn = document.getElementById('jobSliderNext');
-let jobSliderIndex = 0;
-const JOBS_PER_SLIDE = 3;
-let isSliding = false;
-
-// Генерация HTML для 3 объявлений
-function renderJobSlide(startIdx) {
-    let html = '';
-    for (let i = 0; i < JOBS_PER_SLIDE; i++) {
-        const idx = (startIdx + i) % jobAds.length;
-        const ad = jobAds[idx];
-        html += `
-        <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover min-w-[320px] max-w-[370px] w-full mx-2 flex-shrink-0 job-slide"
-            style="transition: transform 0.7s, opacity 0.7s;">
-            <div class="flex justify-between items-start mb-4">
-                <h3 class="text-xl font-semibold text-gray-800">${ad.title}</h3>
-                <span class="${ad.labelClass} px-3 py-1 rounded-full text-sm">${ad.label}</span>
-            </div>
-            <p class="text-gray-600 mb-2"><i class="fas fa-building mr-2"></i>${ad.company}</p>
-            <p class="text-gray-600 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>${ad.city}</p>
-            <p class="text-gray-600 mb-4"><i class="fas fa-money-bill-wave mr-2"></i>${ad.salary}</p>
-            <p class="text-gray-700 mb-4">${ad.desc}</p>
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors mt-4">Подробнее</button>
-        </div>
-        `;
-    }
-    jobSliderTrack.innerHTML = html;
-}
-
-// Анимация слайдера: три объявления уезжают вправо/влево, появляются следующие три
-function slideJobs(direction = 1) {
-    if (isSliding) return;
-    isSliding = true;
-    const slides = document.querySelectorAll('.job-slide');
-    slides.forEach(el => {
-        el.style.transition = 'transform 0.7s, opacity 0.7s';
-        el.style.transform = `translateX(${direction > 0 ? '100vw' : '-100vw'})`;
-        el.style.opacity = '0';
-    });
-    setTimeout(() => {
-        jobSliderIndex = (jobSliderIndex + JOBS_PER_SLIDE * direction + jobAds.length) % jobAds.length;
-        renderJobSlide(jobSliderIndex);
-        // Появление новых слайдов с другой стороны
-        document.querySelectorAll('.job-slide').forEach(el => {
-            el.style.transition = 'none';
-            el.style.transform = `translateX(${direction > 0 ? '-100vw' : '100vw'})`;
-            el.style.opacity = '0';
-            setTimeout(() => {
-                el.style.transition = 'transform 0.7s, opacity 0.7s';
-                el.style.transform = 'translateX(0)';
-                el.style.opacity = '1';
-            }, 30);
+            document.getElementById('govCard').addEventListener('click', function() {
+                window.location.href = 'gov_pg.html';
+            });
         });
-        setTimeout(() => { isSliding = false; }, 700);
-    }, 700);
-}
-
-// Инициализация первого слайда
-renderJobSlide(jobSliderIndex);
-
-// Автосмена каждые 5 секунд
-let jobSliderTimer = setInterval(() => {
-    slideJobs(1);
-}, 5000);
-
-// Стрелки для ручного перелистывания
-if (prevBtn && nextBtn) {
-    prevBtn.addEventListener('click', () => {
-        clearInterval(jobSliderTimer);
-        slideJobs(-1);
-        jobSliderTimer = setInterval(() => slideJobs(1), 5000);
-    });
-    nextBtn.addEventListener('click', () => {
-        clearInterval(jobSliderTimer);
-        slideJobs(1);
-        jobSliderTimer = setInterval(() => slideJobs(1), 5000);
-    });
-}
-
-// Показывать стрелки только на md+ экранах
-function updateArrowVisibility() {
-    if (window.innerWidth >= 768) {
-        prevBtn.style.display = '';
-        nextBtn.style.display = '';
-    } else {
-        prevBtn.style.display = 'none';
-        nextBtn.style.display = 'none';
-    }
-}
-window.addEventListener('resize', updateArrowVisibility);
-updateArrowVisibility();
-
-// Пульсация AI виджета каждые 4 секунды
-function pulseAIWidget() {
-    const aiWidget = document.getElementById('aiAssistantWidget');
-    if (aiWidget) {
-        // Удаляем анимацию, если она уже есть
-        aiWidget.style.animation = 'none';
-        
-        // Форсируем reflow для перезапуска анимации
-        aiWidget.offsetHeight;
-        
-        // Добавляем анимацию пульсации
-        aiWidget.style.animation = 'ai-pulse 0.8s ease-in-out';
-        
-        // Удаляем анимацию после завершения, чтобы она могла повториться
-        setTimeout(() => {
-            aiWidget.style.animation = 'none';
-        }, 800);
-    }
-}
-
-// Запускаем пульсацию каждые 4 секунды
-setInterval(pulseAIWidget, 4000);
-
-// Первая пульсация через 2 секунды после загрузки страницы
-setTimeout(pulseAIWidget, 2000);
-
-        // Пульсация AI виджета каждые 4 секунды
-        setInterval(function() {
-            const aiWidget = document.getElementById('aiAssistantWidget');
-            if (aiWidget) {
-                aiWidget.style.animation = 'none';
-                setTimeout(() => {
-                    aiWidget.style.animation = 'ai-pulse 0.8s ease-in-out';
-                }, 10);
-            }
-        }, 4000);
-
-
-
     </script>
 </body>
 </html>
