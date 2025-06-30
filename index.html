@@ -521,16 +521,17 @@
     <section id="statistics" class="section-spacing bg-gray-100">
         <div class="container mx-auto px-4">
             <!-- Аккордеон для статистики -->
-            <div class="accordion-header statistics rounded-xl p-8 shadow-xl mb-6" onclick="toggleAccordion('statisticsContent', 'statisticsIcon')">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center space-x-4">
-                        <i class="fas fa-chart-line text-4xl"></i>
-                        <h2 class="text-3xl font-bold">Статистика рынка труда</h2>
+            <div class="max-w-3xl mx-auto">
+                <div class="accordion-header statistics rounded-xl p-8 shadow-xl mb-6" onclick="toggleAccordion('statisticsContent', 'statisticsIcon')">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-4">
+                            <i class="fas fa-chart-line text-4xl"></i>
+                            <h2 class="text-3xl font-bold">Статистика рынка труда</h2>
+                        </div>
+                        <i id="statisticsIcon" class="fas fa-chevron-down text-3xl accordion-icon"></i>
                     </div>
-                    <i id="statisticsIcon" class="fas fa-chevron-down text-3xl accordion-icon"></i>
-                </div>
-                <p class="mt-2 text-lg opacity-90">Подробная аналитика и отчеты по рынку труда</p>
-            </div>
+                    <p class="mt-2 text-lg opacity-90">Подробная аналитика и отчеты по рынку труда</p>
+                </div></div>
             
             <div id="statisticsContent" class="accordion-content">
                 <div class="flex justify-center mb-8">
@@ -588,8 +589,9 @@
 
     <section id="programs" class="section-spacing bg-white">
         <div class="container mx-auto px-4">
-            <!-- Аккордеон для программ трудоустройства -->
-            <div class="accordion-header programs rounded-xl p-8 shadow-xl mb-6" onclick="toggleAccordion('programsContent', 'programsIcon')">
+            <div class="max-w-3xl mx-auto">
+                <!-- Аккордеон для программ трудоустройства -->
+                <div class="accordion-header programs rounded-xl p-8 shadow-xl mb-6" onclick="toggleAccordion('programsContent', 'programsIcon')">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-4">
                         <i class="fas fa-rocket text-4xl"></i>
@@ -700,8 +702,9 @@
 
     <section id="education" class="section-spacing bg-gray-100">
         <div class="container mx-auto px-4">
-            <!-- Аккордеон для образовательных ресурсов -->
-            <div class="accordion-header education rounded-xl p-8 shadow-xl mb-6" onclick="toggleAccordion('educationContent', 'educationIcon')">
+            <div class="max-w-3xl mx-auto">
+                <!-- Аккордеон для образовательных ресурсов -->
+                <div class="accordion-header education rounded-xl p-8 shadow-xl mb-6" onclick="toggleAccordion('educationContent', 'educationIcon')">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-4">
                         <i class="fas fa-brain text-4xl"></i>
@@ -790,7 +793,7 @@
     <section class="section-spacing bg-white">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Контактная информация</h2>
-            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+            <div class="max-w-3xl mx-auto grid md:grid-cols-2 gap-8">
                 <div class="space-y-6">
                     <div class="flex items-start space-x-4">
                         <i class="fas fa-map-marker-alt text-2xl text-blue-500 mt-1"></i>
