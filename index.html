@@ -210,28 +210,110 @@
         /* Стили для аккордеонов */
         .accordion-header {
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .accordion-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .accordion-header:hover::before {
+            left: 100%;
+        }
+        
         .accordion-header:hover {
-            border-color: #3b82f6;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
         }
+        
+        .accordion-header.statistics {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .accordion-header.programs {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .accordion-header.education {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease-in-out, padding 0.3s ease;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(-20px);
         }
+        
         .accordion-content.active {
-            max-height: 2000px;
-            padding-top: 1rem;
+            max-height: 3000px;
+            opacity: 1;
+            transform: translateY(0);
+            padding-top: 2rem;
+            margin-top: 1rem;
         }
+        
         .accordion-icon {
-            transition: transform 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
+        
         .accordion-icon.rotated {
-            transform: rotate(180deg);
+            transform: rotate(180deg) scale(1.1);
+        }
+        
+        .accordion-header h2 {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        /* Анимация появления контента */
+        .accordion-content > * {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .accordion-content.active > * {
+            animation-delay: 0.2s;
+        }
+        
+        .accordion-content.active > *:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        
+        .accordion-content.active > *:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Эффект пульсации для иконок */
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .accordion-header:hover .accordion-icon {
+            animation: iconPulse 2s infinite;
         }
     </style>
 </head>
@@ -439,28 +521,38 @@
     <section id="statistics" class="section-spacing bg-gray-100">
         <div class="container mx-auto px-4">
             <!-- Аккордеон для статистики -->
-            <div class="accordion-header bg-white rounded-lg p-6 shadow-lg mb-4" onclick="toggleAccordion('statisticsContent', 'statisticsIcon')">
+            <div class="accordion-header statistics rounded-xl p-8 shadow-xl mb-6" onclick="toggleAccordion('statisticsContent', 'statisticsIcon')">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-3xl font-bold text-gray-800">Статистика рынка труда</h2>
-                    <i id="statisticsIcon" class="fas fa-chevron-down text-2xl text-blue-500 accordion-icon"></i>
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-chart-line text-4xl"></i>
+                        <h2 class="text-3xl font-bold">Статистика рынка труда</h2>
+                    </div>
+                    <i id="statisticsIcon" class="fas fa-chevron-down text-3xl accordion-icon"></i>
                 </div>
+                <p class="mt-2 text-lg opacity-90">Подробная аналитика и отчеты по рынку труда</p>
             </div>
             
             <div id="statisticsContent" class="accordion-content">
                 <div class="flex justify-center mb-8">
-                    <a href="analitic_pg.html" class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors shadow">
-                        Подробнее
+                    <a href="analitic_pg.html" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-external-link-alt mr-2"></i>Подробнее
                     </a>
                 </div>
                 <div class="grid lg:grid-cols-2 gap-8">
-                    <div class="bg-white rounded-lg p-6 shadow-lg">
-                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Уровень безработицы по регионам</h3>
+                    <div class="bg-white rounded-xl p-8 shadow-xl transform hover:scale-105 transition-all duration-300">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+                            <i class="fas fa-map-marked-alt text-blue-500 mr-3"></i>
+                            Уровень безработицы по регионам
+                        </h3>
                         <div class="chart-container">
                             <canvas id="unemploymentChart"></canvas>
                         </div>
                     </div>
-                    <div class="bg-white rounded-lg p-6 shadow-lg">
-                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Популярные профессии</h3>
+                    <div class="bg-white rounded-xl p-8 shadow-xl transform hover:scale-105 transition-all duration-300">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+                            <i class="fas fa-users-cog text-purple-500 mr-3"></i>
+                            Популярные профессии
+                        </h3>
                         <div class="chart-container">
                             <canvas id="professionsChart"></canvas>
                         </div>
@@ -468,25 +560,25 @@
                 </div>
                 
                 <div class="grid md:grid-cols-4 gap-6 mt-8">
-                    <div class="bg-white rounded-lg p-6 text-center shadow-lg card-hover">
-                        <i class="fas fa-users text-4xl text-blue-500 mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800">47,382</h3>
-                        <p class="text-gray-600">Зарегистрированных соискателей</p>
+                    <div class="bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl p-6 text-center shadow-lg text-white transform hover:scale-105 transition-all duration-300">
+                        <i class="fas fa-users text-4xl mb-4 opacity-90"></i>
+                        <h3 class="text-2xl font-bold">47,382</h3>
+                        <p class="opacity-90">Зарегистрированных соискателей</p>
                     </div>
-                    <div class="bg-white rounded-lg p-6 text-center shadow-lg card-hover">
-                        <i class="fas fa-briefcase text-4xl text-green-500 mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800">12,456</h3>
-                        <p class="text-gray-600">Активных вакансий</p>
+                    <div class="bg-gradient-to-br from-green-400 to-green-600 rounded-xl p-6 text-center shadow-lg text-white transform hover:scale-105 transition-all duration-300">
+                        <i class="fas fa-briefcase text-4xl mb-4 opacity-90"></i>
+                        <h3 class="text-2xl font-bold">12,456</h3>
+                        <p class="opacity-90">Активных вакансий</p>
                     </div>
-                    <div class="bg-white rounded-lg p-6 text-center shadow-lg card-hover">
-                        <i class="fas fa-handshake text-4xl text-purple-500 mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800">8,921</h3>
-                        <p class="text-gray-600">Успешных трудоустройств</p>
+                    <div class="bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl p-6 text-center shadow-lg text-white transform hover:scale-105 transition-all duration-300">
+                        <i class="fas fa-handshake text-4xl mb-4 opacity-90"></i>
+                        <h3 class="text-2xl font-bold">8,921</h3>
+                        <p class="opacity-90">Успешных трудоустройств</p>
                     </div>
-                    <div class="bg-white rounded-lg p-6 text-center shadow-lg card-hover">
-                        <i class="fas fa-building text-4xl text-orange-500 mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800">3,247</h3>
-                        <p class="text-gray-600">Зарегистрированных работодателей</p>
+                    <div class="bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl p-6 text-center shadow-lg text-white transform hover:scale-105 transition-all duration-300">
+                        <i class="fas fa-building text-4xl mb-4 opacity-90"></i>
+                        <h3 class="text-2xl font-bold">3,247</h3>
+                        <p class="opacity-90">Зарегистрированных работодателей</p>
                     </div>
                 </div>
             </div>
@@ -497,96 +589,108 @@
     <section id="programs" class="section-spacing bg-white">
         <div class="container mx-auto px-4">
             <!-- Аккордеон для программ трудоустройства -->
-            <div class="accordion-header bg-gray-100 rounded-lg p-6 shadow-lg mb-4" onclick="toggleAccordion('programsContent', 'programsIcon')">
+            <div class="accordion-header programs rounded-xl p-8 shadow-xl mb-6" onclick="toggleAccordion('programsContent', 'programsIcon')">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-3xl font-bold text-gray-800">Программы трудоустройства</h2>
-                    <i id="programsIcon" class="fas fa-chevron-down text-2xl text-green-500 accordion-icon"></i>
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-rocket text-4xl"></i>
+                        <h2 class="text-3xl font-bold">Программы трудоустройства</h2>
+                    </div>
+                    <i id="programsIcon" class="fas fa-chevron-down text-3xl accordion-icon"></i>
                 </div>
+                <p class="mt-2 text-lg opacity-90">Карьерные возможности и профессиональное развитие</p>
             </div>
             
             <div id="programsContent" class="accordion-content">
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="bg-white rounded-lg p-6 shadow-lg card-hover">
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-8 shadow-xl transform hover:scale-105 transition-all duration-300 border border-blue-200">
                         <div class="text-center mb-6">
-                            <i class="fas fa-graduation-cap text-4xl text-blue-500 mb-4"></i>
+                            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                <i class="fas fa-graduation-cap text-2xl text-white"></i>
+                            </div>
                             <h3 class="text-xl font-semibold text-gray-800">Профессиональная переподготовка</h3>
                         </div>
-                        <ul class="space-y-3 text-gray-700">
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
+                        <ul class="space-y-3 text-gray-700 mb-6">
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-green-400 to-green-600 rounded-full"></div>
                                 <span>IT технологии</span>
                             </li>
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-green-400 to-green-600 rounded-full"></div>
                                 <span>Бухгалтерский учет</span>
                             </li>
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-green-400 to-green-600 rounded-full"></div>
                                 <span>Туризм и гостеприимство</span>
                             </li>
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-green-400 to-green-600 rounded-full"></div>
                                 <span>Строительные специальности</span>
                             </li>
                         </ul>
-                        <button class="mt-6 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors" id="profSkillApplyBtn">Подать заявку</button>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg p-6 shadow-lg card-hover">
-                        <div class="text-center mb-6">
-                            <i class="fas fa-seedling text-4xl text-green-500 mb-4"></i>
-                            <h3 class="text-xl font-semibold text-gray-800">Поддержка предпринимательства</h3>
-                        </div>
-                        <ul class="space-y-3 text-gray-700">
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
-                                <span>Микрокредитование</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
-                                <span>Бизнес-консультации</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
-                                <span>Обучение основам бизнеса</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
-                                <span>Налоговые льготы</span>
-                            </li>
-                        </ul>
-                        <button class="mt-6 w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors"
-                onclick="window.location.href='micro_credit.html'">
-                        Узнать больше
+                        <button class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all transform hover:scale-105 shadow-lg font-semibold" id="profSkillApplyBtn">
+                            <i class="fas fa-paper-plane mr-2"></i>Подать заявку
                         </button>
                     </div>
                     
-                    <div class="bg-white rounded-lg p-6 shadow-lg card-hover">
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl p-8 shadow-xl transform hover:scale-105 transition-all duration-300 border border-green-200">
                         <div class="text-center mb-6">
-                            <i class="fas fa-users text-4xl text-purple-500 mb-4"></i>
+                            <div class="bg-gradient-to-br from-green-500 to-emerald-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                <i class="fas fa-seedling text-2xl text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-800">Поддержка предпринимательства</h3>
+                        </div>
+                        <ul class="space-y-3 text-gray-700 mb-6">
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                                <span>Микрокредитование</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                                <span>Бизнес-консультации</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                                <span>Обучение основам бизнеса</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                                <span>Налоговые льготы</span>
+                            </li>
+                        </ul>
+                        <button class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all transform hover:scale-105 shadow-lg font-semibold"
+                        onclick="window.location.href='micro_credit.html'">
+                            <i class="fas fa-info-circle mr-2"></i>Узнать больше
+                        </button>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-100 rounded-xl p-8 shadow-xl transform hover:scale-105 transition-all duration-300 border border-purple-200">
+                        <div class="text-center mb-6">
+                            <div class="bg-gradient-to-br from-purple-500 to-pink-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                <i class="fas fa-users text-2xl text-white"></i>
+                            </div>
                             <h3 class="text-xl font-semibold text-gray-800">Молодежные программы</h3>
                         </div>
-                        <ul class="space-y-3 text-gray-700">
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
+                        <ul class="space-y-3 text-gray-700 mb-6">
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-600 rounded-full"></div>
                                 <span>Стажировки в госучреждениях</span>
                             </li>
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-600 rounded-full"></div>
                                 <span>Программы наставничества</span>
                             </li>
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-600 rounded-full"></div>
                                 <span>Карьерное консультирование</span>
                             </li>
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-check text-green-500"></i>
+                            <li class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-600 rounded-full"></div>
                                 <span>Развитие soft skills</span>
                             </li>
                         </ul>
-                        <button class="mt-6 w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 transition-colors"
-                onclick="window.location.href='youth_programs.html'">
-                        Присоединиться
+                        <button class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 rounded-xl hover:from-purple-600 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg font-semibold"
+                        onclick="window.location.href='youth_programs.html'">
+                            <i class="fas fa-hand-peace mr-2"></i>Присоединиться
                         </button>
                     </div>
                 </div>
@@ -597,66 +701,80 @@
     <section id="education" class="section-spacing bg-gray-100">
         <div class="container mx-auto px-4">
             <!-- Аккордеон для образовательных ресурсов -->
-            <div class="accordion-header bg-white rounded-lg p-6 shadow-lg mb-4" onclick="toggleAccordion('educationContent', 'educationIcon')">
+            <div class="accordion-header education rounded-xl p-8 shadow-xl mb-6" onclick="toggleAccordion('educationContent', 'educationIcon')">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-3xl font-bold text-gray-800">Образовательные ресурсы</h2>
-                    <i id="educationIcon" class="fas fa-chevron-down text-2xl text-purple-500 accordion-icon"></i>
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-brain text-4xl"></i>
+                        <h2 class="text-3xl font-bold">Образовательные ресурсы</h2>
+                    </div>
+                    <i id="educationIcon" class="fas fa-chevron-down text-3xl accordion-icon"></i>
                 </div>
+                <p class="mt-2 text-lg opacity-90">Курсы, тренинги и сертификационные программы</p>
             </div>
             
             <div id="educationContent" class="accordion-content">
                 <div class="max-w-6xl mx-auto">
                     <div class="grid md:grid-cols-2 gap-8 mb-12">
-                        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-8 text-white">
-                            <h3 class="text-2xl font-bold mb-4">Онлайн курсы</h3>
-                            <p class="mb-6">Получите новые навыки с помощью наших бесплатных онлайн курсов, разработанных совместно с ведущими образовательными учреждениями.</p>
+                        <div class="bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 rounded-xl p-8 text-white shadow-xl transform hover:scale-105 transition-all duration-300">
+                            <h3 class="text-3xl font-bold mb-4 flex items-center">
+                                <i class="fas fa-laptop-code mr-3"></i>
+                                Онлайн курсы
+                            </h3>
+                            <p class="mb-6 text-lg opacity-90">Получите новые навыки с помощью наших бесплатных онлайн курсов, разработанных совместно с ведущими образовательными учреждениями.</p>
                             <div class="grid grid-cols-2 gap-4 mb-6">
-                                <div class="bg-white bg-opacity-20 rounded-lg p-4">
-                                    <i class="fas fa-laptop-code text-2xl mb-2"></i>
+                                <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 transform hover:scale-105 transition-all duration-300">
+                                    <i class="fas fa-laptop-code text-3xl mb-2"></i>
                                     <p class="font-semibold">Программирование</p>
                                 </div>
-                                <div class="bg-white bg-opacity-20 rounded-lg p-4">
-                                    <i class="fas fa-language text-2xl mb-2"></i>
+                                <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 transform hover:scale-105 transition-all duration-300">
+                                    <i class="fas fa-language text-3xl mb-2"></i>
                                     <p class="font-semibold">Языки</p>
                                 </div>
-                                <div class="bg-white bg-opacity-20 rounded-lg p-4">
-                                    <i class="fas fa-chart-bar text-2xl mb-2"></i>
+                                <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 transform hover:scale-105 transition-all duration-300">
+                                    <i class="fas fa-chart-bar text-3xl mb-2"></i>
                                     <p class="font-semibold">Управление</p>
                                 </div>
-                                <div class="bg-white bg-opacity-20 rounded-lg p-4">
-                                    <i class="fas fa-tools text-2xl mb-2"></i>
+                                <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 transform hover:scale-105 transition-all duration-300">
+                                    <i class="fas fa-tools text-3xl mb-2"></i>
                                     <p class="font-semibold">Ремесла</p>
                                 </div>
                             </div>
-                            <a href="skill_serch.html" class="inline-block mt-4 bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors shadow">
+                            <a href="skill_serch.html" class="inline-block bg-white text-gray-900 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg">
+                                <i class="fas fa-arrow-right mr-2"></i>
                                 Перейти к каталогу образовательных ресурсов
-                                <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
                         
                         <div class="space-y-6">
-                            <div class="bg-blue-50 p-6 rounded-lg">
-                                <h4 class="text-lg font-semibold mb-4 text-blue-800">Вебинары и мастер-классы</h4>
-                                <div class="space-y-3">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-700">Как составить резюме</span>
-                                        <span class="text-sm text-blue-600">15 ноября</span>
+                            <div class="bg-gradient-to-br from-blue-50 to-cyan-100 p-8 rounded-xl shadow-xl border border-blue-200 transform hover:scale-105 transition-all duration-300">
+                                <h4 class="text-xl font-semibold mb-6 text-blue-800 flex items-center">
+                                    <i class="fas fa-video text-blue-600 mr-3"></i>
+                                    Вебинары и мастер-классы
+                                </h4>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
+                                        <span class="text-gray-700 font-medium">Как составить резюме</span>
+                                        <span class="text-sm text-blue-600 bg-blue-100 px-3 py-1 rounded-full">15 ноября</span>
                                     </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-700">Подготовка к собеседованию</span>
-                                        <span class="text-sm text-blue-600">22 ноября</span>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
+                                        <span class="text-gray-700 font-medium">Подготовка к собеседованию</span>
+                                        <span class="text-sm text-blue-600 bg-blue-100 px-3 py-1 rounded-full">22 ноября</span>
                                     </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-700">Основы цифрового маркетинга</span>
-                                        <span class="text-sm text-blue-600">29 ноября</span>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
+                                        <span class="text-gray-700 font-medium">Основы цифрового маркетинга</span>
+                                        <span class="text-sm text-blue-600 bg-blue-100 px-3 py-1 rounded-full">29 ноября</span>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="bg-green-50 p-6 rounded-lg">
-                                <h4 class="text-lg font-semibold mb-4 text-green-800">Сертификационные программы</h4>
-                                <p class="text-gray-700 mb-4">Получите официальные сертификаты, признаваемые работодателями по всей стране.</p>
-                                <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                            <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-8 rounded-xl shadow-xl border border-green-200 transform hover:scale-105 transition-all duration-300">
+                                <h4 class="text-xl font-semibold mb-4 text-green-800 flex items-center">
+                                    <i class="fas fa-certificate text-green-600 mr-3"></i>
+                                    Сертификационные программы
+                                </h4>
+                                <p class="text-gray-700 mb-6">Получите официальные сертификаты, признаваемые работодателями по всей стране.</p>
+                                <button class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all transform hover:scale-105 shadow-lg font-semibold">
+                                    <i class="fas fa-eye mr-2"></i>
                                     Просмотреть программы
                                 </button>
                             </div>
