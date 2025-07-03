@@ -101,6 +101,22 @@
         .menu a:first-child {
             margin-top: 4rem;
         }
+
+        /* Исправление выравнивания элементов меню */
+        .menu {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-top: 4rem; /* Учитываем отступ для значка меню */
+        }
+
+        .menu a {
+            width: 100%;
+        }
+
+        .menu a:first-child {
+            margin-top: 0; /* Убираем лишний отступ */
+        }
     </style>
 </head>
 <body class="flex items-center justify-center w-screen h-screen p-10 bg-gray-300">
