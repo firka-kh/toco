@@ -117,6 +117,16 @@
         .menu a:first-child {
             margin-top: 0; /* Убираем лишний отступ */
         }
+
+        /* Градиентный фон для меню */
+        .menu {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: background 0.5s ease;
+        }
+
+        .menu:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
     </style>
 </head>
 <body class="flex items-center justify-center w-screen h-screen p-10 bg-gray-300">
