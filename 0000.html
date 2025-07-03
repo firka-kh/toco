@@ -118,14 +118,25 @@
             margin-top: 0; /* Убираем лишний отступ */
         }
 
-        /* Градиентный фон для меню */
+        /* Градиентный фон для меню с более темными цветами */
         .menu {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
             transition: background 0.5s ease;
         }
 
         .menu:hover {
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+        }
+
+        /* Эффект рулона бумаги для меню */
+        .menu {
+            transform-origin: top left;
+            transform: scaleY(0);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .menu.open {
+            transform: scaleY(1);
         }
     </style>
 </head>
