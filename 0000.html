@@ -185,6 +185,16 @@
             const menu = document.querySelector('.menu');
             menu.classList.toggle('open');
         }
+
+        // Закрытие меню при клике вне его области
+        document.addEventListener('click', (event) => {
+            const menu = document.querySelector('.menu');
+            const toggleButton = document.querySelector('.menu-toggle');
+
+            if (!menu.contains(event.target) && !toggleButton.contains(event.target)) {
+                menu.classList.remove('open');
+            }
+        });
     </script>
 </body>
 </html>
