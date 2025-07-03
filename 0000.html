@@ -36,6 +36,17 @@
             display: inline;
             opacity: 1;
         }
+
+        /* Стили для подменю */
+        .submenu {
+            display: none;
+            flex-direction: column;
+            margin-left: 1.5rem;
+        }
+
+        .menu-item:hover .submenu {
+            display: flex;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center w-screen h-screen p-10 bg-gray-300">
@@ -96,14 +107,16 @@
             </a>
         </div>
         <div class="mt-3 border-t border-gray-700">
-            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="user_dashboard.html">
-                <i class="fas fa-user-circle text-lg"></i>
-                <span class="text-sm font-medium">Мой профиль</span>
-            </a>
-            <div class="ml-8">
-                <a class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="user_profile.html">Настройки профиля</a>
-                <a class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="employer_profile.html">Кабинет работодателя</a>
-                <a class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="register.html">Регистрация</a>
+            <div class="menu-item">
+                <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#">
+                    <i class="fas fa-user-circle text-lg"></i>
+                    <span class="text-sm font-medium">Мой профиль</span>
+                </a>
+                <div class="submenu">
+                    <a class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="user_profile.html">Настройки профиля</a>
+                    <a class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="employer_profile.html">Кабинет работодателя</a>
+                    <a class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="register.html">Регистрация</a>
+                </div>
             </div>
         </div>
         <a class="flex items-center justify-start px-4 py-3 mt-auto space-x-3 bg-gray-800 hover:bg-gray-700 hover:text-gray-300" href="#">
