@@ -165,13 +165,49 @@
         .menu.open {
             transform: scaleY(1);
         }
+
+        /* Вертикальная надпись "Меню" */
+        .menu-label {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            background: #4a5568;
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .menu-label:hover {
+            background: #2d3748;
+        }
+
+        .menu {
+            position: absolute;
+            top: 50%;
+            left: 2.5rem;
+            transform: translateY(-50%) scaleY(0);
+            width: 14rem;
+            padding: 0.5rem;
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transform-origin: top;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .menu.open {
+            transform: translateY(-50%) scaleY(1);
+        }
     </style>
 </head>
 <body class="flex items-center justify-center w-screen h-screen p-10 bg-gray-300">
-    <!-- Значок меню -->
-    <button class="menu-toggle" onclick="toggleMenu()">
-        <i class="fas fa-bars"></i>
-    </button>
+    <!-- Вертикальная надпись "Меню" -->
+    <div class="menu-label" onclick="toggleMenu()">Меню</div>
 
     <!-- Component Start -->
     <div class="menu flex flex-col w-16 h-full overflow-hidden text-gray-400 bg-gray-900 rounded">
