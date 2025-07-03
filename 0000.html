@@ -169,24 +169,41 @@
 
         /* Меню под размер кнопки и выплывающее из нее */
         .menu {
-            position: absolute;
-            top: 4rem; /* Расположение под кнопкой меню */
-            left: 1rem;
-            width: 12rem; /* Размер меню */
-            height: auto;
-            transform-origin: top;
-            transform: scaleY(0);
-            transition: transform 0.3s ease-in-out;
+            position: fixed;
+            top: 50%;
+            left: 2.5rem;
+            transform: translateY(-50%) scaleY(0);
+            width: 14rem; /* Размер меню */
+            padding: 0.5rem;
             background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
             border-radius: 0.5rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .menu.open {
-            transform: scaleY(1);
+            transform: translateY(-50%) scaleY(1);
         }
 
-        /* Вертикальная надпись "Меню" */
+        /* Анимация дрожания и переливания цвета для кнопки меню */
+        @keyframes menuLabelShake {
+            0%, 100% {
+                transform: translateY(-50%) rotate(0deg);
+                background: #4a5568;
+            }
+            25% {
+                transform: translateY(-48%) rotate(-2deg);
+                background: #5a6678;
+            }
+            50% {
+                transform: translateY(-50%) rotate(2deg);
+                background: #3a4558;
+            }
+            75% {
+                transform: translateY(-52%) rotate(-1deg);
+                background: #4a5568;
+            }
+        }
+
         .menu-label {
             position: fixed;
             top: 50%;
@@ -200,6 +217,7 @@
             border-radius: 0 0.5rem 0.5rem 0;
             cursor: pointer;
             transition: background 0.3s ease;
+            animation: menuLabelShake 2s infinite;
         }
 
         .menu-label:hover {
