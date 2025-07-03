@@ -76,12 +76,38 @@
             top: 0;
             left: 0;
             height: 100%;
+            width: 14rem;
             transform: translateX(-100%);
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            border-radius: 0 0.75rem 0.75rem 0;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transform-origin: left;
             transition: transform 0.3s ease-in-out;
         }
 
         .menu.open {
             transform: translateX(0);
+        }
+
+        /* Кнопка меню посередине левой части страницы */
+        .menu-label {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            background: #4a5568;
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            animation: menuLabelShake 2s infinite;
+        }
+
+        .menu-label:hover {
+            background: #2d3748;
         }
 
         /* Отделение значка меню от самого меню */
