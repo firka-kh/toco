@@ -138,6 +138,25 @@
         .menu.open {
             transform: scaleY(1);
         }
+
+        /* Меню под размер кнопки и выплывающее из нее */
+        .menu {
+            position: absolute;
+            top: 2.5rem; /* Расположение под кнопкой меню */
+            left: 1rem;
+            width: 12rem; /* Размер меню */
+            height: auto;
+            transform-origin: top;
+            transform: scaleY(0);
+            transition: transform 0.3s ease-in-out;
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu.open {
+            transform: scaleY(1);
+        }
     </style>
 </head>
 <body class="flex items-center justify-center w-screen h-screen p-10 bg-gray-300">
