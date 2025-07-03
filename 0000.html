@@ -47,9 +47,63 @@
         .menu-item:hover .submenu {
             display: flex;
         }
+
+        /* Стили для выравнивания элементов по левой стороне */
+        .menu a {
+            justify-content: flex-start;
+        }
+
+        .menu a i {
+            margin-right: 0.75rem;
+        }
+
+        .submenu a {
+            justify-content: flex-start;
+            padding-left: 2rem;
+        }
+
+        /* Скрытие меню по умолчанию */
+        .menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .menu.open {
+            transform: translateX(0);
+        }
+
+        /* Стили для значка меню */
+        .menu-toggle {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1000;
+            cursor: pointer;
+            background: #1f2937;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle i {
+            color: #fff;
+            font-size: 1.5rem;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center w-screen h-screen p-10 bg-gray-300">
+    <!-- Значок меню -->
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <!-- Component Start -->
     <div class="menu flex flex-col w-16 h-full overflow-hidden text-gray-400 bg-gray-900 rounded">
         <a class="flex items-center px-4 py-3 mt-3 hover:bg-gray-700 hover:text-gray-300" href="index.html">
@@ -125,5 +179,12 @@
         </a>
     </div>
     <!-- Component End -->
+
+    <script>
+        function toggleMenu() {
+            const menu = document.querySelector('.menu');
+            menu.classList.toggle('open');
+        }
+    </script>
 </body>
 </html>
