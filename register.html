@@ -7,20 +7,211 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
+        /* Основные стили дизайна сайта */
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         .section-spacing {
             padding: 3rem 0;
         }
-        .focus-outline {
-            outline: 3px solid #667eea !important;
-            outline-offset: 2px;
+        
+        /* Улучшенные стили для формы регистрации */
+        .registration-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
         }
-        .aria-error {
+        
+        .registration-card:hover {
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Стили для полей ввода */
+        .form-input {
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            font-size: 17px; /* ≥16pt для доступности */
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        
+        .form-input:focus {
+            outline: 3px solid #667eea;
+            outline-offset: 2px;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-input:invalid {
+            border-color: #dc2626;
+            background: #fef2f2;
+        }
+        
+        .form-select {
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            font-size: 17px;
+            background: #fafafa;
+            transition: all 0.3s ease;
+        }
+        
+        .form-select:focus {
+            outline: 3px solid #667eea;
+            outline-offset: 2px;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        /* Стили для кнопок */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 17px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 17px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+            transform: translateY(-1px);
+        }
+        
+        /* Стили для ошибок */
+        .error-message {
             color: #dc2626;
-            font-size: 1rem;
+            font-size: 16px;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #fef2f2;
+            border-radius: 0.5rem;
+            border-left: 4px solid #dc2626;
+        }
+        
+        .success-message {
+            color: #059669;
+            font-size: 16px;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #ecfdf5;
+            border-radius: 0.5rem;
+            border-left: 4px solid #059669;
+        }
+        
+        /* Стили для меток обязательных полей */
+        .required-mark {
+            color: #dc2626;
+            font-weight: bold;
+        }
+        
+        /* Стили для выбора метода регистрации */
+        .method-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .method-option {
+            padding: 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: #fafafa;
+        }
+        
+        .method-option:hover {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+        
+        .method-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+        
+        .method-icon {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            .method-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-input, .form-select, .btn-primary, .btn-secondary {
+                font-size: 18px; /* Увеличенный размер для мобильных */
+                padding: 1.25rem;
+            }
+        }
+        
+        /* Стили для индикатора загрузки */
+        .loading-spinner {
+            border: 3px solid rgba(102, 126, 234, 0.3);
+            border-left-color: #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Стили для подсказок */
+        .field-hint {
+            font-size: 14px;
+            color: #6b7280;
             margin-top: 0.25rem;
+        }
+        
+        /* Высококонтрастный режим для доступности */
+        @media (prefers-contrast: high) {
+            .form-input, .form-select {
+                border-width: 3px;
+                border-color: #000;
+            }
+            
+            .form-input:focus, .form-select:focus {
+                border-color: #000;
+                outline: 4px solid #000;
+            }
         }
     </style>
 </head>
@@ -121,75 +312,251 @@
     </header>
 
     <main>
-    <section class="section-spacing bg-white">
-        <div class="container mx-auto px-4 max-w-lg">
-            <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Регистрация на портале</h2>
-            <form class="bg-gray-50 rounded-lg shadow-lg p-8 space-y-6" id="registerForm" autocomplete="off" aria-label="Форма регистрации">
-                <div>
-                    <label for="registerMethod" class="block text-gray-700 font-medium mb-2">Способ регистрации <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <select id="registerMethod" name="registerMethod" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" aria-required="true" aria-describedby="registerMethodHelp">
-                        <option value="">-- Выберите --</option>
-                        <option value="email">По Email</option>
-                        <option value="phone">По номеру телефона</option>
-                        <option value="nsz">По номеру социальной защиты (НСЗ)</option>
-                    </select>
-                    <div id="registerMethodHelp" class="text-sm text-gray-500 mt-1">Выберите удобный способ регистрации</div>
+    <section class="section-spacing bg-gray-50">
+        <div class="container mx-auto px-4 max-w-2xl">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Создание учетной записи</h2>
+                <p class="text-lg text-gray-600">Выберите удобный способ регистрации на портале рынка труда</p>
+            </div>
+            
+            <div class="registration-card p-8">
+                <!-- Выбор метода регистрации -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Способ регистрации <span class="required-mark">*</span></h3>
+                    <div class="method-selector">
+                        <div class="method-option" data-method="email" role="button" tabindex="0" aria-label="Регистрация через email">
+                            <div class="method-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-800">Email</h4>
+                            <p class="text-sm text-gray-600 mt-2">Стандартный способ через электронную почту</p>
+                        </div>
+                        
+                        <div class="method-option" data-method="phone" role="button" tabindex="0" aria-label="Регистрация через телефон">
+                            <div class="method-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-800">Телефон</h4>
+                            <p class="text-sm text-gray-600 mt-2">Быстрая регистрация через SMS</p>
+                        </div>
+                        
+                        <div class="method-option" data-method="nsz" role="button" tabindex="0" aria-label="Регистрация через НСЗ">
+                            <div class="method-icon">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-800">НСЗ</h4>
+                            <p class="text-sm text-gray-600 mt-2">Через Национальный реестр социальной защиты</p>
+                        </div>
+                    </div>
                 </div>
-                <div id="dynamicFields"></div>
-                <div>
-                    <label for="fullname" class="block text-gray-700 font-medium mb-2">ФИО <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <input type="text" id="fullname" name="fullname" required aria-required="true" aria-label="Введите ваше полное имя" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите ваше ФИО">
+
+                <form id="registrationForm" class="space-y-6" autocomplete="off" aria-label="Форма регистрации" novalidate>
+                    <!-- Скрытое поле для выбранного метода -->
+                    <input type="hidden" id="selectedMethod" name="registrationMethod" required>
+                    
+                    <!-- Динамические поля для контактной информации -->
+                    <div id="contactFields" class="hidden">
+                        <!-- Поля будут добавлены динамически -->
+                    </div>
+                    
+                    <!-- ФИО (обязательное поле) -->
+                    <div>
+                        <label for="fullName" class="block text-gray-700 font-semibold mb-2 text-lg">
+                            Полное имя <span class="required-mark">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            name="fullName" 
+                            required 
+                            aria-required="true" 
+                            aria-describedby="fullNameHint fullNameError"
+                            class="form-input w-full" 
+                            placeholder="Введите ваше полное имя"
+                            minlength="2"
+                            maxlength="100"
+                        >
+                        <div id="fullNameHint" class="field-hint">Введите ваше полное имя как в документах</div>
+                        <div id="fullNameError" class="error-message hidden" role="alert"></div>
+                    </div>
+                    
+                    <!-- Пароль (обязательное поле) -->
+                    <div>
+                        <label for="password" class="block text-gray-700 font-semibold mb-2 text-lg">
+                            Пароль <span class="required-mark">*</span>
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                required 
+                                aria-required="true" 
+                                aria-describedby="passwordHint passwordError"
+                                class="form-input w-full pr-12" 
+                                placeholder="Минимум 8 символов"
+                                minlength="8"
+                            >
+                            <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700" aria-label="Показать пароль">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div id="passwordHint" class="field-hint">Минимум 8 символов, включая буквы, цифры и специальные знаки</div>
+                        <div id="passwordError" class="error-message hidden" role="alert"></div>
+                        
+                        <!-- Индикатор силы пароля -->
+                        <div class="mt-2">
+                            <div class="flex space-x-1">
+                                <div id="strength1" class="h-2 flex-1 bg-gray-200 rounded"></div>
+                                <div id="strength2" class="h-2 flex-1 bg-gray-200 rounded"></div>
+                                <div id="strength3" class="h-2 flex-1 bg-gray-200 rounded"></div>
+                                <div id="strength4" class="h-2 flex-1 bg-gray-200 rounded"></div>
+                            </div>
+                            <div id="strengthText" class="text-sm text-gray-600 mt-1"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Подтверждение пароля -->
+                    <div>
+                        <label for="confirmPassword" class="block text-gray-700 font-semibold mb-2 text-lg">
+                            Подтвердите пароль <span class="required-mark">*</span>
+                        </label>
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword" 
+                            required 
+                            aria-required="true" 
+                            aria-describedby="confirmPasswordError"
+                            class="form-input w-full" 
+                            placeholder="Повторите пароль"
+                        >
+                        <div id="confirmPasswordError" class="error-message hidden" role="alert"></div>
+                    </div>
+                    
+                    <!-- Тип пользователя -->
+                    <div>
+                        <label for="userType" class="block text-gray-700 font-semibold mb-2 text-lg">
+                            Тип пользователя <span class="required-mark">*</span>
+                        </label>
+                        <select 
+                            id="userType" 
+                            name="userType" 
+                            required 
+                            aria-required="true"
+                            aria-describedby="userTypeHint"
+                            class="form-select w-full"
+                        >
+                            <option value="">-- Выберите роль --</option>
+                            <option value="jobseeker">Соискатель (ищу работу)</option>
+                            <option value="employer">Работодатель</option>
+                            <option value="training_center">Учебный центр</option>
+                            <option value="government">Госслужащий</option>
+                            <option value="student">Студент</option>
+                            <option value="other">Другое</option>
+                        </select>
+                        <div id="userTypeHint" class="field-hint">Выберите наиболее подходящую роль для персонализации</div>
+                    </div>
+                    
+                    <!-- Дополнительные поля для роли -->
+                    <div id="roleSpecificFields">
+                        <!-- Поля будут добавлены динамически -->
+                    </div>
+                    
+                    <!-- Регион (необязательное поле) -->
+                    <div>
+                        <label for="region" class="block text-gray-700 font-semibold mb-2 text-lg">
+                            Регион
+                        </label>
+                        <select 
+                            id="region" 
+                            name="region" 
+                            aria-describedby="regionHint"
+                            class="form-select w-full"
+                        >
+                            <option value="">-- Выберите регион --</option>
+                            <option value="dushanbe">Душанбе</option>
+                            <option value="gbao">ГБАО (Горно-Бадахшанская автономная область)</option>
+                            <option value="sughd">Согдийская область</option>
+                            <option value="khatlon">Хатлонская область</option>
+                            <option value="rrp">РРП (Районы республиканского подчинения)</option>
+                        </select>
+                        <div id="regionHint" class="field-hint">Регион поможет показывать релевантные вакансии</div>
+                    </div>
+                    
+                    <!-- Желаемая должность (необязательное поле) -->
+                    <div>
+                        <label for="desiredPosition" class="block text-gray-700 font-semibold mb-2 text-lg">
+                            Желаемая должность
+                        </label>
+                        <input 
+                            type="text" 
+                            id="desiredPosition" 
+                            name="desiredPosition" 
+                            aria-describedby="positionHint"
+                            class="form-input w-full" 
+                            placeholder="Например: программист, учитель, менеджер"
+                            maxlength="100"
+                        >
+                        <div id="positionHint" class="field-hint">Укажите желаемую должность для персонализации рекомендаций</div>
+                    </div>
+                    
+                    <!-- Соглашение с условиями -->
+                    <div class="flex items-start space-x-3">
+                        <input 
+                            type="checkbox" 
+                            id="agreement" 
+                            name="agreement" 
+                            required 
+                            aria-required="true"
+                            class="mt-1 h-5 w-5 text-blue-600 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                        >
+                        <label for="agreement" class="text-gray-700 text-lg">
+                            Я принимаю <a href="#" class="text-blue-600 underline hover:text-blue-800">условия использования</a> 
+                            и <a href="#" class="text-blue-600 underline hover:text-blue-800">политику конфиденциальности</a> 
+                            <span class="required-mark">*</span>
+                        </label>
+                    </div>
+                    
+                    <!-- Кнопки действий -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <button type="submit" id="submitBtn" class="btn-primary flex-1 flex items-center justify-center">
+                            <span id="submitText">Создать учетную запись</span>
+                        </button>
+                        <button type="button" id="saveDraftBtn" class="btn-secondary flex-1">
+                            Сохранить черновик
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Сообщения о результате -->
+                <div id="successMessage" class="hidden mt-6 p-4 bg-green-50 border border-green-200 rounded-lg" role="alert">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <div>
+                            <h4 class="text-green-800 font-semibold">Регистрация успешна!</h4>
+                            <p class="text-green-700 mt-1">Проверьте свою почту или телефон для подтверждения аккаунта.</p>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label for="role" class="block text-gray-700 font-medium mb-2">Тип пользователя <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <select id="role" name="role" required aria-required="true" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">-- Выберите --</option>
-                        <option value="jobseeker">Ищу работу</option>
-                        <option value="employer">Работодатель</option>
-                        <option value="gov">Госслужащий</option>
-                        <option value="student">Учебный центр/Студент</option>
-                        <option value="other">Другое</option>
-                    </select>
+                
+                <div id="errorMessage" class="hidden mt-6 p-4 bg-red-50 border border-red-200 rounded-lg" role="alert">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
+                        <div>
+                            <h4 class="text-red-800 font-semibold">Ошибка регистрации</h4>
+                            <p class="text-red-700 mt-1" id="errorText">Произошла ошибка. Попробуйте еще раз.</p>
+                        </div>
+                    </div>
                 </div>
-                <div id="roleFields"></div>
-                <div>
-                    <label for="region" class="block text-gray-700 font-medium mb-2">Регион</label>
-                    <select id="region" name="region" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">-- Выберите регион --</option>
-                        <option>Душанбе</option>
-                        <option>ГБАО</option>
-                        <option>Согдийская область</option>
-                        <option>Хатлонская область</option>
-                        <option>РРП</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="desiredPosition" class="block text-gray-700 font-medium mb-2">Желаемая должность</label>
-                    <input type="text" id="desiredPosition" name="desiredPosition" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Например, программист">
-                </div>
-                <div>
-                    <label for="password" class="block text-gray-700 font-medium mb-2">Пароль <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <input type="password" id="password" name="password" required minlength="8" aria-required="true" aria-label="Введите пароль" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Минимум 8 символов, буквы, цифры, спецзнаки">
-                </div>
-                <div>
-                    <label for="confirmPassword" class="block text-gray-700 font-medium mb-2">Подтвердите пароль <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" aria-required="true" aria-label="Повторите пароль" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Повторите пароль">
-                </div>
-                <div class="flex items-center">
-                    <input type="checkbox" id="agree" name="agree" required class="h-4 w-4 text-blue-600 border-gray-300 rounded" aria-required="true">
-                    <label for="agree" class="ml-2 block text-sm text-gray-700">Я принимаю <a href="#" class="text-blue-600 underline">условия использования</a></label>
-                </div>
-                <div class="flex flex-col md:flex-row gap-4 mt-2">
-                    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
-                        Зарегистрироваться
-                    </button>
-                    <button type="button" id="saveDraft" class="w-full bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
-                        Сохранить и продолжить позже
-                    </button>
-                </div>
-            </form>
-            <div id="successMessage" class="hidden mt-6 text-green-600 text-center font-semibold" aria-live="polite">
-                Регистрация прошла успешно! Проверьте email или телефон для подтверждения.
+            </div>
+            
+            <!-- Дополнительная информация -->
+            <div class="mt-8 text-center">
+                <p class="text-gray-600">
+                    Уже есть аккаунт? 
+                    <a href="user_dashboard.html" class="text-blue-600 underline hover:text-blue-800 font-semibold">Войти в систему</a>
+                </p>
             </div>
         </div>
     </section>
@@ -201,162 +568,744 @@
         </div>
     </footer>
     <script>
-        // Голосовые подсказки (доступность)
-        function speak(text) {
-            if ('speechSynthesis' in window) {
-                const utter = new SpeechSynthesisUtterance(text);
-                utter.lang = 'ru-RU';
-                window.speechSynthesis.speak(utter);
+        // Глобальные переменные
+        let selectedMethod = '';
+        let speechSupported = 'speechSynthesis' in window;
+        
+        // Функция для голосовых подсказок (доступность)
+        function speak(text, priority = false) {
+            if (!speechSupported) return;
+            
+            if (priority && window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
             }
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ru-RU';
+            utterance.rate = 0.9;
+            utterance.volume = 0.8;
+            window.speechSynthesis.speak(utterance);
         }
-        document.querySelectorAll('input, select').forEach(el => {
-            el.addEventListener('focus', () => {
-                if (el.getAttribute('aria-label')) speak(el.getAttribute('aria-label'));
-                else if (el.labels && el.labels.length > 0) speak(el.labels[0].innerText);
+        
+        // Обработка выбора метода регистрации
+        document.querySelectorAll('.method-option').forEach(option => {
+            option.addEventListener('click', function() {
+                selectMethod(this.dataset.method);
+                speak(`Выбран способ регистрации: ${this.querySelector('h4').textContent}`);
+            });
+            
+            option.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    selectMethod(this.dataset.method);
+                    speak(`Выбран способ регистрации: ${this.querySelector('h4').textContent}`);
+                }
             });
         });
-
-        // Динамические поля для разных способов регистрации
-        const methodSelect = document.getElementById('registerMethod');
-        const dynamicFields = document.getElementById('dynamicFields');
-        methodSelect.addEventListener('change', function() {
-            dynamicFields.innerHTML = '';
-            if (this.value === 'email') {
-                dynamicFields.innerHTML = `
-                    <label for="email" class="block text-gray-700 font-medium mb-2">Email <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <input type="email" id="email" name="email" required aria-required="true" aria-label="Введите ваш email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="example@email.com">
-                    <div id="emailError" class="aria-error hidden"></div>
-                `;
+        
+        function selectMethod(method) {
+            // Убираем выделение с других опций
+            document.querySelectorAll('.method-option').forEach(opt => {
+                opt.classList.remove('selected');
+                opt.setAttribute('aria-selected', 'false');
+            });
+            
+            // Выделяем выбранную опцию
+            const selectedOption = document.querySelector(`[data-method="${method}"]`);
+            selectedOption.classList.add('selected');
+            selectedOption.setAttribute('aria-selected', 'true');
+            
+            selectedMethod = method;
+            document.getElementById('selectedMethod').value = method;
+            
+            // Показываем соответствующие поля
+            showContactFields(method);
+        }
+        
+        function showContactFields(method) {
+            const contactFields = document.getElementById('contactFields');
+            contactFields.innerHTML = '';
+            contactFields.classList.remove('hidden');
+            
+            let fieldHTML = '';
+            
+            switch(method) {
+                case 'email':
+                    fieldHTML = `
+                        <div>
+                            <label for="email" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                Email адрес <span class="required-mark">*</span>
+                            </label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                required 
+                                aria-required="true" 
+                                aria-describedby="emailHint emailError"
+                                class="form-input w-full" 
+                                placeholder="example@email.com"
+                                autocomplete="email"
+                            >
+                            <div id="emailHint" class="field-hint">Введите действующий email адрес для подтверждения</div>
+                            <div id="emailError" class="error-message hidden" role="alert"></div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'phone':
+                    fieldHTML = `
+                        <div>
+                            <label for="phone" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                Номер телефона <span class="required-mark">*</span>
+                            </label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone" 
+                                required 
+                                aria-required="true" 
+                                aria-describedby="phoneHint phoneError"
+                                class="form-input w-full" 
+                                placeholder="+992 900 00 00 00"
+                                pattern="^\\+?[0-9\\s\\-\\(\\)]{9,15}$"
+                                autocomplete="tel"
+                            >
+                            <div id="phoneHint" class="field-hint">Введите номер телефона для получения SMS с кодом подтверждения</div>
+                            <div id="phoneError" class="error-message hidden" role="alert"></div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'nsz':
+                    fieldHTML = `
+                        <div>
+                            <label for="nsz" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                Номер социальной защиты (НСЗ) <span class="required-mark">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="nsz" 
+                                name="nsz" 
+                                required 
+                                aria-required="true" 
+                                aria-describedby="nszHint nszError"
+                                class="form-input w-full" 
+                                placeholder="Введите номер НСЗ"
+                                pattern="^[0-9]{8,12}$"
+                                maxlength="12"
+                            >
+                            <div id="nszHint" class="field-hint">Номер из Национального реестра социальной защиты. Данные будут автоматически заполнены.</div>
+                            <div id="nszError" class="error-message hidden" role="alert"></div>
+                            <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                <div class="flex items-center text-blue-800">
+                                    <i class="fas fa-info-circle mr-2"></i>
+                                    <span class="text-sm font-medium">Интеграция с НРСЗ</span>
+                                </div>
+                                <p class="text-sm text-blue-700 mt-1">При вводе НСЗ автоматически заполнятся: ФИО, регион, статус безработного</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
             }
-            if (this.value === 'phone') {
-                dynamicFields.innerHTML = `
-                    <label for="phone" class="block text-gray-700 font-medium mb-2">Телефон <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <input type="tel" id="phone" name="phone" required aria-required="true" aria-label="Введите номер телефона" pattern="^\\+?\\d{9,15}$" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="+992 900 00 00 00">
-                    <div id="phoneError" class="aria-error hidden"></div>
-                `;
-            }
-            if (this.value === 'nsz') {
-                dynamicFields.innerHTML = `
-                    <label for="nsz" class="block text-gray-700 font-medium mb-2">Номер социальной защиты (НСЗ) <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <input type="text" id="nsz" name="nsz" required aria-required="true" aria-label="Введите номер социальной защиты" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="XXXXXXXXXXXX">
-                    <div id="nszError" class="aria-error hidden"></div>
-                    <div class="text-sm text-gray-500 mt-1">Данные будут автоматически заполнены из НРСЗ</div>
-                `;
-            }
+            
+            contactFields.innerHTML = fieldHTML;
+            
+            // Добавляем обработчики валидации для новых полей
+            setTimeout(() => {
+                addValidationListeners();
+            }, 100);
+        }
+        
+        // Обработка изменения типа пользователя
+        document.getElementById('userType').addEventListener('change', function() {
+            showRoleSpecificFields(this.value);
         });
-
-        // Динамические поля для ролей
-        const roleSelect = document.getElementById('role');
-        const roleFields = document.getElementById('roleFields');
-        roleSelect.addEventListener('change', function() {
+        
+        function showRoleSpecificFields(userType) {
+            const roleFields = document.getElementById('roleSpecificFields');
             roleFields.innerHTML = '';
-            if (this.value === 'employer') {
-                roleFields.innerHTML = `
-                    <label for="company" class="block text-gray-700 font-medium mb-2">Название организации <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <input type="text" id="company" name="company" required aria-required="true" aria-label="Введите название организации" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" placeholder="Введите название организации">
-                    <label for="inn" class="block text-gray-700 font-medium mb-2">ИНН организации <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <input type="text" id="inn" name="inn" required aria-required="true" aria-label="Введите ИНН" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите ИНН">
-                `;
+            
+            let fieldHTML = '';
+            
+            switch(userType) {
+                case 'employer':
+                    fieldHTML = `
+                        <div class="space-y-4">
+                            <div>
+                                <label for="companyName" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                    Название организации <span class="required-mark">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="companyName" 
+                                    name="companyName" 
+                                    required 
+                                    aria-required="true"
+                                    class="form-input w-full" 
+                                    placeholder="Введите название вашей организации"
+                                    maxlength="200"
+                                >
+                            </div>
+                            <div>
+                                <label for="inn" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                    ИНН организации <span class="required-mark">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="inn" 
+                                    name="inn" 
+                                    required 
+                                    aria-required="true"
+                                    class="form-input w-full" 
+                                    placeholder="Введите ИНН"
+                                    pattern="^[0-9]{9,12}$"
+                                    maxlength="12"
+                                >
+                                <div class="field-hint">ИНН организации для верификации</div>
+                            </div>
+                            <div>
+                                <label for="companySize" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                    Размер организации
+                                </label>
+                                <select id="companySize" name="companySize" class="form-select w-full">
+                                    <option value="">-- Выберите --</option>
+                                    <option value="micro">Микро (до 10 сотрудников)</option>
+                                    <option value="small">Малая (10-50 сотрудников)</option>
+                                    <option value="medium">Средняя (50-250 сотрудников)</option>
+                                    <option value="large">Крупная (более 250 сотрудников)</option>
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'training_center':
+                    fieldHTML = `
+                        <div class="space-y-4">
+                            <div>
+                                <label for="centerName" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                    Название учебного центра <span class="required-mark">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="centerName" 
+                                    name="centerName" 
+                                    required 
+                                    aria-required="true"
+                                    class="form-input w-full" 
+                                    placeholder="Введите название центра"
+                                    maxlength="200"
+                                >
+                            </div>
+                            <div>
+                                <label for="centerType" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                    Тип учебного заведения
+                                </label>
+                                <select id="centerType" name="centerType" class="form-select w-full">
+                                    <option value="">-- Выберите --</option>
+                                    <option value="university">Университет</option>
+                                    <option value="college">Колледж</option>
+                                    <option value="training">Учебный центр</option>
+                                    <option value="vocational">Профессиональное училище</option>
+                                    <option value="online">Онлайн платформа</option>
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'government':
+                    fieldHTML = `
+                        <div class="space-y-4">
+                            <div>
+                                <label for="department" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                    Ведомство/организация <span class="required-mark">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="department" 
+                                    name="department" 
+                                    required 
+                                    aria-required="true"
+                                    class="form-input w-full" 
+                                    placeholder="Введите название ведомства"
+                                    maxlength="200"
+                                >
+                            </div>
+                            <div>
+                                <label for="position" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                    Должность <span class="required-mark">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="position" 
+                                    name="position" 
+                                    required 
+                                    aria-required="true"
+                                    class="form-input w-full" 
+                                    placeholder="Введите вашу должность"
+                                    maxlength="100"
+                                >
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'student':
+                    fieldHTML = `
+                        <div class="space-y-4">
+                            <div>
+                                <label for="institution" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                    Учебное заведение
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="institution" 
+                                    name="institution" 
+                                    class="form-input w-full" 
+                                    placeholder="Название вашего учебного заведения"
+                                    maxlength="200"
+                                >
+                            </div>
+                            <div>
+                                <label for="studyLevel" class="block text-gray-700 font-semibold mb-2 text-lg">
+                                    Уровень образования
+                                </label>
+                                <select id="studyLevel" name="studyLevel" class="form-select w-full">
+                                    <option value="">-- Выберите --</option>
+                                    <option value="high_school">Среднее образование</option>
+                                    <option value="vocational">Среднее специальное</option>
+                                    <option value="bachelor">Бакалавриат</option>
+                                    <option value="master">Магистратура</option>
+                                    <option value="phd">Аспирантура/PhD</option>
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                    break;
             }
-            if (this.value === 'gov') {
-                roleFields.innerHTML = `
-                    <label for="department" class="block text-gray-700 font-medium mb-2">Ведомство/организация <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <input type="text" id="department" name="department" required aria-required="true" aria-label="Введите название ведомства" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" placeholder="Введите название ведомства">
-                    <label for="position" class="block text-gray-700 font-medium mb-2">Должность <span aria-hidden="true" class="text-red-500">*</span></label>
-                    <input type="text" id="position" name="position" required aria-required="true" aria-label="Введите вашу должность" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите вашу должность">
-                `;
+            
+            if (fieldHTML) {
+                roleFields.innerHTML = `<div class="pt-4 border-t border-gray-200">${fieldHTML}</div>`;
+            }
+        }
+        
+        // Валидация полей в реальном времени
+        function addValidationListeners() {
+            // Email валидация
+            const emailField = document.getElementById('email');
+            if (emailField) {
+                emailField.addEventListener('blur', validateEmail);
+                emailField.addEventListener('input', debounce(validateEmail, 500));
+            }
+            
+            // Phone валидация
+            const phoneField = document.getElementById('phone');
+            if (phoneField) {
+                phoneField.addEventListener('blur', validatePhone);
+                phoneField.addEventListener('input', debounce(validatePhone, 500));
+            }
+            
+            // NSZ валидация
+            const nszField = document.getElementById('nsz');
+            if (nszField) {
+                nszField.addEventListener('blur', validateNSZ);
+                nszField.addEventListener('input', debounce(validateNSZ, 500));
+                nszField.addEventListener('input', debounce(fetchNSZData, 1000));
+            }
+        }
+        
+        function validateEmail() {
+            const emailField = document.getElementById('email');
+            const errorElement = document.getElementById('emailError');
+            
+            if (!emailField || !errorElement) return true;
+            
+            const email = emailField.value.trim();
+            const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+            
+            if (email && !emailRegex.test(email)) {
+                showFieldError('emailError', 'Неверный формат email адреса');
+                speak('Неверный формат email адреса');
+                return false;
+            } else {
+                hideFieldError('emailError');
+                return true;
+            }
+        }
+        
+        function validatePhone() {
+            const phoneField = document.getElementById('phone');
+            const errorElement = document.getElementById('phoneError');
+            
+            if (!phoneField || !errorElement) return true;
+            
+            const phone = phoneField.value.trim();
+            const phoneRegex = /^\\+?[0-9\\s\\-\\(\\)]{9,15}$/;
+            
+            if (phone && !phoneRegex.test(phone)) {
+                showFieldError('phoneError', 'Неверный формат номера телефона');
+                speak('Неверный формат номера телефона');
+                return false;
+            } else {
+                hideFieldError('phoneError');
+                return true;
+            }
+        }
+        
+        function validateNSZ() {
+            const nszField = document.getElementById('nsz');
+            const errorElement = document.getElementById('nszError');
+            
+            if (!nszField || !errorElement) return true;
+            
+            const nsz = nszField.value.trim();
+            const nszRegex = /^[0-9]{8,12}$/;
+            
+            if (nsz && !nszRegex.test(nsz)) {
+                showFieldError('nszError', 'НСЗ должен содержать от 8 до 12 цифр');
+                speak('Неверный формат номера социальной защиты');
+                return false;
+            } else {
+                hideFieldError('nszError');
+                return true;
+            }
+        }
+        
+        // Имитация получения данных из НРСЗ
+        function fetchNSZData() {
+            const nszField = document.getElementById('nsz');
+            if (!nszField || !validateNSZ()) return;
+            
+            const nsz = nszField.value.trim();
+            if (nsz.length >= 8) {
+                // Имитация API запроса
+                setTimeout(() => {
+                    // Заполнение данных (в реальной системе это данные из НРСЗ)
+                    document.getElementById('fullName').value = 'Имитация данных из НРСЗ';
+                    document.getElementById('region').value = 'dushanbe';
+                    
+                    speak('Данные автоматически заполнены из реестра социальной защиты');
+                }, 1000);
+            }
+        }
+        
+        // Проверка силы пароля
+        document.getElementById('password').addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+        });
+        
+        function checkPasswordStrength(password) {
+            const strengthBars = ['strength1', 'strength2', 'strength3', 'strength4'];
+            const strengthText = document.getElementById('strengthText');
+            
+            let score = 0;
+            let feedback = '';
+            
+            // Проверки
+            if (password.length >= 8) score++;
+            if (/[a-z]/.test(password)) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^A-Za-z0-9]/.test(password)) score++;
+            
+            // Сброс всех полос
+            strengthBars.forEach(bar => {
+                document.getElementById(bar).className = 'h-2 flex-1 bg-gray-200 rounded';
+            });
+            
+            // Установка цвета и текста
+            if (score === 0) {
+                feedback = '';
+            } else if (score <= 2) {
+                strengthBars.slice(0, 1).forEach(bar => {
+                    document.getElementById(bar).className = 'h-2 flex-1 bg-red-400 rounded';
+                });
+                feedback = 'Слабый пароль';
+            } else if (score <= 3) {
+                strengthBars.slice(0, 2).forEach(bar => {
+                    document.getElementById(bar).className = 'h-2 flex-1 bg-yellow-400 rounded';
+                });
+                feedback = 'Средний пароль';
+            } else if (score <= 4) {
+                strengthBars.slice(0, 3).forEach(bar => {
+                    document.getElementById(bar).className = 'h-2 flex-1 bg-blue-400 rounded';
+                });
+                feedback = 'Хороший пароль';
+            } else {
+                strengthBars.forEach(bar => {
+                    document.getElementById(bar).className = 'h-2 flex-1 bg-green-400 rounded';
+                });
+                feedback = 'Отличный пароль';
+            }
+            
+            strengthText.textContent = feedback;
+        }
+        
+        // Показать/скрыть пароль
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordField = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+                this.setAttribute('aria-label', 'Скрыть пароль');
+            } else {
+                passwordField.type = 'password';
+                icon.className = 'fas fa-eye';
+                this.setAttribute('aria-label', 'Показать пароль');
             }
         });
-
-        // Валидация email/phone/nsz
-        document.addEventListener('input', function(e) {
-            if (e.target.id === 'email') {
-                const email = e.target.value;
-                const error = document.getElementById('emailError');
-                if (email && !/^[\w-.]+@[\w-]+\.[a-z]{2,}$/i.test(email)) {
-                    error.textContent = 'Неверный формат email';
-                    error.classList.remove('hidden');
-                    speak('Неверный формат email');
-                } else {
-                    error.classList.add('hidden');
-                }
+        
+        // Проверка совпадения паролей
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            const errorElement = document.getElementById('confirmPasswordError');
+            
+            if (confirmPassword && password !== confirmPassword) {
+                showFieldError('confirmPasswordError', 'Пароли не совпадают');
+                return false;
+            } else {
+                hideFieldError('confirmPasswordError');
+                return true;
             }
-            if (e.target.id === 'phone') {
-                const phone = e.target.value;
-                const error = document.getElementById('phoneError');
-                if (phone && !/^\+?\d{9,15}$/.test(phone.replace(/\s/g, ''))) {
-                    error.textContent = 'Неверный формат телефона';
-                    error.classList.remove('hidden');
-                    speak('Неверный формат телефона');
-                } else {
-                    error.classList.add('hidden');
-                }
+        });
+        
+        // Вспомогательные функции
+        function showFieldError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.classList.remove('hidden');
             }
-            if (e.target.id === 'nsz') {
-                const nsz = e.target.value;
-                const error = document.getElementById('nszError');
-                if (nsz && !/^\d{8,12}$/.test(nsz)) {
-                    error.textContent = 'Неверный формат НСЗ';
-                    error.classList.remove('hidden');
-                    speak('Неверный формат НСЗ');
-                } else {
-                    error.classList.add('hidden');
+        }
+        
+        function hideFieldError(elementId) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.classList.add('hidden');
+            }
+        }
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        
+        // Сохранение черновика
+        document.getElementById('saveDraftBtn').addEventListener('click', function() {
+            const formData = new FormData(document.getElementById('registrationForm'));
+            const draftData = Object.fromEntries(formData.entries());
+            
+            localStorage.setItem('registrationDraft', JSON.stringify(draftData));
+            
+            // Показываем уведомление
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            notification.innerHTML = '<i class="fas fa-check mr-2"></i>Черновик сохранен';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+            
+            speak('Черновик формы сохранен');
+        });
+        
+        // Загрузка черновика при загрузке страницы
+        window.addEventListener('load', function() {
+            const draft = localStorage.getItem('registrationDraft');
+            if (draft) {
+                try {
+                    const draftData = JSON.parse(draft);
+                    
+                    // Восстанавливаем метод регистрации
+                    if (draftData.registrationMethod) {
+                        selectMethod(draftData.registrationMethod);
+                        
+                        setTimeout(() => {
+                            // Восстанавливаем остальные поля
+                            Object.keys(draftData).forEach(key => {
+                                const field = document.getElementById(key) || document.querySelector(`[name="${key}"]`);
+                                if (field && key !== 'registrationMethod') {
+                                    field.value = draftData[key];
+                                    
+                                    // Для select полей триггерим change
+                                    if (field.tagName === 'SELECT') {
+                                        field.dispatchEvent(new Event('change'));
+                                    }
+                                }
+                            });
+                        }, 500);
+                    }
+                } catch (e) {
+                    console.error('Ошибка загрузки черновика:', e);
                 }
             }
         });
-
-        // Сохранить и продолжить позже (имитация)
-        document.getElementById('saveDraft').addEventListener('click', function() {
-            alert('Черновик формы сохранён. Вы сможете продолжить регистрацию позже.');
-        });
-
-        // Простая имитация успешной регистрации
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+        
+        // Обработка отправки формы
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            document.getElementById('registerForm').classList.add('hidden');
-            document.getElementById('successMessage').classList.remove('hidden');
-            speak('Регистрация прошла успешно! Проверьте email или телефон для подтверждения.');
+            
+            // Проверяем, выбран ли метод регистрации
+            if (!selectedMethod) {
+                speak('Пожалуйста, выберите способ регистрации', true);
+                document.querySelector('.method-selector').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+            
+            // Валидация всех полей
+            let isValid = true;
+            const requiredFields = this.querySelectorAll('[required]');
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('border-red-500');
+                    field.focus();
+                    speak(`Поле ${field.labels?.[0]?.textContent || field.placeholder} обязательно для заполнения`, true);
+                    return;
+                } else {
+                    field.classList.remove('border-red-500');
+                }
+            });
+            
+            // Специфическая валидация
+            if (selectedMethod === 'email' && !validateEmail()) isValid = false;
+            if (selectedMethod === 'phone' && !validatePhone()) isValid = false;
+            if (selectedMethod === 'nsz' && !validateNSZ()) isValid = false;
+            
+            // Проверка паролей
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showFieldError('confirmPasswordError', 'Пароли не совпадают');
+                isValid = false;
+            }
+            
+            if (password.length < 8) {
+                showFieldError('passwordError', 'Пароль должен содержать минимум 8 символов');
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                speak('Пожалуйста, исправьте ошибки в форме', true);
+                return;
+            }
+            
+            // Показываем индикатор загрузки
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            
+            submitBtn.disabled = true;
+            submitText.innerHTML = '<span class="loading-spinner"></span>Создание аккаунта...';
+            
+            // Имитация отправки данных
+            setTimeout(() => {
+                // Очищаем черновик
+                localStorage.removeItem('registrationDraft');
+                
+                // Показываем успешное сообщение
+                document.getElementById('registrationForm').classList.add('hidden');
+                document.getElementById('successMessage').classList.remove('hidden');
+                
+                speak('Регистрация прошла успешно! Проверьте свою почту или телефон для подтверждения аккаунта', true);
+                
+                // Прокручиваем к сообщению
+                document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+                
+            }, 2000);
         });
-
-        // Клавиатурная навигация: выделение фокуса
-        document.querySelectorAll('input, select, button').forEach(el => {
-            el.addEventListener('focus', () => el.classList.add('focus-outline'));
-            el.addEventListener('blur', () => el.classList.remove('focus-outline'));
+        
+        // Добавляем обработчики для голосовых подсказок при фокусе
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input, select, button').forEach(element => {
+                element.addEventListener('focus', function() {
+                    const label = this.labels?.[0]?.textContent || 
+                                 this.getAttribute('aria-label') || 
+                                 this.placeholder;
+                    
+                    if (label && speechSupported) {
+                        // Небольшая задержка, чтобы не мешать навигации
+                        setTimeout(() => {
+                            speak(label.replace(/\*/g, ''));
+                        }, 500);
+                    }
+                });
+            });
         });
-
-        // Выпадающее меню профиля и языков (как на index.html)
+        
+        // Обработчики выпадающих меню (из оригинального кода)
         const profileMenuBtn = document.getElementById('profileMenuBtn');
         const profileDropdown = document.getElementById('profileDropdown');
         const langMenuBtn = document.getElementById('langMenuBtn');
         const langDropdown = document.getElementById('langDropdown');
         const currentLangLabel = document.getElementById('currentLangLabel');
+        const moreMenuBtn = document.getElementById('moreMenuBtn');
+        const moreDropdown = document.getElementById('moreDropdown');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
 
+        // Обработчики для десктопных меню
         profileMenuBtn?.addEventListener('click', function(e) {
             e.stopPropagation();
             profileDropdown.classList.toggle('hidden');
-            langDropdown.classList.add('hidden');
+            langDropdown?.classList.add('hidden');
+            moreDropdown?.classList.add('hidden');
         });
 
         langMenuBtn?.addEventListener('click', function(e) {
             e.stopPropagation();
             langDropdown.classList.toggle('hidden');
-            profileDropdown.classList.add('hidden');
+            profileDropdown?.classList.add('hidden');
+            moreDropdown?.classList.add('hidden');
         });
 
+        moreMenuBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            moreDropdown.classList.toggle('hidden');
+            profileDropdown?.classList.add('hidden');
+            langDropdown?.classList.add('hidden');
+        });
+
+        // Мобильное меню
+        mobileMenuBtn?.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Закрытие меню при клике вне
         document.addEventListener('click', function(e) {
-            if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+            if (profileDropdown && !profileDropdown.contains(e.target) && !profileMenuBtn?.contains(e.target)) {
                 profileDropdown.classList.add('hidden');
             }
-            if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
+            if (langDropdown && !langDropdown.contains(e.target) && !langMenuBtn?.contains(e.target)) {
                 langDropdown.classList.add('hidden');
+            }
+            if (moreDropdown && !moreDropdown.contains(e.target) && !moreMenuBtn?.contains(e.target)) {
+                moreDropdown.classList.add('hidden');
             }
         });
 
+        // Обработчик смены языка
         langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
-            btn.onclick = function() {
-                currentLangLabel.textContent = this.textContent;
+            btn.addEventListener('click', function() {
+                if (currentLangLabel) {
+                    currentLangLabel.textContent = this.textContent;
+                }
                 langDropdown.classList.add('hidden');
-            };
+            });
         });
     </script>
     <!-- Google Translate -->
