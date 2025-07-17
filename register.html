@@ -131,50 +131,204 @@
         }
         
         /* Стили для выбора метода регистрации */
-        .method-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+        .method-selector-wrapper {
+            position: relative;
             margin-bottom: 2rem;
         }
         
-        .method-option {
-            padding: 1.5rem;
+        .method-select-button {
+            width: 100%;
+            padding: 1.25rem;
             border: 2px solid #e5e7eb;
             border-radius: 0.75rem;
+            background: #fafafa;
+            color: #374151;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: left;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-align: center;
-            background: #fafafa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        .method-option:hover {
+        .method-select-button:hover {
             border-color: #667eea;
             background: white;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
         }
         
-        .method-option.selected {
+        .method-select-button:focus {
+            outline: 3px solid #667eea;
+            outline-offset: 2px;
             border-color: #667eea;
+            background: white;
+        }
+        
+        .method-select-button.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            color: #667eea;
+        }
+        
+        .method-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            margin-top: 0.5rem;
+        }
+        
+        .method-dropdown.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        
+        .method-option {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .method-option:last-child {
+            border-bottom: none;
+            border-radius: 0 0 0.75rem 0.75rem;
+        }
+        
+        .method-option:first-child {
+            border-radius: 0.75rem 0.75rem 0 0;
+        }
+        
+        .method-option:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            transform: translateX(4px);
+        }
+        
+        .method-option.selected {
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            color: #667eea;
+            font-weight: 600;
         }
         
         .method-icon {
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: #667eea;
-            margin-bottom: 0.5rem;
+            width: 2rem;
+            text-align: center;
+        }
+        
+        .method-details {
+            flex: 1;
+        }
+        
+        .method-title {
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .method-option.selected .method-title {
+            color: #667eea;
+        }
+        
+        .method-description {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
         }
         
         /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
-            .method-selector {
-                grid-template-columns: 1fr;
+            .method-dropdown {
+                position: fixed;
+                top: 50%;
+                left: 1rem;
+                right: 1rem;
+                transform: translateY(-50%);
+                margin-top: 0;
+                border-radius: 1rem;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            
+            .method-dropdown.open {
+                transform: translateY(-50%);
             }
             
             .form-input, .form-select, .btn-primary, .btn-secondary {
                 font-size: 18px; /* Увеличенный размер для мобильных */
                 padding: 1.25rem;
             }
+            
+            .method-select-button {
+                font-size: 18px;
+                padding: 1.5rem;
+            }
+        }
+        
+        /* Улучшенные стили для карточки формы */
+        .registration-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(102, 126, 234, 0.05);
+            border: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .registration-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .registration-card:hover {
+            box-shadow: 
+                0 35px 70px -12px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(102, 126, 234, 0.1);
+            transform: translateY(-4px);
+        }
+        
+        /* Улучшенные стили для заголовков */
+        .form-section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #f3f4f6;
+            position: relative;
+        }
+        
+        .form-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 3rem;
+            height: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         
         /* Стили для индикатора загрузки */
@@ -322,35 +476,59 @@
             <div class="registration-card p-8">
                 <!-- Выбор метода регистрации -->
                 <div class="mb-8">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Способ регистрации <span class="required-mark">*</span></h3>
-                    <div class="method-selector">
-                        <div class="method-option" data-method="email" role="button" tabindex="0" aria-label="Регистрация через email">
-                            <div class="method-icon">
-                                <i class="fas fa-envelope"></i>
+                    <h3 class="form-section-title">Способ регистрации <span class="required-mark">*</span></h3>
+                    
+                    <div class="method-selector-wrapper">
+                        <button 
+                            type="button" 
+                            id="methodSelectButton" 
+                            class="method-select-button"
+                            aria-label="Выберите способ регистрации"
+                            aria-haspopup="listbox"
+                            aria-expanded="false"
+                        >
+                            <div class="flex items-center gap-3">
+                                <i id="selectedMethodIcon" class="fas fa-user-plus text-gray-400"></i>
+                                <span id="selectedMethodText" class="text-gray-500">Выберите способ регистрации</span>
                             </div>
-                            <h4 class="font-semibold text-gray-800">Email</h4>
-                            <p class="text-sm text-gray-600 mt-2">Стандартный способ через электронную почту</p>
-                        </div>
+                            <i class="fas fa-chevron-down transition-transform duration-200" id="dropdownArrow"></i>
+                        </button>
                         
-                        <div class="method-option" data-method="phone" role="button" tabindex="0" aria-label="Регистрация через телефон">
-                            <div class="method-icon">
-                                <i class="fas fa-mobile-alt"></i>
+                        <div id="methodDropdown" class="method-dropdown">
+                            <div class="method-option" data-method="email" role="option" tabindex="0">
+                                <div class="method-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="method-details">
+                                    <div class="method-title">Email адрес</div>
+                                    <div class="method-description">Стандартный способ через электронную почту</div>
+                                </div>
                             </div>
-                            <h4 class="font-semibold text-gray-800">Телефон</h4>
-                            <p class="text-sm text-gray-600 mt-2">Быстрая регистрация через SMS</p>
-                        </div>
-                        
-                        <div class="method-option" data-method="nsz" role="button" tabindex="0" aria-label="Регистрация через НСЗ">
-                            <div class="method-icon">
-                                <i class="fas fa-id-card"></i>
+                            
+                            <div class="method-option" data-method="phone" role="option" tabindex="0">
+                                <div class="method-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="method-details">
+                                    <div class="method-title">Номер телефона</div>
+                                    <div class="method-description">Быстрая регистрация через SMS</div>
+                                </div>
                             </div>
-                            <h4 class="font-semibold text-gray-800">НСЗ</h4>
-                            <p class="text-sm text-gray-600 mt-2">Через Национальный реестр социальной защиты</p>
+                            
+                            <div class="method-option" data-method="nsz" role="option" tabindex="0">
+                                <div class="method-icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <div class="method-details">
+                                    <div class="method-title">НСЗ</div>
+                                    <div class="method-description">Через Национальный реестр социальной защиты</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <form id="registrationForm" class="space-y-6" autocomplete="off" aria-label="Форма регистрации" novalidate>
+                <form id="registrationForm" class="space-y-8" autocomplete="off" aria-label="Форма регистрации" novalidate>
                     <!-- Скрытое поле для выбранного метода -->
                     <input type="hidden" id="selectedMethod" name="registrationMethod" required>
                     
@@ -359,103 +537,54 @@
                         <!-- Поля будут добавлены динамически -->
                     </div>
                     
-                    <!-- ФИО (обязательное поле) -->
-                    <div>
-                        <label for="fullName" class="block text-gray-700 font-semibold mb-2 text-lg">
-                            Полное имя <span class="required-mark">*</span>
-                        </label>
-                        <input 
-                            type="text" 
-                            id="fullName" 
-                            name="fullName" 
-                            required 
-                            aria-required="true" 
-                            aria-describedby="fullNameHint fullNameError"
-                            class="form-input w-full" 
-                            placeholder="Введите ваше полное имя"
-                            minlength="2"
-                            maxlength="100"
-                        >
-                        <div id="fullNameHint" class="field-hint">Введите ваше полное имя как в документах</div>
-                        <div id="fullNameError" class="error-message hidden" role="alert"></div>
-                    </div>
-                    
-                    <!-- Пароль (обязательное поле) -->
-                    <div>
-                        <label for="password" class="block text-gray-700 font-semibold mb-2 text-lg">
-                            Пароль <span class="required-mark">*</span>
-                        </label>
-                        <div class="relative">
+                    <!-- Основная информация -->
+                    <div class="space-y-6">
+                        <h3 class="form-section-title">Основная информация</h3>
+                        
+                        <!-- ФИО (обязательное поле) -->
+                        <div>
+                            <label for="fullName" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                Полное имя <span class="required-mark">*</span>
+                            </label>
                             <input 
-                                type="password" 
-                                id="password" 
-                                name="password" 
+                                type="text" 
+                                id="fullName" 
+                                name="fullName" 
                                 required 
                                 aria-required="true" 
-                                aria-describedby="passwordHint passwordError"
-                                class="form-input w-full pr-12" 
-                                placeholder="Минимум 8 символов"
-                                minlength="8"
+                                aria-describedby="fullNameHint fullNameError"
+                                class="form-input w-full" 
+                                placeholder="Введите ваше полное имя"
+                                minlength="2"
+                                maxlength="100"
                             >
-                            <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700" aria-label="Показать пароль">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                            <div id="fullNameHint" class="field-hint">Введите ваше полное имя как в документах</div>
+                            <div id="fullNameError" class="error-message hidden" role="alert"></div>
                         </div>
-                        <div id="passwordHint" class="field-hint">Минимум 8 символов, включая буквы, цифры и специальные знаки</div>
-                        <div id="passwordError" class="error-message hidden" role="alert"></div>
                         
-                        <!-- Индикатор силы пароля -->
-                        <div class="mt-2">
-                            <div class="flex space-x-1">
-                                <div id="strength1" class="h-2 flex-1 bg-gray-200 rounded"></div>
-                                <div id="strength2" class="h-2 flex-1 bg-gray-200 rounded"></div>
-                                <div id="strength3" class="h-2 flex-1 bg-gray-200 rounded"></div>
-                                <div id="strength4" class="h-2 flex-1 bg-gray-200 rounded"></div>
-                            </div>
-                            <div id="strengthText" class="text-sm text-gray-600 mt-1"></div>
+                        <!-- Тип пользователя -->
+                        <div>
+                            <label for="userType" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                Тип пользователя <span class="required-mark">*</span>
+                            </label>
+                            <select 
+                                id="userType" 
+                                name="userType" 
+                                required 
+                                aria-required="true"
+                                aria-describedby="userTypeHint"
+                                class="form-select w-full"
+                            >
+                                <option value="">-- Выберите роль --</option>
+                                <option value="jobseeker">Соискатель (ищу работу)</option>
+                                <option value="employer">Работодатель</option>
+                                <option value="training_center">Учебный центр</option>
+                                <option value="government">Госслужащий</option>
+                                <option value="student">Студент</option>
+                                <option value="other">Другое</option>
+                            </select>
+                            <div id="userTypeHint" class="field-hint">Выберите наиболее подходящую роль для персонализации</div>
                         </div>
-                    </div>
-                    
-                    <!-- Подтверждение пароля -->
-                    <div>
-                        <label for="confirmPassword" class="block text-gray-700 font-semibold mb-2 text-lg">
-                            Подтвердите пароль <span class="required-mark">*</span>
-                        </label>
-                        <input 
-                            type="password" 
-                            id="confirmPassword" 
-                            name="confirmPassword" 
-                            required 
-                            aria-required="true" 
-                            aria-describedby="confirmPasswordError"
-                            class="form-input w-full" 
-                            placeholder="Повторите пароль"
-                        >
-                        <div id="confirmPasswordError" class="error-message hidden" role="alert"></div>
-                    </div>
-                    
-                    <!-- Тип пользователя -->
-                    <div>
-                        <label for="userType" class="block text-gray-700 font-semibold mb-2 text-lg">
-                            Тип пользователя <span class="required-mark">*</span>
-                        </label>
-                        <select 
-                            id="userType" 
-                            name="userType" 
-                            required 
-                            aria-required="true"
-                            aria-describedby="userTypeHint"
-                            class="form-select w-full"
-                        >
-                            <option value="">-- Выберите роль --</option>
-                            <option value="jobseeker">Соискатель (ищу работу)</option>
-                            <option value="employer">Работодатель</option>
-                            <option value="training_center">Учебный центр</option>
-                            <option value="government">Госслужащий</option>
-                            <option value="student">Студент</option>
-                            <option value="other">Другое</option>
-                        </select>
-                        <div id="userTypeHint" class="field-hint">Выберите наиболее подходящую роль для персонализации</div>
                     </div>
                     
                     <!-- Дополнительные поля для роли -->
@@ -463,42 +592,106 @@
                         <!-- Поля будут добавлены динамически -->
                     </div>
                     
-                    <!-- Регион (необязательное поле) -->
-                    <div>
-                        <label for="region" class="block text-gray-700 font-semibold mb-2 text-lg">
-                            Регион
-                        </label>
-                        <select 
-                            id="region" 
-                            name="region" 
-                            aria-describedby="regionHint"
-                            class="form-select w-full"
-                        >
-                            <option value="">-- Выберите регион --</option>
-                            <option value="dushanbe">Душанбе</option>
-                            <option value="gbao">ГБАО (Горно-Бадахшанская автономная область)</option>
-                            <option value="sughd">Согдийская область</option>
-                            <option value="khatlon">Хатлонская область</option>
-                            <option value="rrp">РРП (Районы республиканского подчинения)</option>
-                        </select>
-                        <div id="regionHint" class="field-hint">Регион поможет показывать релевантные вакансии</div>
+                    <!-- Безопасность -->
+                    <div class="space-y-6">
+                        <h3 class="form-section-title">Безопасность аккаунта</h3>
+                        
+                        <!-- Пароль (обязательное поле) -->
+                        <div>
+                            <label for="password" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                Пароль <span class="required-mark">*</span>
+                            </label>
+                            <div class="relative">
+                                <input 
+                                    type="password" 
+                                    id="password" 
+                                    name="password" 
+                                    required 
+                                    aria-required="true" 
+                                    aria-describedby="passwordHint passwordError"
+                                    class="form-input w-full pr-12" 
+                                    placeholder="Минимум 8 символов"
+                                    minlength="8"
+                                >
+                                <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors" aria-label="Показать пароль">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div id="passwordHint" class="field-hint">Минимум 8 символов, включая буквы, цифры и специальные знаки</div>
+                            <div id="passwordError" class="error-message hidden" role="alert"></div>
+                            
+                            <!-- Индикатор силы пароля -->
+                            <div class="mt-3">
+                                <div class="flex space-x-1 mb-2">
+                                    <div id="strength1" class="h-2 flex-1 bg-gray-200 rounded-full transition-all duration-300"></div>
+                                    <div id="strength2" class="h-2 flex-1 bg-gray-200 rounded-full transition-all duration-300"></div>
+                                    <div id="strength3" class="h-2 flex-1 bg-gray-200 rounded-full transition-all duration-300"></div>
+                                    <div id="strength4" class="h-2 flex-1 bg-gray-200 rounded-full transition-all duration-300"></div>
+                                </div>
+                                <div id="strengthText" class="text-sm text-gray-600"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Подтверждение пароля -->
+                        <div>
+                            <label for="confirmPassword" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                Подтвердите пароль <span class="required-mark">*</span>
+                            </label>
+                            <input 
+                                type="password" 
+                                id="confirmPassword" 
+                                name="confirmPassword" 
+                                required 
+                                aria-required="true" 
+                                aria-describedby="confirmPasswordError"
+                                class="form-input w-full" 
+                                placeholder="Повторите пароль"
+                            >
+                            <div id="confirmPasswordError" class="error-message hidden" role="alert"></div>
+                        </div>
                     </div>
                     
-                    <!-- Желаемая должность (необязательное поле) -->
-                    <div>
-                        <label for="desiredPosition" class="block text-gray-700 font-semibold mb-2 text-lg">
-                            Желаемая должность
-                        </label>
-                        <input 
-                            type="text" 
-                            id="desiredPosition" 
-                            name="desiredPosition" 
-                            aria-describedby="positionHint"
-                            class="form-input w-full" 
-                            placeholder="Например: программист, учитель, менеджер"
-                            maxlength="100"
-                        >
-                        <div id="positionHint" class="field-hint">Укажите желаемую должность для персонализации рекомендаций</div>
+                    <!-- Дополнительная информация -->
+                    <div class="space-y-6">
+                        <h3 class="form-section-title">Дополнительная информация</h3>
+                        
+                        <!-- Регион (необязательное поле) -->
+                        <div>
+                            <label for="region" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                Регион
+                            </label>
+                            <select 
+                                id="region" 
+                                name="region" 
+                                aria-describedby="regionHint"
+                                class="form-select w-full"
+                            >
+                                <option value="">-- Выберите регион --</option>
+                                <option value="dushanbe">Душанбе</option>
+                                <option value="gbao">ГБАО (Горно-Бадахшанская автономная область)</option>
+                                <option value="sughd">Согдийская область</option>
+                                <option value="khatlon">Хатлонская область</option>
+                                <option value="rrp">РРП (Районы республиканского подчинения)</option>
+                            </select>
+                            <div id="regionHint" class="field-hint">Регион поможет показывать релевантные вакансии</div>
+                        </div>
+                        
+                        <!-- Желаемая должность (необязательное поле) -->
+                        <div>
+                            <label for="desiredPosition" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                Желаемая должность
+                            </label>
+                            <input 
+                                type="text" 
+                                id="desiredPosition" 
+                                name="desiredPosition" 
+                                aria-describedby="positionHint"
+                                class="form-input w-full" 
+                                placeholder="Например: программист, учитель, менеджер"
+                                maxlength="100"
+                            >
+                            <div id="positionHint" class="field-hint">Укажите желаемую должность для персонализации рекомендаций</div>
+                        </div>
                     </div>
                     
                     <!-- Соглашение с условиями -->
@@ -588,38 +781,140 @@
         }
         
         // Обработка выбора метода регистрации
-        document.querySelectorAll('.method-option').forEach(option => {
+        const methodSelectButton = document.getElementById('methodSelectButton');
+        const methodDropdown = document.getElementById('methodDropdown');
+        const dropdownArrow = document.getElementById('dropdownArrow');
+        const selectedMethodIcon = document.getElementById('selectedMethodIcon');
+        const selectedMethodText = document.getElementById('selectedMethodText');
+        
+        // Открытие/закрытие выпадающего списка
+        methodSelectButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleDropdown();
+        });
+        
+        methodSelectButton.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleDropdown();
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                openDropdown();
+                focusFirstOption();
+            }
+        });
+        
+        function toggleDropdown() {
+            const isOpen = methodDropdown.classList.contains('open');
+            if (isOpen) {
+                closeDropdown();
+            } else {
+                openDropdown();
+            }
+        }
+        
+        function openDropdown() {
+            methodDropdown.classList.add('open');
+            dropdownArrow.style.transform = 'rotate(180deg)';
+            methodSelectButton.setAttribute('aria-expanded', 'true');
+            
+            // Фокус на выбранном элементе или первом
+            const selectedOption = methodDropdown.querySelector('.method-option.selected');
+            if (selectedOption) {
+                selectedOption.focus();
+            } else {
+                focusFirstOption();
+            }
+        }
+        
+        function closeDropdown() {
+            methodDropdown.classList.remove('open');
+            dropdownArrow.style.transform = 'rotate(0deg)';
+            methodSelectButton.setAttribute('aria-expanded', 'false');
+        }
+        
+        function focusFirstOption() {
+            const firstOption = methodDropdown.querySelector('.method-option');
+            if (firstOption) {
+                firstOption.focus();
+            }
+        }
+        
+        // Обработка выбора опций
+        document.querySelectorAll('.method-option').forEach((option, index) => {
             option.addEventListener('click', function() {
-                selectMethod(this.dataset.method);
-                speak(`Выбран способ регистрации: ${this.querySelector('h4').textContent}`);
+                selectMethod(this.dataset.method, this);
+                closeDropdown();
+                methodSelectButton.focus();
             });
             
             option.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    selectMethod(this.dataset.method);
-                    speak(`Выбран способ регистрации: ${this.querySelector('h4').textContent}`);
+                switch(e.key) {
+                    case 'Enter':
+                    case ' ':
+                        e.preventDefault();
+                        selectMethod(this.dataset.method, this);
+                        closeDropdown();
+                        methodSelectButton.focus();
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        const nextOption = this.nextElementSibling;
+                        if (nextOption) {
+                            nextOption.focus();
+                        } else {
+                            focusFirstOption();
+                        }
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        const prevOption = this.previousElementSibling;
+                        if (prevOption) {
+                            prevOption.focus();
+                        } else {
+                            const options = methodDropdown.querySelectorAll('.method-option');
+                            options[options.length - 1].focus();
+                        }
+                        break;
+                    case 'Escape':
+                        closeDropdown();
+                        methodSelectButton.focus();
+                        break;
                 }
             });
         });
         
-        function selectMethod(method) {
+        // Закрытие при клике вне области
+        document.addEventListener('click', function(e) {
+            if (!methodSelectButton.contains(e.target) && !methodDropdown.contains(e.target)) {
+                closeDropdown();
+            }
+        });
+        
+        function selectMethod(method, optionElement) {
             // Убираем выделение с других опций
             document.querySelectorAll('.method-option').forEach(opt => {
                 opt.classList.remove('selected');
-                opt.setAttribute('aria-selected', 'false');
             });
             
             // Выделяем выбранную опцию
-            const selectedOption = document.querySelector(`[data-method="${method}"]`);
-            selectedOption.classList.add('selected');
-            selectedOption.setAttribute('aria-selected', 'true');
+            optionElement.classList.add('selected');
+            
+            // Обновляем кнопку
+            const iconClass = optionElement.querySelector('.method-icon i').className;
+            const title = optionElement.querySelector('.method-title').textContent;
+            
+            selectedMethodIcon.className = iconClass;
+            selectedMethodText.textContent = title;
+            methodSelectButton.classList.add('selected');
             
             selectedMethod = method;
             document.getElementById('selectedMethod').value = method;
             
             // Показываем соответствующие поля
             showContactFields(method);
+            
+            speak(`Выбран способ регистрации: ${title}`);
         }
         
         function showContactFields(method) {
@@ -632,77 +927,86 @@
             switch(method) {
                 case 'email':
                     fieldHTML = `
-                        <div>
-                            <label for="email" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                Email адрес <span class="required-mark">*</span>
-                            </label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                name="email" 
-                                required 
-                                aria-required="true" 
-                                aria-describedby="emailHint emailError"
-                                class="form-input w-full" 
-                                placeholder="example@email.com"
-                                autocomplete="email"
-                            >
-                            <div id="emailHint" class="field-hint">Введите действующий email адрес для подтверждения</div>
-                            <div id="emailError" class="error-message hidden" role="alert"></div>
+                        <div class="space-y-6">
+                            <h3 class="form-section-title">Контактная информация</h3>
+                            <div>
+                                <label for="email" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                    Email адрес <span class="required-mark">*</span>
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="email" 
+                                    name="email" 
+                                    required 
+                                    aria-required="true" 
+                                    aria-describedby="emailHint emailError"
+                                    class="form-input w-full" 
+                                    placeholder="example@email.com"
+                                    autocomplete="email"
+                                >
+                                <div id="emailHint" class="field-hint">Введите действующий email адрес для подтверждения</div>
+                                <div id="emailError" class="error-message hidden" role="alert"></div>
+                            </div>
                         </div>
                     `;
                     break;
                     
                 case 'phone':
                     fieldHTML = `
-                        <div>
-                            <label for="phone" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                Номер телефона <span class="required-mark">*</span>
-                            </label>
-                            <input 
-                                type="tel" 
-                                id="phone" 
-                                name="phone" 
-                                required 
-                                aria-required="true" 
-                                aria-describedby="phoneHint phoneError"
-                                class="form-input w-full" 
-                                placeholder="+992 900 00 00 00"
-                                pattern="^\\+?[0-9\\s\\-\\(\\)]{9,15}$"
-                                autocomplete="tel"
-                            >
-                            <div id="phoneHint" class="field-hint">Введите номер телефона для получения SMS с кодом подтверждения</div>
-                            <div id="phoneError" class="error-message hidden" role="alert"></div>
+                        <div class="space-y-6">
+                            <h3 class="form-section-title">Контактная информация</h3>
+                            <div>
+                                <label for="phone" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                    Номер телефона <span class="required-mark">*</span>
+                                </label>
+                                <input 
+                                    type="tel" 
+                                    id="phone" 
+                                    name="phone" 
+                                    required 
+                                    aria-required="true" 
+                                    aria-describedby="phoneHint phoneError"
+                                    class="form-input w-full" 
+                                    placeholder="+992 900 00 00 00"
+                                    pattern="^\\+?[0-9\\s\\-\\(\\)]{9,15}$"
+                                    autocomplete="tel"
+                                >
+                                <div id="phoneHint" class="field-hint">Введите номер телефона для получения SMS с кодом подтверждения</div>
+                                <div id="phoneError" class="error-message hidden" role="alert"></div>
+                            </div>
                         </div>
                     `;
                     break;
                     
                 case 'nsz':
                     fieldHTML = `
-                        <div>
-                            <label for="nsz" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                Номер социальной защиты (НСЗ) <span class="required-mark">*</span>
-                            </label>
-                            <input 
-                                type="text" 
-                                id="nsz" 
-                                name="nsz" 
-                                required 
-                                aria-required="true" 
-                                aria-describedby="nszHint nszError"
-                                class="form-input w-full" 
-                                placeholder="Введите номер НСЗ"
-                                pattern="^[0-9]{8,12}$"
-                                maxlength="12"
-                            >
-                            <div id="nszHint" class="field-hint">Номер из Национального реестра социальной защиты. Данные будут автоматически заполнены.</div>
-                            <div id="nszError" class="error-message hidden" role="alert"></div>
-                            <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                <div class="flex items-center text-blue-800">
-                                    <i class="fas fa-info-circle mr-2"></i>
-                                    <span class="text-sm font-medium">Интеграция с НРСЗ</span>
+                        <div class="space-y-6">
+                            <h3 class="form-section-title">Интеграция с НРСЗ</h3>
+                            <div>
+                                <label for="nsz" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                    Номер социальной защиты (НСЗ) <span class="required-mark">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="nsz" 
+                                    name="nsz" 
+                                    required 
+                                    aria-required="true" 
+                                    aria-describedby="nszHint nszError"
+                                    class="form-input w-full" 
+                                    placeholder="Введите номер НСЗ"
+                                    pattern="^[0-9]{8,12}$"
+                                    maxlength="12"
+                                >
+                                <div id="nszHint" class="field-hint">Номер из Национального реестра социальной защиты. Данные будут автоматически заполнены.</div>
+                                <div id="nszError" class="error-message hidden" role="alert"></div>
+                                <div class="mt-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
+                                    <div class="flex items-center text-blue-800 mb-2">
+                                        <i class="fas fa-info-circle mr-2"></i>
+                                        <span class="font-semibold">Интеграция с НРСЗ</span>
+                                    </div>
+                                    <p class="text-sm text-blue-700">При вводе НСЗ автоматически заполнятся: ФИО, регион, статус безработного</p>
                                 </div>
-                                <p class="text-sm text-blue-700 mt-1">При вводе НСЗ автоматически заполнятся: ФИО, регион, статус безработного</p>
                             </div>
                         </div>
                     `;
@@ -731,50 +1035,53 @@
             switch(userType) {
                 case 'employer':
                     fieldHTML = `
-                        <div class="space-y-4">
-                            <div>
-                                <label for="companyName" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                    Название организации <span class="required-mark">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="companyName" 
-                                    name="companyName" 
-                                    required 
-                                    aria-required="true"
-                                    class="form-input w-full" 
-                                    placeholder="Введите название вашей организации"
-                                    maxlength="200"
-                                >
-                            </div>
-                            <div>
-                                <label for="inn" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                    ИНН организации <span class="required-mark">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="inn" 
-                                    name="inn" 
-                                    required 
-                                    aria-required="true"
-                                    class="form-input w-full" 
-                                    placeholder="Введите ИНН"
-                                    pattern="^[0-9]{9,12}$"
-                                    maxlength="12"
-                                >
-                                <div class="field-hint">ИНН организации для верификации</div>
-                            </div>
-                            <div>
-                                <label for="companySize" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                    Размер организации
-                                </label>
-                                <select id="companySize" name="companySize" class="form-select w-full">
-                                    <option value="">-- Выберите --</option>
-                                    <option value="micro">Микро (до 10 сотрудников)</option>
-                                    <option value="small">Малая (10-50 сотрудников)</option>
-                                    <option value="medium">Средняя (50-250 сотрудников)</option>
-                                    <option value="large">Крупная (более 250 сотрудников)</option>
-                                </select>
+                        <div class="space-y-6">
+                            <h3 class="form-section-title">Информация о работодателе</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="companyName" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                        Название организации <span class="required-mark">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="companyName" 
+                                        name="companyName" 
+                                        required 
+                                        aria-required="true"
+                                        class="form-input w-full" 
+                                        placeholder="Введите название вашей организации"
+                                        maxlength="200"
+                                    >
+                                </div>
+                                <div>
+                                    <label for="inn" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                        ИНН организации <span class="required-mark">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="inn" 
+                                        name="inn" 
+                                        required 
+                                        aria-required="true"
+                                        class="form-input w-full" 
+                                        placeholder="Введите ИНН"
+                                        pattern="^[0-9]{9,12}$"
+                                        maxlength="12"
+                                    >
+                                    <div class="field-hint">ИНН организации для верификации</div>
+                                </div>
+                                <div>
+                                    <label for="companySize" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                        Размер организации
+                                    </label>
+                                    <select id="companySize" name="companySize" class="form-select w-full">
+                                        <option value="">-- Выберите --</option>
+                                        <option value="micro">Микро (до 10 сотрудников)</option>
+                                        <option value="small">Малая (10-50 сотрудников)</option>
+                                        <option value="medium">Средняя (50-250 сотрудников)</option>
+                                        <option value="large">Крупная (более 250 сотрудников)</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -782,34 +1089,37 @@
                     
                 case 'training_center':
                     fieldHTML = `
-                        <div class="space-y-4">
-                            <div>
-                                <label for="centerName" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                    Название учебного центра <span class="required-mark">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="centerName" 
-                                    name="centerName" 
-                                    required 
-                                    aria-required="true"
-                                    class="form-input w-full" 
-                                    placeholder="Введите название центра"
-                                    maxlength="200"
-                                >
-                            </div>
-                            <div>
-                                <label for="centerType" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                    Тип учебного заведения
-                                </label>
-                                <select id="centerType" name="centerType" class="form-select w-full">
-                                    <option value="">-- Выберите --</option>
-                                    <option value="university">Университет</option>
-                                    <option value="college">Колледж</option>
-                                    <option value="training">Учебный центр</option>
-                                    <option value="vocational">Профессиональное училище</option>
-                                    <option value="online">Онлайн платформа</option>
-                                </select>
+                        <div class="space-y-6">
+                            <h3 class="form-section-title">Информация об учебном центре</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="centerName" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                        Название учебного центра <span class="required-mark">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="centerName" 
+                                        name="centerName" 
+                                        required 
+                                        aria-required="true"
+                                        class="form-input w-full" 
+                                        placeholder="Введите название центра"
+                                        maxlength="200"
+                                    >
+                                </div>
+                                <div>
+                                    <label for="centerType" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                        Тип учебного заведения
+                                    </label>
+                                    <select id="centerType" name="centerType" class="form-select w-full">
+                                        <option value="">-- Выберите --</option>
+                                        <option value="university">Университет</option>
+                                        <option value="college">Колледж</option>
+                                        <option value="training">Учебный центр</option>
+                                        <option value="vocational">Профессиональное училище</option>
+                                        <option value="online">Онлайн платформа</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -817,36 +1127,39 @@
                     
                 case 'government':
                     fieldHTML = `
-                        <div class="space-y-4">
-                            <div>
-                                <label for="department" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                    Ведомство/организация <span class="required-mark">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="department" 
-                                    name="department" 
-                                    required 
-                                    aria-required="true"
-                                    class="form-input w-full" 
-                                    placeholder="Введите название ведомства"
-                                    maxlength="200"
-                                >
-                            </div>
-                            <div>
-                                <label for="position" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                    Должность <span class="required-mark">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="position" 
-                                    name="position" 
-                                    required 
-                                    aria-required="true"
-                                    class="form-input w-full" 
-                                    placeholder="Введите вашу должность"
-                                    maxlength="100"
-                                >
+                        <div class="space-y-6">
+                            <h3 class="form-section-title">Информация о госслужащем</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="department" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                        Ведомство/организация <span class="required-mark">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="department" 
+                                        name="department" 
+                                        required 
+                                        aria-required="true"
+                                        class="form-input w-full" 
+                                        placeholder="Введите название ведомства"
+                                        maxlength="200"
+                                    >
+                                </div>
+                                <div>
+                                    <label for="position" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                        Должность <span class="required-mark">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="position" 
+                                        name="position" 
+                                        required 
+                                        aria-required="true"
+                                        class="form-input w-full" 
+                                        placeholder="Введите вашу должность"
+                                        maxlength="100"
+                                    >
+                                </div>
                             </div>
                         </div>
                     `;
@@ -854,32 +1167,35 @@
                     
                 case 'student':
                     fieldHTML = `
-                        <div class="space-y-4">
-                            <div>
-                                <label for="institution" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                    Учебное заведение
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="institution" 
-                                    name="institution" 
-                                    class="form-input w-full" 
-                                    placeholder="Название вашего учебного заведения"
-                                    maxlength="200"
-                                >
-                            </div>
-                            <div>
-                                <label for="studyLevel" class="block text-gray-700 font-semibold mb-2 text-lg">
-                                    Уровень образования
-                                </label>
-                                <select id="studyLevel" name="studyLevel" class="form-select w-full">
-                                    <option value="">-- Выберите --</option>
-                                    <option value="high_school">Среднее образование</option>
-                                    <option value="vocational">Среднее специальное</option>
-                                    <option value="bachelor">Бакалавриат</option>
-                                    <option value="master">Магистратура</option>
-                                    <option value="phd">Аспирантура/PhD</option>
-                                </select>
+                        <div class="space-y-6">
+                            <h3 class="form-section-title">Информация об образовании</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="institution" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                        Учебное заведение
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="institution" 
+                                        name="institution" 
+                                        class="form-input w-full" 
+                                        placeholder="Название вашего учебного заведения"
+                                        maxlength="200"
+                                    >
+                                </div>
+                                <div>
+                                    <label for="studyLevel" class="block text-gray-700 font-semibold mb-3 text-lg">
+                                        Уровень образования
+                                    </label>
+                                    <select id="studyLevel" name="studyLevel" class="form-select w-full">
+                                        <option value="">-- Выберите --</option>
+                                        <option value="high_school">Среднее образование</option>
+                                        <option value="vocational">Среднее специальное</option>
+                                        <option value="bachelor">Бакалавриат</option>
+                                        <option value="master">Магистратура</option>
+                                        <option value="phd">Аспирантура/PhD</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -887,7 +1203,7 @@
             }
             
             if (fieldHTML) {
-                roleFields.innerHTML = `<div class="pt-4 border-t border-gray-200">${fieldHTML}</div>`;
+                roleFields.innerHTML = fieldHTML;
             }
         }
         
