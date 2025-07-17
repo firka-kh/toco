@@ -763,22 +763,6 @@
     <script>
         // Глобальные переменные
         let selectedMethod = '';
-        let speechSupported = 'speechSynthesis' in window;
-        
-        // Функция для голосовых подсказок (доступность)
-        function speak(text, priority = false) {
-            if (!speechSupported) return;
-            
-            if (priority && window.speechSynthesis.speaking) {
-                window.speechSynthesis.cancel();
-            }
-            
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ru-RU';
-            utterance.rate = 0.9;
-            utterance.volume = 0.8;
-            window.speechSynthesis.speak(utterance);
-        }
         
         // Обработка выбора метода регистрации
         const methodSelectButton = document.getElementById('methodSelectButton');
@@ -913,8 +897,6 @@
             
             // Показываем соответствующие поля
             showContactFields(method);
-            
-            speak(`Выбран способ регистрации: ${title}`);
         }
         
         function showContactFields(method) {
@@ -1239,11 +1221,10 @@
             if (!emailField || !errorElement) return true;
             
             const email = emailField.value.trim();
-            const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             
             if (email && !emailRegex.test(email)) {
                 showFieldError('emailError', 'Неверный формат email адреса');
-                speak('Неверный формат email адреса');
                 return false;
             } else {
                 hideFieldError('emailError');
@@ -1258,11 +1239,10 @@
             if (!phoneField || !errorElement) return true;
             
             const phone = phoneField.value.trim();
-            const phoneRegex = /^\\+?[0-9\\s\\-\\(\\)]{9,15}$/;
+            const phoneRegex = /^\+?[0-9\s\-\(\)]{9,15}$/;
             
             if (phone && !phoneRegex.test(phone)) {
                 showFieldError('phoneError', 'Неверный формат номера телефона');
-                speak('Неверный формат номера телефона');
                 return false;
             } else {
                 hideFieldError('phoneError');
@@ -1281,7 +1261,6 @@
             
             if (nsz && !nszRegex.test(nsz)) {
                 showFieldError('nszError', 'НСЗ должен содержать от 8 до 12 цифр');
-                speak('Неверный формат номера социальной защиты');
                 return false;
             } else {
                 hideFieldError('nszError');
@@ -1301,8 +1280,6 @@
                     // Заполнение данных (в реальной системе это данные из НРСЗ)
                     document.getElementById('fullName').value = 'Имитация данных из НРСЗ';
                     document.getElementById('region').value = 'dushanbe';
-                    
-                    speak('Данные автоматически заполнены из реестра социальной защиты');
                 }, 1000);
             }
         }
@@ -1434,8 +1411,6 @@
             setTimeout(() => {
                 notification.remove();
             }, 3000);
-            
-            speak('Черновик формы сохранен');
         });
         
         // Загрузка черновика при загрузке страницы
@@ -1476,8 +1451,7 @@
             
             // Проверяем, выбран ли метод регистрации
             if (!selectedMethod) {
-                speak('Пожалуйста, выберите способ регистрации', true);
-                document.querySelector('.method-selector').scrollIntoView({ behavior: 'smooth' });
+                document.querySelector('.method-selector-wrapper').scrollIntoView({ behavior: 'smooth' });
                 return;
             }
             
@@ -1490,7 +1464,6 @@
                     isValid = false;
                     field.classList.add('border-red-500');
                     field.focus();
-                    speak(`Поле ${field.labels?.[0]?.textContent || field.placeholder} обязательно для заполнения`, true);
                     return;
                 } else {
                     field.classList.remove('border-red-500');
@@ -1517,7 +1490,6 @@
             }
             
             if (!isValid) {
-                speak('Пожалуйста, исправьте ошибки в форме', true);
                 return;
             }
             
@@ -1537,30 +1509,10 @@
                 document.getElementById('registrationForm').classList.add('hidden');
                 document.getElementById('successMessage').classList.remove('hidden');
                 
-                speak('Регистрация прошла успешно! Проверьте свою почту или телефон для подтверждения аккаунта', true);
-                
                 // Прокручиваем к сообщению
                 document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
                 
             }, 2000);
-        });
-        
-        // Добавляем обработчики для голосовых подсказок при фокусе
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('input, select, button').forEach(element => {
-                element.addEventListener('focus', function() {
-                    const label = this.labels?.[0]?.textContent || 
-                                 this.getAttribute('aria-label') || 
-                                 this.placeholder;
-                    
-                    if (label && speechSupported) {
-                        // Небольшая задержка, чтобы не мешать навигации
-                        setTimeout(() => {
-                            speak(label.replace(/\*/g, ''));
-                        }, 500);
-                    }
-                });
-            });
         });
         
         // Обработчики выпадающих меню (из оригинального кода)
