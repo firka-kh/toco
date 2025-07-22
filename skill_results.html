@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты теста</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-center text-gray-800">Результаты теста</h1>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <section class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- Результаты теста -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-700">Ваши результаты</h2>
+                <div class="bg-gray-100 rounded-lg p-4">
+                    <p class="text-lg text-gray-800"><span id="scorePercentage">85%</span> ( <span id="correctAnswers">17 из 20</span> )</p>
+                    <p class="text-gray-600">Дата прохождения: <span id="testDate">Завершен: 22 июля 2025, 12:19</span></p>
+                </div>
+            </div>
+
+            <!-- График результатов -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">График результатов</h3>
+                <div class="bg-white rounded-lg p-6 border">
+                    <canvas id="scoreChart" height="150"></canvas>
+                </div>
+            </div>
+
+            <!-- Практические задания -->
+            <div class="mb-8">
+                <h4 class="text-xl font-semibold mb-6 text-gray-700">Практические задания</h4>
+                <div class="bg-white rounded-lg p-6 border">
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <i class="fas fa-code text-3xl text-blue-500 mb-3"></i>
+                            <h5 class="font-semibold mb-2">Решите 5 задач на циклы</h5>
+                            <p class="text-gray-600 text-sm mb-2">Уровень: Средний</p>
+                            <a href="https://leetcode.com/tag/python/" target="_blank" class="text-blue-600 hover:underline text-sm">Перейти</a>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-database text-3xl text-green-500 mb-3"></i>
+                            <h5 class="font-semibold mb-2">Работа с библиотекой Pandas</h5>
+                            <p class="text-gray-600 text-sm mb-2">Уровень: Начальный</p>
+                            <a href="https://pandas.pydata.org/docs/getting_started/index.html" target="_blank" class="text-green-600 hover:underline text-sm">Перейти</a>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-bug text-3xl text-red-500 mb-3"></i>
+                            <h5 class="font-semibold mb-2">Обработка исключений</h5>
+                            <p class="text-gray-600 text-sm mb-2">Уровень: Продвинутый</p>
+                            <a href="https://stepik.org/course/63054" target="_blank" class="text-red-600 hover:underline text-sm">Перейти</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Следующие шаги -->
+            <div class="mb-8">
+                <h4 class="text-xl font-semibold mb-6 text-gray-700">Следующие шаги</h4>
+                <div class="flex flex-col md:flex-row gap-6">
+                    <a href="skill_gap_analysis.html" class="bg-blue-500 text-white px-6 py-4 rounded-lg font-semibold hover:bg-blue-600 transition-colors text-center flex-1">
+                        <i class="fas fa-search mr-2"></i>Анализ пробелов в навыках
+                    </a>
+                    <a href="skill_course_recommend.html" class="bg-green-500 text-white px-6 py-4 rounded-lg font-semibold hover:bg-green-600 transition-colors text-center flex-1">
+                        <i class="fas fa-graduation-cap mr-2"></i>Рекомендации курсов
+                    </a>
+                    <a href="skill_assessment.html" class="bg-yellow-400 text-gray-800 px-6 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-center flex-1">
+                        <i class="fas fa-redo mr-2"></i>Пройти другой тест
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 Министерство труда, миграции и занятости населения Республики Таджикистан</p>
+        </div>
+    </footer>
+
+    <script>
+        // Инициализация данных результатов из URL
+        function getQueryParam(name) {
+            const url = new URL(window.location.href);
+            return url.searchParams.get(name);
+        }
+        // Пример заполнения данными
+        document.addEventListener('DOMContentLoaded', function() {
+            const score = getQueryParam('score') || 85;
+            const total = getQueryParam('total') || 20;
+            document.getElementById('scorePercentage').textContent = score + '%';
+            document.getElementById('correctAnswers').textContent = Math.round(score * total / 100) + ' из ' + total;
+            document.getElementById('testDate').textContent = 'Завершен: ' + new Date().toLocaleString('ru-RU');
+            // Круговая диаграмма
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Результат', 'Остальное'],
+                    datasets: [{
+                        data: [score, 100 - score],
+                        backgroundColor: ['#3B82F6', '#E5E7EB'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    cutout: '80%',
+                    plugins: { legend: { display: false } }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

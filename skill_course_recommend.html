@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рекомендации курсов - Портал рынка труда</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .section-spacing {
+            padding: 3rem 0;
+        }
+        .high-contrast {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+        .large-text {
+            font-size: 1.25rem !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">Рекомендации курсов</h1>
+                <span class="text-sm opacity-90 block">Портал рынка труда РТ</span>
+            </div>
+            <a href="skill_gap_analysis.html" class="bg-yellow-400 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>К анализу пробелов
+            </a>
+        </div>
+    </header>
+
+    <section class="section-spacing bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Подберите курс для развития навыков</h2>
+            <!-- Фильтры -->
+            <div class="bg-gray-50 rounded-lg p-6 mb-8 shadow max-w-4xl mx-auto">
+                <form id="filterForm" class="grid md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block mb-2 font-semibold">Формат</label>
+                        <select name="format" class="w-full px-4 py-2 rounded-lg border text-gray-800">
+                            <option value="">Любой</option>
+                            <option value="online">Онлайн</option>
+                            <option value="offline">Оффлайн</option>
+                            <option value="mixed">Смешанный</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold">Стоимость</label>
+                        <select name="price" class="w-full px-4 py-2 rounded-lg border text-gray-800">
+                            <option value="">Любая</option>
+                            <option value="free">Бесплатно</option>
+                            <option value="lt500">До 500 сомони</option>
+                            <option value="500-1000">500–1000 сомони</option>
+                            <option value="gt1000">Более 1000 сомони</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold">Язык</label>
+                        <select name="lang" class="w-full px-4 py-2 rounded-lg border text-gray-800">
+                            <option value="">Любой</option>
+                            <option value="tj">Таджикский</option>
+                            <option value="ru">Русский</option>
+                            <option value="en">Английский</option>
+                        </select>
+                    </div>
+                </form>
+                <button id="applyFilters" class="mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors w-full">
+                    <i class="fas fa-filter mr-2"></i>Применить фильтры
+                </button>
+            </div>
+            <!-- Список курсов -->
+            <div id="coursesList" class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Курсы будут загружены динамически -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 Министерство труда, миграции и занятости населения Республики Таджикистан</p>
+        </div>
+    </footer>
+
+    <script>
+        // Демонстрационные курсы
+        const demoCourses = [
+            {
+                title: 'Основы Python',
+                provider: 'IT Академия Душанбе',
+                duration: '4 недели',
+                format: 'online',
+                price: 'lt500',
+                lang: 'ru',
+                accessibility: ['subtitles'],
+                cost: '400 сомони',
+                link: 'https://itacademy.tj/python'
+            },
+            {
+                title: 'Python библиотеки: Pandas, NumPy',
+                provider: 'Coursera',
+                duration: '4 недели',
+                format: 'online',
+                price: 'free',
+                lang: 'en',
+                accessibility: ['subtitles', 'audio'],
+                cost: 'Бесплатно',
+                link: 'https://coursera.org/learn/python-libraries'
+            },
+            {
+                title: 'Бухгалтерский учет 1С',
+                provider: 'Центр обучения 1С',
+                duration: '2 месяца',
+                format: 'offline',
+                price: '500-1000',
+                lang: 'ru',
+                accessibility: ['ramp'],
+                cost: '800 сомони',
+                link: 'https://1c.tj/courses'
+            }
+            // ...другие курсы...
+        ];
+
+        function renderCourses(courses) {
+            const list = document.getElementById('coursesList');
+            list.innerHTML = '';
+            courses.forEach(course => {
+                const div = document.createElement('div');
+                div.className = 'bg-white rounded-lg p-6 border card-hover flex flex-col justify-between';
+                div.innerHTML = `
+                    <h4 class="text-xl font-semibold mb-2">${course.title}</h4>
+                    <p class="text-gray-600 mb-2">${course.provider}</p>
+                    <div class="flex items-center space-x-4 mb-2">
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">${course.duration}</span>
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">${course.format === 'online' ? 'Онлайн' : course.format === 'offline' ? 'Оффлайн' : 'Смешанный'}</span>
+                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">${course.cost}</span>
+                    </div>
+                    <div class="mb-2 text-sm text-gray-500">Язык: ${course.lang === 'ru' ? 'Русский' : course.lang === 'en' ? 'Английский' : 'Таджикский'}</div>
+                    <div class="mb-2 text-sm text-gray-500">Доступность: ${course.accessibility.join(', ')}</div>
+                    <a href="${course.link}" target="_blank" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors text-center">Подробнее</a>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function applyFilters() {
+            const form = document.getElementById('filterForm');
+            const format = form.format.value;
+            const price = form.price.value;
+            const lang = form.lang.value;
+            let filtered = demoCourses.filter(course => {
+                return (!format || course.format === format)
+                    && (!price || course.price === price)
+                    && (!lang || course.lang === lang);
+            });
+            renderCourses(filtered);
+        }
+
+        document.getElementById('applyFilters').onclick = applyFilters;
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCourses(demoCourses);
+        });
+    </script>
+</body>
+</html>

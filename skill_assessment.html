@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оценка навыков - Портал рынка труда</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .section-spacing {
+            padding: 3rem 0;
+        }
+        /* Доступность */
+        .high-contrast {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+        .large-text {
+            font-size: 1.25rem !important;
+        }
+        .focus-visible {
+            outline: 3px solid #fbbf24 !important;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Логотип МТМЗН" class="rounded-full">
+                    <div>
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Кнопки доступности -->
+                <div class="flex items-center space-x-4">
+                    <button id="toggleContrast" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded text-sm" title="Высокий контраст">
+                        <i class="fas fa-adjust"></i>
+                    </button>
+                    <button id="toggleFontSize" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded text-sm" title="Увеличить шрифт">
+                        <i class="fas fa-font"></i>
+                    </button>
+                    <a href="index.html" class="bg-yellow-400 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+                        На главную
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Навигация -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-8 py-4">
+                <a href="skill_assessment.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-2">Оценка навыков</a>
+                <a href="skill_gap_analysis.html" class="text-gray-600 hover:text-blue-600 pb-2">Анализ пробелов</a>
+                <a href="skill_serch.html" class="text-gray-600 hover:text-blue-600 pb-2">Курсы</a>
+                <a href="skill_certificates.html" class="text-gray-600 hover:text-blue-600 pb-2">Сертификаты</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero секция -->
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6">Оценка навыков</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">Пройдите онлайн-тесты для оценки ваших технических навыков, софт-скиллов и языковых компетенций</p>
+            <div class="bg-white bg-opacity-20 rounded-lg p-6 backdrop-blur-sm max-w-2xl mx-auto">
+                <div class="flex items-center justify-center space-x-8 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-clock"></i>
+                        <span>20-30 минут</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-questions"></i>
+                        <span>15-30 вопросов</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-certificate"></i>
+                        <span>Мгновенные результаты</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Категории тестов -->
+    <section class="section-spacing bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Выберите категорию теста</h2>
+            
+            <!-- Технические навыки -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold mb-6 text-gray-700">
+                    <i class="fas fa-code text-blue-500 mr-3"></i>Технические навыки
+                </h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover cursor-pointer" onclick="startTest('python')">
+                        <div class="text-center">
+                            <i class="fab fa-python text-4xl text-blue-600 mb-4"></i>
+                            <h4 class="text-xl font-semibold mb-2">Python</h4>
+                            <p class="text-gray-600 mb-4">Основы программирования, алгоритмы, библиотеки</p>
+                            <div class="flex justify-between text-sm text-gray-500 mb-4">
+                                <span><i class="fas fa-clock mr-1"></i>25 мин</span>
+                                <span><i class="fas fa-users mr-1"></i>2,453 прошли</span>
+                            </div>
+                            <button class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                                Начать тест
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover cursor-pointer" onclick="startTest('office')">
+                        <div class="text-center">
+                            <i class="fas fa-file-excel text-4xl text-green-600 mb-4"></i>
+                            <h4 class="text-xl font-semibold mb-2">MS Office</h4>
+                            <p class="text-gray-600 mb-4">Excel, Word, PowerPoint</p>
+                            <div class="flex justify-between text-sm text-gray-500 mb-4">
+                                <span><i class="fas fa-clock mr-1"></i>20 мин</span>
+                                <span><i class="fas fa-users mr-1"></i>5,234 прошли</span>
+                            </div>
+                            <button class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                Начать тест
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover cursor-pointer" onclick="startTest('accounting')">
+                        <div class="text-center">
+                            <i class="fas fa-calculator text-4xl text-purple-600 mb-4"></i>
+                            <h4 class="text-xl font-semibold mb-2">Бухгалтерский учет</h4>
+                            <p class="text-gray-600 mb-4">1С, основы учета, налогообложение</p>
+                            <div class="flex justify-between text-sm text-gray-500 mb-4">
+                                <span><i class="fas fa-clock mr-1"></i>30 мин</span>
+                                <span><i class="fas fa-users mr-1"></i>1,876 прошли</span>
+                            </div>
+                            <button class="w-full bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 transition-colors">
+                                Начать тест
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Софт-скиллы -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold mb-6 text-gray-700">
+                    <i class="fas fa-users text-orange-500 mr-3"></i>Софт-скиллы
+                </h3>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover cursor-pointer" onclick="startTest('communication')">
+                        <div class="text-center">
+                            <i class="fas fa-comments text-4xl text-orange-500 mb-4"></i>
+                            <h4 class="text-lg font-semibold mb-2">Коммуникация</h4>
+                            <p class="text-gray-600 mb-4 text-sm">Навыки общения и презентации</p>
+                            <button class="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                                Начать тест
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover cursor-pointer" onclick="startTest('leadership')">
+                        <div class="text-center">
+                            <i class="fas fa-crown text-4xl text-yellow-600 mb-4"></i>
+                            <h4 class="text-lg font-semibold mb-2">Лидерство</h4>
+                            <p class="text-gray-600 mb-4 text-sm">Управление командой</p>
+                            <button class="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors">
+                                Начать тест
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover cursor-pointer" onclick="startTest('time-management')">
+                        <div class="text-center">
+                            <i class="fas fa-clock text-4xl text-indigo-500 mb-4"></i>
+                            <h4 class="text-lg font-semibold mb-2">Управление временем</h4>
+                            <p class="text-gray-600 mb-4 text-sm">Планирование и приоритеты</p>
+                            <button class="w-full bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600 transition-colors">
+                                Начать тест
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover cursor-pointer" onclick="startTest('problem-solving')">
+                        <div class="text-center">
+                            <i class="fas fa-lightbulb text-4xl text-pink-500 mb-4"></i>
+                            <h4 class="text-lg font-semibold mb-2">Решение проблем</h4>
+                            <p class="text-gray-600 mb-4 text-sm">Аналитическое мышление</p>
+                            <button class="w-full bg-pink-500 text-white py-2 rounded-lg hover:bg-pink-600 transition-colors">
+                                Начать тест
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Языковые навыки -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold mb-6 text-gray-700">
+                    <i class="fas fa-language text-red-500 mr-3"></i>Языковые навыки
+                </h3>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover cursor-pointer" onclick="startTest('tajik')">
+                        <div class="text-center">
+                            <i class="fas fa-flag text-4xl text-green-600 mb-4"></i>
+                            <h4 class="text-lg font-semibold mb-2">Таджикский язык</h4>
+                            <p class="text-gray-600 mb-4 text-sm">Уровни A1-C2</p>
+                            <button class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                Начать тест
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover cursor-pointer" onclick="startTest('russian')">
+                        <div class="text-center">
+                            <i class="fas fa-flag text-4xl text-blue-600 mb-4"></i>
+                            <h4 class="text-lg font-semibold mb-2">Русский язык</h4>
+                            <p class="text-gray-600 mb-4 text-sm">Уровни A1-C2</p>
+                            <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                Начать тест
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover cursor-pointer" onclick="startTest('english')">
+                        <div class="text-center">
+                            <i class="fas fa-flag text-4xl text-red-600 mb-4"></i>
+                            <h4 class="text-lg font-semibold mb-2">Английский язык</h4>
+                            <p class="text-gray-600 mb-4 text-sm">Уровни A1-C2</p>
+                            <button class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                Начать тест
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 card-hover cursor-pointer" onclick="startTest('uzbek')">
+                        <div class="text-center">
+                            <i class="fas fa-flag text-4xl text-yellow-600 mb-4"></i>
+                            <h4 class="text-lg font-semibold mb-2">Узбекский язык</h4>
+                            <p class="text-gray-600 mb-4 text-sm">Уровни A1-C2</p>
+                            <button class="w-full bg-yellow-600 text-white py-2 rounded-lg hover:bg-yellow-700 transition-colors">
+                                Начать тест
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ваша статистика -->
+    <section class="section-spacing bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Ваша статистика</h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                    <i class="fas fa-check-circle text-4xl text-green-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-gray-800">5</h3>
+                    <p class="text-gray-600">Пройдено тестов</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                    <i class="fas fa-star text-4xl text-yellow-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-gray-800">4.2</h3>
+                    <p class="text-gray-600">Средний балл</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                    <i class="fas fa-trophy text-4xl text-purple-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-gray-800">3</h3>
+                    <p class="text-gray-600">Сертификатов</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                    <i class="fas fa-chart-line text-4xl text-blue-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-gray-800">+15%</h3>
+                    <p class="text-gray-600">Прогресс за месяц</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 Министерство труда, миграции и занятости населения Республики Таджикистан</p>
+        </div>
+    </footer>
+
+    <!-- Модальное окно инструкций -->
+    <div id="instructionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full mx-4">
+            <h3 class="text-2xl font-bold mb-6">Инструкции для теста</h3>
+            <div id="instructionContent">
+                <!-- Содержимое будет загружено динамически -->
+            </div>
+            <div class="flex space-x-4 mt-6">
+                <button id="startTestBtn" class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                    Начать тест
+                </button>
+                <button id="closeModal" class="bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors">
+                    Отмена
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Функции доступности
+        document.getElementById('toggleContrast').addEventListener('click', function() {
+            document.body.classList.toggle('high-contrast');
+        });
+
+        document.getElementById('toggleFontSize').addEventListener('click', function() {
+            document.body.classList.toggle('large-text');
+        });
+
+        // Функция начала теста
+        function startTest(category) {
+            const instructions = {
+                'python': {
+                    title: 'Тест по Python',
+                    content: `
+                        <p class="mb-4">Этот тест оценивает ваши знания программирования на Python.</p>
+                        <ul class="list-disc list-inside mb-4 space-y-2">
+                            <li>Время прохождения: 25 минут</li>
+                            <li>Количество вопросов: 20</li>
+                            <li>Типы вопросов: выбор ответа, написание кода</li>
+                            <li>Можно прервать и продолжить позже (в течение 24 часов)</li>
+                        </ul>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <p class="text-yellow-800"><strong>Внимание:</strong> Вы можете пройти этот тест только 2 раза в месяц.</p>
+                        </div>
+                    `
+                },
+                'office': {
+                    title: 'Тест по MS Office',
+                    content: `
+                        <p class="mb-4">Тест проверяет навыки работы с Microsoft Office.</p>
+                        <ul class="list-disc list-inside mb-4 space-y-2">
+                            <li>Время прохождения: 20 минут</li>
+                            <li>Количество вопросов: 15</li>
+                            <li>Охватывает: Excel, Word, PowerPoint</li>
+                        </ul>
+                    `
+                }
+                // Добавить другие категории...
+            };
+
+            const modal = document.getElementById('instructionModal');
+            const content = document.getElementById('instructionContent');
+            const instruction = instructions[category] || {
+                title: 'Тест',
+                content: '<p>Инструкции для теста будут здесь.</p>'
+            };
+
+            content.innerHTML = `<h4 class="text-xl font-semibold mb-4">${instruction.title}</h4>${instruction.content}`;
+            modal.classList.remove('hidden');
+
+            document.getElementById('startTestBtn').onclick = function() {
+                window.location.href = `skill_test.html?category=${category}`;
+            };
+        }
+
+        // Закрытие модального окна
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('instructionModal').classList.add('hidden');
+        });
+
+        // Закрытие по клику вне модального окна
+        document.getElementById('instructionModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+
+        // Аудио инструкции для доступности
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ru-RU';
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Добавление поддержки клавиатурной навигации
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('instructionModal').classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

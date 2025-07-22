@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прохождение теста - Портал рынка труда</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        .question-container {
+            min-height: 400px;
+        }
+        .code-editor {
+            font-family: 'Courier New', monospace;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+        }
+        /* Доступность */
+        .high-contrast {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+        .large-text {
+            font-size: 1.25rem !important;
+        }
+        .focus-visible {
+            outline: 3px solid #fbbf24 !important;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-xl font-bold">Тест: <span id="testTitle">Python</span></h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 bg-white bg-opacity-20 rounded-lg px-4 py-2">
+                        <i class="fas fa-clock"></i>
+                        <span id="timer">25:00</span>
+                    </div>
+                    <button id="pauseTest" class="bg-yellow-400 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+                        <i class="fas fa-pause mr-2"></i>Пауза
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Прогресс-бар -->
+    <div class="bg-white border-b">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-gray-600">Прогресс</span>
+                <span class="text-sm text-gray-600" id="progressText">Вопрос 1 из 20</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div id="progressBar" class="bg-blue-500 h-3 rounded-full progress-bar" style="width: 5%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Контейнер вопроса -->
+            <div class="bg-white rounded-lg shadow-lg p-8 question-container">
+                <div id="questionContent">
+                    <!-- Содержимое вопроса будет загружено динамически -->
+                </div>
+                
+                <!-- Навигация -->
+                <div class="flex justify-between items-center mt-8 pt-6 border-t">
+                    <button id="prevBtn" class="bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors disabled:opacity-50" disabled>
+                        <i class="fas fa-arrow-left mr-2"></i>Назад
+                    </button>
+                    
+                    <div class="flex space-x-4">
+                        <button id="saveBtn" class="bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Сохранить
+                        </button>
+                        <button id="nextBtn" class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                            Далее<i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Боковая панель навигации по вопросам -->
+            <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">Навигация по вопросам</h3>
+                <div id="questionNavigation" class="grid grid-cols-10 gap-2">
+                    <!-- Кнопки вопросов будут сгенерированы динамически -->
+                </div>
+                <div class="mt-4 flex items-center space-x-4 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-blue-500 rounded"></div>
+                        <span>Текущий</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-green-500 rounded"></div>
+                        <span>Отвечен</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-gray-300 rounded"></div>
+                        <span>Не отвечен</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно завершения -->
+    <div id="finishModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold mb-6 text-center">Завершить тест?</h3>
+            <p class="text-gray-600 mb-6 text-center">Вы ответили на <span id="answeredCount">0</span> из <span id="totalQuestions">20</span> вопросов.</p>
+            <div class="flex space-x-4">
+                <button id="continueTest" class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors">
+                    Продолжить
+                </button>
+                <button id="finishTest" class="flex-1 bg-red-500 text-white py-3 rounded-lg font-semibold hover:bg-red-600 transition-colors">
+                    Завершить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Состояние теста
+        let testState = {
+            category: new URLSearchParams(window.location.search).get('category') || 'python',
+            currentQuestion: 0,
+            totalQuestions: 20,
+            timeLeft: 25 * 60, // 25 минут в секундах
+            answers: {},
+            questions: [],
+            isPaused: false
+        };
+
+        // Примеры вопросов для демонстрации
+        const sampleQuestions = {
+            python: [
+                {
+                    id: 1,
+                    type: 'multiple-choice',
+                    question: 'Что выведет следующий код?\n\nprint("Hello" + " " + "World")',
+                    options: ['Hello World', 'HelloWorld', 'Hello + World', 'Ошибка'],
+                    correct: 0
+                },
+                {
+                    id: 2,
+                    type: 'code',
+                    question: 'Напишите функцию, которая возвращает сумму двух чисел:',
+                    starter: 'def add_numbers(a, b):\n    # Ваш код здесь\n    pass',
+                    expected: 'def add_numbers(a, b):\n    return a + b'
+                },
+                {
+                    id: 3,
+                    type: 'multiple-choice',
+                    question: 'Какой из следующих типов данных является изменяемым в Python?',
+                    options: ['tuple', 'string', 'list', 'frozenset'],
+                    correct: 2
+                }
+            ]
+        };
+
+        // Инициализация теста
+        function initTest() {
+            const category = testState.category;
+            testState.questions = sampleQuestions[category] || sampleQuestions.python;
+            testState.totalQuestions = testState.questions.length;
+            
+            document.getElementById('testTitle').textContent = getCategoryTitle(category);
+            document.getElementById('totalQuestions').textContent = testState.totalQuestions;
+            
+            generateQuestionNavigation();
+            loadQuestion(0);
+            startTimer();
+        }
+
+        // Получение названия категории
+        function getCategoryTitle(category) {
+            const titles = {
+                'python': 'Python',
+                'office': 'MS Office',
+                'communication': 'Коммуникация',
+                'russian': 'Русский язык'
+            };
+            return titles[category] || 'Тест';
+        }
+
+        // Генерация навигации по вопросам
+        function generateQuestionNavigation() {
+            const nav = document.getElementById('questionNavigation');
+            nav.innerHTML = '';
+            
+            for (let i = 0; i < testState.totalQuestions; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'w-10 h-10 rounded-lg font-semibold text-sm transition-colors';
+                btn.textContent = i + 1;
+                btn.onclick = () => loadQuestion(i);
+                
+                updateQuestionButton(btn, i);
+                nav.appendChild(btn);
+            }
+        }
+
+        // Обновление кнопки вопроса
+        function updateQuestionButton(btn, index) {
+            if (index === testState.currentQuestion) {
+                btn.className = 'w-10 h-10 rounded-lg font-semibold text-sm bg-blue-500 text-white';
+            } else if (testState.answers[index] !== undefined) {
+                btn.className = 'w-10 h-10 rounded-lg font-semibold text-sm bg-green-500 text-white';
+            } else {
+                btn.className = 'w-10 h-10 rounded-lg font-semibold text-sm bg-gray-300 text-gray-700 hover:bg-gray-400';
+            }
+        }
+
+        // Загрузка вопроса
+        function loadQuestion(index) {
+            if (index < 0 || index >= testState.totalQuestions) return;
+            
+            testState.currentQuestion = index;
+            const question = testState.questions[index];
+            const container = document.getElementById('questionContent');
+            
+            // Обновление прогресса
+            const progress = ((index + 1) / testState.totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Вопрос ${index + 1} из ${testState.totalQuestions}`;
+            
+            // Генерация HTML вопроса
+            if (question.type === 'multiple-choice') {
+                container.innerHTML = generateMultipleChoiceQuestion(question, index);
+            } else if (question.type === 'code') {
+                container.innerHTML = generateCodeQuestion(question, index);
+            }
+            
+            // Обновление навигации
+            updateNavigationButtons();
+            updateQuestionNavigationButtons();
+            
+            // Загрузка сохраненного ответа
+            loadSavedAnswer(index);
+        }
+
+        // Генерация вопроса с множественным выбором
+        function generateMultipleChoiceQuestion(question, index) {
+            let html = `
+                <h2 class="text-2xl font-semibold mb-6">Вопрос ${index + 1}</h2>
+                <div class="mb-6">
+                    <pre class="whitespace-pre-wrap text-lg">${question.question}</pre>
+                </div>
+                <div class="space-y-3">
+            `;
+            
+            question.options.forEach((option, i) => {
+                html += `
+                    <label class="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                        <input type="radio" name="question_${index}" value="${i}" class="text-blue-500 w-4 h-4">
+                        <span class="text-lg">${option}</span>
+                    </label>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+
+        // Генерация вопроса с кодом
+        function generateCodeQuestion(question, index) {
+            return `
+                <h2 class="text-2xl font-semibold mb-6">Вопрос ${index + 1}</h2>
+                <div class="mb-6">
+                    <p class="text-lg mb-4">${question.question}</p>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Ваш код:</label>
+                    <textarea id="codeAnswer_${index}" 
+                              class="w-full h-64 p-4 border rounded-lg code-editor" 
+                              placeholder="Введите ваш код здесь...">${question.starter || ''}</textarea>
+                </div>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <p class="text-blue-800 text-sm">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Совет: Убедитесь, что ваш код работает корректно. Вы можете использовать отступы и комментарии.
+                    </p>
+                </div>
+            `;
+        }
+
+        // Сохранение ответа
+        function saveAnswer() {
+            const index = testState.currentQuestion;
+            const question = testState.questions[index];
+            
+            if (question.type === 'multiple-choice') {
+                const selected = document.querySelector(`input[name="question_${index}"]:checked`);
+                if (selected) {
+                    testState.answers[index] = parseInt(selected.value);
+                }
+            } else if (question.type === 'code') {
+                const codeTextarea = document.getElementById(`codeAnswer_${index}`);
+                if (codeTextarea) {
+                    testState.answers[index] = codeTextarea.value;
+                }
+            }
+            
+            updateQuestionNavigationButtons();
+            
+            // Автосохранение в localStorage
+            localStorage.setItem('skillTestProgress', JSON.stringify(testState));
+        }
+
+        // Загрузка сохраненного ответа
+        function loadSavedAnswer(index) {
+            const answer = testState.answers[index];
+            if (answer === undefined) return;
+            
+            const question = testState.questions[index];
+            
+            if (question.type === 'multiple-choice') {
+                const radio = document.querySelector(`input[name="question_${index}"][value="${answer}"]`);
+                if (radio) radio.checked = true;
+            } else if (question.type === 'code') {
+                const codeTextarea = document.getElementById(`codeAnswer_${index}`);
+                if (codeTextarea) codeTextarea.value = answer;
+            }
+        }
+
+        // Обновление кнопок навигации
+        function updateNavigationButtons() {
+            document.getElementById('prevBtn').disabled = testState.currentQuestion === 0;
+            document.getElementById('nextBtn').textContent = 
+                testState.currentQuestion === testState.totalQuestions - 1 ? 'Завершить' : 'Далее';
+        }
+
+        // Обновление навигации по вопросам
+        function updateQuestionNavigationButtons() {
+            const buttons = document.querySelectorAll('#questionNavigation button');
+            buttons.forEach((btn, index) => {
+                updateQuestionButton(btn, index);
+            });
+        }
+
+        // Таймер
+        function startTimer() {
+            const timer = setInterval(() => {
+                if (testState.isPaused) return;
+                
+                testState.timeLeft--;
+                updateTimerDisplay();
+                
+                if (testState.timeLeft <= 0) {
+                    clearInterval(timer);
+                    finishTest();
+                }
+            }, 1000);
+        }
+
+        // Обновление отображения таймера
+        function updateTimerDisplay() {
+            const minutes = Math.floor(testState.timeLeft / 60);
+            const seconds = testState.timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Завершение теста
+        function finishTest() {
+            saveAnswer();
+            const answeredCount = Object.keys(testState.answers).length;
+            
+            if (answeredCount < testState.totalQuestions) {
+                document.getElementById('answeredCount').textContent = answeredCount;
+                document.getElementById('finishModal').classList.remove('hidden');
+            } else {
+                submitTest();
+            }
+        }
+
+        // Отправка теста
+        function submitTest() {
+            localStorage.removeItem('skillTestProgress');
+            
+            // Подсчет результатов (упрощенная версия)
+            let score = 0;
+            let total = 0;
+            
+            testState.questions.forEach((question, index) => {
+                const answer = testState.answers[index];
+                if (answer !== undefined) {
+                    total++;
+                    if (question.type === 'multiple-choice' && answer === question.correct) {
+                        score++;
+                    } else if (question.type === 'code' && answer && answer.trim()) {
+                        // Упрощенная проверка кода - в реальности должна быть более сложная
+                        score += 0.8; // Частичный балл за попытку
+                    }
+                }
+            });
+            
+            const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+            
+            // Переход на страницу результатов
+            window.location.href = `skill_results.html?category=${testState.category}&score=${percentage}&total=${total}`;
+        }
+
+        // Обработчики событий
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            saveAnswer();
+            loadQuestion(testState.currentQuestion - 1);
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            saveAnswer();
+            if (testState.currentQuestion === testState.totalQuestions - 1) {
+                finishTest();
+            } else {
+                loadQuestion(testState.currentQuestion + 1);
+            }
+        });
+
+        document.getElementById('saveBtn').addEventListener('click', saveAnswer);
+
+        document.getElementById('pauseTest').addEventListener('click', () => {
+            testState.isPaused = !testState.isPaused;
+            const btn = document.getElementById('pauseTest');
+            if (testState.isPaused) {
+                btn.innerHTML = '<i class="fas fa-play mr-2"></i>Продолжить';
+                btn.className = 'bg-green-400 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-500 transition-colors';
+            } else {
+                btn.innerHTML = '<i class="fas fa-pause mr-2"></i>Пауза';
+                btn.className = 'bg-yellow-400 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors';
+            }
+        });
+
+        document.getElementById('finishTest').addEventListener('click', submitTest);
+        document.getElementById('continueTest').addEventListener('click', () => {
+            document.getElementById('finishModal').classList.add('hidden');
+        });
+
+        // Автосохранение каждые 30 секунд
+        setInterval(saveAnswer, 30000);
+
+        // Предупреждение при закрытии страницы
+        window.addEventListener('beforeunload', (e) => {
+            saveAnswer();
+            e.preventDefault();
+            e.returnValue = '';
+        });
+
+        // Инициализация при загрузке страницы
+        window.addEventListener('load', () => {
+            // Попытка восстановить прогресс
+            const saved = localStorage.getItem('skillTestProgress');
+            if (saved) {
+                const savedState = JSON.parse(saved);
+                if (savedState.category === testState.category) {
+                    testState = { ...testState, ...savedState };
+                }
+            }
+            
+            initTest();
+        });
+
+        // Доступность - поддержка клавиатуры
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && !testState.isPaused) {
+                document.getElementById('prevBtn').click();
+            } else if (e.key === 'ArrowRight' && !testState.isPaused) {
+                document.getElementById('nextBtn').click();
+            } else if (e.key === ' ' && e.ctrlKey) {
+                e.preventDefault();
+                document.getElementById('pauseTest').click();
+            }
+        });
+    </script>
+</body>
+</html>
