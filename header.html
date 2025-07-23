@@ -64,6 +64,46 @@
         transform: scale(1);
         background-color: var(--activeColor); /* Use single active color */
     }
+
+    /* Dropdown styles */
+    .dropdown {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #2d3748; /* Slightly lighter than header bg */
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 101; /* Above the menu item */
+        border-radius: 0.5em;
+        padding: 0.5em 0;
+        margin-top: 1em; /* Space between item and dropdown */
+    }
+
+    .dropdown-content a {
+        color: white;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+        font-size: 0.9em;
+    }
+
+    .dropdown-content a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
     
     .menu__item:hover:not(.active) {
         transform: translate3d(0, -0.2em, 0);
@@ -208,23 +248,20 @@
                     <span class="menu__text">Аналитика</span>
                 </a>
                 
-                <a href="employer_profile.html" class="menu__item" data-page="employer_profile">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                    <span class="menu__text">Работодатели</span>
-                </a>
-                
-                <a href="user_dashboard.html" class="menu__item" data-page="user_dashboard">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                    <span class="menu__text">Соискатели</span>
-                </a>
+                <div class="dropdown">
+                    <a href="#" class="menu__item" data-page="profile" onclick="event.preventDefault();">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <span class="menu__text">Профиль</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="employer_profile.html">Работодатель</a>
+                        <a href="user_dashboard.html">Соискатель</a>
+                        <a href="register.html">Регистрация</a>
+                    </div>
+                </div>
                 
                 <a href="about.html" class="menu__item" data-page="about">
                     <svg class="icon" viewBox="0 0 24 24">
@@ -270,7 +307,8 @@ $(document).ready(function() {
     menuItems.forEach(item => {
         const href = item.getAttribute('href');
         const page = item.getAttribute('data-page');
-        
+        const parentDropdown = item.closest('.dropdown');
+
         if (href === currentPage || 
             (currentPage === 'index.html' && page === 'index') ||
             (href.includes('#') && currentPage === 'index.html')) {
@@ -281,10 +319,33 @@ $(document).ready(function() {
             // Добавляем active к текущему
             item.classList.add('active');
             activeItem = item;
+        } else if (parentDropdown) {
+            // Check if any link inside the dropdown is active
+            const dropdownLinks = parentDropdown.querySelectorAll('.dropdown-content a');
+            let isDropdownActive = false;
+            dropdownLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    isDropdownActive = true;
+                }
+            });
+
+            if (isDropdownActive) {
+                // Убираем active со всех элементов
+                menuItems.forEach(el => el.classList.remove('active'));
+                
+                // Добавляем active к текущему
+                item.classList.add('active');
+                activeItem = item;
+            }
         }
     });
     
     function clickItem(item, index) {
+        // For dropdown, don't change active state on click, just navigate
+        if (item.closest('.dropdown')) {
+            return;
+        }
+
         menu.style.removeProperty("--timeOut");
         
         if (activeItem == item) return;
