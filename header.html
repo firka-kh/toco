@@ -74,40 +74,65 @@
     }
 
     .dropdown-content {
-        display: none;
         position: absolute;
-        top: 100%;
+        top: 120%; /* Position below the parent item */
         left: 50%;
-        transform: translateX(-50%);
-        background-color: #2d3748; /* Slightly lighter than header bg */
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 101; /* Above the menu item */
-        border-radius: 0.5em;
-        padding: 0.5em 0;
-        margin-top: 1em; /* Space between item and dropdown */
+        transform: translate(-50%, 10px); /* Initial position for animation */
+        
+        /* Matching menu style */
+        background-color: var(--bgColorMenu);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        min-width: 180px;
+        box-shadow: 0px 10px 25px rgba(0,0,0,0.3);
+        z-index: 101;
+        border-radius: 1em;
+        padding: 0.8em 0;
+        
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
+        pointer-events: none;
+        
+        /* Animation with a "bounce" effect */
+        transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), visibility 0.4s;
+    }
+
+    /* The "drop" connector */
+    .dropdown-content::before {
+        content: '';
+        position: absolute;
+        top: -10px; /* Position it above the dropdown box */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 10px;
+        /* Creates a teardrop shape pointing upwards */
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        background-color: var(--bgColorMenu);
+        /* To make it seamless, we can try to add a border too, but background is often enough */
     }
 
     .dropdown-content a {
         color: white;
-        padding: 12px 16px;
+        padding: 12px 20px;
         text-decoration: none;
         display: block;
         text-align: left;
-        font-size: 0.9em;
+        font-size: 0.95em;
+        transition: background-color 0.3s, padding-left 0.3s;
     }
 
     .dropdown-content a:hover {
         background-color: rgba(255, 255, 255, 0.1);
+        padding-left: 25px; /* Indent on hover for feedback */
     }
 
     .dropdown:hover .dropdown-content {
-        display: block;
         opacity: 1;
         visibility: visible;
+        pointer-events: auto;
+        transform: translate(-50%, 0); /* Final position */
     }
     
     .menu__item:hover:not(.active) {
