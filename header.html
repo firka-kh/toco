@@ -1,13 +1,14 @@
 <style>
     /* Custom gradient background for header and hero sections */
     .gradient-bg {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-color: #1f2937; /* Dark gray - more elegant */
     }
     
     /* Animated Menu Styles */
     :root {
-        --bgColorMenu: rgba(255, 255, 255, 0.1);
+        --bgColorMenu: rgba(255, 255, 255, 0.05); /* Slightly more transparent */
         --duration: 0.7s;
+        --activeColor: #eab308; /* Golden-yellow accent for active items */
     }
     
     .animated-menu {
@@ -20,7 +21,7 @@
         background-color: var(--bgColorMenu);
         border-radius: 2em;
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1); /* Lighter border */
     }
     
     .menu__item {
@@ -34,21 +35,21 @@
         align-items: center;
         will-change: transform;
         justify-content: center;
-        padding: 0.4em;
+        padding: 0.5em; /* Increased padding */
         margin: 0 0.2em;
         transition: transform var(--duration);
         color: white;
         text-decoration: none;
-        font-size: 0.9em;
-        min-width: 3em;
-        height: 3em;
+        font-size: 1em; /* Slightly larger base font size */
+        min-width: 3.2em;
+        height: 3.2em;
     }
     
     .menu__item::before {
         content: "";
         z-index: -1;
-        width: 3em;
-        height: 3em;
+        width: 3.2em;
+        height: 3.2em;
         border-radius: 50%;
         position: absolute;
         transform: scale(0);
@@ -61,7 +62,7 @@
     
     .menu__item.active::before {
         transform: scale(1);
-        background-color: var(--bgColorItem);
+        background-color: var(--activeColor); /* Use single active color */
     }
     
     .menu__item:hover:not(.active) {
@@ -74,8 +75,8 @@
     }
     
     .icon {
-        width: 1.2em;
-        height: 1.2em;
+        width: 1.4em; /* Larger icon */
+        height: 1.4em; /* Larger icon */
         stroke: white;
         fill: transparent;
         stroke-width: 2pt;
@@ -98,7 +99,7 @@
     .menu__border {
         left: 0;
         bottom: 99%;
-        width: 6em;
+        width: 6.4em; /* Adjusted for new item size */
         height: 2em;
         position: absolute;
         clip-path: url(#menu);
@@ -115,14 +116,14 @@
     .menu__text {
         display: none;
         margin-left: 0.5em;
-        font-size: 0.8em;
+        font-size: 0.9em; /* Adjusted font size */
         white-space: nowrap;
     }
     
     @media screen and (min-width: 1024px) {
         .menu__item {
             min-width: auto;
-            padding: 0.4em 0.8em;
+            padding: 0.5em 1em; /* Adjusted padding */
         }
         
         .menu__text {
@@ -131,8 +132,8 @@
         
         .menu__item::before {
             width: 100%;
-            height: 3em;
-            border-radius: 1.5em;
+            height: 3.2em;
+            border-radius: 1.6em;
         }
     }
     
@@ -143,14 +144,14 @@
         }
         
         .menu__item {
-            min-width: 2.5em;
-            height: 2.5em;
+            min-width: 2.8em;
+            height: 2.8em;
             margin: 0 0.1em;
         }
         
         .menu__item::before {
-            width: 2.5em;
-            height: 2.5em;
+            width: 2.8em;
+            height: 2.8em;
         }
     }
 </style>
@@ -159,8 +160,8 @@
     <div class="container mx-auto px-4 py-4">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
             <div class="flex items-center space-x-4 mb-4 md:mb-0">
-                <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                    <i class="fas fa-briefcase text-white text-lg"></i>
+                <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                    <i class="fas fa-briefcase text-white text-xl"></i>
                 </div>
                 <div>
                     <a href="index.html" class="hover:underline focus:outline-none">
@@ -171,7 +172,7 @@
             </div>
             
             <nav class="animated-menu">
-                <a href="index.html" class="menu__item active" style="--bgColorItem: #ff8c00;" data-page="index">
+                <a href="index.html" class="menu__item active" data-page="index">
                     <svg class="icon" viewBox="0 0 24 24">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                         <polyline points="9,22 9,12 15,12 15,22"/>
@@ -179,7 +180,7 @@
                     <span class="menu__text">Главная</span>
                 </a>
                 
-                <a href="news.html" class="menu__item" style="--bgColorItem: #f54888;" data-page="news">
+                <a href="news.html" class="menu__item" data-page="news">
                     <svg class="icon" viewBox="0 0 24 24">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                         <polyline points="14,2 14,8 20,8"/>
@@ -190,7 +191,7 @@
                     <span class="menu__text">Новости</span>
                 </a>
                 
-                <a href="serchwork.html" class="menu__item" style="--bgColorItem: #4343f5;" data-page="serchwork">
+                <a href="serchwork.html" class="menu__item" data-page="serchwork">
                     <svg class="icon" viewBox="0 0 24 24">
                         <circle cx="11" cy="11" r="8"/>
                         <path d="M21 21l-4.35-4.35"/>
@@ -198,7 +199,7 @@
                     <span class="menu__text">Поиск работы</span>
                 </a>
                 
-                <a href="analitic_pg.html" class="menu__item" style="--bgColorItem: #e0b115;" data-page="analitic_pg">
+                <a href="analitic_pg.html" class="menu__item" data-page="analitic_pg">
                     <svg class="icon" viewBox="0 0 24 24">
                         <line x1="18" y1="20" x2="18" y2="10"/>
                         <line x1="12" y1="20" x2="12" y2="4"/>
@@ -207,7 +208,7 @@
                     <span class="menu__text">Аналитика</span>
                 </a>
                 
-                <a href="employer_profile.html" class="menu__item" style="--bgColorItem: #65ddb7;" data-page="employer_profile">
+                <a href="employer_profile.html" class="menu__item" data-page="employer_profile">
                     <svg class="icon" viewBox="0 0 24 24">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                         <circle cx="12" cy="7" r="4"/>
@@ -215,7 +216,7 @@
                     <span class="menu__text">Работодатели</span>
                 </a>
                 
-                <a href="user_dashboard.html" class="menu__item" style="--bgColorItem: #9999fb;" data-page="user_dashboard">
+                <a href="user_dashboard.html" class="menu__item" data-page="user_dashboard">
                     <svg class="icon" viewBox="0 0 24 24">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                         <circle cx="9" cy="7" r="4"/>
@@ -225,7 +226,7 @@
                     <span class="menu__text">Соискатели</span>
                 </a>
                 
-                <a href="about.html" class="menu__item" style="--bgColorItem: #ff96bd;" data-page="about">
+                <a href="about.html" class="menu__item" data-page="about">
                     <svg class="icon" viewBox="0 0 24 24">
                         <circle cx="12" cy="12" r="10"/>
                         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
