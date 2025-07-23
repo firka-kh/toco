@@ -6,6 +6,7 @@
     <title>Добро пожаловать на портал рынка труда</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
@@ -404,39 +405,8 @@
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
-    <header class="gradient-bg text-white shadow-lg">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                <div class="flex items-center space-x-4 mb-4 md:mb-0">
-                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                        <i class="fas fa-briefcase text-white text-lg"></i>
-                    </div>
-                    <div>
-                        <a href="index.html" class="hover:underline focus:outline-none">
-                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
-                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
-                        </a>
-                    </div>
-                </div>
-                <nav class="flex flex-wrap gap-2 md:gap-4 lg:gap-6 items-center justify-center text-base font-medium">
-                    <a href="index.html" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">Главная</a>
-                    <a href="news.html" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">Новости</a>
-                    <a href="serchwork.html" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">Поиск работы</a>
-                    <a href="analitic_pg.html" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">Аналитика</a>
-                    <a href="index.html#statistics" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">Статистика</a>
-                    <a href="index.html#programs" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">Программы</a>
-                    <a href="index.html#education" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">Образование</a>
-                    <a href="employer_profile.html" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">Работодатели</a>
-                    <a href="user_dashboard.html" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">Соискатели</a>
-                    <a href="free_lans/freelance_homepage.html" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">Фриланс</a>
-                    <a href="about.html" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">О портале</a>
-                    <a href="register.html" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">Регистрация</a>
-                    <a href="ai_lmis.html" class="px-3 py-2 rounded hover:bg-white hover:bg-opacity-10 transition">ИИ-консультант</a>
-                </nav>
-            </div>
-        </div>
-    </header>
-
+    <!-- Centralized Header -->
+    <div id="header-placeholder"></div>
 
     <section class="gradient-bg text-white py-10">
         <div class="container mx-auto px-4 text-center">
@@ -1220,7 +1190,7 @@ function pulseAIWidget() {
 setInterval(pulseAIWidget, 4000);
 
 // Первая пульсация через 2 секунды после загрузки страницы
-setTimeout(pulseAIWidget, 2000);
+        setTimeout(pulseAIWidget, 2000);
 
         // Пульсация AI виджета каждые 4 секунды
         setInterval(function() {
@@ -1233,8 +1203,14 @@ setTimeout(pulseAIWidget, 2000);
             }
         }, 4000);
 
-
-
     </script>
+
+    <!-- Load centralized header -->
+    <script>
+    $(document).ready(function() {
+        $('#header-placeholder').load('header.html');
+    });
+    </script>
+
 </body>
 </html>

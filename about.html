@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О нас - Портал рынка труда</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        /* Custom gradient background for header and hero sections */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .page-content {
+            min-height: 70vh;
+            padding: 40px 0;
+        }
+        
+        .about-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin: 20px 0;
+        }
+        
+        .about-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .feature-card i {
+            color: #667eea;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Centralized Header -->
+    <div id="header-placeholder"></div>
+    
+    <main class="page-content">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">О нас</h1>
+                <p class="text-xl text-gray-600">Узнайте больше о портале рынка труда Республики Таджикистан</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="about-section">
+                    <h2 class="text-2xl font-bold">Наша миссия</h2>
+                    <p class="text-gray-700 text-lg leading-relaxed">
+                        Портал рынка труда Республики Таджикистан создан для эффективного соединения работодателей и соискателей, 
+                        обеспечения прозрачности рынка труда и содействия экономическому развитию страны.
+                    </p>
+                </div>
+                
+                <div class="about-section">
+                    <h2 class="text-2xl font-bold">Что мы предлагаем</h2>
+                    
+                    <div class="feature-card">
+                        <h3 class="text-lg font-semibold mb-2">
+                            <i class="fas fa-search"></i>
+                            Поиск работы
+                        </h3>
+                        <p class="text-gray-700">
+                            Удобный поиск вакансий по различным критериям: профессии, региону, зарплате и опыту работы.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3 class="text-lg font-semibold mb-2">
+                            <i class="fas fa-chart-bar"></i>
+                            Статистика и аналитика
+                        </h3>
+                        <p class="text-gray-700">
+                            Актуальная статистика рынка труда, аналитические отчеты и прогнозы развития различных отраслей.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3 class="text-lg font-semibold mb-2">
+                            <i class="fas fa-graduation-cap"></i>
+                            Образовательные программы
+                        </h3>
+                        <p class="text-gray-700">
+                            Программы профессиональной переподготовки, повышения квалификации и развития навыков.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3 class="text-lg font-semibold mb-2">
+                            <i class="fas fa-handshake"></i>
+                            Поддержка предпринимательства
+                        </h3>
+                        <p class="text-gray-700">
+                            Программы микрокредитования, бизнес-консультации и поддержка малого и среднего бизнеса.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="about-section">
+                    <h2 class="text-2xl font-bold">Контактная информация</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">
+                                <i class="fas fa-map-marker-alt text-blue-500"></i>
+                                Адрес
+                            </h3>
+                            <p class="text-gray-700">
+                                г. Душанбе, проспект Рудаки 105<br>
+                                Министерство труда, миграции и занятости населения РТ
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">
+                                <i class="fas fa-phone text-green-500"></i>
+                                Телефоны
+                            </h3>
+                            <p class="text-gray-700">
+                                Горячая линия: +992 (37) 221-00-10<br>
+                                Справочная: +992 (37) 221-00-11
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="gradient-bg text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 Министерство труда, миграции и занятости населения Республики Таджикистан</p>
+        </div>
+    </footer>
+
+    <!-- Load centralized header -->
+    <script>
+    $(document).ready(function() {
+        $('#header-placeholder').load('header.html');
+    });
+    </script>
+
+</body>
+</html>
