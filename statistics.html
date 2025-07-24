@@ -516,6 +516,51 @@
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
+        
+        /* Анимация изменения значения в виджете */
+        @keyframes value-change {
+            0% { opacity: 1; transform: translateY(0); }
+            20% { opacity: 0; transform: translateY(-10px); }
+            50% { opacity: 0; transform: translateY(10px); }
+            80% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animated-value {
+            animation: value-change 0.7s ease-in-out;
+        }
+        
+        /* Анимация пульсации для индикатора обновления */
+        @keyframes indicator-pulse {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        .live-indicator {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            font-size: 0.6rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+        
+        .live-indicator::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #10b981;
+            margin-right: 0.3rem;
+            animation: indicator-pulse 2s infinite;
+        }
 
         /* Индикатор тренда */
         .trend-up {
@@ -1572,6 +1617,9 @@
                     document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
                 });
             });
+            
+            // Инициализация анимации виджетов статистики
+            initializeWidgetAnimations();
 
             // Управление модальным окном подписки
             const subscribeBtn = document.getElementById('subscribeBtn');
@@ -1680,6 +1728,140 @@
             Chart.defaults.font.size = 14;
             Chart.defaults.color = '#333';
             
+            // Функция для инициализации анимации виджетов статистики
+            function initializeWidgetAnimations() {
+                // Находим все виджеты статистики на странице
+                const statWidgets = document.querySelectorAll('.stat-widget');
+                
+                // Добавляем индикаторы обновления в реальном времени
+                statWidgets.forEach(widget => {
+                    // Добавляем индикатор только в основные виджеты (первые 4)
+                    if (widget.querySelector('.text-3xl')) {
+                        const liveIndicator = document.createElement('div');
+                        liveIndicator.className = 'live-indicator';
+                        liveIndicator.textContent = 'LIVE';
+                        widget.style.position = 'relative';
+                        widget.appendChild(liveIndicator);
+                    }
+                });
+                
+                // Устанавливаем интервал обновления данных (4 секунды)
+                setInterval(() => {
+                    updateStatWidgets();
+                }, 4000);
+            }
+            
+            // Функция для обновления значений в виджетах
+            function updateStatWidgets() {
+                // Находим все виджеты с числовыми значениями
+                const valueElements = document.querySelectorAll('.stat-widget .text-3xl');
+                const trendElements = document.querySelectorAll('.stat-widget .text-sm');
+                const arrowElements = document.querySelectorAll('.stat-widget .fas');
+                
+                // Обновляем каждый виджет
+                valueElements.forEach((valueEl, index) => {
+                    const trendEl = trendElements[index];
+                    const arrowEl = arrowElements[index];
+                    const currentValue = parseWidgetValue(valueEl.textContent);
+                    
+                    // Определяем направление изменения (чередуем вверх и вниз)
+                    const direction = Math.random() > 0.5 ? 1 : -1;
+                    
+                    // Получаем новое значение и процент изменения
+                    const result = updateWidgetValue(valueEl.textContent, direction);
+                    const newValue = result.newValue;
+                    const changePercent = result.changePercent;
+                    
+                    // Добавляем класс анимации
+                    valueEl.classList.add('animated-value');
+                    
+                    // Через время анимации обновляем значение
+                    setTimeout(() => {
+                        valueEl.textContent = newValue;
+                        
+                        // Обновляем индикатор тренда
+                        if (direction > 0) {
+                            trendEl.textContent = `+${changePercent}%`;
+                            trendEl.className = 'text-sm trend-up mr-1';
+                            arrowEl.className = 'fas fa-arrow-up trend-up text-sm';
+                        } else {
+                            trendEl.textContent = `-${changePercent}%`;
+                            trendEl.className = 'text-sm trend-down mr-1';
+                            arrowEl.className = 'fas fa-arrow-down trend-down text-sm';
+                        }
+                        
+                        // Удаляем класс анимации для следующего цикла
+                        setTimeout(() => {
+                            valueEl.classList.remove('animated-value');
+                        }, 50);
+                    }, 350);
+                });
+            }
+            
+            // Функция для парсинга текущего значения виджета
+            function parseWidgetValue(valueText) {
+                // Извлекаем числовое значение, игнорируя единицы измерения
+                const numericValue = parseFloat(valueText.replace(/[^0-9.,]/g, '').replace(',', '.'));
+                // Определяем единицы измерения (%, сом., пусто)
+                const unit = valueText.replace(/[0-9.,\s]/g, '');
+                
+                return {
+                    value: numericValue,
+                    unit: unit.trim()
+                };
+            }
+            
+            // Функция для обновления значения виджета с сохранением формата
+            function updateWidgetValue(currentText, direction) {
+                const parsed = parseWidgetValue(currentText);
+                
+                // Определяем границы изменения в зависимости от типа данных
+                let minChange = 0.1, maxChange = 0.8;
+                let minValue, maxValue;
+                
+                // Устанавливаем границы в зависимости от единиц измерения
+                if (parsed.unit === '%') {
+                    minValue = 0.5;
+                    maxValue = 100;
+                } else if (parsed.unit === 'сом.') {
+                    minValue = 1000;
+                    maxValue = 5000;
+                    minChange = 50;
+                    maxChange = 200;
+                } else {
+                    // Для числа вакансий и других целочисленных значений
+                    minValue = 1000;
+                    maxValue = 50000;
+                    minChange = 500;
+                    maxChange = 2000;
+                }
+                
+                // Рассчитываем случайное изменение
+                const changeAmount = minChange + Math.random() * (maxChange - minChange);
+                let newValue = parsed.value + (changeAmount * direction);
+                
+                // Проверяем, не вышли ли за границы
+                newValue = Math.max(minValue, Math.min(maxValue, newValue));
+                
+                // Форматируем новое значение в зависимости от типа
+                let formattedValue;
+                let changePercent = (Math.abs(changeAmount) / parsed.value * 100).toFixed(1);
+                
+                if (parsed.unit === '%') {
+                    formattedValue = newValue.toFixed(1) + '%';
+                } else if (parsed.unit === 'сом.') {
+                    formattedValue = Math.round(newValue) + ' сом.';
+                } else {
+                    // Для целых чисел с разделителями тысяч
+                    formattedValue = Math.round(newValue).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+                
+                return {
+                    newValue: formattedValue,
+                    changePercent: changePercent
+                };
+            }
+            
             // Функция для создания динамически обновляемых графиков
             function createUpdatingChart(ctx, config, updateInterval = 3000) {
                 const chart = new Chart(ctx, config);
@@ -1693,15 +1875,25 @@
                     // Получение текущих данных из первого набора данных
                     const data = chart.data.datasets[0].data;
                     
-                    // Создаем небольшие изменения для анимации
-                    const newData = data.map(value => {
-                        // Случайное изменение в пределах ±5% с небольшим уклоном в сторону снижения
-                        // для имитации тренда снижения безработицы
-                        const trend = -0.02; // Общий тренд на снижение
-                        const random = (Math.random() - 0.5) * 0.08; // Случайные колебания
-                        const changePercent = trend + random; // Комбинированное изменение
+                    // Создаем изменения для анимации, чередуя направления (вверх/вниз)
+                    const newData = data.map((value, index) => {
+                        // Получаем минимальное и максимальное значение для данного индекса, чтобы оставаться в пределах графика
+                        const minValue = 6.8; // Минимальное допустимое значение
+                        const maxValue = 8.2; // Максимальное допустимое значение
                         
-                        const newValue = value * (1 + changePercent);
+                        // Чередуем направление изменения с каждым обновлением, используя timestamp
+                        const timestamp = new Date().getTime();
+                        const direction = (timestamp % 8000 < 4000) ? 1 : -1; // Меняем направление каждые 4 секунды
+                        
+                        // Рассчитываем процент изменения с учетом направления
+                        const changePercent = direction * (0.01 + Math.random() * 0.04); // От 1% до 5% в зависимости от направления
+                        
+                        // Вычисляем новое значение
+                        let newValue = value * (1 + changePercent);
+                        
+                        // Ограничиваем значение в допустимых пределах
+                        newValue = Math.min(Math.max(newValue, minValue), maxValue);
+                        
                         return parseFloat(newValue.toFixed(1));
                     });
                     
