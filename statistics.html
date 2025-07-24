@@ -291,33 +291,14 @@
             position: relative;
         }
         
-        .chart-container.interactive::before {
-            content: "Интерактивный график";
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background-color: rgba(102, 126, 234, 0.8);
-            color: white;
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            z-index: 10;
-            opacity: 0.8;
-            transition: all 0.3s ease;
-        }
-
-        .chart-container.interactive:hover::before {
-            background-color: rgba(79, 70, 229, 0.9);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            opacity: 1;
-        }
+        /* Удалены стили для надписи "Интерактивный график" */
         
         /* Добавляем пульсирующую точку для индикации реального времени */
         .chart-container.interactive::after {
             content: "";
             position: absolute;
             top: 0.5rem;
-            right: 8.5rem;
+            right: 0.5rem;
             width: 8px;
             height: 8px;
             border-radius: 50%;
@@ -540,32 +521,52 @@
         /* Стили для организации уведомлений на странице */
         .notifications-container {
             position: fixed;
-            top: 4rem;
-            right: 1rem;
-            max-width: 320px;
+            top: 5rem;
+            right: 2rem;
+            max-width: 280px;
+            width: 280px;
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
             z-index: 100;
             pointer-events: none;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-height: 80vh;
+            overflow-y: auto;
         }
         
         .notifications-container > * {
             pointer-events: auto;
+            width: 100%;
+            background-color: white;
+            border-radius: 0.375rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         
         .live-indicator {
             position: absolute;
             top: 0.5rem;
             right: 0.5rem;
-            background-color: rgba(16, 185, 129, 0.1);
-            color: #10b981;
+            background-color: rgba(79, 70, 229, 0.15);
+            color: #4f46e5;
             font-size: 0.6rem;
-            padding: 0.15rem 0.4rem;
+            padding: 0.2rem 0.5rem;
             border-radius: 1rem;
             display: flex;
             align-items: center;
-            font-weight: 600;
+            font-weight: 700;
+            animation: pulse 2s infinite ease-in-out;
+            box-shadow: 0 0 0 rgba(79, 70, 229, 0.4);
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
         }
         
         .live-indicator::before {
@@ -1544,6 +1545,13 @@
                     ['unemploymentChart', 'ageUnemploymentChart', 'popularProfessionsChart', 
                     'salaryForecastChart', 'regionalSalaryChart'].includes(canvasId)) {
                     container.classList.add('interactive');
+                    
+                    // Добавляем индикатор LIVE
+                    const liveIndicator = document.createElement('div');
+                    liveIndicator.className = 'live-indicator';
+                    liveIndicator.textContent = 'LIVE';
+                    container.style.position = 'relative';
+                    container.appendChild(liveIndicator);
                 }
             });
             
@@ -1559,7 +1567,14 @@
                     const tooltip = document.createElement('div');
                     tooltip.className = 'bg-white p-4 rounded-lg shadow-xl w-full';
                     tooltip.innerHTML = `
-                        <p class="text-gray-700 mb-3">Этот график обновляется в реальном времени каждые 3 секунды для демонстрации актуальных данных рынка труда.</p>
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center">
+                                <i class="fas fa-chart-line text-indigo-500 mr-2"></i>
+                                <span class="font-medium text-indigo-700">Обновляемые данные</span>
+                            </div>
+                            <div class="live-indicator" style="position: static; margin-left: auto;">LIVE</div>
+                        </div>
+                        <p class="text-gray-700 mb-3">Этот график обновляется каждые 3 секунды для демонстрации актуальных данных рынка труда.</p>
                         <p class="text-gray-600 text-sm mb-4">Наведите курсор на точки графика для просмотра детальной информации.</p>
                         <button class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition-colors">
                             Понятно
@@ -1688,8 +1703,8 @@
                     <div class="flex items-center">
                         <i class="fas fa-crown text-yellow-500 text-xl mr-2"></i>
                         <div>
-                            <p class="font-medium">Премиум-подписка успешно активирована!</p>
-                            <p class="text-sm mt-1">Теперь все интерактивные графики и аналитика доступны на всех вкладках.</p>
+                            <p class="font-medium">Премиум активирован!</p>
+                            <p class="text-sm mt-1">Все графики и аналитика доступны</p>
                         </div>
                     </div>
                 `;
