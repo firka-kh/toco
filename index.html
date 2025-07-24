@@ -9,7 +9,27 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* Стили для бокового меню */
+        /* Анимация дрожания и переливания цвета для кнопки меню */
+        @keyframes menuLabelShake {
+            0%, 100% {
+                transform: translateY(-50%) rotate(0deg);
+                background: #4a5568;
+            }
+            25% {
+                transform: translateY(-48%) rotate(-2deg);
+                background: #5a6678;
+            }
+            50% {
+                transform: translateY(-50%) rotate(2deg);
+                background: #3a4558;
+            }
+            75% {
+                transform: translateY(-52%) rotate(-1deg);
+                background: #4a5568;
+            }
+        }
+
+        /* Кнопка меню посередине левой части страницы */
         .menu-label {
             position: fixed;
             top: 50%;
@@ -23,37 +43,60 @@
             border-radius: 0 0.5rem 0.5rem 0;
             cursor: pointer;
             transition: all 0.3s ease;
+            animation: menuLabelShake 2s infinite;
             z-index: 999;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(102, 126, 234, 0.2);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .menu-label:hover {
             background: linear-gradient(135deg, rgba(118, 75, 162, 0.9) 0%, rgba(102, 126, 234, 0.9) 100%);
-            left: 0;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(102, 126, 234, 0.3);
+            transform: translateY(-50%) scale(1.02);
         }
 
+        /* Боковое меню выплывает слева направо */
         .side-menu {
             position: fixed;
             top: 0;
-            left: -300px;
-            width: 260px;
-            height: 100vh;
-            background: linear-gradient(135deg, rgba(74, 85, 104, 0.98) 0%, rgba(45, 55, 72, 0.98) 100%);
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
-            z-index: 1001;
-            transition: all 0.3s ease;
-            overflow-y: auto;
-            backdrop-filter: blur(10px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 1rem;
-        }
-        
-        .side-menu.open {
             left: 0;
+            height: 100%;
+            width: 14rem;
+            transform: translateX(-100%);
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.98) 0%, 
+                rgba(118, 75, 162, 0.98) 50%, 
+                rgba(102, 126, 234, 0.98) 100%);
+            border-radius: 0 1rem 1rem 0;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 12px 24px rgba(0, 0, 0, 0.3),
+                0 4px 8px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1rem;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-left: none;
         }
-        
+
+        .side-menu.open {
+            transform: translateX(0);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.5),
+                0 15px 30px rgba(0, 0, 0, 0.4),
+                0 6px 12px rgba(102, 126, 234, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+        }
+
         .side-menu a {
             display: flex;
             align-items: center;
@@ -107,253 +150,45 @@
             transition: all 0.3s ease;
         }
 
-        /* Overlay для закрытия меню */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            backdrop-filter: blur(3px);
-            transition: all 0.3s ease;
+        .side-menu a:hover i {
+            color: #fff;
+            transform: scale(1.1);
         }
 
-        .overlay.show {
-            display: block;
-        }
-        
-        /* Стили для выпадающего подменю */
-        .menu-item {
-            position: relative;
-        }
-        
+        /* Стили для подменю */
         .submenu {
-            position: absolute;
-            top: 0;
-            left: calc(100% + 5px);
-            width: 200px;
-            background: linear-gradient(135deg, rgba(74, 85, 104, 0.98) 0%, rgba(45, 55, 72, 0.98) 100%);
+            display: none;
+            flex-direction: column;
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+            background: linear-gradient(135deg, 
+                rgba(118, 75, 162, 0.3) 0%, 
+                rgba(102, 126, 234, 0.3) 100%);
             border-radius: 0.5rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             padding: 0.5rem;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateX(-10px);
-            transition: all 0.3s ease;
-            z-index: 1002;
             border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .menu-item:hover .submenu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(0);
-        }
-        
-        .submenu a {
-            padding: 0.5rem 1rem;
-            margin: 0.25rem 0;
-            border-radius: 0.25rem;
-            font-size: 0.875rem;
-        }
-        
-        /* Добавляем "капельку" для соединения с подменю */
-        .menu-item > a::after {
-            content: '';
-            position: absolute;
-            right: 0.5rem;
-            width: 0.4rem;
-            height: 0.4rem;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.7);
-            top: 50%;
-            transform: translateY(-50%);
-            box-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
-            transition: all 0.3s ease;
-        }
-        
-        .menu-item:hover > a::after {
-            background: rgba(255, 255, 255, 1);
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
-        }
-
-        @keyframes slideInLeft {
-            from {
-                transform: translateX(-100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .side-menu.open {
-            animation: slideInLeft 0.3s ease-out;
-        }
-        
-        /* Custom gradient background for header and hero sections */
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        /* Enhanced hover effect for cards */
-        .card-hover {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-8px); /* Slightly more pronounced lift */
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Larger, softer shadow */
-        }
-        /* Consistent spacing for sections */
-        .section-spacing {
-            padding: 3rem 0; /* Increased vertical padding for more breathing room */
-        }        /* Basic spinner for loading states */
-        .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-left-color: #ffffff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Ensure canvas elements are responsive within their containers */
-        .chart-container {
-            position: relative;
-            height: 320px; /* Fixed height for chart containers */
-            width: 100%; /* Full width within parent */
-        }
-
-        /* Print-specific styles for A4 format */
-        @media print {
-            /* Define A4 page size and margins */
-            @page {
-                size: A4;
-                margin: 1cm;
-            }
-
-            /* Adjust body font and color for print */
-            body {
-                font-size: 10pt;
-                line-height: 1.5;
-                color: #000;
-                background-color: #fff !important; /* Ensure white background for printing */
-            }
-            /* Hide elements not relevant for print */
-            header, nav, footer,
-            .job-search-form-controls, /* Hide the job search input form controls */
-            .card-hover, /* Hide hover effects */
-            button, /* Hide all buttons */
-            input, select, textarea, /* Hide form inputs */
-            .spinner, /* Hide loading spinners */
-            .pagination, /* Hide pagination */
-            #expandVideoButton, /* Hide expand button */
-            #soundVisualizer /* Hide sound visualizer */
-             {
-                display: none !important;
-            }
-
-            /* Ensure main content sections are visible */
-            section {
-                display: block !important;
-                padding: 0.5cm 0 !important; /* Reduce padding for print */
-                background: none !important; /* Remove section backgrounds */
-                box-shadow: none !important; /* Remove section shadows */
-            }
-        }
-    </style>
-</head>
-<body class="bg-gray-50 font-sans">
-    <!-- Контейнер для заголовка -->
-    <div id="header-container"></div>
-
-    <section class="gradient-bg text-white py-10">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl font-bold mb-4">
-                Добро пожаловать на 
-                <span class="animated-gradient-text font-bold">портал</span> 
-                рынка труда Таджикистана
-            </h2>
-            <style>
-            .animated-gradient-text {
-                background: linear-gradient(90deg, #3b82f6, #f59e42, #f43f5e, #6366f1, #3b82f6);
-                background-size: 300% 300%;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                color: transparent;
-                animation: gradient-move 3s linear infinite;
-            }
-            @keyframes gradient-move {
-                0% { background-position: 0% 50%; }
-                100% { background-position: 100% 50%; }
-            }
-            </style>
-
-        .menu-item {
-            position: relative !important; /* Обязательно относительное позиционирование */
-            width: 100%; /* Чтобы элемент занимал всю ширину родительского контейнера */
-            z-index: 2000 !important; /* Высокий z-index для перекрытия других элементов */
-            display: block !important; /* Блочное отображение для правильного позиционирования */
-        }
-        
-        /* Специальный стиль для пункта меню с подменю */
-        .menu-item > a {
-            position: relative !important;
-            z-index: 2000 !important; /* Высокий z-index для пункта меню */
-        }
-        
-        /* Индикатор наличия подменю */
-        .menu-item > a::after {
-            content: '›';
-            position: absolute;
-            right: 0.8rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.2rem;
-            opacity: 0.7;
-            transition: transform 0.3s ease, opacity 0.3s;
-        }
-        
-        .menu-item:hover > a::after {
-            transform: translateY(-50%) rotate(90deg);
-            opacity: 1;
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .menu-item:hover .submenu {
-            display: flex !important;
-            opacity: 1;
-            visibility: visible;
-            transform: translate(0, 0);
+            display: flex;
         }
 
         .submenu a {
             justify-content: flex-start;
-            padding: 0.7rem 1.2rem;
+            padding: 0.5rem 0.75rem;
             font-size: 0.9rem;
-            margin: 0.25rem 0.6rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: flex !important;
-            align-items: center;
-            position: relative !important;
-            z-index: 2001 !important;
+            margin: 0.125rem 0;
+            border-radius: 0.25rem;
         }
 
         .submenu a:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateX(5px);
-            padding-left: 1.5rem;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(255, 255, 255, 0.08) 100%);
+            transform: translateX(4px);
         }
 
         /* Overlay для закрытия меню */
@@ -393,6 +228,22 @@
         .side-menu > * {
             position: relative;
             z-index: 2;
+        }
+
+        /* Анимация появления меню */
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .side-menu.open {
+            animation: slideInLeft 0.3s ease-out;
         }
 
         /* Custom gradient background for header and hero sections */
@@ -553,8 +404,106 @@
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
-    <!-- Контейнер для заголовка -->
-    <div id="header-container"></div>
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-center">
+                <!-- Центрированные: Лого и название -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fas fa-briefcase text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <!-- Добавляем ссылку на главную страницу -->
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Вертикальная надпись "Меню" -->
+    <div class="menu-label" onclick="toggleSideMenu()">Меню</div>
+
+    <!-- Overlay для закрытия меню -->
+    <div class="overlay"></div>
+
+    <!-- Боковое меню -->
+    <div class="side-menu">
+        <a class="flex items-center px-4 py-3 mt-3 hover:bg-gray-700 hover:text-gray-300" href="index.html">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-sm font-medium">Главная</span>
+        </a>
+        <div class="mt-3 border-t border-gray-700">
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="news.html">
+                <i class="fas fa-newspaper text-lg"></i>
+                <span class="text-sm font-medium">Новости</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="serchwork.html">
+                <i class="fas fa-search text-lg"></i>
+                <span class="text-sm font-medium">Поиск работы</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#statistics">
+                <i class="fas fa-chart-bar text-lg"></i>
+                <span class="text-sm font-medium">Статистика</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#programs">
+                <i class="fas fa-briefcase text-lg"></i>
+                <span class="text-sm font-medium">Программы</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#education">
+                <i class="fas fa-graduation-cap text-lg"></i>
+                <span class="text-sm font-medium">Образование</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="about.html">
+                <i class="fas fa-info-circle text-lg"></i>
+                <span class="text-sm font-medium">О портале</span>
+            </a>
+        </div>
+        <div class="mt-3 border-t border-gray-700">
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="employer_profile.html">
+                <i class="fas fa-building text-lg"></i>
+                <span class="text-sm font-medium">Работодатели</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="user_dashboard.html">
+                <i class="fas fa-user text-lg"></i>
+                <span class="text-sm font-medium">Соискатели</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="register.html">
+                <i class="fas fa-user-plus text-lg"></i>
+                <span class="text-sm font-medium">Регистрация</span>
+            </a>
+        </div>
+        <div class="mt-3 border-t border-gray-700">
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="free_lans/freelance_homepage.html">
+                <i class="fas fa-laptop-code text-lg"></i>
+                <span class="text-sm font-medium">Фриланс</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="analitic_pg.html">
+                <i class="fas fa-chart-line text-lg"></i>
+                <span class="text-sm font-medium">Аналитика</span>
+            </a>
+        </div>
+        <div class="mt-3 border-t border-gray-700">
+            <div class="menu-item">
+                <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#">
+                    <i class="fas fa-user-circle text-lg"></i>
+                    <span class="text-sm font-medium">Мой профиль</span>
+                </a>
+                <div class="submenu">
+                    <a class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="user_profile.html">Настройки профиля</a>
+                    <a class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="employer_profile.html">Кабинет работодателя</a>
+                    <a class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="register.html">Регистрация</a>
+                </div>
+            </div>
+        </div>
+        <a class="flex items-center justify-start px-4 py-3 mt-4 space-x-3 bg-gray-800 hover:bg-gray-700 hover:text-gray-300" href="#">
+            <i class="fas fa-cog text-xl"></i>
+            <span class="text-sm font-medium">Настройки</span>
+        </a>
+    </div>
 
     <section class="gradient-bg text-white py-10">
         <div class="container mx-auto px-4 text-center">
@@ -1156,31 +1105,34 @@
 </div>
 
     <script>
-        // Функция для переключения видимости бокового меню
+        // Функция для управления боковым меню
         function toggleSideMenu() {
-            const sideMenu = document.querySelector('.side-menu');
+            const menu = document.querySelector('.side-menu');
             const overlay = document.querySelector('.overlay');
             
-            sideMenu.classList.toggle('open');
+            menu.classList.toggle('open');
             overlay.classList.toggle('show');
         }
 
-        // Обработчик клика на overlay для закрытия меню
-        document.querySelector('.overlay').addEventListener('click', function() {
-            toggleSideMenu();
+        // Закрытие меню при клике вне его области или на overlay
+        document.addEventListener('click', (event) => {
+            const menu = document.querySelector('.side-menu');
+            const menuLabel = document.querySelector('.menu-label');
+            const overlay = document.querySelector('.overlay');
+
+            if (!menu.contains(event.target) && !menuLabel.contains(event.target)) {
+                menu.classList.remove('open');
+                overlay.classList.remove('show');
+            }
         });
 
-        // Обработчик клавиши Escape для закрытия меню
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const sideMenu = document.querySelector('.side-menu');
-                const overlay = document.querySelector('.overlay');
-                
-                if (sideMenu.classList.contains('open')) {
-                    sideMenu.classList.remove('open');
-                    overlay.classList.remove('show');
-                }
-            }
+        // Закрытие меню при клике на overlay
+        document.querySelector('.overlay').addEventListener('click', () => {
+            const menu = document.querySelector('.side-menu');
+            const overlay = document.querySelector('.overlay');
+            
+            menu.classList.remove('open');
+            overlay.classList.remove('show');
         });
 
         // Unemployment Chart
