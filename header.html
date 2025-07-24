@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заголовок страницы</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        /* Анимация дрожания и переливания цвета для кнопки меню */
+        @keyframes menuLabelShake {
+            0%, 100% {
+                transform: translateY(-50%) rotate(0deg);
+                background: #4a5568;
+            }
+            25% {
+                transform: translateY(-48%) rotate(-2deg);
+                background: #5a6678;
+            }
+            50% {
+                transform: translateY(-50%) rotate(2deg);
+                background: #3a4558;
+            }
+            75% {
+                transform: translateY(-52%) rotate(-1deg);
+                background: #4a5568;
+            }
+        }
+
+        /* Кнопка меню посередине левой части страницы */
+        .menu-label {
+            position: fixed;
+            top: 50%;
+            left: -2px;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: menuLabelShake 2s infinite;
+            z-index: 999;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-label:hover {
+            background: linear-gradient(135deg, rgba(118, 75, 162, 0.9) 0%, rgba(102, 126, 234, 0.9) 100%);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(102, 126, 234, 0.3);
+            transform: translateY(-50%) scale(1.02);
+        }
+
+        /* Боковое меню выплывает слева направо */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 14rem;
+            transform: translateX(-100%);
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.98) 0%, 
+                rgba(118, 75, 162, 0.98) 50%, 
+                rgba(102, 126, 234, 0.98) 100%);
+            border-radius: 0 1rem 1rem 0;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 12px 24px rgba(0, 0, 0, 0.3),
+                0 4px 8px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1rem;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-left: none;
+        }
+
+        .side-menu.open {
+            transform: translateX(0);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.5),
+                0 15px 30px rgba(0, 0, 0, 0.4),
+                0 6px 12px rgba(102, 126, 234, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .side-menu a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            justify-content: flex-start;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .side-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            transition: left 0.5s ease;
+        }
+
+        .side-menu a:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            transform: translateX(8px);
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.2),
+                0 2px 4px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .side-menu a:hover::before {
+            left: 100%;
+        }
+
+        .side-menu a i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .side-menu a:hover i {
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        /* Стили для подменю */
+        .submenu {
+            display: none;
+            position: absolute !important;
+            left: calc(100% + 5px) !important; /* Меньший отступ от основного меню */
+            top: 0 !important; /* Привязка к верхнему краю родительского элемента */
+            flex-direction: column;
+            width: 240px; /* Увеличиваем ширину для более длинных пунктов */
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.95) 0%, 
+                rgba(118, 75, 162, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 0.8rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 2001 !important; /* Высокий z-index для перекрытия других элементов */
+            opacity: 0;
+            visibility: hidden;
+            transform: translate(10px, 0);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), visibility 0.4s;
+        }
+        
+        /* "Ручеек" соединяющий меню с подменю */
+        .submenu::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -7px; /* Соединение ближе к меню */
+            transform: translateY(-50%);
+            width: 8px; /* Ширина для соединения */
+            height: 14px; /* Высота */
+            /* Создаем форму капельного соединения */
+            background: linear-gradient(to right, 
+                rgba(118, 75, 162, 0.7) 0%, 
+                rgba(102, 126, 234, 0.95) 100%);
+            /* Закругление для плавности */
+            border-radius: 0 2px 2px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item {
+            position: relative !important; /* Обязательно относительное позиционирование */
+            width: 100%; /* Чтобы элемент занимал всю ширину родительского контейнера */
+            z-index: 2000 !important; /* Высокий z-index для перекрытия других элементов */
+            display: block !important; /* Блочное отображение для правильного позиционирования */
+        }
+        
+        /* Специальный стиль для пункта меню с подменю */
+        .menu-item > a {
+            position: relative !important;
+            z-index: 2000 !important; /* Высокий z-index для пункта меню */
+        }
+        
+        /* Индикатор наличия подменю */
+        .menu-item > a::after {
+            content: '›';
+            position: absolute;
+            right: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: transform 0.3s ease, opacity 0.3s;
+        }
+        
+        .menu-item:hover > a::after {
+            transform: translateY(-50%) rotate(90deg);
+            opacity: 1;
+        }
+
+        .menu-item:hover .submenu {
+            display: flex !important;
+            opacity: 1;
+            visibility: visible;
+            transform: translate(0, 0);
+        }
+
+        .submenu a {
+            justify-content: flex-start;
+            padding: 0.7rem 1.2rem;
+            font-size: 0.9rem;
+            margin: 0.25rem 0.6rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex !important;
+            align-items: center;
+            position: relative !important;
+            z-index: 2001 !important;
+        }
+
+        .submenu a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+            padding-left: 1.5rem;
+        }
+
+        /* Overlay для закрытия меню */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+            backdrop-filter: blur(3px);
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Дополнительные эффекты для объема */
+        .side-menu::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(0, 0, 0, 0.1) 100%);
+            border-radius: 0 1rem 1rem 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .side-menu > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Анимация появления меню */
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .side-menu.open {
+            animation: slideInLeft 0.3s ease-out;
+        }
+
+        /* Custom gradient background for header and hero sections */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body>
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-center">
+                <!-- Центрированные: Лого и название -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fas fa-briefcase text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <!-- Добавляем ссылку на главную страницу -->
+                        <a href="index.html" class="hover:underline focus:outline-none">
+                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Вертикальная надпись "Меню" -->
+    <div class="menu-label" onclick="toggleSideMenu()">Меню</div>
+
+    <!-- Overlay для закрытия меню -->
+    <div class="overlay"></div>
+
+    <!-- Боковое меню -->
+    <div class="side-menu">
+        <!-- Первый раздел -->
+        <a class="flex items-center px-4 py-3 mt-3 hover:bg-gray-700 hover:text-gray-300" href="index.html">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-sm font-medium">Главная</span>
+        </a>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="news.html">
+            <i class="fas fa-newspaper text-lg"></i>
+            <span class="text-sm font-medium">Новости</span>
+        </a>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="serchwork.html">
+            <i class="fas fa-search text-lg"></i>
+            <span class="text-sm font-medium">Поиск работы</span>
+        </a>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#statistics">
+            <i class="fas fa-chart-bar text-lg"></i>
+            <span class="text-sm font-medium">Статистика</span>
+        </a>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#programs">
+            <i class="fas fa-briefcase text-lg"></i>
+            <span class="text-sm font-medium">Программы</span>
+        </a>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#education">
+            <i class="fas fa-graduation-cap text-lg"></i>
+            <span class="text-sm font-medium">Образование</span>
+        </a>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="about.html">
+            <i class="fas fa-info-circle text-lg"></i>
+            <span class="text-sm font-medium">О портале</span>
+        </a>
+        
+        <!-- Второй раздел -->
+        <div class="mt-3 border-t border-gray-700">
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="free_lans/freelance_homepage.html">
+                <i class="fas fa-laptop-code text-lg"></i>
+                <span class="text-sm font-medium">Фриланс</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="analitic_pg.html">
+                <i class="fas fa-chart-line text-lg"></i>
+                <span class="text-sm font-medium">Аналитика</span>
+            </a>
+        </div>
+        
+        <!-- Третий раздел -->
+        <div class="mt-3 border-t border-gray-700">
+            <div class="menu-item" style="position: relative !important; display: block !important; z-index: 2000 !important;">
+                <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#" style="position: relative !important; z-index: 2000 !important;">
+                    <i class="fas fa-user-circle text-lg"></i>
+                    <span class="text-sm font-medium">Мой профиль</span>
+                </a>
+                <div class="submenu" style="top: 0 !important; left: calc(100% + 5px) !important; z-index: 2001 !important;">
+                    <a href="user_profile.html">
+                        <i class="fas fa-cog fa-fw mr-2"></i>Настройки профиля
+                    </a>
+                    <a href="employer_profile.html">
+                        <i class="fas fa-building fa-fw mr-2"></i>Кабинет работодателя
+                    </a>
+                    <a href="user_dashboard.html">
+                        <i class="fas fa-user fa-fw mr-2"></i>Кабинет соискателя
+                    </a>
+                    <a href="#">
+                        <i class="fas fa-handshake fa-fw mr-2"></i>Кабинет Консультанта
+                    </a>
+                    <a href="register.html">
+                        <i class="fas fa-user-plus fa-fw mr-2"></i>Регистрация
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Функция для переключения видимости бокового меню
+        function toggleSideMenu() {
+            const sideMenu = document.querySelector('.side-menu');
+            const overlay = document.querySelector('.overlay');
+            
+            sideMenu.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Обработчик клика на overlay для закрытия меню
+        document.querySelector('.overlay').addEventListener('click', function() {
+            toggleSideMenu();
+        });
+
+        // Обработчик клавиши Escape для закрытия меню
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const sideMenu = document.querySelector('.side-menu');
+                const overlay = document.querySelector('.overlay');
+                
+                if (sideMenu.classList.contains('open')) {
+                    sideMenu.classList.remove('open');
+                    overlay.classList.remove('show');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

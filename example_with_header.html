@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пример страницы с подключенным заголовком</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Контейнер для заголовка -->
+    <div id="header-container"></div>
+
+    <!-- Основное содержимое страницы -->
+    <section class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h1 class="text-2xl font-bold mb-4">Пример страницы с подключенным заголовком</h1>
+            <p class="mb-4">Это пример страницы, которая использует общий файл заголовка.</p>
+            <p>Преимущества этого подхода:</p>
+            <ul class="list-disc pl-5 mb-4">
+                <li>Более легкое обслуживание - изменения в меню делаются в одном месте</li>
+                <li>Единообразие интерфейса на всех страницах</li>
+                <li>Упрощение кода каждой страницы</li>
+                <li>Более быстрая разработка новых страниц</li>
+            </ul>
+            <div class="bg-yellow-100 p-4 rounded-lg">
+                <p class="font-medium">Обратите внимание!</p>
+                <p>При открытии этой страницы в локальном браузере (без сервера) включение заголовка может не работать. 
+                   Это связано с ограничениями безопасности браузера при работе с локальными файлами. 
+                   Для корректного тестирования используйте локальный сервер или загрузите файлы на хостинг.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Скрипт для загрузки заголовка -->
+    <script>
+        // Загрузка общего заголовка
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                // Извлекаем только содержимое body из header.html
+                const parser = new DOMParser();
+                const headerDoc = parser.parseFromString(data, 'text/html');
+                const headerContent = headerDoc.querySelector('body').innerHTML;
+                
+                // Вставляем заголовок в контейнер
+                document.getElementById('header-container').innerHTML = headerContent;
+                
+                // Выполняем скрипты из заголовка (если есть)
+                const scripts = headerDoc.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    if (script.src) {
+                        newScript.src = script.src;
+                    } else {
+                        newScript.textContent = script.textContent;
+                    }
+                    document.body.appendChild(newScript);
+                });
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки заголовка:', error);
+                document.getElementById('header-container').innerHTML = 
+                    '<div class="bg-red-100 text-red-700 p-4 mb-4">Ошибка загрузки заголовка. ' +
+                    'Если вы открыли файл локально, попробуйте запустить через сервер.</div>';
+            });
+    </script>
+</body>
+</html>
