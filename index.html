@@ -158,37 +158,64 @@
         /* Стили для подменю */
         .submenu {
             display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
             flex-direction: column;
-            margin-left: 1.5rem;
-            margin-top: 0.5rem;
+            width: 200px;
             background: linear-gradient(135deg, 
-                rgba(118, 75, 162, 0.3) 0%, 
-                rgba(102, 126, 234, 0.3) 100%);
-            border-radius: 0.5rem;
-            padding: 0.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 4px 8px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                rgba(102, 126, 234, 0.95) 0%, 
+                rgba(118, 75, 162, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 0.8rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transform: translate(10px, 0);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), visibility 0.4s;
+        }
+        
+        /* "Капля" соединяющая меню с подменю */
+        .submenu::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -10px; /* Расположение "ножки" капли */
+            transform: translateY(-50%);
+            width: 10px;
+            height: 20px;
+            /* Создаем форму треугольника, указывающего влево */
+            clip-path: polygon(100% 0, 0 50%, 100% 100%);
+            background: rgba(102, 126, 234, 0.95); /* Соответствует фону подменю */
+        }
+
+        .menu-item {
+            position: relative; /* Для корректного позиционирования подменю */
         }
 
         .menu-item:hover .submenu {
             display: flex;
+            opacity: 1;
+            visibility: visible;
+            transform: translate(0, 0);
         }
 
         .submenu a {
             justify-content: flex-start;
-            padding: 0.5rem 0.75rem;
+            padding: 0.7rem 1rem;
             font-size: 0.9rem;
-            margin: 0.125rem 0;
-            border-radius: 0.25rem;
+            margin: 0.125rem 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
         }
 
         .submenu a:hover {
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.15) 0%, 
-                rgba(255, 255, 255, 0.08) 100%);
-            transform: translateX(4px);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+            padding-left: 1.2rem;
         }
 
         /* Overlay для закрытия меню */
