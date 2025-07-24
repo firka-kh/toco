@@ -9,6 +9,192 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        /* Стили для бокового меню */
+        .menu-label {
+            position: fixed;
+            top: 50%;
+            left: -2px;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .menu-label:hover {
+            background: linear-gradient(135deg, rgba(118, 75, 162, 0.9) 0%, rgba(102, 126, 234, 0.9) 100%);
+            left: 0;
+        }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 260px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(74, 85, 104, 0.98) 0%, rgba(45, 55, 72, 0.98) 100%);
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+        }
+        
+        .side-menu.open {
+            left: 0;
+        }
+        
+        .side-menu a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            justify-content: flex-start;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .side-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            transition: left 0.5s ease;
+        }
+
+        .side-menu a:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            transform: translateX(8px);
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.2),
+                0 2px 4px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .side-menu a:hover::before {
+            left: 100%;
+        }
+
+        .side-menu a i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        /* Overlay для закрытия меню */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            backdrop-filter: blur(3px);
+            transition: all 0.3s ease;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+        
+        /* Стили для выпадающего подменю */
+        .menu-item {
+            position: relative;
+        }
+        
+        .submenu {
+            position: absolute;
+            top: 0;
+            left: calc(100% + 5px);
+            width: 200px;
+            background: linear-gradient(135deg, rgba(74, 85, 104, 0.98) 0%, rgba(45, 55, 72, 0.98) 100%);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            padding: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            z-index: 1002;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .menu-item:hover .submenu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+        
+        .submenu a {
+            padding: 0.5rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Добавляем "капельку" для соединения с подменю */
+        .menu-item > a::after {
+            content: '';
+            position: absolute;
+            right: 0.5rem;
+            width: 0.4rem;
+            height: 0.4rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover > a::after {
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .side-menu.open {
+            animation: slideInLeft 0.3s ease-out;
+        }
+        
         /* Custom gradient background for header and hero sections */
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -970,35 +1156,32 @@
 </div>
 
     <script>
-        // Загрузка общего заголовка
-        fetch('header.html')
-            .then(response => response.text())
-            .then(data => {
-                // Извлекаем только содержимое body из header.html
-                const parser = new DOMParser();
-                const headerDoc = parser.parseFromString(data, 'text/html');
-                const headerContent = headerDoc.querySelector('body').innerHTML;
+        // Функция для переключения видимости бокового меню
+        function toggleSideMenu() {
+            const sideMenu = document.querySelector('.side-menu');
+            const overlay = document.querySelector('.overlay');
+            
+            sideMenu.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Обработчик клика на overlay для закрытия меню
+        document.querySelector('.overlay').addEventListener('click', function() {
+            toggleSideMenu();
+        });
+
+        // Обработчик клавиши Escape для закрытия меню
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const sideMenu = document.querySelector('.side-menu');
+                const overlay = document.querySelector('.overlay');
                 
-                // Вставляем заголовок в контейнер
-                document.getElementById('header-container').innerHTML = headerContent;
-                
-                // Выполняем скрипты из заголовка (если есть)
-                const scripts = headerDoc.querySelectorAll('script');
-                scripts.forEach(script => {
-                    const newScript = document.createElement('script');
-                    if (script.src) {
-                        newScript.src = script.src;
-                    } else {
-                        newScript.textContent = script.textContent;
-                    }
-                    document.body.appendChild(newScript);
-                });
-            })
-            .catch(error => {
-                console.error('Ошибка загрузки заголовка:', error);
-                document.getElementById('header-container').innerHTML = 
-                    '<div class="bg-red-100 text-red-700 p-4 mb-4">Ошибка загрузки заголовка.</div>';
-            });
+                if (sideMenu.classList.contains('open')) {
+                    sideMenu.classList.remove('open');
+                    overlay.classList.remove('show');
+                }
+            }
+        });
 
         // Unemployment Chart
         const ctx1 = document.getElementById('unemploymentChart').getContext('2d');
