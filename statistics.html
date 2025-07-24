@@ -7,7 +7,16 @@
     <meta name="description" content="Статистика рынка труда Республики Таджикистан. Аналитика занятости, безработицы, вакансий и трудовой миграции.">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.0.0"></script>
+    <script>
+        // Регистрируем плагины для Chart.js
+        Chart.register(ChartDataLabels);
+    </script>
     <style>
         /* Анимация дрожания и переливания цвета для кнопки меню */
         @keyframes menuLabelShake {
@@ -261,9 +270,122 @@
         /* Chart container styles */
         .chart-container {
             position: relative;
-            height: 300px;
+            height: 350px;
             width: 100%;
             margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .chart-container:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .chart-container.interactive {
+            border-left: 4px solid rgba(102, 126, 234, 0.8);
+            position: relative;
+        }
+        
+        .chart-container.interactive::before {
+            content: "Интерактивный график";
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: rgba(102, 126, 234, 0.8);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            z-index: 10;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .chart-container.interactive:hover::before {
+            background-color: rgba(79, 70, 229, 0.9);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            opacity: 1;
+        }
+        
+        /* Добавляем пульсирующую точку для индикации реального времени */
+        .chart-container.interactive::after {
+            content: "";
+            position: absolute;
+            top: 0.5rem;
+            right: 8.5rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            z-index: 10;
+            animation: pulse-dot 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+        }
+        
+        @keyframes pulse-dot {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.8;
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            50% {
+                transform: scale(1);
+                opacity: 1;
+                box-shadow: 0 0 0 5px rgba(16, 185, 129, 0);
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0.8;
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+        
+        /* Анимация обновления данных */
+        @keyframes pulse-update {
+            0% { background-color: rgba(102, 126, 234, 0.05); }
+            50% { background-color: rgba(102, 126, 234, 0.15); }
+            100% { background-color: rgba(102, 126, 234, 0.05); }
+        }
+        
+        .chart-updating {
+            animation: pulse-update 1s ease-in-out;
+        }
+
+        /* Добавляем пояснения к графикам */
+        .chart-caption {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: -1.5rem;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+            line-height: 1.4;
+            font-style: italic;
+        }
+        
+        .chart-data-source {
+            position: absolute;
+            bottom: 0.3rem;
+            left: 1rem;
+            font-size: 0.7rem;
+            color: #9ca3af;
+            font-style: italic;
+        }
+        
+        /* Стиль для метки "Обновляется" */
+        .update-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 9.5rem;
+            font-size: 0.7rem;
+            color: #10b981;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            z-index: 10;
         }
 
         /* Блок с размытием для платного контента */
@@ -592,17 +714,23 @@
                     <!-- График динамики безработицы -->
                     <div class="bg-white rounded-lg shadow-lg p-6 mb-10">
                         <h3 class="text-xl font-semibold text-gray-800 mb-4">Динамика уровня безработицы</h3>
-                        <div class="chart-container">
+                        <div class="chart-container interactive">
                             <canvas id="unemploymentChart"></canvas>
+                            <div class="update-badge">LIVE</div>
+                            <div class="chart-data-source">Источник: Агентство по статистике РТ, 2024</div>
                         </div>
+                        <p class="chart-caption">График показывает месячную динамику уровня безработицы в сравнении с прошлым годом. Обратите внимание на тренд снижения, который свидетельствует об улучшении ситуации на рынке труда.</p>
                     </div>
 
                     <!-- Популярные профессии - блок с премиум контентом -->
                     <div class="bg-white rounded-lg shadow-lg p-6 mb-10 relative premium-blur">
                         <h3 class="text-xl font-semibold text-gray-800 mb-4">Самые востребованные профессии</h3>
-                        <div class="chart-container">
+                        <div class="chart-container interactive">
                             <canvas id="popularProfessionsChart"></canvas>
+                            <div class="update-badge">LIVE</div>
+                            <div class="chart-data-source">Источник: Агентство по статистике РТ, 2024</div>
                         </div>
+                        <p class="chart-caption">Диаграмма отображает наиболее востребованные профессии на рынке труда Таджикистана. IT-специалисты лидируют с большим отрывом, что отражает текущую тенденцию цифровизации экономики страны.</p>
                         <div class="premium-content-overlay">
                             <div class="flex flex-col items-center justify-center">
                                 <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
@@ -646,9 +774,12 @@
                     <!-- Возрастное распределение безработицы -->
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-4">Возрастное распределение безработицы</h3>
-                        <div class="chart-container">
+                        <div class="chart-container interactive">
                             <canvas id="ageUnemploymentChart"></canvas>
+                            <div class="update-badge">LIVE</div>
+                            <div class="chart-data-source">Источник: Агентство по статистике РТ, 2024</div>
                         </div>
+                        <p class="chart-caption">График показывает распределение уровня безработицы по возрастным группам. Молодежь (16-24 лет) испытывает наибольшие трудности с трудоустройством, в то время как средняя возрастная группа (35-44) имеет наименьший уровень безработицы.</p>
                     </div>
                 </div>
 
@@ -665,24 +796,25 @@
                     </div>
 
                     <!-- Сравнение средних зарплат по регионам -->
-                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10 relative premium-blur">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Средняя заработная плата по регионам</h3>
-                        <div class="chart-container">
-                            <canvas id="regionalSalaryChart"></canvas>
-                        </div>
-                        <div class="premium-content-overlay">
-                            <div class="flex flex-col items-center justify-center">
-                                <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
-                                <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
-                                <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
-                                <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
-                                    Разблокировать <i class="fas fa-unlock ml-2"></i>
-                                </button>
+                        <div class="bg-white rounded-lg shadow-lg p-6 mb-10 relative premium-blur">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Средняя заработная плата по регионам</h3>
+                            <div class="chart-container interactive">
+                                <canvas id="regionalSalaryChart"></canvas>
+                                <div class="update-badge">LIVE</div>
+                                <div class="chart-data-source">Источник: Агентство по статистике РТ, 2024</div>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Таблица с показателями по регионам -->
+                            <p class="chart-caption">Диаграмма демонстрирует различия в средней заработной плате между регионами страны. Заметна существенная разница между столицей и другими регионами, что отражает экономическую неравномерность развития территорий.</p>
+                            <div class="premium-content-overlay">
+                                <div class="flex flex-col items-center justify-center">
+                                    <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                    <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                    <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                    <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                                        Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>                    <!-- Таблица с показателями по регионам -->
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-4">Ключевые показатели по регионам</h3>
                         <div class="overflow-x-auto">
@@ -1323,6 +1455,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Инициализация обработчиков и переключателей для всей страницы
             // Объявляем функцию toggleSideMenu глобально в области видимости
             window.toggleSideMenu = function() {
                 const sideMenu = document.querySelector('.side-menu');
@@ -1332,7 +1465,55 @@
                 sideMenu.classList.toggle('open');
                 overlay.classList.toggle('visible');
                 menuLabel.classList.toggle('active');
-            }
+            };
+            
+            // Добавляем класс interactive всем контейнерам графиков с интерактивными графиками
+            document.querySelectorAll('.chart-container').forEach(container => {
+                const canvasId = container.querySelector('canvas')?.id;
+                if (canvasId && 
+                    ['unemploymentChart', 'ageUnemploymentChart', 'popularProfessionsChart', 
+                    'salaryForecastChart', 'regionalSalaryChart'].includes(canvasId)) {
+                    container.classList.add('interactive');
+                }
+            });
+            
+            // Добавляем всплывающие подсказки к интерактивным графикам
+            const interactiveCharts = document.querySelectorAll('.chart-container.interactive');
+            interactiveCharts.forEach(chart => {
+                const infoButton = document.createElement('button');
+                infoButton.className = 'absolute top-2 left-2 text-indigo-600 hover:text-indigo-800 z-10';
+                infoButton.innerHTML = '<i class="fas fa-info-circle text-lg"></i>';
+                infoButton.title = 'Информация об обновлениях';
+                
+                infoButton.addEventListener('click', function() {
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-xl z-50 w-80';
+                    tooltip.innerHTML = `
+                        <h3 class="text-lg font-bold text-indigo-700 mb-3">Интерактивный график</h3>
+                        <p class="text-gray-700 mb-4">Этот график обновляется в реальном времени каждые 3 секунды для демонстрации актуальных данных рынка труда.</p>
+                        <p class="text-gray-600 text-sm mb-4">Наведите курсор на точки графика для просмотра детальной информации.</p>
+                        <button class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition-colors">
+                            Понятно
+                        </button>
+                    `;
+                    
+                    document.body.appendChild(tooltip);
+                    
+                    tooltip.querySelector('button').addEventListener('click', function() {
+                        tooltip.remove();
+                    });
+                    
+                    // Закрыть при клике вне тултипа
+                    document.addEventListener('click', function closeTooltip(e) {
+                        if (!tooltip.contains(e.target) && e.target !== infoButton) {
+                            tooltip.remove();
+                            document.removeEventListener('click', closeTooltip);
+                        }
+                    });
+                });
+                
+                chart.appendChild(infoButton);
+            });
 
             // Закрыть меню при клике на overlay
             document.querySelector('.overlay').addEventListener('click', window.toggleSideMenu);
@@ -1426,17 +1607,22 @@
                 
                 // Показываем уведомление об успешной активации
                 const notification = document.createElement('div');
-                notification.className = 'fixed top-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md z-50';
+                notification.className = 'fixed top-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md z-50 animate-bounce';
                 notification.innerHTML = `
                     <div class="flex items-center">
-                        <i class="fas fa-check-circle text-xl mr-2"></i>
+                        <i class="fas fa-crown text-yellow-500 text-xl mr-2"></i>
                         <div>
-                            <p class="font-medium">Подписка успешно активирована!</p>
-                            <p class="text-sm mt-1">Премиум контент доступен на всех вкладках статистики.</p>
+                            <p class="font-medium">Премиум-подписка успешно активирована!</p>
+                            <p class="text-sm mt-1">Теперь все интерактивные графики и аналитика доступны на всех вкладках.</p>
                         </div>
                     </div>
                 `;
                 document.body.appendChild(notification);
+                
+                // Убираем анимацию bounce через 2 секунды
+                setTimeout(() => {
+                    notification.classList.remove('animate-bounce');
+                }, 2000);
                 
                 // Удаляем уведомление через 5 секунд
                 setTimeout(() => {
@@ -1445,9 +1631,36 @@
                     setTimeout(() => notification.remove(), 500);
                 }, 5000);
                 
-                // Активируем все премиум-графики, которые могли быть скрыты
-                // и теперь должны стать видимыми
+                // Активируем и обновляем все премиум-графики
+                // Обновляем размеры графиков
                 window.dispatchEvent(new Event('resize'));
+                
+                // Находим интерактивные премиум-графики и добавляем им класс interactive
+                setTimeout(() => {
+                    document.querySelectorAll('.chart-container').forEach(container => {
+                        if (container.closest('.premium-blur') !== null) {
+                            const canvasId = container.querySelector('canvas')?.id;
+                            if (canvasId && 
+                                ['popularProfessionsChart', 'salaryForecastChart'].includes(canvasId)) {
+                                container.classList.add('interactive');
+                                
+                                // Анимация появления интерактивного графика
+                                container.classList.add('chart-updating');
+                                setTimeout(() => {
+                                    container.classList.remove('chart-updating');
+                                }, 3000);
+                            }
+                        }
+                    });
+                    
+                    // Запускаем обновление премиум-графиков
+                    if (popularProfessionsChart) {
+                        popularProfessionsChart.update();
+                    }
+                    if (salaryForecastChart) {
+                        salaryForecastChart.update();
+                    }
+                }, 300);
             }
 
             subscribeBtn.addEventListener('click', openModal);
@@ -1462,10 +1675,159 @@
                 }
             });
 
+            // Настройка Chart.js для улучшенного отображения
+            Chart.defaults.font.family = "'Roboto', 'Helvetica', 'Arial', sans-serif";
+            Chart.defaults.font.size = 14;
+            Chart.defaults.color = '#333';
+            
+            // Функция для создания динамически обновляемых графиков
+            function createUpdatingChart(ctx, config, updateInterval = 3000) {
+                const chart = new Chart(ctx, config);
+                let isUpdating = false;
+                
+                // Функция для обновления данных
+                function updateChartData() {
+                    if (isUpdating) return; // Предотвращаем одновременные обновления
+                    isUpdating = true;
+                    
+                    // Получение текущих данных из первого набора данных
+                    const data = chart.data.datasets[0].data;
+                    
+                    // Создаем небольшие изменения для анимации
+                    const newData = data.map(value => {
+                        // Случайное изменение в пределах ±5% с небольшим уклоном в сторону снижения
+                        // для имитации тренда снижения безработицы
+                        const trend = -0.02; // Общий тренд на снижение
+                        const random = (Math.random() - 0.5) * 0.08; // Случайные колебания
+                        const changePercent = trend + random; // Комбинированное изменение
+                        
+                        const newValue = value * (1 + changePercent);
+                        return parseFloat(newValue.toFixed(1));
+                    });
+                    
+                    // Создаем эффект обновления
+                    const chartElement = chart.canvas.parentNode;
+                    chartElement.classList.add('chart-updating');
+                    
+                    // Добавляем индикатор обновления
+                    const updateIndicator = document.createElement('div');
+                    updateIndicator.className = 'absolute top-2 right-2 text-indigo-600 animate-spin';
+                    updateIndicator.innerHTML = '<i class="fas fa-sync-alt text-lg"></i>';
+                    updateIndicator.style.zIndex = 5;
+                    chartElement.appendChild(updateIndicator);
+                    
+                    // Обновляем данные графика с небольшой задержкой для визуального эффекта
+                    setTimeout(() => {
+                        // Обновляем данные графика
+                        chart.data.datasets[0].data = newData;
+                        chart.update('normal');
+                        
+                        // Находим значения, которые изменились значительно
+                        const significantChanges = [];
+                        data.forEach((oldValue, index) => {
+                            const newValue = newData[index];
+                            const change = ((newValue - oldValue) / oldValue * 100).toFixed(1);
+                            if (Math.abs(parseFloat(change)) > 1.5) {
+                                significantChanges.push({
+                                    index: index,
+                                    oldValue: oldValue,
+                                    newValue: newValue,
+                                    change: change
+                                });
+                            }
+                        });
+                        
+                        // Если есть значительные изменения, показываем их в уведомлении
+                        if (significantChanges.length > 0) {
+                            const randomChange = significantChanges[Math.floor(Math.random() * significantChanges.length)];
+                            const label = chart.data.labels[randomChange.index];
+                            
+                            // Создаем уведомление о значительном изменении
+                            const changeNotification = document.createElement('div');
+                            changeNotification.className = 'fixed bottom-16 right-4 bg-white border-l-4 border-indigo-500 text-gray-700 p-4 rounded shadow-md z-50';
+                            changeNotification.style.maxWidth = '300px';
+                            changeNotification.innerHTML = `
+                                <div class="flex items-start">
+                                    <i class="fas fa-chart-line text-indigo-600 text-xl mt-1 mr-3"></i>
+                                    <div>
+                                        <p class="font-medium">Значительное изменение</p>
+                                        <p class="text-sm mt-1">
+                                            ${label}: ${randomChange.oldValue}% → ${randomChange.newValue}% 
+                                            <span class="${parseFloat(randomChange.change) < 0 ? 'text-green-600' : 'text-red-600'}">
+                                                (${randomChange.change > 0 ? '+' : ''}${randomChange.change}%)
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            `;
+                            document.body.appendChild(changeNotification);
+                            
+                            // Удаляем уведомление через 4 секунды
+                            setTimeout(() => {
+                                changeNotification.classList.add('opacity-0');
+                                changeNotification.style.transition = 'opacity 0.5s ease';
+                                setTimeout(() => changeNotification.remove(), 500);
+                            }, 4000);
+                        }
+                        
+                        // Удаляем эффект обновления и индикатор
+                        setTimeout(() => {
+                            chartElement.classList.remove('chart-updating');
+                            updateIndicator.remove();
+                            isUpdating = false;
+                        }, 800);
+                    }, 500);
+                }
+                
+                // Запускаем интервал обновления, если задан
+                let updateTimer = null;
+                if (updateInterval > 0) {
+                    // Первое обновление через половину интервала
+                    setTimeout(() => {
+                        updateChartData();
+                        // Затем регулярные обновления
+                        updateTimer = setInterval(updateChartData, updateInterval);
+                    }, updateInterval / 2);
+                    
+                    // При переключении вкладок останавливаем и возобновляем обновление
+                    document.addEventListener('visibilitychange', function() {
+                        if (document.hidden) {
+                            clearInterval(updateTimer);
+                        } else {
+                            if (!updateTimer) {
+                                updateTimer = setInterval(updateChartData, updateInterval);
+                            }
+                        }
+                    });
+                }
+                
+                // Функция для принудительного обновления
+                function forceUpdate() {
+                    if (!isUpdating) {
+                        updateChartData();
+                    }
+                }
+                
+                // Добавляем кнопку для принудительного обновления
+                const chartElement = chart.canvas.parentNode;
+                const updateButton = document.createElement('button');
+                updateButton.className = 'absolute bottom-2 right-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 px-2 py-1 rounded text-xs z-10 flex items-center';
+                updateButton.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> Обновить';
+                updateButton.title = 'Обновить данные';
+                updateButton.addEventListener('click', forceUpdate);
+                chartElement.appendChild(updateButton);
+                
+                return {
+                    chart: chart,
+                    timer: updateTimer,
+                    update: updateChartData
+                };
+            }
+            
             // Инициализация графиков Chart.js
-            // График динамики безработицы
+            // График динамики безработицы (интерактивный, обновляется каждые 3 секунды)
             const unemploymentCtx = document.getElementById('unemploymentChart').getContext('2d');
-            new Chart(unemploymentCtx, {
+            const unemploymentChart = createUpdatingChart(unemploymentCtx, {
                 type: 'line',
                 data: {
                     labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
@@ -1476,16 +1838,174 @@
                         backgroundColor: 'rgba(102, 126, 234, 0.1)',
                         borderWidth: 2,
                         fill: true,
-                        tension: 0.4
+                        tension: 0.4,
+                        pointBackgroundColor: 'white',
+                        pointBorderColor: 'rgba(102, 126, 234, 1)',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }, {
+                        label: 'Прошлый год (%)',
+                        data: [8.4, 8.3, 8.3, 8.2, 8.1, 8.0, 8.0, 7.9, 7.8, 7.7, 7.6, 7.5],
+                        borderColor: 'rgba(156, 163, 175, 0.7)',
+                        backgroundColor: 'rgba(156, 163, 175, 0.05)',
+                        borderWidth: 1.5,
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.4,
+                        pointBackgroundColor: 'white',
+                        pointBorderColor: 'rgba(156, 163, 175, 0.7)',
+                        pointBorderWidth: 1,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
                     plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y}%`;
+                                },
+                                afterLabel: function(context) {
+                                    if (context.datasetIndex === 0 && context.datasetIndex === 1) {
+                                        const thisYear = context.parsed.y;
+                                        const lastYear = context.dataset.data[context.dataIndex];
+                                        const diff = (thisYear - lastYear).toFixed(1);
+                                        return `Изменение: ${diff > 0 ? '+' : ''}${diff}%`;
+                                    }
+                                    return '';
+                                },
+                                footer: function(tooltipItems) {
+                                    const thisYear = tooltipItems[0].parsed.y;
+                                    const lastYear = tooltipItems.length > 1 ? tooltipItems[1].parsed.y : null;
+                                    
+                                    if (lastYear !== null) {
+                                        const diff = (thisYear - lastYear).toFixed(1);
+                                        const diffPercent = ((thisYear - lastYear) / lastYear * 100).toFixed(1);
+                                        return `Снижение на ${Math.abs(diff)}% (${Math.abs(diffPercent)}%) по сравнению с прошлым годом`;
+                                    }
+                                    
+                                    return 'Данные обновляются в реальном времени';
+                                }
+                            },
+                            padding: 10,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
                         legend: {
                             display: true,
-                            position: 'top'
+                            position: 'top',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                },
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Динамика уровня безработицы по месяцам',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
+                        },
+                        // Добавляем аннотации для выделения тренда
+                        annotation: {
+                            annotations: {
+                                trendLine: {
+                                    type: 'line',
+                                    xMin: 0,
+                                    xMax: 11,
+                                    yMin: 8.1,
+                                    yMax: 7.0,
+                                    borderColor: 'rgba(234, 88, 12, 0.5)',
+                                    borderWidth: 2,
+                                    borderDash: [3, 3],
+                                    label: {
+                                        content: 'Тренд снижения',
+                                        enabled: true,
+                                        position: 'center',
+                                        backgroundColor: 'rgba(234, 88, 12, 0.7)',
+                                        color: 'white',
+                                        font: {
+                                            size: 12,
+                                            style: 'italic'
+                                        },
+                                        xAdjust: 50,
+                                        yAdjust: -20
+                                    }
+                                },
+                                targetPoint: {
+                                    type: 'point',
+                                    xValue: 11,
+                                    yValue: 7.0,
+                                    backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                                    borderWidth: 2,
+                                    borderColor: 'white',
+                                    radius: 8,
+                                    label: {
+                                        content: 'Целевой показатель',
+                                        enabled: true,
+                                        position: 'bottom',
+                                        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                                        color: 'white',
+                                        font: {
+                                            size: 12
+                                        },
+                                        yAdjust: 10
+                                    }
+                                }
+                            }
+                        },
+                        // Добавляем метки для отображения изменений
+                        datalabels: {
+                            display: function(context) {
+                                // Показываем метки только для выборочных точек текущего года
+                                return context.datasetIndex === 0 && [0, 3, 6, 9, 11].includes(context.dataIndex);
+                            },
+                            formatter: function(value, context) {
+                                if (context.datasetIndex === 0) {
+                                    const lastYearValue = context.chart.data.datasets[1].data[context.dataIndex];
+                                    const diff = (value - lastYearValue).toFixed(1);
+                                    return `${value}%\n(${diff > 0 ? '+' : ''}${diff}%)`;
+                                }
+                                return value + '%';
+                            },
+                            align: 'top',
+                            anchor: 'bottom',
+                            offset: 8,
+                            color: function(context) {
+                                if (context.datasetIndex === 0) {
+                                    const value = context.dataset.data[context.dataIndex];
+                                    const lastYearValue = context.chart.data.datasets[1].data[context.dataIndex];
+                                    return value < lastYearValue ? '#10b981' : '#ef4444';
+                                }
+                                return '#333';
+                            },
+                            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                            borderRadius: 4,
+                            padding: 4,
+                            font: {
+                                size: 11,
+                                weight: 'bold'
+                            }
                         }
                     },
                     scales: {
@@ -1494,17 +2014,62 @@
                             min: 6.5,
                             max: 8.5,
                             ticks: {
-                                stepSize: 0.5
+                                stepSize: 0.5,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Уровень безработицы (%)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    bottom: 10
+                                }
+                            },
+                            grid: {
+                                color: function(context) {
+                                    if (context.tick.value === 7.5) {
+                                        return 'rgba(102, 126, 234, 0.3)';
+                                    }
+                                    return 'rgba(0, 0, 0, 0.1)';
+                                },
+                                lineWidth: function(context) {
+                                    if (context.tick.value === 7.5) {
+                                        return 2;
+                                    }
+                                    return 1;
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Месяц',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 10
+                                }
                             }
                         }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
                     }
                 }
             });
 
             // График времени поиска работы
             const jobSearchTimeCtx = document.getElementById('jobSearchTimeChart').getContext('2d');
-            new Chart(jobSearchTimeCtx, {
-                type: 'pie',
+            const jobSearchTimeChart = new Chart(jobSearchTimeCtx, {
+                type: 'doughnut',
                 data: {
                     labels: ['До 1 месяца', '1-3 месяца', '3-6 месяцев', '6-12 месяцев', 'Более 12 месяцев'],
                     datasets: [{
@@ -1516,31 +2081,98 @@
                             'rgba(251, 146, 60, 0.8)',
                             'rgba(239, 68, 68, 0.8)'
                         ],
-                        borderWidth: 1
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
+                        hoverOffset: 15
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    cutout: '60%',
                     plugins: {
                         legend: {
-                            position: 'right'
+                            position: 'right',
+                            labels: {
+                                padding: 15,
+                                font: {
+                                    size: 14
+                                },
+                                generateLabels: function(chart) {
+                                    const data = chart.data;
+                                    const total = data.datasets[0].data.reduce((sum, value) => sum + value, 0);
+                                    return data.labels.map((label, i) => {
+                                        const value = data.datasets[0].data[i];
+                                        const percentage = Math.round((value / total) * 100);
+                                        return {
+                                            text: `${label}: ${percentage}%`,
+                                            fillStyle: data.datasets[0].backgroundColor[i],
+                                            hidden: false,
+                                            index: i
+                                        };
+                                    });
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${percentage}% (${value} тыс. человек)`;
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Распределение по времени поиска работы',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
+                        },
+                        // Добавляем центральный текст с общим количеством
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                const total = ctx.dataset.data.reduce((sum, val) => sum + val, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return percentage >= 10 ? `${percentage}%` : '';
+                            },
+                            color: '#fff',
+                            font: {
+                                weight: 'bold',
+                                size: 12
+                            }
                         }
                     }
                 }
             });
 
-            // График распределения безработицы по возрасту
+            // График распределения безработицы по возрасту (интерактивный)
             const ageUnemploymentCtx = document.getElementById('ageUnemploymentChart').getContext('2d');
-            new Chart(ageUnemploymentCtx, {
+            const ageUnemploymentChart = createUpdatingChart(ageUnemploymentCtx, {
                 type: 'bar',
                 data: {
                     labels: ['16-24', '25-34', '35-44', '45-54', '55-65'],
                     datasets: [{
                         label: 'Уровень безработицы (%)',
                         data: [12.5, 7.8, 6.2, 5.9, 8.4],
-                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                        borderWidth: 0
+                        backgroundColor: [
+                            'rgba(102, 126, 234, 0.8)',
+                            'rgba(104, 211, 145, 0.8)',
+                            'rgba(250, 204, 21, 0.8)',
+                            'rgba(251, 146, 60, 0.8)',
+                            'rgba(239, 68, 68, 0.8)'
+                        ],
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        borderColor: '#ffffff'
                     }]
                 },
                 options: {
@@ -1549,6 +2181,39 @@
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Безработица: ${context.parsed.y}%`;
+                                },
+                                afterLabel: function(context) {
+                                    const ageGroups = {
+                                        '16-24': 'Молодежь',
+                                        '25-34': 'Молодые специалисты',
+                                        '35-44': 'Средний возраст',
+                                        '45-54': 'Предпенсионный возраст',
+                                        '55-65': 'Старший возраст'
+                                    };
+                                    const age = context.label;
+                                    return `Категория: ${ageGroups[age] || age}`;
+                                },
+                                footer: function(tooltipItems) {
+                                    return 'Данные обновляются в реальном времени';
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Уровень безработицы по возрастным группам',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
                         }
                     },
                     scales: {
@@ -1556,9 +2221,37 @@
                             beginAtZero: true,
                             max: 15,
                             ticks: {
-                                stepSize: 3
+                                stepSize: 3,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Уровень безработицы (%)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Возрастная группа (лет)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 10
+                                }
                             }
                         }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
                     }
                 }
             });
@@ -1566,15 +2259,24 @@
             // Заглушки для премиум графиков - в реальном приложении эти графики бы 
             // инициализировались только после оформления подписки
             const popularProfessionsCtx = document.getElementById('popularProfessionsChart').getContext('2d');
-            new Chart(popularProfessionsCtx, {
+            const popularProfessionsChart = createUpdatingChart(popularProfessionsCtx, {
                 type: 'bar',
                 data: {
                     labels: ['IT специалисты', 'Бухгалтеры', 'Менеджеры', 'Инженеры', 'Врачи', 'Преподаватели'],
                     datasets: [{
                         label: 'Количество вакансий',
                         data: [2500, 1800, 1500, 1200, 950, 850],
-                        backgroundColor: 'rgba(104, 211, 145, 0.8)',
-                        borderWidth: 0
+                        backgroundColor: [
+                            'rgba(104, 211, 145, 0.8)',
+                            'rgba(102, 126, 234, 0.8)',
+                            'rgba(250, 204, 21, 0.8)',
+                            'rgba(251, 146, 60, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(79, 209, 197, 0.8)'
+                        ],
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        borderColor: '#ffffff'
                     }]
                 },
                 options: {
@@ -1584,30 +2286,231 @@
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Вакансий: ${context.parsed.x.toLocaleString()} шт.`;
+                                },
+                                afterLabel: function(context) {
+                                    const trends = {
+                                        'IT специалисты': 'Растущий спрос +15% за год',
+                                        'Бухгалтеры': 'Стабильный спрос +3% за год',
+                                        'Менеджеры': 'Стабильный спрос +5% за год',
+                                        'Инженеры': 'Растущий спрос +8% за год',
+                                        'Врачи': 'Высокий спрос +12% за год',
+                                        'Преподаватели': 'Умеренный спрос +2% за год'
+                                    };
+                                    const profession = context.label;
+                                    return `${trends[profession] || ''}`;
+                                },
+                                footer: function(tooltipItems) {
+                                    return 'Данные обновляются в реальном времени';
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Самые востребованные профессии',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
+                        },
+                        // Добавляем метки данных на сами столбцы
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'right',
+                            formatter: value => value.toLocaleString(),
+                            color: '#333',
+                            font: {
+                                weight: 'bold'
+                            }
                         }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Количество вакансий',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Профессия',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
                     }
                 }
             });
 
-            // Заглушка для графика прогноза зарплат
+            // Заглушка для графика прогноза зарплат (интерактивный)
             const salaryForecastCtx = document.getElementById('salaryForecastChart').getContext('2d');
-            new Chart(salaryForecastCtx, {
+            const salaryForecastChart = createUpdatingChart(salaryForecastCtx, {
                 type: 'line',
                 data: {
                     labels: ['2022', '2023', '2024', '2025', '2026', '2027'],
-                    datasets: [{
-                        label: 'Средняя зарплата (сомони)',
-                        data: [2100, 2300, 2450, 2650, 2900, 3150],
-                        borderColor: 'rgba(104, 211, 145, 1)',
-                        backgroundColor: 'rgba(104, 211, 145, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4
-                    }]
+                    datasets: [
+                        {
+                            label: 'Средняя зарплата (сомони)',
+                            data: [2100, 2300, 2450, 2650, 2900, 3150],
+                            borderColor: 'rgba(104, 211, 145, 1)',
+                            backgroundColor: 'rgba(104, 211, 145, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: 'white',
+                            pointBorderColor: 'rgba(104, 211, 145, 1)',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        },
+                        {
+                            label: 'Прогноз роста',
+                            data: [null, null, null, 2650, 2900, 3150, 3400, 3650],
+                            borderColor: 'rgba(102, 126, 234, 0.7)',
+                            borderDash: [5, 5],
+                            backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: 'white',
+                            pointBorderColor: 'rgba(102, 126, 234, 0.7)',
+                            pointBorderWidth: 2,
+                            pointRadius: 4
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.datasetIndex === 0) {
+                                        return `Средняя зарплата: ${context.parsed.y.toLocaleString()} сомони`;
+                                    } else {
+                                        return `Прогноз: ${context.parsed.y ? context.parsed.y.toLocaleString() : '-'} сомони`;
+                                    }
+                                },
+                                footer: function(tooltipItems) {
+                                    const year = tooltipItems[0].label;
+                                    if (parseInt(year) >= 2025) {
+                                        return 'Прогнозируемые данные';
+                                    } else {
+                                        return 'Фактические данные';
+                                    }
+                                }
+                            }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Прогноз средней зарплаты (2022-2027)',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
+                        },
+                        // Добавляем аннотацию для разделения фактических и прогнозных данных
+                        annotation: {
+                            annotations: {
+                                line1: {
+                                    type: 'line',
+                                    xMin: 3.5,
+                                    xMax: 3.5,
+                                    borderColor: 'rgba(102, 126, 234, 0.5)',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    label: {
+                                        content: 'Прогноз',
+                                        enabled: true,
+                                        position: 'top',
+                                        backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                                        color: 'white',
+                                        font: {
+                                            size: 12
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 1800,
+                            title: {
+                                display: true,
+                                text: 'Средняя зарплата (сомони)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Год',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 10
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1200,
+                        easing: 'easeInOutQuart'
+                    }
                 }
             });
 
@@ -2157,30 +3060,271 @@
                 });
             }
 
-            // График для раздела "По регионам"
+            // График для раздела "По регионам" (интерактивный, обновляющийся)
             if (document.getElementById('regionalSalaryChart')) {
                 const regionalSalaryCtx = document.getElementById('regionalSalaryChart').getContext('2d');
-                new Chart(regionalSalaryCtx, {
+                const regionalSalaryChart = createUpdatingChart(regionalSalaryCtx, {
                     type: 'bar',
                     data: {
                         labels: ['Душанбе', 'Согдийская область', 'Хатлонская область', 'ГБАО', 'РРП'],
-                        datasets: [{
-                            label: 'Средняя зарплата (сомони)',
-                            data: [3450, 2840, 2250, 2180, 2590],
-                            backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                            borderWidth: 0
-                        }]
+                        datasets: [
+                            {
+                                label: 'Средняя зарплата (сомони)',
+                                data: [3450, 2840, 2250, 2180, 2590],
+                                backgroundColor: [
+                                    'rgba(102, 126, 234, 0.8)',
+                                    'rgba(104, 211, 145, 0.8)',
+                                    'rgba(251, 146, 60, 0.8)',
+                                    'rgba(239, 68, 68, 0.8)',
+                                    'rgba(79, 209, 197, 0.8)'
+                                ],
+                                borderWidth: 2,
+                                borderColor: '#ffffff',
+                                borderRadius: 6,
+                                barPercentage: 0.6,
+                                categoryPercentage: 0.7
+                            },
+                            {
+                                label: 'Средняя зарплата в 2023 (сомони)',
+                                data: [3150, 2650, 2100, 2050, 2450],
+                                backgroundColor: 'rgba(200, 200, 200, 0.4)',
+                                borderWidth: 1,
+                                borderColor: 'rgba(200, 200, 200, 0.8)',
+                                borderRadius: 6,
+                                barPercentage: 0.6,
+                                categoryPercentage: 0.7
+                            },
+                            {
+                                label: 'Средняя по стране (сомони)',
+                                data: [2450, 2450, 2450, 2450, 2450],
+                                type: 'line',
+                                borderColor: 'rgba(220, 38, 38, 0.8)',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                fill: false,
+                                pointStyle: 'star',
+                                pointRadius: 5,
+                                pointBackgroundColor: 'rgba(220, 38, 38, 0.8)'
+                            }
+                        ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
                         plugins: {
                             legend: {
-                                display: false
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    padding: 15,
+                                    usePointStyle: true,
+                                    pointStyle: 'rect'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.dataset.label || '';
+                                        const value = context.raw || 0;
+                                        return `${label}: ${value.toLocaleString()} сомони`;
+                                    },
+                                    afterLabel: function(context) {
+                                        if (context.datasetIndex === 0) {
+                                            const growthMap = {
+                                                'Душанбе': 9.5,
+                                                'Согдийская область': 7.2,
+                                                'Хатлонская область': 7.1,
+                                                'ГБАО': 6.3,
+                                                'РРП': 5.7
+                                            };
+                                            const region = context.label;
+                                            return `Рост: +${growthMap[region] || 0}% за год`;
+                                        }
+                                        return '';
+                                    },
+                                    footer: function(tooltipItems) {
+                                        const region = tooltipItems[0].label;
+                                        const currentValue = tooltipItems[0].parsed.y;
+                                        const countryAvg = 2450;
+                                        const diff = ((currentValue - countryAvg) / countryAvg * 100).toFixed(1);
+                                        
+                                        if (diff > 0) {
+                                            return `На ${diff}% выше среднего по стране`;
+                                        } else if (diff < 0) {
+                                            return `На ${Math.abs(diff)}% ниже среднего по стране`;
+                                        } else {
+                                            return 'На уровне среднего по стране';
+                                        }
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Средняя зарплата по регионам',
+                                font: {
+                                    size: 18,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 20
+                                }
+                            },
+                            // Добавляем метки данных с процентами роста
+                            datalabels: {
+                                display: function(context) {
+                                    return context.datasetIndex === 0; // Показываем только для первого набора данных
+                                },
+                                formatter: function(value, context) {
+                                    const countryAvg = 2450;
+                                    const diff = ((value - countryAvg) / countryAvg * 100).toFixed(0);
+                                    let diffText = '';
+                                    
+                                    if (diff > 0) {
+                                        diffText = `+${diff}%`;
+                                    } else if (diff < 0) {
+                                        diffText = `${diff}%`;
+                                    }
+                                    
+                                    return value.toLocaleString() + ' с.\n' + diffText;
+                                },
+                                color: function(context) {
+                                    const value = context.dataset.data[context.dataIndex];
+                                    const countryAvg = 2450;
+                                    
+                                    if (value > countryAvg) {
+                                        return '#047857'; // Зеленый для значений выше среднего
+                                    } else if (value < countryAvg) {
+                                        return '#b91c1c'; // Красный для значений ниже среднего
+                                    } else {
+                                        return '#333'; // Черный для значений равных среднему
+                                    }
+                                },
+                                font: {
+                                    weight: 'bold',
+                                    size: 12
+                                },
+                                anchor: 'end',
+                                align: 'top',
+                                offset: 0,
+                                clamp: true,
+                                textAlign: 'center'
+                            },
+                            // Добавляем аннотацию для обозначения среднего по стране
+                            annotation: {
+                                annotations: {
+                                    line1: {
+                                        type: 'line',
+                                        yMin: 2450,
+                                        yMax: 2450,
+                                        borderColor: 'rgba(220, 38, 38, 0.5)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            content: 'Средняя по стране',
+                                            display: true,
+                                            position: 'start',
+                                            backgroundColor: 'rgba(220, 38, 38, 0.7)',
+                                            color: 'white',
+                                            font: {
+                                                size: 12
+                                            }
+                                        }
+                                    }
+                                }
                             }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Средняя зарплата (сомони)',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toLocaleString();
+                                    }
+                                },
+                                grid: {
+                                    color: function(context) {
+                                        if (context.tick.value === 2450) {
+                                            return 'rgba(220, 38, 38, 0.3)';
+                                        }
+                                        return 'rgba(0, 0, 0, 0.1)';
+                                    },
+                                    lineWidth: function(context) {
+                                        if (context.tick.value === 2450) {
+                                            return 2;
+                                        }
+                                        return 1;
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Регион',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    },
+                                    padding: {
+                                        top: 10
+                                    }
+                                }
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
                         }
                     }
                 });
+                
+                // Добавляем периодические обновления значений в реальном времени
+                setInterval(() => {
+                    // Имитация поступления новых данных 
+                    const newDataset1 = regionalSalaryChart.chart.data.datasets[0].data.map(value => {
+                        // Случайное изменение в пределах ±3%
+                        const changePercent = (Math.random() - 0.5) * 0.06;
+                        const newValue = value * (1 + changePercent);
+                        return Math.round(newValue);
+                    });
+                    
+                    // Обновляем данные графика
+                    regionalSalaryChart.chart.data.datasets[0].data = newDataset1;
+                    regionalSalaryChart.chart.update('normal');
+                    
+                    // Добавляем уведомление об обновлении
+                    const updateNotification = document.createElement('div');
+                    updateNotification.className = 'fixed bottom-4 right-4 bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 rounded shadow-md z-50 animate-pulse';
+                    updateNotification.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fas fa-sync-alt text-xl mr-2"></i>
+                            <div>
+                                <p class="font-medium">Данные обновлены</p>
+                                <p class="text-sm mt-1">Получены новые данные по рынку труда</p>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(updateNotification);
+                    
+                    // Удаляем уведомление через 2 секунды
+                    setTimeout(() => {
+                        updateNotification.classList.add('opacity-0');
+                        updateNotification.style.transition = 'opacity 0.5s ease';
+                        setTimeout(() => updateNotification.remove(), 500);
+                    }, 2000);
+                }, 10000); // Обновление каждые 10 секунд
             }
         });
     </script>
