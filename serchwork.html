@@ -416,7 +416,7 @@
     </header>
 
     <!-- Вертикальная надпись "Меню" -->
-    <div class="menu-label" onclick="toggleSideMenu()">Меню</div>
+    <div class="menu-label">Меню</div>
 
     <!-- Overlay для закрытия меню -->
     <div class="overlay"></div>
@@ -497,8 +497,12 @@
             </div>
         </div>
     </div>
-                <aside class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-lg" aria-label="Фильтры поиска">
-                    <h3 class="text-xl font-semibold mb-6 text-gray-800">Фильтры</h3>
+    <main>
+        <section id="jobs" class="section-spacing bg-white">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <aside class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-lg" aria-label="Фильтры поиска">
+                        <h3 class="text-xl font-semibold mb-6 text-gray-800">Фильтры</h3>
                     <form class="space-y-5" autocomplete="off">
                         <div>
                             <label for="filterRegion" class="block text-sm font-medium text-gray-700 mb-2">Регион :</label>
@@ -769,8 +773,8 @@
                 }
             });
             
-            // Функция для переключения меню
-            function toggleSideMenu() {
+            // Объявляем функцию toggleSideMenu глобально в области видимости
+            window.toggleSideMenu = function() {
                 const sideMenu = document.querySelector('.side-menu');
                 const overlay = document.querySelector('.overlay');
                 const menuLabel = document.querySelector('.menu-label');
@@ -781,7 +785,7 @@
             }
 
             // Закрыть меню при клике на overlay
-            document.querySelector('.overlay').addEventListener('click', toggleSideMenu);
+            document.querySelector('.overlay').addEventListener('click', window.toggleSideMenu);
 
             // Обработка выпадающих подменю
             const menuItems = document.querySelectorAll('.menu-item');
@@ -816,85 +820,13 @@
                     });
                 }
             });
+            
+            // Явно вызываем функцию toggleSideMenu при клике на кнопку меню
+            document.querySelector('.menu-label').addEventListener('click', window.toggleSideMenu);
         });
     </script>
-
-    // Открытие/закрытие мобильного меню
-    mobileMenuBtn?.addEventListener('click', function(e) {
-        e.stopPropagation();
-        mobileMenu.classList.toggle('hidden');
-    });
-
-    // Открытие/закрытие меню "Мой профиль"
-    profileMenuBtn?.addEventListener('click', function(e) {
-        e.stopPropagation();
-        profileDropdown.classList.toggle('hidden');
-        langDropdown.classList.add('hidden');
-        moreDropdown.classList.add('hidden');
-    });
-
-    // Открытие/закрытие меню языков
-    langMenuBtn?.addEventListener('click', function(e) {
-        e.stopPropagation();
-        langDropdown.classList.toggle('hidden');
-        profileDropdown.classList.add('hidden');
-        moreDropdown.classList.add('hidden');
-    });
-
-    // Открытие/закрытие меню "Больше"
-    moreMenuBtn?.addEventListener('click', function(e) {
-        e.stopPropagation();
-        moreDropdown.classList.toggle('hidden');
-        profileDropdown.classList.add('hidden');
-        langDropdown.classList.add('hidden');
-    });
-
-    // Закрытие всех меню при клике вне
-    document.addEventListener('click', function(e) {
-        if (!profileDropdown.contains(e.target) && !profileMenuBtn.contains(e.target)) {
-            profileDropdown.classList.add('hidden');
-        }
-        if (!langDropdown.contains(e.target) && !langMenuBtn.contains(e.target)) {
-            langDropdown.classList.add('hidden');
-        }
-        if (!moreDropdown.contains(e.target) && !moreMenuBtn.contains(e.target)) {
-            moreDropdown.classList.add('hidden');
-        }
-        if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-            mobileMenu.classList.add('hidden');
-        }
-    });
-
-    // Переключение языка (только смена надписи, без перевода)
-    function setupLanguageSwitching() {
-        langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
-            btn.onclick = function() {
-                currentLangLabel.textContent = this.textContent;
-                langDropdown.classList.add('hidden');
-            };
-        });
-        
-        // Мобильные кнопки языков
-        document.querySelectorAll('#mobileMenu button[data-lang]').forEach(btn => {
-            btn.onclick = function() {
-                const lang = this.getAttribute('data-lang');
-                const langText = this.textContent;
-                // Обновляем основную кнопку языка
-                if (currentLangLabel) {
-                    currentLangLabel.textContent = langText;
-                }
-                // Обновляем состояние мобильных кнопок
-                document.querySelectorAll('#mobileMenu button[data-lang]').forEach(b => {
-                    b.className = 'px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm';
-                });
-                this.className = 'px-3 py-1 bg-white text-gray-800 rounded font-bold text-sm';
-                // Закрываем мобильное меню
-                mobileMenu.classList.add('hidden');
-            };
-        });
-    }
-    
-    setupLanguageSwitching();
+</body>
+</html>
 </script>
 </body>
 </html>
