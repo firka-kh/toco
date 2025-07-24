@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика рынка труда</title>
+    <meta name="description" content="Статистика рынка труда Республики Таджикистан. Аналитика занятости, безработицы, вакансий и трудовой миграции.">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Анимация дрожания и переливания цвета для кнопки меню */
+        @keyframes menuLabelShake {
+            0%, 100% {
+                transform: translateY(-50%) rotate(0deg);
+                background: #4a5568;
+            }
+            25% {
+                transform: translateY(-48%) rotate(-2deg);
+                background: #5a6678;
+            }
+            50% {
+                transform: translateY(-50%) rotate(2deg);
+                background: #3a4558;
+            }
+            75% {
+                transform: translateY(-52%) rotate(-1deg);
+                background: #4a5568;
+            }
+        }
+
+        /* Кнопка меню посередине левой части страницы */
+        .menu-label {
+            position: fixed;
+            top: 50%;
+            left: -2px;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: menuLabelShake 2s infinite;
+            z-index: 999;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-label:hover {
+            background: linear-gradient(135deg, rgba(118, 75, 162, 0.9) 0%, rgba(102, 126, 234, 0.9) 100%);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(102, 126, 234, 0.3);
+            transform: translateY(-50%) scale(1.02);
+        }
+
+        /* Боковое меню выплывает слева направо */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 14rem;
+            transform: translateX(-100%);
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.98) 0%, 
+                rgba(118, 75, 162, 0.98) 50%, 
+                rgba(102, 126, 234, 0.98) 100%);
+            border-radius: 0 1rem 1rem 0;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 12px 24px rgba(0, 0, 0, 0.3),
+                0 4px 8px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1rem;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-left: none;
+        }
+
+        .side-menu.open {
+            transform: translateX(0);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.5),
+                0 15px 30px rgba(0, 0, 0, 0.4),
+                0 6px 12px rgba(102, 126, 234, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .side-menu a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            justify-content: flex-start;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .side-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            transition: left 0.5s ease;
+        }
+
+        .side-menu a:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            transform: translateX(8px);
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.2),
+                0 2px 4px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .side-menu a:hover::before {
+            left: 100%;
+        }
+
+        .side-menu a i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .side-menu a:hover i {
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        /* Стили для подменю */
+        .submenu {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            left: calc(100% + 20px);
+            top: -80px;
+            margin-left: 0;
+            background: linear-gradient(135deg, 
+                rgba(118, 75, 162, 0.95) 0%, 
+                rgba(102, 126, 234, 0.95) 100%);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 8px 16px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            min-width: 200px;
+            z-index: 1002;
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-item:hover .submenu {
+            display: flex;
+        }
+
+        .submenu a {
+            justify-content: flex-start;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+            margin: 0.125rem 0;
+            border-radius: 0.25rem;
+        }
+
+        .submenu a:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(255, 255, 255, 0.08) 100%);
+            transform: translateX(4px);
+        }
+
+        /* Overlay для закрытия меню */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+            backdrop-filter: blur(3px);
+        }
+
+        .overlay.visible {
+            display: block;
+        }
+
+        /* Дополнительные эффекты для объема */
+        .side-menu::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(0, 0, 0, 0.1) 100%);
+            border-radius: 0 1rem 1rem 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .side-menu > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Custom gradient background for header and hero sections */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Enhanced hover effect for cards */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Consistent spacing for sections */
+        .section-spacing {
+            padding: 3rem 0;
+        }
+
+        /* Chart container styles */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        /* Блок с размытием для платного контента */
+        .premium-blur {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-blur::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .premium-content-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: 0.5rem;
+        }
+
+        /* Анимация пульсации для кнопки подписки */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(102, 126, 234, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+            }
+        }
+
+        .pulse-button {
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 0 0 rgba(102, 126, 234, 1);
+        }
+
+        /* Модальное окно подписки */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal.open .modal-content {
+            transform: translateY(0);
+        }
+
+        /* Стили для вкладок */
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border-bottom: 2px solid transparent;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            color: #4c51bf;
+            border-bottom: 2px solid #4c51bf;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1.5rem 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Стиль для статистического виджета */
+        .stat-widget {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-widget:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Индикатор тренда */
+        .trend-up {
+            color: #48bb78;
+        }
+
+        .trend-down {
+            color: #f56565;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-center">
+                <div class="text-center">
+                    <h1 class="text-3xl font-bold">Статистика рынка труда</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Вертикальная надпись "Меню" -->
+    <div class="menu-label">Меню</div>
+
+    <!-- Overlay для закрытия меню -->
+    <div class="overlay"></div>
+
+    <!-- Боковое меню -->
+    <div class="side-menu">
+        <a class="flex items-center px-4 py-3 mt-3 hover:bg-gray-700 hover:text-gray-300" href="index.html">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-sm font-medium">Главная</span>
+        </a>
+        <div class="mt-3 border-t border-gray-700">
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="news.html">
+                <i class="fas fa-newspaper text-lg"></i>
+                <span class="text-sm font-medium">Новости</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="serchwork.html">
+                <i class="fas fa-search text-lg"></i>
+                <span class="text-sm font-medium">Поиск работы</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="statistics.html">
+                <i class="fas fa-chart-bar text-lg"></i>
+                <span class="text-sm font-medium">Статистика</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#programs">
+                <i class="fas fa-briefcase text-lg"></i>
+                <span class="text-sm font-medium">Программы</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#education">
+                <i class="fas fa-graduation-cap text-lg"></i>
+                <span class="text-sm font-medium">Образование</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="about.html">
+                <i class="fas fa-info-circle text-lg"></i>
+                <span class="text-sm font-medium">О портале</span>
+            </a>
+        </div>
+        <div class="mt-3 border-t border-gray-700">
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="free_lans/freelance_homepage.html">
+                <i class="fas fa-laptop-code text-lg"></i>
+                <span class="text-sm font-medium">Фриланс</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="analitic_pg.html">
+                <i class="fas fa-chart-line text-lg"></i>
+                <span class="text-sm font-medium">Аналитика</span>
+            </a>
+        </div>
+        <div class="mt-3 border-t border-gray-700">
+            <div class="menu-item">
+                <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#">
+                    <div class="flex items-center">
+                        <i class="fas fa-user-circle text-lg"></i>
+                        <span class="text-sm font-medium ml-3">Мой профиль</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-xs opacity-70"></i>
+                </a>
+                <div class="submenu">
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="user_profile.html">
+                        <i class="fas fa-cog text-sm mr-2"></i>
+                        <span>Настройки профиля</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="employer_profile.html">
+                        <i class="fas fa-building text-sm mr-2"></i>
+                        <span>Кабинет работодателя</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="user_dashboard.html">
+                        <i class="fas fa-user text-sm mr-2"></i>
+                        <span>Кабинет соискателя</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="#">
+                        <i class="fas fa-headset text-sm mr-2"></i>
+                        <span>Кабинет консультанта</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="register.html">
+                        <i class="fas fa-user-plus text-sm mr-2"></i>
+                        <span>Регистрация</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <!-- Информация о доступе к премиум-контенту -->
+        <div class="bg-indigo-50 py-4 border-b border-indigo-100">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div>
+                        <p class="text-indigo-800 font-medium">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Часть информации доступна только по подписке
+                        </p>
+                    </div>
+                    <button id="subscribeBtn" class="mt-3 md:mt-0 px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors pulse-button">
+                        Оформить подписку <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Панель с вкладками -->
+        <div class="bg-white border-b border-gray-200">
+            <div class="container mx-auto px-4">
+                <div class="flex overflow-x-auto">
+                    <button class="tab-button active" data-tab="general">Общая статистика</button>
+                    <button class="tab-button" data-tab="regional">По регионам</button>
+                    <button class="tab-button" data-tab="industries">По отраслям</button>
+                    <button class="tab-button" data-tab="demographic">Демография</button>
+                    <button class="tab-button" data-tab="education">Образование</button>
+                    <button class="tab-button" data-tab="migration">Миграция</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Содержимое вкладок -->
+        <section class="section-spacing bg-gray-50">
+            <div class="container mx-auto px-4">
+                <!-- Общая статистика -->
+                <div id="general-tab" class="tab-content active">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">Основные показатели рынка труда</h2>
+                    
+                    <!-- Виджеты с ключевыми показателями -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Уровень безработицы</h3>
+                            <div class="flex items-end justify-between">
+                                <p class="text-3xl font-bold text-gray-800">7.4%</p>
+                                <div class="flex items-center">
+                                    <p class="text-sm trend-down mr-1">-0.3%</p>
+                                    <i class="fas fa-arrow-down trend-down text-sm"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Уровень занятости</h3>
+                            <div class="flex items-end justify-between">
+                                <p class="text-3xl font-bold text-gray-800">61.3%</p>
+                                <div class="flex items-center">
+                                    <p class="text-sm trend-up mr-1">+0.5%</p>
+                                    <i class="fas fa-arrow-up trend-up text-sm"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Средняя зарплата</h3>
+                            <div class="flex items-end justify-between">
+                                <p class="text-3xl font-bold text-gray-800">2450 сом.</p>
+                                <div class="flex items-center">
+                                    <p class="text-sm trend-up mr-1">+5.2%</p>
+                                    <i class="fas fa-arrow-up trend-up text-sm"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Активные вакансии</h3>
+                            <div class="flex items-end justify-between">
+                                <p class="text-3xl font-bold text-gray-800">21,543</p>
+                                <div class="flex items-center">
+                                    <p class="text-sm trend-up mr-1">+12.7%</p>
+                                    <i class="fas fa-arrow-up trend-up text-sm"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                        </div>
+                    </div>
+
+                    <!-- График динамики безработицы -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Динамика уровня безработицы</h3>
+                        <div class="chart-container">
+                            <canvas id="unemploymentChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Популярные профессии - блок с премиум контентом -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10 relative premium-blur">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Самые востребованные профессии</h3>
+                        <div class="chart-container">
+                            <canvas id="popularProfessionsChart"></canvas>
+                        </div>
+                        <div class="premium-content-overlay">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors pulse-button">
+                                    Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Статистика трудоустройства -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Время поиска работы</h3>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="jobSearchTimeChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Премиум блок -->
+                        <div class="bg-white rounded-lg shadow-lg p-6 relative premium-blur">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Прогноз роста зарплат</h3>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="salaryForecastChart"></canvas>
+                            </div>
+                            <div class="premium-content-overlay">
+                                <div class="flex flex-col items-center justify-center">
+                                    <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                    <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                    <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                    <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                                        Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Возрастное распределение безработицы -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Возрастное распределение безработицы</h3>
+                        <div class="chart-container">
+                            <canvas id="ageUnemploymentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Остальные вкладки с подобной структурой -->
+                <div id="regional-tab" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">Статистика по регионам</h2>
+                    
+                    <!-- Карта с уровнем безработицы по регионам -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Уровень безработицы по регионам</h3>
+                        <div class="h-96 w-full bg-gray-100 rounded-lg flex items-center justify-center">
+                            <img src="https://placehold.co/800x400/e2e8f0/64748b?text=Интерактивная+карта+регионов" alt="Карта регионов" class="max-h-full max-w-full object-contain">
+                        </div>
+                    </div>
+
+                    <!-- Сравнение средних зарплат по регионам -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10 relative premium-blur">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Средняя заработная плата по регионам</h3>
+                        <div class="chart-container">
+                            <canvas id="regionalSalaryChart"></canvas>
+                        </div>
+                        <div class="premium-content-overlay">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                                    Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Таблица с показателями по регионам -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Ключевые показатели по регионам</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Регион</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Уровень безработицы</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Средняя зарплата</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Активные вакансии</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Тренд</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Душанбе</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5.6%</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3450 сом.</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8,752</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500"><i class="fas fa-arrow-up mr-1"></i> Растущий</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Согдийская область</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">6.8%</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2840 сом.</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5,124</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500"><i class="fas fa-arrow-up mr-1"></i> Растущий</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Хатлонская область</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8.2%</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2250 сом.</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3,864</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-500"><i class="fas fa-arrow-down mr-1"></i> Снижение</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ГБАО</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">9.5%</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2180 сом.</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,245</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-500"><i class="fas fa-minus mr-1"></i> Стабильный</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">РРП</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">7.4%</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2590 сом.</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,558</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500"><i class="fas fa-arrow-up mr-1"></i> Растущий</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Содержимое для остальных вкладок -->
+                <div id="industries-tab" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">Статистика по отраслям</h2>
+                    
+                    <p class="text-gray-600 mb-8">Здесь будет отображаться статистика распределения рабочих мест по отраслям экономики, тенденции развития различных секторов, средние зарплаты и количество вакансий.</p>
+                    
+                    <!-- Заглушка для демонстрации -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                        <i class="fas fa-chart-pie text-6xl text-indigo-300 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Контент находится в разработке</h3>
+                        <p class="text-gray-600">Полная информация по отраслям будет доступна в ближайшее время</p>
+                    </div>
+                </div>
+
+                <div id="demographic-tab" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">Демографические показатели</h2>
+                    
+                    <p class="text-gray-600 mb-8">Здесь будет отображаться информация о возрастной структуре работающего населения, гендерном распределении в различных отраслях и занятости уязвимых групп населения.</p>
+                    
+                    <!-- Заглушка для демонстрации -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                        <i class="fas fa-users text-6xl text-indigo-300 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Контент находится в разработке</h3>
+                        <p class="text-gray-600">Демографическая статистика будет доступна в ближайшее время</p>
+                    </div>
+                </div>
+
+                <div id="education-tab" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">Образование и квалификация</h2>
+                    
+                    <p class="text-gray-600 mb-8">Здесь будет представлена статистика по уровню образования работников, соответствию образования требованиям рынка и востребованным навыкам.</p>
+                    
+                    <!-- Заглушка для демонстрации -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                        <i class="fas fa-graduation-cap text-6xl text-indigo-300 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Контент находится в разработке</h3>
+                        <p class="text-gray-600">Статистика по образованию будет доступна в ближайшее время</p>
+                    </div>
+                </div>
+
+                <div id="migration-tab" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">Данные о миграции</h2>
+                    
+                    <p class="text-gray-600 mb-8">Здесь будет представлена статистика по трудовой миграции, основным странам-реципиентам трудовых мигрантов и денежным переводам.</p>
+                    
+                    <!-- Заглушка для демонстрации -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                        <i class="fas fa-plane-departure text-6xl text-indigo-300 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Контент находится в разработке</h3>
+                        <p class="text-gray-600">Статистика по миграции будет доступна в ближайшее время</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальное окно подписки -->
+    <div id="subscriptionModal" class="modal">
+        <div class="modal-content">
+            <button class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 focus:outline-none" id="closeModal">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Оформление подписки</h2>
+            
+            <div class="mb-6">
+                <p class="text-gray-600 mb-4">Подписка дает вам полный доступ к аналитике и расширенной статистике рынка труда Таджикистана.</p>
+                <div class="bg-indigo-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold text-indigo-800 mb-2">Преимущества подписки:</h3>
+                    <ul class="text-indigo-700 space-y-2">
+                        <li><i class="fas fa-check-circle mr-2"></i> Полная статистика по всем регионам</li>
+                        <li><i class="fas fa-check-circle mr-2"></i> Прогнозы развития рынка труда</li>
+                        <li><i class="fas fa-check-circle mr-2"></i> Данные о востребованных профессиях</li>
+                        <li><i class="fas fa-check-circle mr-2"></i> Тенденции изменения зарплат</li>
+                        <li><i class="fas fa-check-circle mr-2"></i> Аналитические отчеты</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Варианты подписки -->
+            <div class="space-y-4 mb-6">
+                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                    <input type="radio" name="subscription-type" id="monthly" checked class="mr-2">
+                    <label for="monthly" class="text-lg font-medium text-gray-800">Месячная подписка</label>
+                    <p class="text-gray-600 ml-6">150 сомони / месяц</p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                    <input type="radio" name="subscription-type" id="yearly" class="mr-2">
+                    <label for="yearly" class="text-lg font-medium text-gray-800">Годовая подписка</label>
+                    <p class="text-gray-600 ml-6">1500 сомони / год <span class="text-green-600 font-medium">(экономия 16%)</span></p>
+                </div>
+            </div>
+
+            <button class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                Продолжить <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">О портале</h3>
+                    <p class="text-sm opacity-90">Официальный портал информационной системы рынка труда Республики Таджикистан</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Полезные ссылки</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Правительство РТ</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Министерство труда</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Налоговый комитет</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Нормативные акты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Поддержка</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Часто задаваемые вопросы</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Руководство пользователя</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Техническая поддержка</a></li>
+                        <li><a href="#" class="opacity-90 hover:opacity-100">Обратная связь</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Социальные сети</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-2xl opacity-90 hover:opacity-100" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-sm opacity-90">&copy; 2024 Министерство труда, миграции и занятости населения Республики Таджикистан. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Объявляем функцию toggleSideMenu глобально в области видимости
+            window.toggleSideMenu = function() {
+                const sideMenu = document.querySelector('.side-menu');
+                const overlay = document.querySelector('.overlay');
+                const menuLabel = document.querySelector('.menu-label');
+                
+                sideMenu.classList.toggle('open');
+                overlay.classList.toggle('visible');
+                menuLabel.classList.toggle('active');
+            }
+
+            // Закрыть меню при клике на overlay
+            document.querySelector('.overlay').addEventListener('click', window.toggleSideMenu);
+
+            // Обработка выпадающих подменю
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (e.target.closest('a') && !e.target.closest('.submenu')) {
+                        e.preventDefault();
+                        const submenu = this.querySelector('.submenu');
+                        
+                        // Проверка, открыто ли подменю
+                        const isOpen = submenu.classList.contains('open');
+                        
+                        // Закрываем все открытые подменю
+                        document.querySelectorAll('.submenu').forEach(sub => {
+                            sub.classList.remove('open');
+                        });
+                        
+                        // Если подменю было закрыто, открываем его
+                        if (!isOpen) {
+                            submenu.classList.add('open');
+                        }
+                    }
+                });
+            });
+            
+            // Закрываем подменю при клике вне их
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.menu-item')) {
+                    document.querySelectorAll('.submenu').forEach(sub => {
+                        sub.classList.remove('open');
+                    });
+                }
+            });
+            
+            // Явно вызываем функцию toggleSideMenu при клике на кнопку меню
+            document.querySelector('.menu-label').addEventListener('click', window.toggleSideMenu);
+
+            // Переключение вкладок
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Убираем активный класс со всех кнопок
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    // Добавляем активный класс на нажатую кнопку
+                    this.classList.add('active');
+                    
+                    // Скрываем все контенты вкладок
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    // Показываем контент активной вкладки
+                    document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
+                });
+            });
+
+            // Управление модальным окном подписки
+            const subscribeBtn = document.getElementById('subscribeBtn');
+            const unlockBtns = document.querySelectorAll('.unlock-premium-btn');
+            const modal = document.getElementById('subscriptionModal');
+            const closeModal = document.getElementById('closeModal');
+
+            function openModal() {
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModalHandler() {
+                modal.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+
+            subscribeBtn.addEventListener('click', openModal);
+            unlockBtns.forEach(btn => btn.addEventListener('click', openModal));
+            closeModal.addEventListener('click', closeModalHandler);
+
+            // Закрытие модального окна при клике вне его области
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModalHandler();
+                }
+            });
+
+            // Инициализация графиков Chart.js
+            // График динамики безработицы
+            const unemploymentCtx = document.getElementById('unemploymentChart').getContext('2d');
+            new Chart(unemploymentCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                    datasets: [{
+                        label: 'Уровень безработицы (%)',
+                        data: [8.1, 8.0, 7.9, 7.8, 7.7, 7.6, 7.5, 7.4, 7.3, 7.2, 7.1, 7.0],
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 6.5,
+                            max: 8.5,
+                            ticks: {
+                                stepSize: 0.5
+                            }
+                        }
+                    }
+                }
+            });
+
+            // График времени поиска работы
+            const jobSearchTimeCtx = document.getElementById('jobSearchTimeChart').getContext('2d');
+            new Chart(jobSearchTimeCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['До 1 месяца', '1-3 месяца', '3-6 месяцев', '6-12 месяцев', 'Более 12 месяцев'],
+                    datasets: [{
+                        data: [15, 30, 25, 20, 10],
+                        backgroundColor: [
+                            'rgba(102, 126, 234, 0.8)',
+                            'rgba(104, 211, 145, 0.8)',
+                            'rgba(250, 204, 21, 0.8)',
+                            'rgba(251, 146, 60, 0.8)',
+                            'rgba(239, 68, 68, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+
+            // График распределения безработицы по возрасту
+            const ageUnemploymentCtx = document.getElementById('ageUnemploymentChart').getContext('2d');
+            new Chart(ageUnemploymentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['16-24', '25-34', '35-44', '45-54', '55-65'],
+                    datasets: [{
+                        label: 'Уровень безработицы (%)',
+                        data: [12.5, 7.8, 6.2, 5.9, 8.4],
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 15,
+                            ticks: {
+                                stepSize: 3
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Заглушки для премиум графиков - в реальном приложении эти графики бы 
+            // инициализировались только после оформления подписки
+            const popularProfessionsCtx = document.getElementById('popularProfessionsChart').getContext('2d');
+            new Chart(popularProfessionsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['IT специалисты', 'Бухгалтеры', 'Менеджеры', 'Инженеры', 'Врачи', 'Преподаватели'],
+                    datasets: [{
+                        label: 'Количество вакансий',
+                        data: [2500, 1800, 1500, 1200, 950, 850],
+                        backgroundColor: 'rgba(104, 211, 145, 0.8)',
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Заглушка для графика прогноза зарплат
+            const salaryForecastCtx = document.getElementById('salaryForecastChart').getContext('2d');
+            new Chart(salaryForecastCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2022', '2023', '2024', '2025', '2026', '2027'],
+                    datasets: [{
+                        label: 'Средняя зарплата (сомони)',
+                        data: [2100, 2300, 2450, 2650, 2900, 3150],
+                        borderColor: 'rgba(104, 211, 145, 1)',
+                        backgroundColor: 'rgba(104, 211, 145, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+    </script>
+</body>
+</html>
