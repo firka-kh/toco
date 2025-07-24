@@ -284,7 +284,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
+            z-index: 5;
         }
 
         .premium-content-overlay {
@@ -1398,7 +1398,6 @@
             const modal = document.getElementById('subscriptionModal');
             const closeModal = document.getElementById('closeModal');
             const modalContinueBtn = document.querySelector('.modal-content button:last-child');
-            const premiumOverlays = document.querySelectorAll('.premium-content-overlay');
             let isPremiumActive = false;
 
             function openModal() {
@@ -1412,9 +1411,16 @@
             }
 
             function unlockPremiumContent() {
-                premiumOverlays.forEach(overlay => {
+                // Убираем все оверлеи премиум-контента на всех вкладках
+                document.querySelectorAll('.premium-content-overlay').forEach(overlay => {
                     overlay.style.display = 'none';
                 });
+                
+                // Удаляем размытие с блоков премиум-контента на всех вкладках
+                document.querySelectorAll('.premium-blur').forEach(element => {
+                    element.classList.remove('premium-blur');
+                });
+                
                 isPremiumActive = true;
                 closeModalHandler();
                 
@@ -1423,8 +1429,11 @@
                 notification.className = 'fixed top-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md z-50';
                 notification.innerHTML = `
                     <div class="flex items-center">
-                        <i class="fas fa-check-circle mr-2"></i>
-                        <p>Подписка успешно активирована! Премиум контент доступен.</p>
+                        <i class="fas fa-check-circle text-xl mr-2"></i>
+                        <div>
+                            <p class="font-medium">Подписка успешно активирована!</p>
+                            <p class="text-sm mt-1">Премиум контент доступен на всех вкладках статистики.</p>
+                        </div>
                     </div>
                 `;
                 document.body.appendChild(notification);
@@ -1435,6 +1444,10 @@
                     notification.style.transition = 'opacity 0.5s ease';
                     setTimeout(() => notification.remove(), 500);
                 }, 5000);
+                
+                // Активируем все премиум-графики, которые могли быть скрыты
+                // и теперь должны стать видимыми
+                window.dispatchEvent(new Event('resize'));
             }
 
             subscribeBtn.addEventListener('click', openModal);
