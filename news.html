@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новости рынка труда - Портал рынка труда Таджикистана</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    
+    <style>
+        /* Общие стили проекта */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Стили для новостей */
+        .news-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .news-card:hover {
+            border-left-color: #667eea;
+            background-color: #f8fafc;
+        }
+
+        .breaking-news {
+            animation: pulse 2s infinite;
+        }
+
+        .category-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .trending-indicator {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 5px rgba(255, 107, 107, 0.5); }
+            to { box-shadow: 0 0 20px rgba(255, 107, 107, 0.8); }
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Адаптивная типографика */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 1.75rem; }
+            .news-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <!-- Навигация -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-center mx-auto">
+                    <h1 class="hero-title text-3xl font-bold">Новости рынка труда</h1>
+                </div>
+                
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="index.html" class="hover:text-yellow-300 transition-colors">Главная</a>
+                    <a href="news.html" class="font-bold text-yellow-300">Новости</a>
+                    <a href="serchwork.html" class="hover:text-yellow-300 transition-colors">Поиск работы</a>
+                    <a href="analitic_pg.html" class="hover:text-yellow-300 transition-colors">Аналитика</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero секция -->
+    <section class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p class="text-lg opacity-90 mb-6">Актуальная информация о трудоустройстве, зарплатах и законодательстве</p>
+                
+                <!-- Бегущая строка с важными новостями -->
+                <div class="bg-red-600 text-white px-4 py-2 rounded-lg inline-flex items-center space-x-2 breaking-news">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span class="font-semibold">СРОЧНО:</span>
+                    <span>Новый закон о минимальной зарплате вступает в силу с 1 июля 2025</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Фильтры новостей -->
+    <div class="sticky-nav border-b">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    <span class="font-semibold text-gray-700">Категории:</span>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="category-filter bg-blue-500 text-white category-tag" data-category="all">Все</button>
+                        <button class="category-filter bg-gray-200 text-gray-700 category-tag" data-category="employment">Трудоустройство</button>
+                        <button class="category-filter bg-gray-200 text-gray-700 category-tag" data-category="salary">Зарплаты</button>
+                        <button class="category-filter bg-gray-200 text-gray-700 category-tag" data-category="law">Законодательство</button>
+                        <button class="category-filter bg-gray-200 text-gray-700 category-tag" data-category="education">Обучение</button>
+                        <button class="category-filter bg-gray-200 text-gray-700 category-tag" data-category="economy">Экономика</button>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-calendar-alt text-gray-500"></i>
+                    <span class="text-gray-600" id="currentDate">30 июня 2025</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid lg:grid-cols-4 gap-8">
+            <!-- Главные новости -->
+            <div class="lg:col-span-3">
+                <!-- Топ новость -->
+                <article class="bg-white rounded-lg shadow-lg overflow-hidden mb-8 card-hover">
+                    <div class="relative">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23667eea'/%3E%3Ctext x='400' y='200' font-family='Arial' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'%3EНовый закон о труде%3C/text%3E%3C/svg%3E" 
+                             alt="Главная новость" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4">
+                            <span class="category-tag bg-red-500 text-white">Законодательство</span>
+                        </div>
+                        <div class="absolute top-4 right-4 trending-indicator text-white px-2 py-1 rounded">
+                            <i class="fas fa-fire"></i> Тренд
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3 hover:text-blue-600 cursor-pointer">
+                            Принят новый трудовой кодекс: что изменится для работников и работодателей
+                        </h2>
+                        <p class="text-gray-600 mb-4">
+                            Парламент Таджикистана принял обновленный трудовой кодекс, который вступит в силу с 1 августа 2025 года. 
+                            Документ содержит важные изменения в области охраны труда, регулирования рабочего времени и социальных гарантий.
+                        </p>
+                        <div class="flex items-center justify-between text-sm text-gray-500">
+                            <div class="flex items-center space-x-4">
+                                <span><i class="fas fa-clock mr-1"></i>2 часа назад</span>
+                                <span><i class="fas fa-eye mr-1"></i>15,234</span>
+                                <span><i class="fas fa-comment mr-1"></i>89</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="text-blue-500 hover:text-blue-700"><i class="fas fa-share-alt"></i></button>
+                                <button class="text-red-500 hover:text-red-700"><i class="fas fa-heart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Сетка новостей -->
+                <div class="news-grid grid md:grid-cols-2 gap-6">
+                    <!-- Новость 1 -->
+                    <article class="news-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-category="salary">
+                        <div class="flex items-start space-x-4">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%2364748b'/%3E%3Ctext x='40' y='45' font-family='Arial' font-size='10' fill='white' text-anchor='middle'%3E💰%3C/text%3E%3C/svg%3E" 
+                                 alt="Зарплаты" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">
+                            <div class="flex-1">
+                                <span class="category-tag bg-green-100 text-green-800">Зарплаты</span>
+                                <h3 class="font-bold text-gray-800 mt-2 mb-2 hover:text-blue-600 cursor-pointer">
+                                    Средняя зарплата в Душанбе выросла на 15% за год
+                                </h3>
+                                <p class="text-gray-600 text-sm mb-3">
+                                    По данным Агентства по статистике, средняя зарплата в столице составила 2,850 сомони...
+                                </p>
+                                <div class="flex items-center justify-between text-xs text-gray-500">
+                                    <span>4 часа назад</span>
+                                    <span>3,421 просмотр</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Новость 2 -->
+                    <article class="news-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-category="employment">
+                        <div class="flex items-start space-x-4">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23059669'/%3E%3Ctext x='40' y='45' font-family='Arial' font-size='10' fill='white' text-anchor='middle'%3E👔%3C/text%3E%3C/svg%3E" 
+                                 alt="Трудоустройство" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">
+                            <div class="flex-1">
+                                <span class="category-tag bg-blue-100 text-blue-800">Трудоустройство</span>
+                                <h3 class="font-bold text-gray-800 mt-2 mb-2 hover:text-blue-600 cursor-pointer">
+                                    Крупнейшая ярмарка вакансий пройдет в Душанбе
+                                </h3>
+                                <p class="text-gray-600 text-sm mb-3">
+                                    5 июля в выставочном центре "Кохи Вахдат" состоится ярмарка вакансий с участием 150 компаний...
+                                </p>
+                                <div class="flex items-center justify-between text-xs text-gray-500">
+                                    <span>6 часов назад</span>
+                                    <span>2,134 просмотра</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Новость 3 -->
+                    <article class="news-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-category="education">
+                        <div class="flex items-start space-x-4">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%237c3aed'/%3E%3Ctext x='40' y='45' font-family='Arial' font-size='10' fill='white' text-anchor='middle'%3E🎓%3C/text%3E%3C/svg%3E" 
+                                 alt="Обучение" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">
+                            <div class="flex-1">
+                                <span class="category-tag bg-purple-100 text-purple-800">Обучение</span>
+                                <h3 class="font-bold text-gray-800 mt-2 mb-2 hover:text-blue-600 cursor-pointer">
+                                    Запуск программы переквалификации IT-специалистов
+                                </h3>
+                                <p class="text-gray-600 text-sm mb-3">
+                                    Министерство образования объявило о начале бесплатных курсов программирования для безработных...
+                                </p>
+                                <div class="flex items-center justify-between text-xs text-gray-500">
+                                    <span>1 день назад</span>
+                                    <span>5,672 просмотра</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Новость 4 -->
+                    <article class="news-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-category="economy">
+                        <div class="flex items-start space-x-4">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23dc2626'/%3E%3Ctext x='40' y='45' font-family='Arial' font-size='10' fill='white' text-anchor='middle'%3E📈%3C/text%3E%3C/svg%3E" 
+                                 alt="Экономика" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">
+                            <div class="flex-1">
+                                <span class="category-tag bg-red-100 text-red-800">Экономика</span>
+                                <h3 class="font-bold text-gray-800 mt-2 mb-2 hover:text-blue-600 cursor-pointer">
+                                    Безработица в стране снизилась до 8.2%
+                                </h3>
+                                <p class="text-gray-600 text-sm mb-3">
+                                    Согласно отчету Министерства труда, уровень безработицы продолжает снижаться благодаря новым программам...
+                                </p>
+                                <div class="flex items-center justify-between text-xs text-gray-500">
+                                    <span>1 день назад</span>
+                                    <span>4,893 просмотра</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Новость 5 -->
+                    <article class="news-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-category="law">
+                        <div class="flex items-start space-x-4">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%236366f1'/%3E%3Ctext x='40' y='45' font-family='Arial' font-size='10' fill='white' text-anchor='middle'%3E⚖️%3C/text%3E%3C/svg%3E" 
+                                 alt="Законодательство" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">
+                            <div class="flex-1">
+                                <span class="category-tag bg-indigo-100 text-indigo-800">Законодательство</span>
+                                <h3 class="font-bold text-gray-800 mt-2 mb-2 hover:text-blue-600 cursor-pointer">
+                                    Новые правила оформления трудовых договоров
+                                </h3>
+                                <p class="text-gray-600 text-sm mb-3">
+                                    С 1 августа вступают в силу обновленные требования к оформлению трудовых отношений...
+                                </p>
+                                <div class="flex items-center justify-between text-xs text-gray-500">
+                                    <span>2 дня назад</span>
+                                    <span>7,321 просмотр</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Новость 6 -->
+                    <article class="news-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-category="employment">
+                        <div class="flex items-start space-x-4">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23f59e0b'/%3E%3Ctext x='40' y='45' font-family='Arial' font-size='10' fill='white' text-anchor='middle'%3E🏭%3C/text%3E%3C/svg%3E" 
+                                 alt="Промышленность" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">
+                            <div class="flex-1">
+                                <span class="category-tag bg-yellow-100 text-yellow-800">Трудоустройство</span>
+                                <h3 class="font-bold text-gray-800 mt-2 mb-2 hover:text-blue-600 cursor-pointer">
+                                    Новый завод создаст 500 рабочих мест в Худжанде
+                                </h3>
+                                <p class="text-gray-600 text-sm mb-3">
+                                    Текстильное предприятие планирует начать работу уже в сентябре и нанять местных специалистов...
+                                </p>
+                                <div class="flex items-center justify-between text-xs text-gray-500">
+                                    <span>3 дня назад</span>
+                                    <span>2,756 просмотров</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Пагинация -->
+                <div class="flex justify-center items-center space-x-4 mt-12">
+                    <button class="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 transition-colors">
+                        <i class="fas fa-chevron-left mr-2"></i>Предыдущая
+                    </button>
+                    <div class="flex space-x-2">
+                        <button class="px-3 py-2 bg-blue-500 text-white rounded-lg">1</button>
+                        <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">2</button>
+                        <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">3</button>
+                    </div>
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                        Следующая<i class="fas fa-chevron-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Боковая панель -->
+            <div class="lg:col-span-1">
+                <!-- Популярные новости -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-fire text-red-500 mr-2"></i>Популярное
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3 pb-4 border-b">
+                            <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">1</span>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-800 hover:text-blue-600 cursor-pointer">
+                                    Минимальная зарплата увеличена до 800 сомони
+                                </h4>
+                                <span class="text-xs text-gray-500">12,543 просмотра</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 pb-4 border-b">
+                            <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded">2</span>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-800 hover:text-blue-600 cursor-pointer">
+                                    Онлайн-платформа для поиска работы запущена
+                                </h4>
+                                <span class="text-xs text-gray-500">8,921 просмотр</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">3</span>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-800 hover:text-blue-600 cursor-pointer">
+                                    Новые льготы для молодых специалистов
+                                </h4>
+                                <span class="text-xs text-gray-500">6,754 просмотра</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Статистика -->
+                <div class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg p-6 text-white mb-6">
+                    <h3 class="text-lg font-bold mb-4">📊 Сегодня на портале</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span>Новые вакансии:</span>
+                            <span class="font-bold">+127</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Резюме добавлено:</span>
+                            <span class="font-bold">+89</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Успешных сделок:</span>
+                            <span class="font-bold">+34</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Подписка на новости -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">
+                        <i class="fas fa-bell text-yellow-500 mr-2"></i>Подписка на новости
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Получайте актуальные новости рынка труда на вашу почту
+                    </p>
+                    <div class="space-y-3">
+                        <input type="email" placeholder="Ваш email" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                            Подписаться
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="gradient-bg text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="font-bold mb-4">Портал рынка труда</h4>
+                    <p class="text-sm opacity-80">
+                        Официальный портал трудоустройства Республики Таджикистан
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Новости</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-yellow-300">Трудоустройство</a></li>
+                        <li><a href="#" class="hover:text-yellow-300">Зарплаты</a></li>
+                        <li><a href="#" class="hover:text-yellow-300">Законодательство</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Сервисы</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="serchwork.html" class="hover:text-yellow-300">Поиск работы</a></li>
+                        <li><a href="analitic_pg.html" class="hover:text-yellow-300">Аналитика</a></li>
+                        <li><a href="employer_profile.html" class="hover:text-yellow-300">Для работодателей</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Контакты</h4>
+                    <div class="space-y-2 text-sm">
+                        <p><i class="fas fa-phone mr-2"></i>+992 37 221-00-00</p>
+                        <p><i class="fas fa-envelope mr-2"></i>info@mehnat.tj</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center text-sm">
+                <p>&copy; 2025 Портал рынка труда Таджикистана. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Фильтрация новостей по категориям
+        document.querySelectorAll('.category-filter').forEach(button => {
+            button.addEventListener('click', function() {
+                const category = this.dataset.category;
+                
+                // Обновляем активную кнопку
+                document.querySelectorAll('.category-filter').forEach(btn => {
+                    btn.classList.remove('bg-blue-500', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-700');
+                });
+                this.classList.remove('bg-gray-200', 'text-gray-700');
+                this.classList.add('bg-blue-500', 'text-white');
+                
+                // Фильтруем новости
+                document.querySelectorAll('.news-card').forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Анимация при загрузке
+        window.addEventListener('load', function() {
+            document.querySelectorAll('.news-card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Обновление текущей даты
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ru-RU', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    </script>
+</body>
+</html>
