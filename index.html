@@ -158,11 +158,11 @@
         /* Стили для подменю */
         .submenu {
             display: none;
-            position: absolute;
-            left: calc(100% + 5px); /* Меньший отступ от основного меню */
-            top: 0; /* Привязка к верхнему краю родительского элемента */
+            position: absolute !important;
+            left: calc(100% + 5px) !important; /* Меньший отступ от основного меню */
+            top: 0 !important; /* Привязка к верхнему краю родительского элемента */
             flex-direction: column;
-            width: 220px;
+            width: 240px; /* Увеличиваем ширину для более длинных пунктов */
             background: linear-gradient(135deg, 
                 rgba(102, 126, 234, 0.95) 0%, 
                 rgba(118, 75, 162, 0.95) 100%);
@@ -171,7 +171,7 @@
             padding: 0.8rem 0;
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            z-index: 2001; /* Увеличиваем z-index, чтобы перекрыть другие элементы */
+            z-index: 2001 !important; /* Высокий z-index для перекрытия других элементов */
             opacity: 0;
             visibility: hidden;
             transform: translate(10px, 0);
@@ -183,15 +183,15 @@
             content: '';
             position: absolute;
             top: 50%;
-            left: -7px; /* Делаем соединение ближе к меню */
+            left: -7px; /* Соединение ближе к меню */
             transform: translateY(-50%);
-            width: 7px; /* Уменьшаем ширину для более изящного соединения */
-            height: 12px; /* Увеличиваем высоту */
+            width: 8px; /* Ширина для соединения */
+            height: 14px; /* Высота */
             /* Создаем форму капельного соединения */
             background: linear-gradient(to right, 
-                rgba(118, 75, 162, 0.5) 0%, 
+                rgba(118, 75, 162, 0.7) 0%, 
                 rgba(102, 126, 234, 0.95) 100%);
-            /* Небольшое закругление для плавности */
+            /* Закругление для плавности */
             border-radius: 0 2px 2px 0;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -205,8 +205,8 @@
         
         /* Специальный стиль для пункта меню с подменю */
         .menu-item > a {
-            position: relative;
-            z-index: 2000; /* Высокий z-index для пункта меню */
+            position: relative !important;
+            z-index: 2000 !important; /* Высокий z-index для пункта меню */
         }
         
         /* Индикатор наличия подменю */
@@ -227,7 +227,7 @@
         }
 
         .menu-item:hover .submenu {
-            display: flex;
+            display: flex !important;
             opacity: 1;
             visibility: visible;
             transform: translate(0, 0);
@@ -243,6 +243,10 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: flex !important;
+            align-items: center;
+            position: relative !important;
+            z-index: 2001 !important;
         }
 
         .submenu a:hover {
@@ -492,50 +496,37 @@
 
     <!-- Боковое меню -->
     <div class="side-menu">
+        <!-- Первый раздел -->
         <a class="flex items-center px-4 py-3 mt-3 hover:bg-gray-700 hover:text-gray-300" href="index.html">
             <i class="fas fa-home text-xl"></i>
             <span class="text-sm font-medium">Главная</span>
         </a>
-        <div class="mt-3 border-t border-gray-700">
-            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="news.html">
-                <i class="fas fa-newspaper text-lg"></i>
-                <span class="text-sm font-medium">Новости</span>
-            </a>
-            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="serchwork.html">
-                <i class="fas fa-search text-lg"></i>
-                <span class="text-sm font-medium">Поиск работы</span>
-            </a>
-            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#statistics">
-                <i class="fas fa-chart-bar text-lg"></i>
-                <span class="text-sm font-medium">Статистика</span>
-            </a>
-            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#programs">
-                <i class="fas fa-briefcase text-lg"></i>
-                <span class="text-sm font-medium">Программы</span>
-            </a>
-            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#education">
-                <i class="fas fa-graduation-cap text-lg"></i>
-                <span class="text-sm font-medium">Образование</span>
-            </a>
-            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="about.html">
-                <i class="fas fa-info-circle text-lg"></i>
-                <span class="text-sm font-medium">О портале</span>
-            </a>
-        </div>
-        <div class="mt-3 border-t border-gray-700">
-            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="employer_profile.html">
-                <i class="fas fa-building text-lg"></i>
-                <span class="text-sm font-medium">Работодатели</span>
-            </a>
-            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="user_dashboard.html">
-                <i class="fas fa-user text-lg"></i>
-                <span class="text-sm font-medium">Соискатели</span>
-            </a>
-            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="register.html">
-                <i class="fas fa-user-plus text-lg"></i>
-                <span class="text-sm font-medium">Регистрация</span>
-            </a>
-        </div>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="news.html">
+            <i class="fas fa-newspaper text-lg"></i>
+            <span class="text-sm font-medium">Новости</span>
+        </a>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="serchwork.html">
+            <i class="fas fa-search text-lg"></i>
+            <span class="text-sm font-medium">Поиск работы</span>
+        </a>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#statistics">
+            <i class="fas fa-chart-bar text-lg"></i>
+            <span class="text-sm font-medium">Статистика</span>
+        </a>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#programs">
+            <i class="fas fa-briefcase text-lg"></i>
+            <span class="text-sm font-medium">Программы</span>
+        </a>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#education">
+            <i class="fas fa-graduation-cap text-lg"></i>
+            <span class="text-sm font-medium">Образование</span>
+        </a>
+        <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="about.html">
+            <i class="fas fa-info-circle text-lg"></i>
+            <span class="text-sm font-medium">О портале</span>
+        </a>
+        
+        <!-- Второй раздел -->
         <div class="mt-3 border-t border-gray-700">
             <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="free_lans/freelance_homepage.html">
                 <i class="fas fa-laptop-code text-lg"></i>
@@ -546,18 +537,26 @@
                 <span class="text-sm font-medium">Аналитика</span>
             </a>
         </div>
+        
+        <!-- Третий раздел -->
         <div class="mt-3 border-t border-gray-700">
             <div class="menu-item" style="position: relative !important; display: block !important; z-index: 2000 !important;">
-                <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#" style="z-index: 2000;">
+                <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#" style="position: relative !important; z-index: 2000 !important;">
                     <i class="fas fa-user-circle text-lg"></i>
                     <span class="text-sm font-medium">Мой профиль</span>
                 </a>
-                <div class="submenu" style="top: 0; z-index: 2001 !important;">
+                <div class="submenu" style="top: 0 !important; left: calc(100% + 5px) !important; z-index: 2001 !important;">
                     <a href="user_profile.html">
                         <i class="fas fa-cog fa-fw mr-2"></i>Настройки профиля
                     </a>
                     <a href="employer_profile.html">
                         <i class="fas fa-building fa-fw mr-2"></i>Кабинет работодателя
+                    </a>
+                    <a href="user_dashboard.html">
+                        <i class="fas fa-user fa-fw mr-2"></i>Кабинет соискателя
+                    </a>
+                    <a href="#">
+                        <i class="fas fa-handshake fa-fw mr-2"></i>Кабинет Консультанта
                     </a>
                     <a href="register.html">
                         <i class="fas fa-user-plus fa-fw mr-2"></i>Регистрация
@@ -565,10 +564,6 @@
                 </div>
             </div>
         </div>
-        <a class="flex items-center justify-start px-4 py-3 mt-4 space-x-3 bg-gray-800 hover:bg-gray-700 hover:text-gray-300" href="#">
-            <i class="fas fa-cog text-xl"></i>
-            <span class="text-sm font-medium">Настройки</span>
-        </a>
     </div>
 
     <section class="gradient-bg text-white py-10">
