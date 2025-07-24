@@ -537,6 +537,23 @@
             100% { opacity: 0; }
         }
         
+        /* Стили для организации уведомлений на странице */
+        .notifications-container {
+            position: fixed;
+            top: 4rem;
+            right: 1rem;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        .notifications-container > * {
+            pointer-events: auto;
+        }
+        
         .live-indicator {
             position: absolute;
             top: 0.5rem;
@@ -1500,6 +1517,14 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Создаем контейнер для уведомлений
+            const notificationsContainer = document.createElement('div');
+            notificationsContainer.className = 'notifications-container';
+            document.body.appendChild(notificationsContainer);
+            
+            // Делаем контейнер доступным глобально
+            window.notificationsContainer = notificationsContainer;
+            
             // Инициализация обработчиков и переключателей для всей страницы
             // Объявляем функцию toggleSideMenu глобально в области видимости
             window.toggleSideMenu = function() {
@@ -1532,26 +1557,29 @@
                 
                 infoButton.addEventListener('click', function() {
                     const tooltip = document.createElement('div');
-                    tooltip.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-xl z-50 w-80';
+                    tooltip.className = 'bg-white p-4 rounded-lg shadow-xl w-full';
                     tooltip.innerHTML = `
-                        <h3 class="text-lg font-bold text-indigo-700 mb-3">Интерактивный график</h3>
-                        <p class="text-gray-700 mb-4">Этот график обновляется в реальном времени каждые 3 секунды для демонстрации актуальных данных рынка труда.</p>
+                        <p class="text-gray-700 mb-3">Этот график обновляется в реальном времени каждые 3 секунды для демонстрации актуальных данных рынка труда.</p>
                         <p class="text-gray-600 text-sm mb-4">Наведите курсор на точки графика для просмотра детальной информации.</p>
                         <button class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition-colors">
                             Понятно
                         </button>
                     `;
                     
-                    document.body.appendChild(tooltip);
+                    window.notificationsContainer.appendChild(tooltip);
                     
                     tooltip.querySelector('button').addEventListener('click', function() {
-                        tooltip.remove();
+                        tooltip.classList.add('opacity-0');
+                        tooltip.style.transition = 'opacity 0.3s ease';
+                        setTimeout(() => tooltip.remove(), 300);
                     });
                     
                     // Закрыть при клике вне тултипа
                     document.addEventListener('click', function closeTooltip(e) {
                         if (!tooltip.contains(e.target) && e.target !== infoButton) {
-                            tooltip.remove();
+                            tooltip.classList.add('opacity-0');
+                            tooltip.style.transition = 'opacity 0.3s ease';
+                            setTimeout(() => tooltip.remove(), 300);
                             document.removeEventListener('click', closeTooltip);
                         }
                     });
@@ -1655,7 +1683,7 @@
                 
                 // Показываем уведомление об успешной активации
                 const notification = document.createElement('div');
-                notification.className = 'fixed top-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md z-50 animate-bounce';
+                notification.className = 'bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md w-full';
                 notification.innerHTML = `
                     <div class="flex items-center">
                         <i class="fas fa-crown text-yellow-500 text-xl mr-2"></i>
@@ -1665,18 +1693,24 @@
                         </div>
                     </div>
                 `;
-                document.body.appendChild(notification);
+                window.notificationsContainer.appendChild(notification);
                 
-                // Убираем анимацию bounce через 2 секунды
+                // Добавляем анимацию появления
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-10px)';
+                notification.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                
+                // Анимируем появление
                 setTimeout(() => {
-                    notification.classList.remove('animate-bounce');
-                }, 2000);
+                    notification.style.opacity = '1';
+                    notification.style.transform = 'translateY(0)';
+                }, 100);
                 
                 // Удаляем уведомление через 5 секунд
                 setTimeout(() => {
-                    notification.classList.add('opacity-0');
-                    notification.style.transition = 'opacity 0.5s ease';
-                    setTimeout(() => notification.remove(), 500);
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateY(-10px)';
+                    setTimeout(() => notification.remove(), 300);
                 }, 5000);
                 
                 // Активируем и обновляем все премиум-графики
@@ -1903,7 +1937,7 @@
                     
                     // Добавляем индикатор обновления
                     const updateIndicator = document.createElement('div');
-                    updateIndicator.className = 'absolute top-2 right-2 text-indigo-600 animate-spin';
+                    updateIndicator.className = 'absolute top-2 right-10 text-indigo-600 animate-spin';
                     updateIndicator.innerHTML = '<i class="fas fa-sync-alt text-lg"></i>';
                     updateIndicator.style.zIndex = 5;
                     chartElement.appendChild(updateIndicator);
