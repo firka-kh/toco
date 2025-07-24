@@ -415,7 +415,7 @@
             </div>
         </div>
     </header>
-
+ 
     <!-- Вертикальная надпись "Меню" -->
     <div class="menu-label">Меню</div>
 
@@ -742,52 +742,496 @@
                 <div id="industries-tab" class="tab-content">
                     <h2 class="text-2xl font-bold mb-6 text-gray-800">Статистика по отраслям</h2>
                     
-                    <p class="text-gray-600 mb-8">Здесь будет отображаться статистика распределения рабочих мест по отраслям экономики, тенденции развития различных секторов, средние зарплаты и количество вакансий.</p>
-                    
-                    <!-- Заглушка для демонстрации -->
-                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
-                        <i class="fas fa-chart-pie text-6xl text-indigo-300 mb-4"></i>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Контент находится в разработке</h3>
-                        <p class="text-gray-600">Полная информация по отраслям будет доступна в ближайшее время</p>
+                    <!-- Распределение вакансий по отраслям -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Распределение вакансий по отраслям</h3>
+                        <div class="chart-container">
+                            <canvas id="industriesVacancyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Средние зарплаты по отраслям - Премиум контент -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10 relative premium-blur">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Средние зарплаты по отраслям</h3>
+                        <div class="chart-container">
+                            <canvas id="industriesSalaryChart"></canvas>
+                        </div>
+                        <div class="premium-content-overlay">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors pulse-button">
+                                    Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ключевые показатели по отраслям -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">IT и телекоммуникации</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <div>
+                                    <p class="text-sm text-gray-500">Средняя зарплата:</p>
+                                    <p class="text-xl font-bold text-gray-800">5,200 сом.</p>
+                                </div>
+                                <div class="text-green-500">
+                                    <i class="fas fa-arrow-up text-xl"></i>
+                                    <p class="text-sm font-medium">+15.2%</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between mt-4">
+                                <div>
+                                    <p class="text-sm text-gray-500">Вакансий:</p>
+                                    <p class="text-xl font-bold text-gray-800">3,450</p>
+                                </div>
+                                <div class="text-green-500">
+                                    <i class="fas fa-arrow-up text-xl"></i>
+                                    <p class="text-sm font-medium">+22.3%</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Торговля и услуги</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <div>
+                                    <p class="text-sm text-gray-500">Средняя зарплата:</p>
+                                    <p class="text-xl font-bold text-gray-800">2,850 сом.</p>
+                                </div>
+                                <div class="text-green-500">
+                                    <i class="fas fa-arrow-up text-xl"></i>
+                                    <p class="text-sm font-medium">+7.2%</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between mt-4">
+                                <div>
+                                    <p class="text-sm text-gray-500">Вакансий:</p>
+                                    <p class="text-xl font-bold text-gray-800">5,240</p>
+                                </div>
+                                <div class="text-green-500">
+                                    <i class="fas fa-arrow-up text-xl"></i>
+                                    <p class="text-sm font-medium">+8.1%</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Строительство</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <div>
+                                    <p class="text-sm text-gray-500">Средняя зарплата:</p>
+                                    <p class="text-xl font-bold text-gray-800">3,100 сом.</p>
+                                </div>
+                                <div class="text-green-500">
+                                    <i class="fas fa-arrow-up text-xl"></i>
+                                    <p class="text-sm font-medium">+5.8%</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between mt-4">
+                                <div>
+                                    <p class="text-sm text-gray-500">Вакансий:</p>
+                                    <p class="text-xl font-bold text-gray-800">2,780</p>
+                                </div>
+                                <div class="text-yellow-500">
+                                    <i class="fas fa-minus text-xl"></i>
+                                    <p class="text-sm font-medium">+0.3%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Прогноз развития отраслей - Премиум контент -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 relative premium-blur">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Прогноз развития отраслей (2025-2027)</h3>
+                        <div class="chart-container">
+                            <canvas id="industryForecastChart"></canvas>
+                        </div>
+                        <div class="premium-content-overlay">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors pulse-button">
+                                    Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div id="demographic-tab" class="tab-content">
                     <h2 class="text-2xl font-bold mb-6 text-gray-800">Демографические показатели</h2>
                     
-                    <p class="text-gray-600 mb-8">Здесь будет отображаться информация о возрастной структуре работающего населения, гендерном распределении в различных отраслях и занятости уязвимых групп населения.</p>
-                    
-                    <!-- Заглушка для демонстрации -->
-                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
-                        <i class="fas fa-users text-6xl text-indigo-300 mb-4"></i>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Контент находится в разработке</h3>
-                        <p class="text-gray-600">Демографическая статистика будет доступна в ближайшее время</p>
+                    <!-- Возрастная структура занятого населения -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Возрастная структура занятого населения</h3>
+                        <div class="chart-container">
+                            <canvas id="ageEmploymentChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Гендерное распределение по отраслям -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Гендерное распределение по отраслям</h3>
+                        <div class="chart-container">
+                            <canvas id="genderDistributionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Ключевые демографические показатели -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Средний возраст</h3>
+                            <div class="flex items-center mt-2">
+                                <i class="fas fa-user-clock text-indigo-500 text-2xl mr-3"></i>
+                                <div>
+                                    <p class="text-3xl font-bold text-gray-800">34.7</p>
+                                    <p class="text-sm text-gray-500">лет</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Соотношение полов</h3>
+                            <div class="flex items-center mt-2">
+                                <i class="fas fa-venus-mars text-indigo-500 text-2xl mr-3"></i>
+                                <div>
+                                    <p class="text-3xl font-bold text-gray-800">53% / 47%</p>
+                                    <p class="text-sm text-gray-500">мужчины / женщины</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Трудоспособное население</h3>
+                            <div class="flex items-center mt-2">
+                                <i class="fas fa-users text-indigo-500 text-2xl mr-3"></i>
+                                <div>
+                                    <p class="text-3xl font-bold text-gray-800">5.2 млн</p>
+                                    <p class="text-sm text-gray-500">человек</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Экономически активное</h3>
+                            <div class="flex items-center mt-2">
+                                <i class="fas fa-briefcase text-indigo-500 text-2xl mr-3"></i>
+                                <div>
+                                    <p class="text-3xl font-bold text-gray-800">61.8%</p>
+                                    <p class="text-sm text-gray-500">трудоспособного населения</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Динамика демографического состава - Премиум контент -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10 relative premium-blur">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Динамика демографического состава рабочей силы</h3>
+                        <div class="chart-container">
+                            <canvas id="demographicTrendsChart"></canvas>
+                        </div>
+                        <div class="premium-content-overlay">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors pulse-button">
+                                    Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Уязвимые группы на рынке труда - Премиум контент -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 relative premium-blur">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Занятость уязвимых групп населения</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="vulnerableGroupsChart"></canvas>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-700 mb-3">Ключевые показатели</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <p>Уровень занятости лиц с инвалидностью составляет 23.5%, что на 2.1% выше, чем в предыдущем году</p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <p>Занятость молодежи (16-24 лет) составляет 45.2%, снизившись на 1.3% по сравнению с предыдущим годом</p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <p>Доля занятых женщин с детьми до 3-х лет выросла на 3.5% и составляет 38.7%</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="premium-content-overlay">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors pulse-button">
+                                    Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div id="education-tab" class="tab-content">
                     <h2 class="text-2xl font-bold mb-6 text-gray-800">Образование и квалификация</h2>
                     
-                    <p class="text-gray-600 mb-8">Здесь будет представлена статистика по уровню образования работников, соответствию образования требованиям рынка и востребованным навыкам.</p>
-                    
-                    <!-- Заглушка для демонстрации -->
-                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
-                        <i class="fas fa-graduation-cap text-6xl text-indigo-300 mb-4"></i>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Контент находится в разработке</h3>
-                        <p class="text-gray-600">Статистика по образованию будет доступна в ближайшее время</p>
+                    <!-- Уровень образования работников -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Уровень образования занятого населения</h3>
+                        <div class="chart-container">
+                            <canvas id="educationLevelChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Востребованные навыки - Премиум контент -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10 relative premium-blur">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Самые востребованные навыки</h3>
+                        <div class="chart-container">
+                            <canvas id="inDemandSkillsChart"></canvas>
+                        </div>
+                        <div class="premium-content-overlay">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors pulse-button">
+                                    Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ключевые показатели по образованию -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Соответствие образования требованиям рынка</h3>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="educationMarketMatchChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Уровень безработицы по образованию</h3>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="educationUnemploymentChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Виджеты с ключевыми показателями -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Высшее образование</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <p class="text-3xl font-bold text-gray-800">32.7%</p>
+                                <div class="text-green-500 flex items-center">
+                                    <span class="text-sm mr-1">+1.2%</span>
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">доля работающего населения</p>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Среднее профессиональное</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <p class="text-3xl font-bold text-gray-800">41.3%</p>
+                                <div class="text-green-500 flex items-center">
+                                    <span class="text-sm mr-1">+0.5%</span>
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">доля работающего населения</p>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Среднее общее</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <p class="text-3xl font-bold text-gray-800">24.5%</p>
+                                <div class="text-red-500 flex items-center">
+                                    <span class="text-sm mr-1">-1.3%</span>
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">доля работающего населения</p>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Неполное среднее</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <p class="text-3xl font-bold text-gray-800">1.5%</p>
+                                <div class="text-red-500 flex items-center">
+                                    <span class="text-sm mr-1">-0.4%</span>
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">доля работающего населения</p>
+                        </div>
+                    </div>
+
+                    <!-- Разрыв между образованием и требованиями рынка - Премиум контент -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 relative premium-blur">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Разрыв между системой образования и потребностями рынка</h3>
+                        <div class="chart-container">
+                            <canvas id="educationGapChart"></canvas>
+                        </div>
+                        <div class="premium-content-overlay">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors pulse-button">
+                                    Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div id="migration-tab" class="tab-content">
                     <h2 class="text-2xl font-bold mb-6 text-gray-800">Данные о миграции</h2>
                     
-                    <p class="text-gray-600 mb-8">Здесь будет представлена статистика по трудовой миграции, основным странам-реципиентам трудовых мигрантов и денежным переводам.</p>
-                    
-                    <!-- Заглушка для демонстрации -->
-                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
-                        <i class="fas fa-plane-departure text-6xl text-indigo-300 mb-4"></i>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Контент находится в разработке</h3>
-                        <p class="text-gray-600">Статистика по миграции будет доступна в ближайшее время</p>
+                    <!-- Основные направления трудовой миграции -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Основные страны трудовой миграции</h3>
+                        <div class="chart-container">
+                            <canvas id="migrationCountriesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Динамика денежных переводов - Премиум контент -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-10 relative premium-blur">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Динамика денежных переводов трудовых мигрантов</h3>
+                        <div class="chart-container">
+                            <canvas id="remittancesChart"></canvas>
+                        </div>
+                        <div class="premium-content-overlay">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors pulse-button">
+                                    Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ключевые показатели по миграции -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Трудовые мигранты</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <p class="text-3xl font-bold text-gray-800">820,000</p>
+                                <div class="text-green-500 flex items-center">
+                                    <span class="text-sm mr-1">+5.2%</span>
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">человек</p>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Денежные переводы</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <p class="text-3xl font-bold text-gray-800">2.1 млрд $</p>
+                                <div class="text-green-500 flex items-center">
+                                    <span class="text-sm mr-1">+8.3%</span>
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">в год</p>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Доля от ВВП</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <p class="text-3xl font-bold text-gray-800">27.3%</p>
+                                <div class="text-green-500 flex items-center">
+                                    <span class="text-sm mr-1">+0.8%</span>
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">денежных переводов</p>
+                        </div>
+
+                        <div class="stat-widget">
+                            <h3 class="text-lg font-semibold text-gray-600">Возврат мигрантов</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <p class="text-3xl font-bold text-gray-800">14.5%</p>
+                                <div class="text-yellow-500 flex items-center">
+                                    <span class="text-sm mr-1">+0.2%</span>
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">годовая доля возвращающихся</p>
+                        </div>
+                    </div>
+
+                    <!-- Профессиональная структура мигрантов и Демографические данные -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Профессиональная структура мигрантов</h3>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="migrantProfessionsChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Демографический состав мигрантов</h3>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="migrantDemographicsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Влияние миграции на экономику - Премиум контент -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 relative premium-blur">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Влияние трудовой миграции на экономику</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="migrationEconomicImpactChart"></canvas>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-700 mb-3">Экономические показатели</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-chart-line text-indigo-500 mt-1 mr-2"></i>
+                                        <p>Денежные переводы мигрантов способствуют снижению уровня бедности на 11.2% в сельской местности</p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-chart-line text-indigo-500 mt-1 mr-2"></i>
+                                        <p>Отток квалифицированных специалистов оценивается в 4.7% от общего числа занятых с высшим образованием</p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-chart-line text-indigo-500 mt-1 mr-2"></i>
+                                        <p>Инвестиции мигрантов в малый бизнес увеличились на 6.3% по сравнению с предыдущим годом</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="premium-content-overlay">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-lock text-4xl text-gray-500 mb-3"></i>
+                                <h3 class="text-xl font-bold text-gray-700 mb-2">Премиум контент</h3>
+                                <p class="text-gray-600 text-center mb-4">Этот раздел доступен только по подписке</p>
+                                <button class="unlock-premium-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors pulse-button">
+                                    Разблокировать <i class="fas fa-unlock ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -953,6 +1397,9 @@
             const unlockBtns = document.querySelectorAll('.unlock-premium-btn');
             const modal = document.getElementById('subscriptionModal');
             const closeModal = document.getElementById('closeModal');
+            const modalContinueBtn = document.querySelector('.modal-content button:last-child');
+            const premiumOverlays = document.querySelectorAll('.premium-content-overlay');
+            let isPremiumActive = false;
 
             function openModal() {
                 modal.classList.add('open');
@@ -964,9 +1411,36 @@
                 document.body.style.overflow = '';
             }
 
+            function unlockPremiumContent() {
+                premiumOverlays.forEach(overlay => {
+                    overlay.style.display = 'none';
+                });
+                isPremiumActive = true;
+                closeModalHandler();
+                
+                // Показываем уведомление об успешной активации
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md z-50';
+                notification.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        <p>Подписка успешно активирована! Премиум контент доступен.</p>
+                    </div>
+                `;
+                document.body.appendChild(notification);
+                
+                // Удаляем уведомление через 5 секунд
+                setTimeout(() => {
+                    notification.classList.add('opacity-0');
+                    notification.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => notification.remove(), 500);
+                }, 5000);
+            }
+
             subscribeBtn.addEventListener('click', openModal);
             unlockBtns.forEach(btn => btn.addEventListener('click', openModal));
             closeModal.addEventListener('click', closeModalHandler);
+            modalContinueBtn.addEventListener('click', unlockPremiumContent);
 
             // Закрытие модального окна при клике вне его области
             modal.addEventListener('click', function(e) {
@@ -1123,6 +1597,578 @@
                     maintainAspectRatio: false
                 }
             });
+
+            // Графики для раздела "По отраслям"
+            if (document.getElementById('industriesVacancyChart')) {
+                const industriesVacancyCtx = document.getElementById('industriesVacancyChart').getContext('2d');
+                new Chart(industriesVacancyCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['IT и телекоммуникации', 'Торговля и услуги', 'Строительство', 'Образование', 'Производство', 'Здравоохранение', 'Сельское хозяйство', 'Финансы'],
+                        datasets: [{
+                            label: 'Количество вакансий',
+                            data: [3450, 5240, 2780, 1850, 2340, 1930, 1540, 950],
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (document.getElementById('industriesSalaryChart')) {
+                const industriesSalaryCtx = document.getElementById('industriesSalaryChart').getContext('2d');
+                new Chart(industriesSalaryCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['IT и телекоммуникации', 'Финансы', 'Строительство', 'Производство', 'Здравоохранение', 'Образование', 'Торговля и услуги', 'Сельское хозяйство'],
+                        datasets: [{
+                            label: 'Средняя зарплата (сомони)',
+                            data: [5200, 4300, 3100, 2950, 2800, 2650, 2850, 1950],
+                            backgroundColor: 'rgba(104, 211, 145, 0.8)',
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (document.getElementById('industryForecastChart')) {
+                const industryForecastCtx = document.getElementById('industryForecastChart').getContext('2d');
+                new Chart(industryForecastCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2023', '2024', '2025', '2026', '2027'],
+                        datasets: [
+                            {
+                                label: 'IT и телекоммуникации',
+                                data: [3450, 4100, 4800, 5600, 6500],
+                                borderColor: 'rgba(102, 126, 234, 1)',
+                                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                                borderWidth: 2,
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Строительство',
+                                data: [2780, 2900, 3050, 3200, 3350],
+                                borderColor: 'rgba(251, 146, 60, 1)',
+                                backgroundColor: 'rgba(251, 146, 60, 0.1)',
+                                borderWidth: 2,
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Сельское хозяйство',
+                                data: [1540, 1650, 1750, 1900, 2100],
+                                borderColor: 'rgba(104, 211, 145, 1)',
+                                backgroundColor: 'rgba(104, 211, 145, 0.1)',
+                                borderWidth: 2,
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            // Графики для раздела "Демография"
+            if (document.getElementById('ageEmploymentChart')) {
+                const ageEmploymentCtx = document.getElementById('ageEmploymentChart').getContext('2d');
+                new Chart(ageEmploymentCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['16-24 лет', '25-34 лет', '35-44 лет', '45-54 лет', '55-65 лет', '65+ лет'],
+                        datasets: [{
+                            data: [12, 28, 26, 22, 10, 2],
+                            backgroundColor: [
+                                'rgba(102, 126, 234, 0.8)',
+                                'rgba(104, 211, 145, 0.8)',
+                                'rgba(251, 146, 60, 0.8)',
+                                'rgba(79, 209, 197, 0.8)',
+                                'rgba(250, 204, 21, 0.8)',
+                                'rgba(232, 121, 249, 0.8)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            if (document.getElementById('genderDistributionChart')) {
+                const genderDistributionCtx = document.getElementById('genderDistributionChart').getContext('2d');
+                new Chart(genderDistributionCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['IT и телекоммуникации', 'Финансы', 'Образование', 'Здравоохранение', 'Строительство', 'Торговля', 'Производство', 'Госслужба'],
+                        datasets: [
+                            {
+                                label: 'Мужчины (%)',
+                                data: [78, 52, 32, 28, 85, 48, 67, 55],
+                                backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                                borderWidth: 0
+                            },
+                            {
+                                label: 'Женщины (%)',
+                                data: [22, 48, 68, 72, 15, 52, 33, 45],
+                                backgroundColor: 'rgba(232, 121, 249, 0.8)',
+                                borderWidth: 0
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (document.getElementById('demographicTrendsChart')) {
+                const demographicTrendsCtx = document.getElementById('demographicTrendsChart').getContext('2d');
+                new Chart(demographicTrendsCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                        datasets: [
+                            {
+                                label: 'Молодежь (16-24)',
+                                data: [15, 15.2, 15.5, 15.3, 14.8, 14.5, 14.1, 13.8, 13.5, 13.2],
+                                borderColor: 'rgba(102, 126, 234, 1)',
+                                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                                borderWidth: 2,
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Средний возраст (25-44)',
+                                data: [45, 45.5, 46, 47, 48, 49, 50, 51, 52, 53],
+                                borderColor: 'rgba(104, 211, 145, 1)',
+                                backgroundColor: 'rgba(104, 211, 145, 0.1)',
+                                borderWidth: 2,
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Предпенсионный возраст (45-65)',
+                                data: [35, 34.5, 34, 33, 32.5, 32, 31.5, 31, 30.5, 30],
+                                borderColor: 'rgba(251, 146, 60, 1)',
+                                backgroundColor: 'rgba(251, 146, 60, 0.1)',
+                                borderWidth: 2,
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            if (document.getElementById('vulnerableGroupsChart')) {
+                const vulnerableGroupsCtx = document.getElementById('vulnerableGroupsChart').getContext('2d');
+                new Chart(vulnerableGroupsCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Трудоустройство', 'Уровень зарплаты', 'Социальная защита', 'Доступ к обучению', 'Карьерный рост', 'Условия труда'],
+                        datasets: [
+                            {
+                                label: 'Лица с инвалидностью',
+                                data: [23.5, 65, 70, 45, 30, 55],
+                                borderColor: 'rgba(102, 126, 234, 1)',
+                                backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                                borderWidth: 2
+                            },
+                            {
+                                label: 'Молодежь (16-24)',
+                                data: [45.2, 50, 40, 80, 60, 65],
+                                borderColor: 'rgba(104, 211, 145, 1)',
+                                backgroundColor: 'rgba(104, 211, 145, 0.2)',
+                                borderWidth: 2
+                            },
+                            {
+                                label: 'Женщины с детьми',
+                                data: [38.7, 60, 75, 55, 40, 50],
+                                borderColor: 'rgba(232, 121, 249, 1)',
+                                backgroundColor: 'rgba(232, 121, 249, 0.2)',
+                                borderWidth: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                min: 0,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Графики для раздела "Образование"
+            if (document.getElementById('educationLevelChart')) {
+                const educationLevelCtx = document.getElementById('educationLevelChart').getContext('2d');
+                new Chart(educationLevelCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Высшее образование', 'Среднее профессиональное', 'Среднее общее', 'Неполное среднее', 'Без образования'],
+                        datasets: [{
+                            data: [32.7, 41.3, 24.5, 1.5, 0.1],
+                            backgroundColor: [
+                                'rgba(102, 126, 234, 0.8)',
+                                'rgba(104, 211, 145, 0.8)',
+                                'rgba(251, 146, 60, 0.8)',
+                                'rgba(250, 204, 21, 0.8)',
+                                'rgba(239, 68, 68, 0.8)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            if (document.getElementById('inDemandSkillsChart')) {
+                const inDemandSkillsCtx = document.getElementById('inDemandSkillsChart').getContext('2d');
+                new Chart(inDemandSkillsCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Программирование', 'Иностранные языки', 'Аналитика данных', 'Цифровой маркетинг', 'Управление проектами', 'Финансовый анализ', 'Графический дизайн', 'Продажи и переговоры'],
+                        datasets: [{
+                            label: 'Востребованность (% вакансий)',
+                            data: [28, 25, 22, 18, 15, 12, 10, 9],
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (document.getElementById('educationMarketMatchChart')) {
+                const educationMarketMatchCtx = document.getElementById('educationMarketMatchChart').getContext('2d');
+                new Chart(educationMarketMatchCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Полное соответствие', 'Частичное соответствие', 'Не соответствует'],
+                        datasets: [{
+                            data: [38, 45, 17],
+                            backgroundColor: [
+                                'rgba(104, 211, 145, 0.8)',
+                                'rgba(251, 146, 60, 0.8)',
+                                'rgba(239, 68, 68, 0.8)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            if (document.getElementById('educationUnemploymentChart')) {
+                const educationUnemploymentCtx = document.getElementById('educationUnemploymentChart').getContext('2d');
+                new Chart(educationUnemploymentCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Высшее', 'Среднее профессиональное', 'Среднее общее', 'Неполное среднее', 'Без образования'],
+                        datasets: [{
+                            label: 'Уровень безработицы (%)',
+                            data: [5.2, 6.8, 9.3, 12.5, 18.2],
+                            backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (document.getElementById('educationGapChart')) {
+                const educationGapCtx = document.getElementById('educationGapChart').getContext('2d');
+                new Chart(educationGapCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['IT', 'Инженерия', 'Медицина', 'Образование', 'Финансы', 'Сельское хозяйство', 'Туризм', 'Строительство'],
+                        datasets: [
+                            {
+                                label: 'Потребности рынка',
+                                data: [85, 75, 65, 50, 70, 60, 55, 70],
+                                borderColor: 'rgba(102, 126, 234, 1)',
+                                backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                                borderWidth: 2
+                            },
+                            {
+                                label: 'Система образования',
+                                data: [40, 45, 55, 65, 50, 40, 30, 55],
+                                borderColor: 'rgba(239, 68, 68, 1)',
+                                backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                                borderWidth: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                min: 0,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Графики для раздела "Миграция"
+            if (document.getElementById('migrationCountriesChart')) {
+                const migrationCountriesCtx = document.getElementById('migrationCountriesChart').getContext('2d');
+                new Chart(migrationCountriesCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Россия', 'Казахстан', 'Турция', 'ОАЭ', 'Корея', 'Польша', 'США', 'Другие'],
+                        datasets: [{
+                            label: 'Количество трудовых мигрантов (тыс.)',
+                            data: [650, 75, 35, 25, 15, 10, 5, 5],
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (document.getElementById('remittancesChart')) {
+                const remittancesCtx = document.getElementById('remittancesChart').getContext('2d');
+                new Chart(remittancesCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                        datasets: [{
+                            label: 'Денежные переводы (млн $)',
+                            data: [1200, 1350, 1500, 1650, 1800, 1500, 1700, 1850, 2000, 2100],
+                            borderColor: 'rgba(104, 211, 145, 1)',
+                            backgroundColor: 'rgba(104, 211, 145, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            if (document.getElementById('migrantProfessionsChart')) {
+                const migrantProfessionsCtx = document.getElementById('migrantProfessionsChart').getContext('2d');
+                new Chart(migrantProfessionsCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Строительство', 'Сфера услуг', 'Транспорт', 'Сельское хозяйство', 'Промышленность', 'Торговля', 'Другое'],
+                        datasets: [{
+                            data: [42, 18, 12, 10, 8, 7, 3],
+                            backgroundColor: [
+                                'rgba(102, 126, 234, 0.8)',
+                                'rgba(104, 211, 145, 0.8)',
+                                'rgba(251, 146, 60, 0.8)',
+                                'rgba(250, 204, 21, 0.8)',
+                                'rgba(79, 209, 197, 0.8)',
+                                'rgba(232, 121, 249, 0.8)',
+                                'rgba(176, 176, 176, 0.8)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            if (document.getElementById('migrantDemographicsChart')) {
+                const migrantDemographicsCtx = document.getElementById('migrantDemographicsChart').getContext('2d');
+                new Chart(migrantDemographicsCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['18-24', '25-34', '35-44', '45-54', '55+'],
+                        datasets: [
+                            {
+                                label: 'Мужчины (%)',
+                                data: [15, 35, 25, 10, 3],
+                                backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                                borderWidth: 0
+                            },
+                            {
+                                label: 'Женщины (%)',
+                                data: [3, 5, 3, 1, 0],
+                                backgroundColor: 'rgba(232, 121, 249, 0.8)',
+                                borderWidth: 0
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (document.getElementById('migrationEconomicImpactChart')) {
+                const migrationEconomicImpactCtx = document.getElementById('migrationEconomicImpactChart').getContext('2d');
+                new Chart(migrationEconomicImpactCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                        datasets: [
+                            {
+                                label: 'Доля от ВВП (%)',
+                                data: [20.1, 21.5, 22.8, 24.2, 25.5, 22.3, 24.8, 26.1, 27.3, 28.2],
+                                borderColor: 'rgba(102, 126, 234, 1)',
+                                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Инвестиции мигрантов (млн $)',
+                                data: [40, 45, 52, 58, 65, 58, 70, 78, 85, 92],
+                                borderColor: 'rgba(251, 146, 60, 1)',
+                                backgroundColor: 'rgba(251, 146, 60, 0.1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Доля от ВВП (%)'
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: 'Инвестиции (млн $)'
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // График для раздела "По регионам"
+            if (document.getElementById('regionalSalaryChart')) {
+                const regionalSalaryCtx = document.getElementById('regionalSalaryChart').getContext('2d');
+                new Chart(regionalSalaryCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Душанбе', 'Согдийская область', 'Хатлонская область', 'ГБАО', 'РРП'],
+                        datasets: [{
+                            label: 'Средняя зарплата (сомони)',
+                            data: [3450, 2840, 2250, 2180, 2590],
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>
