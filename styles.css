@@ -1,0 +1,88 @@
+/* Базовые стили для страницы */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    background-color: #f4f7f9;
+}
+
+/* Стили для основного контейнера бокового меню */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: #2c3e50; /* Темно-синий фон */
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 12px 25px;
+    color: #ecf0f1; /* Светлый текст */
+    text-decoration: none;
+    font-size: 16px;
+    transition: background 0.3s ease, padding-left 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background: #34495e; /* Фон при наведении */
+    padding-left: 30px; /* Небольшой сдвиг текста для эффекта */
+}
+
+/* --- Ключевые стили для выпадающего подменю --- */
+
+/* 1. Родительский элемент должен иметь relative позиционирование,
+      чтобы дочернее подменю позиционировалось относительно него. */
+.sidebar .has-submenu {
+    position: relative;
+}
+
+/* 2. Стилизация и позиционирование самого подменю */
+.sidebar .submenu {
+    /* Изначально скрываем подменю для анимации */
+    visibility: hidden;
+    opacity: 0;
+
+    /* Позиционируем абсолютно, справа от родительского элемента */
+    position: absolute;
+    top: 0;
+    left: 100%; /* Выравниваем по правому краю родителя */
+    margin-left: 15px; /* Небольшой отступ от основного меню */
+
+    /* Стиль "капли": фон, скругленные углы и тень */
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Эффект тени */
+    padding: 10px 0;
+    min-width: 200px;
+    z-index: 1000;
+
+    /* Анимация появления: сдвиг и прозрачность */
+    transform: translateX(-10px); /* Начинаем чуть левее для эффекта "выплывания" */
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                visibility 0.3s;
+}
+
+/* 3. Показываем подменю при наведении на родительский элемент */
+.sidebar .has-submenu:hover > .submenu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0); /* Возвращаем в исходное положение */
+}
+
+/* Стили для ссылок внутри подменю */
+.sidebar .submenu li a {
+    color: #333; /* Темный текст на светлом фоне */
+}
+.sidebar .submenu li a:hover {
+    background: #f5f5f5; /* Слегка серый фон при наведении */
+}
