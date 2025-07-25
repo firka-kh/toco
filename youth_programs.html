@@ -111,110 +111,318 @@
         .animate-fade-in {
             animation: fade-in 0.18s ease-out;
         }
+        /* Анимация дрожания и переливания цвета для кнопки меню */
+        @keyframes menuLabelShake {
+            0%, 100% {
+                transform: translateY(-50%) rotate(0deg);
+                background: #4a5568;
+            }
+            25% {
+                transform: translateY(-48%) rotate(-2deg);
+                background: #5a6678;
+            }
+            50% {
+                transform: translateY(-50%) rotate(2deg);
+                background: #3a4558;
+            }
+            75% {
+                transform: translateY(-52%) rotate(-1deg);
+                background: #4a5568;
+            }
+        }
+
+        /* Кнопка меню посередине левой части страницы */
+        .menu-label {
+            position: fixed;
+            top: 50%;
+            left: -2px;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: menuLabelShake 2s infinite;
+            z-index: 999;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-label:hover {
+            background: linear-gradient(135deg, rgba(118, 75, 162, 0.9) 0%, rgba(102, 126, 234, 0.9) 100%);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(102, 126, 234, 0.3);
+            transform: translateY(-50%) scale(1.02);
+        }
+
+        /* Боковое меню выплывает слева направо */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 14rem;
+            transform: translateX(-100%);
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.98) 0%, 
+                rgba(118, 75, 162, 0.98) 50%, 
+                rgba(102, 126, 234, 0.98) 100%);
+            border-radius: 0 1rem 1rem 0;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 12px 24px rgba(0, 0, 0, 0.3),
+                0 4px 8px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1rem;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-left: none;
+        }
+
+        .side-menu.open {
+            transform: translateX(0);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.5),
+                0 15px 30px rgba(0, 0, 0, 0.4),
+                0 6px 12px rgba(102, 126, 234, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .side-menu a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            justify-content: flex-start;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .side-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            transition: left 0.5s ease;
+        }
+
+        .side-menu a:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            transform: translateX(8px);
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.2),
+                0 2px 4px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .side-menu a:hover::before {
+            left: 100%;
+        }
+
+        .side-menu a i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .side-menu a:hover i {
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        /* Стили для подменю */
+        .submenu {
+            display: none;
+            flex-direction: column;
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+            background: linear-gradient(135deg, 
+                rgba(118, 75, 162, 0.3) 0%, 
+                rgba(102, 126, 234, 0.3) 100%);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item:hover .submenu {
+            display: flex;
+        }
+
+        .submenu a {
+            justify-content: flex-start;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+            margin: 0.125rem 0;
+            border-radius: 0.25rem;
+        }
+
+        .submenu a:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(255, 255, 255, 0.08) 100%);
+            transform: translateX(4px);
+        }
+
+        /* Overlay для закрытия меню */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+            backdrop-filter: blur(3px);
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Дополнительные эффекты для объема */
+        .side-menu::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(0, 0, 0, 0.1) 100%);
+            border-radius: 0 1rem 1rem 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .side-menu > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Анимация появления меню */
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .side-menu.open {
+            animation: slideInLeft 0.3s ease-out;
+        }
+        
+        /* Стили для виджетов FL и AI */
+        @keyframes blob-gradient-anim {
+            0% { filter: hue-rotate(0deg);}
+            100% { filter: hue-rotate(360deg);}
+        }
+        
+        @keyframes ai-blob-gradient-anim {
+            0% { filter: hue-rotate(0deg);}
+            100% { filter: hue-rotate(360deg);}
+        }
+        
+        /* Пульсирующая анимация для AI виджета */
+        @keyframes ai-pulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
+            }
+            50% { 
+                transform: scale(1.1);
+                box-shadow: 0 12px 40px 0 rgba(102, 126, 234, 0.4);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">    <header class="gradient-bg text-white shadow-lg">
         <div class="container mx-auto px-4 py-6">
-            <div class="flex items-center justify-between">
-                <!-- Левая часть: Лого и название -->
-                <div class="flex items-center space-x-4">
-                    <img src="https://placehold.co/40x40/ffffff/000000?text=Лого" alt="Изображение логотипа МТМЗН" class="rounded-full">
-                    <div>
-                        <!-- Добавляем ссылку на главную страницу -->
-                        <a href="index.html" class="hover:underline focus:outline-none">
-                            <h1 class="text-2xl font-bold inline">Портал рынка труда</h1>
-                            <span class="text-sm opacity-90 block">Республика Таджикистан</span>
-                        </a>
-                    </div>
-                </div>                <!-- Правая часть: Навигация, языки и профиль -->
-                <nav class="hidden lg:flex space-x-4 xl:space-x-6 items-center flex-wrap">
-                    <!-- Основные пункты меню -->
-                    <a href="index.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Главная</a>
-                    <a href="serchwork.html" class="menu-link font-bold hover:text-yellow-300 transition-colors whitespace-nowrap">Поиск работы</a>
-                    
-                    <!-- Выпадающее меню "Больше" -->
-                    <div class="relative">
-                        <button id="moreMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors flex items-center focus:outline-none whitespace-nowrap">
-                            Больше <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                        </button>
-                        <div id="moreDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
-                            <a href="index.html#statistics" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Статистика</a>
-                            <a href="index.html#programs" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Программы</a>
-                            <a href="index.html#education" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Образование</a>
-                            <a href="about.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">О портале</a>
-                            <div class="border-t border-gray-200 my-1"></div>
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Премиум-услуги</a>
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Фриланс</a>
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Аналитика</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Выпадающее меню профиля -->
-                    <div class="relative">
-                        <button id="profileMenuBtn" type="button" class="menu-link font-bold hover:text-yellow-300 transition-colors focus:outline-none flex items-center whitespace-nowrap">
-                            Мой профиль <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                        </button>                        <div id="profileDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 hidden animate-fade-in">
-                            <a href="user_dashboard.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 font-semibold">🏠 Личный кабинет</a>
-                            <a href="user_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">⚙️ Настройки профиля</a>
-                            <div class="border-t border-gray-200 my-1"></div>
-                            <a href="employer_profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Кабинет работодателя</a>
-                            <a href="register.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Регистрация</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Выпадающее меню языков -->
-                    <div class="relative">
-                        <button id="langMenuBtn" type="button" class="px-3 py-2 rounded-lg font-bold bg-white text-gray-800 shadow hover:bg-yellow-100 transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-yellow-400 whitespace-nowrap" aria-haspopup="true" aria-expanded="false">
-                            <span id="currentLangLabel">RUS</span>
-                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
-                        </button>
-                        <div id="langDropdown" class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-2 z-50 hidden transition-all duration-150 border border-gray-200">
-                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="ru">RUS</button>
-                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="tg">TAJ</button>
-                            <button type="button" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-yellow-100 rounded-lg font-semibold transition-colors" data-lang="en">ENG</button>
-                        </div>
-                    </div>                </nav>
-                
-                <!-- Мобильное меню (гамбургер) -->
-                <div class="lg:hidden">
-                    <button id="mobileMenuBtn" type="button" class="text-white p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-colors">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Мобильная навигация -->
-            <div id="mobileMenu" class="lg:hidden hidden mt-4 pb-4 border-t border-white border-opacity-20">
-                <div class="flex flex-col space-y-3 mt-4">
-                    <a href="index.html" class="font-bold hover:text-yellow-300 transition-colors">Главная</a>
-                    <a href="serchwork.html" class="font-bold hover:text-yellow-300 transition-colors">Поиск работы</a>
-                    <a href="index.html#statistics" class="font-bold hover:text-yellow-300 transition-colors">Статистика</a>
-                    <a href="index.html#programs" class="font-bold hover:text-yellow-300 transition-colors">Программы</a>
-                    <a href="index.html#education" class="font-bold hover:text-yellow-300 transition-colors">Образование</a>
-                    <a href="about.html" class="font-bold hover:text-yellow-300 transition-colors">О портале</a>
-                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
-                        <a href="employer_profile.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для работодателя</a>
-                        <a href="user_dashboard.html" class="block font-bold hover:text-yellow-300 transition-colors mb-2">Вход для соискателя</a>
-                        <a href="register.html" class="block font-bold hover:text-yellow-300 transition-colors">Регистрация</a>
-                    </div>
-                    <div class="border-t border-white border-opacity-20 pt-3 mt-3">
-                        <div class="flex space-x-3">
-                            <button class="px-3 py-1 bg-white text-gray-800 rounded font-bold text-sm" data-lang="ru">RUS</button>
-                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="tg">TAJ</button>
-                            <button class="px-3 py-1 bg-white bg-opacity-20 text-white rounded font-bold text-sm" data-lang="en">ENG</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="text-center">
+                <h2 class="text-3xl font-bold">
+                    Молодежные программы
+                </h2>
+                <p class="text-lg mt-2">Возможности для молодых специалистов: развитие, стажировки, наставничество и карьерный рост</p>
             </div>
         </div>
     </header>
-
-    <section class="gradient-bg text-white py-16">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl font-bold mb-4">Молодежные программы</h2>
-            <p class="text-xl mb-8 max-w-2xl mx-auto">Возможности для молодых специалистов: развитие, стажировки, наставничество и карьерный рост.</p>
-        </div>
-    </section>
+    
+    <!-- Боковое меню -->
+    <button class="menu-label font-bold text-sm py-4" id="menuToggleBtn">
+        МЕНЮ
+    </button>
+    
+    <div class="side-menu" id="sideMenu">
+        <a href="index.html" class="mb-2">
+            <i class="fas fa-home"></i> Главная
+        </a>
+        <a href="serchwork.html">
+            <i class="fas fa-search"></i> Поиск работы
+        </a>
+        <a href="skill_serch.html">
+            <i class="fas fa-briefcase"></i> Поиск по навыкам
+        </a>
+        <a href="employer_anons_work.html">
+            <i class="fas fa-building"></i> Для работодателей
+        </a>
+        <a href="gov_pg.html">
+            <i class="fas fa-landmark"></i> Госпрограммы
+        </a>
+        <a href="youth_programs.html" class="bg-white bg-opacity-20">
+            <i class="fas fa-graduation-cap"></i> Молодежи
+        </a>
+        <a href="test_blind.html">
+            <i class="fas fa-clipboard-check"></i> Тестирование
+        </a>
+        <a href="online_interviews.html">
+            <i class="fas fa-video"></i> Онлайн-собеседования
+        </a>
+        <a href="about.html">
+            <i class="fas fa-info-circle"></i> О портале
+        </a>
+    </div>
+    
+    <div class="overlay" id="menuOverlay"></div>
 
     <!-- Добавьте этот блок сразу после секции с заголовком (после </section> с gradient-bg): -->
     <section class="bg-white py-8">
@@ -516,8 +724,184 @@
         let tickerInterval = setInterval(nextNews, 5000);
         newsList.onmouseenter = () => clearInterval(tickerInterval);
         newsList.onmouseleave = () => tickerInterval = setInterval(nextNews, 5000);
+        
+        // Боковое меню
+        const menuToggleBtn = document.getElementById('menuToggleBtn');
+        const sideMenu = document.getElementById('sideMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        
+        menuToggleBtn.addEventListener('click', () => {
+            sideMenu.classList.toggle('open');
+            menuOverlay.classList.toggle('show');
+        });
+        
+        menuOverlay.addEventListener('click', () => {
+            sideMenu.classList.remove('open');
+            menuOverlay.classList.remove('show');
+        });
+        
+        // Пульсация AI виджета каждые 4 секунды
+        function pulseAIWidget() {
+            const aiWidget = document.getElementById('aiAssistantWidget');
+            if (aiWidget) {
+                // Удаляем анимацию, если она уже есть
+                aiWidget.style.animation = 'none';
+                
+                // Форсируем reflow для перезапуска анимации
+                aiWidget.offsetHeight;
+                
+                // Добавляем анимацию пульсации
+                aiWidget.style.animation = 'ai-pulse 0.8s ease-in-out';
+                
+                // Удаляем анимацию после завершения, чтобы она могла повториться
+                setTimeout(() => {
+                    aiWidget.style.animation = 'none';
+                }, 800);
+            }
+        }
+        
+        // Запускаем пульсацию каждые 4 секунды
+        setInterval(pulseAIWidget, 4000);
+        
+        // Первая пульсация через 2 секунды после загрузки страницы
+        setTimeout(pulseAIWidget, 2000);
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <div id="google_translate_element" style="display:none"></div>
+    
+    <!-- Сначала виджет FL, строго над ИИ -->
+    <div id="freelanceBlobWidget"
+         class="fixed z-50 cursor-pointer group transition-all duration-400 ease-in-out"
+         onclick="window.location.href='free_lans/freelance_homepage.html'"
+              style="width: 64px; height: 64px; right: 24px; bottom: 120px;">
+        <div class="relative w-full h-full flex items-center justify-center">
+            <span class="absolute inset-0 shadow-lg transition-all duration-400 ease-in-out blob-bg"></span>
+            <span class="relative z-10 text-white font-extrabold text-2xl select-none transition-all duration-400 ease-in-out flex items-center justify-center h-full w-full"
+                  style="letter-spacing: 0.05em;">FL</span>
+            <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-semibold text-base px-4 opacity-0 group-hover:opacity-100 transition-all duration-400 ease-in-out z-20"
+                  style="pointer-events:none; white-space:nowrap;">
+                FREELANCE HuB
+            </span>
+        </div>
+        <style>
+            #freelanceBlobWidget {
+                box-shadow: 0 8px 32px 0 rgba(79,70,229,0.18);
+                overflow: visible;
+                background: transparent !important;
+                border-radius: 50%;
+                transition: width 0.4s cubic-bezier(.4,2,.6,1), height 0.3s, border-radius 0.4s;
+            }
+            #freelanceBlobWidget .blob-bg {
+                background: linear-gradient(135deg, #f59e42 0%, #f43f5e 50%, #6366f1 100%);
+                border-radius: 50%;
+                width: 100%;
+                height: 100%;
+                animation: blob-gradient-anim 6s ease-in-out infinite alternate;
+                transition: border-radius 0.4s, width 0.4s, height 0.4s;
+                display: block;
+            }
+            #freelanceBlobWidget:hover {
+                width: 260px !important;
+                height: 64px !important;
+                border-radius: 32px / 50%;
+            }
+            #freelanceBlobWidget:hover .blob-bg {
+                border-radius: 32px / 50%;
+                width: 100%;
+                height: 100%;
+            }
+            #freelanceBlobWidget span.text-2xl {
+                opacity: 1;
+                transition: opacity 0.3s;
+            }
+            #freelanceBlobWidget:hover span.text-2xl {
+                opacity: 0;
+            }
+            #freelanceBlobWidget span.text-base {
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            #freelanceBlobWidget:hover span.text-base {
+                opacity: 1;
+            }
+            #freelanceBlobWidget .group-hover\:opacity-100 {
+                transition: opacity 0.4s;
+            }
+            #freelanceBlobWidget:hover .group-hover\:opacity-100 {
+                opacity: 1 !important;
+            }
+            @media (max-width: 768px) {
+                #freelanceBlobWidget {
+                    right: 12px !important;
+                    bottom: 112px !important;
+                }
+            }
+        </style>
+    </div>
+    
+    <!-- Затем виджет ИИ, строго под FL -->
+    <div id="aiAssistantWidget"
+         class="fixed z-50 cursor-pointer group transition-all duration-400 ease-in-out"
+         onclick="window.location.href='ai_lmis.html'"
+         style="width: 64px; height: 64px; right: 24px; bottom: 48px;">
+        <div class="relative w-full h-full flex items-center justify-center">
+            <span class="absolute inset-0 shadow-lg transition-all duration-400 ease-in-out ai-blob-bg"></span>
+            <span class="relative z-10 text-white font-extrabold text-2xl select-none transition-all duration-400 ease-in-out flex items-center justify-center h-full w-full"
+                  style="letter-spacing: 0.05em;">AI</span>
+            <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-semibold text-base px-4 opacity-0 group-hover:opacity-100 transition-all duration-400 ease-in-out z-20"
+                  style="pointer-events:none; white-space:nowrap;">
+                ИИ-консультант
+            </span>
+        </div>
+        <style>
+            #aiAssistantWidget {
+                box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
+                overflow: visible;
+                background: transparent !important;
+                border-radius: 50%;
+                transition: width 0.4s cubic-bezier(.4,2,.6,1), height 0.3s, border-radius 0.4s;
+                animation: ai-pulse 0.8s ease-in-out;
+            }
+            #aiAssistantWidget .ai-blob-bg {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+                border-radius: 50%;
+                width: 100%;
+                height: 100%;
+                animation: ai-blob-gradient-anim 6s ease-in-out infinite alternate;
+                transition: border-radius 0.4s, width 0.4s, height 0.4s;
+                display: block;
+            }
+            #aiAssistantWidget:hover {
+                width: 260px !important;
+                height: 64px !important;
+                border-radius: 32px / 50%;
+            }
+            #aiAssistantWidget:hover .ai-blob-bg {
+                border-radius: 32px / 50%;
+                width: 100%;
+                height: 100%;
+            }
+            #aiAssistantWidget span.text-2xl {
+                opacity: 1;
+                transition: opacity 0.3s;
+            }
+            #aiAssistantWidget:hover span.text-2xl {
+                opacity: 0;
+            }
+            #aiAssistantWidget span.text-base {
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            #aiAssistantWidget:hover span.text-base {
+                opacity: 1;
+            }
+            @media (max-width: 768px) {
+                #aiAssistantWidget {
+                    right: 12px !important;
+                    bottom: 40px !important;
+                }
+            }
+        </style>
+    </div>
 </body>
 </html>
