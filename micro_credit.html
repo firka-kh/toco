@@ -443,15 +443,15 @@
     </div>
 
     <section class="section-spacing bg-white">
-        <div class="container mx-auto px-4 py-12 flex flex-col lg:flex-row gap-8">
-            <!-- Левый фиксированный виджет -->
-            <aside class="w-full lg:w-80 flex-shrink-0 mb-8 lg:mb-0">
-                <div class="bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-hidden sticky top-8">
+        <div class="container mx-auto px-4 py-12">
+            <!-- Горизонтальный виджет "Возможности для кредита" -->
+            <div class="mb-10">
+                <div class="bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-hidden">
                     <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-4 flex items-center space-x-3">
                         <i class="fas fa-graduation-cap text-2xl"></i>
                         <span class="font-bold text-lg">Возможности для кредита</span>
                     </div>
-                    <ul class="divide-y divide-blue-50" id="growthOpportunitiesListMicro">
+                    <ul class="grid grid-cols-1 md:grid-cols-4" id="growthOpportunitiesListMicro">
                         <!-- Курсы будут добавлены скриптом -->
                     </ul>
                     <div class="bg-blue-50 text-center py-3">
@@ -460,9 +460,10 @@
                         </a>
                     </div>
                 </div>
-            </aside>
-            <!-- Правый основной контент -->
-            <div class="flex-1 min-w-0">
+            </div>
+            
+            <!-- Основной контент -->
+            <div>
                 <!-- Блок с программами партнеров -->
                 <div class="mb-10">
                     <div class="relative overflow-hidden rounded-xl shadow border border-indigo-100 bg-indigo-50 w-full">
@@ -824,15 +825,17 @@ function renderGrowthOpportunitiesMicro(startIdx) {
         const idx = (startIdx + i) % growthOpportunitiesDataMicro.length;
         const item = growthOpportunitiesDataMicro[idx];
         html += `
-            <li class="p-5 hover:bg-blue-50 transition">
-                <div class="flex items-center space-x-3">
-                    <i class="${item.icon} text-xl"></i>
-                    <div>
-                        <div class="font-semibold text-gray-800">${item.title}</div>
-                        <div class="text-sm text-gray-500">${item.desc}</div>
+            <li class="p-4 hover:bg-blue-50 transition border-r border-blue-50 last:border-r-0">
+                <div class="flex flex-col h-full">
+                    <div class="flex items-center space-x-3 mb-2">
+                        <i class="${item.icon} text-xl"></i>
+                        <div>
+                            <div class="font-semibold text-gray-800">${item.title}</div>
+                            <div class="text-sm text-gray-500">${item.desc}</div>
+                        </div>
                     </div>
+                    <div class="mt-auto text-xs ${item.actionColor} font-semibold cursor-pointer hover:underline text-center">${item.action}</div>
                 </div>
-                <div class="mt-2 text-xs ${item.actionColor} font-semibold cursor-pointer hover:underline">${item.action}</div>
             </li>
         `;
     }
