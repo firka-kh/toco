@@ -19,6 +19,29 @@
             transform: translateY(-8px) scale(1.03);
             box-shadow: 0 16px 32px -8px rgba(59, 130, 246, 0.15);
         }
+        /* Стили для вкладок */
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border-bottom: 2px solid transparent;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tab-button.active {
+            color: #4c51bf;
+            border-bottom: 2px solid #4c51bf;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1.5rem 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+        }
         /* Стили для модального окна */
         .modal-overlay {
             position: fixed;
@@ -318,100 +341,6 @@
             display: block;
         }
 
-        .side-menu a {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            margin: 0.25rem 0;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-            width: 100%;
-            justify-content: flex-start;
-            position: relative;
-            overflow: hidden;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
-        .side-menu a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.1) 50%, 
-                transparent 100%);
-            transition: left 0.5s ease;
-        }
-
-        .side-menu a:hover {
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.2) 0%, 
-                rgba(255, 255, 255, 0.1) 100%);
-            transform: translateX(8px);
-            box-shadow: 
-                0 4px 8px rgba(0, 0, 0, 0.2),
-                0 2px 4px rgba(102, 126, 234, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        .side-menu a:hover::before {
-            left: 100%;
-        }
-
-        .side-menu a i {
-            margin-right: 0.75rem;
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s ease;
-        }
-
-        .side-menu a:hover i {
-            color: #fff;
-            transform: scale(1.1);
-        }
-
-        /* Стили для подменю */
-        .submenu {
-            display: none;
-            flex-direction: column;
-            margin-left: 1.5rem;
-            margin-top: 0.5rem;
-            background: linear-gradient(135deg, 
-                rgba(118, 75, 162, 0.3) 0%, 
-                rgba(102, 126, 234, 0.3) 100%);
-            border-radius: 0.5rem;
-            padding: 0.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 4px 8px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .menu-item:hover .submenu {
-            display: flex;
-        }
-
-        .submenu a {
-            justify-content: flex-start;
-            padding: 0.5rem 0.75rem;
-            font-size: 0.9rem;
-            margin: 0.125rem 0;
-            border-radius: 0.25rem;
-        }
-
-        .submenu a:hover {
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.15) 0%, 
-                rgba(255, 255, 255, 0.08) 100%);
-            transform: translateX(4px);
-        }
-
         /* Overlay для закрытия меню */
         .overlay {
             position: fixed;
@@ -506,6 +435,19 @@
         </div>
     </header>
     
+    <!-- Панель с вкладками -->
+    <div class="bg-white border-b border-gray-200">
+        <div class="container mx-auto px-4">
+            <div class="flex overflow-x-auto">
+                <button class="tab-button active" data-tab="events">Календарь мероприятий</button>
+                <button class="tab-button" data-tab="programs">Программы развития</button>
+                <button class="tab-button" data-tab="internships">Стажировки</button>
+                <button class="tab-button" data-tab="faq">Вопросы и ответы</button>
+                <button class="tab-button" data-tab="success">Истории успеха</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Вертикальная надпись "Меню" -->
     <div class="menu-label" onclick="toggleSideMenu()">Меню</div>
 
@@ -549,93 +491,461 @@
                 <i class="fas fa-laptop-code text-lg"></i>
                 <span class="text-sm font-medium">Фриланс</span>
             </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="analitic_pg.html">
+                <i class="fas fa-chart-line text-lg"></i>
+                <span class="text-sm font-medium">Аналитика</span>
+            </a>
+        </div>
+        <div class="mt-3 border-t border-gray-700">
+            <div class="menu-item">
+                <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#">
+                    <div class="flex items-center">
+                        <i class="fas fa-user-circle text-lg"></i>
+                        <span class="text-sm font-medium ml-3">Мой профиль</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-xs opacity-70"></i>
+                </a>
+                <div class="submenu">
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="user_profile.html">
+                        <i class="fas fa-cog text-sm mr-2"></i>
+                        <span>Настройки профиля</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="employer_profile.html">
+                        <i class="fas fa-building text-sm mr-2"></i>
+                        <span>Кабинет работодателя</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="user_dashboard.html">
+                        <i class="fas fa-user text-sm mr-2"></i>
+                        <span>Кабинет соискателя</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="#">
+                        <i class="fas fa-headset text-sm mr-2"></i>
+                        <span>Кабинет консультанта</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="register.html">
+                        <i class="fas fa-user-plus text-sm mr-2"></i>
+                        <span>Регистрация</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Календарь мероприятий для молодых специалистов -->
-    <section class="bg-gray-100 py-16">
+    <!-- Содержимое вкладок -->
+    <section class="section-spacing bg-gray-50">
         <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center text-indigo-800 mb-2">Календарь мероприятий</h2>
-            <p class="text-center text-gray-600 mb-10">Присоединяйтесь к нашим мероприятиям и получите ценные знания и связи</p>
+            <!-- Вкладка Календарь мероприятий -->
+            <div id="events-tab" class="tab-content active">
+                <h2 class="text-3xl font-bold text-center text-indigo-800 mb-2">Календарь мероприятий</h2>
+                <p class="text-center text-gray-600 mb-10">Присоединяйтесь к нашим мероприятиям и получите ценные знания и связи</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Мероприятие 1 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="bg-indigo-600 text-white p-4 flex justify-between items-center">
+                            <span class="font-bold">18 августа, 2023</span>
+                            <span class="px-2 py-1 bg-indigo-800 rounded text-xs font-bold">Ярмарка вакансий</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-2">Ярмарка вакансий для молодых специалистов</h3>
+                            <p class="text-gray-600 mb-4">Встреча с ведущими работодателями Таджикистана. Более 50 компаний представят свои вакансии специально для молодых специалистов.</p>
+                            <div class="flex items-center text-gray-500 mb-4">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>Душанбе, Выставочный центр "Кохи Вахдат"</span>
+                            </div>
+                            <div class="flex items-center text-gray-500 mb-6">
+                                <i class="fas fa-clock mr-2"></i>
+                                <span>10:00 - 17:00</span>
+                            </div>
+                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Зарегистрироваться</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Мероприятие 2 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="bg-indigo-600 text-white p-4 flex justify-between items-center">
+                            <span class="font-bold">24 августа, 2023</span>
+                            <span class="px-2 py-1 bg-indigo-800 rounded text-xs font-bold">Мастер-класс</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-2">Навыки эффективной самопрезентации</h3>
+                            <p class="text-gray-600 mb-4">Практический мастер-класс по созданию резюме, подготовке к собеседованию и построению персонального бренда в социальных сетях.</p>
+                            <div class="flex items-center text-gray-500 mb-4">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>Душанбе, Бизнес-центр "Созидание", 4 этаж</span>
+                            </div>
+                            <div class="flex items-center text-gray-500 mb-6">
+                                <i class="fas fa-clock mr-2"></i>
+                                <span>14:00 - 18:00</span>
+                            </div>
+                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Зарегистрироваться</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Мероприятие 3 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="bg-indigo-600 text-white p-4 flex justify-between items-center">
+                            <span class="font-bold">5 сентября, 2023</span>
+                            <span class="px-2 py-1 bg-indigo-800 rounded text-xs font-bold">Форум</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-2">Форум молодых лидеров Таджикистана</h3>
+                            <p class="text-gray-600 mb-4">Ежегодное мероприятие для обмена опытом между успешными молодыми профессионалами и студентами. Нетворкинг и возможности карьерного роста.</p>
+                            <div class="flex items-center text-gray-500 mb-4">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>Душанбе, Национальная библиотека</span>
+                            </div>
+                            <div class="flex items-center text-gray-500 mb-6">
+                                <i class="fas fa-clock mr-2"></i>
+                                <span>09:00 - 18:00</span>
+                            </div>
+                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Зарегистрироваться</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-10">
+                    <a href="#" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                        <span>Смотреть все мероприятия</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Мероприятие 1 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="bg-indigo-600 text-white p-4 flex justify-between items-center">
-                        <span class="font-bold">18 августа, 2023</span>
-                        <span class="px-2 py-1 bg-indigo-800 rounded text-xs font-bold">Ярмарка вакансий</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2">Ярмарка вакансий для молодых специалистов</h3>
-                        <p class="text-gray-600 mb-4">Встреча с ведущими работодателями Таджикистана. Более 50 компаний представят свои вакансии специально для молодых специалистов.</p>
-                        <div class="flex items-center text-gray-500 mb-4">
-                            <i class="fas fa-map-marker-alt mr-2"></i>
-                            <span>Душанбе, Выставочный центр "Кохи Вахдат"</span>
-                        </div>
-                        <div class="flex items-center text-gray-500 mb-6">
-                            <i class="fas fa-clock mr-2"></i>
-                            <span>10:00 - 17:00</span>
-                        </div>
-                        <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Зарегистрироваться</a>
-                    </div>
-                </div>
+            <!-- Вкладка Программы развития -->
+            <div id="programs-tab" class="tab-content">
+                <h2 class="text-3xl font-bold text-center text-indigo-800 mb-2">Программы развития</h2>
+                <p class="text-center text-gray-600 mb-10">Развивайте ваши профессиональные навыки с нашими специализированными программами</p>
                 
-                <!-- Мероприятие 2 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="bg-indigo-600 text-white p-4 flex justify-between items-center">
-                        <span class="font-bold">24 августа, 2023</span>
-                        <span class="px-2 py-1 bg-indigo-800 rounded text-xs font-bold">Мастер-класс</span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Программа 1 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="bg-indigo-600 text-white p-4">
+                            <h3 class="font-bold text-xl">Программа развития лидерских качеств</h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Наша программа направлена на развитие лидерских качеств, навыков управления командой и принятия решений в сложных ситуациях.</p>
+                            <ul class="list-disc list-inside text-gray-600 mb-4 pl-2">
+                                <li>Продолжительность: 3 месяца</li>
+                                <li>Формат: очно-заочный (встречи 2 раза в неделю)</li>
+                                <li>Для кого: молодые специалисты с опытом работы от 1 года</li>
+                            </ul>
+                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Подробнее</a>
+                        </div>
                     </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2">Навыки эффективной самопрезентации</h3>
-                        <p class="text-gray-600 mb-4">Практический мастер-класс по созданию резюме, подготовке к собеседованию и построению персонального бренда в социальных сетях.</p>
-                        <div class="flex items-center text-gray-500 mb-4">
-                            <i class="fas fa-map-marker-alt mr-2"></i>
-                            <span>Душанбе, Бизнес-центр "Созидание", 4 этаж</span>
+                    
+                    <!-- Программа 2 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="bg-indigo-600 text-white p-4">
+                            <h3 class="font-bold text-xl">Программа профессионального развития ИТ-специалистов</h3>
                         </div>
-                        <div class="flex items-center text-gray-500 mb-6">
-                            <i class="fas fa-clock mr-2"></i>
-                            <span>14:00 - 18:00</span>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Программа для молодых разработчиков, тестировщиков и других IT-специалистов, нацеленная на повышение профессиональных навыков и карьерный рост.</p>
+                            <ul class="list-disc list-inside text-gray-600 mb-4 pl-2">
+                                <li>Продолжительность: 6 месяцев</li>
+                                <li>Формат: онлайн с практическими заданиями</li>
+                                <li>Для кого: IT-специалисты всех уровней</li>
+                            </ul>
+                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Подробнее</a>
                         </div>
-                        <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Зарегистрироваться</a>
                     </div>
-                </div>
-                
-                <!-- Мероприятие 3 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="bg-indigo-600 text-white p-4 flex justify-between items-center">
-                        <span class="font-bold">5 сентября, 2023</span>
-                        <span class="px-2 py-1 bg-indigo-800 rounded text-xs font-bold">Форум</span>
+                    
+                    <!-- Программа 3 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="bg-indigo-600 text-white p-4">
+                            <h3 class="font-bold text-xl">Акселератор предпринимательских проектов</h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Программа для молодых предпринимателей, которая помогает превратить идею в успешный бизнес: от разработки бизнес-плана до привлечения инвестиций.</p>
+                            <ul class="list-disc list-inside text-gray-600 mb-4 pl-2">
+                                <li>Продолжительность: 4 месяца</li>
+                                <li>Формат: смешанный (онлайн + очные интенсивы)</li>
+                                <li>Для кого: начинающие предприниматели или имеющие бизнес-идею</li>
+                            </ul>
+                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Подробнее</a>
+                        </div>
                     </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2">Форум молодых лидеров Таджикистана</h3>
-                        <p class="text-gray-600 mb-4">Ежегодное мероприятие для обмена опытом между успешными молодыми профессионалами и студентами. Нетворкинг и возможности карьерного роста.</p>
-                        <div class="flex items-center text-gray-500 mb-4">
-                            <i class="fas fa-map-marker-alt mr-2"></i>
-                            <span>Душанбе, Национальная библиотека</span>
+                    
+                    <!-- Программа 4 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="bg-indigo-600 text-white p-4">
+                            <h3 class="font-bold text-xl">Программа развития мягких навыков</h3>
                         </div>
-                        <div class="flex items-center text-gray-500 mb-6">
-                            <i class="fas fa-clock mr-2"></i>
-                            <span>09:00 - 18:00</span>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Комплексная программа по развитию коммуникативных навыков, эмоционального интеллекта, тайм-менеджмента и других "мягких" навыков.</p>
+                            <ul class="list-disc list-inside text-gray-600 mb-4 pl-2">
+                                <li>Продолжительность: 2 месяца</li>
+                                <li>Формат: еженедельные тренинги и практические занятия</li>
+                                <li>Для кого: молодые специалисты всех отраслей</li>
+                            </ul>
+                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Подробнее</a>
                         </div>
-                        <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Зарегистрироваться</a>
                     </div>
                 </div>
             </div>
             
-            <div class="text-center mt-10">
-                <a href="#" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
-                    <span>Смотреть все мероприятия</span>
-                    <i class="fas fa-arrow-right ml-2"></i>
-                </a>
+            <!-- Вкладка Стажировки -->
+            <div id="internships-tab" class="tab-content">
+                <h2 class="text-3xl font-bold text-center text-indigo-800 mb-2">Программы стажировок</h2>
+                <p class="text-center text-gray-600 mb-10">Получите ценный опыт работы и начните свою карьеру с нашими программами стажировок</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Стажировка 1 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="https://via.placeholder.com/600x300" alt="Государственная стажировка" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-2">Стажировка в государственных учреждениях</h3>
+                            <p class="text-gray-600 mb-4">Возможность получить опыт работы в государственном секторе, принять участие в разработке и реализации важных проектов для страны.</p>
+                            <div class="mb-4 text-sm">
+                                <div class="flex items-center text-gray-500 mb-2">
+                                    <i class="fas fa-calendar-alt mr-2"></i>
+                                    <span>Продолжительность: 3-6 месяцев</span>
+                                </div>
+                                <div class="flex items-center text-gray-500 mb-2">
+                                    <i class="fas fa-money-bill-wave mr-2"></i>
+                                    <span>Стипендия: 800-1200 сомони в месяц</span>
+                                </div>
+                            </div>
+                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Подать заявку</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Стажировка 2 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="https://via.placeholder.com/600x300" alt="Корпоративная стажировка" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-2">Стажировка в крупных компаниях</h3>
+                            <p class="text-gray-600 mb-4">Стажировка в ведущих компаниях Таджикистана: банках, телекоммуникационных компаниях, производственных предприятиях.</p>
+                            <div class="mb-4 text-sm">
+                                <div class="flex items-center text-gray-500 mb-2">
+                                    <i class="fas fa-calendar-alt mr-2"></i>
+                                    <span>Продолжительность: 2-4 месяца</span>
+                                </div>
+                                <div class="flex items-center text-gray-500 mb-2">
+                                    <i class="fas fa-money-bill-wave mr-2"></i>
+                                    <span>Стипендия: 1000-1500 сомони в месяц</span>
+                                </div>
+                            </div>
+                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Подать заявку</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Стажировка 3 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="https://via.placeholder.com/600x300" alt="Международная стажировка" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-2">Международные программы стажировок</h3>
+                            <p class="text-gray-600 mb-4">Возможность пройти стажировку в международных организациях и компаниях, получить опыт работы в мультикультурной среде.</p>
+                            <div class="mb-4 text-sm">
+                                <div class="flex items-center text-gray-500 mb-2">
+                                    <i class="fas fa-calendar-alt mr-2"></i>
+                                    <span>Продолжительность: 3-12 месяцев</span>
+                                </div>
+                                <div class="flex items-center text-gray-500 mb-2">
+                                    <i class="fas fa-money-bill-wave mr-2"></i>
+                                    <span>Стипендия: в зависимости от программы</span>
+                                </div>
+                            </div>
+                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Подать заявку</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Вкладка Вопросы и ответы -->
+            <div id="faq-tab" class="tab-content">
+                <h2 class="text-3xl font-bold text-center text-indigo-800 mb-10">Часто задаваемые вопросы</h2>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="divide-y divide-gray-200">
+                        <!-- Вопрос 1 -->
+                        <div class="py-5">
+                            <details class="group">
+                                <summary class="flex justify-between items-center font-semibold cursor-pointer list-none">
+                                    <span class="text-lg text-gray-800">Кто может участвовать в молодежных программах?</span>
+                                    <span class="transition group-open:rotate-180">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </span>
+                                </summary>
+                                <p class="text-gray-600 mt-3 group-open:animate-fadeIn">
+                                    В наших программах могут принимать участие молодые люди от 18 до 35 лет, граждане Республики Таджикистан. Для различных программ могут быть установлены дополнительные критерии – уровень образования, специализация или опыт работы. Подробные требования указаны в описании каждой конкретной программы.
+                                </p>
+                            </details>
+                        </div>
+                        
+                        <!-- Вопрос 2 -->
+                        <div class="py-5">
+                            <details class="group">
+                                <summary class="flex justify-between items-center font-semibold cursor-pointer list-none">
+                                    <span class="text-lg text-gray-800">Какие документы нужны для участия в программе стажировок?</span>
+                                    <span class="transition group-open:rotate-180">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </span>
+                                </summary>
+                                <p class="text-gray-600 mt-3 group-open:animate-fadeIn">
+                                    Для участия в программе стажировок вам потребуются: резюме, копия диплома или справка с места учебы, копия паспорта, мотивационное письмо. В некоторых случаях может потребоваться рекомендательное письмо от преподавателя или бывшего работодателя. Полный список документов будет предоставлен после предварительного одобрения вашей заявки.
+                                </p>
+                            </details>
+                        </div>
+                        
+                        <!-- Вопрос 3 -->
+                        <div class="py-5">
+                            <details class="group">
+                                <summary class="flex justify-between items-center font-semibold cursor-pointer list-none">
+                                    <span class="text-lg text-gray-800">Оплачиваются ли стажировки и программы наставничества?</span>
+                                    <span class="transition group-open:rotate-180">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </span>
+                                </summary>
+                                <p class="text-gray-600 mt-3 group-open:animate-fadeIn">
+                                    Большинство стажировок в государственных учреждениях предполагают выплату стипендии. Размер стипендии зависит от конкретного учреждения и может составлять от 800 до 1500 сомони в месяц. Программы наставничества обычно бесплатны для участников, но не предполагают финансового вознаграждения. Однако, некоторые программы предоставляют гранты на реализацию собственных проектов участников.
+                                </p>
+                            </details>
+                        </div>
+                        
+                        <!-- Вопрос 4 -->
+                        <div class="py-5">
+                            <details class="group">
+                                <summary class="flex justify-between items-center font-semibold cursor-pointer list-none">
+                                    <span class="text-lg text-gray-800">Какие навыки наиболее востребованы работодателями в Таджикистане?</span>
+                                    <span class="transition group-open:rotate-180">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </span>
+                                </summary>
+                                <p class="text-gray-600 mt-3 group-open:animate-fadeIn">
+                                    Согласно нашим исследованиям рынка труда, наиболее востребованы следующие навыки: знание языков (русский, английский, таджикский), цифровая грамотность (работа с офисными программами, базовое программирование), аналитические навыки, коммуникабельность и навыки делового общения. В технических специальностях ценятся знания современных технологий и программных продуктов. Наши программы направлены на развитие именно этих компетенций.
+                                </p>
+                            </details>
+                        </div>
+                        
+                        <!-- Вопрос 5 -->
+                        <div class="py-5">
+                            <details class="group">
+                                <summary class="flex justify-between items-center font-semibold cursor-pointer list-none">
+                                    <span class="text-lg text-gray-800">Могут ли участники программ получить постоянную работу?</span>
+                                    <span class="transition group-open:rotate-180">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </span>
+                                </summary>
+                                <p class="text-gray-600 mt-3 group-open:animate-fadeIn">
+                                    Да, это одна из основных целей наших программ. По статистике, около 60% участников программ стажировок получают предложения о постоянной работе в тех организациях, где они проходили стажировку. Ещё около 20% находят работу благодаря контактам и рекомендациям, полученным во время участия в программах. Мы также проводим ярмарки вакансий специально для выпускников наших программ.
+                                </p>
+                            </details>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10 text-center">
+                        <p class="text-gray-600 mb-4">Не нашли ответ на свой вопрос?</p>
+                        <a href="#" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors shadow-md inline-flex items-center">
+                            <i class="fas fa-question-circle mr-2"></i> Задать вопрос специалисту
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Вкладка Истории успеха -->
+            <div id="success-tab" class="tab-content">
+                <h2 class="text-3xl font-bold text-center text-indigo-800 mb-2">Истории успеха</h2>
+                <p class="text-center text-gray-600 mb-10">Вдохновляющие истории выпускников наших программ</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- История 1 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
+                        <div class="md:w-1/3">
+                            <img src="https://via.placeholder.com/300x400" alt="Фото участника" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <h3 class="font-bold text-xl mb-2">Рахим Каримов</h3>
+                            <p class="text-indigo-600 font-semibold mb-4">Выпускник программы стажировок в Министерстве экономического развития</p>
+                            <p class="text-gray-600 mb-4">
+                                "После окончания университета я не мог найти работу по специальности. Программа стажировок дала мне необходимый опыт и знания. Сейчас я работаю ведущим специалистом в министерстве и занимаюсь развитием цифровой экономики в Таджикистане."
+                            </p>
+                            <div class="text-gray-500 italic">
+                                Участвовал в программе в 2022 году
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- История 2 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
+                        <div class="md:w-1/3">
+                            <img src="https://via.placeholder.com/300x400" alt="Фото участника" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <h3 class="font-bold text-xl mb-2">Зарина Гуломова</h3>
+                            <p class="text-indigo-600 font-semibold mb-4">Выпускница программы "Молодые предприниматели"</p>
+                            <p class="text-gray-600 mb-4">
+                                "Благодаря акселерационной программе я смогла превратить свою идею в успешный бизнес. Мой стартап по производству экологически чистой упаковки получил первый раунд инвестиций и сейчас активно развивается."
+                            </p>
+                            <div class="text-gray-500 italic">
+                                Участвовала в программе в 2021 году
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- История 3 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
+                        <div class="md:w-1/3">
+                            <img src="https://via.placeholder.com/300x400" alt="Фото участника" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <h3 class="font-bold text-xl mb-2">Фируз Назаров</h3>
+                            <p class="text-indigo-600 font-semibold mb-4">Выпускник программы "IT-профессионалы"</p>
+                            <p class="text-gray-600 mb-4">
+                                "Программа дала мне возможность освоить современные технологии и получить сертификаты международного уровня. Сейчас я работаю в ведущей IT-компании страны и могу обеспечивать свою семью."
+                            </p>
+                            <div class="text-gray-500 italic">
+                                Участвовал в программе в 2023 году
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- История 4 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
+                        <div class="md:w-1/3">
+                            <img src="https://via.placeholder.com/300x400" alt="Фото участника" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <h3 class="font-bold text-xl mb-2">Нигора Саидова</h3>
+                            <p class="text-indigo-600 font-semibold mb-4">Выпускница международной программы стажировок</p>
+                            <p class="text-gray-600 mb-4">
+                                "Благодаря программе я провела 6 месяцев в международной организации в Женеве. Этот опыт открыл для меня новые горизонты. Сейчас я руковожу проектами по устойчивому развитию и применяю полученные знания для развития нашей страны."
+                            </p>
+                            <div class="text-gray-500 italic">
+                                Участвовала в программе в 2022 году
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10 bg-indigo-50 rounded-xl p-8 max-w-3xl mx-auto">
+                    <h3 class="text-2xl font-bold text-indigo-700 mb-4">Статистика успеха участников программ</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                        <div class="bg-white rounded-lg p-4 shadow-sm">
+                            <div class="text-3xl font-bold text-indigo-600">78%</div>
+                            <div class="text-gray-600 text-sm">трудоустроены после программы</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 shadow-sm">
+                            <div class="text-3xl font-bold text-indigo-600">45%</div>
+                            <div class="text-gray-600 text-sm">получили повышение в течение года</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 shadow-sm">
+                            <div class="text-3xl font-bold text-indigo-600">92%</div>
+                            <div class="text-gray-600 text-sm">отмечают рост профессиональных навыков</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 shadow-sm">
+                            <div class="text-3xl font-bold text-indigo-600">3200+</div>
+                            <div class="text-gray-600 text-sm">молодых специалистов прошли программы</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Секция с часто задаваемыми вопросами -->
-    <section class="bg-white py-16">
+    <!-- Секция с новостями молодежных программ от партнеров -->
+    <section class="bg-white py-8">
         <div class="max-w-4xl mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center text-indigo-800 mb-10">Часто задаваемые вопросы</h2>
             
             <div class="divide-y divide-gray-200">
                 <!-- Вопрос 1 -->
@@ -743,260 +1053,9 @@
         </div>
     </section>
 
-    <!-- Новая секция: Как программы помогают в карьерном росте -->
-    <section class="bg-indigo-50 py-16">
-        <div class="max-w-4xl mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center text-indigo-800 mb-10">Как наши программы помогают вашему карьерному росту</h2>
-            
-            <!-- Шаги для участия в программах -->
-            <div class="mb-16">
-                <h3 class="text-2xl font-bold text-gray-800 mb-8 text-center">Как принять участие в наших программах</h3>
-                
-                <div class="relative">
-                    <!-- Вертикальная линия -->
-                    <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-indigo-200"></div>
-                    
-                    <!-- Шаг 1 -->
-                    <div class="relative mb-8">
-                        <div class="flex flex-col md:flex-row items-center">
-                            <div class="flex-1 md:pr-8 md:text-right order-2 md:order-1">
-                                <h4 class="text-xl font-bold text-indigo-700 mb-2">Выберите подходящую программу</h4>
-                                <p class="text-gray-600">Изучите доступные программы и выберите ту, которая соответствует вашим целям и уровню подготовки. Используйте фильтры по отраслям и типам программ.</p>
-                            </div>
-                            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-600 text-white font-bold mb-4 md:mb-0 md:mx-4 z-10 order-1 md:order-2">1</div>
-                            <div class="flex-1 md:pl-8 md:text-left hidden md:block order-3">
-                                <!-- Пустой блок для выравнивания -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Шаг 2 -->
-                    <div class="relative mb-8">
-                        <div class="flex flex-col md:flex-row items-center">
-                            <div class="flex-1 md:pr-8 md:text-right hidden md:block order-1">
-                                <!-- Пустой блок для выравнивания -->
-                            </div>
-                            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-600 text-white font-bold mb-4 md:mb-0 md:mx-4 z-10 order-1 md:order-2">2</div>
-                            <div class="flex-1 md:pl-8 md:text-left order-2 md:order-3">
-                                <h4 class="text-xl font-bold text-indigo-700 mb-2">Подайте заявку онлайн</h4>
-                                <p class="text-gray-600">Заполните форму заявки, загрузите необходимые документы (резюме, мотивационное письмо, копии документов об образовании) и отправьте их через нашу платформу.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Шаг 3 -->
-                    <div class="relative mb-8">
-                        <div class="flex flex-col md:flex-row items-center">
-                            <div class="flex-1 md:pr-8 md:text-right order-2 md:order-1">
-                                <h4 class="text-xl font-bold text-indigo-700 mb-2">Пройдите отбор</h4>
-                                <p class="text-gray-600">Процесс отбора включает рассмотрение заявки, тестирование навыков и собеседование. Мы свяжемся с вами в течение 10 рабочих дней после подачи заявки.</p>
-                            </div>
-                            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-600 text-white font-bold mb-4 md:mb-0 md:mx-4 z-10 order-1 md:order-2">3</div>
-                            <div class="flex-1 md:pl-8 md:text-left hidden md:block order-3">
-                                <!-- Пустой блок для выравнивания -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Шаг 4 -->
-                    <div class="relative mb-8">
-                        <div class="flex flex-col md:flex-row items-center">
-                            <div class="flex-1 md:pr-8 md:text-right hidden md:block order-1">
-                                <!-- Пустой блок для выравнивания -->
-                            </div>
-                            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-600 text-white font-bold mb-4 md:mb-0 md:mx-4 z-10 order-1 md:order-2">4</div>
-                            <div class="flex-1 md:pl-8 md:text-left order-2 md:order-3">
-                                <h4 class="text-xl font-bold text-indigo-700 mb-2">Участвуйте в программе</h4>
-                                <p class="text-gray-600">Следуйте индивидуальному плану развития, участвуйте в тренингах и мероприятиях, регулярно общайтесь с наставником и получайте обратную связь.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Шаг 5 -->
-                    <div class="relative">
-                        <div class="flex flex-col md:flex-row items-center">
-                            <div class="flex-1 md:pr-8 md:text-right order-2 md:order-1">
-                                <h4 class="text-xl font-bold text-indigo-700 mb-2">Получите сертификат и трудоустройтесь</h4>
-                                <p class="text-gray-600">По завершении программы вы получите сертификат и рекомендации. Наша команда поможет вам найти постоянную работу через партнерскую сеть работодателей.</p>
-                            </div>
-                            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-600 text-white font-bold mb-4 md:mb-0 md:mx-4 z-10 order-1 md:order-2">5</div>
-                            <div class="flex-1 md:pl-8 md:text-left hidden md:block order-3">
-                                <!-- Пустой блок для выравнивания -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="text-center mt-10">
-                    <a href="#" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors shadow-md inline-flex items-center">
-                        <i class="fas fa-file-alt mr-2"></i> Подать заявку на участие
-                    </a>
-                </div>
-            </div>
-            
-            <h3 class="text-2xl font-bold text-gray-800 mb-8 text-center">Преимущества наших программ</h3>
-            <div class="grid md:grid-cols-3 gap-8 mb-10">
-                <div class="bg-white rounded-xl p-6 shadow-md">
-                    <div class="flex items-center mb-4">
-                        <div class="rounded-full bg-indigo-100 p-3 mr-4">
-                            <i class="fas fa-rocket text-indigo-600 text-xl"></i>
-                        </div>
-                        <h3 class="font-bold text-lg text-gray-800">Быстрый старт</h3>
-                    </div>
-                    <p class="text-gray-600">Начните карьеру с реальных проектов под руководством опытных специалистов, минуя длительный период адаптации</p>
-                </div>
-                
-                <div class="bg-white rounded-xl p-6 shadow-md">
-                    <div class="flex items-center mb-4">
-                        <div class="rounded-full bg-indigo-100 p-3 mr-4">
-                            <i class="fas fa-handshake text-indigo-600 text-xl"></i>
-                        </div>
-                        <h3 class="font-bold text-lg text-gray-800">Ценные связи</h3>
-                    </div>
-                    <p class="text-gray-600">Формирование профессиональной сети контактов с лидерами отрасли и единомышленниками</p>
-                </div>
-                
-                <div class="bg-white rounded-xl p-6 shadow-md">
-                    <div class="flex items-center mb-4">
-                        <div class="rounded-full bg-indigo-100 p-3 mr-4">
-                            <i class="fas fa-certificate text-indigo-600 text-xl"></i>
-                        </div>
-                        <h3 class="font-bold text-lg text-gray-800">Сертификация</h3>
-                    </div>
-                    <p class="text-gray-600">Получение официальных сертификатов и рекомендаций, повышающих ценность на рынке труда</p>
-                </div>
-            </div>
-            
-            <div class="bg-white rounded-xl p-8 shadow-lg overflow-hidden relative">
-                <div class="absolute top-0 bottom-0 left-0 w-2 bg-gradient-to-b from-indigo-400 to-purple-500"></div>
-                <h3 class="text-2xl font-bold text-indigo-700 mb-4">Статистика успеха участников программ</h3>
-                
-                <div class="grid sm:grid-cols-3 gap-6 mb-6">
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-indigo-600 mb-2">78%</div>
-                        <p class="text-gray-600">участников находят работу в течение 3 месяцев после программы</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-indigo-600 mb-2">23%</div>
-                        <p class="text-gray-600">получают повышение в первый год работы</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-indigo-600 mb-2">42%</div>
-                        <p class="text-gray-600">отмечают рост дохода более чем на 30%</p>
-                    </div>
-                </div>
-                
-                <p class="text-gray-700 italic text-center">"Наши программы ориентированы на практические навыки, которые действительно востребованы на рынке труда Таджикистана"</p>
-            </div>
-        </div>
-    </section>
 
-    <section class="section-spacing bg-white">
-        <div class="max-w-4xl mx-auto px-4 py-12">
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Карточка: Стажировки -->
-                <div class="bg-blue-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
-                    <i class="fas fa-briefcase text-4xl text-blue-500 mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2 text-blue-800">Стажировки в госучреждениях</h3>
-                    <p class="text-gray-700 mb-4">Получите ценный опыт работы в государственных организациях и начните свою карьеру с реальных задач.</p>
-                    <button class="action-button mt-auto bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors"
-                        data-action="apply_internship"
-                        data-title="Заявка на стажировку"
-                        data-message="Для подачи заявки на стажировку, пожалуйста, перейдите на страницу оформления.">
-                        Подать заявку
-                    </button>
-                </div>
-                <!-- Карточка: Наставничество -->
-                <div class="bg-purple-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
-                    <i class="fas fa-user-friends text-4xl text-purple-500 mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2 text-purple-800">Программы наставничества</h3>
-                    <p class="text-gray-700 mb-4">Работайте с опытными наставниками, получайте советы и поддержку для профессионального и личностного роста.</p>
-                    <button class="action-button mt-auto bg-purple-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-600 transition-colors"
-                        data-action="join_mentorship"
-                        data-title="Присоединиться к программе наставничества"
-                        data-message="Ваш запрос на присоединение к программе наставничества отправлен. Мы свяжемся с вами в ближайшее время!">
-                        Присоединиться
-                    </button>
-                </div>
-                <!-- Карточка: Карьерное консультирование -->
-                <div class="bg-green-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
-                    <i class="fas fa-chalkboard-teacher text-4xl text-green-500 mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2 text-green-800">Карьерное консультирование</h3>
-                    <p class="text-gray-700 mb-4">Индивидуальные консультации по построению карьеры, выбору профессии и развитию навыков.</p>
-                    <button class="action-button mt-auto bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors"
-                        data-action="book_consultation"
-                        data-title="Запись на карьерное консультирование"
-                        data-message="Ваш запрос на карьерное консультирование успешно отправлен. Ожидайте подтверждения записи!">
-                        Записаться
-                    </button>
-                </div>
-                <!-- Карточка: Soft Skills -->
-                <div class="bg-yellow-50 rounded-xl p-8 shadow-lg card-hover flex flex-col items-center text-center">
-                    <i class="fas fa-lightbulb text-4xl text-yellow-500 mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2 text-yellow-800">Развитие soft skills</h3>
-                    <p class="text-gray-700 mb-4">Тренинги и мастер-классы по развитию коммуникации, лидерства, критического мышления и других навыков.</p>
-                    <button class="action-button mt-auto bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition-colors"
-                        data-action="enroll_softskills"
-                        data-title="Запись на тренинг по soft skills"
-                        data-message="Вы успешно записаны на тренинг по развитию soft skills! Мы отправили детали на вашу почту.">
-                        Записаться
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Секция: Истории успеха участников программ -->
-    <section class="bg-gradient-to-br from-indigo-50 to-purple-50 py-16">
-        <div class="max-w-4xl mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center text-indigo-800 mb-6">Истории успеха участников наших программ</h2>
-            <p class="text-gray-600 text-center max-w-3xl mx-auto mb-10">Познакомьтесь с молодыми специалистами, которые начали свой карьерный путь с наших программ и добились значительных результатов</p>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- История успеха 1 -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <img src="https://placehold.co/80x80/indigo/white?text=АМ" alt="Фото Азиза Мирзоева" class="rounded-full mr-4 border-2 border-indigo-200">
-                            <div>
-                                <h3 class="font-bold text-lg text-gray-800">Азиз Мирзоев</h3>
-                                <p class="text-indigo-600">Старший аналитик данных, ИТ-департамент Министерства финансов</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 mb-4">"Благодаря стажировке в госучреждении я получил бесценный опыт работы с большими данными. Мой наставник помог мне освоить современные технологии анализа данных и применить их на практике. Через 8 месяцев после стажировки я получил предложение о постоянной работе."</p>
-                        <div class="flex items-center text-sm text-gray-500">
-                            <span class="mr-4"><i class="fas fa-graduation-cap mr-1"></i> Программа стажировок 2023</span>
-                            <span><i class="fas fa-briefcase mr-1"></i> Карьерный рост за 1 год</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- История успеха 2 -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <img src="https://placehold.co/80x80/purple/white?text=МР" alt="Фото Малики Рахимовой" class="rounded-full mr-4 border-2 border-indigo-200">
-                            <div>
-                                <h3 class="font-bold text-lg text-gray-800">Малика Рахимова</h3>
-                                <p class="text-indigo-600">Основатель социального предпринимательского проекта</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 mb-4">"Я пришла на программу менторства с идеей социального бизнеса, но не знала, с чего начать. Мой ментор помог не только структурировать бизнес-план, но и найти первых инвесторов. Сегодня мой проект помогает молодым мамам получать доход, работая из дома."</p>
-                        <div class="flex items-center text-sm text-gray-500">
-                            <span class="mr-4"><i class="fas fa-users mr-1"></i> Программа наставничества 2024</span>
-                            <span><i class="fas fa-chart-line mr-1"></i> Создала 12 рабочих мест</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-12">
-                <a href="#" class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors shadow-md">
-                    <i class="fas fa-book-open mr-2"></i> Больше историй успеха
-                </a>
-            </div>
-        </div>
-    </section>
+
 
     <footer class="gradient-bg text-white py-12 mt-12">
         <div class="container mx-auto px-4">
@@ -1417,5 +1476,27 @@
             }
         </style>
     </div>
+
+    <script>
+        // Переключение вкладок
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Убираем активный класс со всех кнопок
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    // Добавляем активный класс на нажатую кнопку
+                    this.classList.add('active');
+                    
+                    // Скрываем все контенты вкладок
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    // Показываем контент активной вкладки
+                    document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
