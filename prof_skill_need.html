@@ -26,43 +26,48 @@
             padding: 3rem 0; /* Increased vertical padding for more breathing room */
         }
         
-        /* Боковое меню */
+        /* Vертикальная надпись "Меню" */
         .menu-label {
             position: fixed;
             top: 50%;
             left: 0;
             transform: translateY(-50%) rotate(-90deg);
             transform-origin: left top;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
             color: white;
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.25rem;
             font-weight: bold;
             border-radius: 0 0 0.5rem 0.5rem;
             cursor: pointer;
             z-index: 1000;
             letter-spacing: 1px;
             box-shadow: 
-                0 4px 6px rgba(0, 0, 0, 0.1),
-                0 2px 4px rgba(0, 0, 0, 0.06);
+                0 10px 20px rgba(0, 0, 0, 0.2),
+                0 6px 12px rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(102, 126, 234, 0.3);
             transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .menu-label:hover {
-            padding: 0.5rem 1.5rem;
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            background: linear-gradient(135deg, rgba(118, 75, 162, 0.9) 0%, rgba(102, 126, 234, 0.9) 100%);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(102, 126, 234, 0.3);
+            transform: translateY(-50%) scale(1.02);
         }
         
+        /* Боковое меню выплывает слева направо */
         .side-menu {
             position: fixed;
             top: 0;
             left: 0;
-            height: 100vh;
-            width: 280px;
-            background: linear-gradient(135deg, 
-                rgba(102, 126, 234, 0.97) 0%, 
-                rgba(118, 75, 162, 0.97) 100%);
-            z-index: 1000;
+            height: 100%;
+            width: 14rem;
             transform: translateX(-100%);
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.98) 0%, 
+                rgba(118, 75, 162, 0.98) 50%, 
+                rgba(102, 126, 234, 0.98) 100%);
+            border-radius: 0 1rem 1rem 0;
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
@@ -483,11 +488,9 @@
                     <i class="fas fa-graduation-cap text-2xl"></i>
                     <span class="font-bold text-lg">Возможности для роста</span>
                 </div>
-                <div class="overflow-hidden">
-                    <div class="overflow-x-auto scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
-                        <div class="flex w-full transition-transform duration-500" id="growthOpportunitiesList">
-                            <!-- Здесь будут размещены карточки возможностей (загрузятся через JavaScript) -->
-                        </div>
+                <div class="relative overflow-hidden">
+                    <div id="growthOpportunitiesList" class="flex transition-all duration-500 ease-in-out" style="overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                        <!-- Здесь будут размещены карточки возможностей (загружаются через JavaScript) -->
                     </div>
                 </div>
                 <div class="bg-blue-50 text-center py-3">
@@ -861,15 +864,15 @@
             // Создаем все карточки для горизонтального скроллинга
             growthOpportunitiesData.forEach((item, index) => {
                 html += `
-                    <div class="flex-shrink-0 w-1/4 min-w-[250px] p-4 border-r border-gray-100 hover:bg-blue-50 transition">
-                        <div class="flex items-center space-x-3">
-                            <i class="${item.icon} text-xl"></i>
-                            <div>
+                    <div class="flex-shrink-0 w-1/4 min-w-[250px] p-5 border-r border-gray-100 hover:bg-blue-50 transition-all duration-300">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <i class="${item.icon} text-2xl"></i>
+                            <div class="flex-1">
                                 <div class="font-semibold text-gray-800">${item.title}</div>
                                 <div class="text-sm text-gray-500">${item.desc}</div>
                             </div>
                         </div>
-                        <div class="mt-2 text-xs ${item.actionColor} font-semibold cursor-pointer hover:underline">${item.action}</div>
+                        <div class="mt-3 text-xs ${item.actionColor} font-semibold cursor-pointer hover:underline">${item.action}</div>
                     </div>
                 `;
             });
@@ -881,12 +884,15 @@
 
         // Функция для прокрутки влево
         function scrollGrowthCards() {
-            const cardWidth = growthList.querySelector('div').offsetWidth;
-            const currentScroll = growthList.scrollLeft;
-            const maxScroll = growthList.scrollWidth - growthList.clientWidth;
+            const items = growthList.querySelectorAll('.flex-shrink-0');
+            if (!items.length) return;
             
-            // Если мы достигли конца, возвращаемся в начало
-            if (currentScroll >= maxScroll - 10) {
+            const cardWidth = items[0].offsetWidth;
+            const currentScrollPosition = growthList.scrollLeft;
+            const maxScrollPosition = growthList.scrollWidth - growthList.clientWidth;
+            
+            // Если мы достигли конца или близко к концу, возвращаемся в начало
+            if (currentScrollPosition >= maxScrollPosition - 50) {
                 growthList.scrollTo({
                     left: 0,
                     behavior: 'smooth'
@@ -894,14 +900,25 @@
             } else {
                 // Иначе прокручиваем на ширину одной карточки
                 growthList.scrollTo({
-                    left: currentScroll + cardWidth,
+                    left: currentScrollPosition + cardWidth,
                     behavior: 'smooth'
                 });
             }
         }
 
-        // Автоматическая смена каждые 5 секунд
-        setInterval(scrollGrowthCards, 5000);
+        // Автоматическая прокрутка каждые 5 секунд
+        let scrollInterval = setInterval(scrollGrowthCards, 5000);
+        
+        // Остановка прокрутки при наведении мыши
+        growthList.addEventListener('mouseenter', () => {
+            clearInterval(scrollInterval);
+        });
+        
+        // Возобновление прокрутки при уходе мыши
+        growthList.addEventListener('mouseleave', () => {
+            clearInterval(scrollInterval);
+            scrollInterval = setInterval(scrollGrowthCards, 5000);
+        });
         
         // Функция для управления боковым меню
         function toggleSideMenu() {
