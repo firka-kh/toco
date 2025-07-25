@@ -26,35 +26,53 @@
             padding: 3rem 0; /* Increased vertical padding for more breathing room */
         }
         
-        /* Vертикальная надпись "Меню" */
+        /* Анимация дрожания и переливания цвета для кнопки меню */
+        @keyframes menuLabelShake {
+            0%, 100% {
+                transform: translateY(-50%) rotate(0deg);
+                background: #4a5568;
+            }
+            25% {
+                transform: translateY(-48%) rotate(-2deg);
+                background: #5a6678;
+            }
+            50% {
+                transform: translateY(-50%) rotate(2deg);
+                background: #3a4558;
+            }
+            75% {
+                transform: translateY(-52%) rotate(-1deg);
+                background: #4a5568;
+            }
+        }
+
+        /* Кнопка меню посередине левой части страницы */
         .menu-label {
             position: fixed;
             top: 50%;
-            left: 0;
-            transform: translateY(-50%) rotate(-90deg);
-            transform-origin: left top;
+            left: -2px;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
-            color: white;
-            padding: 0.75rem 1.25rem;
-            font-weight: bold;
-            border-radius: 0 0 0.5rem 0.5rem;
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
             cursor: pointer;
-            z-index: 1000;
-            letter-spacing: 1px;
-            box-shadow: 
-                0 10px 20px rgba(0, 0, 0, 0.2),
-                0 6px 12px rgba(0, 0, 0, 0.1),
-                0 2px 4px rgba(102, 126, 234, 0.3);
             transition: all 0.3s ease;
+            animation: menuLabelShake 2s infinite;
+            z-index: 999;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .menu-label:hover {
             background: linear-gradient(135deg, rgba(118, 75, 162, 0.9) 0%, rgba(102, 126, 234, 0.9) 100%);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(102, 126, 234, 0.3);
             transform: translateY(-50%) scale(1.02);
         }
-        
+
         /* Боковое меню выплывает слева направо */
         .side-menu {
             position: fixed;
@@ -68,7 +86,14 @@
                 rgba(118, 75, 162, 0.98) 50%, 
                 rgba(102, 126, 234, 0.98) 100%);
             border-radius: 0 1rem 1rem 0;
-            transition: transform 0.3s ease;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 12px 24px rgba(0, 0, 0, 0.3),
+                0 4px 8px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            z-index: 1000;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
