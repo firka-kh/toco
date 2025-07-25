@@ -422,6 +422,78 @@
                 box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
             }
         }
+        
+        /* Стили для календаря */
+        .calendar-view-btn {
+            font-weight: 500;
+            color: #6b7280;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .calendar-view-btn.active {
+            color: #4f46e5;
+            background-color: #e0e7ff;
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .calendar-view {
+            display: none;
+        }
+        
+        .calendar-view.active {
+            display: block;
+        }
+        
+        /* Стили для событий календаря */
+        .calendar-event {
+            transition: all 0.2s;
+            border-left: 3px solid;
+            cursor: pointer;
+        }
+        
+        .calendar-event:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        /* Стили для всплывающего окна с деталями события */
+        .event-type-badge {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        /* Анимация появления и исчезновения всплывающего окна */
+        @keyframes popup-in {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -55%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        
+        @keyframes popup-out {
+            from {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translate(-50%, -55%) scale(0.9);
+            }
+        }
+        
+        #eventPopup.show {
+            display: block;
+            animation: popup-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        #eventPopup.hide {
+            animation: popup-out 0.2s forwards;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">    <header class="gradient-bg text-white shadow-lg">
@@ -537,79 +609,488 @@
             <!-- Вкладка Календарь мероприятий -->
             <div id="events-tab" class="tab-content active">
                 <h2 class="text-3xl font-bold text-center text-indigo-800 mb-2">Календарь мероприятий</h2>
-                <p class="text-center text-gray-600 mb-10">Присоединяйтесь к нашим мероприятиям и получите ценные знания и связи</p>
+                <p class="text-center text-gray-600 mb-6">Присоединяйтесь к нашим мероприятиям и получите ценные знания и связи</p>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Мероприятие 1 -->
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <div class="bg-indigo-600 text-white p-4 flex justify-between items-center">
-                            <span class="font-bold">18 августа, 2023</span>
-                            <span class="px-2 py-1 bg-indigo-800 rounded text-xs font-bold">Ярмарка вакансий</span>
+                <!-- Контролы календаря -->
+                <div class="flex justify-between items-center mb-6 max-w-5xl mx-auto">
+                    <div class="flex items-center">
+                        <button id="prevMonthBtn" class="bg-white p-2 rounded-full shadow hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-chevron-left text-indigo-600"></i>
+                        </button>
+                        <h3 id="currentMonthYear" class="text-xl font-bold text-indigo-800 mx-4">Июль 2025</h3>
+                        <button id="nextMonthBtn" class="bg-white p-2 rounded-full shadow hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-chevron-right text-indigo-600"></i>
+                        </button>
+                    </div>
+                    <div class="bg-white shadow rounded-lg flex p-1">
+                        <button id="viewWeek" class="calendar-view-btn px-4 py-2 rounded-md transition-all">Неделя</button>
+                        <button id="viewMonth" class="calendar-view-btn active px-4 py-2 rounded-md transition-all">Месяц</button>
+                        <button id="viewYear" class="calendar-view-btn px-4 py-2 rounded-md transition-all">Год</button>
+                    </div>
+                </div>
+                
+                <!-- Контейнер для календаря -->
+                <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+                    <!-- Неделя -->
+                    <div id="weekView" class="calendar-view hidden">
+                        <div class="grid grid-cols-7 border-b border-gray-200">
+                            <div class="py-3 text-center font-semibold text-indigo-800">ПН</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">ВТ</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">СР</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">ЧТ</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">ПТ</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">СБ</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">ВС</div>
                         </div>
-                        <div class="p-6">
-                            <h3 class="font-bold text-xl mb-2">Ярмарка вакансий для молодых специалистов</h3>
-                            <p class="text-gray-600 mb-4">Встреча с ведущими работодателями Таджикистана. Более 50 компаний представят свои вакансии специально для молодых специалистов.</p>
-                            <div class="flex items-center text-gray-500 mb-4">
-                                <i class="fas fa-map-marker-alt mr-2"></i>
-                                <span>Душанбе, Выставочный центр "Кохи Вахдат"</span>
+                        <div class="grid grid-cols-7 h-32">
+                            <div class="border-r border-b border-gray-200 p-2 overflow-y-auto">
+                                <div class="text-sm font-semibold mb-1">21</div>
+                                <div class="calendar-event bg-blue-100 text-blue-800 rounded p-1 mb-1 text-xs cursor-pointer" data-event="event1">
+                                    09:00 Тренинг
+                                </div>
                             </div>
-                            <div class="flex items-center text-gray-500 mb-6">
-                                <i class="fas fa-clock mr-2"></i>
-                                <span>10:00 - 17:00</span>
+                            <div class="border-r border-b border-gray-200 p-2 overflow-y-auto">
+                                <div class="text-sm font-semibold mb-1">22</div>
                             </div>
-                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Зарегистрироваться</a>
+                            <div class="border-r border-b border-gray-200 p-2 overflow-y-auto">
+                                <div class="text-sm font-semibold mb-1">23</div>
+                                <div class="calendar-event bg-green-100 text-green-800 rounded p-1 mb-1 text-xs cursor-pointer" data-event="event2">
+                                    14:00 Семинар
+                                </div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 overflow-y-auto">
+                                <div class="text-sm font-semibold mb-1">24</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 overflow-y-auto">
+                                <div class="text-sm font-semibold mb-1">25</div>
+                                <div class="calendar-event bg-purple-100 text-purple-800 rounded p-1 mb-1 text-xs cursor-pointer" data-event="event3">
+                                    10:00 Ярмарка
+                                </div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 overflow-y-auto">
+                                <div class="text-sm font-semibold mb-1">26</div>
+                            </div>
+                            <div class="border-b border-gray-200 p-2 overflow-y-auto">
+                                <div class="text-sm font-semibold mb-1">27</div>
+                                <div class="calendar-event bg-yellow-100 text-yellow-800 rounded p-1 mb-1 text-xs cursor-pointer" data-event="event4">
+                                    16:00 Вебинар
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Мероприятие 2 -->
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <div class="bg-indigo-600 text-white p-4 flex justify-between items-center">
-                            <span class="font-bold">24 августа, 2023</span>
-                            <span class="px-2 py-1 bg-indigo-800 rounded text-xs font-bold">Мастер-класс</span>
+                    <!-- Месяц -->
+                    <div id="monthView" class="calendar-view">
+                        <div class="grid grid-cols-7 border-b border-gray-200">
+                            <div class="py-3 text-center font-semibold text-indigo-800">ПН</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">ВТ</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">СР</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">ЧТ</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">ПТ</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">СБ</div>
+                            <div class="py-3 text-center font-semibold text-indigo-800">ВС</div>
                         </div>
-                        <div class="p-6">
-                            <h3 class="font-bold text-xl mb-2">Навыки эффективной самопрезентации</h3>
-                            <p class="text-gray-600 mb-4">Практический мастер-класс по созданию резюме, подготовке к собеседованию и построению персонального бренда в социальных сетях.</p>
-                            <div class="flex items-center text-gray-500 mb-4">
-                                <i class="fas fa-map-marker-alt mr-2"></i>
-                                <span>Душанбе, Бизнес-центр "Созидание", 4 этаж</span>
+                        
+                        <!-- Первая неделя июля -->
+                        <div class="grid grid-cols-7">
+                            <!-- Предыдущий месяц -->
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm text-gray-400">30</div>
                             </div>
-                            <div class="flex items-center text-gray-500 mb-6">
-                                <i class="fas fa-clock mr-2"></i>
-                                <span>14:00 - 18:00</span>
+                            <!-- Предыдущий месяц -->
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm text-gray-400">1</div>
                             </div>
-                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Зарегистрироваться</a>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">2</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">3</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">4</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">5</div>
+                                <div class="calendar-event bg-red-100 text-red-800 rounded p-1 mb-1 text-xs cursor-pointer truncate" data-event="event5">
+                                    Форум
+                                </div>
+                            </div>
+                            <div class="border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">6</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Вторая неделя июля -->
+                        <div class="grid grid-cols-7">
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">7</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">8</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">9</div>
+                                <div class="calendar-event bg-green-100 text-green-800 rounded p-1 mb-1 text-xs cursor-pointer truncate" data-event="event6">
+                                    Мастер-класс
+                                </div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">10</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">11</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">12</div>
+                            </div>
+                            <div class="border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">13</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Третья неделя июля -->
+                        <div class="grid grid-cols-7">
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">14</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">15</div>
+                                <div class="calendar-event bg-blue-100 text-blue-800 rounded p-1 mb-1 text-xs cursor-pointer truncate" data-event="event7">
+                                    Конференция
+                                </div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">16</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">17</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">18</div>
+                                <div class="calendar-event bg-indigo-100 text-indigo-800 rounded p-1 mb-1 text-xs cursor-pointer truncate" data-event="event8">
+                                    Ярмарка вакансий
+                                </div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">19</div>
+                            </div>
+                            <div class="border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">20</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Текущая неделя июля (выделена) -->
+                        <div class="grid grid-cols-7">
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">21</div>
+                                <div class="calendar-event bg-blue-100 text-blue-800 rounded p-1 mb-1 text-xs cursor-pointer truncate" data-event="event1">
+                                    Тренинг
+                                </div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">22</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">23</div>
+                                <div class="calendar-event bg-green-100 text-green-800 rounded p-1 mb-1 text-xs cursor-pointer truncate" data-event="event2">
+                                    Семинар
+                                </div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">24</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 bg-indigo-50 p-2 h-28">
+                                <div class="text-sm font-bold text-indigo-800">25</div>
+                                <div class="calendar-event bg-purple-100 text-purple-800 rounded p-1 mb-1 text-xs cursor-pointer truncate" data-event="event3">
+                                    Ярмарка
+                                </div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">26</div>
+                            </div>
+                            <div class="border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">27</div>
+                                <div class="calendar-event bg-yellow-100 text-yellow-800 rounded p-1 mb-1 text-xs cursor-pointer truncate" data-event="event4">
+                                    Вебинар
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Пятая неделя июля -->
+                        <div class="grid grid-cols-7">
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">28</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">29</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">30</div>
+                                <div class="calendar-event bg-purple-100 text-purple-800 rounded p-1 mb-1 text-xs cursor-pointer truncate" data-event="event9">
+                                    Мастер-класс
+                                </div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm">31</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm text-gray-400">1</div>
+                            </div>
+                            <div class="border-r border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm text-gray-400">2</div>
+                            </div>
+                            <div class="border-b border-gray-200 p-2 h-28">
+                                <div class="text-sm text-gray-400">3</div>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Мероприятие 3 -->
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <div class="bg-indigo-600 text-white p-4 flex justify-between items-center">
-                            <span class="font-bold">5 сентября, 2023</span>
-                            <span class="px-2 py-1 bg-indigo-800 rounded text-xs font-bold">Форум</span>
+                    <!-- Год -->
+                    <div id="yearView" class="calendar-view hidden grid grid-cols-4 gap-4 p-6">
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors">
+                            <div class="text-center font-bold text-gray-800 mb-2">Январь</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                                <!-- Даты будут добавлены скриптом -->
+                            </div>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                2 мероприятия
+                            </div>
                         </div>
-                        <div class="p-6">
-                            <h3 class="font-bold text-xl mb-2">Форум молодых лидеров Таджикистана</h3>
-                            <p class="text-gray-600 mb-4">Ежегодное мероприятие для обмена опытом между успешными молодыми профессионалами и студентами. Нетворкинг и возможности карьерного роста.</p>
-                            <div class="flex items-center text-gray-500 mb-4">
-                                <i class="fas fa-map-marker-alt mr-2"></i>
-                                <span>Душанбе, Национальная библиотека</span>
+                        
+                        <!-- Февраль -->
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors">
+                            <div class="text-center font-bold text-gray-800 mb-2">Февраль</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                                <!-- Даты будут добавлены скриптом -->
                             </div>
-                            <div class="flex items-center text-gray-500 mb-6">
-                                <i class="fas fa-clock mr-2"></i>
-                                <span>09:00 - 18:00</span>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                1 мероприятие
                             </div>
-                            <a href="#" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">Зарегистрироваться</a>
+                        </div>
+                        
+                        <!-- Март -->
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors">
+                            <div class="text-center font-bold text-gray-800 mb-2">Март</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                                <!-- Даты будут добавлены скриптом -->
+                            </div>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                3 мероприятия
+                            </div>
+                        </div>
+                        
+                        <!-- Остальные месяцы аналогично -->
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors">
+                            <div class="text-center font-bold text-gray-800 mb-2">Апрель</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                                <!-- Даты будут добавлены скриптом -->
+                            </div>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                2 мероприятия
+                            </div>
+                        </div>
+                        
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors">
+                            <div class="text-center font-bold text-gray-800 mb-2">Май</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                                <!-- Даты будут добавлены скриптом -->
+                            </div>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                1 мероприятие
+                            </div>
+                        </div>
+                        
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors">
+                            <div class="text-center font-bold text-gray-800 mb-2">Июнь</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                                <!-- Даты будут добавлены скриптом -->
+                            </div>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                3 мероприятия
+                            </div>
+                        </div>
+                        
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors bg-indigo-50">
+                            <div class="text-center font-bold text-indigo-800 mb-2">Июль</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                                <!-- Даты будут добавлены скриптом -->
+                            </div>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                7 мероприятий
+                            </div>
+                        </div>
+                        
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors">
+                            <div class="text-center font-bold text-gray-800 mb-2">Август</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                                <!-- Даты будут добавлены скриптом -->
+                            </div>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                4 мероприятия
+                            </div>
+                        </div>
+                        
+                        <!-- Остальные 4 месяца -->
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors">
+                            <div class="text-center font-bold text-gray-800 mb-2">Сентябрь</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <!-- День недели -->
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                                <!-- Даты будут добавлены скриптом -->
+                            </div>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                5 мероприятий
+                            </div>
+                        </div>
+                        
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors">
+                            <div class="text-center font-bold text-gray-800 mb-2">Октябрь</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                            </div>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                3 мероприятия
+                            </div>
+                        </div>
+                        
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors">
+                            <div class="text-center font-bold text-gray-800 mb-2">Ноябрь</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                            </div>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                2 мероприятия
+                            </div>
+                        </div>
+                        
+                        <div class="month-miniature border rounded-lg p-3 cursor-pointer hover:bg-indigo-50 transition-colors">
+                            <div class="text-center font-bold text-gray-800 mb-2">Декабрь</div>
+                            <div class="grid grid-cols-7 gap-1 text-xs">
+                                <span class="text-center">П</span>
+                                <span class="text-center">В</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">Ч</span>
+                                <span class="text-center">П</span>
+                                <span class="text-center">С</span>
+                                <span class="text-center">В</span>
+                            </div>
+                            <div class="mt-1 text-xs text-indigo-600 font-semibold">
+                                1 мероприятие
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="text-center mt-10">
-                    <a href="#" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
-                        <span>Смотреть все мероприятия</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
+                <!-- Всплывающее окно с деталями события -->
+                <div id="eventPopup" class="hidden fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl p-6 z-50 w-full max-w-md">
+                    <button id="closeEventBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="event-type-badge inline-block px-3 py-1 rounded-full text-sm font-semibold mb-4"></div>
+                    <h3 id="eventTitle" class="text-2xl font-bold text-gray-800 mb-3"></h3>
+                    <div class="flex items-center mb-4 text-gray-600">
+                        <i class="far fa-calendar mr-2"></i>
+                        <span id="eventDate"></span>
+                    </div>
+                    <div class="flex items-center mb-4 text-gray-600">
+                        <i class="far fa-clock mr-2"></i>
+                        <span id="eventTime"></span>
+                    </div>
+                    <div class="flex items-center mb-4 text-gray-600">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <span id="eventLocation"></span>
+                    </div>
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">О мероприятии</h4>
+                        <p id="eventDescription" class="text-gray-600"></p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <a href="#" id="eventLink" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">
+                            Зарегистрироваться
+                        </a>
+                        <button id="addToCalendarBtn" class="inline-flex items-center px-4 py-2 border border-indigo-600 text-indigo-600 rounded hover:bg-indigo-50 transition-colors">
+                            <i class="fas fa-calendar-plus mr-2"></i> Добавить в календарь
+                        </button>
+                    </div>
                 </div>
+                
+                <!-- Затемнение для модального окна -->
+                <div id="modalOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
             </div>
             
             <!-- Вкладка Программы развития -->
@@ -1496,7 +1977,458 @@
                     document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
                 });
             });
+            
+            // Инициализация календаря
+            initCalendar();
         });
+        
+        // Функционал календаря
+        function initCalendar() {
+            const viewWeekBtn = document.getElementById('viewWeek');
+            const viewMonthBtn = document.getElementById('viewMonth');
+            const viewYearBtn = document.getElementById('viewYear');
+            const weekView = document.getElementById('weekView');
+            const monthView = document.getElementById('monthView');
+            const yearView = document.getElementById('yearView');
+            const prevMonthBtn = document.getElementById('prevMonthBtn');
+            const nextMonthBtn = document.getElementById('nextMonthBtn');
+            const currentMonthYear = document.getElementById('currentMonthYear');
+            const eventPopup = document.getElementById('eventPopup');
+            const closeEventBtn = document.getElementById('closeEventBtn');
+            const modalOverlay = document.getElementById('modalOverlay');
+            
+            // Данные о событиях
+            const events = {
+                event1: {
+                    title: "Тренинг по навыкам презентации",
+                    date: "21 июля 2025",
+                    time: "09:00 - 12:00",
+                    location: "Бизнес-центр 'Душанбе Плаза', 3 этаж",
+                    description: "Практический тренинг по развитию навыков публичных выступлений и эффективных презентаций. Вы научитесь структурировать информацию, удерживать внимание аудитории и уверенно отвечать на вопросы.",
+                    type: "Тренинг",
+                    typeColor: "blue"
+                },
+                event2: {
+                    title: "Семинар по цифровым навыкам",
+                    date: "23 июля 2025",
+                    time: "14:00 - 17:30",
+                    location: "IT-парк 'Технологии будущего'",
+                    description: "Интенсивный семинар, посвященный развитию цифровых компетенций. Будут рассмотрены основы программирования, работа с данными и освоение современных онлайн-инструментов для профессионального роста.",
+                    type: "Семинар",
+                    typeColor: "green"
+                },
+                event3: {
+                    title: "Ярмарка вакансий IT-компаний",
+                    date: "25 июля 2025",
+                    time: "10:00 - 18:00",
+                    location: "Выставочный центр 'Кохи Вахдат'",
+                    description: "Крупнейшая в Таджикистане ярмарка вакансий в сфере информационных технологий. Более 30 компаний предложат стажировки и вакансии для специалистов разного уровня. Возьмите с собой резюме!",
+                    type: "Ярмарка",
+                    typeColor: "purple"
+                },
+                event4: {
+                    title: "Вебинар: Фриланс для начинающих",
+                    date: "27 июля 2025",
+                    time: "16:00 - 18:00",
+                    location: "Онлайн (ссылка будет отправлена после регистрации)",
+                    description: "Вебинар для тех, кто хочет начать карьеру фрилансера. Опытные специалисты расскажут, как найти первых клиентов, правильно оценить свою работу и эффективно организовать рабочий процесс.",
+                    type: "Вебинар",
+                    typeColor: "yellow"
+                },
+                event5: {
+                    title: "Форум молодых предпринимателей",
+                    date: "5 июля 2025",
+                    time: "09:00 - 19:00",
+                    location: "Гостиница 'Хайят Ридженси'",
+                    description: "Ежегодный форум, объединяющий молодых предпринимателей Таджикистана. В программе: выступления успешных бизнесменов, практические мастер-классы и возможность найти партнеров для новых проектов.",
+                    type: "Форум",
+                    typeColor: "red"
+                },
+                event6: {
+                    title: "Мастер-класс по деловым переговорам",
+                    date: "9 июля 2025",
+                    time: "15:00 - 18:00",
+                    location: "Торгово-промышленная палата Таджикистана",
+                    description: "Практический мастер-класс по ведению деловых переговоров, разработке стратегии и тактики, а также методам достижения выгодных условий сделки.",
+                    type: "Мастер-класс",
+                    typeColor: "green"
+                },
+                event7: {
+                    title: "Конференция по цифровой трансформации",
+                    date: "15 июля 2025",
+                    time: "10:00 - 17:00",
+                    location: "Национальная библиотека Таджикистана",
+                    description: "Международная конференция, посвященная вопросам цифровой трансформации экономики Таджикистана. Участие примут эксперты из стран СНГ и Европы.",
+                    type: "Конференция",
+                    typeColor: "blue"
+                },
+                event8: {
+                    title: "Ярмарка вакансий государственной службы",
+                    date: "18 июля 2025",
+                    time: "09:00 - 16:00",
+                    location: "Дворец нации",
+                    description: "Ярмарка вакансий для молодых специалистов, желающих работать в государственных структурах. Представители министерств и ведомств расскажут о карьерных возможностях и социальных гарантиях.",
+                    type: "Ярмарка вакансий",
+                    typeColor: "indigo"
+                },
+                event9: {
+                    title: "Мастер-класс по финансовой грамотности",
+                    date: "30 июля 2025",
+                    time: "18:00 - 20:00",
+                    location: "Филиал Национального банка Таджикистана",
+                    description: "Практический мастер-класс по основам финансовой грамотности: личный бюджет, инвестиции, кредиты и финансовое планирование.",
+                    type: "Мастер-класс",
+                    typeColor: "purple"
+                }
+            };
+            
+            // Переключение видов календаря
+            viewWeekBtn.addEventListener('click', function() {
+                setActiveView(this, weekView);
+            });
+            
+            viewMonthBtn.addEventListener('click', function() {
+                setActiveView(this, monthView);
+            });
+            
+            viewYearBtn.addEventListener('click', function() {
+                setActiveView(this, yearView);
+            });
+            
+            function setActiveView(button, view) {
+                // Деактивация всех кнопок и видов
+                viewWeekBtn.classList.remove('active');
+                viewMonthBtn.classList.remove('active');
+                viewYearBtn.classList.remove('active');
+                weekView.classList.remove('active');
+                monthView.classList.remove('active');
+                yearView.classList.remove('active');
+                
+                // Активация нужного вида и кнопки
+                button.classList.add('active');
+                view.classList.add('active');
+            }
+            
+            // Навигация по месяцам
+            let currentMonth = 7; // Июль
+            let currentYear = 2025;
+            
+            prevMonthBtn.addEventListener('click', function() {
+                currentMonth--;
+                if (currentMonth < 1) {
+                    currentMonth = 12;
+                    currentYear--;
+                }
+                updateMonthDisplay();
+            });
+            
+            nextMonthBtn.addEventListener('click', function() {
+                currentMonth++;
+                if (currentMonth > 12) {
+                    currentMonth = 1;
+                    currentYear++;
+                }
+                updateMonthDisplay();
+            });
+            
+            function updateMonthDisplay() {
+                const months = [
+                    'Январь', 'Февраль', 'Март', 'Апрель', 
+                    'Май', 'Июнь', 'Июль', 'Август', 
+                    'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                ];
+                currentMonthYear.textContent = `${months[currentMonth-1]} ${currentYear}`;
+                
+                // Здесь можно добавить логику обновления календаря при смене месяца
+            }
+            
+            // Инициализация текущего месяца
+            updateMonthDisplay();
+            
+            // Обработка кликов по событиям календаря
+            document.querySelectorAll('.calendar-event').forEach(eventElement => {
+                eventElement.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const eventId = this.dataset.event;
+                    const eventData = events[eventId];
+                    
+                    if (eventData) {
+                        showEventDetails(eventData);
+                    }
+                });
+            });
+            
+            // Отображение деталей события
+            function showEventDetails(eventData) {
+                // Заполняем данными всплывающее окно
+                document.getElementById('eventTitle').textContent = eventData.title;
+                document.getElementById('eventDate').textContent = eventData.date;
+                document.getElementById('eventTime').textContent = eventData.time;
+                document.getElementById('eventLocation').textContent = eventData.location;
+                document.getElementById('eventDescription').textContent = eventData.description;
+                
+                // Устанавливаем тип события и цвет
+                const eventTypeBadge = document.querySelector('.event-type-badge');
+                eventTypeBadge.textContent = eventData.type;
+                eventTypeBadge.className = `event-type-badge inline-block px-3 py-1 rounded-full text-sm font-semibold mb-4 bg-${eventData.typeColor}-100 text-${eventData.typeColor}-800`;
+                
+                // Показываем всплывающее окно и затемнение
+                modalOverlay.classList.remove('hidden');
+                eventPopup.classList.remove('hide');
+                eventPopup.classList.add('show');
+                eventPopup.classList.remove('hidden');
+            }
+            
+            // Закрытие всплывающего окна
+            closeEventBtn.addEventListener('click', closeEventPopup);
+            modalOverlay.addEventListener('click', closeEventPopup);
+            
+            function closeEventPopup() {
+                eventPopup.classList.remove('show');
+                eventPopup.classList.add('hide');
+                setTimeout(() => {
+                    eventPopup.classList.add('hidden');
+                    modalOverlay.classList.add('hidden');
+                }, 200);
+            }
+            
+            // Добавление события в календарь
+            document.getElementById('addToCalendarBtn').addEventListener('click', function() {
+                alert('Событие добавлено в ваш календарь!');
+            });
+            
+            // Наполнение миниатюр месяцев в годовом обзоре
+            const monthMiniatures = document.querySelectorAll('.month-miniature');
+            monthMiniatures.forEach(miniature => {
+                miniature.addEventListener('click', function() {
+                    // При клике на миниатюру месяца переключаемся на месячный вид
+                    // и выбираем соответствующий месяц
+                    const monthName = this.querySelector('.text-gray-800, .text-indigo-800').textContent;
+                    const months = [
+                        'Январь', 'Февраль', 'Март', 'Апрель', 
+                        'Май', 'Июнь', 'Июль', 'Август', 
+                        'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                    ];
+                    currentMonth = months.indexOf(monthName) + 1;
+                    updateMonthDisplay();
+                    setActiveView(viewMonthBtn, monthView);
+                });
+            });
+            
+            // Функция для управления боковым меню
+            window.toggleSideMenu = function() {
+                const menu = document.querySelector('.side-menu');
+                const overlay = document.querySelector('.overlay');
+                
+                menu.classList.toggle('open');
+                overlay.classList.toggle('show');
+            }
+
+            // Закрытие меню при клике вне его области или на overlay
+            document.addEventListener('click', (event) => {
+                const menu = document.querySelector('.side-menu');
+                const menuLabel = document.querySelector('.menu-label');
+                const overlay = document.querySelector('.overlay');
+
+                if (!menu.contains(event.target) && !menuLabel.contains(event.target)) {
+                    menu.classList.remove('open');
+                    overlay.classList.remove('show');
+                }
+            });
+
+            // Закрытие меню при клике на overlay
+            document.querySelector('.overlay').addEventListener('click', () => {
+                const menu = document.querySelector('.side-menu');
+                const overlay = document.querySelector('.overlay');
+                
+                menu.classList.remove('open');
+                overlay.classList.remove('show');
+            });
+
+            // Профиль и языки
+            const profileMenuBtn = document.getElementById('profileMenuBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+            const langMenuBtn = document.getElementById('langMenuBtn');
+            const langDropdown = document.getElementById('langDropdown');
+            const currentLangLabel = document.getElementById('currentLangLabel');
+
+            profileMenuBtn?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+                langDropdown.classList.add('hidden');
+            });
+            document.addEventListener('click', function(e) {
+                if (profileDropdownContainer && !profileDropdownContainer.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+
+            langMenuBtn?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                langDropdown.classList.toggle('hidden');
+                profileDropdown.classList.add('hidden');
+            });
+            document.addEventListener('click', function(e) {
+                if (langDropdown && !langDropdown.contains(e.target) && langMenuBtn && !langMenuBtn.contains(e.target)) {
+                    langDropdown.classList.add('hidden');
+                }
+            });
+            langDropdown?.querySelectorAll('button[data-lang]').forEach(btn => {
+                btn.onclick = function() {
+                    currentLangLabel.textContent = this.textContent;
+                    langDropdown.classList.add('hidden');
+                };
+            });
+
+            // Google Translate stub
+            window.googleTranslateElementInit = function() {}
+
+            // Логика модального окна
+            const infoModalOverlay = document.getElementById('infoModalOverlay');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const modalActionBtn = document.getElementById('modalActionBtn');
+
+            function openModal(title, message, actionType) {
+                modalTitle.textContent = title;
+                modalMessage.textContent = message;
+                infoModalOverlay.classList.add('active');
+
+                modalActionBtn.onclick = () => {
+                    closeModal();
+                    if (actionType === 'apply_internship_redirect') {
+                        window.location.href = 'professional_retraining_application.html';
+                    }
+                };
+            }
+
+            function closeModal() {
+                infoModalOverlay.classList.remove('active');
+            }
+
+            closeModalBtn.addEventListener('click', closeModal);
+            infoModalOverlay.addEventListener('click', (e) => {
+                if (e.target === infoModalOverlay) {
+                    closeModal();
+                }
+            });
+
+            // Обработчики для кнопок на карточках программ
+            document.querySelectorAll('.action-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.dataset.action;
+                    const title = this.dataset.title;
+                    const message = this.dataset.message;
+
+                    if (action === 'apply_internship') {
+                        openModal(title, message, 'apply_internship_redirect');
+                    } else {
+                        openModal(title, message, 'generic_confirmation');
+                    }
+                });
+            });
+
+            // Новости
+            const newsData = [
+                {
+                    org: "UNICEF",
+                    text: "Открыт набор на бесплатные курсы цифровых навыков для молодежи 16-25 лет.",
+                    date: "09.06.2025",
+                    link: "#"
+                },
+                {
+                    org: "USAID",
+                    text: "Стартует программа стажировок в IT-компаниях Душанбе. Подайте заявку до 20 июня!",
+                    date: "08.06.2025",
+                    link: "#"
+                },
+                {
+                    org: "British Council",
+                    text: "Мастер-класс по развитию soft skills для студентов вузов. Регистрация открыта.",
+                    date: "07.06.2025",
+                    link: "#"
+                },
+                {
+                    org: "Aga Khan Foundation",
+                    text: "Программа наставничества для молодых женщин. Участие бесплатное.",
+                    date: "06.06.2025",
+                    link: "#"
+                },
+                {
+                    org: "World Bank",
+                    text: "Гранты на обучение и карьерное консультирование для выпускников колледжей.",
+                    date: "05.06.2025",
+                    link: "#"
+                }
+            ];
+
+            const newsList = document.getElementById('newsList');
+            let currentIndex = 0;
+            const visibleCount = 2;
+
+            function renderNews() {
+                newsList.innerHTML = '';
+                for (let i = 0; i < visibleCount; i++) {
+                    const idx = (currentIndex + i) % newsData.length;
+                    const news = newsData[idx];
+                    const item = document.createElement('a');
+                    item.href = news.link;
+                    item.className = 'news-item hover:bg-indigo-100 transition-colors';
+                    item.innerHTML = `
+                        <span class="news-org">${news.org}</span>
+                        <span>${news.text}</span>
+                        <span class="news-date"><i class="far fa-calendar-alt mr-1"></i>${news.date}</span>
+                    `;
+                    newsList.appendChild(item);
+                }
+            }
+            renderNews();
+
+            function nextNews() {
+                currentIndex = (currentIndex + 1) % newsData.length;
+                newsList.style.transform = 'translateY(32px)';
+                setTimeout(() => {
+                    newsList.style.transition = 'transform 0.6s cubic-bezier(.4,2,.6,1)';
+                    newsList.style.transform = 'translateY(0)';
+                    renderNews();
+                }, 100);
+            }
+            function prevNews() {
+                currentIndex = (currentIndex - 1 + newsData.length) % newsData.length;
+                newsList.style.transform = 'translateY(-32px)';
+                setTimeout(() => {
+                    newsList.style.transition = 'transform 0.6s cubic-bezier(.4,2,.6,1)';
+                    newsList.style.transform = 'translateY(0)';
+                    renderNews();
+                }, 100);
+            }
+
+            document.getElementById('nextNews').onclick = nextNews;
+            document.getElementById('prevNews').onclick = prevNews;
+
+            // Автоматическая прокрутка
+            let tickerInterval = setInterval(nextNews, 5000);
+            newsList.onmouseenter = () => clearInterval(tickerInterval);
+            newsList.onmouseleave = () => tickerInterval = setInterval(nextNews, 5000);
+            
+            // Пульсация AI виджета
+            function pulseAIWidget() {
+                const aiWidget = document.getElementById('aiAssistantWidget');
+                if (aiWidget) {
+                    aiWidget.style.animation = 'none';
+                    aiWidget.offsetHeight;
+                    aiWidget.style.animation = 'ai-pulse 0.8s ease-in-out';
+                    setTimeout(() => {
+                        aiWidget.style.animation = 'none';
+                    }, 800);
+                }
+            }
+            
+            setInterval(pulseAIWidget, 4000);
+            setTimeout(pulseAIWidget, 2000);
+        }
     </script>
 </body>
 </html>
