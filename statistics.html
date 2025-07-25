@@ -545,6 +545,26 @@
         .trend-down {
             color: #f56565;
         }
+        
+        /* Стили для заблокированной и разблокированной кнопки */
+        .tab-button.locked {
+            color: #a0aec0;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .tab-button.locked .fa-lock {
+            color: #cbd5e0;
+        }
+
+        .tab-button.unlocked {
+            color: #4338ca;
+            cursor: pointer;
+        }
+
+        .tab-button.unlocked .fa-unlock {
+            color: #4338ca;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -669,6 +689,9 @@
                     <button class="tab-button" data-tab="demographic">Демография</button>
                     <button class="tab-button" data-tab="education">Образование</button>
                     <button class="tab-button" data-tab="migration">Миграция</button>
+                    <button id="generateReportBtn" class="tab-button locked" data-tab="report">
+                        Сгенерировать отчет <i class="fas fa-lock ml-1 text-xs"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -3614,5 +3637,41 @@
             }
         </style>
     </div>
+    
+    <!-- Скрипт для обработки кнопки "Сгенерировать отчет" -->
+    <script>
+        // Обработчик для кнопки "Сгенерировать отчет"
+        const generateReportBtn = document.getElementById('generateReportBtn');
+        
+        // Обработчик для кнопки подписки
+        document.getElementById('subscribeBtn').addEventListener('click', function() {
+            // Показываем модальное окно подписки
+            document.getElementById('subscriptionModal').style.display = 'flex';
+            
+            // После оформления подписки (для демонстрации сразу разблокируем)
+            setTimeout(() => {
+                // Разблокировать премиум функции
+                document.querySelectorAll('.premium-content-overlay').forEach(overlay => {
+                    overlay.style.display = 'none';
+                });
+                
+                // Разблокировать кнопку "Сгенерировать отчет"
+                generateReportBtn.classList.remove('locked');
+                generateReportBtn.classList.add('unlocked');
+                generateReportBtn.innerHTML = 'Сгенерировать отчет <i class="fas fa-unlock ml-1 text-xs"></i>';
+            }, 1000);
+        });
+        
+        // Обработчик клика на кнопку "Сгенерировать отчет"
+        generateReportBtn.addEventListener('click', function() {
+            if (generateReportBtn.classList.contains('unlocked')) {
+                // Перенаправляем на страницу инструментов аналитики
+                window.location.href = 'tools_analitic.html';
+            } else {
+                // Показываем модальное окно подписки
+                document.getElementById('subscriptionModal').style.display = 'flex';
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инструменты аналитики</title>
+    <meta name="description" content="Инструменты аналитики рынка труда Республики Таджикистан. Расширенные возможности для анализа занятости, безработицы, вакансий и трудовой миграции.">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.0.0"></script>
+    <script>
+        // Регистрируем плагины для Chart.js
+        Chart.register(ChartDataLabels);
+    </script>
+    <style>
+        /* Анимация дрожания и переливания цвета для кнопки меню */
+        @keyframes menuLabelShake {
+            0%, 100% {
+                transform: translateY(-50%) rotate(0deg);
+                background: #4a5568;
+            }
+            25% {
+                transform: translateY(-48%) rotate(-2deg);
+                background: #5a6678;
+            }
+            50% {
+                transform: translateY(-50%) rotate(2deg);
+                background: #3a4558;
+            }
+            75% {
+                transform: translateY(-52%) rotate(-1deg);
+                background: #4a5568;
+            }
+        }
+
+        /* Кнопка меню посередине левой части страницы */
+        .menu-label {
+            position: fixed;
+            top: 50%;
+            left: -2px;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            color: #fff;
+            padding: 20px 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            z-index: 40;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            animation: menuLabelShake 5s infinite;
+        }
+
+        /* Боковое меню */
+        .side-menu {
+            position: fixed;
+            left: -280px;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: #e2e8f0;
+            z-index: 50;
+            overflow-y: auto;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            padding-top: 20px;
+        }
+
+        .side-menu a {
+            text-decoration: none;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .side-menu a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .side-menu a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Подменю */
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .submenu.active {
+            max-height: 500px;
+        }
+
+        /* Затемнение фона при открытом меню */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 45;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        /* Стили для тела страницы, когда меню открыто */
+        body.menu-open .side-menu {
+            left: 0;
+        }
+
+        body.menu-open .overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Красивый градиент для фона шапки */
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+
+        /* Стили для карточек */
+        .stat-widget {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-widget:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Стили для вкладок */
+        .tab-button {
+            padding: 1rem 1.5rem;
+            color: #4b5563;
+            font-weight: 500;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .tab-button:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: transparent;
+            transition: background-color 0.2s;
+        }
+
+        .tab-button.active {
+            color: #4338ca;
+        }
+
+        .tab-button.active:after {
+            background-color: #4338ca;
+        }
+
+        /* Стили для контента вкладок */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Стили для интерактивных графиков */
+        .chart-container {
+            position: relative;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            min-height: 300px;
+        }
+
+        .interactive {
+            cursor: pointer;
+        }
+
+        .chart-data-source {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        .chart-caption {
+            font-size: 0.875rem;
+            color: #4b5563;
+            margin-top: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Стили для премиум контента */
+        .premium-blur {
+            position: relative;
+        }
+
+        .premium-content-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+            border-radius: 0.5rem;
+            z-index: 10;
+        }
+
+        /* Стили для трендов */
+        .trend-up {
+            color: #10b981;
+        }
+
+        .trend-down {
+            color: #ef4444;
+        }
+
+        /* Пульсирующая кнопка */
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+            }
+        }
+
+        .pulse-button {
+            animation: pulse 2s infinite;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 60;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Стили для раздела с интервалами дат */
+        .date-range-control {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Стили для карточек инструментов */
+        .tool-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            border-color: #4f46e5;
+        }
+
+        .tool-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Пользовательские стили для форм */
+        .custom-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234B5563'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        /* Анимация загрузки */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #4f46e5;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Секция с отступами */
+        .section-spacing {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-center">
+                <div class="text-center">
+                    <h1 class="text-3xl font-bold">Инструменты аналитики</h1>
+                    <p class="mt-2 text-lg">Расширенные возможности для анализа рынка труда</p>
+                </div>
+            </div>
+        </div>
+    </header>
+ 
+    <!-- Вертикальная надпись "Меню" -->
+    <div class="menu-label">Меню</div>
+
+    <!-- Overlay для закрытия меню -->
+    <div class="overlay"></div>
+
+    <!-- Боковое меню -->
+    <div class="side-menu">
+        <a class="flex items-center px-4 py-3 mt-3 hover:bg-gray-700 hover:text-gray-300" href="index.html">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-sm font-medium">Главная</span>
+        </a>
+        <div class="mt-3 border-t border-gray-700">
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="news.html">
+                <i class="fas fa-newspaper text-lg"></i>
+                <span class="text-sm font-medium">Новости</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="serchwork.html">
+                <i class="fas fa-search text-lg"></i>
+                <span class="text-sm font-medium">Поиск работы</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="statistics.html">
+                <i class="fas fa-chart-bar text-lg"></i>
+                <span class="text-sm font-medium">Статистика</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#programs">
+                <i class="fas fa-briefcase text-lg"></i>
+                <span class="text-sm font-medium">Программы</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="index.html#education">
+                <i class="fas fa-graduation-cap text-lg"></i>
+                <span class="text-sm font-medium">Образование</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="about.html">
+                <i class="fas fa-info-circle text-lg"></i>
+                <span class="text-sm font-medium">О портале</span>
+            </a>
+        </div>
+        <div class="mt-3 border-t border-gray-700">
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="free_lans/freelance_homepage.html">
+                <i class="fas fa-laptop-code text-lg"></i>
+                <span class="text-sm font-medium">Фриланс</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="analitic_pg.html">
+                <i class="fas fa-chart-line text-lg"></i>
+                <span class="text-sm font-medium">Аналитика</span>
+            </a>
+        </div>
+        <div class="mt-3 border-t border-gray-700">
+            <div class="menu-item">
+                <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#">
+                    <div class="flex items-center">
+                        <i class="fas fa-user-circle text-lg"></i>
+                        <span class="text-sm font-medium ml-3">Мой профиль</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-xs opacity-70"></i>
+                </a>
+                <div class="submenu">
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="user_profile.html">
+                        <i class="fas fa-cog text-sm mr-2"></i>
+                        <span>Настройки профиля</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="employer_profile.html">
+                        <i class="fas fa-building text-sm mr-2"></i>
+                        <span>Кабинет работодателя</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="user_dashboard.html">
+                        <i class="fas fa-user text-sm mr-2"></i>
+                        <span>Кабинет соискателя</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="#">
+                        <i class="fas fa-headset text-sm mr-2"></i>
+                        <span>Кабинет консультанта</span>
+                    </a>
+                    <a class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 hover:text-gray-300" href="register.html">
+                        <i class="fas fa-user-plus text-sm mr-2"></i>
+                        <span>Регистрация</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <!-- Информация о премиум-доступе -->
+        <div class="bg-indigo-50 py-4 border-b border-indigo-100">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div>
+                        <p class="text-indigo-800 font-medium">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            Ваша подписка активна до 25 августа 2025 г.
+                        </p>
+                    </div>
+                    <button id="extendSubscriptionBtn" class="mt-3 md:mt-0 px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                        Продлить подписку <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Панель с настройками дат -->
+        <div class="bg-white border-b border-gray-200 py-4">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 md:mb-0">Параметры отчета</h2>
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="date-range-control">
+                            <div>
+                                <label for="startDate" class="block text-sm font-medium text-gray-700 mb-1">С даты</label>
+                                <input type="date" id="startDate" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                            </div>
+                            <div>
+                                <label for="endDate" class="block text-sm font-medium text-gray-700 mb-1">По дату</label>
+                                <input type="date" id="endDate" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="reportType" class="block text-sm font-medium text-gray-700 mb-1">Тип отчета</label>
+                            <select id="reportType" class="custom-select w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                                <option value="comprehensive">Комплексный анализ</option>
+                                <option value="regional">Региональный анализ</option>
+                                <option value="industries">Отраслевой анализ</option>
+                                <option value="demographic">Демографический анализ</option>
+                                <option value="migration">Анализ миграции</option>
+                            </select>
+                        </div>
+                        <button id="generateReportBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors self-end">
+                            Сгенерировать отчет <i class="fas fa-file-download ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Инструменты аналитики -->
+        <section class="section-spacing bg-gray-50">
+            <div class="container mx-auto px-4">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">Инструменты аналитики</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                    <!-- Инструмент прогнозирования тенденций -->
+                    <div class="tool-card bg-white">
+                        <div class="tool-icon bg-blue-100 text-blue-600">
+                            <i class="fas fa-chart-line text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Прогнозирование тенденций</h3>
+                        <p class="text-gray-600 mb-4">Анализ исторических данных для прогнозирования будущих тенденций на рынке труда с использованием моделей машинного обучения.</p>
+                        <a href="#" class="text-indigo-600 font-medium hover:text-indigo-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Инструмент анализа навыков -->
+                    <div class="tool-card bg-white">
+                        <div class="tool-icon bg-green-100 text-green-600">
+                            <i class="fas fa-brain text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Анализ востребованных навыков</h3>
+                        <p class="text-gray-600 mb-4">Выявление наиболее востребованных профессиональных навыков по отраслям и регионам с анализом тенденций.</p>
+                        <a href="#" class="text-indigo-600 font-medium hover:text-indigo-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Инструмент сравнительного анализа -->
+                    <div class="tool-card bg-white">
+                        <div class="tool-icon bg-purple-100 text-purple-600">
+                            <i class="fas fa-balance-scale text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Сравнительный анализ</h3>
+                        <p class="text-gray-600 mb-4">Сравнение показателей рынка труда между различными регионами, отраслями или временными периодами.</p>
+                        <a href="#" class="text-indigo-600 font-medium hover:text-indigo-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Инструмент анализа зарплат -->
+                    <div class="tool-card bg-white">
+                        <div class="tool-icon bg-yellow-100 text-yellow-600">
+                            <i class="fas fa-money-bill-wave text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Анализ зарплат</h3>
+                        <p class="text-gray-600 mb-4">Детальный анализ уровней заработной платы по профессиям, отраслям и регионам с прогнозированием динамики.</p>
+                        <a href="#" class="text-indigo-600 font-medium hover:text-indigo-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Инструмент анализа миграции -->
+                    <div class="tool-card bg-white">
+                        <div class="tool-icon bg-red-100 text-red-600">
+                            <i class="fas fa-globe-asia text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Анализ трудовой миграции</h3>
+                        <p class="text-gray-600 mb-4">Комплексный анализ трудовой миграции, включая направления, профессиональную структуру и экономическое влияние.</p>
+                        <a href="#" class="text-indigo-600 font-medium hover:text-indigo-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Инструмент анализа вакансий -->
+                    <div class="tool-card bg-white">
+                        <div class="tool-icon bg-indigo-100 text-indigo-600">
+                            <i class="fas fa-briefcase text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Анализ вакансий</h3>
+                        <p class="text-gray-600 mb-4">Глубокий анализ динамики вакансий, требований работодателей и соответствия предложений спросу на рынке труда.</p>
+                        <a href="#" class="text-indigo-600 font-medium hover:text-indigo-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Интерактивный конструктор отчетов -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-10">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Конструктор отчетов</h3>
+                    <p class="text-gray-600 mb-6">Создайте персонализированный отчет по рынку труда, выбрав интересующие вас показатели и визуализации.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="text-lg font-medium text-gray-800 mb-3">Выберите показатели</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="indicator1" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="indicator1" class="ml-2 text-gray-700">Уровень безработицы</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="indicator2" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="indicator2" class="ml-2 text-gray-700">Уровень занятости</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="indicator3" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="indicator3" class="ml-2 text-gray-700">Средняя заработная плата</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="indicator4" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="indicator4" class="ml-2 text-gray-700">Количество вакансий</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="indicator5" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="indicator5" class="ml-2 text-gray-700">Востребованные навыки</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="indicator6" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="indicator6" class="ml-2 text-gray-700">Миграционные потоки</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-medium text-gray-800 mb-3">Выберите визуализации</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="visual1" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="visual1" class="ml-2 text-gray-700">Линейные графики</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="visual2" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="visual2" class="ml-2 text-gray-700">Столбчатые диаграммы</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="visual3" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="visual3" class="ml-2 text-gray-700">Круговые диаграммы</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="visual4" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="visual4" class="ml-2 text-gray-700">Тепловые карты</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="visual5" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="visual5" class="ml-2 text-gray-700">Радарные диаграммы</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="visual6" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                    <label for="visual6" class="ml-2 text-gray-700">Карты распределения</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                        Сформировать отчет <i class="fas fa-file-chart-line ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Анализ разрыва навыков -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Анализ разрыва навыков</h3>
+                    <p class="text-gray-600 mb-6">Исследуйте несоответствие между навыками, которые ищут работодатели, и навыками, доступными на рынке труда.</p>
+                    
+                    <div class="chart-container interactive">
+                        <canvas id="skillsGapChart"></canvas>
+                        <div class="chart-data-source">Источник: Аналитический центр TOCO, 2024</div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="text-lg font-medium text-green-800 mb-2">Высокий спрос</h4>
+                            <ul class="space-y-1 text-green-700">
+                                <li>• Программирование (Python, JavaScript)</li>
+                                <li>• Анализ данных</li>
+                                <li>• Кибербезопасность</li>
+                                <li>• Цифровой маркетинг</li>
+                                <li>• Управление проектами</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <h4 class="text-lg font-medium text-yellow-800 mb-2">Средний спрос</h4>
+                            <ul class="space-y-1 text-yellow-700">
+                                <li>• Графический дизайн</li>
+                                <li>• Продажи</li>
+                                <li>• Бухгалтерский учет</li>
+                                <li>• Административная поддержка</li>
+                                <li>• Обслуживание клиентов</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="text-lg font-medium text-red-800 mb-2">Избыток на рынке</h4>
+                            <ul class="space-y-1 text-red-700">
+                                <li>• Общее делопроизводство</li>
+                                <li>• Базовые компьютерные навыки</li>
+                                <li>• Общий менеджмент</li>
+                                <li>• Преподавание общих предметов</li>
+                                <li>• Курьерские услуги</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <a href="#" class="text-indigo-600 font-medium hover:text-indigo-800 transition-colors">
+                            Подробный анализ разрыва навыков <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">О портале</h3>
+                    <p class="text-gray-200 mb-4">TOCO - национальный портал по трудоустройству, предоставляющий информацию о рынке труда и возможностях трудоустройства в Таджикистане.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-200 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-200 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-200 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-gray-200 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Ссылки</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-200 hover:text-white">Главная</a></li>
+                        <li><a href="about.html" class="text-gray-200 hover:text-white">О нас</a></li>
+                        <li><a href="news.html" class="text-gray-200 hover:text-white">Новости</a></li>
+                        <li><a href="serchwork.html" class="text-gray-200 hover:text-white">Поиск работы</a></li>
+                        <li><a href="statistics.html" class="text-gray-200 hover:text-white">Статистика</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Контакты</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-gray-300"></i>
+                            <span class="text-gray-200">ул. Рудаки 42, Душанбе, Таджикистан</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone mt-1 mr-3 text-gray-300"></i>
+                            <span class="text-gray-200">+992 37 221-05-63</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-3 text-gray-300"></i>
+                            <span class="text-gray-200">info@toco.tj</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Подписка</h3>
+                    <p class="text-gray-200 mb-4">Подпишитесь на нашу рассылку, чтобы получать последние новости и обновления.</p>
+                    <form class="space-y-2">
+                        <input type="email" placeholder="Ваш email" class="w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button type="submit" class="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                            Подписаться
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-gray-300">© 2025 TOCO. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Инициализация обработчиков и переключателей для всей страницы
+            // Объявляем функцию toggleSideMenu глобально в области видимости
+            window.toggleSideMenu = function() {
+                const body = document.body;
+                body.classList.toggle('menu-open');
+            };
+            
+            // Открыть/закрыть меню при клике на надпись "Меню"
+            document.querySelector('.menu-label').addEventListener('click', window.toggleSideMenu);
+            
+            // Закрыть меню при клике на overlay
+            document.querySelector('.overlay').addEventListener('click', window.toggleSideMenu);
+
+            // Обработка выпадающих подменю
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach(item => {
+                const link = item.querySelector('a');
+                const submenu = item.querySelector('.submenu');
+                
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    submenu.classList.toggle('active');
+                    
+                    // Поворачиваем стрелку
+                    const arrow = link.querySelector('.fa-chevron-right');
+                    if (submenu.classList.contains('active')) {
+                        arrow.classList.replace('fa-chevron-right', 'fa-chevron-down');
+                    } else {
+                        arrow.classList.replace('fa-chevron-down', 'fa-chevron-right');
+                    }
+                });
+            });
+
+            // Инициализация даты для полей выбора дат
+            const today = new Date();
+            const oneYearAgo = new Date();
+            oneYearAgo.setFullYear(today.getFullYear() - 1);
+            
+            document.getElementById('startDate').valueAsDate = oneYearAgo;
+            document.getElementById('endDate').valueAsDate = today;
+
+            // Обработчик для кнопки генерации отчета
+            document.getElementById('generateReportBtn').addEventListener('click', function() {
+                // Здесь будет код для генерации отчета
+                // Для демонстрации показываем уведомление
+                alert('Отчет будет сгенерирован и отправлен на вашу электронную почту.');
+            });
+
+            // Инициализация примера графика для анализа разрыва навыков
+            const skillsGapCtx = document.getElementById('skillsGapChart').getContext('2d');
+            const skillsGapChart = new Chart(skillsGapCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Программирование', 'Анализ данных', 'Маркетинг', 'Продажи', 'Управление', 'Языки'],
+                    datasets: [
+                        {
+                            label: 'Требуемые навыки',
+                            data: [85, 90, 70, 60, 75, 65],
+                            backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                            borderColor: 'rgba(79, 70, 229, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(79, 70, 229, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(79, 70, 229, 1)'
+                        },
+                        {
+                            label: 'Доступные навыки',
+                            data: [40, 35, 60, 80, 60, 80],
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(239, 68, 68, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(239, 68, 68, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Разрыв между требуемыми и доступными навыками',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Анимация для карточек инструментов
+            const toolCards = document.querySelectorAll('.tool-card');
+            toolCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-5px)';
+                    card.style.boxShadow = '0 10px 15px rgba(0, 0, 0, 0.1)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
