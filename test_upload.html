@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Загрузка файлов — Портал рынка труда</title>
+    <title>Массовая загрузка вакансий — Портал рынка труда</title>
     <!-- Подключение Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Подключение Font Awesome для иконок -->
@@ -80,16 +80,16 @@
         <div class="container mx-auto px-4 py-6">
             <div class="text-center">
                 <h2 class="text-3xl font-bold">
-                    Загрузка файлов
+                    Массовая загрузка вакансий
                 </h2>
-                <p class="text-lg mt-2">Загружайте документы, резюме и другие файлы в нашу систему</p>
+                <p class="text-lg mt-2">Загрузите сразу несколько вакансий с помощью CSV или Excel файла</p>
             </div>
         </div>
     </header>
 
     <main class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Загрузка документов</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Загрузка нескольких вакансий</h2>
             
             <!-- Инструкции -->
             <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
@@ -99,20 +99,36 @@
                     </div>
                     <div class="ml-3">
                         <p class="text-sm text-blue-700">
-                            Вы можете загрузить файлы форматов PDF, DOC, DOCX, JPG, PNG. Максимальный размер файла: 10 МБ.
+                            Для массовой загрузки вакансий, пожалуйста, скачайте наш шаблон, заполните его и загрузите обратно. 
+                            Поддерживаемые форматы: CSV, XLSX. Максимальный размер файла: 5 МБ.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Область загрузки файлов -->
+            <!-- Шаг 1: Скачать шаблон -->
+            <div class="border-b border-gray-200 pb-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Шаг 1: Скачайте шаблон</h3>
+                <div class="flex space-x-4">
+                    <a href="#" id="download-csv" class="flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
+                        <i class="fas fa-file-csv mr-2"></i> Скачать CSV шаблон
+                    </a>
+                    <a href="#" id="download-xlsx" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-file-excel mr-2"></i> Скачать Excel шаблон
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Шаг 2: Загрузка заполненного файла -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Шаг 2: Загрузите заполненный файл</h3>
             <div id="upload-area" class="file-upload-area flex flex-col items-center justify-center p-8 mb-8 rounded-lg">
                 <i class="fas fa-cloud-upload-alt text-4xl text-indigo-600 mb-4"></i>
-                <p class="text-gray-700 mb-2">Перетащите файлы сюда или</p>
+                <p class="text-gray-700 mb-2">Перетащите заполненный файл сюда или</p>
                 <button id="browse-files" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">
-                    Выбрать файлы
+                    Выбрать файл
                 </button>
-                <input type="file" id="file-upload-input" class="file-upload-input" multiple>
+                <input type="file" id="file-upload-input" class="file-upload-input" accept=".csv,.xlsx,.xls">
             </div>
 
             <!-- Прогресс загрузки -->
@@ -128,9 +144,20 @@
 
             <!-- Превью загруженных файлов -->
             <div class="mb-8">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">Загруженные файлы</h3>
-                <div id="file-previews" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Здесь будут отображаться превью загруженных файлов -->
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Загруженный файл</h3>
+                <div id="file-previews" class="grid grid-cols-1 gap-4">
+                    <!-- Здесь будет отображаться превью загруженного файла -->
+                </div>
+            </div>
+
+            <!-- Шаг 3: Проверка и обработка -->
+            <div id="validation-results" class="hidden mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Шаг 3: Проверка данных</h3>
+                <div id="validation-status" class="p-4 rounded mb-4">
+                    <!-- Здесь будет отображаться статус валидации -->
+                </div>
+                <div id="validation-details" class="max-h-64 overflow-y-auto bg-gray-50 p-4 rounded">
+                    <!-- Здесь будут отображаться детали валидации -->
                 </div>
             </div>
 
@@ -140,53 +167,88 @@
                     Отмена
                 </button>
                 <button id="submit-upload" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">
-                    Сохранить
+                    Загрузить вакансии
                 </button>
             </div>
         </div>
 
         <!-- Документация -->
         <div class="max-w-4xl mx-auto mt-12 bg-white rounded-xl shadow-lg p-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Требования к документам</h2>
-
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Как работает массовая загрузка</h2>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Резюме</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Требования к файлу</h3>
                     <ul class="list-disc list-inside text-gray-700 space-y-2">
-                        <li>Формат: PDF, DOC, DOCX</li>
+                        <li>Формат: CSV или XLSX</li>
                         <li>Размер: до 5 МБ</li>
-                        <li>Должно содержать контактную информацию</li>
-                        <li>Рекомендуется включить фотографию</li>
+                        <li>Не изменяйте названия столбцов</li>
+                        <li>Заполните все обязательные поля</li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Документы об образовании</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Обязательные поля</h3>
                     <ul class="list-disc list-inside text-gray-700 space-y-2">
-                        <li>Формат: PDF, JPG, PNG</li>
-                        <li>Размер: до 10 МБ</li>
-                        <li>Сканы должны быть четкими и читаемыми</li>
-                        <li>Обязательно включите все страницы документа</li>
+                        <li>Название вакансии</li>
+                        <li>Город</li>
+                        <li>Описание должностных обязанностей</li>
+                        <li>Требуемый опыт работы</li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Сертификаты</h3>
-                    <ul class="list-disc list-inside text-gray-700 space-y-2">
-                        <li>Формат: PDF, JPG, PNG</li>
-                        <li>Размер: до 5 МБ каждый</li>
-                        <li>Проверьте, что видны все важные детали</li>
-                    </ul>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Процесс обработки</h3>
+                    <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                        <li>Система проверяет корректность данных</li>
+                        <li>При обнаружении ошибок вы получите отчет</li>
+                        <li>Исправьте ошибки и загрузите файл повторно</li>
+                        <li>После успешной проверки вакансии будут опубликованы</li>
+                    </ol>
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Фотографии</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Советы</h3>
                     <ul class="list-disc list-inside text-gray-700 space-y-2">
-                        <li>Формат: JPG, PNG</li>
-                        <li>Размер: до 2 МБ</li>
-                        <li>Рекомендуемое разрешение: 400x600 пикселей</li>
-                        <li>Фото должно быть на светлом фоне</li>
+                        <li>Используйте точные и конкретные названия</li>
+                        <li>Указывайте реалистичный уровень зарплаты</li>
+                        <li>Подробно описывайте требования и обязанности</li>
+                        <li>Не загружайте более 100 вакансий за раз</li>
                     </ul>
+                </div>
+            </div>
+            
+            <!-- Пример таблицы данных -->
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Пример заполнения таблицы</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-2 bg-gray-100 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">Название вакансии</th>
+                                <th class="px-4 py-2 bg-gray-100 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">Город</th>
+                                <th class="px-4 py-2 bg-gray-100 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">Зарплата от</th>
+                                <th class="px-4 py-2 bg-gray-100 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">Зарплата до</th>
+                                <th class="px-4 py-2 bg-gray-100 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">Опыт</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">Менеджер по продажам</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">Душанбе</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">2000</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">3000</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">1-3 года</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">Программист PHP</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">Худжанд</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">2500</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">4000</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">3-5 лет</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -245,11 +307,69 @@
             const filePreviews = document.getElementById('file-previews');
             const cancelBtn = document.getElementById('cancel-upload');
             const submitBtn = document.getElementById('submit-upload');
+            const validationResults = document.getElementById('validation-results');
+            const validationStatus = document.getElementById('validation-status');
+            const validationDetails = document.getElementById('validation-details');
+            const downloadCsvBtn = document.getElementById('download-csv');
+            const downloadXlsxBtn = document.getElementById('download-xlsx');
             
             // Счетчик загруженных файлов
             let uploadedFiles = 0;
+            let fileData = null;
             
-            // Имитация загрузки файлов
+            // Создание CSV шаблона для скачивания
+            downloadCsvBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const csvContent = 'Название вакансии,Город,Зарплата от,Зарплата до,Опыт,Тип занятости,График работы,Описание должностных обязанностей,Требования к кандидату,Условия работы\n' +
+                                  'Менеджер по продажам,Душанбе,2000,3000,1-3 года,Полная занятость,Полный день,"Поиск и привлечение клиентов, проведение переговоров, заключение договоров","Опыт работы в продажах, коммуникабельность, целеустремленность","Официальное трудоустройство, бонусы от продаж, корпоративная связь"\n' +
+                                  'Программист PHP,Худжанд,2500,4000,3-5 лет,Полная занятость,Полный день,"Разработка и поддержка веб-приложений, оптимизация кода","Знание PHP, MySQL, JavaScript, опыт работы с фреймворками","Комфортный офис, гибкий график, профессиональный рост"';
+                
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'template_vacancies.csv';
+                link.click();
+            });
+            
+            // Создание XLSX шаблона для скачивания (эмуляция)
+            downloadXlsxBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('В реальном приложении здесь будет скачиваться Excel файл с шаблоном. В данной демонстрации, пожалуйста, используйте CSV шаблон.');
+            });
+            
+            // Имитация проверки файла
+            function validateFile(file) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        // Имитация результатов проверки
+                        const randomErrors = Math.random() > 0.5;
+                        
+                        if (randomErrors) {
+                            // Имитация ошибок валидации
+                            resolve({
+                                success: false,
+                                totalRows: 10,
+                                validRows: 7,
+                                errors: [
+                                    { row: 3, field: 'Зарплата от', message: 'Значение должно быть числом' },
+                                    { row: 5, field: 'Город', message: 'Указанный город не найден в базе данных' },
+                                    { row: 8, field: 'Название вакансии', message: 'Обязательное поле не заполнено' }
+                                ]
+                            });
+                        } else {
+                            // Имитация успешной валидации
+                            resolve({
+                                success: true,
+                                totalRows: 10,
+                                validRows: 10,
+                                processedVacancies: 10
+                            });
+                        }
+                    }, 2000);
+                });
+            }
+            
+            // Имитация загрузки файла
             function simulateUpload(file, preview) {
                 let progress = 0;
                 progressContainer.classList.remove('hidden');
@@ -265,13 +385,16 @@
                         progressPercent.textContent = '100%';
                         
                         // Добавляем класс успешной загрузки
-                        preview.querySelector('.file-status').innerHTML = '<span class="text-green-500"><i class="fas fa-check-circle"></i> Загружено</span>';
+                        preview.querySelector('.file-status').innerHTML = '<span class="text-green-500"><i class="fas fa-check-circle"></i> Файл загружен</span>';
                         
                         uploadedFiles++;
                         
-                        // Если все файлы загружены, скрываем прогресс-бар через 1 секунду
+                        // Если файл загружен, скрываем прогресс-бар через 1 секунду
                         setTimeout(() => {
                             progressContainer.classList.add('hidden');
+                            
+                            // Отображаем результаты валидации
+                            showValidation(file);
                         }, 1000);
                     } else {
                         // Обновляем прогресс-бар
@@ -284,6 +407,66 @@
                 }, 200);
             }
             
+            // Показ результатов валидации
+            function showValidation(file) {
+                validationResults.classList.remove('hidden');
+                validationStatus.innerHTML = '<div class="flex items-center"><i class="fas fa-spinner fa-spin text-blue-500 mr-2"></i> Проверка данных...</div>';
+                
+                validateFile(file).then(result => {
+                    if (result.success) {
+                        validationStatus.className = 'p-4 rounded mb-4 bg-green-100 text-green-700';
+                        validationStatus.innerHTML = `
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                <div>
+                                    <p class="font-semibold">Проверка пройдена успешно!</p>
+                                    <p class="text-sm mt-1">Обработано ${result.totalRows} строк, найдено ${result.processedVacancies} вакансий.</p>
+                                </div>
+                            </div>
+                        `;
+                        
+                        validationDetails.innerHTML = `
+                            <div class="text-green-700">
+                                <p class="font-semibold mb-2">Вакансии готовы к публикации</p>
+                                <p>Нажмите кнопку "Загрузить вакансии" для публикации всех вакансий.</p>
+                            </div>
+                        `;
+                        
+                        // Активируем кнопку загрузки
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    } else {
+                        validationStatus.className = 'p-4 rounded mb-4 bg-red-100 text-red-700';
+                        validationStatus.innerHTML = `
+                            <div class="flex items-center">
+                                <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+                                <div>
+                                    <p class="font-semibold">Обнаружены ошибки в файле</p>
+                                    <p class="text-sm mt-1">Обработано ${result.totalRows} строк, корректных: ${result.validRows}, с ошибками: ${result.totalRows - result.validRows}.</p>
+                                </div>
+                            </div>
+                        `;
+                        
+                        let errorHtml = '<div class="text-red-700"><p class="font-semibold mb-2">Найдены следующие ошибки:</p><ul class="list-disc list-inside space-y-1">';
+                        
+                        result.errors.forEach(error => {
+                            errorHtml += `<li>Строка ${error.row}: ${error.field} - ${error.message}</li>`;
+                        });
+                        
+                        errorHtml += '</ul><p class="mt-4">Пожалуйста, исправьте ошибки и загрузите файл повторно.</p></div>';
+                        
+                        validationDetails.innerHTML = errorHtml;
+                        
+                        // Деактивируем кнопку загрузки
+                        submitBtn.disabled = true;
+                        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    }
+                    
+                    // Сохраняем данные для дальнейшей обработки
+                    fileData = result;
+                });
+            }
+            
             // Создание превью файла
             function createFilePreview(file) {
                 const preview = document.createElement('div');
@@ -291,12 +474,10 @@
                 
                 // Определяем иконку в зависимости от типа файла
                 let fileIcon = 'fa-file';
-                if (file.type.includes('image')) {
-                    fileIcon = 'fa-file-image';
-                } else if (file.type.includes('pdf')) {
-                    fileIcon = 'fa-file-pdf';
-                } else if (file.type.includes('word') || file.type.includes('doc')) {
-                    fileIcon = 'fa-file-word';
+                if (file.name.endsWith('.csv')) {
+                    fileIcon = 'fa-file-csv';
+                } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+                    fileIcon = 'fa-file-excel';
                 }
                 
                 preview.innerHTML = `
@@ -325,6 +506,8 @@
                 const removeBtn = preview.querySelector('.remove-file');
                 removeBtn.addEventListener('click', function() {
                     preview.remove();
+                    validationResults.classList.add('hidden');
+                    fileInput.value = '';
                 });
                 
                 return preview;
@@ -339,14 +522,16 @@
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
             }
             
-            // Событие клика на кнопку "Выбрать файлы"
+            // Событие клика на кнопку "Выбрать файл"
             browseBtn.addEventListener('click', function() {
                 fileInput.click();
             });
             
             // Событие изменения в input[type="file"]
             fileInput.addEventListener('change', function(e) {
-                handleFiles(e.target.files);
+                if (e.target.files.length > 0) {
+                    handleFiles(e.target.files);
+                }
             });
             
             // Drag & Drop события
@@ -379,20 +564,45 @@
             uploadArea.addEventListener('drop', function(e) {
                 const dt = e.dataTransfer;
                 const files = dt.files;
-                handleFiles(files);
+                
+                if (files.length > 0) {
+                    handleFiles(files);
+                }
             });
             
             // Обработка файлов
             function handleFiles(files) {
+                // Очищаем предыдущие превью
+                filePreviews.innerHTML = '';
+                validationResults.classList.add('hidden');
+                
+                // Берем только первый файл для загрузки
                 if (files.length > 0) {
-                    Array.from(files).forEach(file => {
-                        // Создаем превью файла
-                        const preview = createFilePreview(file);
-                        filePreviews.appendChild(preview);
-                        
-                        // Имитируем загрузку файла
-                        simulateUpload(file, preview);
-                    });
+                    const file = files[0];
+                    
+                    // Проверяем формат файла
+                    const validExtensions = ['.csv', '.xlsx', '.xls'];
+                    const fileName = file.name.toLowerCase();
+                    let isValidFile = false;
+                    
+                    for (const ext of validExtensions) {
+                        if (fileName.endsWith(ext)) {
+                            isValidFile = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!isValidFile) {
+                        alert('Пожалуйста, загрузите файл в формате CSV или Excel (XLSX, XLS).');
+                        return;
+                    }
+                    
+                    // Создаем превью файла
+                    const preview = createFilePreview(file);
+                    filePreviews.appendChild(preview);
+                    
+                    // Имитируем загрузку файла
+                    simulateUpload(file, preview);
                 }
             }
             
@@ -400,26 +610,60 @@
             cancelBtn.addEventListener('click', function() {
                 // Очищаем все превью
                 filePreviews.innerHTML = '';
-                // Скрываем прогресс-бар
+                // Скрываем прогресс-бар и результаты валидации
                 progressContainer.classList.add('hidden');
+                validationResults.classList.add('hidden');
                 // Сбрасываем счетчик
                 uploadedFiles = 0;
+                // Очищаем input file
+                fileInput.value = '';
             });
             
-            // Кнопка сохранения
+            // Кнопка сохранения/загрузки вакансий
             submitBtn.addEventListener('click', function() {
-                if (uploadedFiles > 0) {
-                    alert('Файлы успешно загружены и сохранены!');
-                    // Очищаем все превью
-                    filePreviews.innerHTML = '';
-                    // Скрываем прогресс-бар
-                    progressContainer.classList.add('hidden');
-                    // Сбрасываем счетчик
-                    uploadedFiles = 0;
-                } else {
-                    alert('Пожалуйста, загрузите хотя бы один файл.');
+                if (fileData && fileData.success) {
+                    // Имитация отправки на сервер
+                    validationStatus.className = 'p-4 rounded mb-4 bg-blue-100 text-blue-700';
+                    validationStatus.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fas fa-spinner fa-spin text-blue-500 mr-2"></i>
+                            <div>
+                                <p class="font-semibold">Публикация вакансий...</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    setTimeout(() => {
+                        validationStatus.className = 'p-4 rounded mb-4 bg-green-100 text-green-700';
+                        validationStatus.innerHTML = `
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                <div>
+                                    <p class="font-semibold">Вакансии успешно опубликованы!</p>
+                                    <p class="text-sm mt-1">Опубликовано ${fileData.processedVacancies} вакансий.</p>
+                                </div>
+                            </div>
+                        `;
+                        
+                        validationDetails.innerHTML = `
+                            <div class="text-green-700">
+                                <p class="font-semibold mb-2">Что дальше?</p>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Вы можете просмотреть все опубликованные вакансии в разделе "Мои вакансии"</li>
+                                    <li>Система автоматически начнет подбор кандидатов</li>
+                                    <li>Вы получите уведомление, когда появятся первые отклики</li>
+                                </ul>
+                            </div>
+                        `;
+                    }, 2000);
+                } else if (!fileData) {
+                    alert('Пожалуйста, загрузите файл с вакансиями.');
                 }
             });
+            
+            // Инициализация
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
         });
     </script>
 </body>
