@@ -620,6 +620,172 @@
             </div>
         </div>
     </div>
+    
+    <!-- Сначала виджет FL, строго над ИИ -->
+    <div id="freelanceBlobWidget"
+         class="fixed z-50 cursor-pointer group transition-all duration-400 ease-in-out"
+         onclick="window.location.href='free_lans/freelance_homepage.html'"
+         style="width: 64px; height: 64px; right: 24px; bottom: 120px;">
+        <div class="relative w-full h-full flex items-center justify-center">
+            <span class="absolute inset-0 shadow-lg transition-all duration-400 ease-in-out blob-bg"></span>
+            <span class="relative z-10 text-white font-extrabold text-2xl select-none transition-all duration-400 ease-in-out flex items-center justify-center h-full w-full"
+                  style="letter-spacing: 0.05em;">FL</span>
+            <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-semibold text-base px-4 opacity-0 group-hover:opacity-100 transition-all duration-400 ease-in-out z-20"
+                  style="pointer-events:none; white-space:nowrap;">
+                FREELANCE HuB
+            </span>
+        </div>
+        <style>
+            @keyframes blob-gradient-anim {
+                0% { filter: hue-rotate(0deg);}
+                100% { filter: hue-rotate(360deg);}
+            }
+            #freelanceBlobWidget {
+                box-shadow: 0 8px 32px 0 rgba(31, 175, 81, 0.18);
+                overflow: visible;
+                background: transparent !important;
+                border-radius: 50%;
+                transition: width 0.4s cubic-bezier(.4,2,.6,1), height 0.3s, border-radius 0.4s;
+            }
+            #freelanceBlobWidget .blob-bg {
+                background: linear-gradient(135deg, #1faf51 0%, #1f8f71 50%, #44a08d 100%);
+                border-radius: 50%;
+                width: 100%;
+                height: 100%;
+                animation: blob-gradient-anim 6s ease-in-out infinite alternate;
+                transition: border-radius 0.4s, width 0.4s, height 0.4s;
+                display: block;
+            }
+            #freelanceBlobWidget:hover {
+                width: 260px !important;
+                height: 64px !important;
+                border-radius: 32px / 50%;
+            }
+            #freelanceBlobWidget:hover .blob-bg {
+                border-radius: 32px / 50%;
+                width: 100%;
+                height: 100%;
+            }
+            #freelanceBlobWidget span.text-2xl {
+                opacity: 1;
+                transition: opacity 0.3s;
+            }
+            #freelanceBlobWidget:hover span.text-2xl {
+                opacity: 0;
+            }
+            #freelanceBlobWidget span.text-base {
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            #freelanceBlobWidget:hover span.text-base {
+                opacity: 1;
+            }
+            #freelanceBlobWidget .group-hover\:opacity-100 {
+                transition: opacity 0.4s;
+            }
+            #freelanceBlobWidget:hover .group-hover\:opacity-100 {
+                opacity: 1 !important;
+            }
+            @media (max-width: 768px) {
+                #freelanceBlobWidget {
+                    right: 12px !important;
+                    bottom: 112px !important;
+                }
+            }
+        </style>
+    </div>
+
+    <!-- Затем виджет ИИ, строго под FL -->
+    <div id="aiAssistantWidget"
+         class="fixed z-50 cursor-pointer group transition-all duration-400 ease-in-out"
+         onclick="window.location.href='ai_lmis.html'"
+         style="width: 64px; height: 64px; right: 24px; bottom: 48px;">
+        <div class="relative w-full h-full flex items-center justify-center">
+            <span class="absolute inset-0 shadow-lg transition-all duration-400 ease-in-out ai-blob-bg"></span>
+            <span class="relative z-10 text-white font-extrabold text-2xl select-none transition-all duration-400 ease-in-out flex items-center justify-center h-full w-full"
+                  style="letter-spacing: 0.05em;">AI</span>
+            <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-semibold text-base px-4 opacity-0 group-hover:opacity-100 transition-all duration-400 ease-in-out z-20"
+                  style="pointer-events:none; white-space:nowrap;">
+                ИИ-консультант
+            </span>
+        </div>
+        <style>
+            @keyframes ai-blob-gradient-anim {
+                0% { filter: hue-rotate(0deg);}
+                100% { filter: hue-rotate(360deg);}
+            }
+            
+            /* Пульсирующая анимация для AI виджета */
+            @keyframes ai-pulse {
+                0% { 
+                    transform: scale(1);
+                    box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
+                }
+                50% { 
+                    transform: scale(1.1);
+                    box-shadow: 0 12px 40px 0 rgba(102, 126, 234, 0.4);
+                }
+                100% { 
+                    transform: scale(1);
+                    box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
+                }
+            }
+            
+            #aiAssistantWidget {
+                box-shadow: 0 8px 32px 0 rgba(102, 126, 234, 0.18);
+                overflow: visible;
+                background: transparent !important;
+                border-radius: 50%;
+                transition: width 0.4s cubic-bezier(.4,2,.6,1), height 0.3s, border-radius 0.4s;
+                animation: ai-pulse 0.8s ease-in-out;
+            }
+            #aiAssistantWidget .ai-blob-bg {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+                border-radius: 50%;
+                width: 100%;
+                height: 100%;
+                animation: ai-blob-gradient-anim 6s ease-in-out infinite alternate;
+                transition: border-radius 0.4s, width 0.4s, height 0.4s;
+                display: block;
+            }
+            #aiAssistantWidget:hover {
+                width: 260px !important;
+                height: 64px !important;
+                border-radius: 32px / 50%;
+            }
+            #aiAssistantWidget:hover .ai-blob-bg {
+                border-radius: 32px / 50%;
+                width: 100%;
+                height: 100%;
+            }
+            #aiAssistantWidget span.text-2xl {
+                opacity: 1;
+                transition: opacity 0.3s;
+            }
+            #aiAssistantWidget:hover span.text-2xl {
+                opacity: 0;
+            }
+            #aiAssistantWidget span.text-base {
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            #aiAssistantWidget:hover span.text-base {
+                opacity: 1;
+            }
+            #aiAssistantWidget .group-hover\:opacity-100 {
+                transition: opacity 0.4s;
+            }
+            #aiAssistantWidget:hover .group-hover\:opacity-100 {
+                opacity: 1 !important;
+            }
+            @media (max-width: 768px) {
+                #aiAssistantWidget {
+                    right: 12px !important;
+                    bottom: 40px !important;
+                }
+            }
+        </style>
+    </div>
 
     <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -880,6 +1046,32 @@ document.querySelector('.overlay').addEventListener('click', () => {
     menu.classList.remove('open');
     overlay.classList.remove('show');
 });
+
+// Пульсация AI виджета
+function pulseAIWidget() {
+    const aiWidget = document.getElementById('aiAssistantWidget');
+    if (aiWidget) {
+        // Удаляем анимацию, если она уже есть
+        aiWidget.style.animation = 'none';
+        
+        // Форсируем reflow для перезапуска анимации
+        aiWidget.offsetHeight;
+        
+        // Добавляем анимацию пульсации
+        aiWidget.style.animation = 'ai-pulse 0.8s ease-in-out';
+        
+        // Удаляем анимацию после завершения, чтобы она могла повториться
+        setTimeout(() => {
+            aiWidget.style.animation = 'none';
+        }, 800);
+    }
+}
+
+// Запускаем пульсацию каждые 4 секунды
+setInterval(pulseAIWidget, 4000);
+
+// Первая пульсация через 2 секунды после загрузки страницы
+setTimeout(pulseAIWidget, 2000);
 </script>
 </body>
 </html>
