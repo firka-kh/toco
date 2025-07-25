@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Подключение Font Awesome для иконок -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <!-- Подключение SheetJS для работы с Excel файлами -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -192,8 +194,11 @@
                     <ul class="list-disc list-inside text-gray-700 space-y-2">
                         <li>Название вакансии</li>
                         <li>Город</li>
-                        <li>Описание должностных обязанностей</li>
-                        <li>Требуемый опыт работы</li>
+                        <li>Зарплата от</li>
+                        <li>Зарплата до</li>
+                        <li>Опыт</li>
+                        <li>Работодатель</li>
+                        <li>Описание вакансии</li>
                     </ul>
                 </div>
 
@@ -230,6 +235,8 @@
                                 <th class="px-4 py-2 bg-gray-100 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">Зарплата от</th>
                                 <th class="px-4 py-2 bg-gray-100 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">Зарплата до</th>
                                 <th class="px-4 py-2 bg-gray-100 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">Опыт</th>
+                                <th class="px-4 py-2 bg-gray-100 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">Работодатель</th>
+                                <th class="px-4 py-2 bg-gray-100 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">Описание вакансии</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -239,6 +246,8 @@
                                 <td class="px-4 py-2 border-b border-gray-200 text-sm">2000</td>
                                 <td class="px-4 py-2 border-b border-gray-200 text-sm">3000</td>
                                 <td class="px-4 py-2 border-b border-gray-200 text-sm">1-3 года</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">ООО "ТехноПлюс"</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">Поиск и привлечение клиентов, проведение переговоров, заключение договоров</td>
                             </tr>
                             <tr>
                                 <td class="px-4 py-2 border-b border-gray-200 text-sm">Программист PHP</td>
@@ -246,6 +255,8 @@
                                 <td class="px-4 py-2 border-b border-gray-200 text-sm">2500</td>
                                 <td class="px-4 py-2 border-b border-gray-200 text-sm">4000</td>
                                 <td class="px-4 py-2 border-b border-gray-200 text-sm">3-5 лет</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">ИТ "Алиф"</td>
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm">Разработка и поддержка веб-приложений, оптимизация кода, интеграция с внешними сервисами</td>
                             </tr>
                         </tbody>
                     </table>
@@ -317,13 +328,50 @@
             let uploadedFiles = 0;
             let fileData = null;
             
+            // Данные для шаблонов
+            const templateData = [
+                {
+                    "Название вакансии": "Менеджер по продажам",
+                    "Город": "Душанбе",
+                    "Зарплата от": 2000,
+                    "Зарплата до": 3000,
+                    "Опыт": "1-3 года",
+                    "Работодатель": "ООО \"ТехноПлюс\"",
+                    "Описание вакансии": "Поиск и привлечение клиентов, проведение переговоров, заключение договоров"
+                },
+                {
+                    "Название вакансии": "Программист PHP",
+                    "Город": "Худжанд",
+                    "Зарплата от": 2500,
+                    "Зарплата до": 4000,
+                    "Опыт": "3-5 лет",
+                    "Работодатель": "ИТ \"Алиф\"",
+                    "Описание вакансии": "Разработка и поддержка веб-приложений, оптимизация кода, интеграция с внешними сервисами"
+                }
+            ];
+            
             // Создание CSV шаблона для скачивания
             downloadCsvBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                const csvContent = 'Название вакансии,Город,Зарплата от,Зарплата до,Опыт,Тип занятости,График работы,Описание должностных обязанностей,Требования к кандидату,Условия работы\n' +
-                                  'Менеджер по продажам,Душанбе,2000,3000,1-3 года,Полная занятость,Полный день,"Поиск и привлечение клиентов, проведение переговоров, заключение договоров","Опыт работы в продажах, коммуникабельность, целеустремленность","Официальное трудоустройство, бонусы от продаж, корпоративная связь"\n' +
-                                  'Программист PHP,Худжанд,2500,4000,3-5 лет,Полная занятость,Полный день,"Разработка и поддержка веб-приложений, оптимизация кода","Знание PHP, MySQL, JavaScript, опыт работы с фреймворками","Комфортный офис, гибкий график, профессиональный рост"';
                 
+                // Формируем заголовки CSV
+                const headers = Object.keys(templateData[0]);
+                let csvContent = headers.join(',') + '\n';
+                
+                // Добавляем строки с данными
+                templateData.forEach(row => {
+                    let rowData = headers.map(header => {
+                        // Экранируем кавычки и добавляем кавычки, если значение содержит запятую
+                        let value = String(row[header]).replace(/"/g, '""');
+                        if (value.includes(',') || value.includes('\n') || value.includes('"')) {
+                            value = `"${value}"`;
+                        }
+                        return value;
+                    });
+                    csvContent += rowData.join(',') + '\n';
+                });
+                
+                // Создаем файл для скачивания
                 const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
@@ -331,10 +379,28 @@
                 link.click();
             });
             
-            // Создание XLSX шаблона для скачивания (эмуляция)
+            // Создание XLSX шаблона для скачивания
             downloadXlsxBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                alert('В реальном приложении здесь будет скачиваться Excel файл с шаблоном. В данной демонстрации, пожалуйста, используйте CSV шаблон.');
+                
+                try {
+                    // Создаем новую книгу Excel
+                    const wb = XLSX.utils.book_new();
+                    
+                    // Преобразуем массив данных в рабочий лист Excel
+                    const ws = XLSX.utils.json_to_sheet(templateData);
+                    
+                    // Добавляем рабочий лист в книгу
+                    XLSX.utils.book_append_sheet(wb, ws, "Вакансии");
+                    
+                    // Стилизация заголовков (не поддерживается в базовой версии)
+                    
+                    // Генерируем файл Excel и скачиваем его
+                    XLSX.writeFile(wb, "template_vacancies.xlsx");
+                } catch (error) {
+                    console.error("Ошибка при создании Excel файла:", error);
+                    alert("Произошла ошибка при создании Excel файла. Пожалуйста, используйте CSV шаблон.");
+                }
             });
             
             // Имитация проверки файла
