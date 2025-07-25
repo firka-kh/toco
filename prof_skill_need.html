@@ -476,6 +476,28 @@
     </div>
 
     <main class="container mx-auto px-4 py-8">
+        <!-- Горизонтальный виджет "Возможности для роста" -->
+        <section class="mb-8">
+            <div class="bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-4 flex items-center space-x-3">
+                    <i class="fas fa-graduation-cap text-2xl"></i>
+                    <span class="font-bold text-lg">Возможности для роста</span>
+                </div>
+                <div class="overflow-hidden">
+                    <div class="overflow-x-auto scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+                        <div class="flex w-full transition-transform duration-500" id="growthOpportunitiesList">
+                            <!-- Здесь будут размещены карточки возможностей (загрузятся через JavaScript) -->
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-blue-50 text-center py-3">
+                    <a href="skill_serch.html" id="allCoursesBtn" class="text-blue-700 font-semibold hover:underline text-sm flex items-center justify-center">
+                        <i class="fas fa-external-link-alt mr-2"></i> Все курсы и мероприятия
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <section id="retraining-application" class="section-spacing bg-white rounded-lg shadow-xl">
             <div class="container mx-auto px-4">
                 <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">
@@ -599,23 +621,7 @@
             </div>
         </section>
 
-        <!-- Вертикальная лента возможностей для роста (справа, с интерактивностью, 4 объявления одновременно) -->
-        <aside class="fixed top-36 right-0 z-40 hidden lg:block">
-            <div class="mr-6 bg-white rounded-2xl shadow-2xl border border-blue-100 w-80 overflow-hidden" id="growthOpportunities">
-                <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-4 flex items-center space-x-3">
-                    <i class="fas fa-graduation-cap text-2xl"></i>
-                    <span class="font-bold text-lg">Возможности для роста</span>
-                </div>
-                <ul class="divide-y divide-blue-50" id="growthOpportunitiesList">
-                    <!-- Здесь будут 4 объявления -->
-                </ul>
-                <div class="bg-blue-50 text-center py-3">
-                    <a href="skill_serch.html" id="allCoursesBtn" class="text-blue-700 font-semibold hover:underline text-sm flex items-center justify-center">
-                        <i class="fas fa-external-link-alt mr-2"></i> Все курсы и мероприятия
-                    </a>
-                </div>
-            </div>
-        </aside>
+        <!-- Удалена вертикальная лента возможностей для роста -->
     </main>
 
     <!-- Футер портала (аналогичен главной странице) -->
@@ -850,13 +856,12 @@
         let currentGrowthIndex = 0;
         const growthList = document.getElementById('growthOpportunitiesList');
 
-        function renderGrowthOpportunities(startIdx) {
+        function renderGrowthOpportunities() {
             let html = '';
-            for (let i = 0; i < 4; i++) {
-                const idx = (startIdx + i) % growthOpportunitiesData.length;
-                const item = growthOpportunitiesData[idx];
+            // Создаем все карточки для горизонтального скроллинга
+            growthOpportunitiesData.forEach((item, index) => {
                 html += `
-                    <li class="p-5 hover:bg-blue-50 transition">
+                    <div class="flex-shrink-0 w-1/4 min-w-[250px] p-4 border-r border-gray-100 hover:bg-blue-50 transition">
                         <div class="flex items-center space-x-3">
                             <i class="${item.icon} text-xl"></i>
                             <div>
@@ -865,20 +870,38 @@
                             </div>
                         </div>
                         <div class="mt-2 text-xs ${item.actionColor} font-semibold cursor-pointer hover:underline">${item.action}</div>
-                    </li>
+                    </div>
                 `;
-            }
+            });
             growthList.innerHTML = html;
         }
 
         // Первичная отрисовка
-        renderGrowthOpportunities(currentGrowthIndex);
+        renderGrowthOpportunities();
 
-        // Автоматическая смена каждые 3 секунды (сдвиг на 1)
-        setInterval(() => {
-            currentGrowthIndex = (currentGrowthIndex + 1) % growthOpportunitiesData.length;
-            renderGrowthOpportunities(currentGrowthIndex);
-        }, 3000);
+        // Функция для прокрутки влево
+        function scrollGrowthCards() {
+            const cardWidth = growthList.querySelector('div').offsetWidth;
+            const currentScroll = growthList.scrollLeft;
+            const maxScroll = growthList.scrollWidth - growthList.clientWidth;
+            
+            // Если мы достигли конца, возвращаемся в начало
+            if (currentScroll >= maxScroll - 10) {
+                growthList.scrollTo({
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            } else {
+                // Иначе прокручиваем на ширину одной карточки
+                growthList.scrollTo({
+                    left: currentScroll + cardWidth,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Автоматическая смена каждые 5 секунд
+        setInterval(scrollGrowthCards, 5000);
         
         // Функция для управления боковым меню
         function toggleSideMenu() {
