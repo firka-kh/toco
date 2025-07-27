@@ -2142,74 +2142,6 @@
 
             <!-- Вкладка "Обзор" -->
             <div class="tab-content active" id="overview">
-                <!-- Ключевые метрики в виде спидометров -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                    <!-- Метрика занятости -->
-                    <div class="stat-card glassmorphism p-4">
-                        <div class="flex items-center mb-2">
-                            <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center mr-3">
-                                <i class="fas fa-users text-blue-600 text-xl"></i>
-                            </div>
-                            <div class="text-right ml-auto">
-                                <div class="text-xs text-gray-500">vs прошлый месяц</div>
-                                <div class="text-green-500 font-semibold">+2.4%</div>
-                            </div>
-                        </div>
-                        <div class="text-3xl font-bold text-gray-800">1,847,230</div>
-                        <div class="text-sm text-gray-500 mb-3">Общая занятость</div>
-                        <button class="btn-primary-outline w-full">Занятость</button>
-                    </div>
-
-                    <!-- Метрика безработицы -->
-                    <div class="stat-card glassmorphism p-4">
-                        <div class="flex items-center mb-2">
-                            <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center mr-3">
-                                <i class="fas fa-user-slash text-red-600 text-xl"></i>
-                            </div>
-                            <div class="text-right ml-auto">
-                                <div class="text-xs text-gray-500">vs прошлый месяц</div>
-                                <div class="text-red-500 font-semibold">+0.3%</div>
-                            </div>
-                        </div>
-                        <div class="text-3xl font-bold text-gray-800">7.2%</div>
-                        <div class="text-sm text-gray-500 mb-3">Уровень безработицы</div>
-                        <button class="btn-primary-outline w-full">Безработица</button>
-                    </div>
-
-                    <!-- Метрика вакансий -->
-                    <div class="stat-card glassmorphism p-4">
-                        <div class="flex items-center mb-2">
-                            <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center mr-3">
-                                <i class="fas fa-briefcase text-green-600 text-xl"></i>
-                            </div>
-                            <div class="text-right ml-auto">
-                                <div class="text-xs text-gray-500">vs прошлый месяц</div>
-                                <div class="text-green-500 font-semibold">+12.8%</div>
-                            </div>
-                        </div>
-                        <div class="text-3xl font-bold text-gray-800">23,456</div>
-                        <div class="text-sm text-gray-500 mb-3">Активные вакансии</div>
-                        <button class="btn-primary-outline w-full">Вакансии</button>
-                    </div>
-
-                    <!-- Метрика зарплаты -->
-                    <div class="stat-card glassmorphism p-4">
-                        <div class="flex items-center mb-2">
-                            <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center mr-3">
-                                <i class="fas fa-money-bill-wave text-yellow-600 text-xl"></i>
-                            </div>
-                            <div class="text-right ml-auto">
-                                <div class="text-xs text-gray-500">vs прошлый месяц</div>
-                                <div class="text-green-500 font-semibold">+5.2%</div>
-                            </div>
-                        </div>
-                        <div class="text-3xl font-bold text-gray-800">2,847</div>
-                        <div class="text-sm text-gray-500 mb-3">Средняя зарплата (сомони)</div>
-                        <button class="btn-primary-outline w-full">Зарплаты</button>
-                    </div>
-                </div>
-
-                <!-- Графики аналитики -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     <!-- Пространство для нового виджета занятости -->
                     <div class="stat-card glassmorphism">
@@ -3347,7 +3279,6 @@
             if (typeof currentCharts === 'object') {
                 currentCharts.employmentTrend = null;
             }
-        }
             
             // РАСШИРЕННЫЕ ОПЦИИ С АНИМАЦИЕЙ
             const chartOptions = {
@@ -3726,10 +3657,13 @@
                 html += '</div></div>';
                 container.innerHTML = html;
             }
-        }
-
-        // Создание региональной статистики
-        function createRegionalStatsChart() {
+                }
+            });
+            
+            currentCharts.industryDistribution = chart;
+            
+            // Добавляем функциональность для отображения значения в центре диаграммы
+            const updateCenterValue = (index) => {
                 const centerValue = document.querySelector('.center-value');
                 const centerLabel = document.querySelector('.center-label');
                 const centerChange = document.querySelector('.center-change-indicator');
@@ -3767,8 +3701,31 @@
                     document.querySelectorAll('.industry-item').forEach(el => {
                         el.classList.remove('active');
                     });
-                }
-            }
+                    
+                    // Добавляем класс active для текущего элемента
+                    item.classList.add('active');
+                    
+                    // Подсвечиваем соответствующий сегмент в диаграмме
+                    chart.setActiveElements([{datasetIndex: 0, index: index}]);
+                    chart.update();
+                    
+                    // Обновляем центральное значение
+                    updateCenterValue(index);
+                });
+                
+                // Добавляем обработчик клика для фиксации выбранного элемента
+                item.addEventListener('click', () => {
+                    // Создаем событие детализации для этой отрасли
+                    const industryDetails = new CustomEvent('showIndustryDetails', {
+                        detail: {
+                            label: labels[index],
+                            value: values[index],
+                            index: index
+                        }
+                    });
+                    document.dispatchEvent(industryDetails);
+                });
+            });
         }
 
         // Создание региональной статистики
