@@ -3357,172 +3357,202 @@
             createTopVacanciesChart();
         }
 
-        // Создание графика динамики занятости
+        // Создание графика динамики занятости с 3D эффектом и анимацией
         function createEmploymentTrendChart() {
-            console.log("Creating employment trend chart...");
+            console.log("Creating employment trend 3D chart...");
             
-            // Готовые данные (не зависит от внешних источников)
+            // НОВЫЕ ДЕМОНСТРАЦИОННЫЕ ДАННЫЕ
+            // Генерация реалистичных данных с небольшими колебаниями и общим восходящим трендом
+            const generateData = () => {
+                const baseData = [89.5, 90.1, 90.6, 91.2, 90.8, 90.5, 91.0, 92.5, 93.1, 94.0, 94.8, 95.2];
+                
+                // Добавляем небольшой шум к данным для большей реалистичности
+                return baseData.map(value => {
+                    const noise = (Math.random() - 0.5) * 0.4; // Случайное отклонение ±0.2%
+                    return Number((value + noise).toFixed(1));
+                });
+            };
+
+            const monthLabels = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+            const employmentData = generateData();
+            
+            // Конфигурация данных для графика
             const data = {
-                labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                labels: monthLabels,
                 datasets: [{
                     label: 'Занятость (%)',
-                    data: [89.5, 90.1, 90.6, 91.2, 90.8, 90.5, 91.0, 92.5, 93.1, 94.0, 94.8, 95.2],
+                    data: employmentData,
                     fill: true,
-                    backgroundColor: 'rgba(59, 130, 246, 0.2)', // Добавляем цвет заливки
-                    borderColor: 'rgba(59, 130, 246, 1)', // Добавляем цвет границы
-                    borderWidth: 2 // Добавляем толщину линии
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)', 
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: 'rgba(59, 130, 246, 1)',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7,
+                    tension: 0.4 // Сглаживание линии для более плавного вида
                 }]
             };
 
-            // Сохраняем ссылку на созданный график и непосредственно отображаем его
-            const chart = new Chart(document.getElementById('employmentTrendChart'), {
-                type: 'line',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    elements: {
-                        line: {
-                            tension: 0.4
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                            titleColor: '#111827',
-                            bodyColor: '#111827',
-                            borderColor: 'rgba(0, 0, 0, 0.1)',
-                            borderWidth: 1,
-                            cornerRadius: 8,
-                            padding: 12
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                maxRotation: 0,
-                                font: {
-                                    size: 11
-                                },
-                                color: '#6b7280'
-                            }
-                        },
+            // Получаем canvas и его контекст для создания графика
+            const canvas = document.getElementById('employmentTrendChart');
+            const ctx = canvas.getContext('2d');
+            
+            // УЛУЧШЕННЫЙ 3D ГРАДИЕНТ
+            // Создаем градиент с более глубоким 3D эффектом
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(59, 130, 246, 0.5)');    // Более насыщенный цвет вверху
+            gradient.addColorStop(0.4, 'rgba(59, 130, 246, 0.2)');  // Средний слой
+            gradient.addColorStop(0.8, 'rgba(59, 130, 246, 0.05)'); // Более прозрачный внизу
+            gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');      // Полностью прозрачный в самом низу
+            
+            // Применяем градиент к набору данных
+            data.datasets[0].backgroundColor = gradient;
+            
+            // РАСШИРЕННЫЕ ОПЦИИ С АНИМАЦИЕЙ
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 2000, // Более длительная анимация при инициализации
+                    easing: 'easeOutQuart', // Плавное замедление
+                    // Анимация с задержкой для последовательного появления точек
+                    animations: {
                         y: {
-                            beginAtZero: false,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
+                            duration: 2000,
+                            delay: context => context.dataIndex * 100
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        // Улучшенный дизайн всплывающих подсказок
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#111827',
+                        bodyColor: '#111827',
+                        borderColor: 'rgba(0, 0, 0, 0.1)',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        padding: 12,
+                        // Кастомное форматирование всплывающих подсказок
+                        callbacks: {
+                            title: (context) => {
+                                return `${context[0].label} 2023`;
                             },
-                            ticks: {
-                                font: {
-                                    size: 11
-                                },
-                                color: '#6b7280'
+                            label: (context) => {
+                                return `Занятость: ${context.formattedValue}%`;
+                            },
+                            afterLabel: (context) => {
+                                const dataIndex = context.dataIndex;
+                                const datasetIndex = context.datasetIndex;
+                                const value = context.chart.data.datasets[datasetIndex].data[dataIndex];
+                                
+                                // Вычисляем изменение с предыдущего месяца
+                                if (dataIndex > 0) {
+                                    const prevValue = context.chart.data.datasets[datasetIndex].data[dataIndex - 1];
+                                    const change = (value - prevValue).toFixed(1);
+                                    const sign = change >= 0 ? '+' : '';
+                                    return `Изменение: ${sign}${change}%`;
+                                }
+                                return '';
                             }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false // Скрываем сетку по оси X для чистоты графика
+                        },
+                        ticks: {
+                            maxRotation: 0,
+                            font: {
+                                size: 11
+                            },
+                            color: '#6b7280'
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        min: Math.min(...employmentData) - 1, // Немного увеличиваем диапазон снизу
+                        max: Math.max(...employmentData) + 1, // Немного увеличиваем диапазон сверху
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 11
+                            },
+                            color: '#6b7280',
+                            // Добавляем символ % к значениям по оси Y
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                },
+                // Настройка отзывчивости на наведение
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                // Особое выделение последней точки
+                elements: {
+                    point: {
+                        radius: function(context) {
+                            const index = context.dataIndex;
+                            const data = context.dataset.data;
+                            // Делаем последнюю точку крупнее для акцента
+                            return index === data.length - 1 ? 6 : 4;
                         }
                     }
                 }
+            };
+
+            // Создаем график с заданными данными и опциями
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: chartOptions
             });
             
-            // Получаем контекст для создания градиента
-            const ctx = document.getElementById('employmentTrendChart').getContext('2d');
+            // Сохраняем ссылку на график для дальнейшего использования
+            if (typeof currentCharts === 'object') {
+                currentCharts.employmentTrend = chart;
+            }
             
-            // Создаем градиент для заливки области под линией
-            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(59, 130, 246, 0.3)');
-            gradient.addColorStop(0.6, 'rgba(59, 130, 246, 0.05)');
-            gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
-            
-            // Применяем градиент и другие стили к графику
-            chart.data.datasets[0].backgroundColor = gradient;
-            chart.data.datasets[0].borderColor = 'rgba(59, 130, 246, 1)';
-            chart.data.datasets[0].borderWidth = 3;
-            chart.data.datasets[0].pointRadius = 4;
-            chart.data.datasets[0].pointBackgroundColor = '#ffffff';
-            chart.data.datasets[0].pointBorderColor = 'rgba(59, 130, 246, 1)';
-            chart.data.datasets[0].pointBorderWidth = 2;
-            chart.data.datasets[0].pointHoverRadius = 7;
-            
-            // Обновляем график с новыми стилями
-            chart.update();
-            
-            // Сохраняем ссылку на график
-            currentCharts.employmentTrend = chart;
-            
-            // Добавляем обработчики событий для элементов управления графиком
-            document.querySelectorAll('.timeframe-selector button').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    // Удаляем активный класс у всех кнопок
-                    document.querySelectorAll('.timeframe-selector button').forEach(b => {
-                        b.classList.remove('active');
-                    });
-                    
-                    // Добавляем активный класс на нажатую кнопку
-                    button.classList.add('active');
-                    
-                    // Получаем выбранный временной интервал
-                    const timeframe = button.dataset.timeframe || '1m';
-                    
-                    // Обновляем данные в зависимости от выбранного интервала
-                    const dataPoints = {
-                        '1m': [68, 70, 72, 70, 69, 71],
-                        '3m': [65, 68, 70, 72, 74, 71],
-                        '6m': [60, 63, 68, 70, 72, 71],
-                        '1y': [55, 58, 62, 66, 70, 71],
-                        'all': [45, 50, 58, 63, 68, 71]
-                    };
-                    
-                    // Получаем данные для выбранного интервала или используем случайные, если нет предопределенных
-                    const newData = dataPoints[timeframe] || Array.from({length: 6}, () => 
-                        Math.floor(Math.random() * 20) + 60
-                    );
-                    
-                    // Обновляем данные графика
-                    chart.data.datasets[0].data = newData;
-                    
-                    // Определяем подписи оси X в зависимости от временного интервала
-                    const labels = {
-                        '1m': ['1 нед', '2 нед', '3 нед', '4 нед', 'Пред. нед', 'Тек. нед'],
-                        '3m': ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь'],
-                        '6m': ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь'],
-                        '1y': ['Янв', 'Март', 'Май', 'Июль', 'Сен', 'Нояб'],
-                        'all': ['2019', '2020', '2021', '2022', '2023', '2024']
-                    };
-                    
-                    // Обновляем подписи оси X
-                    chart.data.labels = labels[timeframe] || chart.data.labels;
-                    
-                    // Пересчитываем процент изменения
-                    const percentChange = document.querySelector('.employment-percent-change');
-                    if (percentChange) {
-                        const lastData = newData[newData.length - 1];
-                        const prevData = newData[newData.length - 2];
-                        const change = ((lastData - prevData) / prevData * 100).toFixed(1);
-                        
-                        if (change > 0) {
-                            percentChange.textContent = '+' + change + '%';
-                            percentChange.className = 'employment-percent-change up';
-                            percentChange.innerHTML = '<i class="fas fa-arrow-up"></i> +' + change + '%';
-                        } else if (change < 0) {
-                            percentChange.className = 'employment-percent-change down';
-                            percentChange.innerHTML = '<i class="fas fa-arrow-down"></i> ' + change + '%';
-                        } else {
-                            percentChange.className = 'employment-percent-change stable';
-                            percentChange.innerHTML = '<i class="fas fa-minus"></i> 0.0%';
-                        }
+            // ЭФФЕКТ ПОДСВЕТКИ ПОСЛЕДНЕЙ ТОЧКИ
+            // Добавляем пульсацию для последней точки
+            const pulseLastPoint = () => {
+                const lastIndex = employmentData.length - 1;
+                let size = 6;
+                let growing = false;
+                
+                setInterval(() => {
+                    if (growing) {
+                        size += 0.2;
+                        if (size >= 8) growing = false;
+                    } else {
+                        size -= 0.2;
+                        if (size <= 6) growing = true;
                     }
                     
-                    // Обновляем график
-                    chart.update();
-                });
-            });
+                    chart.options.elements.point.radius = function(context) {
+                        return context.dataIndex === lastIndex ? size : 4;
+                    };
+                    
+                    chart.update('none'); // Обновляем без анимации
+                }, 100);
+            };
             
-            // Добавим обработчики для переключения периодов
+            // Запускаем эффект пульсации через небольшую задержку
+            setTimeout(pulseLastPoint, 2500);
+            
+            // ОБРАБОТЧИКИ ДЛЯ ПЕРЕКЛЮЧЕНИЯ ПЕРИОДОВ
             document.querySelectorAll('.period-selector').forEach(btn => {
                 btn.addEventListener('click', function() {
                     // Убираем активный класс со всех кнопок
@@ -3534,39 +3564,173 @@
                     this.classList.add('active');
                     
                     const period = this.getAttribute('data-period');
-                    let newData;
+                    let newData, newLabels;
                     
                     // Изменяем данные в зависимости от выбранного периода
                     switch(period) {
                         case '6m':
                             // Последние 6 месяцев
-                            newData = data.datasets[0].data.slice(-6);
-                            chart.data.labels = data.labels.slice(-6);
+                            newData = employmentData.slice(-6);
+                            newLabels = monthLabels.slice(-6);
                             break;
                         case '1y':
                             // Полный год (12 месяцев)
-                            newData = data.datasets[0].data;
-                            chart.data.labels = data.labels;
+                            newData = employmentData;
+                            newLabels = monthLabels;
                             break;
                         case 'all':
-                            // Расширенная история (добавляем данные прошлого года)
-                            const extendedLabels = [
-                                'Янв 2024', 'Фев 2024', 'Мар 2024', 'Апр 2024', 'Май 2024', 'Июн 2024',
-                                ...data.labels
-                            ];
-                            const extendedData = [
-                                86.2, 86.8, 87.5, 88.1, 88.7, 89.2,
-                                ...data.datasets[0].data
-                            ];
-                            newData = extendedData;
-                            chart.data.labels = extendedLabels;
+                            // Многолетние данные с общим трендом роста
+                            newData = [85.7, 87.3, 89.1, 91.5, 93.4, 95.2];
+                            newLabels = ['2019', '2020', '2021', '2022', '2023', '2024'];
                             break;
+                        default:
+                            newData = employmentData;
+                            newLabels = monthLabels;
                     }
                     
+                    // Обновляем данные и метки графика
                     chart.data.datasets[0].data = newData;
-                    chart.update();
+                    chart.data.labels = newLabels;
+                    
+                    // Обновляем границы оси Y для лучшего отображения данных
+                    chart.options.scales.y.min = Math.min(...newData) - 1;
+                    chart.options.scales.y.max = Math.max(...newData) + 1;
+                    
+                    // Применяем плавную анимацию
+                    chart.update({
+                        duration: 800,
+                        easing: 'easeOutQuart'
+                    });
+                    
+                    // ОБНОВЛЕНИЕ ВСПЛЫВАЮЩЕЙ ПОДСКАЗКИ НА ГРАФИКЕ
+                    // Находим и обновляем данные в фиксированной подсказке
+                    const tooltip = document.querySelector('.chart-data-tooltip');
+                    if (tooltip) {
+                        const dateElem = tooltip.querySelector('.date');
+                        const valueElem = tooltip.querySelector('.value span');
+                        const changeElem = tooltip.querySelector('.change');
+                        
+                        // Получаем последние два значения для расчета изменения
+                        const lastValue = newData[newData.length - 1];
+                        const prevValue = newData[newData.length - 2];
+                        const change = (lastValue - prevValue).toFixed(1);
+                        const isPositive = change >= 0;
+                        
+                        // Обновляем текст в подсказке
+                        if (dateElem) dateElem.textContent = period === 'all' ? 'Прогноз 2024' : (period === '1y' ? 'Декабрь 2023' : 'Декабрь 2023');
+                        if (valueElem) valueElem.textContent = lastValue.toFixed(1) + '%';
+                        if (changeElem) {
+                            const sign = isPositive ? '+' : '';
+                            changeElem.textContent = `${sign}${change}% с ${period === 'all' ? 'прошлого года' : 'прошлого месяца'}`;
+                            changeElem.className = `change ${isPositive ? 'up' : 'down'}`;
+                        }
+                    }
+                    
+                    // ОБНОВЛЕНИЕ ИНФОРМАЦИОННОГО ЗНАЧКА
+                    // Обновляем информационный значок с процентом изменения
+                    const insightBadge = document.querySelector('.insight-badge');
+                    if (insightBadge) {
+                        const lastValue = newData[newData.length - 1];
+                        const prevValue = newData[newData.length - 2];
+                        const changePercent = ((lastValue - prevValue) / prevValue * 100).toFixed(1);
+                        const isPositive = changePercent >= 0;
+                        
+                        // Обновляем класс и содержимое значка
+                        insightBadge.className = `insight-badge ${isPositive ? 'positive' : 'negative'}`;
+                        insightBadge.innerHTML = `<i class="fas fa-arrow-trend-${isPositive ? 'up' : 'down'} mr-1"></i> ${isPositive ? 'Рост' : 'Спад'} ${Math.abs(changePercent)}%`;
+                    }
                 });
             });
+            
+            // ДОБАВЛЯЕМ ИНТЕРАКТИВНОСТЬ ВСПЛЫВАЮЩЕЙ ПОДСКАЗКЕ
+            // Получаем элементы оверлея графика
+            const chartOverlay = document.querySelector('.chart-overlay');
+            const chartHighlight = document.querySelector('.chart-highlight');
+            const chartTooltip = document.querySelector('.chart-data-tooltip');
+            
+            if (chartOverlay && chartHighlight && chartTooltip) {
+                // Начальное положение подсказки (над последней точкой)
+                const positionTooltip = () => {
+                    const canvasWidth = canvas.offsetWidth;
+                    const canvasHeight = canvas.offsetHeight;
+                    
+                    // Устанавливаем начальную позицию над последней точкой (примерно 85-90% ширины)
+                    const tooltipX = canvasWidth * 0.88;
+                    const tooltipY = canvasHeight * 0.25; // Примерно в верхней четверти графика
+                    
+                    chartHighlight.style.height = '100%';
+                    chartHighlight.style.left = `${tooltipX}px`;
+                    chartTooltip.style.left = `${tooltipX - 60}px`;
+                    chartTooltip.style.top = `${tooltipY}px`;
+                };
+                
+                // Устанавливаем начальное положение после создания графика
+                setTimeout(positionTooltip, 500);
+                
+                // Обработчик изменения размера окна
+                window.addEventListener('resize', positionTooltip);
+                
+                // Перемещение подсказки при наведении мыши на график
+                canvas.addEventListener('mousemove', (e) => {
+                    // Получаем позицию курсора относительно холста
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    
+                    // Обновляем положение вертикальной линии и подсказки
+                    chartHighlight.style.left = `${x}px`;
+                    
+                    // Подсказка должна быть немного смещена влево от курсора
+                    chartTooltip.style.left = `${x - 60}px`;
+                    
+                    // Получаем индекс ближайшей точки данных для обновления подсказки
+                    const dataPointIndex = Math.round((x / rect.width) * (chart.data.labels.length - 1));
+                    
+                    // Убеждаемся, что индекс в допустимом диапазоне
+                    if (dataPointIndex >= 0 && dataPointIndex < chart.data.labels.length) {
+                        const label = chart.data.labels[dataPointIndex];
+                        const value = chart.data.datasets[0].data[dataPointIndex];
+                        
+                        // Вычисляем изменение относительно предыдущей точки
+                        let changeText = '';
+                        if (dataPointIndex > 0) {
+                            const prevValue = chart.data.datasets[0].data[dataPointIndex - 1];
+                            const change = (value - prevValue).toFixed(1);
+                            const isPositive = change >= 0;
+                            const sign = isPositive ? '+' : '';
+                            
+                            changeText = `${sign}${change}% с прошлого ${chart.data.labels.length > 12 ? 'года' : 'месяца'}`;
+                            chartTooltip.querySelector('.change').className = `change ${isPositive ? 'up' : 'down'}`;
+                        } else {
+                            changeText = 'Начальное значение';
+                            chartTooltip.querySelector('.change').className = 'change';
+                        }
+                        
+                        // Обновляем текст в подсказке
+                        chartTooltip.querySelector('.date').textContent = label;
+                        chartTooltip.querySelector('.value span').textContent = value.toFixed(1) + '%';
+                        chartTooltip.querySelector('.change').textContent = changeText;
+                    }
+                });
+                
+                // Скрываем подсказку при выходе мыши за пределы графика
+                canvas.addEventListener('mouseleave', () => {
+                    // Возвращаем подсказку на исходное положение (последняя точка)
+                    positionTooltip();
+                    
+                    // Обновляем текст подсказки для последней точки
+                    const lastIndex = chart.data.labels.length - 1;
+                    const lastValue = chart.data.datasets[0].data[lastIndex];
+                    const prevValue = chart.data.datasets[0].data[lastIndex - 1];
+                    const change = (lastValue - prevValue).toFixed(1);
+                    const isPositive = change >= 0;
+                    const sign = isPositive ? '+' : '';
+                    
+                    chartTooltip.querySelector('.date').textContent = chart.data.labels[lastIndex];
+                    chartTooltip.querySelector('.value span').textContent = lastValue.toFixed(1) + '%';
+                    chartTooltip.querySelector('.change').textContent = `${sign}${change}% с прошлого ${chart.data.labels.length > 12 ? 'года' : 'месяца'}`;
+                    chartTooltip.querySelector('.change').className = `change ${isPositive ? 'up' : 'down'}`;
+                });
+            }
         }
 
         // Создание диаграммы распределения по отраслям
