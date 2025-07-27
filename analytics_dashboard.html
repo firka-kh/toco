@@ -661,6 +661,546 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        /* Современные стили для виджетов с эффектом glassmorphism */
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+        
+        .glassmorphism::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4f46e5, #ec4899);
+            opacity: 0.8;
+            transition: transform 0.4s ease;
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+        
+        .glassmorphism:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .glassmorphism:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(31, 38, 135, 0.2);
+        }
+        
+        /* Индикатор точки цвета */
+        .indicator-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        /* Переключатели периода */
+        .period-selector {
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: rgba(243, 244, 246, 0.7);
+            color: #6b7280;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .period-selector:hover {
+            background-color: rgba(209, 213, 219, 0.7);
+        }
+        
+        .period-selector.active {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+        
+        /* Анимированный контейнер 3D графика */
+        .employment-3d-container {
+            position: relative;
+            height: 350px;
+            perspective: 1000px;
+        }
+        
+        .employment-3d-container canvas {
+            transform: rotateX(5deg);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        
+        .employment-3d-container:hover canvas {
+            transform: rotateX(10deg) scale(1.02);
+        }
+        
+        .chart-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .chart-highlight {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .chart-data-tooltip {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            font-size: 12px;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .chart-data-tooltip .date {
+            font-weight: 500;
+            color: #6b7280;
+        }
+        
+        .chart-data-tooltip .value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+            margin: 5px 0;
+        }
+        
+        .chart-data-tooltip .value span {
+            color: #3b82f6;
+        }
+        
+        .chart-data-tooltip .change {
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .chart-data-tooltip .change.up {
+            color: #10b981;
+        }
+        
+        .chart-data-tooltip .change.down {
+            color: #ef4444;
+        }
+        
+        /* Секция с инсайтами */
+        .chart-insights {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .insight-badge {
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .insight-badge.positive {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .insight-badge.negative {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .insight-badge.neutral {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+        
+        /* Интерактивное кольцо отраслей */
+        .industry-ring-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        .center-stat {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 5;
+        }
+        
+        .center-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1;
+        }
+        
+        .center-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+        
+        .industry-legend {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .industry-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            padding: 6px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .industry-item:hover {
+            background-color: rgba(243, 244, 246, 0.5);
+        }
+        
+        .color-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .industry-item .name {
+            flex: 1;
+            color: #4b5563;
+        }
+        
+        .industry-item .value {
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        .industry-item .trend {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 10px;
+        }
+        
+        .industry-item .trend.up {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .industry-item .trend.down {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .industry-item .trend.stable {
+            background-color: rgba(107, 114, 128, 0.1);
+            color: #6b7280;
+        }
+        
+        /* Контроллеры графиков */
+        .chart-controls, .stat-actions, .sort-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chart-control-btn, .stat-action-btn, .sort-btn {
+            background: rgba(243, 244, 246, 0.7);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .chart-control-btn:hover, .stat-action-btn:hover, .sort-btn:hover {
+            background: rgba(209, 213, 219, 0.7);
+        }
+        
+        .stat-action-btn.active, .sort-btn.active {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+        
+        /* Региональная тепловая карта */
+        .regional-heatmap-container {
+            height: 350px;
+            position: relative;
+            display: flex;
+        }
+        
+        .region-map-wrapper {
+            position: relative;
+            flex: 1;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .region-map {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .region-highlight {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            max-width: 200px;
+            z-index: 10;
+        }
+        
+        .region-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: #111827;
+        }
+        
+        .region-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin: 8px 0 2px;
+        }
+        
+        .region-label {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .region-growth {
+            margin-top: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .region-growth.positive {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .region-growth.negative {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .regional-legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .legend-gradient {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .gradient-bar {
+            height: 6px;
+            width: 150px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #cffafe, #06b6d4, #0369a1);
+        }
+        
+        /* Анимированные бары вакансий */
+        .vacancies-race-container {
+            height: 350px;
+            position: relative;
+        }
+        
+        .vacancy-bars-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px 0;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .vacancy-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .vacancy-item:hover {
+            background-color: rgba(243, 244, 246, 0.7);
+        }
+        
+        .vacancy-rank {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            color: #4b5563;
+        }
+        
+        .vacancy-name {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .vacancy-bar {
+            flex: 2;
+            height: 10px;
+            background-color: #f3f4f6;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #818cf8);
+            border-radius: 5px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: width 1s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+        
+        .vacancy-count {
+            width: 60px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: right;
+            color: #111827;
+        }
+        
+        .vacancy-growth {
+            width: 60px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .vacancy-growth.positive {
+            color: #10b981;
+        }
+        
+        .vacancy-growth.negative {
+            color: #ef4444;
+        }
+        
+        .chart-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        
+        /* Анимации для виджетов */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+        
+        .shimmer-effect {
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.8) 50%, 
+                rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -1027,47 +1567,183 @@
             <!-- Вкладка "Обзор" -->
             <div class="tab-content active" id="overview">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                    <!-- Динамика занятости -->
-                    <div class="stat-card">
-                        <div class="chart-header">
-                            <h3 class="text-xl font-bold text-gray-800">Динамика занятости</h3>
+                    <!-- Динамика занятости - современная 3D карта с градиентами -->
+                    <div class="stat-card glassmorphism">
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            LIVE
+                        </div>
+                        <div class="chart-header flex justify-between items-center">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                    <span class="indicator-dot bg-blue-500 mr-2"></span>
+                                    Динамика занятости
+                                </h3>
+                                <p class="text-sm text-gray-500 mt-1">Реальные данные с рынка труда</p>
+                            </div>
                             <div class="flex space-x-2">
-                                <button class="text-sm px-3 py-1 bg-blue-100 text-blue-600 rounded">6М</button>
-                                <button class="text-sm px-3 py-1 bg-gray-100 text-gray-600 rounded">1Г</button>
+                                <button class="period-selector active" data-period="6m">6М</button>
+                                <button class="period-selector" data-period="1y">1Г</button>
+                                <button class="period-selector" data-period="all">Все</button>
                             </div>
                         </div>
-                        <div class="chart-container">
+                        <div class="chart-container employment-3d-container">
                             <canvas id="employmentTrendChart"></canvas>
+                            <div class="chart-overlay">
+                                <div class="chart-highlight"></div>
+                                <div class="chart-data-tooltip">
+                                    <div class="date">Июнь 2025</div>
+                                    <div class="value"><span>95.2%</span> занятости</div>
+                                    <div class="change up">+2.1% с прошлого месяца</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-insights">
+                            <div class="insight-badge positive">
+                                <i class="fas fa-arrow-trend-up mr-1"></i> Рост 2.1%
+                            </div>
+                            <div class="insight-badge neutral">
+                                <i class="fas fa-calendar-check mr-1"></i> Сезонность
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Распределение по отраслям -->
-                    <div class="stat-card">
-                        <div class="chart-header">
-                            <h3 class="text-xl font-bold text-gray-800">Распределение по отраслям</h3>
+                    <!-- Распределение по отраслям - интерактивное кольцо с 3D эффектами -->
+                    <div class="stat-card glassmorphism">
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            LIVE
                         </div>
-                        <div class="chart-container">
+                        <div class="chart-header flex justify-between items-center">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                    <span class="indicator-dot bg-purple-500 mr-2"></span>
+                                    Распределение по отраслям
+                                </h3>
+                                <p class="text-sm text-gray-500 mt-1">Структура рынка по секторам</p>
+                            </div>
+                            <div class="chart-controls">
+                                <button class="chart-control-btn" data-action="viewType">
+                                    <i class="fas fa-chart-pie"></i>
+                                </button>
+                                <button class="chart-control-btn" data-action="download">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container industry-ring-container">
                             <canvas id="industryDistributionChart"></canvas>
+                            <div class="center-stat">
+                                <div class="center-value">45.8%</div>
+                                <div class="center-label">Сфера услуг</div>
+                            </div>
+                        </div>
+                        <div class="industry-legend">
+                            <div class="industry-item">
+                                <span class="color-dot bg-blue-500"></span>
+                                <span class="name">Услуги</span>
+                                <span class="value">45.8%</span>
+                                <span class="trend up"><i class="fas fa-arrow-up"></i></span>
+                            </div>
+                            <div class="industry-item">
+                                <span class="color-dot bg-green-500"></span>
+                                <span class="name">Сельское хозяйство</span>
+                                <span class="value">21.3%</span>
+                                <span class="trend down"><i class="fas fa-arrow-down"></i></span>
+                            </div>
+                            <div class="industry-item">
+                                <span class="color-dot bg-yellow-500"></span>
+                                <span class="name">Производство</span>
+                                <span class="value">18.5%</span>
+                                <span class="trend stable"><i class="fas fa-minus"></i></span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Региональная статистика -->
-                    <div class="stat-card">
-                        <div class="chart-header">
-                            <h3 class="text-xl font-bold text-gray-800">Региональная статистика</h3>
+                    <!-- Региональная статистика - интерактивная тепловая карта -->
+                    <div class="stat-card glassmorphism">
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            LIVE
                         </div>
-                        <div class="chart-container">
+                        <div class="chart-header flex justify-between items-center">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                    <span class="indicator-dot bg-green-500 mr-2"></span>
+                                    Региональная статистика
+                                </h3>
+                                <p class="text-sm text-gray-500 mt-1">Анализ по регионам</p>
+                            </div>
+                            <div class="stat-actions">
+                                <button class="stat-action-btn" data-metric="employment">Занятость</button>
+                                <button class="stat-action-btn active" data-metric="vacancies">Вакансии</button>
+                            </div>
+                        </div>
+                        <div class="chart-container regional-heatmap-container">
+                            <div class="region-map-wrapper">
+                                <div class="region-map">
+                                    <!-- SVG карта Таджикистана с интерактивными регионами будет добавлена через JS -->
+                                </div>
+                                <div class="region-highlight" id="selectedRegion">
+                                    <div class="region-name">Душанбе</div>
+                                    <div class="region-value">9,845</div>
+                                    <div class="region-label">активных вакансий</div>
+                                    <div class="region-growth positive">+12.4% рост</div>
+                                </div>
+                            </div>
                             <canvas id="regionalStatsChart"></canvas>
                         </div>
+                        <div class="regional-legend">
+                            <div class="legend-gradient">
+                                <span>Низкий</span>
+                                <div class="gradient-bar"></div>
+                                <span>Высокий</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Топ вакансий -->
-                    <div class="stat-card">
-                        <div class="chart-header">
-                            <h3 class="text-xl font-bold text-gray-800">Топ-10 вакансий</h3>
+                    <!-- Топ вакансий - современная анимированная гистограмма с микроанимациями -->
+                    <div class="stat-card glassmorphism">
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            LIVE
                         </div>
-                        <div class="chart-container">
+                        <div class="chart-header flex justify-between items-center">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                    <span class="indicator-dot bg-yellow-500 mr-2"></span>
+                                    Топ-10 вакансий
+                                </h3>
+                                <p class="text-sm text-gray-500 mt-1">Самые востребованные специальности</p>
+                            </div>
+                            <div class="sort-controls">
+                                <button class="sort-btn active" data-sort="count">
+                                    <i class="fas fa-sort-amount-down"></i> По количеству
+                                </button>
+                                <button class="sort-btn" data-sort="growth">
+                                    <i class="fas fa-chart-line"></i> По росту
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container vacancies-race-container">
+                            <div class="vacancy-bars-wrapper">
+                                <!-- Интерактивные полосы с вакансиями будут добавлены через JS -->
+                                <div class="vacancy-item">
+                                    <div class="vacancy-rank">1</div>
+                                    <div class="vacancy-name">Разработчик ПО</div>
+                                    <div class="vacancy-bar" style="width: 85%;">
+                                        <div class="bar-fill" style="width: 85%;"></div>
+                                    </div>
+                                    <div class="vacancy-count">1,248</div>
+                                    <div class="vacancy-growth positive">+14.5%</div>
+                                </div>
+                            </div>
                             <canvas id="topVacanciesChart"></canvas>
+                        </div>
+                        <div class="chart-footer">
+                            <button class="text-sm text-blue-600 flex items-center">
+                                <i class="fas fa-external-link mr-1"></i> Подробный отчет
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -3704,13 +4380,683 @@
             });
         }
         
+        // Функция для инициализации и анимации современных виджетов
+        function initializeModernWidgets() {
+            // Карта Таджикистана с регионами (упрощенная SVG-карта)
+            const regionMap = document.querySelector('.region-map');
+            if (regionMap) {
+                regionMap.innerHTML = `
+                <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+                    <path id="region-dushanbe" d="M220,150 L240,150 L240,170 L220,170 Z" fill="#3b82f6" data-name="Душанбе" data-value="9,845" data-growth="+12.4%" />
+                    <path id="region-sughd" d="M100,50 L250,50 L200,150 L100,130 Z" fill="#60a5fa" data-name="Согд" data-value="7,213" data-growth="+8.7%" />
+                    <path id="region-khatlon" d="M150,180 L300,200 L280,250 L130,240 Z" fill="#93c5fd" data-name="Хатлон" data-value="5,421" data-growth="+3.2%" />
+                    <path id="region-gbao" d="M300,100 L400,120 L380,250 L280,230 Z" fill="#bfdbfe" data-name="ГБАО" data-value="824" data-growth="-2.1%" />
+                    <path id="region-rrp" d="M180,140 L260,120 L290,190 L180,180 Z" fill="#dbeafe" data-name="РРП" data-value="4,156" data-growth="+6.5%" />
+                </svg>
+                `;
+                
+                // Добавляем интерактивность к регионам
+                const regions = regionMap.querySelectorAll('path');
+                const regionHighlight = document.getElementById('selectedRegion');
+                
+                regions.forEach(region => {
+                    region.addEventListener('mouseenter', function() {
+                        // Сбрасываем цвета всех регионов
+                        regions.forEach(r => r.style.opacity = '0.7');
+                        
+                        // Выделяем текущий регион
+                        this.style.opacity = '1';
+                        this.style.filter = 'drop-shadow(0 0 5px rgba(59, 130, 246, 0.5))';
+                        
+                        // Обновляем информацию о регионе
+                        const name = this.getAttribute('data-name');
+                        const value = this.getAttribute('data-value');
+                        const growth = this.getAttribute('data-growth');
+                        
+                        regionHighlight.querySelector('.region-name').textContent = name;
+                        regionHighlight.querySelector('.region-value').textContent = value;
+                        regionHighlight.querySelector('.region-growth').textContent = growth + ' рост';
+                        
+                        // Анимируем появление информации
+                        regionHighlight.style.animation = 'fadeInRight 0.3s forwards';
+                    });
+                    
+                    region.addEventListener('mouseleave', function() {
+                        this.style.filter = 'none';
+                    });
+                });
+            }
+            
+            // Инициализация данных для топ-10 вакансий
+            const vacanciesWrapper = document.querySelector('.vacancy-bars-wrapper');
+            if (vacanciesWrapper) {
+                // Очищаем контейнер
+                vacanciesWrapper.innerHTML = '';
+                
+                // Данные о вакансиях
+                const vacanciesData = [
+                    { name: 'Разработчик ПО', count: 1248, growth: 14.5, barWidth: 90 },
+                    { name: 'Специалист по маркетингу', count: 946, growth: 11.2, barWidth: 75 },
+                    { name: 'Менеджер проектов', count: 834, growth: 9.8, barWidth: 70 },
+                    { name: 'Бухгалтер', count: 782, growth: -2.3, barWidth: 65 },
+                    { name: 'Инженер', count: 743, growth: 5.7, barWidth: 60 },
+                    { name: 'Специалист по продажам', count: 678, growth: 8.1, barWidth: 55 },
+                    { name: 'Администратор', count: 512, growth: 3.4, barWidth: 45 },
+                    { name: 'HR-специалист', count: 489, growth: 7.5, barWidth: 42 },
+                    { name: 'Врач', count: 437, growth: 15.2, barWidth: 40 },
+                    { name: 'Учитель', count: 389, growth: -1.8, barWidth: 35 }
+                ];
+                
+                // Создаем элементы для каждой вакансии
+                vacanciesData.forEach((vacancy, index) => {
+                    const vacancyItem = document.createElement('div');
+                    vacancyItem.className = 'vacancy-item';
+                    vacancyItem.style.animation = `fadeIn 0.3s ${index * 0.1}s both`;
+                    
+                    const rankDiv = document.createElement('div');
+                    rankDiv.className = 'vacancy-rank';
+                    rankDiv.textContent = index + 1;
+                    
+                    const nameDiv = document.createElement('div');
+                    nameDiv.className = 'vacancy-name';
+                    nameDiv.textContent = vacancy.name;
+                    
+                    const barDiv = document.createElement('div');
+                    barDiv.className = 'vacancy-bar';
+                    
+                    const barFill = document.createElement('div');
+                    barFill.className = 'bar-fill';
+                    barFill.style.width = '0%';
+                    
+                    // Анимация заполнения полосы
+                    setTimeout(() => {
+                        barFill.style.width = `${vacancy.barWidth}%`;
+                    }, 100 + index * 100);
+                    
+                    barDiv.appendChild(barFill);
+                    
+                    const countDiv = document.createElement('div');
+                    countDiv.className = 'vacancy-count';
+                    countDiv.textContent = vacancy.count.toLocaleString();
+                    
+                    const growthDiv = document.createElement('div');
+                    growthDiv.className = `vacancy-growth ${vacancy.growth >= 0 ? 'positive' : 'negative'}`;
+                    growthDiv.textContent = (vacancy.growth >= 0 ? '+' : '') + vacancy.growth + '%';
+                    
+                    // Собираем элемент
+                    vacancyItem.appendChild(rankDiv);
+                    vacancyItem.appendChild(nameDiv);
+                    vacancyItem.appendChild(barDiv);
+                    vacancyItem.appendChild(countDiv);
+                    vacancyItem.appendChild(growthDiv);
+                    
+                    vacanciesWrapper.appendChild(vacancyItem);
+                });
+                
+                // Добавляем интерактивность к сортировке
+                const sortButtons = document.querySelectorAll('.sort-btn');
+                sortButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        sortButtons.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        const sortType = this.getAttribute('data-sort');
+                        const sortedData = [...vacanciesData];
+                        
+                        if (sortType === 'count') {
+                            sortedData.sort((a, b) => b.count - a.count);
+                        } else if (sortType === 'growth') {
+                            sortedData.sort((a, b) => b.growth - a.growth);
+                        }
+                        
+                        // Обновляем UI
+                        vacanciesWrapper.innerHTML = '';
+                        sortedData.forEach((vacancy, index) => {
+                            // Здесь такой же код создания элементов, как выше
+                            const vacancyItem = document.createElement('div');
+                            vacancyItem.className = 'vacancy-item';
+                            vacancyItem.style.animation = `fadeIn 0.3s ${index * 0.05}s both`;
+                            
+                            // ... (остальной код для создания элементов)
+                            const rankDiv = document.createElement('div');
+                            rankDiv.className = 'vacancy-rank';
+                            rankDiv.textContent = index + 1;
+                            
+                            const nameDiv = document.createElement('div');
+                            nameDiv.className = 'vacancy-name';
+                            nameDiv.textContent = vacancy.name;
+                            
+                            const barDiv = document.createElement('div');
+                            barDiv.className = 'vacancy-bar';
+                            
+                            const barFill = document.createElement('div');
+                            barFill.className = 'bar-fill';
+                            barFill.style.width = '0%';
+                            
+                            // Анимация заполнения полосы
+                            setTimeout(() => {
+                                barFill.style.width = `${vacancy.barWidth}%`;
+                            }, 100 + index * 50);
+                            
+                            barDiv.appendChild(barFill);
+                            
+                            const countDiv = document.createElement('div');
+                            countDiv.className = 'vacancy-count';
+                            countDiv.textContent = vacancy.count.toLocaleString();
+                            
+                            const growthDiv = document.createElement('div');
+                            growthDiv.className = `vacancy-growth ${vacancy.growth >= 0 ? 'positive' : 'negative'}`;
+                            growthDiv.textContent = (vacancy.growth >= 0 ? '+' : '') + vacancy.growth + '%';
+                            
+                            // Собираем элемент
+                            vacancyItem.appendChild(rankDiv);
+                            vacancyItem.appendChild(nameDiv);
+                            vacancyItem.appendChild(barDiv);
+                            vacancyItem.appendChild(countDiv);
+                            vacancyItem.appendChild(growthDiv);
+                            
+                            vacanciesWrapper.appendChild(vacancyItem);
+                        });
+                    });
+                });
+            }
+            
+            // Кнопки периода для динамики занятости
+            const periodButtons = document.querySelectorAll('.period-selector');
+            periodButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    periodButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Эффект обновления графика при смене периода
+                    const chartContainer = document.querySelector('.employment-3d-container');
+                    if (chartContainer) {
+                        const canvas = chartContainer.querySelector('canvas');
+                        canvas.style.opacity = '0.5';
+                        setTimeout(() => {
+                            canvas.style.opacity = '1';
+                        }, 300);
+                        
+                        // Обновление тултипа
+                        const tooltip = chartContainer.querySelector('.chart-data-tooltip');
+                        const highlight = chartContainer.querySelector('.chart-highlight');
+                        
+                        // Позиционируем подсветку случайным образом на графике
+                        const randomX = 40 + Math.random() * 60; // 40-100%
+                        const randomY = 30 + Math.random() * 40; // 30-70%
+                        
+                        highlight.style.left = `${randomX}%`;
+                        highlight.style.top = `${randomY}%`;
+                        highlight.style.opacity = '1';
+                        
+                        // Позиционируем тултип рядом с подсветкой
+                        tooltip.style.left = `${randomX + 5}%`;
+                        tooltip.style.top = `${randomY - 15}%`;
+                        tooltip.style.opacity = '1';
+                        tooltip.style.transform = 'translateY(0)';
+                        
+                        // Обновляем данные в тултипе в зависимости от периода
+                        const period = this.getAttribute('data-period');
+                        if (period === '6m') {
+                            tooltip.querySelector('.date').textContent = 'Июнь 2025';
+                            tooltip.querySelector('.value span').textContent = '95.2%';
+                            tooltip.querySelector('.change').textContent = '+2.1% с прошлого месяца';
+                        } else if (period === '1y') {
+                            tooltip.querySelector('.date').textContent = 'Январь 2025';
+                            tooltip.querySelector('.value span').textContent = '93.8%';
+                            tooltip.querySelector('.change').textContent = '+3.5% с прошлого года';
+                        } else {
+                            tooltip.querySelector('.date').textContent = 'Июль 2023';
+                            tooltip.querySelector('.value span').textContent = '91.4%';
+                            tooltip.querySelector('.change').textContent = '+5.2% рост за 2 года';
+                        }
+                    }
+                });
+            });
+            
+            // Переключение метрик для региональной статистики
+            const metricButtons = document.querySelectorAll('.stat-action-btn');
+            metricButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    metricButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const metric = this.getAttribute('data-metric');
+                    const regionHighlight = document.getElementById('selectedRegion');
+                    
+                    // Обновляем информацию о метрике
+                    if (metric === 'employment') {
+                        regionHighlight.querySelector('.region-label').textContent = 'уровень занятости';
+                        regionHighlight.querySelector('.region-value').textContent = '93.4%';
+                    } else if (metric === 'vacancies') {
+                        regionHighlight.querySelector('.region-label').textContent = 'активных вакансий';
+                        regionHighlight.querySelector('.region-value').textContent = '9,845';
+                    }
+                    
+                    // Анимация обновления данных
+                    regionHighlight.style.animation = 'scaleIn 0.3s forwards';
+                    setTimeout(() => {
+                        regionHighlight.style.animation = '';
+                    }, 300);
+                });
+            });
+            
+            // Кольцевая диаграмма отраслей - обновление центрального значения при наведении
+            const industryItems = document.querySelectorAll('.industry-item');
+            const centerValue = document.querySelector('.center-value');
+            const centerLabel = document.querySelector('.center-label');
+            
+            industryItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const name = this.querySelector('.name').textContent;
+                    const value = this.querySelector('.value').textContent;
+                    
+                    // Анимация обновления данных в центре
+                    centerValue.style.transform = 'translateY(-10px)';
+                    centerValue.style.opacity = '0';
+                    centerLabel.style.transform = 'translateY(-10px)';
+                    centerLabel.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        centerValue.textContent = value;
+                        centerLabel.textContent = name;
+                        
+                        centerValue.style.transform = 'translateY(0)';
+                        centerValue.style.opacity = '1';
+                        centerLabel.style.transform = 'translateY(0)';
+                        centerLabel.style.opacity = '1';
+                    }, 200);
+                    
+                    // Подсвечиваем выбранный элемент
+                    industryItems.forEach(i => i.style.backgroundColor = '');
+                    this.style.backgroundColor = 'rgba(243, 244, 246, 0.7)';
+                });
+            });
+            
+            // Запускаем случайные обновления для демонстрации интерактивности
+            setInterval(() => {
+                // Случайные обновления подсветки на графике занятости
+                const chartHighlight = document.querySelector('.chart-highlight');
+                const chartTooltip = document.querySelector('.chart-data-tooltip');
+                
+                if (chartHighlight && chartTooltip) {
+                    // С вероятностью 30% обновляем позицию
+                    if (Math.random() < 0.3) {
+                        // Генерируем новую случайную позицию
+                        const randomX = 40 + Math.random() * 60;
+                        const randomY = 30 + Math.random() * 40;
+                        
+                        // Анимируем перемещение подсветки
+                        chartHighlight.style.transition = 'all 0.8s ease';
+                        chartHighlight.style.left = `${randomX}%`;
+                        chartHighlight.style.top = `${randomY}%`;
+                        
+                        // Анимируем перемещение тултипа
+                        chartTooltip.style.transition = 'all 0.8s ease';
+                        chartTooltip.style.left = `${randomX + 5}%`;
+                        chartTooltip.style.top = `${randomY - 15}%`;
+                        
+                        // Генерируем новые данные для тултипа
+                        const randomValue = (94 + Math.random() * 2).toFixed(1);
+                        const randomChange = (Math.random() * 3).toFixed(1);
+                        
+                        // Обновляем данные в тултипе с небольшой задержкой
+                        setTimeout(() => {
+                            chartTooltip.querySelector('.value span').textContent = `${randomValue}%`;
+                            chartTooltip.querySelector('.change').textContent = `+${randomChange}% с прошлого периода`;
+                        }, 400);
+                    }
+                }
+            }, 5000);
+        }
+        
+        // Функция для инициализации всех графиков на странице
+        function initializeAllCharts() {
+            // Примерные данные для графиков
+            const monthlyLabels = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+            const colorPalette = ['#3b82f6', '#60a5fa', '#93c5fd', '#dbeafe', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0', '#f59e0b', '#fbbf24', '#fcd34d', '#fef3c7'];
+            
+            // График динамики занятости
+            const employmentTrendCtx = document.getElementById('employmentTrendChart');
+            if (employmentTrendCtx) {
+                const employmentGradient = employmentTrendCtx.getContext('2d').createLinearGradient(0, 0, 0, 300);
+                employmentGradient.addColorStop(0, 'rgba(59, 130, 246, 0.8)');
+                employmentGradient.addColorStop(1, 'rgba(59, 130, 246, 0.1)');
+                
+                new Chart(employmentTrendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: monthlyLabels,
+                        datasets: [{
+                            label: 'Уровень занятости',
+                            data: [92.8, 93.1, 93.5, 94.2, 94.6, 95.1, 95.2, 95.0, 94.7, 94.3, 94.1, 94.5],
+                            borderColor: '#3b82f6',
+                            borderWidth: 3,
+                            backgroundColor: employmentGradient,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#ffffff',
+                            pointBorderColor: '#3b82f6',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 8,
+                            pointHoverBackgroundColor: '#3b82f6',
+                            pointHoverBorderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 1500,
+                            easing: 'easeOutQuart'
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                titleColor: '#6b7280',
+                                bodyColor: '#111827',
+                                bodyFont: {
+                                    size: 14,
+                                    weight: 700
+                                },
+                                padding: 15,
+                                boxPadding: 8,
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                borderColor: 'rgba(0, 0, 0, 0.1)',
+                                borderWidth: 1,
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Занятость: ${context.raw}%`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                suggestedMin: 90,
+                                suggestedMax: 97,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Распределение по отраслям - кольцевая диаграмма
+            const industryDistributionCtx = document.getElementById('industryDistributionChart');
+            if (industryDistributionCtx) {
+                new Chart(industryDistributionCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Услуги', 'Сельское хозяйство', 'Производство', 'Образование', 'Здравоохранение', 'Другие'],
+                        datasets: [{
+                            data: [45.8, 21.3, 18.5, 7.2, 3.5, 3.7],
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#6b7280'],
+                            borderColor: '#ffffff',
+                            borderWidth: 2,
+                            hoverOffset: 15,
+                            hoverBorderWidth: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        animation: {
+                            animateRotate: true,
+                            animateScale: true,
+                            duration: 1500,
+                            easing: 'easeOutCirc'
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                titleColor: '#6b7280',
+                                bodyColor: '#111827',
+                                bodyFont: {
+                                    size: 14,
+                                    weight: 700
+                                },
+                                padding: 15,
+                                boxPadding: 8,
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                borderColor: 'rgba(0, 0, 0, 0.1)',
+                                borderWidth: 1,
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.label}: ${context.raw}%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Региональная статистика - горизонтальная гистограмма
+            const regionalStatsCtx = document.getElementById('regionalStatsChart');
+            if (regionalStatsCtx) {
+                const regions = ['Душанбе', 'Согд', 'Хатлон', 'РРП', 'ГБАО'];
+                const vacancies = [9845, 7213, 5421, 4156, 824];
+                
+                const regionalGradient = regionalStatsCtx.getContext('2d').createLinearGradient(0, 0, 400, 0);
+                regionalGradient.addColorStop(0, '#3b82f6');
+                regionalGradient.addColorStop(1, '#60a5fa');
+                
+                new Chart(regionalStatsCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: regions,
+                        datasets: [{
+                            label: 'Активные вакансии',
+                            data: vacancies,
+                            backgroundColor: regionalGradient,
+                            borderRadius: 10,
+                            barThickness: 20,
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 1500,
+                            easing: 'easeOutQuart'
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                titleColor: '#6b7280',
+                                bodyColor: '#111827',
+                                bodyFont: {
+                                    size: 14,
+                                    weight: 700
+                                },
+                                padding: 15,
+                                boxPadding: 8,
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                borderColor: 'rgba(0, 0, 0, 0.1)',
+                                borderWidth: 1
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Топ-10 вакансий - горизонтальная гистограмма
+            const topVacanciesCtx = document.getElementById('topVacanciesChart');
+            if (topVacanciesCtx) {
+                const topVacancies = ['Разработчик ПО', 'Специалист по маркетингу', 'Менеджер проектов', 'Бухгалтер', 'Инженер', 'Специалист по продажам', 'Администратор', 'HR-специалист', 'Врач', 'Учитель'];
+                const vacancyCounts = [1248, 946, 834, 782, 743, 678, 512, 489, 437, 389];
+                
+                const vacancyGradient = topVacanciesCtx.getContext('2d').createLinearGradient(0, 0, 400, 0);
+                vacancyGradient.addColorStop(0, '#f59e0b');
+                vacancyGradient.addColorStop(1, '#fbbf24');
+                
+                new Chart(topVacanciesCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: topVacancies,
+                        datasets: [{
+                            label: 'Количество вакансий',
+                            data: vacancyCounts,
+                            backgroundColor: vacancyGradient,
+                            borderRadius: 10,
+                            barThickness: 18,
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            delay: function(context) {
+                                return context.dataIndex * 100;
+                            },
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                titleColor: '#6b7280',
+                                bodyColor: '#111827',
+                                bodyFont: {
+                                    size: 14,
+                                    weight: 700
+                                },
+                                padding: 15,
+                                boxPadding: 8,
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                borderColor: 'rgba(0, 0, 0, 0.1)',
+                                borderWidth: 1
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
             // Инициализируем биржевые графики
             initializeStockCharts();
             
+            // Инициализируем современные виджеты
+            initializeModernWidgets();
+            
+            // Инициализируем все графики на странице
+            initializeAllCharts();
+            
             // Запускаем интервал обновления каждые 3 секунды
             setInterval(updateStockCharts, 3000);
+            
+            // Остальной код инициализации
+            const menuToggle = document.getElementById('menuToggle');
+            const sideMenu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+            const openFilters = document.getElementById('openFilters');
+            const closeFilters = document.getElementById('closeFilters');
+            const filterSidebar = document.getElementById('filterSidebar');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Открытие/закрытие бокового меню
+            if (menuToggle && sideMenu && overlay) {
+                menuToggle.addEventListener('click', function() {
+                    sideMenu.classList.toggle('open');
+                    overlay.classList.toggle('active');
+                });
+            }
+            
+            // Открытие/закрытие панели фильтров
+            if (openFilters && closeFilters && filterSidebar && overlay) {
+                openFilters.addEventListener('click', function() {
+                    filterSidebar.classList.add('open');
+                    overlay.classList.add('active');
+                });
+                
+                closeFilters.addEventListener('click', function() {
+                    filterSidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                });
+            }
+            
+            // Закрытие всех панелей при клике на затемнение
+            if (overlay && sideMenu && filterSidebar) {
+                overlay.addEventListener('click', function() {
+                    sideMenu.classList.remove('open');
+                    filterSidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                });
+            }
+            
+            // Переключение вкладок
+            if (tabButtons && tabContents) {
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const tabId = this.getAttribute('data-tab');
+                        
+                        // Удаляем активный класс у всех кнопок и контента
+                        tabButtons.forEach(btn => btn.classList.remove('active'));
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        
+                        // Добавляем активный класс выбранной вкладке
+                        this.classList.add('active');
+                        document.getElementById(tabId).classList.add('active');
+                    });
+                });
+            }
         });
     </script>
 </body>
