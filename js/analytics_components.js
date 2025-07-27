@@ -24,11 +24,9 @@ class AdvancedAnalytics {
         const canvas = document.getElementById(canvasId);
         if (!canvas) return null;
 
-        // Установка адаптивных размеров
-        const containerWidth = canvas.parentElement.clientWidth;
-        const size = Math.min(containerWidth - 40, 200); // Максимум 200px
-        canvas.width = size;
-        canvas.height = size * 0.75; // Соотношение 4:3
+        // Фиксированные размеры для лучшей читаемости
+        canvas.width = 280;
+        canvas.height = 180;
 
         const ctx = canvas.getContext('2d');
         const centerX = canvas.width / 2;
@@ -228,25 +226,37 @@ class AdvancedAnalytics {
 
     drawGaugeText(ctx, centerX, centerY, config, value) {
         if (config.showValue) {
-            // Значение
+            // Значение - крупнее и в центре
             ctx.fillStyle = config.textColor;
-            ctx.font = 'bold 24px Inter, sans-serif';
+            ctx.font = 'bold 36px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
+            
+            // Добавляем светлый фон для лучшей читаемости
+            const textWidth = ctx.measureText(Math.round(value) + '%').width;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.fillRect(
+                centerX - textWidth/2 - 8,
+                centerY + 20,
+                textWidth + 16,
+                40
+            );
+            
+            ctx.fillStyle = config.textColor;
             ctx.fillText(
-                Math.round(value) + (config.unit || ''),
+                Math.round(value) + '%',
                 centerX,
                 centerY + 40
             );
         }
         
+        // Название на самом верху и не перекрывается
         if (config.title) {
-            // Заголовок
             ctx.fillStyle = config.textColor;
-            ctx.font = '14px Inter, sans-serif';
+            ctx.font = '16px Inter, sans-serif';
             ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(config.title, centerX, centerY - 60);
+            ctx.textBaseline = 'top';
+            ctx.fillText(config.title, centerX, centerY - 80);
         }
     }
 

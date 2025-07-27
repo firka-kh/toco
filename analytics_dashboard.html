@@ -6,6 +6,35 @@
     <title>Панель аналитики и статистики - TOCO</title>
     <meta name="description" content="Комплексная панель аналитики рынка труда Республики Таджикистан. Профессиональные инструменты для анализа занятости, безработицы, вакансий и трудовой миграции.">
     
+    <style>
+        .gauge-container {
+            position: relative;
+            margin: 0 auto;
+            width: 100%;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .stat-card {
+            overflow: hidden;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 350px;
+        }
+        .gauge-label {
+            position: absolute;
+            top: -15px;
+            text-align: center;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+    
     <!-- Стили и библиотеки -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
@@ -641,8 +670,9 @@
                     <div class="text-3xl font-bold text-gray-800" id="totalEmployment">1,847,230</div>
                     <div class="text-gray-600">Общая занятость</div>
                     <div class="mt-4 flex justify-center">
-                        <div style="min-width:320px;min-height:220px;display:flex;flex-direction:column;align-items:center;">
-                            <canvas id="employmentGauge" width="320" height="220"></canvas>
+                        <div class="gauge-container">
+                            <span class="gauge-label">Занятость</span>
+                            <canvas id="employmentGauge" width="280" height="180"></canvas>
                         </div>
                     </div>
                 </div>
@@ -661,8 +691,9 @@
                     <div class="text-3xl font-bold text-gray-800" id="unemploymentRate">7.2%</div>
                     <div class="text-gray-600">Уровень безработицы</div>
                     <div class="mt-4 flex justify-center">
-                        <div style="min-width:320px;min-height:220px;display:flex;flex-direction:column;align-items:center;">
-                            <canvas id="unemploymentGauge" width="320" height="220"></canvas>
+                        <div class="gauge-container">
+                            <span class="gauge-label">Безработица</span>
+                            <canvas id="unemploymentGauge" width="280" height="180"></canvas>
                         </div>
                     </div>
                 </div>
@@ -681,8 +712,9 @@
                     <div class="text-3xl font-bold text-gray-800" id="activeVacancies">23,456</div>
                     <div class="text-gray-600">Активные вакансии</div>
                     <div class="mt-4 flex justify-center">
-                        <div style="min-width:320px;min-height:220px;display:flex;flex-direction:column;align-items:center;">
-                            <canvas id="vacanciesGauge" width="320" height="220"></canvas>
+                        <div class="gauge-container">
+                            <span class="gauge-label">Вакансии</span>
+                            <canvas id="vacanciesGauge" width="280" height="180"></canvas>
                         </div>
                     </div>
                 </div>
@@ -701,8 +733,9 @@
                     <div class="text-3xl font-bold text-gray-800" id="averageSalary">2,847</div>
                     <div class="text-gray-600">Средняя зарплата (сомони)</div>
                     <div class="mt-4 flex justify-center">
-                        <div style="min-width:320px;min-height:220px;display:flex;flex-direction:column;align-items:center;">
-                            <canvas id="salaryGauge" width="320" height="220"></canvas>
+                        <div class="gauge-container">
+                            <span class="gauge-label">Зарплаты</span>
+                            <canvas id="salaryGauge" width="280" height="180"></canvas>
                         </div>
                     </div>
                 </div>
