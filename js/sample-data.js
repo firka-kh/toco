@@ -320,6 +320,30 @@ const SampleDataUtils = {
     }
 };
 
+// Функция для генерации случайных данных
+function generateRandomMonthlyTrends() {
+    const labels = [
+        'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+    ];
+
+    const employment = labels.map(() => (Math.random() * (96 - 92) + 92).toFixed(1));
+    const unemployment = employment.map(e => (100 - e).toFixed(1));
+    const vacancies = labels.map(() => Math.floor(Math.random() * (1500 - 900) + 900));
+    const newRegistrations = labels.map(() => Math.floor(Math.random() * (800 - 400) + 400));
+
+    return {
+        labels,
+        employment,
+        unemployment,
+        vacancies,
+        newRegistrations
+    };
+}
+
+// Обновление данных трендов
+SampleData.monthlyTrends = generateRandomMonthlyTrends();
+
 // Экспорт для использования
 if (typeof window !== 'undefined') {
     window.SampleData = SampleData;
