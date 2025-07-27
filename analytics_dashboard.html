@@ -749,9 +749,563 @@
             position: absolute;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        /* Стили для контейнера отраслевого распределения */
+        .industry-ring-container {
+            position: relative;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+        
+        /* Центральная статистика в кольце */
+        .center-stat {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .center-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #111827;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .center-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        
+        .center-change-indicator {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .center-change-indicator.up {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .center-change-indicator.down {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .center-change-indicator.stable {
+            background-color: rgba(107, 114, 128, 0.1);
+            color: #6b7280;
+        }
+        
+        /* Легенда отраслей */
+        .industry-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 0 15px;
+        }
+        
+        .industry-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .industry-item:hover {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .color-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .industry-item .name {
+            flex-grow: 1;
+            font-size: 12px;
+            font-weight: 500;
+            color: #4b5563;
+        }
+        
+        .industry-item .value {
+            font-weight: 700;
+            font-size: 14px;
+            color: #111827;
+            margin-right: 8px;
+        }
+        
+        .trend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        
+        .trend.up {
+            color: #10b981;
+        }
+        
+        .trend.down {
+            color: #ef4444;
+        }
+        
+        .trend.stable {
+            color: #6b7280;
+        }
+        
+        /* Плавающие иконки */
+        .floating-stats {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        
+        .floating-stat-item {
+            position: absolute;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-stat-item:nth-child(2) {
+            animation-delay: -2s;
+        }
+        
+        .floating-stat-item:nth-child(3) {
+            animation-delay: -4s;
+        }
+        
+        .floating-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: #3b82f6;
+        }
+        
+        /* Панель деталей отрасли */
+        .industry-details {
+            margin-top: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            max-height: 200px;
+            overflow: hidden;
+        }
+        
+        .industry-details.collapse {
+            max-height: 0;
+            padding: 0 15px;
+            opacity: 0;
+            margin: 0;
+        }
+        
+        .details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .close-details {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(243, 244, 246, 0.7);
+            transition: all 0.2s ease;
+        }
+        
+        .close-details:hover {
+            background-color: rgba(209, 213, 219, 0.7);
+        }
+        
+        .details-content {
+            font-size: 14px;
+            color: #4b5563;
+        }
+        
+        /* Стили для региональной карты */
+        .regional-heatmap-container {
+            position: relative;
+            height: 320px;
+        }
+        
+        .chart-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 0 15px;
+        }
+        
+        .filter-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: rgba(243, 244, 246, 0.7);
+            color: #6b7280;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            background-color: rgba(209, 213, 219, 0.7);
+        }
+        
+        .filter-btn.active {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+        
+        .region-map-wrapper {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .region-map {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background-color: rgba(243, 244, 246, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        /* Пульсирующие точки на карте */
+        .map-pulsing-dots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: all;
+        }
+        
+        .pulsing-dot {
+            position: absolute;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .pulse-ring {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: rgba(59, 130, 246, 0.3);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite;
+        }
+        
+        .pulse-core {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+        }
+        
+        .pulse-label {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #111827;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+        
+        .pulsing-dot:hover .pulse-label,
+        .pulsing-dot.active .pulse-label {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+        
+        .pulsing-dot.active .pulse-ring {
+            background-color: rgba(16, 185, 129, 0.3);
+            animation: pulse 1.5s infinite;
+        }
+        
+        .pulsing-dot.active .pulse-core {
+            background-color: #10b981;
+            width: 12px;
+            height: 12px;
+        }
+        
+        /* Панель региональной детализации */
+        .region-highlight {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+            transition: all 0.3s ease;
+            max-width: 200px;
+        }
+        
+        .region-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 5px;
+        }
+        
+        .region-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .region-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin: 2px 0 5px;
+        }
+        
+        .region-growth {
+            display: inline-flex;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+        
+        .region-growth.positive {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .region-growth.negative {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        /* Детальная панель региона */
+        .region-detail-panel {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+        
+        .region-detail-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+        
+        .region-stats {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 3px;
+        }
+        
+        .region-stat-label {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .region-stat-value {
+            display: flex;
+            align-items: center;
+        }
+        
+        .fa-star, .fa-star-half-alt {
+            color: #f59e0b;
+            font-size: 12px;
+            margin-right: 2px;
+        }
+        
+        .region-detail-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .region-stat-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background-color: rgba(243, 244, 246, 0.7);
+            border-radius: 8px;
+        }
+        
+        .stat-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border-radius: 8px;
+        }
+        
+        .stat-info {
+            flex-grow: 1;
+        }
+        
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #6b7280;
+        }
+        
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .stat-trend.up {
+            color: #10b981;
+        }
+        
+        .stat-trend.down {
+            color: #ef4444;
+        }
+        
+        /* Анимация пульсации */
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.8;
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        /* Анимация плавания */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        /* Контроллеры для графиков */
+        .chart-controls {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .chart-control-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(243, 244, 246, 0.7);
+            color: #6b7280;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .chart-control-btn:hover {
+            background-color: rgba(209, 213, 219, 0.7);
+        }
+        
+        .chart-control-btn.active {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+        
+        .chart-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
+            z-index: 10;
         }
         
         .chart-highlight {
@@ -1623,8 +2177,11 @@
                                 <p class="text-sm text-gray-500 mt-1">Структура рынка по секторам</p>
                             </div>
                             <div class="chart-controls">
-                                <button class="chart-control-btn" data-action="viewType">
+                                <button class="chart-control-btn active" data-action="viewType" data-view="donut">
                                     <i class="fas fa-chart-pie"></i>
+                                </button>
+                                <button class="chart-control-btn" data-action="viewType" data-view="polar">
+                                    <i class="fas fa-chart-line"></i>
                                 </button>
                                 <button class="chart-control-btn" data-action="download">
                                     <i class="fas fa-download"></i>
@@ -1632,30 +2189,75 @@
                             </div>
                         </div>
                         <div class="chart-container industry-ring-container">
+                            <div class="chart-overlay">
+                                <div class="chart-highlight-radial"></div>
+                            </div>
                             <canvas id="industryDistributionChart"></canvas>
                             <div class="center-stat">
-                                <div class="center-value">45.8%</div>
+                                <div class="center-value animated-number">45.8%</div>
                                 <div class="center-label">Сфера услуг</div>
+                                <div class="center-change-indicator up">
+                                    <i class="fas fa-arrow-up"></i> 3.2%
+                                </div>
+                            </div>
+                            <div class="floating-stats">
+                                <div class="floating-stat-item" style="top: 30%; left: 22%;">
+                                    <div class="floating-icon">
+                                        <i class="fas fa-briefcase"></i>
+                                    </div>
+                                </div>
+                                <div class="floating-stat-item" style="top: 60%; left: 75%;">
+                                    <div class="floating-icon">
+                                        <i class="fas fa-tractor"></i>
+                                    </div>
+                                </div>
+                                <div class="floating-stat-item" style="top: 20%; left: 65%;">
+                                    <div class="floating-icon">
+                                        <i class="fas fa-industry"></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="industry-legend">
-                            <div class="industry-item">
+                            <div class="industry-item" data-industry="services">
                                 <span class="color-dot bg-blue-500"></span>
                                 <span class="name">Услуги</span>
-                                <span class="value">45.8%</span>
+                                <span class="value animated-value">45.8%</span>
                                 <span class="trend up"><i class="fas fa-arrow-up"></i></span>
                             </div>
-                            <div class="industry-item">
+                            <div class="industry-item" data-industry="agriculture">
                                 <span class="color-dot bg-green-500"></span>
                                 <span class="name">Сельское хозяйство</span>
-                                <span class="value">21.3%</span>
+                                <span class="value animated-value">21.3%</span>
                                 <span class="trend down"><i class="fas fa-arrow-down"></i></span>
                             </div>
-                            <div class="industry-item">
+                            <div class="industry-item" data-industry="production">
                                 <span class="color-dot bg-yellow-500"></span>
                                 <span class="name">Производство</span>
-                                <span class="value">18.5%</span>
+                                <span class="value animated-value">18.5%</span>
                                 <span class="trend stable"><i class="fas fa-minus"></i></span>
+                            </div>
+                        </div>
+                        <div class="industry-details collapse">
+                            <div class="details-header">
+                                <h4 class="text-md font-semibold">Детали по отрасли: <span class="industry-detail-name">Услуги</span></h4>
+                                <div class="close-details">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </div>
+                            <div class="details-content">
+                                <div class="flex justify-between mb-2">
+                                    <span>Занятость в отрасли:</span>
+                                    <span class="font-semibold">846,230 чел.</span>
+                                </div>
+                                <div class="flex justify-between mb-2">
+                                    <span>Средняя зарплата:</span>
+                                    <span class="font-semibold">3,250 сомони</span>
+                                </div>
+                                <div class="flex justify-between mb-2">
+                                    <span>Рост за последний год:</span>
+                                    <span class="font-semibold text-green-500">+3.2%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1674,21 +2276,114 @@
                                 </h3>
                                 <p class="text-sm text-gray-500 mt-1">Анализ по регионам</p>
                             </div>
-                            <div class="stat-actions">
-                                <button class="stat-action-btn" data-metric="employment">Занятость</button>
-                                <button class="stat-action-btn active" data-metric="vacancies">Вакансии</button>
+                            <div class="chart-controls">
+                                <button class="chart-control-btn active" data-action="viewType" data-view="map">
+                                    <i class="fas fa-map"></i>
+                                </button>
+                                <button class="chart-control-btn" data-action="viewType" data-view="bars">
+                                    <i class="fas fa-chart-bar"></i>
+                                </button>
+                                <button class="chart-control-btn" data-action="download">
+                                    <i class="fas fa-download"></i>
+                                </button>
                             </div>
                         </div>
                         <div class="chart-container regional-heatmap-container">
+                            <div class="chart-filters">
+                                <div class="filter-btn active" data-filter="vacancies">Вакансии</div>
+                                <div class="filter-btn" data-filter="unemployment">Безработица</div>
+                                <div class="filter-btn" data-filter="salary">Зарплата</div>
+                            </div>
                             <div class="region-map-wrapper">
                                 <div class="region-map">
                                     <!-- SVG карта Таджикистана с интерактивными регионами будет добавлена через JS -->
+                                    <div class="map-pulsing-dots">
+                                        <div class="pulsing-dot" style="top: 35%; left: 60%;" data-region="dushanbe" data-value="9845">
+                                            <div class="pulse-ring"></div>
+                                            <div class="pulse-core"></div>
+                                            <div class="pulse-label">Душанбе</div>
+                                        </div>
+                                        <div class="pulsing-dot" style="top: 20%; left: 30%;" data-region="sughd" data-value="6254">
+                                            <div class="pulse-ring"></div>
+                                            <div class="pulse-core"></div>
+                                            <div class="pulse-label">Согд</div>
+                                        </div>
+                                        <div class="pulsing-dot" style="top: 65%; left: 45%;" data-region="khatlon" data-value="4875">
+                                            <div class="pulse-ring"></div>
+                                            <div class="pulse-core"></div>
+                                            <div class="pulse-label">Хатлон</div>
+                                        </div>
+                                        <div class="pulsing-dot" style="top: 40%; left: 80%;" data-region="gbao" data-value="2325">
+                                            <div class="pulse-ring"></div>
+                                            <div class="pulse-core"></div>
+                                            <div class="pulse-label">ГБАО</div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="region-highlight" id="selectedRegion">
                                     <div class="region-name">Душанбе</div>
-                                    <div class="region-value">9,845</div>
+                                    <div class="region-value animated-number">9,845</div>
                                     <div class="region-label">активных вакансий</div>
-                                    <div class="region-growth positive">+12.4% рост</div>
+                                    <div class="region-growth positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span class="trend-value">12.4%</span> рост
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="region-detail-panel">
+                                <div class="region-detail-header">
+                                    <h4 class="region-name">Душанбе</h4>
+                                    <div class="region-stats">
+                                        <span class="region-stat-label">Рейтинг активности:</span>
+                                        <span class="region-stat-value">
+                                            <i class="fas fa-star filled"></i>
+                                            <i class="fas fa-star filled"></i>
+                                            <i class="fas fa-star filled"></i>
+                                            <i class="fas fa-star filled"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="region-detail-stats">
+                                    <div class="region-stat-item">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-briefcase"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-value animated-value">9,845</div>
+                                            <div class="stat-label">Активных вакансий</div>
+                                        </div>
+                                        <div class="stat-trend up">
+                                            <i class="fas fa-arrow-up"></i> 
+                                            <span class="trend-value">12.4%</span>
+                                        </div>
+                                    </div>
+                                    <div class="region-stat-item">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-value animated-value">2.8%</div>
+                                            <div class="stat-label">Уровень безработицы</div>
+                                        </div>
+                                        <div class="stat-trend down">
+                                            <i class="fas fa-arrow-down"></i> 
+                                            <span class="trend-value">1.2%</span>
+                                        </div>
+                                    </div>
+                                    <div class="region-stat-item">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-value animated-value">4,250</div>
+                                            <div class="stat-label">Средняя зарплата (сомони)</div>
+                                        </div>
+                                        <div class="stat-trend up">
+                                            <i class="fas fa-arrow-up"></i> 
+                                            <span class="trend-value">5.4%</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <canvas id="regionalStatsChart"></canvas>
@@ -1704,7 +2399,7 @@
 
                     <!-- Топ вакансий - современная анимированная гистограмма с микроанимациями -->
                     <div class="stat-card glassmorphism">
-                        <div class="live-indicator">
+                        <div class="live-indicator" style="left: 10px; right: auto;">
                             <span class="live-dot"></span>
                             LIVE
                         </div>
@@ -5057,6 +5752,403 @@
                     });
                 });
             }
+
+            // Распределение по отраслям - интерактивное кольцо с 3D эффектами
+            function initIndustryDistributionChart() {
+                const ctx = document.getElementById('industryDistributionChart');
+                if (!ctx) return;
+
+                const data = {
+                    labels: ['Услуги', 'Сельское хозяйство', 'Производство', 'Образование', 'Здравоохранение', 'Другое'],
+                    datasets: [{
+                        data: [45.8, 21.3, 18.5, 7.2, 4.5, 2.7],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(107, 114, 128, 0.8)'
+                        ],
+                        borderWidth: 1,
+                        borderColor: 'rgba(255, 255, 255, 0.7)',
+                        hoverBorderWidth: 3,
+                        hoverBorderColor: '#ffffff',
+                        cutout: '65%',
+                        borderRadius: 6
+                    }]
+                };
+
+                const industryChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutoutPercentage: 70,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                enabled: true,
+                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                titleColor: '#111827',
+                                bodyColor: '#111827',
+                                borderColor: 'rgba(0, 0, 0, 0.1)',
+                                borderWidth: 1,
+                                cornerRadius: 8,
+                                padding: 12,
+                                boxPadding: 6,
+                                usePointStyle: true,
+                                callbacks: {
+                                    label: function(context) {
+                                        const value = context.raw;
+                                        return `${context.label}: ${value}%`;
+                                    },
+                                    title: function(context) {
+                                        return 'Отрасль';
+                                    }
+                                }
+                            }
+                        },
+                        animation: {
+                            animateRotate: true,
+                            animateScale: true,
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        },
+                        hover: {
+                            mode: 'nearest',
+                            intersect: false,
+                            animationDuration: 200
+                        }
+                    }
+                });
+
+                // Анимация центрального индикатора при наведении на сегменты
+                document.querySelectorAll('.industry-item').forEach((item, index) => {
+                    item.addEventListener('mouseenter', () => {
+                        const industry = item.getAttribute('data-industry');
+                        const centerValue = document.querySelector('.center-value');
+                        const centerLabel = document.querySelector('.center-label');
+                        const centerChange = document.querySelector('.center-change-indicator');
+                        
+                        // Анимируем переход значения
+                        animateValue(centerValue, parseFloat(centerValue.textContent), data.datasets[0].data[index], 500);
+                        
+                        // Изменяем текст и класс
+                        centerLabel.textContent = data.labels[index];
+                        
+                        // Находим соответствующий тренд
+                        const trendEl = item.querySelector('.trend');
+                        if (trendEl.classList.contains('up')) {
+                            centerChange.className = 'center-change-indicator up';
+                            centerChange.innerHTML = '<i class="fas fa-arrow-up"></i> ' + (Math.random() * 5 + 1).toFixed(1) + '%';
+                        } else if (trendEl.classList.contains('down')) {
+                            centerChange.className = 'center-change-indicator down';
+                            centerChange.innerHTML = '<i class="fas fa-arrow-down"></i> ' + (Math.random() * 3 + 0.5).toFixed(1) + '%';
+                        } else {
+                            centerChange.className = 'center-change-indicator stable';
+                            centerChange.innerHTML = '<i class="fas fa-minus"></i> 0.0%';
+                        }
+
+                        // Подсветка активного сегмента
+                        industryChart.setActiveElements([{datasetIndex: 0, index: index}]);
+                        industryChart.update();
+                    });
+                });
+
+                // Анимация обновления данных каждые 3 секунды
+                setInterval(() => {
+                    // Обновляем данные с небольшими случайными изменениями
+                    data.datasets[0].data = data.datasets[0].data.map(value => {
+                        const change = (Math.random() - 0.5) * 1.5; // Случайное изменение в диапазоне +/- 0.75%
+                        return Math.max(0, Math.min(100, value + change));
+                    });
+                    
+                    // Обновляем проценты в легенде
+                    document.querySelectorAll('.industry-item .animated-value').forEach((el, index) => {
+                        animateValue(el, parseFloat(el.textContent), data.datasets[0].data[index], 1000);
+                    });
+                    
+                    industryChart.update();
+                }, 3000);
+
+                // Эффект 3D вращения при наведении на виджет
+                const container = document.querySelector('.industry-ring-container');
+                if (container) {
+                    container.addEventListener('mousemove', (e) => {
+                        const rect = container.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        const mouseX = e.clientX;
+                        const mouseY = e.clientY;
+                        
+                        // Вычисляем угол наклона (не более 10 градусов)
+                        const maxTilt = 10;
+                        const tiltX = ((mouseY - centerY) / (rect.height / 2)) * maxTilt;
+                        const tiltY = -((mouseX - centerX) / (rect.width / 2)) * maxTilt;
+                        
+                        // Применяем 3D трансформацию
+                        ctx.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+                    });
+                    
+                    container.addEventListener('mouseleave', () => {
+                        // Возвращаем в нормальное положение при уходе мыши
+                        ctx.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+                    });
+                }
+
+                // Кнопки управления представлением
+                document.querySelectorAll('.chart-control-btn[data-action="viewType"]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const viewType = this.getAttribute('data-view');
+                        
+                        // Переключаем активную кнопку
+                        document.querySelectorAll('.chart-control-btn[data-action="viewType"]').forEach(b => {
+                            b.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        // Изменяем тип графика
+                        if (viewType === 'donut') {
+                            industryChart.config.type = 'doughnut';
+                        } else if (viewType === 'polar') {
+                            industryChart.config.type = 'polarArea';
+                        }
+                        
+                        industryChart.update();
+                    });
+                });
+            }
+
+            // Региональная статистика - интерактивная карта с анимацией
+            function initRegionalStatistics() {
+                // Анимация пульсирующих точек
+                document.querySelectorAll('.pulsing-dot').forEach(dot => {
+                    dot.addEventListener('mouseenter', () => {
+                        // Подсвечиваем активную точку
+                        document.querySelectorAll('.pulsing-dot').forEach(d => {
+                            d.classList.remove('active');
+                        });
+                        dot.classList.add('active');
+                        
+                        // Обновляем данные в панели выбранного региона
+                        const regionName = dot.getAttribute('data-region');
+                        const regionValue = dot.getAttribute('data-value');
+                        const regionHighlight = document.getElementById('selectedRegion');
+                        
+                        if (regionHighlight) {
+                            const nameEl = regionHighlight.querySelector('.region-name');
+                            const valueEl = regionHighlight.querySelector('.region-value');
+                            
+                            if (nameEl && valueEl) {
+                                // Преобразуем название региона
+                                let displayName = 'Регион';
+                                switch(regionName) {
+                                    case 'dushanbe': displayName = 'Душанбе'; break;
+                                    case 'sughd': displayName = 'Согд'; break;
+                                    case 'khatlon': displayName = 'Хатлон'; break;
+                                    case 'gbao': displayName = 'ГБАО'; break;
+                                }
+                                
+                                nameEl.textContent = displayName;
+                                animateValue(valueEl, parseInt(valueEl.textContent.replace(/,/g, '')), parseInt(regionValue), 800);
+                            }
+                        }
+                        
+                        // Обновляем детальную панель региона
+                        const detailPanel = document.querySelector('.region-detail-panel');
+                        const detailHeader = detailPanel.querySelector('.region-name');
+                        const detailValues = detailPanel.querySelectorAll('.animated-value');
+                        
+                        if (detailHeader) {
+                            // Преобразуем название региона
+                            let displayName = 'Регион';
+                            switch(regionName) {
+                                case 'dushanbe': displayName = 'Душанбе'; break;
+                                case 'sughd': displayName = 'Согд'; break;
+                                case 'khatlon': displayName = 'Хатлон'; break;
+                                case 'gbao': displayName = 'ГБАО'; break;
+                            }
+                            
+                            detailHeader.textContent = displayName;
+                        }
+                        
+                        if (detailValues.length > 0) {
+                            // Устанавливаем значения с анимацией
+                            animateValue(detailValues[0], parseInt(detailValues[0].textContent.replace(/,/g, '')), parseInt(regionValue), 800);
+                            
+                            // Безработица зависит от региона
+                            let unemploymentRate = 0;
+                            switch(regionName) {
+                                case 'dushanbe': unemploymentRate = 2.8; break;
+                                case 'sughd': unemploymentRate = 3.5; break;
+                                case 'khatlon': unemploymentRate = 4.2; break;
+                                case 'gbao': unemploymentRate = 5.1; break;
+                                default: unemploymentRate = 3.8;
+                            }
+                            
+                            animateValue(detailValues[1], parseFloat(detailValues[1].textContent), unemploymentRate, 800);
+                            
+                            // Средняя зарплата зависит от региона
+                            let avgSalary = 0;
+                            switch(regionName) {
+                                case 'dushanbe': avgSalary = 4250; break;
+                                case 'sughd': avgSalary = 3650; break;
+                                case 'khatlon': avgSalary = 2950; break;
+                                case 'gbao': avgSalary = 3150; break;
+                                default: avgSalary = 3500;
+                            }
+                            
+                            animateValue(detailValues[2], parseInt(detailValues[2].textContent.replace(/,/g, '')), avgSalary, 800);
+                        }
+                    });
+                });
+                
+                // Переключение фильтров
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // Переключаем активную кнопку
+                        document.querySelectorAll('.filter-btn').forEach(b => {
+                            b.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        const filterType = this.getAttribute('data-filter');
+                        const pulseDots = document.querySelectorAll('.pulsing-dot');
+                        const regionLabel = document.querySelector('.region-label');
+                        
+                        // Обновляем метрику
+                        if (regionLabel) {
+                            switch(filterType) {
+                                case 'vacancies': 
+                                    regionLabel.textContent = 'активных вакансий';
+                                    // Обновляем значения на точках для вакансий
+                                    pulseDots.forEach(dot => {
+                                        const region = dot.getAttribute('data-region');
+                                        let value = 0;
+                                        switch(region) {
+                                            case 'dushanbe': value = 9845; break;
+                                            case 'sughd': value = 6254; break;
+                                            case 'khatlon': value = 4875; break;
+                                            case 'gbao': value = 2325; break;
+                                            default: value = 1000;
+                                        }
+                                        dot.setAttribute('data-value', value);
+                                        
+                                        // Если это активная точка, обновляем показатели
+                                        if (dot.classList.contains('active')) {
+                                            dot.dispatchEvent(new Event('mouseenter'));
+                                        }
+                                    });
+                                    break;
+                                case 'unemployment': 
+                                    regionLabel.textContent = 'уровень безработицы';
+                                    // Обновляем значения на точках для безработицы
+                                    pulseDots.forEach(dot => {
+                                        const region = dot.getAttribute('data-region');
+                                        let value = 0;
+                                        switch(region) {
+                                            case 'dushanbe': value = 2.8; break;
+                                            case 'sughd': value = 3.5; break;
+                                            case 'khatlon': value = 4.2; break;
+                                            case 'gbao': value = 5.1; break;
+                                            default: value = 3.8;
+                                        }
+                                        dot.setAttribute('data-value', value);
+                                        
+                                        // Если это активная точка, обновляем показатели
+                                        if (dot.classList.contains('active')) {
+                                            dot.dispatchEvent(new Event('mouseenter'));
+                                        }
+                                    });
+                                    break;
+                                case 'salary': 
+                                    regionLabel.textContent = 'средняя зарплата (сомони)';
+                                    // Обновляем значения на точках для зарплаты
+                                    pulseDots.forEach(dot => {
+                                        const region = dot.getAttribute('data-region');
+                                        let value = 0;
+                                        switch(region) {
+                                            case 'dushanbe': value = 4250; break;
+                                            case 'sughd': value = 3650; break;
+                                            case 'khatlon': value = 2950; break;
+                                            case 'gbao': value = 3150; break;
+                                            default: value = 3500;
+                                        }
+                                        dot.setAttribute('data-value', value);
+                                        
+                                        // Если это активная точка, обновляем показатели
+                                        if (dot.classList.contains('active')) {
+                                            dot.dispatchEvent(new Event('mouseenter'));
+                                        }
+                                    });
+                                    break;
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Вспомогательная функция для анимации изменения числовых значений
+            function animateValue(element, start, end, duration) {
+                if (!element) return;
+                
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    const value = progress * (end - start) + start;
+                    
+                    // Форматируем число в зависимости от его типа
+                    if (Number.isInteger(end)) {
+                        element.textContent = Math.floor(value).toLocaleString();
+                    } else {
+                        element.textContent = value.toFixed(1);
+                    }
+                    
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+
+            // Инициализация новых виджетов
+            document.addEventListener('DOMContentLoaded', function() {
+                // Инициализируем все виджеты
+                initIndustryDistributionChart();
+                initRegionalStatistics();
+                
+                // Обработка кликов на элементы легенды отраслей
+                document.querySelectorAll('.industry-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const industry = this.getAttribute('data-industry');
+                        const detailsPanel = document.querySelector('.industry-details');
+                        const detailName = detailsPanel.querySelector('.industry-detail-name');
+                        
+                        // Показываем панель деталей
+                        detailsPanel.classList.toggle('collapse');
+                        
+                        // Устанавливаем название отрасли
+                        if (detailName) {
+                            switch(industry) {
+                                case 'services': detailName.textContent = 'Услуги'; break;
+                                case 'agriculture': detailName.textContent = 'Сельское хозяйство'; break;
+                                case 'production': detailName.textContent = 'Производство'; break;
+                                default: detailName.textContent = 'Отрасль';
+                            }
+                        }
+                    });
+                });
+                
+                // Закрытие панели деталей отрасли
+                document.querySelector('.close-details')?.addEventListener('click', function() {
+                    document.querySelector('.industry-details').classList.add('collapse');
+                });
+            });
         });
     </script>
 </body>
