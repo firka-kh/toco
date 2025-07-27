@@ -699,6 +699,69 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Дополнительные статистические карточки -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Тренд занятости -->
+                <div class="stat-card-enhanced" data-stat="employment-rate">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Тренд занятости</h4>
+                        <div class="trend-indicator trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value text-2xl font-bold text-gray-800 mb-2">95.0%</div>
+                    <div class="chart-mini mb-3">
+                        <canvas id="employment-trend-mini" width="100" height="40"></canvas>
+                    </div>
+                    <div class="text-xs text-gray-500">За последние 12 месяцев</div>
+                </div>
+
+                <!-- Активность на рынке -->
+                <div class="stat-card-enhanced" data-stat="total-population">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Трудовые ресурсы</h4>
+                        <div class="trend-indicator trend-stable">
+                            <i class="fas fa-minus"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value text-2xl font-bold text-gray-800 mb-2">2.4М</div>
+                    <div class="chart-mini mb-3">
+                        <canvas id="vacancies-trend-mini" width="100" height="40"></canvas>
+                    </div>
+                    <div class="text-xs text-gray-500">Трудоспособное население</div>
+                </div>
+
+                <!-- Региональное распределение -->
+                <div class="stat-card-enhanced" data-stat="labor-force">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-semibold text-gray-600 uppercase tracking-wide">По регионам</h4>
+                        <div class="trend-indicator trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value text-2xl font-bold text-gray-800 mb-2">5</div>
+                    <div class="chart-mini mb-3">
+                        <canvas id="regional-mini" width="100" height="40"></canvas>
+                    </div>
+                    <div class="text-xs text-gray-500">Основных регионов</div>
+                </div>
+
+                <!-- Отраслевое распределение -->
+                <div class="stat-card-enhanced" data-stat="job-seekers">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-semibold text-gray-600 uppercase tracking-wide">По отраслям</h4>
+                        <div class="trend-indicator trend-down">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value text-2xl font-bold text-gray-800 mb-2">10</div>
+                    <div class="chart-mini mb-3">
+                        <canvas id="industries-mini" width="100" height="40"></canvas>
+                    </div>
+                    <div class="text-xs text-gray-500">Основных отраслей</div>
+                </div>
+            </div>
         </section>
 
         <!-- Вкладки аналитики -->
@@ -762,6 +825,30 @@
 
             <!-- Вкладка "Аналитика" -->
             <div class="tab-content" id="analytics">
+                <!-- Диаграммы аналитики -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="chart-container">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Возрастное распределение</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="ageDistributionChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Образовательная структура</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="educationChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container lg:col-span-2">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Эффективность программ трудоустройства</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="programEfficiencyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Инструменты аналитики -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <div class="tool-card theme-analytics interactive-element">
@@ -851,6 +938,30 @@
 
             <!-- Вкладка "Прогнозирование" -->
             <div class="tab-content" id="forecasting">
+                <!-- Диаграммы прогнозирования -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="chart-container">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Прогноз уровня занятости</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="employmentForecastChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Прогноз средних зарплат</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="salaryForecastChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container lg:col-span-2">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Прогноз вакансий по секторам</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="vacancyForecastChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     <div class="stat-card">
                         <h3 class="text-xl font-bold text-gray-800 mb-4">Прогноз занятости на 2025 год</h3>
@@ -935,6 +1046,30 @@
 
             <!-- Вкладка "Миграция" -->
             <div class="tab-content" id="migration">
+                <!-- Диаграммы миграции -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="chart-container">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Внутренняя миграция</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="internalMigrationChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Внешняя миграция по странам</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="externalMigrationChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container lg:col-span-2">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Денежные переводы</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="remittancesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     <div class="stat-card">
                         <h3 class="text-xl font-bold text-gray-800 mb-4">Миграционные потоки</h3>
@@ -1006,6 +1141,30 @@
 
             <!-- Вкладка "Навыки" -->
             <div class="tab-content" id="skills">
+                <!-- Диаграммы навыков -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="chart-container">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Разрыв навыков: спрос vs предложение</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="skillGapChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Анализ навыков по категориям</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="skillCategoriesChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container lg:col-span-2">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Самые востребованные навыки</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="topSkillsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     <div class="stat-card">
                         <h3 class="text-xl font-bold text-gray-800 mb-4">Востребованные навыки</h3>
@@ -1327,6 +1486,70 @@
                     loadSkillsData();
                     break;
             }
+        }
+
+        // Загрузка данных аналитики
+        function loadAnalyticsData() {
+            if (typeof SampleData === 'undefined') return;
+            
+            // Создаем диаграмму по возрастным группам
+            createAgeDistributionChart();
+            
+            // Создаем диаграмму по образованию
+            createEducationChart();
+            
+            // Создаем диаграмму производительности программ
+            createProgramEfficiencyChart();
+            
+            showNotification('Данные аналитики загружены', 'success');
+        }
+
+        // Загрузка данных прогнозирования
+        function loadForecastingData() {
+            if (typeof SampleData === 'undefined') return;
+            
+            // Создаем прогнозы занятости
+            createEmploymentForecastChart();
+            
+            // Создаем прогнозы зарплат
+            createSalaryForecastChart();
+            
+            // Создаем прогнозы по вакансиям
+            createVacancyForecastChart();
+            
+            showNotification('Прогнозные данные загружены', 'success');
+        }
+
+        // Загрузка данных миграции
+        function loadMigrationData() {
+            if (typeof SampleData === 'undefined') return;
+            
+            // Создаем диаграмму внутренней миграции
+            createInternalMigrationChart();
+            
+            // Создаем диаграмму внешней миграции
+            createExternalMigrationChart();
+            
+            // Создаем диаграмму денежных переводов
+            createRemittancesChart();
+            
+            showNotification('Данные миграции загружены', 'success');
+        }
+
+        // Загрузка данных навыков
+        function loadSkillsData() {
+            if (typeof SampleData === 'undefined') return;
+            
+            // Создаем диаграмму разрыва навыков
+            createSkillGapChart();
+            
+            // Создаем диаграмму по категориям навыков
+            createSkillCategoriesChart();
+            
+            // Создаем диаграмму самых востребованных навыков
+            createTopSkillsChart();
+            
+            showNotification('Данные навыков загружены', 'success');
         }
 
         // Инициализация фильтров
@@ -1693,23 +1916,18 @@
             animateCounter('totalEmployment', summary.totalEmployed);
             animateCounter('activeVacancies', summary.activeVacancies);
             animateCounter('averageSalary', summary.averageSalary);
+            animatePercentage('unemploymentRate', summary.unemploymentRate);
             
             // Обновляем дополнительные показатели
-            const unemploymentElement = document.querySelector('[data-metric="unemployment"]');
-            if (unemploymentElement) {
-                animateCounter(unemploymentElement.id, summary.unemployment);
-            }
+            updateStatCard('employment-rate', summary.employmentRate, '%', 'up');
+            updateStatCard('total-population', 2400000, '', 'stable');
+            updateStatCard('labor-force', summary.totalEmployed, '', 'up');
+            updateStatCard('job-seekers', summary.activeVacancies, '', 'down');
             
-            // Обновляем проценты
-            const employmentRateElement = document.querySelector('[data-metric="employment-rate"]');
-            if (employmentRateElement) {
-                animatePercentage(employmentRateElement.id, summary.employmentRate);
-            }
-            
-            const unemploymentRateElement = document.querySelector('[data-metric="unemployment-rate"]');
-            if (unemploymentRateElement) {
-                animatePercentage(unemploymentRateElement.id, summary.unemploymentRate);
-            }
+            // Загружаем мини-диаграммы
+            setTimeout(() => {
+                loadMiniCharts();
+            }, 1000);
         }
 
         // Обновление метрик
@@ -1718,6 +1936,47 @@
             animateCounter('totalEmployment', 1847230);
             animateCounter('activeVacancies', 23456);
             animateCounter('averageSalary', 2847);
+        }
+
+        // Обновление статистических карточек
+        function updateStatCard(cardId, value, unit, trend) {
+            const card = document.querySelector(`[data-stat="${cardId}"]`);
+            if (!card) return;
+            
+            const valueElement = card.querySelector('.stat-value');
+            const trendElement = card.querySelector('.trend-indicator');
+            
+            if (valueElement) {
+                if (unit === '%') {
+                    valueElement.textContent = value.toFixed(1) + unit;
+                } else {
+                    valueElement.textContent = AnalyticsUtils.formatNumber(value);
+                }
+            }
+            
+            if (trendElement) {
+                trendElement.className = `trend-indicator trend-${trend}`;
+                const icon = trend === 'up' ? 'fa-arrow-up' : 
+                           trend === 'down' ? 'fa-arrow-down' : 'fa-minus';
+                trendElement.innerHTML = `<i class="fas ${icon}"></i>`;
+            }
+        }
+
+        // Загрузка мини-диаграмм в карточки
+        function loadMiniCharts() {
+            if (typeof SampleData === 'undefined') return;
+            
+            // Мини-график трендов занятости
+            createMiniLineChart('employment-trend-mini', SampleData.monthlyTrends.employment);
+            
+            // Мини-график вакансий
+            createMiniLineChart('vacancies-trend-mini', SampleData.monthlyTrends.vacancies);
+            
+            // Мини-диаграмма по регионам
+            createMiniBarChart('regional-mini', SampleData.regionalData.employment.map(r => r.rate));
+            
+            // Мини-диаграмма по отраслям
+            createMiniDoughnutChart('industries-mini', SampleData.industryData.employment.slice(0, 5));
         }
 
         // Анимация счетчика
@@ -1737,21 +1996,106 @@
             }, 20);
         }
 
-        // Анимация процентов
-        function animatePercentage(elementId, targetValue) {
-            const element = document.getElementById(elementId);
-            if (!element) return;
+        // Создание мини-диаграммы линейного типа
+        function createMiniLineChart(canvasId, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
             
-            let current = 0;
-            const increment = targetValue / 100;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= targetValue) {
-                    current = targetValue;
-                    clearInterval(timer);
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map((_, i) => i + 1),
+                    datasets: [{
+                        data: data,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    },
+                    elements: {
+                        point: { radius: 0 }
+                    }
                 }
-                element.textContent = current.toFixed(1) + '%';
-            }, 20);
+            });
+        }
+
+        // Создание мини-диаграммы столбчатого типа
+        function createMiniBarChart(canvasId, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map((_, i) => i + 1),
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'
+                        ],
+                        borderRadius: 4,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Создание мини-диаграммы кольцевого типа
+        function createMiniDoughnutChart(canvasId, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    cutout: '70%'
+                }
+            });
         }
 
         // Обновление диаграмм с фильтрами
@@ -2139,6 +2483,600 @@
                 showNotification(`Инструмент "${toolName}" будет доступен в полной версии`, 'info');
             }
         });
+
+        // === ДИАГРАММЫ ДЛЯ РАЗДЕЛА АНАЛИТИКИ ===
+        
+        // Создание диаграммы возрастного распределения
+        function createAgeDistributionChart() {
+            const canvas = document.getElementById('ageDistributionChart');
+            if (!canvas) return;
+            
+            const ageData = SampleData.ageDistribution;
+            const ctx = canvas.getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ageData.labels,
+                    datasets: [{
+                        label: 'Трудоустроенные',
+                        data: ageData.employed,
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 8
+                    }, {
+                        label: 'Безработные',
+                        data: ageData.unemployed,
+                        backgroundColor: '#ef4444',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Распределение по возрастным группам',
+                            font: { size: 16, weight: 'bold' }
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Количество человек'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Создание диаграммы по образованию
+        function createEducationChart() {
+            const canvas = document.getElementById('educationChart');
+            if (!canvas) return;
+            
+            const eduData = SampleData.educationDistribution;
+            const ctx = canvas.getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: eduData.labels,
+                    datasets: [{
+                        data: eduData.employed,
+                        backgroundColor: [
+                            '#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Распределение по уровню образования',
+                            font: { size: 16, weight: 'bold' }
+                        },
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Создание диаграммы эффективности программ
+        function createProgramEfficiencyChart() {
+            const canvas = document.getElementById('programEfficiencyChart');
+            if (!canvas) return;
+            
+            const programs = SampleDataUtils.calculateProgramEfficiency();
+            const ctx = canvas.getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Программы трудоустройства',
+                        data: programs.map(p => ({
+                            x: p.completionRate,
+                            y: p.successRate,
+                            r: p.participants / 1000
+                        })),
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Эффективность программ трудоустройства',
+                            font: { size: 16, weight: 'bold' }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const program = programs[context.dataIndex];
+                                    return `${program.name}: ${context.parsed.y}% успеха, ${context.parsed.x}% завершения`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Процент завершения (%)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Процент трудоустройства (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // === ДИАГРАММЫ ДЛЯ РАЗДЕЛА ПРОГНОЗИРОВАНИЯ ===
+        
+        // Создание прогноза занятости
+        function createEmploymentForecastChart() {
+            const canvas = document.getElementById('employmentForecastChart');
+            if (!canvas) return;
+            
+            const forecast = SampleData.forecastData.employment;
+            const ctx = canvas.getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: forecast.labels,
+                    datasets: [{
+                        label: 'Оптимистичный сценарий',
+                        data: forecast.optimistic,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: false,
+                        tension: 0.4
+                    }, {
+                        label: 'Реалистичный сценарий',
+                        data: forecast.realistic,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: false,
+                        tension: 0.4
+                    }, {
+                        label: 'Пессимистичный сценарий',
+                        data: forecast.pessimistic,
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        fill: false,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Прогноз уровня занятости',
+                            font: { size: 16, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Уровень занятости (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Создание прогноза зарплат
+        function createSalaryForecastChart() {
+            const canvas = document.getElementById('salaryForecastChart');
+            if (!canvas) return;
+            
+            const salaries = SampleData.forecastData.salaries;
+            const ctx = canvas.getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: salaries.labels,
+                    datasets: [{
+                        label: 'Средняя зарплата',
+                        data: salaries.average,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'ИТ сектор',
+                        data: salaries.it,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        fill: false,
+                        tension: 0.4
+                    }, {
+                        label: 'Сельское хозяйство',
+                        data: salaries.agriculture,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: false,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Прогноз средних зарплат по секторам',
+                            font: { size: 16, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Зарплата (сомони)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Создание прогноза вакансий
+        function createVacancyForecastChart() {
+            const canvas = document.getElementById('vacancyForecastChart');
+            if (!canvas) return;
+            
+            const vacancies = SampleData.forecastData.vacancies;
+            const ctx = canvas.getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: vacancies.labels,
+                    datasets: [{
+                        label: 'ИТ',
+                        data: vacancies.it,
+                        backgroundColor: '#8b5cf6',
+                        borderRadius: 8
+                    }, {
+                        label: 'Услуги',
+                        data: vacancies.services,
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 8
+                    }, {
+                        label: 'Производство',
+                        data: vacancies.manufacturing,
+                        backgroundColor: '#f59e0b',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Прогноз количества вакансий по кварталам',
+                            font: { size: 16, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Количество вакансий'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // === ДИАГРАММЫ ДЛЯ РАЗДЕЛА МИГРАЦИИ ===
+        
+        // Создание диаграммы внутренней миграции
+        function createInternalMigrationChart() {
+            const canvas = document.getElementById('internalMigrationChart');
+            if (!canvas) return;
+            
+            const migration = SampleData.migrationData.internal;
+            const ctx = canvas.getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: migration.labels,
+                    datasets: [{
+                        label: 'Приток',
+                        data: migration.inflow,
+                        backgroundColor: '#10b981',
+                        borderRadius: 8
+                    }, {
+                        label: 'Отток',
+                        data: migration.outflow,
+                        backgroundColor: '#ef4444',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Внутренняя миграция',
+                            font: { size: 16, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Количество человек'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Создание диаграммы внешней миграции
+        function createExternalMigrationChart() {
+            const canvas = document.getElementById('externalMigrationChart');
+            if (!canvas) return;
+            
+            const external = SampleData.migrationData.external;
+            const ctx = canvas.getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: external.labels,
+                    datasets: [{
+                        label: 'Эмигранты',
+                        data: external.emigrants,
+                        backgroundColor: [
+                            '#3b82f6', '#10b981', '#f59e0b', '#ef4444'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Внешняя миграция по странам',
+                            font: { size: 16, weight: 'bold' }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Создание диаграммы денежных переводов
+        function createRemittancesChart() {
+            const canvas = document.getElementById('remittancesChart');
+            if (!canvas) return;
+            
+            const external = SampleData.migrationData.external;
+            const ctx = canvas.getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: external.labels,
+                    datasets: [{
+                        label: 'Денежные переводы (млн сомони)',
+                        data: external.remittances.map(val => val / 1000000),
+                        backgroundColor: '#f59e0b',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Денежные переводы по странам',
+                            font: { size: 16, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Млн сомони'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // === ДИАГРАММЫ ДЛЯ РАЗДЕЛА НАВЫКОВ ===
+        
+        // Создание диаграммы разрыва навыков
+        function createSkillGapChart() {
+            const canvas = document.getElementById('skillGapChart');
+            if (!canvas) return;
+            
+            const skillGaps = SampleDataUtils.getTopSkillGaps();
+            const ctx = canvas.getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: skillGaps.map(s => s.skill),
+                    datasets: [{
+                        label: 'Спрос',
+                        data: skillGaps.map(s => s.demand),
+                        backgroundColor: '#ef4444',
+                        borderRadius: 8
+                    }, {
+                        label: 'Предложение',
+                        data: skillGaps.map(s => s.supply),
+                        backgroundColor: '#10b981',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Разрыв между спросом и предложением навыков',
+                            font: { size: 16, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Процент (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Создание диаграммы категорий навыков
+        function createSkillCategoriesChart() {
+            const canvas = document.getElementById('skillCategoriesChart');
+            if (!canvas) return;
+            
+            const categories = SampleData.skillsAnalysis.byCategory;
+            const ctx = canvas.getContext('2d');
+            
+            const categoryNames = Object.keys(categories);
+            const totalData = categoryNames.map(cat => categories[cat].total);
+            const certifiedData = categoryNames.map(cat => categories[cat].certified);
+            const inDemandData = categoryNames.map(cat => categories[cat].inDemand);
+            
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Технические', 'Гибкие', 'Цифровые', 'Языковые'],
+                    datasets: [{
+                        label: 'Имеющиеся',
+                        data: totalData,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        fill: true
+                    }, {
+                        label: 'Сертифицированные',
+                        data: certifiedData,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        fill: true
+                    }, {
+                        label: 'Востребованные',
+                        data: inDemandData,
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Анализ навыков по категориям',
+                            font: { size: 16, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Количество специалистов (тыс.)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Создание диаграммы топ навыков
+        function createTopSkillsChart() {
+            const canvas = document.getElementById('topSkillsChart');
+            if (!canvas) return;
+            
+            const topSkills = SampleData.skillsAnalysis.mostDemanded.slice(0, 8);
+            const ctx = canvas.getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: topSkills.map(s => s.skill),
+                    datasets: [{
+                        label: 'Уровень спроса',
+                        data: topSkills.map(s => s.demand),
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Это делает столбцы горизонтальными
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Самые востребованные навыки',
+                            font: { size: 16, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Уровень спроса (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
