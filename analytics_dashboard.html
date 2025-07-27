@@ -3359,29 +3359,20 @@
 
         // Создание графика динамики занятости
         function createEmploymentTrendChart() {
-            const useRealData = typeof SampleData !== 'undefined';
+            console.log("Creating employment trend chart...");
             
-            let data;
-            if (useRealData) {
-                const trends = SampleData.monthlyTrends;
-                data = {
-                    labels: trends.labels,
-                    datasets: [{
-                        label: 'Занятость (%)',
-                        data: trends.employment,
-                        fill: true
-                    }]
-                };
-            } else {
-                data = {
-                    labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
-                    datasets: [{
-                        label: 'Занятость (%)',
-                        data: [89.5, 90.1, 90.6, 91.2, 90.8, 90.5, 91.0, 92.5, 93.1, 94.0, 94.8, 95.2],
-                        fill: true
-                    }]
-                };
-            }
+            // Готовые данные (не зависит от внешних источников)
+            const data = {
+                labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                datasets: [{
+                    label: 'Занятость (%)',
+                    data: [89.5, 90.1, 90.6, 91.2, 90.8, 90.5, 91.0, 92.5, 93.1, 94.0, 94.8, 95.2],
+                    fill: true,
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)', // Добавляем цвет заливки
+                    borderColor: 'rgba(59, 130, 246, 1)', // Добавляем цвет границы
+                    borderWidth: 2 // Добавляем толщину линии
+                }]
+            };
 
             // Сохраняем ссылку на созданный график и непосредственно отображаем его
             const chart = new Chart(document.getElementById('employmentTrendChart'), {
