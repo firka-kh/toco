@@ -396,13 +396,33 @@
         
         /* Стили для эффекта подсветки при обновлении */
         @keyframes highlight {
-            0% { color: #3b82f6; }
-            50% { color: #10b981; }
-            100% { color: inherit; }
+            0% { background-color: rgba(16, 185, 129, 0); }
+            30% { background-color: rgba(16, 185, 129, 0.1); }
+            100% { background-color: rgba(16, 185, 129, 0); }
         }
         
         .highlight-update {
-            animation: highlight 1s ease-out;
+            animation: highlight 0.8s ease-out;
+            position: relative;
+        }
+        
+        .highlight-update::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(59, 130, 246, 0.05);
+            border-radius: inherit;
+            opacity: 0;
+            animation: pulse-highlight 1s ease-out;
+        }
+        
+        @keyframes pulse-highlight {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
         }
         
         /* Делаем карточки более интерактивными */
@@ -3001,6 +3021,53 @@
         let currentCharts = {};
         let analytics;
         
+        // Функция для имитации живых обновлений данных
+        function simulateLiveUpdates() {
+            // Пульсация LIVE индикаторов
+            const liveIndicators = document.querySelectorAll('.live-indicator');
+            liveIndicators.forEach(indicator => {
+                indicator.classList.add('active');
+                setTimeout(() => {
+                    indicator.classList.remove('active');
+                }, 1000);
+            });
+            
+            // Обновление графика динамики занятости
+            if (currentCharts.employmentTrend) {
+                const chart = currentCharts.employmentTrend;
+                const dataset = chart.data.datasets[0];
+                
+                // Небольшое случайное изменение последнего значения
+                const lastValue = dataset.data[dataset.data.length - 1];
+                const change = (Math.random() - 0.5) * 0.6; // Случайное изменение в диапазоне +/- 0.3%
+                const newValue = Math.min(100, Math.max(80, lastValue + change));
+                dataset.data[dataset.data.length - 1] = newValue;
+                
+                // Обновляем текст с процентом роста
+                const growthBadge = document.querySelector('.insight-badge.positive');
+                if (growthBadge) {
+                    const currentGrowthText = growthBadge.textContent;
+                    const currentGrowthMatch = currentGrowthText.match(/[\d.]+/);
+                    if (currentGrowthMatch) {
+                        const currentGrowth = parseFloat(currentGrowthMatch[0]);
+                        const newGrowth = currentGrowth + (Math.random() - 0.5) * 0.2;
+                        growthBadge.innerHTML = `<i class="fas fa-arrow-trend-up mr-1"></i> Рост ${newGrowth.toFixed(1)}%`;
+                    }
+                }
+                
+                // Обновляем график с эффектом подсветки
+                chart.update();
+                
+                const chartContainer = document.querySelector('.employment-3d-container');
+                if (chartContainer) {
+                    chartContainer.classList.add('highlight-update');
+                    setTimeout(() => {
+                        chartContainer.classList.remove('highlight-update');
+                    }, 700);
+                }
+            }
+        }
+        
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
             // Инициализация расширенной аналитики
@@ -3016,6 +3083,9 @@
             window.addEventListener('resize', () => {
                 analytics.resizeAllCharts();
             });
+            
+            // Имитация обновления данных в реальном времени
+            setInterval(simulateLiveUpdates, 3000);
         });
 
         // Инициализация меню
@@ -3304,14 +3374,138 @@
                 data = {
                     labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
                     datasets: [{
-                        label: 'Занятость (тыс. человек)',
-                        data: [1820, 1825, 1830, 1835, 1840, 1842, 1845, 1847, 1849, 1851, 1848, 1847],
+                        label: 'Занятость (%)',
+                        data: [89.5, 90.1, 90.6, 91.2, 90.8, 90.5, 91.0, 92.5, 93.1, 94.0, 94.8, 95.2],
                         fill: true
                     }]
                 };
             }
 
-            currentCharts.employmentTrend = analytics.createAdvancedLineChart('employmentTrendChart', data);
+            // Сохраняем ссылку на созданный график и непосредственно отображаем его
+            const chart = new Chart(document.getElementById('employmentTrendChart'), {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: {
+                            tension: 0.4
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#111827',
+                            bodyColor: '#111827',
+                            borderColor: 'rgba(0, 0, 0, 0.1)',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            padding: 12
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                maxRotation: 0,
+                                font: {
+                                    size: 11
+                                },
+                                color: '#6b7280'
+                            }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                font: {
+                                    size: 11
+                                },
+                                color: '#6b7280'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Получаем контекст для создания градиента
+            const ctx = document.getElementById('employmentTrendChart').getContext('2d');
+            
+            // Создаем градиент для заливки области под линией
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(59, 130, 246, 0.3)');
+            gradient.addColorStop(0.6, 'rgba(59, 130, 246, 0.05)');
+            gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+            
+            // Применяем градиент и другие стили к графику
+            chart.data.datasets[0].backgroundColor = gradient;
+            chart.data.datasets[0].borderColor = 'rgba(59, 130, 246, 1)';
+            chart.data.datasets[0].borderWidth = 3;
+            chart.data.datasets[0].pointRadius = 4;
+            chart.data.datasets[0].pointBackgroundColor = '#ffffff';
+            chart.data.datasets[0].pointBorderColor = 'rgba(59, 130, 246, 1)';
+            chart.data.datasets[0].pointBorderWidth = 2;
+            chart.data.datasets[0].pointHoverRadius = 7;
+            
+            // Обновляем график с новыми стилями
+            chart.update();
+            
+            // Сохраняем ссылку на график
+            currentCharts.employmentTrend = chart;
+            
+            // Добавим обработчики для переключения периодов
+            document.querySelectorAll('.period-selector').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Убираем активный класс со всех кнопок
+                    document.querySelectorAll('.period-selector').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    
+                    // Добавляем активный класс нажатой кнопке
+                    this.classList.add('active');
+                    
+                    const period = this.getAttribute('data-period');
+                    let newData;
+                    
+                    // Изменяем данные в зависимости от выбранного периода
+                    switch(period) {
+                        case '6m':
+                            // Последние 6 месяцев
+                            newData = data.datasets[0].data.slice(-6);
+                            chart.data.labels = data.labels.slice(-6);
+                            break;
+                        case '1y':
+                            // Полный год (12 месяцев)
+                            newData = data.datasets[0].data;
+                            chart.data.labels = data.labels;
+                            break;
+                        case 'all':
+                            // Расширенная история (добавляем данные прошлого года)
+                            const extendedLabels = [
+                                'Янв 2024', 'Фев 2024', 'Мар 2024', 'Апр 2024', 'Май 2024', 'Июн 2024',
+                                ...data.labels
+                            ];
+                            const extendedData = [
+                                86.2, 86.8, 87.5, 88.1, 88.7, 89.2,
+                                ...data.datasets[0].data
+                            ];
+                            newData = extendedData;
+                            chart.data.labels = extendedLabels;
+                            break;
+                    }
+                    
+                    chart.data.datasets[0].data = newData;
+                    chart.update();
+                });
+            });
         }
 
         // Создание диаграммы распределения по отраслям
