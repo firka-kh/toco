@@ -259,15 +259,93 @@
         
         /* Стили для мини-графиков в карточках */
         .chart-mini {
-            height: 50px;
+            height: 80px;
             width: 100%;
             margin: 0.5rem 0;
+            position: relative;
+            background-color: rgba(240, 245, 255, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        /* Стили для биржевых диаграмм */
+        .stock-chart {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+        
+        .chart-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-rows: repeat(4, 1fr);
+        }
+        
+        .chart-grid-line {
+            width: 100%;
+            height: 1px;
+            background-color: rgba(203, 213, 225, 0.5);
+        }
+        
+        .chart-candle {
+            position: absolute;
+            bottom: 0;
+            width: 6px;
+            background-color: #10b981;
+            transition: height 0.5s ease, background-color 0.3s ease;
+        }
+        
+        .chart-candle.down {
+            background-color: #ef4444;
+        }
+        
+        .chart-line {
+            position: absolute;
+            bottom: 0;
+            height: 2px;
+            background-color: #3b82f6;
+            z-index: 2;
+        }
+        
+        .chart-point {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+        }
+        
+        .value-change {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .value-change.up {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .value-change.down {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
         }
         
         /* Стили для кнопки LIVE */
         .live-indicator {
             position: absolute;
-            top: 10px;
+            bottom: 10px;
             right: 10px;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
@@ -3409,6 +3487,231 @@
                 }
             });
         }
+    </script>
+    
+    <script>
+        // Функция для инициализации карточек с биржевыми графиками
+        function initializeStockCharts() {
+            const statCards = document.querySelectorAll('.stat-card-enhanced');
+            
+            statCards.forEach((card) => {
+                const statType = card.dataset.stat;
+                const chartContainer = card.querySelector('.chart-mini');
+                
+                // Очищаем контейнер
+                chartContainer.innerHTML = '';
+                
+                // Создаем структуру биржевого графика
+                const stockChart = document.createElement('div');
+                stockChart.className = 'stock-chart';
+                
+                // Добавляем сетку
+                const chartGrid = document.createElement('div');
+                chartGrid.className = 'chart-grid';
+                
+                for (let i = 0; i < 4; i++) {
+                    const gridLine = document.createElement('div');
+                    gridLine.className = 'chart-grid-line';
+                    chartGrid.appendChild(gridLine);
+                }
+                
+                stockChart.appendChild(chartGrid);
+                
+                // Генерируем начальные данные
+                const data = generateStockData(20);
+                
+                // Создаем свечи и линию
+                data.forEach((value, index) => {
+                    // Свеча
+                    const candle = document.createElement('div');
+                    candle.className = 'chart-candle';
+                    if (index > 0 && value < data[index - 1]) {
+                        candle.classList.add('down');
+                    }
+                    
+                    candle.style.height = `${value}%`;
+                    candle.style.left = `${index * 5}%`;
+                    stockChart.appendChild(candle);
+                    
+                    // Точка на линии
+                    if (index < data.length - 1) {
+                        const line = document.createElement('div');
+                        line.className = 'chart-line';
+                        line.style.height = '2px';
+                        line.style.bottom = `${value}%`;
+                        line.style.left = `${index * 5}%`;
+                        line.style.width = '5%';
+                        stockChart.appendChild(line);
+                    }
+                    
+                    const point = document.createElement('div');
+                    point.className = 'chart-point';
+                    point.style.bottom = `${value}%`;
+                    point.style.left = `${index * 5}%`;
+                    stockChart.appendChild(point);
+                });
+                
+                // Индикатор изменения
+                const valueChange = document.createElement('div');
+                valueChange.className = 'value-change';
+                const lastTwoValues = data.slice(-2);
+                const changePercent = ((lastTwoValues[1] - lastTwoValues[0]) / lastTwoValues[0] * 100).toFixed(2);
+                
+                if (changePercent >= 0) {
+                    valueChange.classList.add('up');
+                    valueChange.textContent = `+${changePercent}%`;
+                } else {
+                    valueChange.classList.add('down');
+                    valueChange.textContent = `${changePercent}%`;
+                }
+                
+                stockChart.appendChild(valueChange);
+                chartContainer.appendChild(stockChart);
+                
+                // Сохраняем данные в атрибуте для последующих обновлений
+                chartContainer.dataset.chartData = JSON.stringify(data);
+            });
+        }
+        
+        // Функция для генерации случайных данных для графика
+        function generateStockData(points) {
+            const data = [];
+            let value = Math.random() * 40 + 30; // Начальное значение от 30% до 70%
+            
+            for (let i = 0; i < points; i++) {
+                // Случайное изменение в пределах ±8%
+                const change = (Math.random() - 0.5) * 16;
+                value += change;
+                
+                // Ограничиваем значения от 10% до 90%
+                value = Math.max(10, Math.min(90, value));
+                
+                data.push(value);
+            }
+            
+            return data;
+        }
+        
+        // Функция для обновления графиков в реальном времени
+        function updateStockCharts() {
+            const statCards = document.querySelectorAll('.stat-card-enhanced');
+            
+            statCards.forEach((card) => {
+                const chartContainer = card.querySelector('.chart-mini');
+                const statValue = card.querySelector('.stat-value');
+                const currentData = JSON.parse(chartContainer.dataset.chartData);
+                
+                // Удаляем первый элемент и добавляем новый
+                currentData.shift();
+                
+                // Рассчитываем новое значение на основе последнего значения
+                let lastValue = currentData[currentData.length - 1];
+                let change = (Math.random() - 0.5) * 16;
+                let newValue = lastValue + change;
+                newValue = Math.max(10, Math.min(90, newValue));
+                
+                currentData.push(newValue);
+                
+                // Обновляем данные в атрибуте
+                chartContainer.dataset.chartData = JSON.stringify(currentData);
+                
+                // Перерисовываем график
+                const stockChart = chartContainer.querySelector('.stock-chart');
+                
+                // Очищаем предыдущие элементы
+                const candles = stockChart.querySelectorAll('.chart-candle, .chart-line, .chart-point');
+                candles.forEach(candle => candle.remove());
+                
+                // Создаем новые элементы
+                currentData.forEach((value, index) => {
+                    // Свеча
+                    const candle = document.createElement('div');
+                    candle.className = 'chart-candle';
+                    if (index > 0 && value < currentData[index - 1]) {
+                        candle.classList.add('down');
+                    }
+                    
+                    candle.style.height = `${value}%`;
+                    candle.style.left = `${index * 5}%`;
+                    stockChart.appendChild(candle);
+                    
+                    // Точка на линии
+                    if (index < currentData.length - 1) {
+                        const line = document.createElement('div');
+                        line.className = 'chart-line';
+                        line.style.height = '2px';
+                        line.style.bottom = `${value}%`;
+                        line.style.left = `${index * 5}%`;
+                        line.style.width = '5%';
+                        stockChart.appendChild(line);
+                    }
+                    
+                    const point = document.createElement('div');
+                    point.className = 'chart-point';
+                    point.style.bottom = `${value}%`;
+                    point.style.left = `${index * 5}%`;
+                    stockChart.appendChild(point);
+                });
+                
+                // Обновляем индикатор изменения
+                const valueChange = stockChart.querySelector('.value-change');
+                const lastTwoValues = currentData.slice(-2);
+                const changePercent = ((lastTwoValues[1] - lastTwoValues[0]) / lastTwoValues[0] * 100).toFixed(2);
+                
+                valueChange.className = 'value-change';
+                if (changePercent >= 0) {
+                    valueChange.classList.add('up');
+                    valueChange.textContent = `+${changePercent}%`;
+                } else {
+                    valueChange.classList.add('down');
+                    valueChange.textContent = `${changePercent}%`;
+                }
+                
+                // Обновляем основное значение с анимацией
+                if (statValue) {
+                    // Генерируем новое число на основе типа статистики
+                    const statType = card.dataset.stat;
+                    let newStatValue;
+                    
+                    switch (statType) {
+                        case 'employment-rate':
+                            newStatValue = (94 + Math.random() * 2).toFixed(1) + '%';
+                            break;
+                        case 'total-population':
+                            newStatValue = (2.3 + Math.random() * 0.2).toFixed(1) + 'М';
+                            break;
+                        case 'labor-force':
+                            newStatValue = Math.floor(4 + Math.random() * 2);
+                            break;
+                        case 'job-seekers':
+                            newStatValue = Math.floor(9 + Math.random() * 3);
+                            break;
+                        default:
+                            newStatValue = statValue.textContent;
+                    }
+                    
+                    // Проверяем, изменилось ли значение
+                    if (statValue.textContent !== newStatValue) {
+                        statValue.classList.add('highlight-update');
+                        statValue.textContent = newStatValue;
+                        
+                        // Удаляем класс анимации после завершения
+                        setTimeout(() => {
+                            statValue.classList.remove('highlight-update');
+                        }, 1000);
+                    }
+                }
+            });
+        }
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализируем биржевые графики
+            initializeStockCharts();
+            
+            // Запускаем интервал обновления каждые 3 секунды
+            setInterval(updateStockCharts, 3000);
+        });
     </script>
 </body>
 </html>
