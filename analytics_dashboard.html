@@ -67,9 +67,11 @@
     
     <!-- Дополнительные компоненты аналитики -->
     <script src="js/analytics_components.js"></script>
+    <script src="js/industry-details.js"></script>
     
     <!-- Дополнительные стили -->
     <link rel="stylesheet" href="css/analytics-enhanced.css">
+    <link rel="stylesheet" href="css/analytics-dashboard-extra.css">
     
     <style>
         body {
@@ -3461,6 +3463,74 @@
             // Сохраняем ссылку на график
             currentCharts.employmentTrend = chart;
             
+            // Добавляем обработчики событий для элементов управления графиком
+            document.querySelectorAll('.timeframe-selector button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    // Удаляем активный класс у всех кнопок
+                    document.querySelectorAll('.timeframe-selector button').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    
+                    // Добавляем активный класс на нажатую кнопку
+                    button.classList.add('active');
+                    
+                    // Получаем выбранный временной интервал
+                    const timeframe = button.dataset.timeframe || '1m';
+                    
+                    // Обновляем данные в зависимости от выбранного интервала
+                    const dataPoints = {
+                        '1m': [68, 70, 72, 70, 69, 71],
+                        '3m': [65, 68, 70, 72, 74, 71],
+                        '6m': [60, 63, 68, 70, 72, 71],
+                        '1y': [55, 58, 62, 66, 70, 71],
+                        'all': [45, 50, 58, 63, 68, 71]
+                    };
+                    
+                    // Получаем данные для выбранного интервала или используем случайные, если нет предопределенных
+                    const newData = dataPoints[timeframe] || Array.from({length: 6}, () => 
+                        Math.floor(Math.random() * 20) + 60
+                    );
+                    
+                    // Обновляем данные графика
+                    chart.data.datasets[0].data = newData;
+                    
+                    // Определяем подписи оси X в зависимости от временного интервала
+                    const labels = {
+                        '1m': ['1 нед', '2 нед', '3 нед', '4 нед', 'Пред. нед', 'Тек. нед'],
+                        '3m': ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь'],
+                        '6m': ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь'],
+                        '1y': ['Янв', 'Март', 'Май', 'Июль', 'Сен', 'Нояб'],
+                        'all': ['2019', '2020', '2021', '2022', '2023', '2024']
+                    };
+                    
+                    // Обновляем подписи оси X
+                    chart.data.labels = labels[timeframe] || chart.data.labels;
+                    
+                    // Пересчитываем процент изменения
+                    const percentChange = document.querySelector('.employment-percent-change');
+                    if (percentChange) {
+                        const lastData = newData[newData.length - 1];
+                        const prevData = newData[newData.length - 2];
+                        const change = ((lastData - prevData) / prevData * 100).toFixed(1);
+                        
+                        if (change > 0) {
+                            percentChange.textContent = '+' + change + '%';
+                            percentChange.className = 'employment-percent-change up';
+                            percentChange.innerHTML = '<i class="fas fa-arrow-up"></i> +' + change + '%';
+                        } else if (change < 0) {
+                            percentChange.className = 'employment-percent-change down';
+                            percentChange.innerHTML = '<i class="fas fa-arrow-down"></i> ' + change + '%';
+                        } else {
+                            percentChange.className = 'employment-percent-change stable';
+                            percentChange.innerHTML = '<i class="fas fa-minus"></i> 0.0%';
+                        }
+                    }
+                    
+                    // Обновляем график
+                    chart.update();
+                });
+            });
+            
             // Добавим обработчики для переключения периодов
             document.querySelectorAll('.period-selector').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -3512,21 +3582,141 @@
         function createIndustryDistributionChart() {
             const useRealData = typeof SampleData !== 'undefined';
             
-            let data;
+            let labels, values;
             if (useRealData) {
                 const industries = SampleData.industryData;
-                data = {
-                    labels: industries.labels.slice(0, 6), // Берем первые 6 отраслей
-                    values: industries.employment.slice(0, 6).map(val => Math.round(val / 10000)) // Приводим к процентам
-                };
+                labels = industries.labels.slice(0, 6); // Берем первые 6 отраслей
+                values = industries.employment.slice(0, 6).map(val => Math.round(val / 10000)); // Приводим к процентам
             } else {
-                data = {
-                    labels: ['Сельское хозяйство', 'Производство', 'Услуги', 'ИТ', 'Строительство', 'Образование'],
-                    values: [35, 20, 18, 12, 10, 5]
-                };
+                labels = ['Услуги', 'Сельское хозяйство', 'Производство', 'Образование', 'Здравоохранение', 'Другое'];
+                values = [45.8, 21.3, 18.5, 7.2, 4.5, 2.7];
             }
+            
+            // Преобразуем данные в формат, который ожидает Chart.js
+            const data = {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(139, 92, 246, 0.8)',
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(107, 114, 128, 0.8)'
+                    ],
+                    borderColor: 'rgba(255, 255, 255, 0.8)',
+                    borderWidth: 1,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#ffffff',
+                    borderRadius: 5
+                }]
+            };
 
-            currentCharts.industryDistribution = analytics.createInteractivePieChart('industryDistributionChart', data);
+            // Создаем кольцевую диаграмму напрямую через Chart.js
+            const ctx = document.getElementById('industryDistributionChart');
+            if (!ctx) return;
+            
+            const chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#111827',
+                            bodyColor: '#111827',
+                            borderColor: 'rgba(0, 0, 0, 0.1)',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    return `${context.label}: ${value}%`;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
+                    }
+                }
+            });
+            
+            currentCharts.industryDistribution = chart;
+            
+            // Добавляем функциональность для отображения значения в центре диаграммы
+            const updateCenterValue = (index) => {
+                const centerValue = document.querySelector('.center-value');
+                const centerLabel = document.querySelector('.center-label');
+                const centerChange = document.querySelector('.center-change-indicator');
+                
+                if (centerValue && centerLabel) {
+                    centerValue.textContent = values[index] + '%';
+                    centerLabel.textContent = labels[index];
+                }
+                
+                if (centerChange) {
+                    // Используем предопределенные тренды или генерируем случайные
+                    const trends = ['+3.2%', '-1.5%', '+0.2%', '+0.8%', '+1.2%', '-0.5%'];
+                    const trend = trends[index] || ((Math.random() > 0.5 ? '+' : '-') + (Math.random() * 3).toFixed(1) + '%');
+                    
+                    if (trend.startsWith('+')) {
+                        centerChange.className = 'center-change-indicator up';
+                        centerChange.innerHTML = '<i class="fas fa-arrow-up"></i> ' + trend.substring(1);
+                    } else if (trend.startsWith('-')) {
+                        centerChange.className = 'center-change-indicator down';
+                        centerChange.innerHTML = '<i class="fas fa-arrow-down"></i> ' + trend.substring(1);
+                    } else {
+                        centerChange.className = 'center-change-indicator stable';
+                        centerChange.innerHTML = '<i class="fas fa-minus"></i> 0.0%';
+                    }
+                }
+            };
+            
+            // Устанавливаем начальное значение для центра (первый элемент)
+            updateCenterValue(0);
+            
+            // Добавляем обработчики для элементов легенды
+            document.querySelectorAll('.industry-item').forEach((item, index) => {
+                item.addEventListener('mouseenter', () => {
+                    // Удаляем класс active у всех элементов легенды
+                    document.querySelectorAll('.industry-item').forEach(el => {
+                        el.classList.remove('active');
+                    });
+                    
+                    // Добавляем класс active для текущего элемента
+                    item.classList.add('active');
+                    
+                    // Подсвечиваем соответствующий сегмент в диаграмме
+                    chart.setActiveElements([{datasetIndex: 0, index: index}]);
+                    chart.update();
+                    
+                    // Обновляем центральное значение
+                    updateCenterValue(index);
+                });
+                
+                // Добавляем обработчик клика для фиксации выбранного элемента
+                item.addEventListener('click', () => {
+                    // Создаем событие детализации для этой отрасли
+                    const industryDetails = new CustomEvent('showIndustryDetails', {
+                        detail: {
+                            label: labels[index],
+                            value: values[index],
+                            index: index
+                        }
+                    });
+                    document.dispatchEvent(industryDetails);
+                });
+            });
         }
 
         // Создание региональной статистики
