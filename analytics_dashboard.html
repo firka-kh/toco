@@ -263,6 +263,85 @@
             width: 100%;
             margin: 0.5rem 0;
         }
+        
+        /* Стили для кнопки LIVE */
+        .live-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 5;
+            transition: all 0.3s ease;
+        }
+        
+        .live-indicator:hover {
+            background-color: #3b82f6;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            position: relative;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+            }
+            
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+        
+        /* Стили для эффекта подсветки при обновлении */
+        @keyframes highlight {
+            0% { color: #3b82f6; }
+            50% { color: #10b981; }
+            100% { color: inherit; }
+        }
+        
+        .highlight-update {
+            animation: highlight 1s ease-out;
+        }
+        
+        /* Делаем карточки более интерактивными */
+        .stat-card-enhanced {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card-enhanced:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Стиль активной кнопки LIVE */
+        .live-indicator.active .live-dot {
+            animation: pulse 1.5s infinite;
+        }
 
         /* Инструментальные карточки */
         .tool-card {
@@ -781,6 +860,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- Тренд занятости -->
                 <div class="stat-card-enhanced" data-stat="employment-rate">
+                    <div class="live-indicator">
+                        <span class="live-dot"></span>
+                        LIVE
+                    </div>
                     <div class="flex items-center justify-between mb-3">
                         <h4 class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Тренд занятости</h4>
                         <div class="trend-indicator trend-up">
@@ -796,6 +879,10 @@
 
                 <!-- Активность на рынке -->
                 <div class="stat-card-enhanced" data-stat="total-population">
+                    <div class="live-indicator">
+                        <span class="live-dot"></span>
+                        LIVE
+                    </div>
                     <div class="flex items-center justify-between mb-3">
                         <h4 class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Трудовые ресурсы</h4>
                         <div class="trend-indicator trend-stable">
@@ -811,6 +898,10 @@
 
                 <!-- Региональное распределение -->
                 <div class="stat-card-enhanced" data-stat="labor-force">
+                    <div class="live-indicator">
+                        <span class="live-dot"></span>
+                        LIVE
+                    </div>
                     <div class="flex items-center justify-between mb-3">
                         <h4 class="text-sm font-semibold text-gray-600 uppercase tracking-wide">По регионам</h4>
                         <div class="trend-indicator trend-up">
@@ -826,6 +917,10 @@
 
                 <!-- Отраслевое распределение -->
                 <div class="stat-card-enhanced" data-stat="job-seekers">
+                    <div class="live-indicator">
+                        <span class="live-dot"></span>
+                        LIVE
+                    </div>
                     <div class="flex items-center justify-between mb-3">
                         <h4 class="text-sm font-semibold text-gray-600 uppercase tracking-wide">По отраслям</h4>
                         <div class="trend-indicator trend-down">
@@ -2057,6 +2152,162 @@
                 // Данные по отраслям
                 const industryData = [30, 25, 20, 15, 10];
                 createMiniDoughnutChart('industries-mini', industryData);
+            }
+            
+            // Делаем карточки интерактивными
+            initializeEnhancedCards();
+            
+            // Запускаем периодические обновления для создания эффекта "live"
+            startLiveUpdates();
+        }
+        
+        // Инициализация интерактивных карточек
+        function initializeEnhancedCards() {
+            // Добавляем обработчики событий для всех карточек
+            document.querySelectorAll('.stat-card-enhanced').forEach(card => {
+                // Добавляем эффект клика
+                card.addEventListener('click', function() {
+                    // Покажем подробную информацию по карточке
+                    const statType = this.getAttribute('data-stat');
+                    showDetailedView(statType);
+                });
+                
+                // Добавляем эффект наведения на индикатор LIVE
+                const liveIndicator = card.querySelector('.live-indicator');
+                if (liveIndicator) {
+                    liveIndicator.addEventListener('click', function(event) {
+                        event.stopPropagation(); // Предотвращаем срабатывание клика на родительской карточке
+                        toggleLiveUpdates(this.closest('.stat-card-enhanced').getAttribute('data-stat'));
+                    });
+                }
+            });
+        }
+        
+        // Показ детального представления для карточки
+        function showDetailedView(statType) {
+            let title, description;
+            
+            switch(statType) {
+                case 'employment-rate':
+                    title = 'Детальный тренд занятости';
+                    description = 'Подробная информация о динамике занятости за последние 12 месяцев, включая сезонные колебания и тенденции.';
+                    break;
+                case 'total-population':
+                    title = 'Анализ трудовых ресурсов';
+                    description = 'Распределение трудоспособного населения по возрастам, образованию и другим характеристикам.';
+                    break;
+                case 'labor-force':
+                    title = 'Распределение по регионам';
+                    description = 'Детальный анализ занятости и экономической активности по регионам республики.';
+                    break;
+                case 'job-seekers':
+                    title = 'Анализ по отраслям';
+                    description = 'Распределение рабочих мест и занятости по секторам экономики.';
+                    break;
+                default:
+                    title = 'Подробная информация';
+                    description = 'Детальный анализ выбранного показателя.';
+            }
+            
+            // Здесь может быть код для отображения модального окна или переход на страницу с детальной информацией
+            alert(`${title}\n${description}\n\nДля полного анализа перейдите в раздел аналитики.`);
+        }
+        
+        // Запуск периодических обновлений для создания эффекта "live"
+        function startLiveUpdates() {
+            // Обновление данных каждые 5-10 секунд
+            setInterval(function() {
+                // Выбираем случайную карточку для обновления
+                const cards = ['employment-rate', 'total-population', 'labor-force', 'job-seekers'];
+                const randomCard = cards[Math.floor(Math.random() * cards.length)];
+                
+                // Генерируем небольшое изменение в данных
+                updateCardData(randomCard);
+            }, 5000 + Math.random() * 5000); // Случайный интервал от 5 до 10 секунд
+        }
+        
+        // Обновление данных для карточки
+        function updateCardData(cardType) {
+            const card = document.querySelector(`[data-stat="${cardType}"]`);
+            if (!card) return;
+            
+            // Генерируем небольшое изменение для значения
+            const valueElement = card.querySelector('.stat-value');
+            if (valueElement) {
+                let currentValue = parseFloat(valueElement.innerText);
+                if (isNaN(currentValue)) {
+                    // Если текст содержит не только число (например, "2.4М")
+                    currentValue = parseFloat(valueElement.innerText.replace(/[^\d.-]/g, ''));
+                }
+                
+                // Генерируем изменение в пределах ±2%
+                const change = (Math.random() * 4 - 2) / 100;
+                const newValue = currentValue * (1 + change);
+                
+                // Форматируем в зависимости от типа карточки
+                if (cardType === 'employment-rate') {
+                    valueElement.innerText = newValue.toFixed(1) + '%';
+                } else if (cardType === 'total-population') {
+                    valueElement.innerText = newValue.toFixed(1) + 'М';
+                } else {
+                    valueElement.innerText = Math.round(newValue);
+                }
+                
+                // Добавляем эффект подсветки при обновлении
+                valueElement.classList.add('highlight-update');
+                setTimeout(() => {
+                    valueElement.classList.remove('highlight-update');
+                }, 1000);
+            }
+            
+            // Также можно обновить мини-графики для создания эффекта живых данных
+            updateMiniChart(cardType);
+        }
+        
+        // Обновление мини-графика
+        function updateMiniChart(cardType) {
+            let canvasId;
+            switch(cardType) {
+                case 'employment-rate': canvasId = 'employment-trend-mini'; break;
+                case 'total-population': canvasId = 'vacancies-trend-mini'; break;
+                case 'labor-force': canvasId = 'regional-mini'; break;
+                case 'job-seekers': canvasId = 'industries-mini'; break;
+                default: return;
+            }
+            
+            const chartInstance = Chart.getChart(canvasId);
+            if (chartInstance) {
+                // Для линейных графиков добавляем новую точку
+                if (chartInstance.config.type === 'line') {
+                    const lastValue = chartInstance.data.datasets[0].data[chartInstance.data.datasets[0].data.length - 1];
+                    const newValue = lastValue * (1 + (Math.random() * 0.06 - 0.03));
+                    
+                    chartInstance.data.datasets[0].data.shift(); // Убираем первую точку
+                    chartInstance.data.datasets[0].data.push(newValue); // Добавляем новую точку
+                    chartInstance.update();
+                }
+                // Для других типов графиков можно реализовать свою логику обновления
+            }
+        }
+        
+        // Включение/выключение живых обновлений для карточки
+        function toggleLiveUpdates(cardType) {
+            const card = document.querySelector(`[data-stat="${cardType}"]`);
+            if (!card) return;
+            
+            const liveIndicator = card.querySelector('.live-indicator');
+            if (liveIndicator) {
+                const isActive = liveIndicator.classList.contains('active');
+                
+                if (isActive) {
+                    liveIndicator.classList.remove('active');
+                    liveIndicator.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                    liveIndicator.style.color = '#3b82f6';
+                } else {
+                    liveIndicator.classList.add('active');
+                    liveIndicator.style.backgroundColor = '#3b82f6';
+                    liveIndicator.style.color = 'white';
+                }
             }
         }
 
