@@ -24,6 +24,12 @@ class AdvancedAnalytics {
         const canvas = document.getElementById(canvasId);
         if (!canvas) return null;
 
+        // Установка адаптивных размеров
+        const containerWidth = canvas.parentElement.clientWidth;
+        const size = Math.min(containerWidth - 40, 200); // Максимум 200px
+        canvas.width = size;
+        canvas.height = size * 0.75; // Соотношение 4:3
+
         const ctx = canvas.getContext('2d');
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
