@@ -24,9 +24,9 @@ class AdvancedAnalytics {
         const canvas = document.getElementById(canvasId);
         if (!canvas) return null;
 
-        // Фиксированные размеры для лучшей читаемости
-        canvas.width = 280;
-        canvas.height = 180;
+        // Круглый спидометр с достаточным размером
+        canvas.width = 240;
+        canvas.height = 240;
 
         const ctx = canvas.getContext('2d');
         const centerX = canvas.width / 2;
@@ -94,13 +94,15 @@ class AdvancedAnalytics {
         const totalAngle = endAngle - startAngle;
         const steps = 10;
         
+        // Больше пространства для шкалы
+        const outerRadius = radius * 0.9; 
+        const innerRadius = radius * 0.75;
+        
         for (let i = 0; i <= steps; i++) {
             const angle = startAngle + (totalAngle * i / steps);
             const value = (maxValue * i / steps);
             
             // Основные деления
-            const outerRadius = radius - 10;
-            const innerRadius = radius - 25;
             const x1 = centerX + Math.cos(angle) * outerRadius;
             const y1 = centerY + Math.sin(angle) * outerRadius;
             const x2 = centerX + Math.cos(angle) * innerRadius;
@@ -113,27 +115,19 @@ class AdvancedAnalytics {
             ctx.lineWidth = 2;
             ctx.stroke();
             
-            // Подписи
+            // Подписи для четных делений
             if (config.showLabels && i % 2 === 0) {
-                const labelRadius = radius - 35;
-                const labelX = centerX + Math.cos(angle) * labelRadius;
-                const labelY = centerY + Math.sin(angle) * labelRadius;
-                
-                ctx.fillStyle = config.textColor;
-                ctx.font = '12px Inter, sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(Math.round(value), labelX, labelY);
+                // Не рисуем подписи на шкале, они перекрывают дизайн
             }
             
-            // Малые деления
+            // Малые деления между основными
             if (i < steps) {
                 for (let j = 1; j < 5; j++) {
                     const smallAngle = angle + (totalAngle / steps) * (j / 5);
-                    const smallX1 = centerX + Math.cos(smallAngle) * (radius - 10);
-                    const smallY1 = centerY + Math.sin(smallAngle) * (radius - 10);
-                    const smallX2 = centerX + Math.cos(smallAngle) * (radius - 18);
-                    const smallY2 = centerY + Math.sin(smallAngle) * (radius - 18);
+                    const smallX1 = centerX + Math.cos(smallAngle) * (outerRadius);
+                    const smallY1 = centerY + Math.sin(smallAngle) * (outerRadius);
+                    const smallX2 = centerX + Math.cos(smallAngle) * (outerRadius - 8);
+                    const smallY2 = centerY + Math.sin(smallAngle) * (outerRadius - 8);
                     
                     ctx.beginPath();
                     ctx.moveTo(smallX1, smallY1);
@@ -151,27 +145,29 @@ class AdvancedAnalytics {
         const totalAngle = endAngle - startAngle;
         const valueAngle = startAngle + (totalAngle * value / maxValue);
         
-        // Цветная дуга для показания значения
+        // Толстая цветная дуга для показания значения
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius - 30, startAngle, valueAngle);
+        ctx.arc(centerX, centerY, radius * 0.7, startAngle, valueAngle);
         ctx.strokeStyle = config.primaryColor;
-        ctx.lineWidth = 8;
+        ctx.lineWidth = 20; // Делаем дугу толще
         ctx.lineCap = 'round';
         ctx.stroke();
         
-        // Градиентный эффект
+        // Яркий градиентный эффект
         const gradient = ctx.createLinearGradient(
             centerX - radius, centerY,
             centerX + radius, centerY
         );
         gradient.addColorStop(0, config.primaryColor);
-        gradient.addColorStop(1, config.primaryColor + '80');
+        gradient.addColorStop(1, '#ffffff');
         
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius - 32, startAngle, valueAngle);
+        ctx.arc(centerX, centerY, radius * 0.7, startAngle, valueAngle);
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = 4;
+        ctx.lineWidth = 10;
+        ctx.globalAlpha = 0.4; // Полупрозрачность
         ctx.stroke();
+        ctx.globalAlpha = 1.0; // Восстанавливаем прозрачность
     }
 
     drawGaugeNeedle(ctx, centerX, centerY, radius, config, value, maxValue) {
@@ -179,7 +175,7 @@ class AdvancedAnalytics {
         const totalAngle = endAngle - startAngle;
         const needleAngle = startAngle + (totalAngle * value / maxValue);
         
-        const needleLength = radius - 40;
+        const needleLength = radius * 0.6; // Короче стрелка
         const needleX = centerX + Math.cos(needleAngle) * needleLength;
         const needleY = centerY + Math.sin(needleAngle) * needleLength;
         
@@ -226,38 +222,30 @@ class AdvancedAnalytics {
 
     drawGaugeText(ctx, centerX, centerY, config, value) {
         if (config.showValue) {
-            // Значение - крупнее и в центре
-            ctx.fillStyle = config.textColor;
+            // Рисуем темно-серый круг для значения в центре
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 50, 0, 2 * Math.PI);
+            ctx.fillStyle = '#333333';
+            ctx.fill();
+            
+            // Делаем белую окантовку
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 50, 0, 2 * Math.PI);
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // Значение - крупное, в центре, белым цветом
+            ctx.fillStyle = 'white';
             ctx.font = 'bold 36px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             
-            // Добавляем светлый фон для лучшей читаемости
-            const textWidth = ctx.measureText(Math.round(value) + '%').width;
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.fillRect(
-                centerX - textWidth/2 - 8,
-                centerY + 20,
-                textWidth + 16,
-                40
-            );
-            
-            ctx.fillStyle = config.textColor;
-            ctx.fillText(
-                Math.round(value) + '%',
-                centerX,
-                centerY + 40
-            );
+            // Отображаем значение в центре спидометра
+            ctx.fillText(Math.round(value) + '%', centerX, centerY);
         }
         
-        // Название на самом верху и не перекрывается
-        if (config.title) {
-            ctx.fillStyle = config.textColor;
-            ctx.font = '16px Inter, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'top';
-            ctx.fillText(config.title, centerX, centerY - 80);
-        }
+        // Удаляем отображение названия в спидометре, оно теперь будет выводиться как отдельная подпись через HTML
     }
 
     // Создание интерактивной круговой диаграммы
