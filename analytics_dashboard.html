@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель аналитики и статистики - TOCO</title>
+    <meta name="description" content="Комплексная панель аналитики рынка труда Республики Таджикистан. Профессиональные инструменты для анализа занятости, безработицы, вакансий и трудовой миграции.">
+    
+    <!-- Стили и библиотеки -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js и плагины -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1"></script>
+    
+    <!-- Конфигурация и утилиты аналитики -->
+    <script src="js/analytics-config.js"></script>
+    
+    <!-- Демонстрационные данные -->
+    <script src="js/sample-data.js"></script>
+    
+    <!-- Дополнительные компоненты аналитики -->
+    <script src="js/analytics_components.js"></script>
+    
+    <!-- Дополнительные стили -->
+    <link rel="stylesheet" href="css/analytics-enhanced.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Анимация для кнопки меню */
+        @keyframes menuPulse {
+            0%, 100% {
+                transform: translateY(-50%) scale(1);
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+            }
+            50% {
+                transform: translateY(-50%) scale(1.05);
+                box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+            }
+        }
+
+        /* Кнопка меню */
+        .menu-toggle {
+            position: fixed;
+            top: 50%;
+            left: -2px;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 20px 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            border-radius: 0 12px 12px 0;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 2px 2px 15px rgba(0,0,0,0.2);
+            animation: menuPulse 3s infinite;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            transform: translateY(-50%) translateX(5px);
+        }
+
+        /* Боковое меню */
+        .side-menu {
+            position: fixed;
+            left: -350px;
+            top: 0;
+            width: 350px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            color: #e2e8f0;
+            z-index: 1100;
+            overflow-y: auto;
+            transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 5px 0 20px rgba(0,0,0,0.3);
+        }
+
+        .side-menu.open {
+            left: 0;
+        }
+
+        .side-menu .menu-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .side-menu .menu-item {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .side-menu .menu-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: #4f46e5;
+            transform: translateX(5px);
+        }
+
+        .side-menu .menu-item.active {
+            background: rgba(79, 70, 229, 0.2);
+            color: white;
+            border-left-color: #4f46e5;
+        }
+
+        .side-menu .menu-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Затемнение фона */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1050;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Выдвижная панель фильтров */
+        .filter-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1200;
+            overflow-y: auto;
+        }
+
+        .filter-sidebar.open {
+            right: 0;
+        }
+
+        .filter-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        /* Градиентный фон */
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+        }
+
+        /* Стили для карточек */
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Инструментальные карточки */
+        .tool-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed, #ec4899);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .tool-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            border-color: #4f46e5;
+        }
+
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--icon-color-1), var(--icon-color-2));
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Контейнеры для диаграмм */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 1rem 0;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Современные круговые диаграммы (спидометр) */
+        .speedometer-container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .speedometer-bg {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            height: 140px;
+            border: 15px solid #f3f4f6;
+            border-bottom: 15px solid transparent;
+            border-radius: 280px 280px 0 0;
+        }
+
+        .speedometer-fill {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            height: 140px;
+            border: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-radius: 280px 280px 0 0;
+            transition: all 1s ease-in-out;
+        }
+
+        .speedometer-needle {
+            position: absolute;
+            top: 125px;
+            left: 50%;
+            transform-origin: 50% 0%;
+            width: 4px;
+            height: 120px;
+            background: #1f2937;
+            border-radius: 2px;
+            transition: transform 1s ease-in-out;
+        }
+
+        .speedometer-center {
+            position: absolute;
+            top: 115px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: #374151;
+            border-radius: 50%;
+        }
+
+        .speedometer-value {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        /* Интерактивные элементы */
+        .interactive-element {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-element:hover {
+            transform: scale(1.02);
+        }
+
+        /* Кнопки фильтров */
+        .filter-btn {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+        }
+
+        /* Анимации загрузки */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            z-index: 10;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .side-menu {
+                width: 100%;
+                left: -100%;
+            }
+            
+            .filter-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+        }
+
+        /* Темы для инструментов */
+        .theme-analytics { --icon-color-1: #3b82f6; --icon-color-2: #1d4ed8; }
+        .theme-statistics { --icon-color-1: #10b981; --icon-color-2: #059669; }
+        .theme-forecasting { --icon-color-1: #f59e0b; --icon-color-2: #d97706; }
+        .theme-migration { --icon-color-1: #ef4444; --icon-color-2: #dc2626; }
+        .theme-skills { --icon-color-1: #8b5cf6; --icon-color-2: #7c3aed; }
+        .theme-salaries { --icon-color-1: #06b6d4; --icon-color-2: #0891b2; }
+
+        /* Стили для вкладок */
+        .tab-container {
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 2rem;
+        }
+
+        .tab-button {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            color: #4f46e5;
+            border-bottom-color: #4f46e5;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Кнопка меню -->
+    <div class="menu-toggle" id="menuToggle">
+        Меню
+    </div>
+
+    <!-- Боковое меню -->
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-header">
+            <h2 class="text-xl font-bold">TOCO Analytics</h2>
+            <p class="text-sm opacity-90 mt-1">Панель аналитики</p>
+        </div>
+        
+        <nav>
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </a>
+            <a href="#dashboard" class="menu-item active">
+                <i class="fas fa-chart-pie"></i>
+                <span>Дашборд</span>
+            </a>
+            <a href="#analytics" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Аналитика</span>
+            </a>
+            <a href="#statistics" class="menu-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Статистика</span>
+            </a>
+            <a href="#reports" class="menu-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Отчеты</span>
+            </a>
+            <a href="#forecasting" class="menu-item">
+                <i class="fas fa-crystal-ball"></i>
+                <span>Прогнозирование</span>
+            </a>
+            <a href="serchwork.html" class="menu-item">
+                <i class="fas fa-search"></i>
+                <span>Поиск работы</span>
+            </a>
+            <a href="news.html" class="menu-item">
+                <i class="fas fa-newspaper"></i>
+                <span>Новости</span>
+            </a>
+            <a href="user_profile.html" class="menu-item">
+                <i class="fas fa-user"></i>
+                <span>Профиль</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Затемнение фона -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Выдвижная панель фильтров -->
+    <div class="filter-sidebar" id="filterSidebar">
+        <div class="filter-header">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold">Фильтры и настройки</h3>
+                <button id="closeFilters" class="text-white hover:text-gray-200">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="p-6 space-y-6">
+            <!-- Региональные фильтры -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Регион</label>
+                <select id="regionFilter" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="all">Все регионы</option>
+                    <option value="dushanbe">Душанбе</option>
+                    <option value="rrp">РРП</option>
+                    <option value="sughd">Согд</option>
+                    <option value="khatlon">Хатлон</option>
+                    <option value="gbao">ГБАО</option>
+                </select>
+            </div>
+
+            <!-- Временной период -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Период</label>
+                <select id="periodFilter" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="week">Последняя неделя</option>
+                    <option value="month" selected>Последний месяц</option>
+                    <option value="quarter">Последний квартал</option>
+                    <option value="year">Последний год</option>
+                    <option value="custom">Пользовательский период</option>
+                </select>
+            </div>
+
+            <!-- Отрасли -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Отрасль</label>
+                <select id="industryFilter" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="all">Все отрасли</option>
+                    <option value="it">ИТ и телекоммуникации</option>
+                    <option value="manufacturing">Производство</option>
+                    <option value="agriculture">Сельское хозяйство</option>
+                    <option value="services">Услуги</option>
+                    <option value="construction">Строительство</option>
+                    <option value="education">Образование</option>
+                    <option value="healthcare">Здравоохранение</option>
+                    <option value="finance">Финансы</option>
+                </select>
+            </div>
+
+            <!-- Тип занятости -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Тип занятости</label>
+                <div class="space-y-2">
+                    <label class="flex items-center">
+                        <input type="checkbox" value="full-time" class="mr-2 text-blue-600">
+                        <span class="text-sm">Полная занятость</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" value="part-time" class="mr-2 text-blue-600">
+                        <span class="text-sm">Частичная занятость</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" value="freelance" class="mr-2 text-blue-600">
+                        <span class="text-sm">Фриланс</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" value="contract" class="mr-2 text-blue-600">
+                        <span class="text-sm">Контракт</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Уровень образования -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Уровень образования</label>
+                <select id="educationFilter" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="all">Все уровни</option>
+                    <option value="basic">Базовое</option>
+                    <option value="secondary">Среднее</option>
+                    <option value="vocational">Профессиональное</option>
+                    <option value="higher">Высшее</option>
+                    <option value="postgraduate">Послевузовское</option>
+                </select>
+            </div>
+
+            <!-- Кнопки действий -->
+            <div class="flex space-x-3 pt-4">
+                <button id="applyFilters" class="flex-1 filter-btn">
+                    <i class="fas fa-filter mr-2"></i>
+                    Применить
+                </button>
+                <button id="resetFilters" class="flex-1 bg-gray-200 text-gray-700 px-4 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-undo mr-2"></i>
+                    Сбросить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <main class="transition-all duration-300">
+        <!-- Шапка -->
+        <header class="gradient-bg text-white shadow-xl">
+            <div class="container mx-auto px-6 py-8">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-4xl font-bold mb-2">Панель аналитики и статистики</h1>
+                        <p class="text-xl opacity-90">Комплексный анализ рынка труда Республики Таджикистан</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button id="openFilters" class="bg-white bg-opacity-20 px-6 py-3 rounded-lg font-semibold hover:bg-opacity-30 transition-all">
+                            <i class="fas fa-sliders-h mr-2"></i>
+                            Фильтры
+                        </button>
+                        <button id="exportData" class="bg-white bg-opacity-20 px-6 py-3 rounded-lg font-semibold hover:bg-opacity-30 transition-all">
+                            <i class="fas fa-download mr-2"></i>
+                            Экспорт
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Ключевые метрики -->
+        <section class="container mx-auto px-6 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Общая занятость -->
+                <div class="stat-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 bg-blue-100 rounded-lg">
+                            <i class="fas fa-users text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-500">vs прошлый месяц</div>
+                            <div class="text-green-500 font-semibold">+2.4%</div>
+                        </div>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-800" id="totalEmployment">1,847,230</div>
+                    <div class="text-gray-600">Общая занятость</div>
+                    <div class="mt-4">
+                        <canvas id="employmentGauge" width="300" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Уровень безработицы -->
+                <div class="stat-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 bg-red-100 rounded-lg">
+                            <i class="fas fa-chart-line-down text-red-600 text-xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-500">vs прошлый месяц</div>
+                            <div class="text-red-500 font-semibold">+0.3%</div>
+                        </div>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-800" id="unemploymentRate">7.2%</div>
+                    <div class="text-gray-600">Уровень безработицы</div>
+                    <div class="mt-4">
+                        <canvas id="unemploymentGauge" width="300" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Активные вакансии -->
+                <div class="stat-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 bg-green-100 rounded-lg">
+                            <i class="fas fa-briefcase text-green-600 text-xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-500">vs прошлый месяц</div>
+                            <div class="text-green-500 font-semibold">+12.8%</div>
+                        </div>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-800" id="activeVacancies">23,456</div>
+                    <div class="text-gray-600">Активные вакансии</div>
+                    <div class="mt-4">
+                        <canvas id="vacanciesGauge" width="300" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Средняя зарплата -->
+                <div class="stat-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 bg-yellow-100 rounded-lg">
+                            <i class="fas fa-money-bill-wave text-yellow-600 text-xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-500">vs прошлый месяц</div>
+                            <div class="text-green-500 font-semibold">+5.2%</div>
+                        </div>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-800" id="averageSalary">2,847</div>
+                    <div class="text-gray-600">Средняя зарплата (сомони)</div>
+                    <div class="mt-4">
+                        <canvas id="salaryGauge" width="300" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Вкладки аналитики -->
+        <section class="container mx-auto px-6">
+            <div class="tab-container">
+                <button class="tab-button active" data-tab="overview">Обзор</button>
+                <button class="tab-button" data-tab="analytics">Аналитика</button>
+                <button class="tab-button" data-tab="forecasting">Прогнозирование</button>
+                <button class="tab-button" data-tab="migration">Миграция</button>
+                <button class="tab-button" data-tab="skills">Навыки</button>
+            </div>
+
+            <!-- Вкладка "Обзор" -->
+            <div class="tab-content active" id="overview">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Динамика занятости -->
+                    <div class="stat-card">
+                        <div class="chart-header">
+                            <h3 class="text-xl font-bold text-gray-800">Динамика занятости</h3>
+                            <div class="flex space-x-2">
+                                <button class="text-sm px-3 py-1 bg-blue-100 text-blue-600 rounded">6М</button>
+                                <button class="text-sm px-3 py-1 bg-gray-100 text-gray-600 rounded">1Г</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="employmentTrendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Распределение по отраслям -->
+                    <div class="stat-card">
+                        <div class="chart-header">
+                            <h3 class="text-xl font-bold text-gray-800">Распределение по отраслям</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="industryDistributionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Региональная статистика -->
+                    <div class="stat-card">
+                        <div class="chart-header">
+                            <h3 class="text-xl font-bold text-gray-800">Региональная статистика</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="regionalStatsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Топ вакансий -->
+                    <div class="stat-card">
+                        <div class="chart-header">
+                            <h3 class="text-xl font-bold text-gray-800">Топ-10 вакансий</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="topVacanciesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка "Аналитика" -->
+            <div class="tab-content" id="analytics">
+                <!-- Инструменты аналитики -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="tool-card theme-analytics interactive-element">
+                        <div class="tool-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Трендовый анализ</h3>
+                        <p class="text-gray-600 mb-4">Анализ исторических данных и выявление тенденций на рынке труда с использованием продвинутых алгоритмов.</p>
+                        <button class="text-blue-600 font-semibold hover:text-blue-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+
+                    <div class="tool-card theme-statistics interactive-element">
+                        <div class="tool-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Анализ навыков</h3>
+                        <p class="text-gray-600 mb-4">Выявление наиболее востребованных профессиональных навыков и анализ разрыва компетенций.</p>
+                        <button class="text-green-600 font-semibold hover:text-green-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+
+                    <div class="tool-card theme-salaries interactive-element">
+                        <div class="tool-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Анализ зарплат</h3>
+                        <p class="text-gray-600 mb-4">Комплексный анализ уровней заработной платы по профессиям, отраслям и регионам.</p>
+                        <button class="text-cyan-600 font-semibold hover:text-cyan-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+
+                    <div class="tool-card theme-forecasting interactive-element">
+                        <div class="tool-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Сравнительный анализ</h3>
+                        <p class="text-gray-600 mb-4">Сравнение показателей между регионами, отраслями и временными периодами.</p>
+                        <button class="text-yellow-600 font-semibold hover:text-yellow-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+
+                    <div class="tool-card theme-migration interactive-element">
+                        <div class="tool-icon">
+                            <i class="fas fa-globe-asia"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Анализ миграции</h3>
+                        <p class="text-gray-600 mb-4">Исследование трудовой миграции, направлений и экономического воздействия.</p>
+                        <button class="text-red-600 font-semibold hover:text-red-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+
+                    <div class="tool-card theme-skills interactive-element">
+                        <div class="tool-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Анализ вакансий</h3>
+                        <p class="text-gray-600 mb-4">Глубокий анализ динамики вакансий и требований работодателей.</p>
+                        <button class="text-purple-600 font-semibold hover:text-purple-800 transition-colors">
+                            Открыть инструмент <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Расширенная аналитика -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="stat-card">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Корреляционный анализ</h3>
+                        <div class="chart-container">
+                            <canvas id="correlationChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Тепловая карта активности</h3>
+                        <div class="chart-container">
+                            <canvas id="heatmapChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка "Прогнозирование" -->
+            <div class="tab-content" id="forecasting">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="stat-card">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Прогноз занятости на 2025 год</h3>
+                        <div class="chart-container">
+                            <canvas id="employmentForecastChart"></canvas>
+                        </div>
+                        <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                            <p class="text-sm text-blue-800">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Прогноз основан на анализе исторических данных и экономических трендов
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Прогноз по отраслям</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                                <div>
+                                    <div class="font-semibold text-green-800">ИТ и технологии</div>
+                                    <div class="text-sm text-green-600">Ожидаемый рост</div>
+                                </div>
+                                <div class="text-2xl font-bold text-green-600">+15%</div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                                <div>
+                                    <div class="font-semibold text-blue-800">Образование</div>
+                                    <div class="text-sm text-blue-600">Стабильный рост</div>
+                                </div>
+                                <div class="text-2xl font-bold text-blue-600">+8%</div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                                <div>
+                                    <div class="font-semibold text-yellow-800">Производство</div>
+                                    <div class="text-sm text-yellow-600">Медленный рост</div>
+                                </div>
+                                <div class="text-2xl font-bold text-yellow-600">+3%</div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                                <div>
+                                    <div class="font-semibold text-red-800">Сельское хозяйство</div>
+                                    <div class="text-sm text-red-600">Снижение</div>
+                                </div>
+                                <div class="text-2xl font-bold text-red-600">-2%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Модель прогнозирования -->
+                <div class="stat-card">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Настройки модели прогнозирования</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Горизонт прогноза</label>
+                            <select class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="3">3 месяца</option>
+                                <option value="6">6 месяцев</option>
+                                <option value="12" selected>1 год</option>
+                                <option value="24">2 года</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Модель</label>
+                            <select class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="arima">ARIMA</option>
+                                <option value="lstm" selected>LSTM нейросеть</option>
+                                <option value="linear">Линейная регрессия</option>
+                                <option value="ensemble">Ансамбль моделей</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Точность</label>
+                            <div class="flex items-center p-3 bg-green-50 rounded-lg">
+                                <div class="text-2xl font-bold text-green-600 mr-2">87.3%</div>
+                                <div class="text-sm text-green-600">MAE: 2.1%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка "Миграция" -->
+            <div class="tab-content" id="migration">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="stat-card">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Миграционные потоки</h3>
+                        <div class="chart-container">
+                            <canvas id="migrationFlowChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">География миграции</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 border-l-4 border-blue-500 bg-blue-50">
+                                <div>
+                                    <div class="font-semibold">Россия</div>
+                                    <div class="text-sm text-gray-600">Основное направление</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xl font-bold text-blue-600">847,230</div>
+                                    <div class="text-sm text-gray-500">мигрантов</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 border-l-4 border-green-500 bg-green-50">
+                                <div>
+                                    <div class="font-semibold">Казахстан</div>
+                                    <div class="text-sm text-gray-600">Второе направление</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xl font-bold text-green-600">156,890</div>
+                                    <div class="text-sm text-gray-500">мигрантов</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 border-l-4 border-yellow-500 bg-yellow-50">
+                                <div>
+                                    <div class="font-semibold">Киргизия</div>
+                                    <div class="text-sm text-gray-600">Третье направление</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xl font-bold text-yellow-600">89,450</div>
+                                    <div class="text-sm text-gray-500">мигрантов</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Денежные переводы -->
+                <div class="stat-card">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Денежные переводы</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="text-center p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg">
+                            <div class="text-3xl font-bold">$2.47B</div>
+                            <div class="text-sm opacity-90">Общий объем</div>
+                        </div>
+                        <div class="text-center p-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg">
+                            <div class="text-3xl font-bold">+12.5%</div>
+                            <div class="text-sm opacity-90">Рост за год</div>
+                        </div>
+                        <div class="text-center p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg">
+                            <div class="text-3xl font-bold">$206</div>
+                            <div class="text-sm opacity-90">На душу населения</div>
+                        </div>
+                        <div class="text-center p-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg">
+                            <div class="text-3xl font-bold">31.2%</div>
+                            <div class="text-sm opacity-90">% от ВВП</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка "Навыки" -->
+            <div class="tab-content" id="skills">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="stat-card">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Востребованные навыки</h3>
+                        <div class="chart-container">
+                            <canvas id="skillsRadarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Рейтинг навыков</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</div>
+                                    <span class="font-medium">Программирование (Python)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2 mr-3">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 95%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">95%</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</div>
+                                    <span class="font-medium">Анализ данных</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2 mr-3">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: 88%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">88%</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</div>
+                                    <span class="font-medium">Цифровой маркетинг</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2 mr-3">
+                                        <div class="bg-purple-500 h-2 rounded-full" style="width: 82%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">82%</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">4</div>
+                                    <span class="font-medium">Управление проектами</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2 mr-3">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">75%</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">5</div>
+                                    <span class="font-medium">Кибербезопасность</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2 mr-3">
+                                        <div class="bg-red-500 h-2 rounded-full" style="width: 71%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">71%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карта навыков -->
+                <div class="stat-card">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Карта навыков по регионам</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                        <div class="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                            <h4 class="font-semibold mb-2">Душанбе</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span>ИТ навыки</span>
+                                    <span class="font-semibold text-blue-600">85%</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Языки</span>
+                                    <span class="font-semibold text-green-600">78%</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Менеджмент</span>
+                                    <span class="font-semibold text-purple-600">72%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                            <h4 class="font-semibold mb-2">Согд</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span>Производство</span>
+                                    <span class="font-semibold text-blue-600">82%</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Логистика</span>
+                                    <span class="font-semibold text-green-600">76%</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Торговля</span>
+                                    <span class="font-semibold text-purple-600">71%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                            <h4 class="font-semibold mb-2">Хатлон</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span>Сельское хозяйство</span>
+                                    <span class="font-semibold text-blue-600">88%</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Пищевая индустрия</span>
+                                    <span class="font-semibold text-green-600">74%</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Строительство</span>
+                                    <span class="font-semibold text-purple-600">69%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                            <h4 class="font-semibold mb-2">РРП</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span>Добыча</span>
+                                    <span class="font-semibold text-blue-600">79%</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Энергетика</span>
+                                    <span class="font-semibold text-green-600">73%</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Туризм</span>
+                                    <span class="font-semibold text-purple-600">65%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                            <h4 class="font-semibold mb-2">ГБАО</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span>Туризм</span>
+                                    <span class="font-semibold text-blue-600">81%</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Ремесла</span>
+                                    <span class="font-semibold text-green-600">77%</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Экология</span>
+                                    <span class="font-semibold text-purple-600">70%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="gradient-bg text-white py-12 mt-16">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">TOCO Analytics</h3>
+                    <p class="text-gray-200 mb-4">Профессиональная панель аналитики рынка труда Республики Таджикистан.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Инструменты</h3>
+                    <ul class="space-y-2 text-gray-200">
+                        <li><a href="#" class="hover:text-white">Дашборд</a></li>
+                        <li><a href="#" class="hover:text-white">Аналитика</a></li>
+                        <li><a href="#" class="hover:text-white">Прогнозирование</a></li>
+                        <li><a href="#" class="hover:text-white">Отчеты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Ресурсы</h3>
+                    <ul class="space-y-2 text-gray-200">
+                        <li><a href="#" class="hover:text-white">Документация</a></li>
+                        <li><a href="#" class="hover:text-white">API</a></li>
+                        <li><a href="#" class="hover:text-white">Поддержка</a></li>
+                        <li><a href="#" class="hover:text-white">Обучение</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Контакты</h3>
+                    <div class="space-y-2 text-gray-200">
+                        <p><i class="fas fa-envelope mr-2"></i>analytics@toco.tj</p>
+                        <p><i class="fas fa-phone mr-2"></i>+992 37 221-05-63</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-gray-300">© 2025 TOCO Analytics. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Глобальные переменные
+        let currentCharts = {};
+        let analytics;
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация расширенной аналитики
+            analytics = new AdvancedAnalytics();
+            
+            initializeMenus();
+            initializeCharts();
+            initializeTabs();
+            initializeFilters();
+            loadDashboardData();
+            
+            // Добавляем обработчик изменения размера окна
+            window.addEventListener('resize', () => {
+                analytics.resizeAllCharts();
+            });
+        });
+
+        // Инициализация меню
+        function initializeMenus() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sideMenu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+            const openFilters = document.getElementById('openFilters');
+            const filterSidebar = document.getElementById('filterSidebar');
+            const closeFilters = document.getElementById('closeFilters');
+
+            // Боковое меню
+            menuToggle.addEventListener('click', () => {
+                sideMenu.classList.toggle('open');
+                overlay.classList.toggle('active');
+            });
+
+            // Панель фильтров
+            openFilters.addEventListener('click', () => {
+                filterSidebar.classList.add('open');
+                overlay.classList.add('active');
+            });
+
+            closeFilters.addEventListener('click', () => {
+                filterSidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            });
+
+            // Закрытие при клике на затемнение
+            overlay.addEventListener('click', () => {
+                sideMenu.classList.remove('open');
+                filterSidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            });
+
+            // Навигация по меню
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (item.getAttribute('href').startsWith('#')) {
+                        e.preventDefault();
+                        document.querySelectorAll('.menu-item').forEach(menuItem => {
+                            menuItem.classList.remove('active');
+                        });
+                        item.classList.add('active');
+                        
+                        sideMenu.classList.remove('open');
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+        }
+
+        // Инициализация вкладок
+        function initializeTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.dataset.tab;
+                    
+                    // Удаляем активные классы
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Добавляем активные классы
+                    button.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                    
+                    // Загружаем соответствующие данные для вкладки
+                    loadTabData(targetTab);
+                });
+            });
+        }
+
+        // Загрузка данных для конкретной вкладки
+        function loadTabData(tabName) {
+            switch(tabName) {
+                case 'analytics':
+                    loadAnalyticsData();
+                    break;
+                case 'forecasting':
+                    loadForecastingData();
+                    break;
+                case 'migration':
+                    loadMigrationData();
+                    break;
+                case 'skills':
+                    loadSkillsData();
+                    break;
+            }
+        }
+
+        // Инициализация фильтров
+        function initializeFilters() {
+            const applyFilters = document.getElementById('applyFilters');
+            const resetFilters = document.getElementById('resetFilters');
+
+            applyFilters.addEventListener('click', () => {
+                showLoadingOverlay();
+                // Имитация применения фильтров
+                setTimeout(() => {
+                    hideLoadingOverlay();
+                    updateChartsWithFilters();
+                    document.getElementById('filterSidebar').classList.remove('open');
+                    document.getElementById('overlay').classList.remove('active');
+                    showNotification('Фильтры применены успешно', 'success');
+                }, 1500);
+            });
+
+            resetFilters.addEventListener('click', () => {
+                // Сброс всех фильтров
+                document.getElementById('regionFilter').value = 'all';
+                document.getElementById('periodFilter').value = 'month';
+                document.getElementById('industryFilter').value = 'all';
+                document.getElementById('educationFilter').value = 'all';
+                
+                const checkboxes = document.querySelectorAll('#filterSidebar input[type="checkbox"]');
+                checkboxes.forEach(cb => cb.checked = false);
+                
+                showNotification('Фильтры сброшены', 'info');
+            });
+        }
+
+        // Функции для загрузки
+        function showLoadingOverlay() {
+            const overlay = document.createElement('div');
+            overlay.className = 'loading-overlay';
+            overlay.innerHTML = '<div class="spinner"></div>';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+            overlay.style.zIndex = '9999';
+            document.body.appendChild(overlay);
+        }
+
+        function hideLoadingOverlay() {
+            const overlay = document.querySelector('.loading-overlay');
+            if (overlay) overlay.remove();
+        }
+
+        // Инициализация диаграмм
+        function initializeCharts() {
+            // Получаем реальные данные если доступны
+            const useRealData = typeof SampleData !== 'undefined';
+            
+            if (useRealData) {
+                const metrics = SampleData.employmentMetrics;
+                
+                // Современные спидометры для ключевых метрик с реальными данными
+                analytics.createModernGauge('employmentGauge', metrics.employmentRate, 100, {
+                    color: '#3b82f6',
+                    title: 'Занятость',
+                    unit: '%'
+                });
+                
+                analytics.createModernGauge('unemploymentGauge', metrics.unemploymentRate, 15, {
+                    color: '#ef4444',
+                    title: 'Безработица',
+                    unit: '%'
+                });
+                
+                analytics.createModernGauge('vacanciesGauge', (metrics.newVacancies / 2000 * 100), 100, {
+                    color: '#10b981',
+                    title: 'Вакансии',
+                    unit: '%'
+                });
+                
+                analytics.createModernGauge('salaryGauge', (metrics.averageSalary / 5000 * 100), 100, {
+                    color: '#f59e0b',
+                    title: 'Зарплаты',
+                    unit: '%'
+                });
+            } else {
+                // Fallback к демонстрационным данным
+                analytics.createModernGauge('employmentGauge', 75, 100, {
+                    color: '#3b82f6',
+                    title: 'Занятость',
+                    unit: '%'
+                });
+                
+                analytics.createModernGauge('unemploymentGauge', 7.2, 15, {
+                    color: '#ef4444',
+                    title: 'Безработица',
+                    unit: '%'
+                });
+                
+                analytics.createModernGauge('vacanciesGauge', 65, 100, {
+                    color: '#10b981',
+                    title: 'Вакансии',
+                    unit: '%'
+                });
+                
+                analytics.createModernGauge('salaryGauge', 45, 100, {
+                    color: '#f59e0b',
+                    title: 'Зарплаты',
+                    unit: '%'
+                });
+            }
+
+            // Основные диаграммы
+            createEmploymentTrendChart();
+            createIndustryDistributionChart();
+            createRegionalStatsChart();
+            createTopVacanciesChart();
+        }
+
+        // Создание графика динамики занятости
+        function createEmploymentTrendChart() {
+            const useRealData = typeof SampleData !== 'undefined';
+            
+            let data;
+            if (useRealData) {
+                const trends = SampleData.monthlyTrends;
+                data = {
+                    labels: trends.labels,
+                    datasets: [{
+                        label: 'Занятость (%)',
+                        data: trends.employment,
+                        fill: true
+                    }]
+                };
+            } else {
+                data = {
+                    labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                    datasets: [{
+                        label: 'Занятость (тыс. человек)',
+                        data: [1820, 1825, 1830, 1835, 1840, 1842, 1845, 1847, 1849, 1851, 1848, 1847],
+                        fill: true
+                    }]
+                };
+            }
+
+            currentCharts.employmentTrend = analytics.createAdvancedLineChart('employmentTrendChart', data);
+        }
+
+        // Создание диаграммы распределения по отраслям
+        function createIndustryDistributionChart() {
+            const useRealData = typeof SampleData !== 'undefined';
+            
+            let data;
+            if (useRealData) {
+                const industries = SampleData.industryData;
+                data = {
+                    labels: industries.labels.slice(0, 6), // Берем первые 6 отраслей
+                    values: industries.employment.slice(0, 6).map(val => Math.round(val / 10000)) // Приводим к процентам
+                };
+            } else {
+                data = {
+                    labels: ['Сельское хозяйство', 'Производство', 'Услуги', 'ИТ', 'Строительство', 'Образование'],
+                    values: [35, 20, 18, 12, 10, 5]
+                };
+            }
+
+            currentCharts.industryDistribution = analytics.createInteractivePieChart('industryDistributionChart', data);
+        }
+
+        // Создание региональной статистики
+        function createRegionalStatsChart() {
+            const useRealData = typeof SampleData !== 'undefined';
+            
+            let data;
+            if (useRealData) {
+                const regional = SampleData.regionalData;
+                data = {
+                    labels: regional.labels,
+                    datasets: [{
+                        label: 'Занятость (тыс.)',
+                        data: regional.employment.map(item => Math.round(item.employed / 1000))
+                    }]
+                };
+            } else {
+                data = {
+                    labels: ['Душанбе', 'РРП', 'Согд', 'Хатлон', 'ГБАО'],
+                    datasets: [{
+                        label: 'Занятость (тыс.)',
+                        data: [450, 520, 380, 420, 77]
+                    }]
+                };
+            }
+
+            currentCharts.regionalStats = analytics.createBarChart('regionalStatsChart', data);
+        }
+
+        // Создание топ вакансий
+        function createTopVacanciesChart() {
+            const ctx = document.getElementById('topVacanciesChart');
+            if (!ctx) return;
+
+            const data = {
+                labels: ['Продавец', 'Водитель', 'Программист', 'Учитель', 'Врач', 'Строитель', 'Бухгалтер', 'Менеджер', 'Повар', 'Охранник'],
+                datasets: [{
+                    label: 'Количество вакансий',
+                    data: [2450, 1890, 1650, 1420, 1280, 1150, 980, 850, 750, 650],
+                    backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                    borderColor: '#10b981',
+                    borderWidth: 1
+                }]
+            };
+
+            currentCharts.topVacancies = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            borderColor: '#10b981',
+                            borderWidth: 1,
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: { 
+                                color: '#f3f4f6',
+                                borderColor: '#e5e7eb'
+                            },
+                            ticks: {
+                                font: {
+                                    family: 'Inter',
+                                    size: 11
+                                }
+                            }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: {
+                                font: {
+                                    family: 'Inter',
+                                    size: 11
+                                }
+                            }
+                        }
+                    },
+                    onHover: (event, activeElements) => {
+                        event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
+                    },
+                    animation: {
+                        duration: 1000
+                    }
+                }
+            });
+        }
+
+        // Загрузка данных аналитики
+        function loadAnalyticsData() {
+            // Создание корреляционного анализа
+            setTimeout(() => {
+                createCorrelationChart();
+                createHeatmapChart();
+            }, 100);
+        }
+
+        // Создание корреляционного графика
+        function createCorrelationChart() {
+            const ctx = document.getElementById('correlationChart');
+            if (!ctx) return;
+
+            const data = {
+                datasets: [{
+                    label: 'Корреляция зарплаты и образования',
+                    data: [
+                        {x: 1, y: 1800}, {x: 2, y: 2200}, {x: 3, y: 2800},
+                        {x: 4, y: 3400}, {x: 5, y: 4200}, {x: 6, y: 5100}
+                    ],
+                    backgroundColor: 'rgba(79, 70, 229, 0.6)',
+                    borderColor: '#4f46e5',
+                    borderWidth: 2
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'scatter',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            borderColor: '#4f46e5',
+                            borderWidth: 1,
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Уровень образования'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Средняя зарплата (сомони)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Создание тепловой карты
+        function createHeatmapChart() {
+            const canvas = document.getElementById('heatmapChart');
+            if (!canvas) return;
+            
+            // Данные для тепловой карты (активность по дням недели и часам)
+            const heatmapData = [
+                [1.2, 2.1, 3.4, 4.5, 5.6, 4.3, 3.2],
+                [2.3, 3.2, 4.1, 5.8, 6.2, 5.1, 4.0],
+                [3.1, 4.3, 5.2, 6.7, 7.1, 6.3, 5.2],
+                [2.8, 3.9, 4.8, 6.1, 6.8, 5.9, 4.7],
+                [1.9, 2.7, 3.6, 4.9, 5.4, 4.6, 3.5]
+            ];
+            
+            analytics.createHeatmapChart('heatmapChart', heatmapData);
+        }
+
+        // Загрузка данных дашборда
+        function loadDashboardData() {
+            // Загружаем данные из конфигурации
+            if (typeof SampleData !== 'undefined') {
+                const summary = SampleDataUtils.getDashboardSummary();
+                updateMetricsWithRealData(summary);
+            } else {
+                // Fallback к демонстрационным данным
+                updateMetrics();
+            }
+        }
+
+        // Обновление метрик с реальными данными
+        function updateMetricsWithRealData(summary) {
+            // Анимация счетчиков с реальными данными
+            animateCounter('totalEmployment', summary.totalEmployed);
+            animateCounter('activeVacancies', summary.activeVacancies);
+            animateCounter('averageSalary', summary.averageSalary);
+            
+            // Обновляем дополнительные показатели
+            const unemploymentElement = document.querySelector('[data-metric="unemployment"]');
+            if (unemploymentElement) {
+                animateCounter(unemploymentElement.id, summary.unemployment);
+            }
+            
+            // Обновляем проценты
+            const employmentRateElement = document.querySelector('[data-metric="employment-rate"]');
+            if (employmentRateElement) {
+                animatePercentage(employmentRateElement.id, summary.employmentRate);
+            }
+            
+            const unemploymentRateElement = document.querySelector('[data-metric="unemployment-rate"]');
+            if (unemploymentRateElement) {
+                animatePercentage(unemploymentRateElement.id, summary.unemploymentRate);
+            }
+        }
+
+        // Обновление метрик
+        function updateMetrics() {
+            // Анимация счетчиков
+            animateCounter('totalEmployment', 1847230);
+            animateCounter('activeVacancies', 23456);
+            animateCounter('averageSalary', 2847);
+        }
+
+        // Анимация счетчика
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            let current = 0;
+            const increment = targetValue / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= targetValue) {
+                    current = targetValue;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current).toLocaleString('ru-RU');
+            }, 20);
+        }
+
+        // Анимация процентов
+        function animatePercentage(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            let current = 0;
+            const increment = targetValue / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= targetValue) {
+                    current = targetValue;
+                    clearInterval(timer);
+                }
+                element.textContent = current.toFixed(1) + '%';
+            }, 20);
+        }
+
+        // Обновление диаграмм с фильтрами
+        function updateChartsWithFilters() {
+            const region = document.getElementById('regionFilter').value;
+            const period = document.getElementById('periodFilter').value;
+            const industry = document.getElementById('industryFilter').value;
+            
+            // Пример обновления данных на основе фильтров
+            if (currentCharts.employmentTrend) {
+                const newData = {
+                    datasets: [{
+                        data: generateRandomData(12, 1800000, 1900000)
+                    }]
+                };
+                analytics.animateChartUpdate('employmentTrendChart', newData);
+            }
+            
+            console.log(`Обновление диаграмм для региона: ${region}, периода: ${period}, отрасли: ${industry}`);
+        }
+
+        // Генерация случайных данных для демонстрации
+        function generateRandomData(count, min, max) {
+            return Array.from({ length: count }, () => 
+                Math.floor(Math.random() * (max - min + 1)) + min
+            );
+        }
+
+        // Функции загрузки данных для вкладок
+        function loadForecastingData() {
+            console.log('Загрузка данных прогнозирования');
+            setTimeout(() => {
+                createEmploymentForecastChart();
+            }, 100);
+        }
+
+        function loadMigrationData() {
+            console.log('Загрузка данных миграции');
+            setTimeout(() => {
+                createMigrationFlowChart();
+            }, 100);
+        }
+
+        function loadSkillsData() {
+            console.log('Загрузка данных навыков');
+            setTimeout(() => {
+                createSkillsRadarChart();
+            }, 100);
+        }
+
+        // Создание графика прогноза занятости
+        function createEmploymentForecastChart() {
+            const ctx = document.getElementById('employmentForecastChart');
+            if (!ctx) return;
+
+            const historicalData = [1820, 1825, 1830, 1835, 1840, 1842, 1845, 1847];
+            const forecastData = [1850, 1855, 1862, 1868, 1875, 1881, 1888, 1895];
+
+            const data = {
+                labels: ['Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек', 'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг'],
+                datasets: [
+                    {
+                        label: 'Исторические данные',
+                        data: [...historicalData, ...Array(8).fill(null)],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Прогноз',
+                        data: [...Array(8).fill(null), ...forecastData],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        borderDash: [10, 5],
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5
+                    }
+                ]
+            };
+
+            new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: { family: 'Inter', size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            borderColor: '#4f46e5',
+                            borderWidth: 1,
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#f3f4f6' },
+                            ticks: { font: { family: 'Inter', size: 11 } }
+                        },
+                        y: {
+                            grid: { color: '#f3f4f6' },
+                            ticks: { 
+                                font: { family: 'Inter', size: 11 },
+                                callback: function(value) {
+                                    return value + ' тыс.';
+                                }
+                            }
+                        }
+                    },
+                    animation: { duration: 1500 }
+                }
+            });
+        }
+
+        // Создание графика миграционных потоков
+        function createMigrationFlowChart() {
+            const ctx = document.getElementById('migrationFlowChart');
+            if (!ctx) return;
+
+            const data = {
+                labels: ['2020', '2021', '2022', '2023', '2024'],
+                datasets: [
+                    {
+                        label: 'Эмиграция',
+                        data: [320000, 295000, 280000, 310000, 335000],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Возвращение мигрантов',
+                        data: [45000, 52000, 38000, 41000, 48000],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            };
+
+            new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: { family: 'Inter', size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            borderColor: '#4f46e5',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y.toLocaleString()} человек`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#f3f4f6' },
+                            ticks: { font: { family: 'Inter', size: 11 } }
+                        },
+                        y: {
+                            grid: { color: '#f3f4f6' },
+                            ticks: {
+                                font: { family: 'Inter', size: 11 },
+                                callback: function(value) {
+                                    return (value / 1000) + 'K';
+                                }
+                            }
+                        }
+                    },
+                    animation: { duration: 1500 }
+                }
+            });
+        }
+
+        // Создание радарной диаграммы навыков
+        function createSkillsRadarChart() {
+            const ctx = document.getElementById('skillsRadarChart');
+            if (!ctx) return;
+
+            const data = {
+                labels: [
+                    'Программирование',
+                    'Анализ данных',
+                    'Цифровой маркетинг',
+                    'Управление проектами',
+                    'Кибербезопасность',
+                    'Дизайн',
+                    'Продажи',
+                    'Языки'
+                ],
+                datasets: [
+                    {
+                        label: 'Спрос',
+                        data: [95, 88, 82, 75, 71, 65, 78, 70],
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#4f46e5',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Предложение',
+                        data: [45, 52, 68, 58, 35, 72, 85, 78],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    }
+                ]
+            };
+
+            new Chart(ctx, {
+                type: 'radar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: { family: 'Inter', size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            borderColor: '#4f46e5',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.r}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: '#f3f4f6' },
+                            pointLabels: {
+                                font: { family: 'Inter', size: 11 }
+                            },
+                            ticks: {
+                                stepSize: 20,
+                                font: { family: 'Inter', size: 10 },
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    },
+                    animation: { duration: 1500 }
+                }
+            });
+        }
+
+        // Экспорт данных
+        document.getElementById('exportData').addEventListener('click', () => {
+            const exportMenu = document.createElement('div');
+            exportMenu.className = 'fixed top-20 right-6 bg-white rounded-lg shadow-xl p-4 z-50 border';
+            exportMenu.innerHTML = `
+                <h3 class="font-semibold mb-3">Экспорт данных</h3>
+                <div class="space-y-2">
+                    <button onclick="exportAs('pdf')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded">
+                        <i class="fas fa-file-pdf mr-2 text-red-500"></i>PDF отчет
+                    </button>
+                    <button onclick="exportAs('excel')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded">
+                        <i class="fas fa-file-excel mr-2 text-green-500"></i>Excel файл
+                    </button>
+                    <button onclick="exportAs('csv')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded">
+                        <i class="fas fa-file-csv mr-2 text-blue-500"></i>CSV данные
+                    </button>
+                    <button onclick="exportAs('image')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded">
+                        <i class="fas fa-image mr-2 text-purple-500"></i>Изображения графиков
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(exportMenu);
+            
+            // Удаление меню через 5 секунд или при клике вне его
+            setTimeout(() => exportMenu.remove(), 5000);
+            
+            document.addEventListener('click', function closeMenu(e) {
+                if (!exportMenu.contains(e.target)) {
+                    exportMenu.remove();
+                    document.removeEventListener('click', closeMenu);
+                }
+            });
+        });
+
+        // Функция экспорта
+        function exportAs(format) {
+            showNotification(`Экспорт в формате ${format.toUpperCase()} начался. Файл будет загружен через несколько секунд.`, 'success');
+            
+            if (format === 'image') {
+                // Экспорт всех диаграмм как изображений
+                Object.keys(currentCharts).forEach(chartId => {
+                    analytics.exportChart(chartId, `${chartId}_${new Date().getTime()}.png`);
+                });
+            }
+        }
+
+        // Функция уведомлений
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-x-full ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'error' ? 'bg-red-500' : 
+                type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
+            } text-white max-w-sm`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <div class="flex-1">${message}</div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Анимация появления
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Автоудаление через 5 секунд
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // Добавляем интерактивность к карточкам инструментов
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.tool-card')) {
+                const card = e.target.closest('.tool-card');
+                const toolName = card.querySelector('h3').textContent;
+                showNotification(`Инструмент "${toolName}" будет доступен в полной версии`, 'info');
+            }
+        });
+    </script>
+</body>
+</html>
