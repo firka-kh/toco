@@ -1668,50 +1668,42 @@
                 // Современные спидометры для ключевых метрик с реальными данными
                 analytics.createModernGauge('employmentGauge', metrics.employmentRate, 100, {
                     color: '#3b82f6',
-                    title: 'Занятость',
                     unit: '%'
                 });
                 
                 analytics.createModernGauge('unemploymentGauge', metrics.unemploymentRate, 15, {
                     color: '#ef4444',
-                    title: 'Безработица',
                     unit: '%'
                 });
                 
                 analytics.createModernGauge('vacanciesGauge', (metrics.newVacancies / 2000 * 100), 100, {
                     color: '#10b981',
-                    title: 'Вакансии',
                     unit: '%'
                 });
                 
                 analytics.createModernGauge('salaryGauge', (metrics.averageSalary / 5000 * 100), 100, {
                     color: '#f59e0b',
-                    title: 'Зарплаты',
                     unit: '%'
                 });
             } else {
                 // Fallback к демонстрационным данным
                 analytics.createModernGauge('employmentGauge', 75, 100, {
                     color: '#3b82f6',
-                    title: 'Занятость',
                     unit: '%'
                 });
                 
                 analytics.createModernGauge('unemploymentGauge', 7.2, 15, {
                     color: '#ef4444',
-                    title: 'Безработица',
                     unit: '%'
                 });
                 
                 analytics.createModernGauge('vacanciesGauge', 65, 100, {
                     color: '#10b981',
-                    title: 'Вакансии',
                     unit: '%'
                 });
                 
                 analytics.createModernGauge('salaryGauge', 45, 100, {
                     color: '#f59e0b',
-                    title: 'Зарплаты',
                     unit: '%'
                 });
             }
