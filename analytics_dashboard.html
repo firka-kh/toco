@@ -2143,142 +2143,50 @@
             <!-- Вкладка "Обзор" -->
             <div class="tab-content active" id="overview">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                    <!-- Динамика занятости - современная 3D карта с градиентами -->
+                    <!-- Пространство для нового виджета занятости -->
                     <div class="stat-card glassmorphism">
-                        <div class="live-indicator">
-                            <span class="live-dot"></span>
-                            LIVE
-                        </div>
                         <div class="chart-header flex justify-between items-center">
                             <div>
                                 <h3 class="text-xl font-bold text-gray-800 flex items-center">
                                     <span class="indicator-dot bg-blue-500 mr-2"></span>
-                                    Динамика занятости
+                                    Новый аналитический виджет
                                 </h3>
-                                <p class="text-sm text-gray-500 mt-1">Реальные данные с рынка труда</p>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button class="period-selector active" data-period="6m">6М</button>
-                                <button class="period-selector" data-period="1y">1Г</button>
-                                <button class="period-selector" data-period="all">Все</button>
+                                <p class="text-sm text-gray-500 mt-1">Здесь будет размещен новый интерактивный график</p>
                             </div>
                         </div>
-                        <div class="chart-container employment-3d-container">
-                            <canvas id="employmentTrendChart"></canvas>
-                            <div class="chart-overlay">
-                                <div class="chart-highlight"></div>
-                                <div class="chart-data-tooltip">
-                                    <div class="date">Июнь 2025</div>
-                                    <div class="value"><span>95.2%</span> занятости</div>
-                                    <div class="change up">+2.1% с прошлого месяца</div>
+                        <div class="flex items-center justify-center p-6 bg-gray-50 rounded-lg">
+                            <div class="text-center py-10">
+                                <div class="text-5xl text-gray-300 mb-4">
+                                    <i class="fas fa-chart-line"></i>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="chart-insights">
-                            <div class="insight-badge positive">
-                                <i class="fas fa-arrow-trend-up mr-1"></i> Рост 2.1%
-                            </div>
-                            <div class="insight-badge neutral">
-                                <i class="fas fa-calendar-check mr-1"></i> Сезонность
+                                <h3 class="text-lg font-semibold text-gray-600">Виджет в разработке</h3>
+                                <p class="text-gray-500 mt-2">Новая версия графика динамики занятости будет доступна в следующем обновлении</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Распределение по отраслям - интерактивное кольцо с 3D эффектами -->
+                    <!-- Заготовка для нового виджета отраслей -->
                     <div class="stat-card glassmorphism">
-                        <div class="live-indicator">
-                            <span class="live-dot"></span>
-                            LIVE
-                        </div>
                         <div class="chart-header flex justify-between items-center">
                             <div>
                                 <h3 class="text-xl font-bold text-gray-800 flex items-center">
                                     <span class="indicator-dot bg-purple-500 mr-2"></span>
                                     Распределение по отраслям
                                 </h3>
-                                <p class="text-sm text-gray-500 mt-1">Структура рынка по секторам</p>
+                                <p class="text-sm text-gray-500 mt-1">Новая версия в разработке</p>
                             </div>
-                            <div class="chart-controls">
-                                <button class="chart-control-btn active" data-action="viewType" data-view="donut">
+                        </div>
+                        <div class="flex items-center justify-center p-6 bg-gray-50 rounded-lg">
+                            <div class="text-center py-10">
+                                <div class="text-5xl text-gray-300 mb-4">
                                     <i class="fas fa-chart-pie"></i>
-                                </button>
-                                <button class="chart-control-btn" data-action="viewType" data-view="polar">
-                                    <i class="fas fa-chart-line"></i>
-                                </button>
-                                <button class="chart-control-btn" data-action="download">
-                                    <i class="fas fa-download"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="chart-container industry-ring-container">
-                            <div class="chart-overlay">
-                                <div class="chart-highlight-radial"></div>
-                            </div>
-                            <canvas id="industryDistributionChart"></canvas>
-                            <div class="center-stat">
-                                <div class="center-value animated-number">45.8%</div>
-                                <div class="center-label">Сфера услуг</div>
-                                <div class="center-change-indicator up">
-                                    <i class="fas fa-arrow-up"></i> 3.2%
                                 </div>
-                            </div>
-                            <div class="floating-stats">
-                                <div class="floating-stat-item" style="top: 30%; left: 22%;">
-                                    <div class="floating-icon">
-                                        <i class="fas fa-briefcase"></i>
-                                    </div>
-                                </div>
-                                <div class="floating-stat-item" style="top: 60%; left: 75%;">
-                                    <div class="floating-icon">
-                                        <i class="fas fa-tractor"></i>
-                                    </div>
-                                </div>
-                                <div class="floating-stat-item" style="top: 20%; left: 65%;">
-                                    <div class="floating-icon">
-                                        <i class="fas fa-industry"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="industry-legend">
-                            <div class="industry-item" data-industry="services">
-                                <span class="color-dot bg-blue-500"></span>
-                                <span class="name">Услуги</span>
-                                <span class="value animated-value">45.8%</span>
-                                <span class="trend up"><i class="fas fa-arrow-up"></i></span>
-                            </div>
-                            <div class="industry-item" data-industry="agriculture">
-                                <span class="color-dot bg-green-500"></span>
-                                <span class="name">Сельское хозяйство</span>
-                                <span class="value animated-value">21.3%</span>
-                                <span class="trend down"><i class="fas fa-arrow-down"></i></span>
-                            </div>
-                            <div class="industry-item" data-industry="production">
-                                <span class="color-dot bg-yellow-500"></span>
-                                <span class="name">Производство</span>
-                                <span class="value animated-value">18.5%</span>
-                                <span class="trend stable"><i class="fas fa-minus"></i></span>
-                            </div>
-                        </div>
-                        <div class="industry-details collapse">
-                            <div class="details-header">
-                                <h4 class="text-md font-semibold">Детали по отрасли: <span class="industry-detail-name">Услуги</span></h4>
-                                <div class="close-details">
-                                    <i class="fas fa-times"></i>
-                                </div>
-                            </div>
-                            <div class="details-content">
-                                <div class="flex justify-between mb-2">
-                                    <span>Занятость в отрасли:</span>
-                                    <span class="font-semibold">846,230 чел.</span>
-                                </div>
-                                <div class="flex justify-between mb-2">
-                                    <span>Средняя зарплата:</span>
-                                    <span class="font-semibold">3,250 сомони</span>
-                                </div>
-                                <div class="flex justify-between mb-2">
-                                    <span>Рост за последний год:</span>
-                                    <span class="font-semibold text-green-500">+3.2%</span>
+                                <h3 class="text-lg font-semibold text-gray-600">Виджет обновляется</h3>
+                                <p class="text-gray-500 mt-2">Мы работаем над новым интерактивным представлением данных по отраслям</p>
+                                <div class="mt-6 flex justify-center gap-4">
+                                    <div class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Услуги: 45.8%</div>
+                                    <div class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">С/х: 21.3%</div>
+                                    <div class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm">Пром.: 18.5%</div>
                                 </div>
                             </div>
                         </div>
@@ -3357,58 +3265,21 @@
             createTopVacanciesChart();
         }
 
-        // Создание графика динамики занятости с 3D эффектом и анимацией
+        // Заглушка для функции createEmploymentTrendChart
         function createEmploymentTrendChart() {
-            console.log("Creating employment trend 3D chart...");
+            console.log("Employment trend chart removed - will be replaced in future update");
+            // Функция была удалена из-за проблем с реализацией
+            // Новая версия будет добавлена в следующем обновлении
             
-            // НОВЫЕ ДЕМОНСТРАЦИОННЫЕ ДАННЫЕ
-            // Генерация реалистичных данных с небольшими колебаниями и общим восходящим трендом
-            const generateData = () => {
-                const baseData = [89.5, 90.1, 90.6, 91.2, 90.8, 90.5, 91.0, 92.5, 93.1, 94.0, 94.8, 95.2];
-                
-                // Добавляем небольшой шум к данным для большей реалистичности
-                return baseData.map(value => {
-                    const noise = (Math.random() - 0.5) * 0.4; // Случайное отклонение ±0.2%
-                    return Number((value + noise).toFixed(1));
-                });
-            };
-
-            const monthLabels = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
-            const employmentData = generateData();
+            // Добавляем сообщение в элементы, которые могут отображать график
+            const chartContainer = document.getElementById('employmentTrendChart');
+            if (!chartContainer) return;
             
-            // Конфигурация данных для графика
-            const data = {
-                labels: monthLabels,
-                datasets: [{
-                    label: 'Занятость (%)',
-                    data: employmentData,
-                    fill: true,
-                    backgroundColor: 'rgba(59, 130, 246, 0.2)', 
-                    borderColor: 'rgba(59, 130, 246, 1)',
-                    borderWidth: 3,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#ffffff',
-                    pointBorderColor: 'rgba(59, 130, 246, 1)',
-                    pointBorderWidth: 2,
-                    pointHoverRadius: 7,
-                    tension: 0.4 // Сглаживание линии для более плавного вида
-                }]
-            };
-
-            // Получаем canvas и его контекст для создания графика
-            const canvas = document.getElementById('employmentTrendChart');
-            const ctx = canvas.getContext('2d');
-            
-            // УЛУЧШЕННЫЙ 3D ГРАДИЕНТ
-            // Создаем градиент с более глубоким 3D эффектом
-            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(59, 130, 246, 0.5)');    // Более насыщенный цвет вверху
-            gradient.addColorStop(0.4, 'rgba(59, 130, 246, 0.2)');  // Средний слой
-            gradient.addColorStop(0.8, 'rgba(59, 130, 246, 0.05)'); // Более прозрачный внизу
-            gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');      // Полностью прозрачный в самом низу
-            
-            // Применяем градиент к набору данных
-            data.datasets[0].backgroundColor = gradient;
+            // Сохраняем пустую ссылку для предотвращения ошибок в других частях кода
+            if (typeof currentCharts === 'object') {
+                currentCharts.employmentTrend = null;
+            }
+        }
             
             // РАСШИРЕННЫЕ ОПЦИИ С АНИМАЦИЕЙ
             const chartOptions = {
@@ -3733,83 +3604,64 @@
             }
         }
 
-        // Создание диаграммы распределения по отраслям
+        // Заглушка для функции распределения по отраслям
         function createIndustryDistributionChart() {
-            const useRealData = typeof SampleData !== 'undefined';
+            console.log("Industry distribution chart removed - will be replaced in future update");
+            // Функция была удалена из-за проблем с реализацией
+            // Новая версия будет добавлена в следующем обновлении
             
-            let labels, values;
-            if (useRealData) {
-                const industries = SampleData.industryData;
-                labels = industries.labels.slice(0, 6); // Берем первые 6 отраслей
-                values = industries.employment.slice(0, 6).map(val => Math.round(val / 10000)); // Приводим к процентам
-            } else {
-                labels = ['Услуги', 'Сельское хозяйство', 'Производство', 'Образование', 'Здравоохранение', 'Другое'];
-                values = [45.8, 21.3, 18.5, 7.2, 4.5, 2.7];
+            // Простое представление данных для отображения в интерфейсе
+            const labels = ['Услуги', 'Сельское хозяйство', 'Производство', 'Образование', 'Здравоохранение', 'Другое'];
+            const values = [45.8, 21.3, 18.5, 7.2, 4.5, 2.7];
+            
+            // Сохраняем пустую ссылку для предотвращения ошибок в других частях кода
+            if (typeof currentCharts === 'object') {
+                currentCharts.industryDistribution = null;
             }
             
-            // Преобразуем данные в формат, который ожидает Chart.js
-            const data = {
-                labels: labels,
-                datasets: [{
-                    data: values,
-                    backgroundColor: [
-                        'rgba(59, 130, 246, 0.8)',
-                        'rgba(16, 185, 129, 0.8)',
-                        'rgba(245, 158, 11, 0.8)',
-                        'rgba(139, 92, 246, 0.8)',
-                        'rgba(239, 68, 68, 0.8)',
-                        'rgba(107, 114, 128, 0.8)'
-                    ],
-                    borderColor: 'rgba(255, 255, 255, 0.8)',
-                    borderWidth: 1,
-                    hoverBorderWidth: 3,
-                    hoverBorderColor: '#ffffff',
-                    borderRadius: 5
-                }]
-            };
+            // Получаем контейнер для вывода простых статистических данных
+            const container = document.querySelector('.stat-card:nth-child(2) .flex.items-center.justify-center');
+            if (container) {
+                let html = '<div class="p-4 w-full">';
+                html += '<h4 class="text-center mb-4 text-gray-600">Структура занятости по отраслям</h4>';
+                html += '<div class="space-y-3">';
+                
+                // Создаем простые полоски с процентами для каждой отрасли
+                labels.forEach((label, index) => {
+                    const value = values[index];
+                    const colors = [
+                        'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 
+                        'bg-purple-500', 'bg-red-500', 'bg-gray-500'
+                    ];
+                    
+                    html += `
+                    <div class="relative pt-1">
+                        <div class="flex mb-2 items-center justify-between">
+                            <div>
+                                <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full ${colors[index].replace('bg-', 'bg-opacity-20 text-')}">
+                                    ${label}
+                                </span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs font-semibold inline-block text-gray-600">
+                                    ${value}%
+                                </span>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                            <div style="width:${value}%" class="${colors[index]} shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center"></div>
+                        </div>
+                    </div>
+                    `;
+                });
+                
+                html += '</div></div>';
+                container.innerHTML = html;
+            }
+        }
 
-            // Создаем кольцевую диаграмму напрямую через Chart.js
-            const ctx = document.getElementById('industryDistributionChart');
-            if (!ctx) return;
-            
-            const chart = new Chart(ctx, {
-                type: 'doughnut',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '70%',
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                            titleColor: '#111827',
-                            bodyColor: '#111827',
-                            borderColor: 'rgba(0, 0, 0, 0.1)',
-                            borderWidth: 1,
-                            cornerRadius: 8,
-                            padding: 12,
-                            callbacks: {
-                                label: function(context) {
-                                    const value = context.raw;
-                                    return `${context.label}: ${value}%`;
-                                }
-                            }
-                        }
-                    },
-                    animation: {
-                        animateRotate: true,
-                        animateScale: true
-                    }
-                }
-            });
-            
-            currentCharts.industryDistribution = chart;
-            
-            // Добавляем функциональность для отображения значения в центре диаграммы
-            const updateCenterValue = (index) => {
+        // Создание региональной статистики
+        function createRegionalStatsChart() {
                 const centerValue = document.querySelector('.center-value');
                 const centerLabel = document.querySelector('.center-label');
                 const centerChange = document.querySelector('.center-change-indicator');
@@ -3847,31 +3699,8 @@
                     document.querySelectorAll('.industry-item').forEach(el => {
                         el.classList.remove('active');
                     });
-                    
-                    // Добавляем класс active для текущего элемента
-                    item.classList.add('active');
-                    
-                    // Подсвечиваем соответствующий сегмент в диаграмме
-                    chart.setActiveElements([{datasetIndex: 0, index: index}]);
-                    chart.update();
-                    
-                    // Обновляем центральное значение
-                    updateCenterValue(index);
-                });
-                
-                // Добавляем обработчик клика для фиксации выбранного элемента
-                item.addEventListener('click', () => {
-                    // Создаем событие детализации для этой отрасли
-                    const industryDetails = new CustomEvent('showIndustryDetails', {
-                        detail: {
-                            label: labels[index],
-                            value: values[index],
-                            index: index
-                        }
-                    });
-                    document.dispatchEvent(industryDetails);
-                });
-            });
+                }
+            }
         }
 
         // Создание региональной статистики
