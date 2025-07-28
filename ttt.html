@@ -1902,7 +1902,7 @@
                     normalizedData[normalizedData.length - 1] += (100 - sum);
                 }
                 
-                // Обновляем прогресс-бары и значения в виджете левой части
+                // Обновляем прогресс-бары и значения в виджете
                 const marketDynamicsBars = document.querySelectorAll('.market-dynamics-bar');
                 const marketDynamicsValues = document.querySelectorAll('.market-dynamics-value');
                 
@@ -1924,42 +1924,6 @@
                         }, 500);
                     }
                 }
-                
-                // Обновляем данные круговой диаграммы в правой части
-                animatePieChartUpdate(normalizedData);
-            }
-            
-            // Функция для плавной анимации обновления круговой диаграммы
-            function animatePieChartUpdate(newData) {
-                // Добавляем визуальный эффект при обновлении данных
-                sectorPieChart.options.animation = {
-                    animateRotate: true,
-                    animateScale: true,
-                    duration: 800,
-                    easing: 'easeOutQuart'
-                };
-                
-                // Применяем новые данные к диаграмме
-                sectorPieChart.data.datasets[0].data = newData;
-                
-                // Добавляем "импульс" при обновлении (небольшое изменение размера)
-                sectorPieChart.update();
-                
-                // Применяем случайное вращение для более динамичного обновления
-                const rotation = Math.random() * 0.2 - 0.1; // от -0.1 до 0.1 радиан
-                sectorPieChart.options.rotation = rotation;
-                
-                // Добавляем эффект "дрожания" секторов при обновлении
-                setTimeout(() => {
-                    sectorPieChart.data.datasets[0].hoverOffset = 5 + Math.random() * 5;
-                    sectorPieChart.update();
-                }, 100);
-                
-                // Возвращаем нормальное состояние после анимации
-                setTimeout(() => {
-                    sectorPieChart.data.datasets[0].hoverOffset = 10;
-                    sectorPieChart.update();
-                }, 800);
             }
             
             // Запускаем обновление данных рынка труда каждые 3 секунды
