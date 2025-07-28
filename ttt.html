@@ -14,14 +14,6 @@
         // Регистрируем плагины Chart.js глобально
         Chart.register(ChartDataLabels);
     </script>
-
-    <style>
-        /* Анимация дрожания и переливания цвета для кнопки меню */
-        @keyframes menuLabelShake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
-            20%, 40%, 60%, 80% { transform: translateX(2px); }
-        }
         
         /* Анимация появления контента */
         @keyframes fadeIn {
@@ -2182,8 +2174,8 @@
             
             // Функция для создания и обновления графиков отраслей
             function initSectorCharts() {
-            // Конфигурация для всех графиков
-            const chartConfig = {
+                // Конфигурация для всех графиков
+                const chartConfig = {
                 type: 'line',
                 options: {
                     responsive: true,
@@ -2206,7 +2198,6 @@
                                     }
                                     return context.dataset.label + ': ' + value;
                                 }
-                            }
                             }
                         }
                     },
@@ -2415,8 +2406,8 @@
         const sectorCharts = initSectorCharts();
         
         // Функция для инициализации интерактивности между отраслевыми диаграммами и информационным виджетом
-            function initSectorInteractions() {
-                // Получаем все элементы отраслей
+        function initSectorInteractions() {
+            // Получаем все элементы отраслей
                 const sectorItems = document.querySelectorAll('.market-dynamics-item');
                 const sectorInfo = document.getElementById('sector-info');
                 
@@ -2468,7 +2459,22 @@
                 // Устанавливаем сельское хозяйство как отрасль по умолчанию
                 document.querySelector('[data-sector="agriculture"]').click();
             }
+
+            // Инициализируем интерактивные элементы для отраслевых данных
+            initSectorInteractions();
         });
+
+        // Запускаем обновление данных виджетов каждые 3 секунды
+        setInterval(updateWidgetData, 3000);
+        
+        // Запускаем обновление данных рынка труда каждые 3 секунды
+        setInterval(updateLaborMarketData, 3000);
+        
+        // Запускаем первые обновления через 1 секунду после загрузки страницы
+        setTimeout(() => {
+            updateWidgetData();
+            updateLaborMarketData();
+        }, 1000);
     </script>
 </body>
 </html>
