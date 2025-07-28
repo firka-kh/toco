@@ -56,6 +56,17 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
+        
+        /* Стили для выравнивания процентов в виджете динамики рынка труда */
+        .industry-name {
+            width: 80%;
+        }
+        
+        .percentage-value {
+            width: 20%;
+            text-align: right;
+            padding-right: 5px;
+        }
 
         /* Кнопка меню посередине левой части страницы */
         .menu-label {
@@ -801,9 +812,9 @@
                             
                             <!-- Сельское хозяйство -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="agriculture">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="text-sm text-gray-600">Сельское хозяйство</div>
-                                    <div class="text-sm font-medium market-dynamics-value-right">11%</div>
+                                <div class="flex items-center mb-1">
+                                    <div class="text-sm text-gray-600 industry-name">Сельское хозяйство</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right percentage-value">11%</div>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
                                     <div class="market-dynamics-bar-right bg-green-500 h-2 rounded-full" style="width: 11%"></div>
@@ -812,9 +823,9 @@
                             
                             <!-- Промышленность -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="industry">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="text-sm text-gray-600">Промышленность</div>
-                                    <div class="text-sm font-medium market-dynamics-value-right">13%</div>
+                                <div class="flex items-center mb-1">
+                                    <div class="text-sm text-gray-600 industry-name">Промышленность</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right percentage-value">13%</div>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
                                     <div class="market-dynamics-bar-right bg-blue-500 h-2 rounded-full" style="width: 13%"></div>
@@ -823,9 +834,9 @@
                             
                             <!-- Строительство -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="construction">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="text-sm text-gray-600">Строительство</div>
-                                    <div class="text-sm font-medium market-dynamics-value-right">12%</div>
+                                <div class="flex items-center mb-1">
+                                    <div class="text-sm text-gray-600 industry-name">Строительство</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right percentage-value">12%</div>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
                                     <div class="market-dynamics-bar-right bg-yellow-500 h-2 rounded-full" style="width: 12%"></div>
@@ -834,9 +845,9 @@
                             
                             <!-- Торговля -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="trade">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="text-sm text-gray-600">Торговля</div>
-                                    <div class="text-sm font-medium market-dynamics-value-right">10%</div>
+                                <div class="flex items-center mb-1">
+                                    <div class="text-sm text-gray-600 industry-name">Торговля</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right percentage-value">10%</div>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
                                     <div class="market-dynamics-bar-right bg-red-400 h-2 rounded-full" style="width: 10%"></div>
@@ -845,9 +856,9 @@
                             
                             <!-- Транспорт -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="transport">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="text-sm text-gray-600">Транспорт</div>
-                                    <div class="text-sm font-medium market-dynamics-value-right">16%</div>
+                                <div class="flex items-center mb-1">
+                                    <div class="text-sm text-gray-600 industry-name">Транспорт</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right percentage-value">16%</div>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
                                     <div class="market-dynamics-bar-right bg-purple-500 h-2 rounded-full" style="width: 16%"></div>
@@ -856,9 +867,9 @@
                             
                             <!-- Образование -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="education">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="text-sm text-gray-600">Образование</div>
-                                    <div class="text-sm font-medium market-dynamics-value-right">12%</div>
+                                <div class="flex items-center mb-1">
+                                    <div class="text-sm text-gray-600 industry-name">Образование</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right percentage-value">12%</div>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
                                     <div class="market-dynamics-bar-right bg-indigo-500 h-2 rounded-full" style="width: 12%"></div>
@@ -867,9 +878,9 @@
                             
                             <!-- Здравоохранение -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="healthcare">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="text-sm text-gray-600">Здравоохранение</div>
-                                    <div class="text-sm font-medium market-dynamics-value-right">13%</div>
+                                <div class="flex items-center mb-1">
+                                    <div class="text-sm text-gray-600 industry-name">Здравоохранение</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right percentage-value">13%</div>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
                                     <div class="market-dynamics-bar-right bg-pink-500 h-2 rounded-full" style="width: 13%"></div>
@@ -878,9 +889,9 @@
                             
                             <!-- ИТ и связь -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="it">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="text-sm text-gray-600">ИТ и связь</div>
-                                    <div class="text-sm font-medium market-dynamics-value-right">13%</div>
+                                <div class="flex items-center mb-1">
+                                    <div class="text-sm text-gray-600 industry-name">ИТ и связь</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right percentage-value">13%</div>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
                                     <div class="market-dynamics-bar-right bg-teal-500 h-2 rounded-full" style="width: 13%"></div>
