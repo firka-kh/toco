@@ -471,6 +471,35 @@
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
         }
+        
+        /* Стили для правого виджета динамики рынка труда */
+        .market-dynamics-item-right {
+            transition: all 0.3s ease;
+        }
+        
+        .market-dynamics-item-right:hover {
+            transform: translateX(5px);
+            background-color: rgba(249, 250, 251, 0.8);
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+            margin-left: -0.5rem;
+            margin-right: -0.5rem;
+        }
+        
+        .market-dynamics-bar-right {
+            transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .market-dynamics-value-right.value-updating {
+            animation: value-pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes value-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); color: #2563eb; }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -824,55 +853,102 @@
                         </div>
                     </div>
                     
-                    <!-- Правая часть с секторальной диаграммой структуры рынка труда -->
+                    <!-- Правая часть с виджетом динамики рынка труда -->
                     <div class="w-full md:w-2/3 relative">
                         <div class="bg-white rounded-lg shadow-lg p-6 h-full">
-                            <h3 class="text-lg font-semibold mb-4">Структура рынка труда</h3>
+                            <h3 class="text-lg font-semibold mb-4">Динамика рынка труда</h3>
                             
-                            <div class="flex justify-center items-center h-5/6">
-                                <div class="chart-container relative" style="height: 380px; width: 100%;">
-                                    <canvas id="sectorPieChart"></canvas>
+                            <!-- Сельское хозяйство -->
+                            <div class="market-dynamics-item-right mb-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-sm text-gray-600">Сельское хозяйство</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right">11%</div>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="market-dynamics-bar-right bg-green-500 h-2 rounded-full" style="width: 11%"></div>
                                 </div>
                             </div>
                             
-                            <div class="sector-legend grid grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full bg-green-500 mr-2"></span>
-                                    <span class="text-sm">Сельское хозяйство</span>
+                            <!-- Промышленность -->
+                            <div class="market-dynamics-item-right mb-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-sm text-gray-600">Промышленность</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right">13%</div>
                                 </div>
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span>
-                                    <span class="text-sm">Промышленность</span>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="market-dynamics-bar-right bg-blue-500 h-2 rounded-full" style="width: 13%"></div>
                                 </div>
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></span>
-                                    <span class="text-sm">Строительство</span>
+                            </div>
+                            
+                            <!-- Строительство -->
+                            <div class="market-dynamics-item-right mb-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-sm text-gray-600">Строительство</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right">12%</div>
                                 </div>
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full bg-red-400 mr-2"></span>
-                                    <span class="text-sm">Торговля</span>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="market-dynamics-bar-right bg-yellow-500 h-2 rounded-full" style="width: 12%"></div>
                                 </div>
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full bg-purple-500 mr-2"></span>
-                                    <span class="text-sm">Транспорт</span>
+                            </div>
+                            
+                            <!-- Торговля -->
+                            <div class="market-dynamics-item-right mb-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-sm text-gray-600">Торговля</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right">10%</div>
                                 </div>
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full bg-indigo-500 mr-2"></span>
-                                    <span class="text-sm">Образование</span>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="market-dynamics-bar-right bg-red-400 h-2 rounded-full" style="width: 10%"></div>
                                 </div>
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full bg-pink-500 mr-2"></span>
-                                    <span class="text-sm">Здравоохранение</span>
+                            </div>
+                            
+                            <!-- Транспорт -->
+                            <div class="market-dynamics-item-right mb-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-sm text-gray-600">Транспорт</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right">16%</div>
                                 </div>
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full bg-teal-500 mr-2"></span>
-                                    <span class="text-sm">ИТ и связь</span>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="market-dynamics-bar-right bg-purple-500 h-2 rounded-full" style="width: 16%"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Образование -->
+                            <div class="market-dynamics-item-right mb-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-sm text-gray-600">Образование</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right">12%</div>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="market-dynamics-bar-right bg-indigo-500 h-2 rounded-full" style="width: 12%"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Здравоохранение -->
+                            <div class="market-dynamics-item-right mb-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-sm text-gray-600">Здравоохранение</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right">13%</div>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="market-dynamics-bar-right bg-pink-500 h-2 rounded-full" style="width: 13%"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- ИТ и связь -->
+                            <div class="market-dynamics-item-right mb-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-sm text-gray-600">ИТ и связь</div>
+                                    <div class="text-sm font-medium market-dynamics-value-right">13%</div>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="market-dynamics-bar-right bg-teal-500 h-2 rounded-full" style="width: 13%"></div>
                                 </div>
                             </div>
                             
                             <!-- Информация об обновлении данных -->
-                            <div class="text-center mt-4 pt-2 border-t border-gray-200">
-                                <span class="update-badge">Обновление данных каждые 3 сек.</span>
+                            <div class="text-center mt-6 pt-2 border-t border-gray-200">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-full">Обновление данных каждые 3 сек.</span>
                             </div>
                         </div>
                         
@@ -1840,7 +1916,7 @@
                     normalizedData[normalizedData.length - 1] += (100 - sum);
                 }
                 
-                // Обновляем прогресс-бары и значения в виджете
+                // Обновляем прогресс-бары и значения в левом виджете
                 const marketDynamicsBars = document.querySelectorAll('.market-dynamics-bar');
                 const marketDynamicsValues = document.querySelectorAll('.market-dynamics-value');
                 
@@ -1859,6 +1935,29 @@
                         // Удаляем класс анимации после завершения
                         setTimeout(() => {
                             marketDynamicsValues[i].classList.remove('value-updating');
+                        }, 500);
+                    }
+                }
+                
+                // Обновляем прогресс-бары и значения в правом виджете
+                const marketDynamicsBarsRight = document.querySelectorAll('.market-dynamics-bar-right');
+                const marketDynamicsValuesRight = document.querySelectorAll('.market-dynamics-value-right');
+                
+                for (let i = 0; i < normalizedData.length; i++) {
+                    if (marketDynamicsBarsRight[i] && marketDynamicsValuesRight[i]) {
+                        // Добавляем класс для анимации
+                        marketDynamicsValuesRight[i].classList.add('value-updating');
+                        
+                        // Обновляем значение
+                        marketDynamicsValuesRight[i].textContent = normalizedData[i] + '%';
+                        
+                        // Обновляем ширину прогресс-бара с анимацией
+                        marketDynamicsBarsRight[i].style.transition = 'width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                        marketDynamicsBarsRight[i].style.width = normalizedData[i] + '%';
+                        
+                        // Удаляем класс анимации после завершения
+                        setTimeout(() => {
+                            marketDynamicsValuesRight[i].classList.remove('value-updating');
                         }, 500);
                     }
                 }
