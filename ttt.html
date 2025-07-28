@@ -344,38 +344,40 @@
         .live-indicator {
             display: inline-flex;
             align-items: center;
-            font-size: 0.7rem;
+            font-size: 0.6rem; /* Уменьшен размер шрифта */
             font-weight: bold;
-            color: #10B981; /* Зеленый цвет */
-            background: rgba(16, 185, 129, 0.1); /* Светло-зеленый фон */
-            padding: 0.25rem 0.6rem;
-            border-radius: 1rem;
-            position: relative;
-            margin-right: 0.75rem;
-            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            color: #6366F1; /* Синий/фиолетовый цвет текста */
+            background: rgba(99, 102, 241, 0.08); /* Светло-синий/фиолетовый фон */
+            padding: 0.15rem 0.4rem; /* Уменьшены отступы */
+            border-radius: 0.75rem; /* Уменьшен радиус скругления */
+            position: absolute; /* Абсолютное позиционирование */
+            top: 0.75rem; /* Отступ сверху */
+            right: 0.75rem; /* Отступ справа */
+            box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
             animation: live-badge-pulse 2s infinite;
+            line-height: 1;
         }
         
         @keyframes live-badge-pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.1); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
         }
         
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.8); }
-            50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.2); }
-            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.8); }
+            50% { box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
         }
         
         .live-indicator::before {
             content: '';
-            width: 8px;
-            height: 8px;
-            background: #10B981; /* Зеленый индикатор */
+            width: 6px; /* Уменьшен размер точки */
+            height: 6px;
+            background: #6366F1; /* Синий/фиолетовый индикатор */
             border-radius: 50%;
             display: inline-block;
-            margin-right: 6px;
+            margin-right: 4px; /* Уменьшен отступ справа */
             animation: pulse 2s infinite;
         }
         
@@ -548,9 +550,9 @@
             <!-- Виджеты с ключевыми показателями -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                 <div class="bg-white rounded-lg p-6 shadow-lg stat-widget relative">
+                    <span class="live-indicator"><span>LIVE</span></span>
                     <div class="flex justify-between items-start mb-2">
                         <h3 class="text-lg font-semibold text-gray-600">Уровень безработицы</h3>
-                        <span class="live-indicator"><span>LIVE</span></span>
                     </div>
                     <div class="flex items-baseline justify-between">
                         <p class="text-4xl font-bold text-gray-800 unemployment-value transition-all duration-500 ease-in-out">7.9%</p>
@@ -569,9 +571,9 @@
                 </div>
 
                 <div class="bg-white rounded-lg p-6 shadow-lg stat-widget relative">
+                    <span class="live-indicator"><span>LIVE</span></span>
                     <div class="flex justify-between items-start mb-2">
                         <h3 class="text-lg font-semibold text-gray-600">Уровень занятости</h3>
-                        <span class="live-indicator"><span>LIVE</span></span>
                     </div>
                     <div class="flex items-baseline justify-between">
                         <p class="text-4xl font-bold text-gray-800 employment-value transition-all duration-500 ease-in-out">62.6%</p>
@@ -590,9 +592,9 @@
                 </div>
 
                 <div class="bg-white rounded-lg p-6 shadow-lg stat-widget relative">
+                    <span class="live-indicator"><span>LIVE</span></span>
                     <div class="flex justify-between items-start mb-2">
                         <h3 class="text-lg font-semibold text-gray-600">Средняя зарплата</h3>
-                        <span class="live-indicator"><span>LIVE</span></span>
                     </div>
                     <div class="flex items-baseline justify-between">
                         <p class="text-4xl font-bold text-gray-800 salary-value transition-all duration-500 ease-in-out">1,000</p>
@@ -611,9 +613,9 @@
                 </div>
 
                 <div class="bg-white rounded-lg p-6 shadow-lg stat-widget relative">
+                    <span class="live-indicator"><span>LIVE</span></span>
                     <div class="flex justify-between items-start mb-2">
                         <h3 class="text-lg font-semibold text-gray-600">Активные вакансии</h3>
-                        <span class="live-indicator"><span>LIVE</span></span>
                     </div>
                     <div class="flex items-baseline justify-between">
                         <p class="text-4xl font-bold text-gray-800 vacancies-value transition-all duration-500 ease-in-out">1,000</p>
@@ -635,12 +637,10 @@
             <!-- График динамики безработицы -->
             <div class="mb-12">
                 <h3 class="text-xl font-bold mb-4 text-gray-800">Динамика уровня безработицы</h3>
-                <div class="bg-white rounded-lg shadow-lg p-6 chart-container interactive">
+                <div class="bg-white rounded-lg shadow-lg p-6 chart-container interactive relative">
+                    <span class="live-indicator"><span>LIVE</span></span>
                     <canvas id="unemploymentChart"></canvas>
                     <div class="chart-data-source">Источник: Агентство по статистике РТ, 2024</div>
-                    <div class="flex items-center mt-2">
-                        <span class="live-indicator">LIVE</span>
-                    </div>
                 </div>
                 <p class="chart-caption">График показывает месячную динамику уровня безработицы в сравнении с прошлым годом. Обратите внимание на тренд снижения, который свидетельствует об улучшении ситуации на рынке труда.</p>
             </div>
