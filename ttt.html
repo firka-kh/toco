@@ -943,8 +943,8 @@
                                     </div>
                                     <p class="text-sm mb-2"><strong>Востребованные профессии:</strong> агроном, зоотехник, оператор с/х техники</p>
                                     <p class="text-sm mb-4"><strong>Тренды:</strong> цифровизация сельского хозяйства, внедрение точного земледелия</p>
-                                    <div class="chart-mini h-32 bg-gray-100 rounded flex items-center justify-center">
-                                        График динамики занятости в отрасли
+                                    <div class="chart-mini h-32 bg-gray-100 rounded">
+                                        <canvas id="agricultureChart" width="100%" height="100%"></canvas>
                                     </div>
                                 </div>
                                 
@@ -963,8 +963,8 @@
                                     </div>
                                     <p class="text-sm mb-2"><strong>Востребованные профессии:</strong> инженер-технолог, оператор ЧПУ, сварщик</p>
                                     <p class="text-sm mb-4"><strong>Тренды:</strong> автоматизация производства, энергоэффективные технологии</p>
-                                    <div class="chart-mini h-32 bg-gray-100 rounded flex items-center justify-center">
-                                        График динамики занятости в отрасли
+                                    <div class="chart-mini h-32 bg-gray-100 rounded">
+                                        <canvas id="industryChart" width="100%" height="100%"></canvas>
                                     </div>
                                 </div>
                                 
@@ -983,8 +983,8 @@
                                     </div>
                                     <p class="text-sm mb-2"><strong>Востребованные профессии:</strong> инженер-строитель, прораб, архитектор</p>
                                     <p class="text-sm mb-4"><strong>Тренды:</strong> экологичное строительство, BIM-моделирование</p>
-                                    <div class="chart-mini h-32 bg-gray-100 rounded flex items-center justify-center">
-                                        График динамики занятости в отрасли
+                                    <div class="chart-mini h-32 bg-gray-100 rounded">
+                                        <canvas id="constructionChart" width="100%" height="100%"></canvas>
                                     </div>
                                 </div>
                                 
@@ -1004,8 +1004,8 @@
                                     </div>
                                     <p class="text-sm mb-2"><strong>Востребованные профессии:</strong> менеджер по продажам, маркетолог, специалист по e-commerce</p>
                                     <p class="text-sm mb-4"><strong>Тренды:</strong> омниканальность, персонализированный маркетинг</p>
-                                    <div class="chart-mini h-32 bg-gray-100 rounded flex items-center justify-center">
-                                        График динамики занятости в отрасли
+                                    <div class="chart-mini h-32 bg-gray-100 rounded">
+                                        <canvas id="tradeChart" width="100%" height="100%"></canvas>
                                     </div>
                                 </div>
                                 
@@ -1024,8 +1024,8 @@
                                     </div>
                                     <p class="text-sm mb-2"><strong>Востребованные профессии:</strong> логист, диспетчер, водитель-экспедитор</p>
                                     <p class="text-sm mb-4"><strong>Тренды:</strong> оптимизация маршрутов, внедрение систем отслеживания</p>
-                                    <div class="chart-mini h-32 bg-gray-100 rounded flex items-center justify-center">
-                                        График динамики занятости в отрасли
+                                    <div class="chart-mini h-32 bg-gray-100 rounded">
+                                        <canvas id="transportChart" width="100%" height="100%"></canvas>
                                     </div>
                                 </div>
                                 
@@ -1044,8 +1044,10 @@
                                     </div>
                                     <p class="text-sm mb-2"><strong>Востребованные профессии:</strong> учитель, методист, преподаватель специальных дисциплин</p>
                                     <p class="text-sm mb-4"><strong>Тренды:</strong> дистанционное образование, цифровые образовательные платформы</p>
-                                    <div class="chart-mini h-32 bg-gray-100 rounded flex items-center justify-center">
-                                        График динамики занятости в отрасли
+                                    <div class="chart-mini h-32 bg-gray-100 rounded">
+                                        <canvas id="educationChart" width="100%" height="100%"></canvas>
+                                    </div>
+                                </div>
                                     </div>
                                 </div>
                                 
@@ -1064,8 +1066,8 @@
                                     </div>
                                     <p class="text-sm mb-2"><strong>Востребованные профессии:</strong> врач, медсестра, фармацевт</p>
                                     <p class="text-sm mb-4"><strong>Тренды:</strong> телемедицина, электронные медицинские карты</p>
-                                    <div class="chart-mini h-32 bg-gray-100 rounded flex items-center justify-center">
-                                        График динамики занятости в отрасли
+                                    <div class="chart-mini h-32 bg-gray-100 rounded">
+                                        <canvas id="healthcareChart" width="100%" height="100%"></canvas>
                                     </div>
                                 </div>
                                 
@@ -1084,8 +1086,8 @@
                                     </div>
                                     <p class="text-sm mb-2"><strong>Востребованные профессии:</strong> программист, системный администратор, специалист по кибербезопасности</p>
                                     <p class="text-sm mb-4"><strong>Тренды:</strong> искусственный интеллект, облачные вычисления, большие данные</p>
-                                    <div class="chart-mini h-32 bg-gray-100 rounded flex items-center justify-center">
-                                        График динамики занятости в отрасли
+                                    <div class="chart-mini h-32 bg-gray-100 rounded">
+                                        <canvas id="itChart" width="100%" height="100%"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -2166,7 +2168,135 @@
                 updateLaborMarketData();
             }, 1000);
             
-            // Функция для инициализации интерактивности между отраслевыми диаграммами и информационным виджетом
+            // Функция для создания и обновления графиков отраслей
+        function initSectorCharts() {
+            // Конфигурация для всех графиков
+            const chartConfig = {
+                type: 'line',
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 500
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false,
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    elements: {
+                        line: {
+                            tension: 0.4
+                        },
+                        point: {
+                            radius: 0
+                        }
+                    }
+                }
+            };
+            
+            // Цвета для разных отраслей
+            const sectorColors = {
+                'agriculture': 'rgba(34, 197, 94, 0.7)',
+                'industry': 'rgba(59, 130, 246, 0.7)',
+                'construction': 'rgba(234, 179, 8, 0.7)',
+                'trade': 'rgba(239, 68, 68, 0.7)',
+                'transport': 'rgba(168, 85, 247, 0.7)',
+                'education': 'rgba(79, 70, 229, 0.7)',
+                'healthcare': 'rgba(236, 72, 153, 0.7)',
+                'it': 'rgba(20, 184, 166, 0.7)'
+            };
+            
+            // Функция для генерации случайных данных
+            function generateRandomData() {
+                return Array.from({length: 12}, () => Math.floor(Math.random() * 40) + 30);
+            }
+            
+            // Функция для обновления графика
+            function updateChart(chartId, color) {
+                const ctx = document.getElementById(chartId);
+                if (!ctx) return null;
+                
+                // Проверяем, существует ли уже график для этого canvas
+                if (ctx.chart) {
+                    // Обновляем данные существующего графика
+                    ctx.chart.data.datasets[0].data = generateRandomData();
+                    ctx.chart.update();
+                    return ctx.chart;
+                }
+                
+                // Создаем новый график
+                const newChart = new Chart(ctx, {
+                    ...chartConfig,
+                    data: {
+                        labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                        datasets: [{
+                            label: 'Занятость',
+                            data: generateRandomData(),
+                            fill: true,
+                            backgroundColor: color.replace('0.7', '0.2'),
+                            borderColor: color,
+                            borderWidth: 2
+                        }]
+                    }
+                });
+                
+                // Сохраняем ссылку на график в элементе canvas
+                ctx.chart = newChart;
+                return newChart;
+            }
+            
+            // Инициализация всех графиков
+            function initAllCharts() {
+                updateChart('agricultureChart', sectorColors.agriculture);
+                updateChart('industryChart', sectorColors.industry);
+                updateChart('constructionChart', sectorColors.construction);
+                updateChart('tradeChart', sectorColors.trade);
+                updateChart('transportChart', sectorColors.transport);
+                updateChart('educationChart', sectorColors.education);
+                updateChart('healthcareChart', sectorColors.healthcare);
+                updateChart('itChart', sectorColors.it);
+            }
+            
+            // Функция для обновления графика текущей отрасли
+            function updateCurrentSectorChart() {
+                const activeSector = document.querySelector('.market-dynamics-item.bg-gray-100');
+                if (activeSector) {
+                    const sectorId = activeSector.dataset.sector;
+                    const chartId = sectorId + 'Chart';
+                    updateChart(chartId, sectorColors[sectorId]);
+                }
+            }
+            
+            // Инициализируем все графики при первой загрузке
+            initAllCharts();
+            
+            // Обновляем графики каждые 5 секунд
+            setInterval(updateCurrentSectorChart, 5000);
+            
+            return {
+                updateAllCharts: initAllCharts,
+                updateChart: updateChart
+            };
+        }
+        
+        // Запускаем инициализацию графиков
+        const sectorCharts = initSectorCharts();
+        
+        // Функция для инициализации интерактивности между отраслевыми диаграммами и информационным виджетом
             function initSectorInteractions() {
                 // Получаем все элементы отраслей
                 const sectorItems = document.querySelectorAll('.market-dynamics-item');
@@ -2188,6 +2318,11 @@
                         
                         // Отображаем соответствующую информацию
                         showSectorInfo(sectorId);
+                        
+                        // Обновляем график для выбранной отрасли
+                        setTimeout(() => {
+                            sectorCharts.updateChart(sectorId + 'Chart', sectorColors[sectorId]);
+                        }, 100);
                     });
                 });
                 
