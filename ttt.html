@@ -409,50 +409,67 @@
             transition: width 0.5s ease-out;
         }
         
-        /* 3D эффект и парение для диаграммы */
-        .chart-3d-container {
-            position: relative;
-            perspective: 1000px;
-            margin: 20px auto;
-            transform-style: preserve-3d;
-            animation: float 6s ease-in-out infinite;
+        /* Стили для обновленного виджета динамики рынка труда */
+        .market-dynamics-widget {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
         }
         
-        @keyframes float {
-            0% { transform: translateY(0px) rotate3d(1, 1, 0, 0deg); }
-            25% { transform: translateY(-10px) rotate3d(1, 1, 0, 2deg); }
-            50% { transform: translateY(0px) rotate3d(1, 1, 0, 0deg); }
-            75% { transform: translateY(10px) rotate3d(1, 1, 0, -2deg); }
-            100% { transform: translateY(0px) rotate3d(1, 1, 0, 0deg); }
+        .market-dynamics-widget h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
         }
         
-        .chart-3d-shadow {
-            position: absolute;
-            bottom: -20px;
-            left: 5%;
-            width: 90%;
-            height: 20px;
-            background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%,rgba(0,0,0,0) 70%);
-            border-radius: 50%;
-            z-index: -1;
-            animation: shadow-pulse 6s ease-in-out infinite;
+        .market-dynamics-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
         }
         
-        @keyframes shadow-pulse {
-            0% { transform: scale(1); opacity: 0.4; }
-            25% { transform: scale(0.95); opacity: 0.5; }
-            50% { transform: scale(1); opacity: 0.4; }
-            75% { transform: scale(1.05); opacity: 0.5; }
-            100% { transform: scale(1); opacity: 0.4; }
+        .market-dynamics-label {
+            color: #4b5563;
+            font-size: 0.95rem;
         }
         
-        /* Стиль для текста на диаграмме, чтобы он хорошо читался */
-        .chart-label-text {
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8), 
-                         -1px -1px 2px rgba(255, 255, 255, 0.8),
-                         1px -1px 2px rgba(255, 255, 255, 0.8),
-                         -1px 1px 2px rgba(255, 255, 255, 0.8);
-            font-weight: bold;
+        .market-dynamics-value {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .market-dynamics-progress {
+            height: 6px;
+            width: 100%;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            margin-top: 0.4rem;
+        }
+        
+        .market-dynamics-bar {
+            height: 6px;
+            border-radius: 9999px;
+            transition: width 0.5s ease-out;
+        }
+        
+        .market-dynamics-update-info {
+            margin-top: 1.5rem;
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .update-badge {
+            display: inline-block;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
         }
     </style>
 </head>
@@ -807,15 +824,105 @@
                         </div>
                     </div>
                     
-                    <!-- Правая часть с диаграммой -->
-                    <div class="w-full md:w-2/3 bg-white rounded-lg shadow-xl p-8 relative" style="height: 480px;">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-gray-50 to-white opacity-5 pointer-events-none"></div>
-                        <div class="chart-3d-container h-full w-full">
-                            <div class="chart-container relative h-full w-full">
-                                <canvas id="employmentStructureChart"></canvas>
+                    <!-- Правая часть с виджетом динамики рынка труда -->
+                    <div class="w-full md:w-2/3 relative">
+                        <div class="market-dynamics-widget h-full">
+                            <h3>Динамика рынка труда</h3>
+                            
+                            <!-- Сельское хозяйство -->
+                            <div class="market-dynamics-item">
+                                <div class="w-full mr-4">
+                                    <div class="market-dynamics-label">Сельское хозяйство</div>
+                                    <div class="market-dynamics-progress">
+                                        <div class="market-dynamics-bar bg-green-500" style="width: 11%"></div>
+                                    </div>
+                                </div>
+                                <div class="market-dynamics-value">11%</div>
                             </div>
-                            <div class="chart-3d-shadow"></div>
+                            
+                            <!-- Промышленность -->
+                            <div class="market-dynamics-item">
+                                <div class="w-full mr-4">
+                                    <div class="market-dynamics-label">Промышленность</div>
+                                    <div class="market-dynamics-progress">
+                                        <div class="market-dynamics-bar bg-blue-500" style="width: 13%"></div>
+                                    </div>
+                                </div>
+                                <div class="market-dynamics-value">13%</div>
+                            </div>
+                            
+                            <!-- Строительство -->
+                            <div class="market-dynamics-item">
+                                <div class="w-full mr-4">
+                                    <div class="market-dynamics-label">Строительство</div>
+                                    <div class="market-dynamics-progress">
+                                        <div class="market-dynamics-bar bg-yellow-500" style="width: 12%"></div>
+                                    </div>
+                                </div>
+                                <div class="market-dynamics-value">12%</div>
+                            </div>
+                            
+                            <!-- Торговля -->
+                            <div class="market-dynamics-item">
+                                <div class="w-full mr-4">
+                                    <div class="market-dynamics-label">Торговля</div>
+                                    <div class="market-dynamics-progress">
+                                        <div class="market-dynamics-bar bg-red-400" style="width: 10%"></div>
+                                    </div>
+                                </div>
+                                <div class="market-dynamics-value">10%</div>
+                            </div>
+                            
+                            <!-- Транспорт -->
+                            <div class="market-dynamics-item">
+                                <div class="w-full mr-4">
+                                    <div class="market-dynamics-label">Транспорт</div>
+                                    <div class="market-dynamics-progress">
+                                        <div class="market-dynamics-bar bg-purple-500" style="width: 16%"></div>
+                                    </div>
+                                </div>
+                                <div class="market-dynamics-value">16%</div>
+                            </div>
+                            
+                            <!-- Образование -->
+                            <div class="market-dynamics-item">
+                                <div class="w-full mr-4">
+                                    <div class="market-dynamics-label">Образование</div>
+                                    <div class="market-dynamics-progress">
+                                        <div class="market-dynamics-bar bg-indigo-500" style="width: 12%"></div>
+                                    </div>
+                                </div>
+                                <div class="market-dynamics-value">12%</div>
+                            </div>
+                            
+                            <!-- Здравоохранение -->
+                            <div class="market-dynamics-item">
+                                <div class="w-full mr-4">
+                                    <div class="market-dynamics-label">Здравоохранение</div>
+                                    <div class="market-dynamics-progress">
+                                        <div class="market-dynamics-bar bg-pink-500" style="width: 13%"></div>
+                                    </div>
+                                </div>
+                                <div class="market-dynamics-value">13%</div>
+                            </div>
+                            
+                            <!-- ИТ и связь -->
+                            <div class="market-dynamics-item">
+                                <div class="w-full mr-4">
+                                    <div class="market-dynamics-label">ИТ и связь</div>
+                                    <div class="market-dynamics-progress">
+                                        <div class="market-dynamics-bar bg-teal-500" style="width: 13%"></div>
+                                    </div>
+                                </div>
+                                <div class="market-dynamics-value">13%</div>
+                            </div>
+                            
+                            <!-- Информация об обновлении данных -->
+                            <div class="market-dynamics-update-info">
+                                <span class="update-badge">Обновление данных каждые 3 сек.</span>
+                            </div>
                         </div>
+                        
                         <div class="absolute top-4 right-4 z-10">
                             <div class="live-indicator">LIVE</div>
                         </div>
@@ -1589,234 +1696,21 @@
                 }
             });
 
-            // График структуры занятости
-            const employmentCtx = document.getElementById('employmentStructureChart').getContext('2d');
+            // Данные секторов рынка труда
             const laborMarketSectors = {
                 labels: ['Сельское хозяйство', 'Промышленность', 'Строительство', 'Торговля', 'Транспорт', 'Образование', 'Здравоохранение', 'IT и связь'],
-                sectors: ['agriculture', 'industry', 'construction', 'trade', 'transport', 'education', 'healthcare', 'it'],
-                initialData: [12, 11, 13, 14, 12, 13, 12, 13],
                 colors: [
                     '#8BC34A', // Зеленый
-                    '#F44336', // Красный
-                    '#FF9800', // Оранжевый
-                    '#FFC107', // Желтый
-                    '#37474F', // Темно-серый
-                    '#78909C', // Серо-синий
-                    '#29B6F6', // Голубой
-                    '#26A69A'  // Бирюзовый
+                    '#3B82F6', // Синий
+                    '#F59E0B', // Желтый
+                    '#EF4444', // Красный
+                    '#8B5CF6', // Пурпурный
+                    '#6366F1', // Индиго
+                    '#EC4899', // Розовый
+                    '#10B981'  // Бирюзовый
                 ],
-                icons: [
-                    'fa-tractor',
-                    'fa-industry',
-                    'fa-hard-hat',
-                    'fa-shopping-cart',
-                    'fa-truck',
-                    'fa-graduation-cap',
-                    'fa-hospital',
-                    'fa-laptop-code'
-                ]
+                initialData: [11, 13, 12, 10, 16, 12, 13, 13]
             };
-            
-            // Создаем график структуры рынка труда
-            const employmentChart = new Chart(employmentCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: laborMarketSectors.labels,
-                    datasets: [{
-                        data: laborMarketSectors.initialData,
-                        backgroundColor: laborMarketSectors.colors,
-                        borderWidth: 0,
-                        hoverOffset: 10
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '60%', // Уменьшаем немного для 3D-эффекта
-                    rotation: -0.5 * Math.PI, // Поворачиваем диаграмму для лучшего размещения надписей
-                    circumference: 2 * Math.PI,
-                    layout: {
-                        padding: {
-                            top: 30,
-                            bottom: 30,
-                            left: 30,
-                            right: 30
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false // Скрываем легенду, так как у нас будут метки на самой диаграмме
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                            titleColor: '#333',
-                            bodyColor: '#333',
-                            borderColor: '#ddd',
-                            borderWidth: 1,
-                            padding: 12,
-                            displayColors: true,
-                            callbacks: {
-                                label: function(context) {
-                                    return context.label + ': ' + context.raw + '%';
-                                }
-                            },
-                        },
-                        // Улучшенная версия datalabels для 3D эффекта
-                        datalabels: {
-                            formatter: function(value, context) {
-                                return null; // Отключаем стандартные лейблы, добавим их вручную в onComplete
-                            },
-                            color: '#fff',
-                            display: false // Отключаем стандартные метки
-                        }
-                    },
-                    // Добавляем ID элементов (01, 02, и т.д.) на диаграмму
-                    animation: {
-                        onComplete: function() {
-                            const chartInstance = this.chart;
-                            const ctx = chartInstance.ctx;
-                            const centerX = (chartInstance.chartArea.left + chartInstance.chartArea.right) / 2;
-                            const centerY = (chartInstance.chartArea.top + chartInstance.chartArea.bottom) / 2;
-                            
-                            // Создаем 3D эффект диаграммы
-                            ctx.save();
-                            
-                            // Круг-тень под диаграммой для 3D эффекта
-                            const outerRadius = chartInstance.getDatasetMeta(0).outerRadius;
-                            const shadowRadius = outerRadius * 1.02;
-                            
-                            // Градиент для 3D-эффекта тени
-                            const shadowGradient = ctx.createLinearGradient(
-                                centerX - shadowRadius, 
-                                centerY + shadowRadius, 
-                                centerX + shadowRadius, 
-                                centerY - shadowRadius
-                            );
-                            
-                            shadowGradient.addColorStop(0, 'rgba(0,0,0,0.1)');
-                            shadowGradient.addColorStop(1, 'rgba(0,0,0,0.03)');
-                            
-                            // Создаем 3D эффект для диаграммы
-                            ctx.beginPath();
-                            ctx.ellipse(centerX, centerY + 5, outerRadius, outerRadius * 0.3, 0, 0, 2 * Math.PI);
-                            ctx.fillStyle = shadowGradient;
-                            ctx.fill();
-                            
-                            ctx.restore();
-                            
-                            // Рисуем текст в центре с годом (с 3D эффектом)
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'middle';
-                            
-                            // Тень для текста
-                            ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
-                            ctx.shadowBlur = 5;
-                            ctx.shadowOffsetX = 2;
-                            ctx.shadowOffsetY = 2;
-                            
-                            // Год (большой шрифт)
-                            ctx.font = 'bold 28px Arial';
-                            ctx.fillStyle = '#333';
-                            ctx.fillText('2025', centerX, centerY - 15);
-                            
-                            // Описание (малый шрифт)
-                            ctx.font = 'bold 14px Arial';
-                            ctx.fillStyle = '#666';
-                            ctx.fillText('СТРУКТУРА', centerX, centerY + 15);
-                            ctx.fillText('РЫНКА ТРУДА', centerX, centerY + 35);
-                            
-                            // Убираем тень для остальных элементов
-                            ctx.shadowColor = 'transparent';
-                            ctx.shadowBlur = 0;
-                            ctx.shadowOffsetX = 0;
-                            ctx.shadowOffsetY = 0;
-                            
-                            // Добавление секторных меток
-                            const data = chartInstance.data.datasets[0].data;
-                            const meta = chartInstance.getDatasetMeta(0);
-                            const radius = meta.innerRadius + (meta.outerRadius - meta.innerRadius) / 2;
-                            const labels = chartInstance.data.labels;
-                            
-                            for (let i = 0; i < data.length; i++) {
-                                const element = meta.data[i];
-                                const angle = element.startAngle + (element.endAngle - element.startAngle) / 2;
-                                
-                                // Определяем на какой стороне диаграммы находится сектор
-                                const isRightSide = Math.cos(angle) > 0;
-                                const isBottomSide = Math.sin(angle) > 0;
-                                
-                                // Позиционирование для иконок внутри сегмента
-                                const iconRadius = radius * 0.8;
-                                const iconX = centerX + Math.cos(angle) * iconRadius;
-                                const iconY = centerY + Math.sin(angle) * iconRadius;
-                                
-                                // Рисуем иконки с тенью для 3D эффекта
-                                ctx.save();
-                                ctx.shadowColor = 'rgba(0,0,0,0.3)';
-                                ctx.shadowBlur = 3;
-                                ctx.shadowOffsetX = 1;
-                                ctx.shadowOffsetY = 1;
-                                
-                                // Круг под иконкой
-                                ctx.beginPath();
-                                ctx.arc(iconX, iconY, 12, 0, 2 * Math.PI);
-                                ctx.fillStyle = 'white';
-                                ctx.fill();
-                                
-                                const iconSize = 16;
-                                ctx.font = `${iconSize}px "Font Awesome 5 Free"`;
-                                ctx.fillStyle = laborMarketSectors.colors[i];
-                                ctx.textAlign = 'center';
-                                ctx.textBaseline = 'middle';
-                                
-                                // Вместо случайной иконки используем одну из подходящих
-                                const iconChars = ['f015', 'f200', 'f1ad', 'f19c', 'f0d1', 'f19d', 'f0f0', 'f109'];
-                                const icon = String.fromCharCode(parseInt(iconChars[i % iconChars.length], 16));
-                                ctx.fillText(icon, iconX, iconY);
-                                ctx.restore();
-                                
-                                // Создаем метки с внешней стороны диаграммы с учетом положения
-                                // Радиус для текста изменяется в зависимости от положения
-                                let textRadius = outerRadius * 1.08;
-                                let labelX = centerX + Math.cos(angle) * textRadius;
-                                let labelY = centerY + Math.sin(angle) * textRadius;
-                                
-                                // Стиль текста для меток
-                                ctx.font = '12px Arial';
-                                ctx.fillStyle = laborMarketSectors.colors[i];
-                                
-                                // Определяем положение текста относительно точки
-                                if (isRightSide) {
-                                    ctx.textAlign = 'start';
-                                    labelX += 5;
-                                } else {
-                                    ctx.textAlign = 'end';
-                                    labelX -= 5;
-                                }
-                                
-                                // Укороченное название для метки
-                                const shortLabel = labels[i].split(' ')[0];
-                                
-                                // Рисуем метку с процентом
-                                ctx.fillText(`${shortLabel}: ${data[i]}%`, labelX, labelY);
-                            }
-                            
-                            // Рисуем текст суммы (100%) с 3D эффектом
-                            ctx.save();
-                            ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
-                            ctx.shadowBlur = 3;
-                            ctx.shadowOffsetX = 1;
-                            ctx.shadowOffsetY = 1;
-                            ctx.font = 'bold 16px Arial';
-                            ctx.fillStyle = '#333';
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'middle';
-                            ctx.fillText('100%', centerX, centerY + 55);
-                            ctx.restore();
-                        }
-                    }
-                }
-            });
 
             // График динамики средней зарплаты
             const salaryCtx = document.getElementById('salaryDynamicsChart').getContext('2d');
@@ -1970,45 +1864,19 @@
                 );
             }
             
-            // Функция для анимации 3D-эффекта диаграммы
-            function animate3DChartEffect() {
-                // Меняем угол поворота диаграммы для создания эффекта движения
-                const currentRotation = employmentChart.options.rotation || 0;
-                const newRotation = currentRotation + 0.01;
+            // Функция для обновления данных динамики рынка труда
+            function updateLaborMarketData() {
+                // Генерируем новые случайные данные для секторов рынка труда
+                const newData = [];
                 
-                // Создаем эффект волны с помощью синуса
-                const amplitudeFactor = 0.03; // Амплитуда волны
-                const waveEffect = Math.sin(Date.now() * 0.001) * amplitudeFactor;
-                
-                employmentChart.options.rotation = newRotation % (2 * Math.PI);
-                employmentChart.options.cutout = `${60 + waveEffect * 5}%`; // Меняем размер центрального отверстия для эффекта пульсации
-                
-                // Добавляем небольшое изменение высоты для каждого сегмента для 3D-эффекта
-                employmentChart.data.datasets[0].offset = employmentChart.data.datasets[0].data.map((_, i) => 
-                    (Math.sin((i / 8) * Math.PI * 2 + Date.now() * 0.001) + 1) * 2
-                );
-                
-                employmentChart.update();
-                
-                // Запускаем анимацию снова
-                requestAnimationFrame(animate3DChartEffect);
-            }
-
-            // Функция для обновления данных секторов рынка труда с более плавной анимацией
-            function updateSectorData() {
-                // Генерируем новые случайные данные для секторов, в сумме они должны быть равны 100%
-                let newData = [];
-                let total = 0;
-                
-                // Создаем 8 случайных чисел с более контрастным распределением
+                // Создаем 8 случайных чисел от 8 до 18 для наглядности
                 for (let i = 0; i < 8; i++) {
-                    // Более выраженный разброс для наглядности (от 8 до 18)
                     const value = Math.floor(Math.random() * 11) + 8;
                     newData.push(value);
-                    total += value;
                 }
                 
                 // Нормализуем данные, чтобы их сумма была равна 100%
+                const total = newData.reduce((sum, val) => sum + val, 0);
                 const normalizedData = newData.map(value => {
                     return Math.round((value / total) * 100);
                 });
@@ -2016,77 +1884,35 @@
                 // Убедимся, что сумма точно равна 100%
                 let sum = normalizedData.reduce((a, b) => a + b, 0);
                 if (sum !== 100) {
-                    // Корректируем последний элемент, чтобы сумма была ровно 100%
                     normalizedData[normalizedData.length - 1] += (100 - sum);
                 }
                 
-                // Сохраняем старые значения для анимации
-                const oldData = [...employmentChart.data.datasets[0].data];
+                // Обновляем прогресс-бары и значения в виджете
+                const marketDynamicsBars = document.querySelectorAll('.market-dynamics-bar');
+                const marketDynamicsValues = document.querySelectorAll('.market-dynamics-value');
                 
-                // Анимируем переход от старых к новым значениям
-                animateChartUpdate(oldData, normalizedData);
-                
-                // Обновляем данные в левой части
-                for (let i = 0; i < laborMarketSectors.sectors.length; i++) {
-                    const sector = laborMarketSectors.sectors[i];
-                    const value = normalizedData[i];
-                    
-                    // Обновляем значение текста
-                    document.querySelector(`.sector-value[data-sector="${sector}"]`).textContent = `${value}%`;
-                    
-                    // Обновляем ширину полосы прогресса с анимацией
-                    const progressBar = document.querySelector(`.sector-bar[data-sector="${sector}"]`);
-                    progressBar.style.transition = 'width 1s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                    progressBar.style.width = `${value}%`;
-                    
-                    // Добавляем анимацию обновления
-                    document.querySelector(`.stat-item:nth-child(${i+1})`).classList.add('value-updating');
-                    
-                    // Удаляем класс анимации после завершения
-                    setTimeout(() => {
-                        document.querySelector(`.stat-item:nth-child(${i+1})`).classList.remove('value-updating');
-                    }, 500);
-                }
-            }
-            
-            // Функция для плавной анимации изменения данных на диаграмме
-            function animateChartUpdate(oldData, newData) {
-                const steps = 30; // Количество шагов анимации
-                let currentStep = 0;
-                
-                function doStep() {
-                    if (currentStep < steps) {
-                        const progress = currentStep / steps;
-                        // Вычисляем промежуточные значения с использованием easeInOutCubic
-                        const easeInOutCubic = t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-                        const easedProgress = easeInOutCubic(progress);
+                for (let i = 0; i < normalizedData.length; i++) {
+                    if (marketDynamicsBars[i] && marketDynamicsValues[i]) {
+                        // Добавляем класс для анимации
+                        marketDynamicsValues[i].classList.add('value-updating');
                         
-                        // Обновляем данные с промежуточными значениями
-                        const currentData = oldData.map((oldValue, i) => {
-                            return Math.round(oldValue + (newData[i] - oldValue) * easedProgress);
-                        });
+                        // Обновляем значение
+                        marketDynamicsValues[i].textContent = normalizedData[i] + '%';
                         
-                        // Применяем к диаграмме
-                        employmentChart.data.datasets[0].data = currentData;
-                        employmentChart.update('none'); // 'none' отключает стандартную анимацию Chart.js
+                        // Обновляем ширину прогресс-бара с анимацией
+                        marketDynamicsBars[i].style.transition = 'width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                        marketDynamicsBars[i].style.width = normalizedData[i] + '%';
                         
-                        currentStep++;
-                        requestAnimationFrame(doStep);
-                    } else {
-                        // Финальное обновление с точными значениями
-                        employmentChart.data.datasets[0].data = newData;
-                        employmentChart.update('none');
+                        // Удаляем класс анимации после завершения
+                        setTimeout(() => {
+                            marketDynamicsValues[i].classList.remove('value-updating');
+                        }, 500);
                     }
                 }
-                
-                doStep();
             }
             
-            // Запускаем анимацию 3D-эффекта для диаграммы
-            requestAnimationFrame(animate3DChartEffect);
-            
-            // Запускаем обновление данных секторов каждые 3 секунды
-            setInterval(updateSectorData, 3000);
+            // Запускаем обновление данных рынка труда каждые 3 секунды
+            setInterval(updateLaborMarketData, 3000);
             
             // Запускаем обновление данных виджетов каждые 3 секунды
             setInterval(updateWidgetData, 3000);
@@ -2094,7 +1920,7 @@
             // Запускаем первые обновления через 1 секунду после загрузки страницы
             setTimeout(() => {
                 updateWidgetData();
-                updateSectorData();
+                updateLaborMarketData();
             }, 1000);
         });
     </script>
