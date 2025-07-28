@@ -1954,16 +1954,18 @@
                 
                 // Функция для генерации случайного процента с префиксом + или -
                 function randomPercent(min, max, isNegative = false) {
-                    const percent = (Math.random() * (max - min) + min).toFixed(1);
+                    const percent = (Math.random() * (max - min) + min).toFixed(3);
                     return isNegative ? `-${percent}%` : `+${percent}%`;
                 }
                 
                 // Функция для генерации случайного большого процента (для демонстрации экстремальных значений)
                 function randomBigPercent() {
                     const isNegative = Math.random() > 0.5;
-                    const base = Math.floor(Math.random() * 100000);
-                    const decimal = Math.floor(Math.random() * 10);
-                    return isNegative ? `-${base}.${decimal}%` : `+${base}.${decimal}%`;
+                    const base = Math.floor(Math.random() * 100);
+                    const decimal = Math.floor(Math.random() * 1000);
+                    // Форматируем для отображения трех цифр после запятой
+                    const decimalFormatted = decimal.toString().padStart(3, '0');
+                    return isNegative ? `-${base}.${decimalFormatted}%` : `+${base}.${decimalFormatted}%`;
                 }
                 
                 // Функция для обновления конкретного виджета
@@ -1975,14 +1977,50 @@
                         // Добавляем класс для анимации обновления
                         valueElem.classList.add('value-updating');
                         
-                        // Обновляем значение
-                        valueElem.textContent = newValue;
+                        // Обновляем значение с форматированием для трех цифр после запятой
+                        if (typeof newValue === 'string' && newValue.includes('.')) {
+                            // Если это строка с десятичной точкой
+                            const parts = newValue.split('.');
+                            valueElem.innerHTML = `<span style="font-weight: bold;">${parts[0]}.</span><span style="color: rgba(220, 53, 69, 1);">${parts[1]}</span>`;
+                        } else if (typeof newValue === 'number') {
+                            // Если это число
+                            const parts = newValue.toFixed(3).split('.');
+                            valueElem.innerHTML = `<span style="font-weight: bold;">${parts[0]}.</span><span style="color: rgba(220, 53, 69, 1);">${parts[1]}</span>`;
+                        } else {
+                            // Если это просто строка без десятичной точки
+                            valueElem.textContent = newValue;
+                        }
                         
                         // Обновляем тренды
                         const trendValues = changeElem.querySelectorAll('.trend-value');
                         if (trendValues.length >= 2) {
-                            trendValues[0].textContent = trend1;
-                            trendValues[1].textContent = trend2;
+                            // Обновляем тренды с форматированием
+                            // Если тренд содержит десятичную точку
+                            if (trend1.includes('.')) {
+                                const trend1Parts = trend1.split('.');
+                                const prefixEnd = trend1Parts[0].indexOf('+') !== -1 ? trend1Parts[0].indexOf('+') + 1 : 
+                                                (trend1Parts[0].indexOf('-') !== -1 ? trend1Parts[0].indexOf('-') + 1 : 0);
+                                
+                                const prefix = trend1Parts[0].substring(0, prefixEnd);
+                                const mainPart = trend1Parts[0].substring(prefixEnd);
+                                
+                                trendValues[0].innerHTML = `${prefix}<span style="font-weight: bold;">${mainPart}.</span><span style="color: rgba(220, 53, 69, 1);">${trend1Parts[1]}</span>`;
+                            } else {
+                                trendValues[0].textContent = trend1;
+                            }
+                            
+                            if (trend2.includes('.')) {
+                                const trend2Parts = trend2.split('.');
+                                const prefixEnd = trend2Parts[0].indexOf('+') !== -1 ? trend2Parts[0].indexOf('+') + 1 : 
+                                                (trend2Parts[0].indexOf('-') !== -1 ? trend2Parts[0].indexOf('-') + 1 : 0);
+                                
+                                const prefix = trend2Parts[0].substring(0, prefixEnd);
+                                const mainPart = trend2Parts[0].substring(prefixEnd);
+                                
+                                trendValues[1].innerHTML = `${prefix}<span style="font-weight: bold;">${mainPart}.</span><span style="color: rgba(220, 53, 69, 1);">${trend2Parts[1]}</span>`;
+                            } else {
+                                trendValues[1].textContent = trend2;
+                            }
                             
                             // Обновляем цвет и иконки для трендов
                             trendValues.forEach((trend, index) => {
@@ -2049,23 +2087,23 @@
                 
                 // Создаем случайные данные для отраслей
                 for (let i = 0; i < 8; i++) {
-                    // Процент занятости для каждой отрасли (от 8 до 18%)
-                    const value = Math.floor(Math.random() * 11) + 8;
+                    // Процент занятости для каждой отрасли (от 8 до 18%) с тремя цифрами после запятой
+                    const value = +(Math.random() * 11 + 8).toFixed(3);
                     newData.push(value);
                     
-                    // Средняя зарплата (от 1500 до 4000 сомони)
-                    const salary = Math.floor(Math.random() * 2500) + 1500;
+                    // Средняя зарплата (от 1500 до 4000 сомони) с тремя цифрами после запятой
+                    const salary = +(Math.random() * 2500 + 1500).toFixed(3);
                     salaryData.push(salary);
                     
-                    // Рост вакансий (от -2% до +15%)
-                    const growth = (Math.random() * 17 - 2).toFixed(1);
+                    // Рост вакансий (от -2% до +15%) с тремя цифрами после запятой
+                    const growth = +(Math.random() * 17 - 2).toFixed(3);
                     vacancyGrowthData.push(growth);
                 }
                 
                 // Нормализуем данные занятости, чтобы их сумма была равна 100%
                 const total = newData.reduce((sum, val) => sum + val, 0);
                 const normalizedData = newData.map(value => {
-                    return Math.round((value / total) * 100);
+                    return +(value / total * 100).toFixed(3);
                 });
                 
                 // Убедимся, что сумма точно равна 100%
@@ -2083,8 +2121,10 @@
                         // Добавляем класс для анимации
                         marketDynamicsValues[i].classList.add('value-updating');
                         
-                        // Обновляем значение
-                        marketDynamicsValues[i].textContent = normalizedData[i] + '%';
+                        // Обновляем значение с форматированием
+                        const valueText = normalizedData[i].toFixed(3);
+                        const parts = valueText.split('.');
+                        marketDynamicsValues[i].innerHTML = `<span style="font-weight: bold;">${parts[0]}.</span><span style="color: rgba(220, 53, 69, 1);">${parts[1]}</span>%`;
                         
                         // Обновляем ширину прогресс-бара с анимацией
                         marketDynamicsBars[i].style.transition = 'width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
@@ -2133,9 +2173,15 @@
                 const growthElement = sectorInfoContent.querySelector('.stat-card:last-child p:last-child');
                 
                 if (salaryElement && growthData[idx] !== undefined) {
-                    // Обновляем данные о зарплате с анимацией
+                    // Обновляем данные о зарплате с анимацией и форматированием
                     salaryElement.classList.add('animate-fade-in');
-                    salaryElement.textContent = salaryData[idx].toLocaleString() + ' сомони';
+                    
+                    // Форматируем зарплату с тремя цифрами после запятой
+                    const salary = salaryData[idx].toFixed(3);
+                    const salaryParts = salary.split('.');
+                    
+                    // Форматируем числа: целая часть жирным черным, дробная - красным
+                    salaryElement.innerHTML = `<span style="font-weight: bold;">${salaryParts[0]}.</span><span style="color: rgba(220, 53, 69, 1);">${salaryParts[1]}</span> сомони`;
                     
                     setTimeout(() => {
                         salaryElement.classList.remove('animate-fade-in');
@@ -2151,7 +2197,12 @@
                     const icon = growth >= 0 ? '↑' : '↓';
                     const colorClass = growth >= 0 ? 'text-green-600' : 'text-red-600';
                     
-                    growthElement.innerHTML = `${growth >= 0 ? '+' : ''}${growthData[idx]}% <span class="${colorClass}">${icon}</span>`;
+                    // Форматируем рост вакансий с тремя цифрами после запятой
+                    const growthFormatted = Math.abs(growth).toFixed(3);
+                    const growthParts = growthFormatted.split('.');
+                    
+                    // Форматируем числа: целая часть жирным черным, дробная - красным
+                    growthElement.innerHTML = `<span class="${colorClass}">${growth >= 0 ? '+' : '-'}<span style="font-weight: bold;">${growthParts[0]}.</span><span style="color: rgba(220, 53, 69, 1);">${growthParts[1]}</span>% ${icon}</span>`;
                     
                     setTimeout(() => {
                         growthElement.classList.remove('animate-fade-in');
@@ -2190,7 +2241,28 @@
                             display: false
                         },
                         tooltip: {
-                            enabled: true
+                            enabled: true,
+                            callbacks: {
+                                label: function(context) {
+                                    let value = context.raw;
+                                    // Форматируем значение с тремя цифрами после запятой
+                                    if (typeof value === 'number') {
+                                        // Разделяем на целую и дробную части
+                                        const parts = value.toFixed(3).split('.');
+                                        // Форматируем значение: целая часть жирным черным, дробная - красным
+                                        return context.dataset.label + ': ' + parts[0] + '.' + parts[1];
+                                    }
+                                    return context.dataset.label + ': ' + value;
+                                },
+                                // Настраиваем внешний вид подсказки
+                                labelTextColor: function(context) {
+                                    // Для числовых значений используем красный цвет для дробной части
+                                    if (typeof context.raw === 'number' && context.raw % 1 !== 0) {
+                                        return 'rgba(0, 0, 0, 1)'; // Основной цвет черный
+                                    }
+                                    return 'rgba(0, 0, 0, 1)';
+                                }
+                            }
                         }
                     },
                     scales: {
@@ -2226,18 +2298,49 @@
                 'it': 'rgba(20, 184, 166, 0.7)'
             };
             
-            // Функция для генерации случайных данных
+            // Функция для генерации случайных данных с тремя цифрами после запятой
             function generateRandomData(baseline = 30, amplitude = 40) {
-                return Array.from({length: 12}, () => Math.floor(Math.random() * amplitude) + baseline);
+                return Array.from({length: 12}, () => {
+                    // Генерируем число с тремя цифрами после запятой
+                    return +(Math.random() * amplitude + baseline).toFixed(3);
+                });
             }
             
-            // Функция для генерации данных на основе тренда
+            // Функция для генерации данных на основе тренда с тремя цифрами после запятой
             function generateTrendData(start, end) {
                 const step = (end - start) / 11;
                 return Array.from({length: 12}, (_, i) => {
                     // Добавляем немного случайности вокруг тренда
                     const randomFactor = Math.random() * 10 - 5; // от -5 до +5
-                    return Math.floor(start + step * i + randomFactor);
+                    return +((start + step * i + randomFactor).toFixed(3));
+                });
+            }
+            
+            // Функция для форматирования меток данных на графике
+            function createDataLabels(values) {
+                return values.map(value => {
+                    if (typeof value === 'number') {
+                        // Проверяем, есть ли десятичная часть
+                        const hasDecimal = value % 1 !== 0;
+                        if (hasDecimal) {
+                            // Для значений с десятичной частью - красный цвет
+                            // Получаем целую и дробную части
+                            const parts = value.toFixed(3).split('.');
+                            return {
+                                value: `${parts[0]}.<span style="color: rgba(220, 53, 69, 1);">${parts[1]}</span>`,
+                                color: 'rgba(0, 0, 0, 1)', // черный для целой части
+                                font: { size: 10, weight: 'bold' }
+                            };
+                        } else {
+                            // Для целых значений - черный цвет и жирный шрифт
+                            return {
+                                value: value,
+                                color: 'rgba(0, 0, 0, 1)', // черный
+                                font: { size: 10, weight: 'bold' }
+                            };
+                        }
+                    }
+                    return value;
                 });
             }
             
