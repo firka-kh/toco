@@ -645,13 +645,100 @@
                 <p class="chart-caption">График показывает месячную динамику уровня безработицы в сравнении с прошлым годом. Обратите внимание на тренд снижения, который свидетельствует об улучшении ситуации на рынке труда.</p>
             </div>
 
-            <!-- График структуры занятости -->
+            <!-- График структуры занятости - обновленный дизайн -->
             <div class="mb-12">
-                <h3 class="text-xl font-bold mb-4 text-gray-800">Структура занятости по отраслям</h3>
-                <div class="bg-white rounded-lg shadow-lg p-4 chart-container">
+                <h3 class="text-2xl font-bold mb-2 text-gray-800">Комплексный годовой отчет по рынку труда</h3>
+                <p class="text-gray-600 mb-4">Ключевые показатели эффективности работы службы занятости за 2025 г.</p>
+                <div class="bg-white rounded-lg shadow-xl p-8 chart-container relative" style="height: 480px;">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-gray-50 to-white opacity-5 pointer-events-none"></div>
                     <canvas id="employmentStructureChart"></canvas>
+                    <div class="absolute top-4 right-4 z-10">
+                        <div class="live-indicator">LIVE</div>
+                    </div>
                 </div>
-                <p class="text-sm text-gray-600 mt-2">Источник: Государственная служба статистики, данные за 2025 г.</p>
+                <!-- Обновленная легенда в виде таблицы с иконками -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                        <div class="w-8 h-8 bg-[#8BC34A] rounded-full mr-3 flex items-center justify-center text-white">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-700">01</div>
+                            <div class="text-sm text-gray-600">Обслуживание клиентов</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                        <div class="w-8 h-8 bg-[#F44336] rounded-full mr-3 flex items-center justify-center text-white">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-700">02</div>
+                            <div class="text-sm text-gray-600">Целостность</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                        <div class="w-8 h-8 bg-[#FF9800] rounded-full mr-3 flex items-center justify-center text-white">
+                            <i class="fas fa-people-group"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-700">03</div>
+                            <div class="text-sm text-gray-600">Командная работа</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                        <div class="w-8 h-8 bg-[#FFC107] rounded-full mr-3 flex items-center justify-center text-white">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-700">04</div>
+                            <div class="text-sm text-gray-600">Ответственность</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                        <div class="w-8 h-8 bg-[#37474F] rounded-full mr-3 flex items-center justify-center text-white">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-700">05</div>
+                            <div class="text-sm text-gray-600">Профессионализм</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                        <div class="w-8 h-8 bg-[#78909C] rounded-full mr-3 flex items-center justify-center text-white">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-700">06</div>
+                            <div class="text-sm text-gray-600">Коммуникация</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                        <div class="w-8 h-8 bg-[#29B6F6] rounded-full mr-3 flex items-center justify-center text-white">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-700">07</div>
+                            <div class="text-sm text-gray-600">Инклюзивность</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
+                        <div class="w-8 h-8 bg-[#26A69A] rounded-full mr-3 flex items-center justify-center text-white">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-700">08</div>
+                            <div class="text-sm text-gray-600">Инновации</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 mt-4 italic text-right pr-4">Источник: Аналитический отдел службы занятости, комплексный финансовый отчет за 2025 г.</p>
             </div>
 
             <!-- График динамики средней зарплаты -->
@@ -1136,6 +1223,18 @@
         Chart.register(ChartDataLabels);
         
         // Код для графиков из раздела статистики
+        // Объект с иконками для каждого сегмента
+        const segmentIcons = {
+            'Обслуживание клиентов': '<i class="fas fa-users"></i>',
+            'Целостность': '<i class="fas fa-handshake"></i>',
+            'Командная работа': '<i class="fas fa-people-group"></i>',
+            'Ответственность': '<i class="fas fa-clipboard-check"></i>',
+            'Профессионализм': '<i class="fas fa-briefcase"></i>',
+            'Коммуникация': '<i class="fas fa-comments"></i>',
+            'Инклюзивность': '<i class="fas fa-globe"></i>',
+            'Инновации': '<i class="fas fa-lightbulb"></i>'
+        };
+        
         document.addEventListener('DOMContentLoaded', function() {
             // График динамики безработицы
             const unemploymentCtx = document.getElementById('unemploymentChart').getContext('2d');
@@ -1411,45 +1510,138 @@
             new Chart(employmentCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Сельское хозяйство', 'Промышленность', 'Строительство', 'Торговля', 'Транспорт', 'Образование', 'Здравоохранение', 'Другие'],
+                    labels: ['Обслуживание клиентов', 'Целостность', 'Командная работа', 'Ответственность', 'Профессионализм', 'Коммуникация', 'Инклюзивность', 'Инновации'],
                     datasets: [{
-                        data: [24, 15, 10, 18, 7, 8, 6, 12],
+                        data: [12, 11, 13, 14, 12, 13, 12, 13],
                         backgroundColor: [
-                            'rgba(66, 153, 225, 0.8)',
-                            'rgba(72, 187, 120, 0.8)',
-                            'rgba(237, 100, 166, 0.8)',
-                            'rgba(246, 173, 85, 0.8)',
-                            'rgba(129, 140, 248, 0.8)',
-                            'rgba(34, 211, 238, 0.8)',
-                            'rgba(245, 158, 11, 0.8)',
-                            'rgba(124, 58, 237, 0.8)'
+                            '#8BC34A', // Зеленый
+                            '#F44336', // Красный
+                            '#FF9800', // Оранжевый
+                            '#FFC107', // Желтый
+                            '#37474F', // Темно-серый
+                            '#78909C', // Серо-синий
+                            '#29B6F6', // Голубой
+                            '#26A69A'  // Бирюзовый
                         ],
-                        borderColor: '#fff',
-                        borderWidth: 2
+                        borderWidth: 0,
+                        hoverOffset: 10
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    cutout: '65%', // Увеличиваем размер отверстия в центре
+                    layout: {
+                        padding: 20
+                    },
                     plugins: {
                         legend: {
-                            position: 'right',
-                            labels: {
-                                boxWidth: 15,
-                                padding: 15,
-                                font: {
-                                    size: 12
-                                }
-                            }
+                            display: false // Скрываем легенду, так как у нас будут метки на самой диаграмме
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#333',
+                            bodyColor: '#333',
+                            borderColor: '#ddd',
+                            borderWidth: 1,
                             padding: 12,
+                            displayColors: true,
                             callbacks: {
                                 label: function(context) {
                                     return context.label + ': ' + context.raw + '%';
                                 }
+                            },
+                        },
+                        // Добавляем плагин для центрального текста с годом
+                        datalabels: {
+                            formatter: function(value, context) {
+                                return context.chart.data.labels[context.dataIndex].split(' ')[0] + '\n' + 
+                                       context.chart.data.datasets[0].data[context.dataIndex] + '%';
+                            },
+                            color: '#fff',
+                            font: {
+                                weight: 'bold',
+                                size: 12
+                            },
+                            display: function(context) {
+                                return context.dataset.data[context.dataIndex] > 5; // Показываем метки только для сегментов больше 5%
+                            },
+                            padding: {
+                                top: 5,
+                                bottom: 5
                             }
+                        }
+                    },
+                    // Добавляем ID элементов (01, 02, и т.д.) на диаграмму
+                    animation: {
+                        onComplete: function() {
+                            const chartInstance = this.chart;
+                            const ctx = chartInstance.ctx;
+                            const centerX = (chartInstance.chartArea.left + chartInstance.chartArea.right) / 2;
+                            const centerY = (chartInstance.chartArea.top + chartInstance.chartArea.bottom) / 2;
+                            
+                            // Рисуем текст в центре с годом
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            
+                            // Год (большой шрифт)
+                            ctx.font = 'bold 24px Arial';
+                            ctx.fillStyle = '#333';
+                            ctx.fillText('2025', centerX, centerY - 10);
+                            
+                            // Описание (малый шрифт)
+                            ctx.font = '12px Arial';
+                            ctx.fillStyle = '#666';
+                            ctx.fillText('ГОДОВОЙ ОТЧЕТ', centerX, centerY + 15);
+                            ctx.fillText('ПО РЫНКУ ТРУДА', centerX, centerY + 30);
+                            
+                            // Добавление номеров элементов (01, 02, и т.д.) и иконок
+                            const data = chartInstance.data.datasets[0].data;
+                            const meta = chartInstance.getDatasetMeta(0);
+                            const radius = meta.innerRadius + (meta.outerRadius - meta.innerRadius) / 2;
+                            const labels = chartInstance.data.labels;
+                            
+                            // Создаем временный элемент для отображения иконок
+                            const tempElement = document.createElement('div');
+                            document.body.appendChild(tempElement);
+                            
+                            for (let i = 0; i < data.length; i++) {
+                                const element = meta.data[i];
+                                const angle = element.startAngle + (element.endAngle - element.startAngle) / 2;
+                                
+                                // Положение номеров
+                                const numberRadius = radius * 1.2;
+                                const numberX = centerX + Math.cos(angle) * numberRadius;
+                                const numberY = centerY + Math.sin(angle) * numberRadius;
+                                
+                                // Рисуем номера с ведущими нулями
+                                ctx.font = 'bold 14px Arial';
+                                ctx.fillStyle = '#555';
+                                ctx.fillText((i + 1).toString().padStart(2, '0'), numberX, numberY);
+                                
+                                // Отрисовка иконки (используем цвет сегмента для иконки)
+                                if (segmentIcons[labels[i]]) {
+                                    const iconColor = chartInstance.data.datasets[0].backgroundColor[i];
+                                    
+                                    // Позиционирование иконки на внешней стороне сегмента
+                                    const iconRadius = radius * 0.7; // Немного ближе к центру, чем номера
+                                    const iconX = centerX + Math.cos(angle) * iconRadius;
+                                    const iconY = centerY + Math.sin(angle) * iconRadius;
+                                    
+                                    // Создаем и позиционируем иконку
+                                    tempElement.innerHTML = segmentIcons[labels[i]];
+                                    const icon = tempElement.firstChild;
+                                    
+                                    // Стилизуем иконку через CSS
+                                    const iconSize = 18;
+                                    ctx.font = `${iconSize}px "Font Awesome 5 Free"`;
+                                    ctx.fillStyle = 'white';
+                                    ctx.fillText(icon.textContent, iconX - iconSize/2, iconY + iconSize/4);
+                                }
+                            }
+                            
+                            // Удаляем временный элемент
+                            document.body.removeChild(tempElement);
                         }
                     }
                 }
