@@ -267,7 +267,7 @@
         
         .chart-container {
             position: relative;
-            height: 350px;
+            height: 388px; /* Увеличено на 1 см (38px) */
             width: 100%;
             margin-bottom: 2rem;
             background-color: #ffffff;
@@ -300,14 +300,14 @@
         
         /* Стили для меток данных графика */
         @keyframes datalabel-pulse {
-            0% { transform: scale(1); opacity: 1; filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3)); }
-            50% { transform: scale(1.3); opacity: 0.9; filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.4)); }
-            100% { transform: scale(1); opacity: 1; filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3)); }
+            0% { transform: scale(1); opacity: 1; filter: none; }
+            50% { transform: scale(1.3); opacity: 0.9; filter: none; }
+            100% { transform: scale(1); opacity: 1; filter: none; }
         }
         
         .chartjs-datalabels canvas {
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-            filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
+            filter: none; /* Убрали тень */
             transform-origin: center center;
         }
         
@@ -1254,7 +1254,7 @@
                             },
                             align: 'top',
                             anchor: 'bottom',
-                            offset: 10, // Увеличиваем отступ для лучшей видимости
+                            offset: 5, /* Уменьшенный отступ */
                             color: function(context) {
                                 if (context.datasetIndex === 0) {
                                     const value = context.dataset.data[context.dataIndex];
@@ -1269,23 +1269,19 @@
                                 }
                                 return '#333';
                             },
-                            backgroundColor: function(context) {
-                                // Добавляем градиентную подложку для лучшей читаемости
-                                return 'rgba(255, 255, 255, 0.85)';
-                            },
-                            borderWidth: 1,
-                            borderRadius: 4,
-                            borderColor: 'rgba(0, 0, 0, 0.1)',
-                            padding: { top: 6, bottom: 6, left: 8, right: 8 },
+                            backgroundColor: 'transparent', /* Убрали фон */
+                            borderWidth: 0, /* Убрали рамку */
+                            borderRadius: 0, /* Убрали скругление углов */
+                            padding: 0, /* Убрали отступы */
                             font: {
-                                size: 13,
+                                size: 11, /* Уменьшен размер шрифта */
                                 weight: 'bold',
-                                lineHeight: 1.3
+                                lineHeight: 1.2
                             },
-                            textStrokeColor: 'white',
-                            textStrokeWidth: 1,
-                            textShadowBlur: 3,
-                            textShadowColor: 'rgba(0, 0, 0, 0.2)',
+                            textStrokeColor: 'transparent', /* Убрали обводку текста */
+                            textStrokeWidth: 0,
+                            textShadowBlur: 0, /* Убрали тень текста */
+                            textShadowColor: 'transparent',
                             // Настройки анимации
                             animation: {
                                 duration: 1000,
