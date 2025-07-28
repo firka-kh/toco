@@ -1664,68 +1664,6 @@
                 ],
                 initialData: [11, 13, 12, 10, 16, 12, 13, 13]
             };
-            
-            // Создаем круговую диаграмму для структуры рынка труда
-            const sectorCtx = document.getElementById('sectorPieChart').getContext('2d');
-            const sectorPieChart = new Chart(sectorCtx, {
-                type: 'pie',
-                data: {
-                    labels: laborMarketSectors.labels,
-                    datasets: [{
-                        data: laborMarketSectors.initialData,
-                        backgroundColor: laborMarketSectors.colors,
-                        borderColor: 'white',
-                        borderWidth: 2,
-                        hoverOffset: 10
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: {
-                        padding: 20
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                            titleColor: '#333',
-                            bodyColor: '#333',
-                            borderColor: '#ddd',
-                            borderWidth: 1,
-                            padding: 10,
-                            displayColors: true,
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.label}: ${context.raw}%`;
-                                }
-                            }
-                        },
-                        datalabels: {
-                            formatter: function(value, context) {
-                                return value + '%';
-                            },
-                            color: 'white',
-                            font: {
-                                weight: 'bold',
-                                size: 12
-                            },
-                            textStrokeColor: 'rgba(0, 0, 0, 0.5)',
-                            textStrokeWidth: 1,
-                            textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                            textShadowBlur: 2
-                        }
-                    },
-                    animation: {
-                        animateRotate: true,
-                        animateScale: true,
-                        duration: 800,
-                        easing: 'easeOutQuart'
-                    }
-                }
-            });
 
             // График динамики средней зарплаты
             const salaryCtx = document.getElementById('salaryDynamicsChart').getContext('2d');
