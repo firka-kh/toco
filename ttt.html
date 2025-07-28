@@ -295,6 +295,22 @@
             animation: pulse-update 0.8s ease-out;
         }
         
+        /* Стили для меток данных графика */
+        @keyframes datalabel-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .chartjs-datalabels canvas {
+            transition: all 0.3s ease !important;
+            filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.2));
+        }
+        
+        .label-updating {
+            animation: datalabel-pulse 0.5s ease-in-out;
+        }
+        
         /* Добавляем пояснения к графикам */
         .chart-caption {
             font-size: 0.9rem;
@@ -975,6 +991,22 @@
                     chart.data.datasets[0].data = newData;
                     chart.update('normal');
                     
+                    // После обновления графика добавляем анимацию для меток
+                    setTimeout(() => {
+                        const labels = document.querySelectorAll('.chartjs-datalabels canvas');
+                        labels.forEach(label => {
+                            label.classList.add('label-updating');
+                            // Добавляем стиль для красного цвета
+                            label.parentNode.style.color = '#ef4444';
+                            label.parentNode.style.fontWeight = 'bold';
+                            
+                            // Убираем класс анимации через некоторое время
+                            setTimeout(() => {
+                                label.classList.remove('label-updating');
+                            }, 500);
+                        });
+                    }, 100);
+                    
                     // Удаляем эффект обновления
                     setTimeout(() => {
                         chartElement.classList.remove('chart-updating');
@@ -1166,34 +1198,30 @@
                         // Добавляем метки для отображения изменений
                         datalabels: {
                             display: function(context) {
-                                // Показываем метки только для выборочных точек текущего года
-                                return context.datasetIndex === 0 && [0, 3, 6, 9, 11].includes(context.dataIndex);
+                                // Показываем метки для всех точек текущего года
+                                return context.datasetIndex === 0;
                             },
                             formatter: function(value, context) {
                                 if (context.datasetIndex === 0) {
-                                    const lastYearValue = context.chart.data.datasets[1].data[context.dataIndex];
-                                    const diff = (value - lastYearValue).toFixed(1);
-                                    return `${value}%\n(${diff > 0 ? '+' : ''}${diff}%)`;
+                                    return `${value}%`;
                                 }
                                 return value + '%';
                             },
                             align: 'top',
                             anchor: 'bottom',
                             offset: 8,
-                            color: function(context) {
-                                if (context.datasetIndex === 0) {
-                                    const value = context.dataset.data[context.dataIndex];
-                                    const lastYearValue = context.chart.data.datasets[1].data[context.dataIndex];
-                                    return value < lastYearValue ? '#10b981' : '#ef4444';
-                                }
-                                return '#333';
-                            },
+                            color: '#ef4444', // Красный цвет для всех меток
                             backgroundColor: 'rgba(255, 255, 255, 0.8)',
                             borderRadius: 4,
                             padding: 4,
                             font: {
-                                size: 11,
+                                size: 14,
                                 weight: 'bold'
+                            },
+                            // Добавляем анимацию для меток
+                            animation: {
+                                duration: 1000,
+                                easing: 'easeOutQuart'
                             }
                         }
                     },
