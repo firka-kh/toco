@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инструменты - Статистика и Анализ</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Анимация дрожания и переливания цвета для кнопки меню */
+        @keyframes menuLabelShake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+            20%, 40%, 60%, 80% { transform: translateX(2px); }
+        }
+
+        /* Кнопка меню посередине левой части страницы */
+        .menu-label {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #3182ce, #5a67d8);
+            color: white;
+            writing-mode: vertical-lr;
+            text-orientation: upright;
+            padding: 1rem 0.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 40;
+            letter-spacing: 0.1em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .menu-label:hover {
+            background: linear-gradient(135deg, #2c5282, #4c51bf);
+            animation: menuLabelShake 0.8s ease;
+        }
+
+        /* Боковое меню выплывает слева направо */
+        .side-menu {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            bottom: 0;
+            width: 300px;
+            background-color: #1a202c;
+            color: white;
+            z-index: 50;
+            transition: all 0.3s ease-in-out;
+            overflow-y: auto;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem 0;
+        }
+
+        .side-menu.open {
+            left: 0;
+        }
+
+        .side-menu a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .side-menu a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #3182ce, #5a67d8);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .side-menu a:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .side-menu a:hover::before {
+            opacity: 1;
+        }
+
+        .side-menu a i {
+            margin-right: 0.75rem;
+            color: #a0aec0;
+            transition: color 0.2s ease;
+            width: 20px;
+            text-align: center;
+        }
+
+        .side-menu a:hover i {
+            color: #63b3ed;
+        }
+
+        /* Стили для подменю */
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: rgba(26, 32, 44, 0.8);
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-item:hover .submenu {
+            max-height: 500px;
+        }
+
+        .submenu a {
+            padding-left: 3rem;
+            font-size: 0.9rem;
+        }
+
+        .submenu a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Overlay для закрытия меню */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 45;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Дополнительные эффекты для объема */
+        .side-menu::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(49, 130, 206, 0.05), rgba(90, 103, 216, 0.05));
+            pointer-events: none;
+        }
+
+        .side-menu > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Анимация появления меню */
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .side-menu.open {
+            animation: slideInLeft 0.3s forwards;
+        }
+
+        /* Custom gradient background for header and hero sections */
+        .gradient-bg {
+            background: linear-gradient(135deg, #3182ce, #5a67d8);
+        }
+        /* Enhanced hover effect for cards */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        /* Consistent spacing for sections */
+        .section-spacing {
+            padding: 3rem 0; /* Increased vertical padding for more breathing room */
+        }        /* Basic spinner for loading states */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3182ce;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Ensure canvas elements are responsive within their containers */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Print-specific styles for A4 format */
+        @media print {
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 0;
+                font-size: 12pt;
+            }
+        }
+
+        #jobSliderTrack {
+            overflow: hidden;
+        }
+        .job-slide {
+            transition: opacity 0.7s ease;
+        }
+        @media (max-width: 1200px) {
+            .job-slide {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+        @media (max-width: 1024px) {
+            .job-slide {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold">Инструменты - Статистика и Анализ</h1>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="hover:text-blue-200 transition-colors">Главная</a>
+                    <a href="#" class="hover:text-blue-200 transition-colors">О проекте</a>
+                    <a href="#" class="hover:text-blue-200 transition-colors">Контакты</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="profileBtn" class="bg-white text-blue-600 px-4 py-1 rounded-full text-sm font-medium hover:bg-blue-100 transition-colors">
+                        Личный кабинет
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Вертикальная надпись "Меню" -->
+    <div class="menu-label" onclick="toggleSideMenu()">Меню</div>
+
+    <!-- Overlay для закрытия меню -->
+    <div class="overlay"></div>
+
+    <!-- Боковое меню -->
+    <div class="side-menu">
+        <a class="flex items-center px-4 py-3 mt-3 hover:bg-gray-700 hover:text-gray-300" href="index.html">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+        <div class="mt-3 border-t border-gray-700">
+            <div class="menu-item">
+                <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#">
+                    <i class="fas fa-briefcase"></i>
+                    Для соискателей
+                </a>
+                <div class="submenu">
+                    <a href="serchwork.html">Поиск работы</a>
+                    <a href="skill_serch.html">Оценка навыков</a>
+                    <a href="prof_skill_need.html">Профпереподготовка</a>
+                    <a href="video_res.html">Видеорезюме</a>
+                    <a href="2_online_interview.html">Онлайн-собеседования</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#">
+                    <i class="fas fa-building"></i>
+                    Для работодателей
+                </a>
+                <div class="submenu">
+                    <a href="employer_anons_work.html">Размещение вакансии</a>
+                    <a href="employer_profile.html">Профиль компании</a>
+                    <a href="statistics.html">Статистика</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#">
+                    <i class="fas fa-chart-bar"></i>
+                    Аналитика
+                </a>
+                <div class="submenu">
+                    <a href="analitic_pg.html">Аналитика рынка</a>
+                    <a href="statistics.html">Статистика</a>
+                    <a href="tools_analitic.html">Инструменты</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#">
+                    <i class="fas fa-university"></i>
+                    Госслужащим
+                </a>
+                <div class="submenu">
+                    <a href="gov_pg.html">Панель госслужащего</a>
+                    <a href="statistics.html">Статистика</a>
+                    <a href="youth_programs.html">Молодежные программы</a>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 border-t border-gray-700">
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="ai_lmis.html">
+                <i class="fas fa-robot"></i>
+                ИИ-ассистент
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="free_lans/freelance_homepage.html">
+                <i class="fas fa-laptop-code"></i>
+                Фриланс
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="micro_credit.html">
+                <i class="fas fa-credit-card"></i>
+                Микрокредиты
+            </a>
+        </div>
+        <div class="mt-3 border-t border-gray-700">
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#">
+                <i class="fas fa-question-circle"></i>
+                Помощь
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-gray-700 hover:text-gray-300" href="#">
+                <i class="fas fa-info-circle"></i>
+                О портале
+            </a>
+        </div>
+    </div>
+
+    <section class="gradient-bg text-white py-10">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Инструменты статистики и анализа</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">
+                Здесь вы найдете все необходимые инструменты для аналитики рынка труда и статистических данных
+            </p>
+        </div>
+    </section>
+
+    <!-- Здесь будет основное содержимое страницы -->
+    <div class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6 text-center">Выберите инструмент анализа</h2>
+        
+        <!-- Здесь будет основной контент страницы -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Карточки с инструментами будут здесь -->
+        </div>
+    </div>
+
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">О портале</h4>
+                    <p class="text-gray-300">
+                        Единая платформа для соискателей, работодателей и аналитиков рынка труда.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Ссылки</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white transition-colors">Главная</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Поиск работы</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Работодателям</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Аналитика</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Контакты</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><i class="fas fa-map-marker-alt mr-2"></i> Душанбе, ул. Примерная, 123</li>
+                        <li><i class="fas fa-phone mr-2"></i> +992 (12) 345-67-89</li>
+                        <li><i class="fas fa-envelope mr-2"></i> info@example.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Подписаться</h4>
+                    <p class="text-gray-300 mb-2">Получайте новости о рынке труда</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Ваш email" class="px-4 py-2 rounded-l-lg w-full focus:outline-none">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-blue-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-300">© 2025 Портал рынка труда. Все права защищены.</p>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно профиля -->
+    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg shadow-lg p-8 max-w-xs w-full text-center">
+        <h3 class="text-xl font-bold mb-6 text-gray-800">Вход или регистрация</h3>
+        <button id="demoLoginBtn" class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors mb-4">Войти (демо)</button>
+        <button id="goRegisterBtn" class="w-full bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors">Зарегистрироваться</button>
+        <button id="closeProfileModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+      </div>
+    </div>
+
+    <!-- Сначала виджет FL, строго над ИИ -->
+    <div id="freelanceBlobWidget"
+         class="fixed z-50 cursor-pointer group transition-all duration-400 ease-in-out"
+         onclick="window.location.href='free_lans/freelance_homepage.html'"
+              style="width: 64px; height: 64px; right: 24px; bottom: 120px;">
+        <div class="relative w-full h-full flex items-center justify-center">
+            <span class="absolute inset-0 shadow-lg transition-all duration-400 ease-in-out blob-bg"></span>
+            <span class="relative z-10 text-white font-extrabold text-2xl select-none transition-all duration-400 ease-in-out flex items-center justify-center h-full w-full"
+                  style="letter-spacing: 0.05em;">FL</span>
+            <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-semibold text-base px-4 opacity-0 group-hover:opacity-100 transition-all duration-400 ease-in-out z-20">
+                Фриланс
+            </span>
+        </div>
+        <style>
+            @keyframes blob-gradient-anim {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            #freelanceBlobWidget {
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            #freelanceBlobWidget .blob-bg {
+                background: linear-gradient(45deg, #FF8A00, #FF5630, #FF8A00);
+                background-size: 200% 200%;
+                animation: blob-gradient-anim 6s ease infinite;
+                border-radius: 50%;
+                box-shadow: 0 6px 12px rgba(255, 138, 0, 0.3);
+            }
+            #freelanceBlobWidget:hover {
+                width: 180px !important;
+                border-radius: 32px !important;
+            }
+            #freelanceBlobWidget:hover .blob-bg {
+                border-radius: 32px;
+                background: linear-gradient(45deg, #FF5630, #FF8A00, #FF5630);
+                background-size: 200% 200%;
+                animation: blob-gradient-anim 3s ease infinite;
+            }
+            #freelanceBlobWidget span.text-2xl {
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            #freelanceBlobWidget:hover span.text-2xl {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            #freelanceBlobWidget span.text-base {
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            #freelanceBlobWidget:hover span.text-base {
+                opacity: 1;
+                transform: scale(1);
+            }
+            #freelanceBlobWidget .group-hover\:opacity-100 {
+                transition-delay: 0.1s;
+            }
+            #freelanceBlobWidget:hover .group-hover\:opacity-100 {
+                transition-delay: 0.1s;
+            }
+            @media (max-width: 768px) {
+                #freelanceBlobWidget {
+                    width: 48px !important;
+                    height: 48px !important;
+                    right: 16px !important;
+                    bottom: 90px !important;
+                }
+                #freelanceBlobWidget:hover {
+                    width: 140px !important;
+                }
+                #freelanceBlobWidget span.text-2xl {
+                    font-size: 1rem;
+                }
+            }
+        </style>
+    </div>
+
+    <!-- Затем виджет ИИ, строго под FL -->
+    <div id="aiAssistantWidget"
+         class="fixed z-50 cursor-pointer group transition-all duration-400 ease-in-out"
+         onclick="window.location.href='ai_lmis.html'"
+         style="width: 64px; height: 64px; right: 24px; bottom: 48px;">
+        <div class="relative w-full h-full flex items-center justify-center">
+            <span class="absolute inset-0 shadow-lg transition-all duration-400 ease-in-out ai-blob-bg"></span>
+            <span class="relative z-10 text-white font-extrabold text-2xl select-none transition-all duration-400 ease-in-out flex items-center justify-center h-full w-full"
+                  style="letter-spacing: 0.05em;">AI</span>
+            <span class="absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center text-white font-semibold text-base px-4 opacity-0 group-hover:opacity-100 transition-all duration-400 ease-in-out z-20">
+                ИИ Ассистент
+            </span>
+        </div>
+        <style>
+            @keyframes ai-blob-gradient-anim {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            
+            /* Пульсирующая анимация для AI виджета */
+            @keyframes ai-pulse {
+                0% { transform: scale(1); box-shadow: 0 6px 12px rgba(80, 102, 252, 0.3); }
+                50% { transform: scale(1.05); box-shadow: 0 8px 16px rgba(80, 102, 252, 0.5); }
+                100% { transform: scale(1); box-shadow: 0 6px 12px rgba(80, 102, 252, 0.3); }
+            }
+            
+            #aiAssistantWidget {
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            #aiAssistantWidget .ai-blob-bg {
+                background: linear-gradient(45deg, #5066FC, #8B5CF6, #5066FC);
+                background-size: 200% 200%;
+                animation: ai-blob-gradient-anim 6s ease infinite;
+                border-radius: 50%;
+                box-shadow: 0 6px 12px rgba(80, 102, 252, 0.3);
+            }
+            #aiAssistantWidget:hover {
+                width: 180px !important;
+                border-radius: 32px !important;
+            }
+            #aiAssistantWidget:hover .ai-blob-bg {
+                border-radius: 32px;
+                background: linear-gradient(45deg, #8B5CF6, #5066FC, #8B5CF6);
+                background-size: 200% 200%;
+                animation: ai-blob-gradient-anim 3s ease infinite;
+            }
+            #aiAssistantWidget span.text-2xl {
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            #aiAssistantWidget:hover span.text-2xl {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            #aiAssistantWidget span.text-base {
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            #aiAssistantWidget:hover span.text-base {
+                opacity: 1;
+                transform: scale(1);
+            }
+            #aiAssistantWidget .group-hover\:opacity-100 {
+                transition-delay: 0.1s;
+            }
+            #aiAssistantWidget:hover .group-hover\:opacity-100 {
+                transition-delay: 0.1s;
+            }
+            @media (max-width: 768px) {
+                #aiAssistantWidget {
+                    width: 48px !important;
+                    height: 48px !important;
+                    right: 16px !important;
+                    bottom: 32px !important;
+                }
+                #aiAssistantWidget:hover {
+                    width: 140px !important;
+                }
+                #aiAssistantWidget span.text-2xl {
+                    font-size: 1rem;
+                }
+            }
+        </style>
+    </div>
+
+    <script>
+        // Функция для управления боковым меню
+        function toggleSideMenu() {
+            const sideMenu = document.querySelector('.side-menu');
+            const overlay = document.querySelector('.overlay');
+            
+            sideMenu.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Закрытие меню при клике вне его области или на overlay
+        document.addEventListener('click', (event) => {
+            const sideMenu = document.querySelector('.side-menu');
+            const menuLabel = document.querySelector('.menu-label');
+            
+            if (!sideMenu.contains(event.target) && !menuLabel.contains(event.target)) {
+                sideMenu.classList.remove('open');
+                document.querySelector('.overlay').classList.remove('show');
+            }
+        });
+
+        // Закрытие меню при клике на overlay
+        document.querySelector('.overlay').addEventListener('click', () => {
+            const sideMenu = document.querySelector('.side-menu');
+            const overlay = document.querySelector('.overlay');
+            
+            sideMenu.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+
+        // Обработчик для кнопки профиля
+        document.getElementById('profileBtn').addEventListener('click', function() {
+            document.getElementById('profileModal').classList.remove('hidden');
+        });
+
+        // Закрытие модального окна
+        document.getElementById('closeProfileModal').addEventListener('click', function() {
+            document.getElementById('profileModal').classList.add('hidden');
+        });
+
+        // Демо-вход
+        document.getElementById('demoLoginBtn').addEventListener('click', function() {
+            document.getElementById('profileModal').classList.add('hidden');
+            alert('Выполнен демо-вход в систему');
+        });
+
+        // Переход на страницу регистрации
+        document.getElementById('goRegisterBtn').addEventListener('click', function() {
+            window.location.href = "register.html";
+        });
+
+        // Пульсация AI виджета каждые 4 секунды
+        function pulseAIWidget() {
+            const aiWidget = document.getElementById('aiAssistantWidget');
+            if (aiWidget) {
+                aiWidget.style.animation = 'ai-pulse 1s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                setTimeout(() => {
+                    aiWidget.style.animation = '';
+                }, 1000);
+            }
+        }
+
+        // Запускаем пульсацию каждые 4 секунды
+        setInterval(pulseAIWidget, 4000);
+
+        // Первая пульсация через 2 секунды после загрузки страницы
+        setTimeout(pulseAIWidget, 2000);
+    </script>
+</body>
+</html>
