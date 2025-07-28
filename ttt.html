@@ -7,6 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Добавляем необходимые плагины Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.0.0"></script>
 
     <style>
         /* Анимация дрожания и переливания цвета для кнопки меню */
@@ -297,18 +300,24 @@
         
         /* Стили для меток данных графика */
         @keyframes datalabel-pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.9; }
-            100% { transform: scale(1); opacity: 1; }
+            0% { transform: scale(1); opacity: 1; filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3)); }
+            50% { transform: scale(1.3); opacity: 0.9; filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.4)); }
+            100% { transform: scale(1); opacity: 1; filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3)); }
         }
         
         .chartjs-datalabels canvas {
-            transition: all 0.3s ease !important;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
             filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
+            transform-origin: center center;
         }
         
         .label-updating {
-            animation: datalabel-pulse 0.6s ease-in-out;
+            animation: datalabel-pulse 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+        
+        /* Улучшение видимости меток */
+        .chartjs-datalabels label {
+            z-index: 100 !important;
         }
         
         /* Добавляем пояснения к графикам */
@@ -989,33 +998,44 @@
                 setTimeout(() => {
                     // Обновляем данные графика
                     chart.data.datasets[0].data = newData;
-                    chart.update('normal');
                     
-                    // После обновления графика добавляем анимацию для меток
-                    setTimeout(() => {
-                        const labels = document.querySelectorAll('.chartjs-datalabels canvas');
-                        labels.forEach((label, index) => {
-                            label.classList.add('label-updating');
-                            
-                            // Определяем цвет метки в зависимости от изменения значения
-                            const currentValue = chart.data.datasets[0].data[index];
-                            const prevValue = index > 0 ? chart.data.datasets[0].data[index - 1] : null;
-                            
-                            // Если это первое значение или выше предыдущего, то красный, иначе зеленый
-                            const color = (prevValue === null || currentValue > prevValue) ? '#ef4444' : '#10b981';
-                            
-                            // Применяем цвет к метке
-                            if (label.parentNode) {
-                                label.parentNode.style.color = color;
-                                label.parentNode.style.fontWeight = 'bold';
-                            }
-                            
-                            // Убираем класс анимации через некоторое время
+                    // Обновляем график с анимацией
+                    chart.update({
+                        duration: 750,
+                        easing: 'easeOutQuart',
+                        // Важно - запускаем функцию после завершения анимации
+                        onComplete: function() {
+                            // Обновляем метки с задержкой после обновления графика
                             setTimeout(() => {
-                                label.classList.remove('label-updating');
-                            }, 500);
-                        });
-                    }, 100);
+                                // Получаем все метки после обновления графика
+                                const labels = document.querySelectorAll('.chartjs-datalabels canvas');
+                                
+                                // Проходим по меткам и обновляем их стили
+                                labels.forEach((label, index) => {
+                                    if (label && label.parentNode) {
+                                        // Добавляем класс анимации
+                                        label.classList.add('label-updating');
+                                        
+                                        // Определяем цвет метки в зависимости от изменения значения
+                                        const currentValue = newData[index];
+                                        const prevValue = index > 0 ? newData[index - 1] : null;
+                                        
+                                        // Если это первое значение или выше предыдущего, то красный, иначе зеленый
+                                        const color = (prevValue === null || currentValue > prevValue) ? '#ef4444' : '#10b981';
+                                        
+                                        // Принудительно устанавливаем стили на родительский элемент метки
+                                        label.parentNode.style.color = color;
+                                        label.parentNode.style.fontWeight = 'bold';
+                                        
+                                        // Убираем класс анимации через некоторое время
+                                        setTimeout(() => {
+                                            label.classList.remove('label-updating');
+                                        }, 600);
+                                    }
+                                });
+                            }, 50);
+                        }
+                    });
                     
                     // Удаляем эффект обновления
                     setTimeout(() => {
@@ -1028,12 +1048,11 @@
             // Запускаем интервал обновления, если задан
             let updateTimer = null;
             if (updateInterval > 0) {
-                // Первое обновление через половину интервала
-                setTimeout(() => {
-                    updateChartData();
-                    // Затем регулярные обновления
-                    updateTimer = setInterval(updateChartData, updateInterval);
-                }, updateInterval / 2);
+                // Первое обновление сразу для инициализации меток
+                updateChartData();
+                
+                // Затем регулярные обновления с заданным интервалом
+                updateTimer = setInterval(updateChartData, updateInterval);
                 
                 // При переключении вкладок останавливаем и возобновляем обновление
                 document.addEventListener('visibilitychange', function() {
@@ -1054,6 +1073,9 @@
             };
         }
 
+        // Регистрируем плагины Chart.js
+        Chart.register(ChartDataLabels);
+        
         // Код для графиков из раздела статистики
         document.addEventListener('DOMContentLoaded', function() {
             // График динамики безработицы
@@ -1208,18 +1230,21 @@
                         // Добавляем метки для отображения изменений
                         datalabels: {
                             display: function(context) {
-                                // Показываем метки для всех точек текущего года
+                                // Показываем метки только для первого набора данных (текущий год)
                                 return context.datasetIndex === 0;
                             },
                             formatter: function(value, context) {
                                 if (context.datasetIndex === 0) {
+                                    // Получаем значение прошлого года для сравнения
                                     const lastYearValue = context.chart.data.datasets[1].data[context.dataIndex];
-                                    const diff = (value - lastYearValue).toFixed(1);
                                     const prevValue = context.dataIndex > 0 ? context.dataset.data[context.dataIndex - 1] : null;
                                     
                                     if (prevValue !== null) {
+                                        // Рассчитываем разницу с предыдущим месяцем
                                         const monthDiff = (value - prevValue).toFixed(1);
-                                        const sign = monthDiff > 0 ? '+' : '';
+                                        // Добавляем знак + для положительных изменений
+                                        const sign = monthDiff >= 0 ? '+' : '';
+                                        // Возвращаем форматированную строку с переносом строки
                                         return `${value}%\n(${sign}${monthDiff}%)`;
                                     }
                                     
@@ -1229,13 +1254,13 @@
                             },
                             align: 'top',
                             anchor: 'bottom',
-                            offset: 8,
+                            offset: 10, // Увеличиваем отступ для лучшей видимости
                             color: function(context) {
                                 if (context.datasetIndex === 0) {
                                     const value = context.dataset.data[context.dataIndex];
                                     const prevValue = context.dataIndex > 0 ? context.dataset.data[context.dataIndex - 1] : null;
                                     
-                                    // Если это первое значение или выше предыдущего, то красный
+                                    // Красный цвет при росте показателя, зеленый при снижении
                                     if (prevValue === null || value > prevValue) {
                                         return '#ef4444'; // красный
                                     } else {
@@ -1244,14 +1269,24 @@
                                 }
                                 return '#333';
                             },
-                            backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                            borderRadius: 4,
-                            padding: 4,
-                            font: {
-                                size: 14,
-                                weight: 'bold'
+                            backgroundColor: function(context) {
+                                // Добавляем градиентную подложку для лучшей читаемости
+                                return 'rgba(255, 255, 255, 0.85)';
                             },
-                            // Добавляем анимацию для меток
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            borderColor: 'rgba(0, 0, 0, 0.1)',
+                            padding: { top: 6, bottom: 6, left: 8, right: 8 },
+                            font: {
+                                size: 13,
+                                weight: 'bold',
+                                lineHeight: 1.3
+                            },
+                            textStrokeColor: 'white',
+                            textStrokeWidth: 1,
+                            textShadowBlur: 3,
+                            textShadowColor: 'rgba(0, 0, 0, 0.2)',
+                            // Настройки анимации
                             animation: {
                                 duration: 1000,
                                 easing: 'easeOutQuart'
