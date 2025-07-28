@@ -1977,19 +1977,8 @@
                         // Добавляем класс для анимации обновления
                         valueElem.classList.add('value-updating');
                         
-                        // Обновляем значение с форматированием для трех цифр после запятой
-                        if (typeof newValue === 'string' && newValue.includes('.')) {
-                            // Если это строка с десятичной точкой
-                            const parts = newValue.split('.');
-                            valueElem.innerHTML = `<span style="font-weight: bold;">${parts[0]}.</span><span style="color: rgba(220, 53, 69, 1);">${parts[1]}</span>`;
-                        } else if (typeof newValue === 'number') {
-                            // Если это число
-                            const parts = newValue.toFixed(3).split('.');
-                            valueElem.innerHTML = `<span style="font-weight: bold;">${parts[0]}.</span><span style="color: rgba(220, 53, 69, 1);">${parts[1]}</span>`;
-                        } else {
-                            // Если это просто строка без десятичной точки
-                            valueElem.textContent = newValue;
-                        }
+                        // Обновляем значение
+                        valueElem.textContent = newValue;
                         
                         // Обновляем тренды
                         const trendValues = changeElem.querySelectorAll('.trend-value');
