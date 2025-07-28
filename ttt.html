@@ -59,13 +59,17 @@
         
         /* Стили для выравнивания процентов в виджете динамики рынка труда */
         .industry-name {
-            width: 80%;
+            width: 65%;
+            min-width: 150px;
         }
         
         .percentage-value {
-            width: 20%;
+            width: 35%;
             text-align: right;
-            padding-right: 5px;
+            padding-right: 10px;
+            font-weight: 600;
+            min-width: 50px;
+            display: inline-block;
         }
 
         /* Кнопка меню посередине левой части страницы */
@@ -812,7 +816,7 @@
                             
                             <!-- Сельское хозяйство -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="agriculture">
-                                <div class="flex items-center mb-1">
+                                <div class="flex mb-1">
                                     <div class="text-sm text-gray-600 industry-name">Сельское хозяйство</div>
                                     <div class="text-sm font-medium market-dynamics-value-right percentage-value">11%</div>
                                 </div>
@@ -823,7 +827,7 @@
                             
                             <!-- Промышленность -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="industry">
-                                <div class="flex items-center mb-1">
+                                <div class="flex mb-1">
                                     <div class="text-sm text-gray-600 industry-name">Промышленность</div>
                                     <div class="text-sm font-medium market-dynamics-value-right percentage-value">13%</div>
                                 </div>
@@ -834,7 +838,7 @@
                             
                             <!-- Строительство -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="construction">
-                                <div class="flex items-center mb-1">
+                                <div class="flex mb-1">
                                     <div class="text-sm text-gray-600 industry-name">Строительство</div>
                                     <div class="text-sm font-medium market-dynamics-value-right percentage-value">12%</div>
                                 </div>
@@ -845,7 +849,7 @@
                             
                             <!-- Торговля -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="trade">
-                                <div class="flex items-center mb-1">
+                                <div class="flex mb-1">
                                     <div class="text-sm text-gray-600 industry-name">Торговля</div>
                                     <div class="text-sm font-medium market-dynamics-value-right percentage-value">10%</div>
                                 </div>
@@ -856,7 +860,7 @@
                             
                             <!-- Транспорт -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="transport">
-                                <div class="flex items-center mb-1">
+                                <div class="flex mb-1">
                                     <div class="text-sm text-gray-600 industry-name">Транспорт</div>
                                     <div class="text-sm font-medium market-dynamics-value-right percentage-value">16%</div>
                                 </div>
@@ -867,7 +871,7 @@
                             
                             <!-- Образование -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="education">
-                                <div class="flex items-center mb-1">
+                                <div class="flex mb-1">
                                     <div class="text-sm text-gray-600 industry-name">Образование</div>
                                     <div class="text-sm font-medium market-dynamics-value-right percentage-value">12%</div>
                                 </div>
@@ -878,7 +882,7 @@
                             
                             <!-- Здравоохранение -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="healthcare">
-                                <div class="flex items-center mb-1">
+                                <div class="flex mb-1">
                                     <div class="text-sm text-gray-600 industry-name">Здравоохранение</div>
                                     <div class="text-sm font-medium market-dynamics-value-right percentage-value">13%</div>
                                 </div>
@@ -889,7 +893,7 @@
                             
                             <!-- ИТ и связь -->
                             <div class="market-dynamics-item mb-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-all" data-sector="it">
-                                <div class="flex items-center mb-1">
+                                <div class="flex mb-1">
                                     <div class="text-sm text-gray-600 industry-name">ИТ и связь</div>
                                     <div class="text-sm font-medium market-dynamics-value-right percentage-value">13%</div>
                                 </div>
