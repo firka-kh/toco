@@ -10,6 +10,10 @@
     <!-- Добавляем необходимые плагины Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.0.0"></script>
+    <script>
+        // Регистрируем плагины Chart.js глобально
+        Chart.register(ChartDataLabels);
+    </script>
 
     <style>
         /* Анимация дрожания и переливания цвета для кнопки меню */
@@ -342,29 +346,48 @@
             align-items: center;
             font-size: 0.7rem;
             font-weight: bold;
-            color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-            padding: 0.2rem 0.5rem;
+            color: #10B981; /* Зеленый цвет */
+            background: rgba(16, 185, 129, 0.1); /* Светло-зеленый фон */
+            padding: 0.25rem 0.6rem;
             border-radius: 1rem;
             position: relative;
             margin-right: 0.75rem;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            animation: live-badge-pulse 2s infinite;
+        }
+        
+        @keyframes live-badge-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.1); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
         
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.8); }
+            50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.2); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
         
         .live-indicator::before {
             content: '';
-            width: 6px;
-            height: 6px;
-            background: #ef4444;
+            width: 8px;
+            height: 8px;
+            background: #10B981; /* Зеленый индикатор */
             border-radius: 50%;
             display: inline-block;
-            margin-right: 4px;
+            margin-right: 6px;
             animation: pulse 2s infinite;
+        }
+        
+        /* Анимация обновления значений виджетов */
+        @keyframes value-update {
+            0% { opacity: 0.5; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        .value-updating {
+            animation: value-update 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -524,52 +547,88 @@
             
             <!-- Виджеты с ключевыми показателями -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget">
-                    <h3 class="text-lg font-semibold text-gray-600">Уровень безработицы</h3>
-                    <div class="flex items-end justify-between">
-                        <p class="text-3xl font-bold text-gray-800">7.4%</p>
-                        <div class="flex items-center">
-                            <p class="text-sm text-red-500 mr-1">-0.3%</p>
-                            <i class="fas fa-arrow-down text-red-500 text-sm"></i>
+                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget relative">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-semibold text-gray-600">Уровень безработицы</h3>
+                        <span class="live-indicator"><span>LIVE</span></span>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <p class="text-4xl font-bold text-gray-800 unemployment-value transition-all duration-500 ease-in-out">7.9%</p>
+                        <div class="flex items-center unemployment-change">
+                            <span class="flex items-center text-sm mr-2">
+                                <span class="text-green-500 mr-1 trend-value">+6.8%</span>
+                                <i class="fas fa-arrow-up text-green-500"></i>
+                            </span>
+                            <span class="flex items-center text-sm">
+                                <span class="text-red-500 trend-value">-1.0%</span>
+                                <i class="fas fa-arrow-down text-red-500"></i>
+                            </span>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                    <p class="text-xs text-gray-500 mt-2">По сравнению с предыдущим кварталом</p>
                 </div>
 
-                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget">
-                    <h3 class="text-lg font-semibold text-gray-600">Уровень занятости</h3>
-                    <div class="flex items-end justify-between">
-                        <p class="text-3xl font-bold text-gray-800">61.3%</p>
-                        <div class="flex items-center">
-                            <p class="text-sm text-green-500 mr-1">+0.5%</p>
-                            <i class="fas fa-arrow-up text-green-500 text-sm"></i>
+                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget relative">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-semibold text-gray-600">Уровень занятости</h3>
+                        <span class="live-indicator"><span>LIVE</span></span>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <p class="text-4xl font-bold text-gray-800 employment-value transition-all duration-500 ease-in-out">62.6%</p>
+                        <div class="flex items-center employment-change">
+                            <span class="flex items-center text-sm mr-2">
+                                <span class="text-red-500 mr-1 trend-value">-74858.8%</span>
+                                <i class="fas fa-arrow-down text-red-500"></i>
+                            </span>
+                            <span class="flex items-center text-sm">
+                                <span class="text-red-500 trend-value">-104054.8%</span>
+                                <i class="fas fa-arrow-down text-red-500"></i>
+                            </span>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                    <p class="text-xs text-gray-500 mt-2">По сравнению с предыдущим кварталом</p>
                 </div>
 
-                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget">
-                    <h3 class="text-lg font-semibold text-gray-600">Средняя зарплата</h3>
-                    <div class="flex items-end justify-between">
-                        <p class="text-3xl font-bold text-gray-800">2450 сом.</p>
-                        <div class="flex items-center">
-                            <p class="text-sm text-green-500 mr-1">+5.2%</p>
-                            <i class="fas fa-arrow-up text-green-500 text-sm"></i>
+                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget relative">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-semibold text-gray-600">Средняя зарплата</h3>
+                        <span class="live-indicator"><span>LIVE</span></span>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <p class="text-4xl font-bold text-gray-800 salary-value transition-all duration-500 ease-in-out">1,000</p>
+                        <div class="flex items-center salary-change">
+                            <span class="flex items-center text-sm mr-2">
+                                <span class="text-green-500 mr-1 trend-value">+118371.6%</span>
+                                <i class="fas fa-arrow-up text-green-500"></i>
+                            </span>
+                            <span class="flex items-center text-sm">
+                                <span class="text-red-500 trend-value">-94777.5%</span>
+                                <i class="fas fa-arrow-down text-red-500"></i>
+                            </span>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                    <p class="text-xs text-gray-500 mt-2">По сравнению с предыдущим кварталом</p>
                 </div>
 
-                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget">
-                    <h3 class="text-lg font-semibold text-gray-600">Активные вакансии</h3>
-                    <div class="flex items-end justify-between">
-                        <p class="text-3xl font-bold text-gray-800">21,543</p>
-                        <div class="flex items-center">
-                            <p class="text-sm text-green-500 mr-1">+12.7%</p>
-                            <i class="fas fa-arrow-up text-green-500 text-sm"></i>
+                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget relative">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-semibold text-gray-600">Активные вакансии</h3>
+                        <span class="live-indicator"><span>LIVE</span></span>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <p class="text-4xl font-bold text-gray-800 vacancies-value transition-all duration-500 ease-in-out">1,000</p>
+                        <div class="flex items-center vacancies-change">
+                            <span class="flex items-center text-sm mr-2">
+                                <span class="text-red-500 mr-1 trend-value">-69353.7%</span>
+                                <i class="fas fa-arrow-down text-red-500"></i>
+                            </span>
+                            <span class="flex items-center text-sm">
+                                <span class="text-red-500 trend-value">-0.2%</span>
+                                <i class="fas fa-arrow-down text-red-500"></i>
+                            </span>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                    <p class="text-xs text-gray-500 mt-2">По сравнению с предыдущим кварталом</p>
                 </div>
             </div>
 
@@ -1445,6 +1504,114 @@
                     }
                 }
             });
+            
+            // Функция для обновления данных виджетов
+            function updateWidgetData() {
+                // Массивы возможных значений для каждого виджета
+                const unemploymentValues = ['7.5%', '7.8%', '7.9%', '7.7%', '7.6%', '7.4%', '7.3%'];
+                const employmentValues = ['62.3%', '62.5%', '62.6%', '62.8%', '63.0%', '62.9%', '62.7%'];
+                const salaryValues = ['1,000', '1,050', '950', '1,100', '980', '1,150', '1,200'];
+                const vacanciesValues = ['1,000', '1,100', '950', '1,200', '980', '890', '1,300'];
+                
+                // Случайные индексы для каждого массива
+                const unemploymentIndex = Math.floor(Math.random() * unemploymentValues.length);
+                const employmentIndex = Math.floor(Math.random() * employmentValues.length);
+                const salaryIndex = Math.floor(Math.random() * salaryValues.length);
+                const vacanciesIndex = Math.floor(Math.random() * vacanciesValues.length);
+                
+                // Функция для генерации случайного процента с префиксом + или -
+                function randomPercent(min, max, isNegative = false) {
+                    const percent = (Math.random() * (max - min) + min).toFixed(1);
+                    return isNegative ? `-${percent}%` : `+${percent}%`;
+                }
+                
+                // Функция для генерации случайного большого процента (для демонстрации экстремальных значений)
+                function randomBigPercent() {
+                    const isNegative = Math.random() > 0.5;
+                    const base = Math.floor(Math.random() * 100000);
+                    const decimal = Math.floor(Math.random() * 10);
+                    return isNegative ? `-${base}.${decimal}%` : `+${base}.${decimal}%`;
+                }
+                
+                // Функция для обновления конкретного виджета
+                function updateWidget(valueClass, changeClass, newValue, trend1, trend2) {
+                    const valueElem = document.querySelector(`.${valueClass}`);
+                    const changeElem = document.querySelector(`.${changeClass}`);
+                    
+                    if (valueElem && changeElem) {
+                        // Добавляем класс для анимации обновления
+                        valueElem.classList.add('value-updating');
+                        
+                        // Обновляем значение
+                        valueElem.textContent = newValue;
+                        
+                        // Обновляем тренды
+                        const trendValues = changeElem.querySelectorAll('.trend-value');
+                        if (trendValues.length >= 2) {
+                            trendValues[0].textContent = trend1;
+                            trendValues[1].textContent = trend2;
+                            
+                            // Обновляем цвет и иконки для трендов
+                            trendValues.forEach((trend, index) => {
+                                const trendText = trend.textContent;
+                                const icon = trend.nextElementSibling;
+                                
+                                if (trendText.startsWith('+')) {
+                                    trend.className = 'text-green-500 mr-1 trend-value';
+                                    icon.className = 'fas fa-arrow-up text-green-500';
+                                } else {
+                                    trend.className = 'text-red-500 mr-1 trend-value';
+                                    icon.className = 'fas fa-arrow-down text-red-500';
+                                }
+                            });
+                        }
+                        
+                        // Убираем класс анимации после завершения
+                        setTimeout(() => {
+                            valueElem.classList.remove('value-updating');
+                        }, 500);
+                    }
+                }
+                
+                // Обновляем все виджеты с разными данными
+                updateWidget(
+                    'unemployment-value', 
+                    'unemployment-change', 
+                    unemploymentValues[unemploymentIndex],
+                    Math.random() > 0.5 ? randomBigPercent() : randomPercent(0.1, 9.9, Math.random() > 0.5),
+                    Math.random() > 0.5 ? randomBigPercent() : randomPercent(0.1, 9.9, Math.random() > 0.5)
+                );
+                
+                updateWidget(
+                    'employment-value', 
+                    'employment-change', 
+                    employmentValues[employmentIndex],
+                    Math.random() > 0.7 ? randomBigPercent() : randomPercent(0.1, 9.9, Math.random() > 0.5),
+                    Math.random() > 0.7 ? randomBigPercent() : randomPercent(0.1, 9.9, Math.random() > 0.5)
+                );
+                
+                updateWidget(
+                    'salary-value', 
+                    'salary-change', 
+                    salaryValues[salaryIndex],
+                    Math.random() > 0.3 ? randomBigPercent() : randomPercent(0.1, 19.9, Math.random() > 0.7),
+                    Math.random() > 0.3 ? randomBigPercent() : randomPercent(0.1, 19.9, Math.random() > 0.3)
+                );
+                
+                updateWidget(
+                    'vacancies-value', 
+                    'vacancies-change', 
+                    vacanciesValues[vacanciesIndex],
+                    Math.random() > 0.4 ? randomBigPercent() : randomPercent(0.1, 29.9, Math.random() > 0.4),
+                    Math.random() > 0.6 ? randomBigPercent() : randomPercent(0.1, 9.9, Math.random() > 0.5)
+                );
+            }
+            
+            // Запускаем обновление данных каждые 3 секунды
+            setInterval(updateWidgetData, 3000);
+            
+            // Запускаем первое обновление через 1 секунду после загрузки страницы
+            setTimeout(updateWidgetData, 1000);
         });
     </script>
 </body>
