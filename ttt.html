@@ -824,101 +824,54 @@
                         </div>
                     </div>
                     
-                    <!-- Правая часть с виджетом динамики рынка труда -->
+                    <!-- Правая часть с секторальной диаграммой структуры рынка труда -->
                     <div class="w-full md:w-2/3 relative">
-                        <div class="market-dynamics-widget h-full">
-                            <h3>Динамика рынка труда</h3>
+                        <div class="bg-white rounded-lg shadow-lg p-6 h-full">
+                            <h3 class="text-lg font-semibold mb-4">Структура рынка труда</h3>
                             
-                            <!-- Сельское хозяйство -->
-                            <div class="market-dynamics-item">
-                                <div class="w-full mr-4">
-                                    <div class="market-dynamics-label">Сельское хозяйство</div>
-                                    <div class="market-dynamics-progress">
-                                        <div class="market-dynamics-bar bg-green-500" style="width: 11%"></div>
-                                    </div>
+                            <div class="flex justify-center items-center h-5/6">
+                                <div class="chart-container relative" style="height: 380px; width: 100%;">
+                                    <canvas id="sectorPieChart"></canvas>
                                 </div>
-                                <div class="market-dynamics-value">11%</div>
                             </div>
                             
-                            <!-- Промышленность -->
-                            <div class="market-dynamics-item">
-                                <div class="w-full mr-4">
-                                    <div class="market-dynamics-label">Промышленность</div>
-                                    <div class="market-dynamics-progress">
-                                        <div class="market-dynamics-bar bg-blue-500" style="width: 13%"></div>
-                                    </div>
+                            <div class="sector-legend grid grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-green-500 mr-2"></span>
+                                    <span class="text-sm">Сельское хозяйство</span>
                                 </div>
-                                <div class="market-dynamics-value">13%</div>
-                            </div>
-                            
-                            <!-- Строительство -->
-                            <div class="market-dynamics-item">
-                                <div class="w-full mr-4">
-                                    <div class="market-dynamics-label">Строительство</div>
-                                    <div class="market-dynamics-progress">
-                                        <div class="market-dynamics-bar bg-yellow-500" style="width: 12%"></div>
-                                    </div>
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span>
+                                    <span class="text-sm">Промышленность</span>
                                 </div>
-                                <div class="market-dynamics-value">12%</div>
-                            </div>
-                            
-                            <!-- Торговля -->
-                            <div class="market-dynamics-item">
-                                <div class="w-full mr-4">
-                                    <div class="market-dynamics-label">Торговля</div>
-                                    <div class="market-dynamics-progress">
-                                        <div class="market-dynamics-bar bg-red-400" style="width: 10%"></div>
-                                    </div>
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></span>
+                                    <span class="text-sm">Строительство</span>
                                 </div>
-                                <div class="market-dynamics-value">10%</div>
-                            </div>
-                            
-                            <!-- Транспорт -->
-                            <div class="market-dynamics-item">
-                                <div class="w-full mr-4">
-                                    <div class="market-dynamics-label">Транспорт</div>
-                                    <div class="market-dynamics-progress">
-                                        <div class="market-dynamics-bar bg-purple-500" style="width: 16%"></div>
-                                    </div>
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-red-400 mr-2"></span>
+                                    <span class="text-sm">Торговля</span>
                                 </div>
-                                <div class="market-dynamics-value">16%</div>
-                            </div>
-                            
-                            <!-- Образование -->
-                            <div class="market-dynamics-item">
-                                <div class="w-full mr-4">
-                                    <div class="market-dynamics-label">Образование</div>
-                                    <div class="market-dynamics-progress">
-                                        <div class="market-dynamics-bar bg-indigo-500" style="width: 12%"></div>
-                                    </div>
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-purple-500 mr-2"></span>
+                                    <span class="text-sm">Транспорт</span>
                                 </div>
-                                <div class="market-dynamics-value">12%</div>
-                            </div>
-                            
-                            <!-- Здравоохранение -->
-                            <div class="market-dynamics-item">
-                                <div class="w-full mr-4">
-                                    <div class="market-dynamics-label">Здравоохранение</div>
-                                    <div class="market-dynamics-progress">
-                                        <div class="market-dynamics-bar bg-pink-500" style="width: 13%"></div>
-                                    </div>
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-indigo-500 mr-2"></span>
+                                    <span class="text-sm">Образование</span>
                                 </div>
-                                <div class="market-dynamics-value">13%</div>
-                            </div>
-                            
-                            <!-- ИТ и связь -->
-                            <div class="market-dynamics-item">
-                                <div class="w-full mr-4">
-                                    <div class="market-dynamics-label">ИТ и связь</div>
-                                    <div class="market-dynamics-progress">
-                                        <div class="market-dynamics-bar bg-teal-500" style="width: 13%"></div>
-                                    </div>
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-pink-500 mr-2"></span>
+                                    <span class="text-sm">Здравоохранение</span>
                                 </div>
-                                <div class="market-dynamics-value">13%</div>
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-teal-500 mr-2"></span>
+                                    <span class="text-sm">ИТ и связь</span>
+                                </div>
                             </div>
                             
                             <!-- Информация об обновлении данных -->
-                            <div class="market-dynamics-update-info">
+                            <div class="text-center mt-4 pt-2 border-t border-gray-200">
                                 <span class="update-badge">Обновление данных каждые 3 сек.</span>
                             </div>
                         </div>
@@ -1711,6 +1664,68 @@
                 ],
                 initialData: [11, 13, 12, 10, 16, 12, 13, 13]
             };
+            
+            // Создаем круговую диаграмму для структуры рынка труда
+            const sectorCtx = document.getElementById('sectorPieChart').getContext('2d');
+            const sectorPieChart = new Chart(sectorCtx, {
+                type: 'pie',
+                data: {
+                    labels: laborMarketSectors.labels,
+                    datasets: [{
+                        data: laborMarketSectors.initialData,
+                        backgroundColor: laborMarketSectors.colors,
+                        borderColor: 'white',
+                        borderWidth: 2,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: 20
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#333',
+                            bodyColor: '#333',
+                            borderColor: '#ddd',
+                            borderWidth: 1,
+                            padding: 10,
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            formatter: function(value, context) {
+                                return value + '%';
+                            },
+                            color: 'white',
+                            font: {
+                                weight: 'bold',
+                                size: 12
+                            },
+                            textStrokeColor: 'rgba(0, 0, 0, 0.5)',
+                            textStrokeWidth: 1,
+                            textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                            textShadowBlur: 2
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 800,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
 
             // График динамики средней зарплаты
             const salaryCtx = document.getElementById('salaryDynamicsChart').getContext('2d');
@@ -1887,7 +1902,7 @@
                     normalizedData[normalizedData.length - 1] += (100 - sum);
                 }
                 
-                // Обновляем прогресс-бары и значения в виджете
+                // Обновляем прогресс-бары и значения в виджете левой части
                 const marketDynamicsBars = document.querySelectorAll('.market-dynamics-bar');
                 const marketDynamicsValues = document.querySelectorAll('.market-dynamics-value');
                 
@@ -1909,6 +1924,42 @@
                         }, 500);
                     }
                 }
+                
+                // Обновляем данные круговой диаграммы в правой части
+                animatePieChartUpdate(normalizedData);
+            }
+            
+            // Функция для плавной анимации обновления круговой диаграммы
+            function animatePieChartUpdate(newData) {
+                // Добавляем визуальный эффект при обновлении данных
+                sectorPieChart.options.animation = {
+                    animateRotate: true,
+                    animateScale: true,
+                    duration: 800,
+                    easing: 'easeOutQuart'
+                };
+                
+                // Применяем новые данные к диаграмме
+                sectorPieChart.data.datasets[0].data = newData;
+                
+                // Добавляем "импульс" при обновлении (небольшое изменение размера)
+                sectorPieChart.update();
+                
+                // Применяем случайное вращение для более динамичного обновления
+                const rotation = Math.random() * 0.2 - 0.1; // от -0.1 до 0.1 радиан
+                sectorPieChart.options.rotation = rotation;
+                
+                // Добавляем эффект "дрожания" секторов при обновлении
+                setTimeout(() => {
+                    sectorPieChart.data.datasets[0].hoverOffset = 5 + Math.random() * 5;
+                    sectorPieChart.update();
+                }, 100);
+                
+                // Возвращаем нормальное состояние после анимации
+                setTimeout(() => {
+                    sectorPieChart.data.datasets[0].hoverOffset = 10;
+                    sectorPieChart.update();
+                }, 800);
             }
             
             // Запускаем обновление данных рынка труда каждые 3 секунды
