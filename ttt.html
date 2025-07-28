@@ -1954,18 +1954,16 @@
                 
                 // Функция для генерации случайного процента с префиксом + или -
                 function randomPercent(min, max, isNegative = false) {
-                    const percent = (Math.random() * (max - min) + min).toFixed(3);
+                    const percent = (Math.random() * (max - min) + min).toFixed(1);
                     return isNegative ? `-${percent}%` : `+${percent}%`;
                 }
                 
                 // Функция для генерации случайного большого процента (для демонстрации экстремальных значений)
                 function randomBigPercent() {
                     const isNegative = Math.random() > 0.5;
-                    const base = Math.floor(Math.random() * 100);
-                    const decimal = Math.floor(Math.random() * 1000);
-                    // Форматируем для отображения трех цифр после запятой
-                    const decimalFormatted = decimal.toString().padStart(3, '0');
-                    return isNegative ? `-${base}.${decimalFormatted}%` : `+${base}.${decimalFormatted}%`;
+                    const base = Math.floor(Math.random() * 100000);
+                    const decimal = Math.floor(Math.random() * 10);
+                    return isNegative ? `-${base}.${decimal}%` : `+${base}.${decimal}%`;
                 }
                 
                 // Функция для обновления конкретного виджета
