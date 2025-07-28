@@ -1994,33 +1994,8 @@
                         // Обновляем тренды
                         const trendValues = changeElem.querySelectorAll('.trend-value');
                         if (trendValues.length >= 2) {
-                            // Обновляем тренды с форматированием
-                            // Если тренд содержит десятичную точку
-                            if (trend1.includes('.')) {
-                                const trend1Parts = trend1.split('.');
-                                const prefixEnd = trend1Parts[0].indexOf('+') !== -1 ? trend1Parts[0].indexOf('+') + 1 : 
-                                                (trend1Parts[0].indexOf('-') !== -1 ? trend1Parts[0].indexOf('-') + 1 : 0);
-                                
-                                const prefix = trend1Parts[0].substring(0, prefixEnd);
-                                const mainPart = trend1Parts[0].substring(prefixEnd);
-                                
-                                trendValues[0].innerHTML = `${prefix}<span style="font-weight: bold;">${mainPart}.</span><span style="color: rgba(220, 53, 69, 1);">${trend1Parts[1]}</span>`;
-                            } else {
-                                trendValues[0].textContent = trend1;
-                            }
-                            
-                            if (trend2.includes('.')) {
-                                const trend2Parts = trend2.split('.');
-                                const prefixEnd = trend2Parts[0].indexOf('+') !== -1 ? trend2Parts[0].indexOf('+') + 1 : 
-                                                (trend2Parts[0].indexOf('-') !== -1 ? trend2Parts[0].indexOf('-') + 1 : 0);
-                                
-                                const prefix = trend2Parts[0].substring(0, prefixEnd);
-                                const mainPart = trend2Parts[0].substring(prefixEnd);
-                                
-                                trendValues[1].innerHTML = `${prefix}<span style="font-weight: bold;">${mainPart}.</span><span style="color: rgba(220, 53, 69, 1);">${trend2Parts[1]}</span>`;
-                            } else {
-                                trendValues[1].textContent = trend2;
-                            }
+                            trendValues[0].textContent = trend1;
+                            trendValues[1].textContent = trend2;
                             
                             // Обновляем цвет и иконки для трендов
                             trendValues.forEach((trend, index) => {
