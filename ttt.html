@@ -14,7 +14,7 @@
         // Регистрируем плагины Chart.js глобально
         Chart.register(ChartDataLabels);
     </script>
-        
+    <style>
         /* Анимация появления контента */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -2462,6 +2462,113 @@
 
             // Инициализируем интерактивные элементы для отраслевых данных
             initSectorInteractions();
+            
+            // Инициализация графика средней зарплаты
+            const salaryDynamicsChart = new Chart(document.getElementById('salaryDynamicsChart'), {
+                type: 'line',
+                data: {
+                    labels: ['2021', '2022', '2023', '2024', '2025'],
+                    datasets: [{
+                        label: 'Средняя зарплата (сомони)',
+                        data: [1650, 1850, 2050, 2280, 2450],
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Динамика средней заработной платы (2021-2025)',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Функция для обновления данных виджетов
+            function updateWidgetData() {
+                // Обновляем значения безработицы
+                const unemploymentValue = document.querySelector('.unemployment-value');
+                if (unemploymentValue) {
+                    const newValue = (Math.random() * 1.5 + 7).toFixed(1) + '%';
+                    unemploymentValue.textContent = newValue;
+                    unemploymentValue.classList.add('value-updating');
+                    setTimeout(() => {
+                        unemploymentValue.classList.remove('value-updating');
+                    }, 500);
+                }
+                
+                // Обновляем значения занятости
+                const employmentValue = document.querySelector('.employment-value');
+                if (employmentValue) {
+                    const newValue = (Math.random() * 5 + 60).toFixed(1) + '%';
+                    employmentValue.textContent = newValue;
+                    employmentValue.classList.add('value-updating');
+                    setTimeout(() => {
+                        employmentValue.classList.remove('value-updating');
+                    }, 500);
+                }
+                
+                // Обновляем значения средней зарплаты
+                const salaryValue = document.querySelector('.salary-value');
+                if (salaryValue) {
+                    const newValue = Math.floor(Math.random() * 500 + 2000).toLocaleString();
+                    salaryValue.textContent = newValue;
+                    salaryValue.classList.add('value-updating');
+                    setTimeout(() => {
+                        salaryValue.classList.remove('value-updating');
+                    }, 500);
+                }
+                
+                // Обновляем значения вакансий
+                const vacanciesValue = document.querySelector('.vacancies-value');
+                if (vacanciesValue) {
+                    const newValue = Math.floor(Math.random() * 2000 + 20000).toLocaleString();
+                    vacanciesValue.textContent = newValue;
+                    vacanciesValue.classList.add('value-updating');
+                    setTimeout(() => {
+                        vacanciesValue.classList.remove('value-updating');
+                    }, 500);
+                }
+            }
+            
+            // Функция для обновления данных рынка труда
+            function updateLaborMarketData() {
+                // Обновляем значения секторов рынка труда
+                const sectorItems = document.querySelectorAll('.market-dynamics-item');
+                
+                sectorItems.forEach(item => {
+                    const valueElement = item.querySelector('.market-dynamics-value-right');
+                    const barElement = item.querySelector('.market-dynamics-bar-right');
+                    
+                    if (valueElement && barElement) {
+                        // Генерируем новое случайное значение от 5% до 25%
+                        const newValue = Math.floor(Math.random() * 20 + 5);
+                        
+                        // Обновляем текст и ширину полосы
+                        valueElement.textContent = newValue + '%';
+                        barElement.style.width = newValue + '%';
+                        
+                        // Добавляем анимацию обновления
+                        valueElement.classList.add('value-updating');
+                        setTimeout(() => {
+                            valueElement.classList.remove('value-updating');
+                        }, 500);
+                    }
+                });
+            }
         });
 
         // Запускаем обновление данных виджетов каждые 3 секунды
