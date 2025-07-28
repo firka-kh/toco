@@ -239,6 +239,45 @@
                 max-width: 100%;
             }
         }
+        
+        /* Стили для страницы статистики */
+        .stat-widget {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-widget:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .trend-up {
+            color: #10B981;
+        }
+        
+        .trend-down {
+            color: #EF4444;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            margin-bottom: 2rem;
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .chart-container:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -391,9 +430,149 @@
             </button>
         </div>
         
-        <!-- Здесь будет основной контент страницы -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Карточки с инструментами будут здесь -->
+        <!-- Основной контент страницы - Общая статистика -->
+        <div id="general-tab" class="tab-content active">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Основные показатели рынка труда</h2>
+            
+            <!-- Виджеты с ключевыми показателями -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget">
+                    <h3 class="text-lg font-semibold text-gray-600">Уровень безработицы</h3>
+                    <div class="flex items-end justify-between">
+                        <p class="text-3xl font-bold text-gray-800">7.4%</p>
+                        <div class="flex items-center">
+                            <p class="text-sm text-red-500 mr-1">-0.3%</p>
+                            <i class="fas fa-arrow-down text-red-500 text-sm"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget">
+                    <h3 class="text-lg font-semibold text-gray-600">Уровень занятости</h3>
+                    <div class="flex items-end justify-between">
+                        <p class="text-3xl font-bold text-gray-800">61.3%</p>
+                        <div class="flex items-center">
+                            <p class="text-sm text-green-500 mr-1">+0.5%</p>
+                            <i class="fas fa-arrow-up text-green-500 text-sm"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget">
+                    <h3 class="text-lg font-semibold text-gray-600">Средняя зарплата</h3>
+                    <div class="flex items-end justify-between">
+                        <p class="text-3xl font-bold text-gray-800">2450 сом.</p>
+                        <div class="flex items-center">
+                            <p class="text-sm text-green-500 mr-1">+5.2%</p>
+                            <i class="fas fa-arrow-up text-green-500 text-sm"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-lg stat-widget">
+                    <h3 class="text-lg font-semibold text-gray-600">Активные вакансии</h3>
+                    <div class="flex items-end justify-between">
+                        <p class="text-3xl font-bold text-gray-800">21,543</p>
+                        <div class="flex items-center">
+                            <p class="text-sm text-green-500 mr-1">+12.7%</p>
+                            <i class="fas fa-arrow-up text-green-500 text-sm"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">По сравнению с предыдущим кварталом</p>
+                </div>
+            </div>
+
+            <!-- График динамики безработицы -->
+            <div class="mb-12">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Динамика уровня безработицы</h3>
+                <div class="bg-white rounded-lg shadow-lg p-4 chart-container">
+                    <canvas id="unemploymentChart"></canvas>
+                </div>
+                <p class="text-sm text-gray-600 mt-2">Источник: Государственная служба статистики, данные за 2021-2025 гг.</p>
+            </div>
+
+            <!-- График структуры занятости -->
+            <div class="mb-12">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Структура занятости по отраслям</h3>
+                <div class="bg-white rounded-lg shadow-lg p-4 chart-container">
+                    <canvas id="employmentStructureChart"></canvas>
+                </div>
+                <p class="text-sm text-gray-600 mt-2">Источник: Государственная служба статистики, данные за 2025 г.</p>
+            </div>
+
+            <!-- График динамики средней зарплаты -->
+            <div class="mb-12">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Динамика средней заработной платы</h3>
+                <div class="bg-white rounded-lg shadow-lg p-4 chart-container">
+                    <canvas id="salaryDynamicsChart"></canvas>
+                </div>
+                <p class="text-sm text-gray-600 mt-2">Источник: Государственная служба статистики, данные за 2021-2025 гг.</p>
+            </div>
+
+            <!-- Таблица с данными -->
+            <div>
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Детальные показатели</h3>
+                <div class="bg-white rounded-lg shadow-lg overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Показатель</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">2022</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">2023</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">2024</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">2025</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Изменение</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Уровень безработицы, %</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8.2</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">7.9</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">7.7</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">7.4</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500">-0.8</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Уровень занятости, %</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">58.5</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">59.2</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">60.7</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">61.3</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500">+2.8</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Средняя зарплата, сомони</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1850</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2050</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2280</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2450</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500">+32.4%</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Количество вакансий</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15,230</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">16,845</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">19,120</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">21,543</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500">+41.5%</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Трудоустроено, чел.</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12,540</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">13,780</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15,230</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">17,650</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500">+40.7%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-sm text-gray-600 mt-2">Источник: Государственная служба статистики</p>
+            </div>
         </div>
     </div>
 
@@ -683,6 +862,171 @@
 
         // Первая пульсация через 2 секунды после загрузки страницы
         setTimeout(pulseAIWidget, 2000);
+
+        // Код для графиков из раздела статистики
+        document.addEventListener('DOMContentLoaded', function() {
+            // График динамики безработицы
+            const unemploymentCtx = document.getElementById('unemploymentChart').getContext('2d');
+            new Chart(unemploymentCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2021', '2022', '2023', '2024', '2025'],
+                    datasets: [{
+                        label: 'Уровень безработицы, %',
+                        data: [8.5, 8.2, 7.9, 7.7, 7.4],
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(102, 126, 234, 1)',
+                        pointRadius: 4,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 7,
+                            max: 9,
+                            ticks: {
+                                stepSize: 0.5
+                            },
+                            grid: {
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // График структуры занятости
+            const employmentCtx = document.getElementById('employmentStructureChart').getContext('2d');
+            new Chart(employmentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Сельское хозяйство', 'Промышленность', 'Строительство', 'Торговля', 'Транспорт', 'Образование', 'Здравоохранение', 'Другие'],
+                    datasets: [{
+                        data: [24, 15, 10, 18, 7, 8, 6, 12],
+                        backgroundColor: [
+                            'rgba(66, 153, 225, 0.8)',
+                            'rgba(72, 187, 120, 0.8)',
+                            'rgba(237, 100, 166, 0.8)',
+                            'rgba(246, 173, 85, 0.8)',
+                            'rgba(129, 140, 248, 0.8)',
+                            'rgba(34, 211, 238, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(124, 58, 237, 0.8)'
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 15,
+                                padding: 15,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // График динамики средней зарплаты
+            const salaryCtx = document.getElementById('salaryDynamicsChart').getContext('2d');
+            new Chart(salaryCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2021', '2022', '2023', '2024', '2025'],
+                    datasets: [{
+                        label: 'Средняя зарплата, сомони',
+                        data: [1730, 1850, 2050, 2280, 2450],
+                        backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barThickness: 30
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 1500,
+                            grid: {
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw + ' сомони';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
