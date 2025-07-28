@@ -298,17 +298,17 @@
         /* Стили для меток данных графика */
         @keyframes datalabel-pulse {
             0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.9; }
+            50% { transform: scale(1.3); opacity: 0.9; }
             100% { transform: scale(1); opacity: 1; }
         }
         
         .chartjs-datalabels canvas {
             transition: all 0.3s ease !important;
-            filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.2));
+            filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
         }
         
         .label-updating {
-            animation: datalabel-pulse 0.5s ease-in-out;
+            animation: datalabel-pulse 0.6s ease-in-out;
         }
         
         /* Добавляем пояснения к графикам */
@@ -994,11 +994,21 @@
                     // После обновления графика добавляем анимацию для меток
                     setTimeout(() => {
                         const labels = document.querySelectorAll('.chartjs-datalabels canvas');
-                        labels.forEach(label => {
+                        labels.forEach((label, index) => {
                             label.classList.add('label-updating');
-                            // Добавляем стиль для красного цвета
-                            label.parentNode.style.color = '#ef4444';
-                            label.parentNode.style.fontWeight = 'bold';
+                            
+                            // Определяем цвет метки в зависимости от изменения значения
+                            const currentValue = chart.data.datasets[0].data[index];
+                            const prevValue = index > 0 ? chart.data.datasets[0].data[index - 1] : null;
+                            
+                            // Если это первое значение или выше предыдущего, то красный, иначе зеленый
+                            const color = (prevValue === null || currentValue > prevValue) ? '#ef4444' : '#10b981';
+                            
+                            // Применяем цвет к метке
+                            if (label.parentNode) {
+                                label.parentNode.style.color = color;
+                                label.parentNode.style.fontWeight = 'bold';
+                            }
                             
                             // Убираем класс анимации через некоторое время
                             setTimeout(() => {
@@ -1203,6 +1213,16 @@
                             },
                             formatter: function(value, context) {
                                 if (context.datasetIndex === 0) {
+                                    const lastYearValue = context.chart.data.datasets[1].data[context.dataIndex];
+                                    const diff = (value - lastYearValue).toFixed(1);
+                                    const prevValue = context.dataIndex > 0 ? context.dataset.data[context.dataIndex - 1] : null;
+                                    
+                                    if (prevValue !== null) {
+                                        const monthDiff = (value - prevValue).toFixed(1);
+                                        const sign = monthDiff > 0 ? '+' : '';
+                                        return `${value}%\n(${sign}${monthDiff}%)`;
+                                    }
+                                    
                                     return `${value}%`;
                                 }
                                 return value + '%';
@@ -1210,7 +1230,20 @@
                             align: 'top',
                             anchor: 'bottom',
                             offset: 8,
-                            color: '#ef4444', // Красный цвет для всех меток
+                            color: function(context) {
+                                if (context.datasetIndex === 0) {
+                                    const value = context.dataset.data[context.dataIndex];
+                                    const prevValue = context.dataIndex > 0 ? context.dataset.data[context.dataIndex - 1] : null;
+                                    
+                                    // Если это первое значение или выше предыдущего, то красный
+                                    if (prevValue === null || value > prevValue) {
+                                        return '#ef4444'; // красный
+                                    } else {
+                                        return '#10b981'; // зеленый
+                                    }
+                                }
+                                return '#333';
+                            },
                             backgroundColor: 'rgba(255, 255, 255, 0.8)',
                             borderRadius: 4,
                             padding: 4,
