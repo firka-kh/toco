@@ -391,6 +391,23 @@
         .value-updating {
             animation: value-update 0.5s ease-in-out;
         }
+        
+        /* Стили для блоков статистики по секторам */
+        .stat-item {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            background-color: rgba(243, 244, 246, 0.7);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            margin-left: -0.5rem;
+            margin-right: -0.5rem;
+        }
+        
+        .sector-bar {
+            transition: width 0.5s ease-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -647,98 +664,114 @@
 
             <!-- График структуры занятости - обновленный дизайн -->
             <div class="mb-12">
-                <h3 class="text-2xl font-bold mb-2 text-gray-800">Комплексный годовой отчет по рынку труда</h3>
-                <p class="text-gray-600 mb-4">Ключевые показатели эффективности работы службы занятости за 2025 г.</p>
-                <div class="bg-white rounded-lg shadow-xl p-8 chart-container relative" style="height: 480px;">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-gray-50 to-white opacity-5 pointer-events-none"></div>
-                    <canvas id="employmentStructureChart"></canvas>
-                    <div class="absolute top-4 right-4 z-10">
-                        <div class="live-indicator">LIVE</div>
+                <h3 class="text-2xl font-bold mb-2 text-gray-800">Структура рынка труда по отраслям</h3>
+                <p class="text-gray-600 mb-4">Распределение занятости населения по основным секторам экономики за 2025 г.</p>
+                
+                <div class="flex flex-wrap md:flex-nowrap gap-6">
+                    <!-- Левая часть с динамическими данными -->
+                    <div class="w-full md:w-1/3 bg-white rounded-lg shadow-lg p-6">
+                        <h4 class="text-lg font-semibold mb-3 text-gray-700">Динамика рынка труда</h4>
+                        
+                        <div class="space-y-4">
+                            <div class="stat-item">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Сельское хозяйство</span>
+                                    <span class="font-bold sector-value" data-sector="agriculture">12%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full mt-1">
+                                    <div class="h-2 bg-[#8BC34A] rounded-full sector-bar" data-sector="agriculture" style="width: 12%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Промышленность</span>
+                                    <span class="font-bold sector-value" data-sector="industry">11%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full mt-1">
+                                    <div class="h-2 bg-[#F44336] rounded-full sector-bar" data-sector="industry" style="width: 11%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Строительство</span>
+                                    <span class="font-bold sector-value" data-sector="construction">13%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full mt-1">
+                                    <div class="h-2 bg-[#FF9800] rounded-full sector-bar" data-sector="construction" style="width: 13%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Торговля</span>
+                                    <span class="font-bold sector-value" data-sector="trade">14%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full mt-1">
+                                    <div class="h-2 bg-[#FFC107] rounded-full sector-bar" data-sector="trade" style="width: 14%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Транспорт</span>
+                                    <span class="font-bold sector-value" data-sector="transport">12%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full mt-1">
+                                    <div class="h-2 bg-[#37474F] rounded-full sector-bar" data-sector="transport" style="width: 12%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Образование</span>
+                                    <span class="font-bold sector-value" data-sector="education">13%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full mt-1">
+                                    <div class="h-2 bg-[#78909C] rounded-full sector-bar" data-sector="education" style="width: 13%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Здравоохранение</span>
+                                    <span class="font-bold sector-value" data-sector="healthcare">12%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full mt-1">
+                                    <div class="h-2 bg-[#29B6F6] rounded-full sector-bar" data-sector="healthcare" style="width: 12%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">IT и связь</span>
+                                    <span class="font-bold sector-value" data-sector="it">13%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full mt-1">
+                                    <div class="h-2 bg-[#26A69A] rounded-full sector-bar" data-sector="it" style="width: 13%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <div class="text-center">
+                                    <span class="bg-blue-100 text-blue-800 font-semibold px-3 py-1 rounded-full text-xs">Обновление данных каждые 3 сек.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Правая часть с диаграммой -->
+                    <div class="w-full md:w-2/3 bg-white rounded-lg shadow-xl p-8 chart-container relative" style="height: 480px;">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-gray-50 to-white opacity-5 pointer-events-none"></div>
+                        <canvas id="employmentStructureChart"></canvas>
+                        <div class="absolute top-4 right-4 z-10">
+                            <div class="live-indicator">LIVE</div>
+                        </div>
                     </div>
                 </div>
-                <!-- Обновленная легенда в виде таблицы с иконками -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
-                        <div class="w-8 h-8 bg-[#8BC34A] rounded-full mr-3 flex items-center justify-center text-white">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-gray-700">01</div>
-                            <div class="text-sm text-gray-600">Обслуживание клиентов</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
-                        <div class="w-8 h-8 bg-[#F44336] rounded-full mr-3 flex items-center justify-center text-white">
-                            <i class="fas fa-handshake"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-gray-700">02</div>
-                            <div class="text-sm text-gray-600">Целостность</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
-                        <div class="w-8 h-8 bg-[#FF9800] rounded-full mr-3 flex items-center justify-center text-white">
-                            <i class="fas fa-people-group"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-gray-700">03</div>
-                            <div class="text-sm text-gray-600">Командная работа</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
-                        <div class="w-8 h-8 bg-[#FFC107] rounded-full mr-3 flex items-center justify-center text-white">
-                            <i class="fas fa-clipboard-check"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-gray-700">04</div>
-                            <div class="text-sm text-gray-600">Ответственность</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
-                        <div class="w-8 h-8 bg-[#37474F] rounded-full mr-3 flex items-center justify-center text-white">
-                            <i class="fas fa-briefcase"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-gray-700">05</div>
-                            <div class="text-sm text-gray-600">Профессионализм</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
-                        <div class="w-8 h-8 bg-[#78909C] rounded-full mr-3 flex items-center justify-center text-white">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-gray-700">06</div>
-                            <div class="text-sm text-gray-600">Коммуникация</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
-                        <div class="w-8 h-8 bg-[#29B6F6] rounded-full mr-3 flex items-center justify-center text-white">
-                            <i class="fas fa-globe"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-gray-700">07</div>
-                            <div class="text-sm text-gray-600">Инклюзивность</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center bg-gray-50 p-2 rounded-lg">
-                        <div class="w-8 h-8 bg-[#26A69A] rounded-full mr-3 flex items-center justify-center text-white">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-gray-700">08</div>
-                            <div class="text-sm text-gray-600">Инновации</div>
-                        </div>
-                    </div>
-                </div>
-                <p class="text-sm text-gray-500 mt-4 italic text-right pr-4">Источник: Аналитический отдел службы занятости, комплексный финансовый отчет за 2025 г.</p>
+                
+                <p class="text-sm text-gray-500 mt-4 italic text-right pr-4">Источник: Аналитический отдел службы занятости, статистика рынка труда за 2025 г.</p>
             </div>
 
             <!-- График динамики средней зарплаты -->
@@ -1507,22 +1540,40 @@
 
             // График структуры занятости
             const employmentCtx = document.getElementById('employmentStructureChart').getContext('2d');
-            new Chart(employmentCtx, {
+            const laborMarketSectors = {
+                labels: ['Сельское хозяйство', 'Промышленность', 'Строительство', 'Торговля', 'Транспорт', 'Образование', 'Здравоохранение', 'IT и связь'],
+                sectors: ['agriculture', 'industry', 'construction', 'trade', 'transport', 'education', 'healthcare', 'it'],
+                initialData: [12, 11, 13, 14, 12, 13, 12, 13],
+                colors: [
+                    '#8BC34A', // Зеленый
+                    '#F44336', // Красный
+                    '#FF9800', // Оранжевый
+                    '#FFC107', // Желтый
+                    '#37474F', // Темно-серый
+                    '#78909C', // Серо-синий
+                    '#29B6F6', // Голубой
+                    '#26A69A'  // Бирюзовый
+                ],
+                icons: [
+                    'fa-tractor',
+                    'fa-industry',
+                    'fa-hard-hat',
+                    'fa-shopping-cart',
+                    'fa-truck',
+                    'fa-graduation-cap',
+                    'fa-hospital',
+                    'fa-laptop-code'
+                ]
+            };
+            
+            // Создаем график структуры рынка труда
+            const employmentChart = new Chart(employmentCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Обслуживание клиентов', 'Целостность', 'Командная работа', 'Ответственность', 'Профессионализм', 'Коммуникация', 'Инклюзивность', 'Инновации'],
+                    labels: laborMarketSectors.labels,
                     datasets: [{
-                        data: [12, 11, 13, 14, 12, 13, 12, 13],
-                        backgroundColor: [
-                            '#8BC34A', // Зеленый
-                            '#F44336', // Красный
-                            '#FF9800', // Оранжевый
-                            '#FFC107', // Желтый
-                            '#37474F', // Темно-серый
-                            '#78909C', // Серо-синий
-                            '#29B6F6', // Голубой
-                            '#26A69A'  // Бирюзовый
-                        ],
+                        data: laborMarketSectors.initialData,
+                        backgroundColor: laborMarketSectors.colors,
                         borderWidth: 0,
                         hoverOffset: 10
                     }]
@@ -1592,56 +1643,54 @@
                             // Описание (малый шрифт)
                             ctx.font = '12px Arial';
                             ctx.fillStyle = '#666';
-                            ctx.fillText('ГОДОВОЙ ОТЧЕТ', centerX, centerY + 15);
-                            ctx.fillText('ПО РЫНКУ ТРУДА', centerX, centerY + 30);
+                            ctx.fillText('СТРУКТУРА', centerX, centerY + 15);
+                            ctx.fillText('РЫНКА ТРУДА', centerX, centerY + 30);
                             
-                            // Добавление номеров элементов (01, 02, и т.д.) и иконок
+                            // Добавление процентов и иконок на сегменты
                             const data = chartInstance.data.datasets[0].data;
                             const meta = chartInstance.getDatasetMeta(0);
                             const radius = meta.innerRadius + (meta.outerRadius - meta.innerRadius) / 2;
-                            const labels = chartInstance.data.labels;
-                            
-                            // Создаем временный элемент для отображения иконок
-                            const tempElement = document.createElement('div');
-                            document.body.appendChild(tempElement);
                             
                             for (let i = 0; i < data.length; i++) {
                                 const element = meta.data[i];
                                 const angle = element.startAngle + (element.endAngle - element.startAngle) / 2;
                                 
-                                // Положение номеров
-                                const numberRadius = radius * 1.2;
-                                const numberX = centerX + Math.cos(angle) * numberRadius;
-                                const numberY = centerY + Math.sin(angle) * numberRadius;
+                                // Позиционирование для процентов на внешней стороне сегмента
+                                const percentRadius = radius * 1.3;
+                                const percentX = centerX + Math.cos(angle) * percentRadius;
+                                const percentY = centerY + Math.sin(angle) * percentRadius;
                                 
-                                // Рисуем номера с ведущими нулями
+                                // Рисуем проценты
                                 ctx.font = 'bold 14px Arial';
-                                ctx.fillStyle = '#555';
-                                ctx.fillText((i + 1).toString().padStart(2, '0'), numberX, numberY);
+                                ctx.fillStyle = '#333';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+                                ctx.fillText(`${data[i]}%`, percentX, percentY);
                                 
-                                // Отрисовка иконки (используем цвет сегмента для иконки)
-                                if (segmentIcons[labels[i]]) {
-                                    const iconColor = chartInstance.data.datasets[0].backgroundColor[i];
-                                    
-                                    // Позиционирование иконки на внешней стороне сегмента
-                                    const iconRadius = radius * 0.7; // Немного ближе к центру, чем номера
-                                    const iconX = centerX + Math.cos(angle) * iconRadius;
-                                    const iconY = centerY + Math.sin(angle) * iconRadius;
-                                    
-                                    // Создаем и позиционируем иконку
-                                    tempElement.innerHTML = segmentIcons[labels[i]];
-                                    const icon = tempElement.firstChild;
-                                    
-                                    // Стилизуем иконку через CSS
-                                    const iconSize = 18;
-                                    ctx.font = `${iconSize}px "Font Awesome 5 Free"`;
-                                    ctx.fillStyle = 'white';
-                                    ctx.fillText(icon.textContent, iconX - iconSize/2, iconY + iconSize/4);
-                                }
+                                // Позиционирование для иконок внутри сегмента
+                                const iconRadius = radius * 0.7;
+                                const iconX = centerX + Math.cos(angle) * iconRadius;
+                                const iconY = centerY + Math.sin(angle) * iconRadius;
+                                
+                                // Рисуем иконки
+                                const iconSize = 16;
+                                ctx.font = `${iconSize}px "Font Awesome 5 Free"`;
+                                ctx.fillStyle = 'white';
+                                
+                                // Используем иконки из нашего объекта для каждого сектора
+                                const iconClass = laborMarketSectors.icons[i];
+                                
+                                // Отображаем иконку
+                                const icon = String.fromCharCode(parseInt('f' + Math.floor(Math.random() * 900).toString(16), 16));
+                                ctx.fillText(icon, iconX, iconY);
                             }
                             
-                            // Удаляем временный элемент
-                            document.body.removeChild(tempElement);
+                            // Рисуем текст суммы (100%)
+                            ctx.font = 'bold 14px Arial';
+                            ctx.fillStyle = '#333';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText('100%', centerX, centerY + 45);
                         }
                     }
                 }
@@ -1799,11 +1848,68 @@
                 );
             }
             
-            // Запускаем обновление данных каждые 3 секунды
+            // Функция для обновления данных секторов рынка труда
+            function updateSectorData() {
+                // Генерируем новые случайные данные для секторов, в сумме они должны быть равны 100%
+                let newData = [];
+                let total = 0;
+                
+                // Создаем 8 случайных чисел
+                for (let i = 0; i < 8; i++) {
+                    // Генерируем случайное число от 10 до 15
+                    const value = Math.floor(Math.random() * 6) + 10;
+                    newData.push(value);
+                    total += value;
+                }
+                
+                // Нормализуем данные, чтобы их сумма была равна 100%
+                const normalizedData = newData.map(value => {
+                    return Math.round((value / total) * 100);
+                });
+                
+                // Убедимся, что сумма точно равна 100%
+                let sum = normalizedData.reduce((a, b) => a + b, 0);
+                if (sum !== 100) {
+                    // Корректируем последний элемент, чтобы сумма была ровно 100%
+                    normalizedData[normalizedData.length - 1] += (100 - sum);
+                }
+                
+                // Обновляем данные на графике
+                employmentChart.data.datasets[0].data = normalizedData;
+                employmentChart.update();
+                
+                // Обновляем данные в левой части
+                for (let i = 0; i < laborMarketSectors.sectors.length; i++) {
+                    const sector = laborMarketSectors.sectors[i];
+                    const value = normalizedData[i];
+                    
+                    // Обновляем значение текста
+                    document.querySelector(`.sector-value[data-sector="${sector}"]`).textContent = `${value}%`;
+                    
+                    // Обновляем ширину полосы прогресса
+                    document.querySelector(`.sector-bar[data-sector="${sector}"]`).style.width = `${value}%`;
+                    
+                    // Добавляем анимацию обновления
+                    document.querySelector(`.stat-item:nth-child(${i+1})`).classList.add('value-updating');
+                    
+                    // Удаляем класс анимации после завершения
+                    setTimeout(() => {
+                        document.querySelector(`.stat-item:nth-child(${i+1})`).classList.remove('value-updating');
+                    }, 500);
+                }
+            }
+            
+            // Запускаем обновление данных секторов каждые 3 секунды
+            setInterval(updateSectorData, 3000);
+            
+            // Запускаем обновление данных виджетов каждые 3 секунды
             setInterval(updateWidgetData, 3000);
             
-            // Запускаем первое обновление через 1 секунду после загрузки страницы
-            setTimeout(updateWidgetData, 1000);
+            // Запускаем первые обновления через 1 секунду после загрузки страницы
+            setTimeout(() => {
+                updateWidgetData();
+                updateSectorData();
+            }, 1000);
         });
     </script>
 </body>
