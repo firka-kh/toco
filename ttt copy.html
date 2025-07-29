@@ -198,51 +198,6 @@
             color: #2563eb; /* text-blue-600 */
             border-bottom: 2px solid #3b82f6; /* border-blue-500 */
         }
-        
-        /* Стили для SVG карты Таджикистана */
-        .region-marker {
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .region-marker:hover {
-            transform: scale(1.05);
-        }
-        
-        .region-marker.active {
-            transform: scale(1.1);
-        }
-        
-        .region-marker circle {
-            transition: all 0.3s ease;
-        }
-        
-        .region-marker text {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-size: 12px;
-            pointer-events: none;
-            user-select: none;
-        }
-        
-        /* Анимации для SVG элементов */
-        @keyframes regionPulse {
-            0% { opacity: 0.3; }
-            50% { opacity: 0.8; }
-            100% { opacity: 0.3; }
-        }
-        
-        /* Адаптивность для SVG карты */
-        #tajikistan-map {
-            width: 100%;
-            height: 100%;
-            border-radius: 0.5rem;
-        }
-        
-        @media (max-width: 768px) {
-            .region-marker text {
-                font-size: 10px;
-            }
-        }
 
         /* Боковое меню выплывает слева направо */
         .side-menu {
@@ -4006,82 +3961,7 @@
 
         // Инициализация маркеров на карте
         document.addEventListener('DOMContentLoaded', function() {
-            // Инициализация обработчиков для SVG карты
-            function initSVGMapMarkers() {
-                const svgMarkers = document.querySelectorAll('.region-marker');
-                
-                if (svgMarkers.length > 0) {
-                    console.log('Найдены SVG маркеры на карте:', svgMarkers.length);
-                    
-                    svgMarkers.forEach(marker => {
-                        marker.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            
-                            const regionCode = this.getAttribute('data-region');
-                            console.log('Клик по SVG маркеру региона:', regionCode);
-                            
-                            // Убираем активное состояние со всех маркеров
-                            svgMarkers.forEach(m => {
-                                m.classList.remove('active');
-                                // Убираем специальные стили
-                                const circle = m.querySelector('circle');
-                                if (circle) {
-                                    circle.style.transform = '';
-                                    circle.style.filter = 'url(#shadow)';
-                                }
-                            });
-                            
-                            // Добавляем активное состояние к текущему маркеру
-                            this.classList.add('active');
-                            const activeCircle = this.querySelector('circle');
-                            if (activeCircle) {
-                                activeCircle.style.transform = 'scale(1.3)';
-                                activeCircle.style.filter = 'url(#shadow) brightness(1.2)';
-                            }
-                            
-                            // Показываем информацию о регионе
-                            if (window.showRegionInfo) {
-                                window.showRegionInfo(regionCode);
-                            } else {
-                                console.error('Функция showRegionInfo недоступна');
-                            }
-                            
-                            return false;
-                        });
-                        
-                        // Добавляем эффект при наведении
-                        marker.addEventListener('mouseenter', function() {
-                            const circle = this.querySelector('circle');
-                            if (circle && !this.classList.contains('active')) {
-                                circle.style.transform = 'scale(1.1)';
-                                circle.style.filter = 'url(#shadow) brightness(1.1)';
-                            }
-                        });
-                        
-                        marker.addEventListener('mouseleave', function() {
-                            const circle = this.querySelector('circle');
-                            if (circle && !this.classList.contains('active')) {
-                                circle.style.transform = '';
-                                circle.style.filter = 'url(#shadow)';
-                            }
-                        });
-                    });
-                    
-                    // Показываем информацию о Душанбе по умолчанию
-                    setTimeout(() => {
-                        const dushanbeMarker = document.querySelector('.region-marker[data-region="dushanbe"]');
-                        if (dushanbeMarker) {
-                            dushanbeMarker.click();
-                        }
-                    }, 500);
-                    
-                } else {
-                    console.warn('SVG маркеры не найдены на карте');
-                }
-            }
-            
-            // Функция для инициализации обработчиков маркеров на карте (старая версия)
+            // Функция для инициализации обработчиков маркеров на карте
             function initMapMarkers() {
                 const mapMarkers = document.querySelectorAll('.map-marker div');
                 
@@ -4117,10 +3997,7 @@
             
             // Запускаем инициализацию маркеров с небольшой задержкой,
             // чтобы убедиться, что DOM полностью загружен
-            setTimeout(() => {
-                initSVGMapMarkers(); // Инициализируем новые SVG маркеры
-                initMapMarkers(); // Оставляем старые маркеры для совместимости
-            }, 1500);
+            setTimeout(initMapMarkers, 1500);
         });
     </script>
 </body>
