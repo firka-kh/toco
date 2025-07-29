@@ -1714,6 +1714,9 @@
             // Добавляем обработчик для overlay
             document.querySelector('.overlay').addEventListener('click', toggleSideMenu);
             
+            // Инициализируем переключение вкладок
+            setupTabs();
+            
             // Добавляем обработчик для кнопки профиля
             document.getElementById('profileBtn').addEventListener('click', function() {
                 document.getElementById('profileModal').classList.remove('hidden');
