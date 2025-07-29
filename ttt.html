@@ -1338,7 +1338,7 @@
                                 <div class="absolute map-marker" style="top: 40%; left: 28%;" 
                                      data-region="dushanbe">
                                     <div class="w-6 h-6 bg-blue-500 rounded-full animate-pulse cursor-pointer relative z-10"
-                                         onclick="showRegionInfo('dushanbe')">
+                                         onclick="window.showRegionInfo('dushanbe')">
                                         <span class="absolute top-0 left-0 w-6 h-6 bg-blue-500 rounded-full animate-ping"></span>
                                         <div class="tooltip">Душанбе</div>
                                     </div>
@@ -1348,7 +1348,7 @@
                                 <div class="absolute map-marker" style="top: 20%; left: 20%;" 
                                      data-region="sughd">
                                     <div class="w-6 h-6 bg-green-500 rounded-full animate-pulse cursor-pointer relative z-10"
-                                         onclick="showRegionInfo('sughd')">
+                                         onclick="window.showRegionInfo('sughd')">
                                         <span class="absolute top-0 left-0 w-6 h-6 bg-green-500 rounded-full animate-ping"></span>
                                         <div class="tooltip">Согдийская область</div>
                                     </div>
@@ -1358,7 +1358,7 @@
                                 <div class="absolute map-marker" style="top: 60%; left: 35%;" 
                                      data-region="khatlon">
                                     <div class="w-6 h-6 bg-yellow-500 rounded-full animate-pulse cursor-pointer relative z-10"
-                                         onclick="showRegionInfo('khatlon')">
+                                         onclick="window.showRegionInfo('khatlon')">
                                         <span class="absolute top-0 left-0 w-6 h-6 bg-yellow-500 rounded-full animate-ping"></span>
                                         <div class="tooltip">Хатлонская область</div>
                                     </div>
@@ -1368,7 +1368,7 @@
                                 <div class="absolute map-marker" style="top: 30%; left: 70%;" 
                                      data-region="gbao">
                                     <div class="w-6 h-6 bg-red-500 rounded-full animate-pulse cursor-pointer relative z-10"
-                                         onclick="showRegionInfo('gbao')">
+                                         onclick="window.showRegionInfo('gbao')">
                                         <span class="absolute top-0 left-0 w-6 h-6 bg-red-500 rounded-full animate-ping"></span>
                                         <div class="tooltip">ГБАО</div>
                                     </div>
@@ -1378,7 +1378,7 @@
                                 <div class="absolute map-marker" style="top: 35%; left: 40%;" 
                                      data-region="rrp">
                                     <div class="w-6 h-6 bg-purple-500 rounded-full animate-pulse cursor-pointer relative z-10"
-                                         onclick="showRegionInfo('rrp')">
+                                         onclick="window.showRegionInfo('rrp')">
                                         <span class="absolute top-0 left-0 w-6 h-6 bg-purple-500 rounded-full animate-ping"></span>
                                         <div class="tooltip">РРП</div>
                                     </div>
@@ -3721,8 +3721,8 @@
         // Запускаем обновление данных рынка труда каждые 3 секунды
         setInterval(updateLaborMarketData, 3000);
         
-        // Данные о занятости по регионам
-        const regionData = {
+        // Данные о занятости по регионам (делаем глобальным объектом)
+        window.regionData = {
             dushanbe: {
                 name: 'Душанбе',
                 color: 'blue',
@@ -3825,14 +3825,25 @@
             }
         };
         
-        // Функция для отображения информации о регионе
-        function showRegionInfo(regionCode) {
-            console.log('Отображение информации о регионе:', regionCode);
-            const region = regionData[regionCode];
-            if (!region) {
+        // Выводим в консоль для проверки
+        console.log('Данные о регионах инициализированы:', Object.keys(window.regionData));
+        
+        // Функция showRegionInfo перенесена в глобальный объект window
+        // Это поможет избежать проблем с областью видимости
+    </script>
+    
+    <script>
+        // Глобальная функция для отображения информации о регионе, доступная из всех скриптов
+        window.showRegionInfo = function(regionCode) {
+            console.log('Глобальная функция: отображение информации о регионе:', regionCode);
+            
+            // Проверяем наличие данных о регионе
+            if (!window.regionData || !window.regionData[regionCode]) {
                 console.error('Данные для региона не найдены:', regionCode);
                 return;
             }
+            
+            const region = window.regionData[regionCode];
             
             // Выделяем активный маркер
             document.querySelectorAll('.map-marker').forEach(marker => {
@@ -3914,11 +3925,12 @@
             const regionInfoElement = document.getElementById('region-info');
             if (regionInfoElement) {
                 regionInfoElement.innerHTML = regionInfoHTML;
+                console.log('Информация о регионе обновлена');
+            } else {
+                console.error('Элемент region-info не найден');
             }
-        }
-    </script>
-    
-    <script>
+        };
+
         // Инициализация маркеров на карте
         document.addEventListener('DOMContentLoaded', function() {
             // Функция для инициализации обработчиков маркеров на карте
@@ -3929,21 +3941,27 @@
                     console.log('Найдены маркеры на карте:', mapMarkers.length);
                     
                     mapMarkers.forEach(marker => {
-                        marker.addEventListener('click', function() {
+                        marker.setAttribute('onclick', function() {
                             const regionCode = this.parentElement.getAttribute('data-region');
                             console.log('Клик по маркеру региона:', regionCode);
-                            if (typeof showRegionInfo === 'function') {
-                                showRegionInfo(regionCode);
-                            }
+                            window.showRegionInfo(regionCode);
+                            return false;
                         });
+                        
+                        // Добавляем обработчик напрямую через onclick
+                        marker.onclick = function() {
+                            const regionCode = this.parentElement.getAttribute('data-region');
+                            console.log('Прямой клик по маркеру региона:', regionCode);
+                            window.showRegionInfo(regionCode);
+                            return false;
+                        };
                     });
                     
                     // Показать первый регион по умолчанию
-                    if (typeof showRegionInfo === 'function') {
-                        setTimeout(() => {
-                            showRegionInfo('dushanbe');
-                        }, 500);
-                    }
+                    setTimeout(() => {
+                        console.log('Показываем первый регион по умолчанию');
+                        window.showRegionInfo('dushanbe');
+                    }, 1000);
                 } else {
                     console.log('Маркеры на карте не найдены');
                 }
@@ -3951,7 +3969,7 @@
             
             // Запускаем инициализацию маркеров с небольшой задержкой,
             // чтобы убедиться, что DOM полностью загружен
-            setTimeout(initMapMarkers, 1000);
+            setTimeout(initMapMarkers, 1500);
         });
     </script>
 </body>
