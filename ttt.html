@@ -718,30 +718,6 @@
 
     <!-- Здесь будет основное содержимое страницы -->
     <div class="container mx-auto px-4 py-8">
-        <!-- Горизонтальное меню навигации по категориям -->
-        <div class="mb-8">
-            <div class="flex flex-wrap border-b border-gray-300 overflow-x-auto">
-                <a href="#" class="px-6 py-3 font-medium text-blue-600 border-b-2 border-blue-600 -mb-px">
-                    Общая статистика
-                </a>
-                <a href="#" class="px-6 py-3 font-medium text-gray-600 hover:text-blue-600 hover:border-b-2 hover:border-blue-600 transition-colors">
-                    По регионам
-                </a>
-                <a href="#" class="px-6 py-3 font-medium text-gray-600 hover:text-blue-600 hover:border-b-2 hover:border-blue-600 transition-colors">
-                    По отраслям
-                </a>
-                <a href="#" class="px-6 py-3 font-medium text-gray-600 hover:text-blue-600 hover:border-b-2 hover:border-blue-600 transition-colors">
-                    Демография
-                </a>
-                <a href="#" class="px-6 py-3 font-medium text-gray-600 hover:text-blue-600 hover:border-b-2 hover:border-blue-600 transition-colors">
-                    Образование
-                </a>
-                <a href="#" class="px-6 py-3 font-medium text-gray-600 hover:text-blue-600 hover:border-b-2 hover:border-blue-600 transition-colors">
-                    Миграция
-                </a>
-            </div>
-        </div>
-        
         <!-- Выбор категории инструментов -->
         <div class="flex flex-wrap justify-center gap-4 mb-8">
             <button class="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-colors shadow-md">
@@ -1446,6 +1422,42 @@
                 </div>
             </div>
         </div>
+
+        <!-- Вкладка "По отраслям" -->
+        <div id="industries-tab" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Рынок труда по отраслям</h2>
+            <div class="bg-white rounded-lg p-6 shadow-lg mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Отраслевая структура занятости</h3>
+                <p class="text-gray-600">Содержание вкладки "По отраслям" будет добавлено в следующей итерации.</p>
+            </div>
+        </div>
+        
+        <!-- Вкладка "Демография" -->
+        <div id="demographic-tab" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Демографические показатели</h2>
+            <div class="bg-white rounded-lg p-6 shadow-lg mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Демографические тренды</h3>
+                <p class="text-gray-600">Содержание вкладки "Демография" будет добавлено в следующей итерации.</p>
+            </div>
+        </div>
+        
+        <!-- Вкладка "Образование" -->
+        <div id="education-tab" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Образование и рынок труда</h2>
+            <div class="bg-white rounded-lg p-6 shadow-lg mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Образовательные показатели</h3>
+                <p class="text-gray-600">Содержание вкладки "Образование" будет добавлено в следующей итерации.</p>
+            </div>
+        </div>
+        
+        <!-- Вкладка "Миграция" -->
+        <div id="migration-tab" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Миграция и рынок труда</h2>
+            <div class="bg-white rounded-lg p-6 shadow-lg mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Миграционные процессы</h3>
+                <p class="text-gray-600">Содержание вкладки "Миграция" будет добавлено в следующей итерации.</p>
+            </div>
+        </div>
     </div>
 
     <footer class="gradient-bg text-white py-12">
@@ -1675,6 +1687,26 @@
             
             sideMenu.classList.toggle('open');
             overlay.classList.toggle('show');
+        }
+
+        // Функция для настройки вкладок
+        function setupTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Убираем активный класс со всех кнопок
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    // Добавляем активный класс на нажатую кнопку
+                    this.classList.add('active');
+                    
+                    // Скрываем все контенты вкладок
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    // Показываем контент активной вкладки
+                    document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
+                });
+            });
         }
 
         // Закрытие меню при клике вне его области или на overlay
@@ -2349,27 +2381,30 @@
                 updateWidgetData();
                 updateLaborMarketData();
             }, 1000);
+            
+            // Обработчик клика вне меню
+            document.addEventListener('click', (event) => {
+                const sideMenu = document.querySelector('.side-menu');
+                const menuLabel = document.querySelector('.menu-label');
+                
+                if (!sideMenu.contains(event.target) && !menuLabel.contains(event.target)) {
+                    sideMenu.classList.remove('open');
+                    document.querySelector('.overlay').classList.remove('show');
+                }
+            });
+
+            // Закрытие меню при клике на overlay
+            document.querySelector('.overlay').addEventListener('click', () => {
+                const sideMenu = document.querySelector('.side-menu');
+                const overlay = document.querySelector('.overlay');
+                
+                sideMenu.classList.remove('open');
+                overlay.classList.remove('show');
+            });
         });
     </script>
-        document.addEventListener('click', (event) => {
-            const sideMenu = document.querySelector('.side-menu');
-            const menuLabel = document.querySelector('.menu-label');
-            
-            if (!sideMenu.contains(event.target) && !menuLabel.contains(event.target)) {
-                sideMenu.classList.remove('open');
-                document.querySelector('.overlay').classList.remove('show');
-            }
-        });
 
-        // Закрытие меню при клике на overlay
-        document.querySelector('.overlay').addEventListener('click', () => {
-            const sideMenu = document.querySelector('.side-menu');
-            const overlay = document.querySelector('.overlay');
-            
-            sideMenu.classList.remove('open');
-            overlay.classList.remove('show');
-        });
-
+    <script>
         // Обработчик для кнопки профиля
         document.getElementById('profileBtn').addEventListener('click', function() {
             document.getElementById('profileModal').classList.remove('hidden');
@@ -3524,53 +3559,6 @@
         
         // Запускаем обновление данных рынка труда каждые 3 секунды
         setInterval(updateLaborMarketData, 3000);
-        
-        // Запускаем первые обновления через 1 секунду после загрузки страницы
-        setTimeout(() => {
-            updateWidgetData();
-            updateLaborMarketData();
-        }, 1000);
-
-        // Функция для переключения вкладок
-        function setupTabs() {
-            // Найти все кнопки вкладок
-            const tabButtons = document.querySelectorAll('.tab-button');
-            
-            // Добавить обработчик клика для каждой кнопки
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Получить значение атрибута data-tab
-                    const tabId = this.getAttribute('data-tab');
-                    
-                    // Удалить активный класс у всех кнопок вкладок
-                    tabButtons.forEach(btn => {
-                        btn.classList.remove('active');
-                        btn.classList.remove('border-blue-500');
-                        btn.classList.remove('text-blue-600');
-                        btn.classList.add('border-transparent');
-                        btn.classList.add('text-gray-500');
-                    });
-                    
-                    // Добавить активный класс к нажатой кнопке
-                    this.classList.add('active');
-                    this.classList.add('border-blue-500');
-                    this.classList.add('text-blue-600');
-                    this.classList.remove('border-transparent');
-                    this.classList.remove('text-gray-500');
-                    
-                    // Скрыть все вкладки
-                    document.querySelectorAll('.tab-content').forEach(tab => {
-                        tab.classList.remove('active');
-                    });
-                    
-                    // Показать соответствующую вкладку
-                    document.getElementById(tabId + '-tab').classList.add('active');
-                });
-            });
-        }
-        
-        // Инициализация вкладок
-        setupTabs();
     </script>
 </body>
 </html>
