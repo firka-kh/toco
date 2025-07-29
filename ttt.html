@@ -199,48 +199,42 @@
             border-bottom: 2px solid #3b82f6; /* border-blue-500 */
         }
         
-        /* Стили для SVG карты Таджикистана */
-        .region-marker {
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .region-marker:hover {
-            transform: scale(1.05);
-        }
-        
-        .region-marker.active {
-            transform: scale(1.1);
-        }
-        
-        .region-marker circle {
+        /* Стили для индикаторов регионов */
+        .region-indicator {
             transition: all 0.3s ease;
         }
         
-        .region-marker text {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-size: 12px;
-            pointer-events: none;
-            user-select: none;
+        .region-indicator:hover {
+            transform: translateY(-4px);
         }
         
-        /* Анимации для SVG элементов */
-        @keyframes regionPulse {
-            0% { opacity: 0.3; }
-            50% { opacity: 0.8; }
-            100% { opacity: 0.3; }
+        .region-indicator.active {
+            transform: translateY(-4px) scale(1.05);
         }
         
-        /* Адаптивность для SVG карты */
-        #tajikistan-map {
-            width: 100%;
-            height: 100%;
-            border-radius: 0.5rem;
+        .region-indicator.active > div {
+            border-color: currentColor !important;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .region-indicator > div {
+            transition: all 0.3s ease;
+        }
+        
+        .region-indicator:hover > div {
+            transform: scale(1.02);
+        }
+        
+        /* Анимации для индикаторов */
+        @keyframes indicatorPulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
         }
         
         @media (max-width: 768px) {
-            .region-marker text {
-                font-size: 10px;
+            .region-indicator {
+                margin: 0.25rem;
             }
         }
 
@@ -1366,99 +1360,70 @@
                 <h3 class="text-xl font-semibold mb-4 text-gray-700">Региональная карта занятости</h3>
                 <div class="flex flex-col md:flex-row gap-6">
                     <div class="w-full md:w-2/3">
-                        <div class="relative h-96 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg overflow-hidden border-2 border-gray-200">
-                            <!-- Кастомная SVG карта Таджикистана -->
-                            <svg id="tajikistan-map" width="100%" height="100%" viewBox="0 0 800 400" style="background: linear-gradient(135deg, #f0f9f0 0%, #e6f2ff 100%);">
-                                <!-- Фон с горами (стилизованный) -->
-                                <defs>
-                                    <pattern id="mountainPattern" patternUnits="userSpaceOnUse" width="40" height="40">
-                                        <path d="M 20,30 L 10,40 L 30,40 Z" fill="#e5e7eb" opacity="0.3"/>
-                                        <path d="M 0,35 L 10,25 L 20,35 Z" fill="#d1d5db" opacity="0.2"/>
-                                    </pattern>
-                                    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                                        <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
-                                    </filter>
-                                </defs>
+                        <div class="relative h-96 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
+                            <!-- Интерактивные индикаторы регионов -->
+                            <div class="flex flex-col items-center justify-center h-full p-8">
+                                <h4 class="text-xl font-bold text-gray-700 mb-8">Выберите регион</h4>
                                 
-                                <!-- Основная территория Таджикистана (упрощенная форма) -->
-                                <path d="M 100,100 L 700,100 L 720,120 L 700,180 L 680,200 L 650,190 L 600,210 L 550,200 L 500,220 L 450,210 L 400,230 L 350,220 L 300,240 L 250,230 L 200,250 L 150,240 L 100,220 Z" 
-                                      fill="url(#mountainPattern)" stroke="#9ca3af" stroke-width="2" opacity="0.8"/>
-                                
-                                <!-- Региональные границы (условные) -->
-                                
-                                <!-- Душанбе (столица) -->
-                                <g class="region-marker" data-region="dushanbe" style="cursor: pointer;">
-                                    <circle cx="300" cy="200" r="12" fill="#3b82f6" stroke="#ffffff" stroke-width="3" filter="url(#shadow)">
-                                        <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite"/>
-                                    </circle>
-                                    <circle cx="300" cy="200" r="20" fill="#3b82f6" opacity="0.3">
-                                        <animate attributeName="r" values="20;25;20" dur="2s" repeatCount="indefinite"/>
-                                        <animate attributeName="opacity" values="0.3;0.1;0.3" dur="2s" repeatCount="indefinite"/>
-                                    </circle>
-                                    <text x="300" y="240" text-anchor="middle" class="text-sm font-semibold" fill="#1f2937">Душанбе</text>
-                                </g>
-                                
-                                <!-- Согдийская область -->
-                                <g class="region-marker" data-region="sughd" style="cursor: pointer;">
-                                    <circle cx="200" cy="120" r="10" fill="#10b981" stroke="#ffffff" stroke-width="3" filter="url(#shadow)">
-                                        <animate attributeName="r" values="10;13;10" dur="2.5s" repeatCount="indefinite"/>
-                                    </circle>
-                                    <circle cx="200" cy="120" r="18" fill="#10b981" opacity="0.3">
-                                        <animate attributeName="r" values="18;23;18" dur="2.5s" repeatCount="indefinite"/>
-                                        <animate attributeName="opacity" values="0.3;0.1;0.3" dur="2.5s" repeatCount="indefinite"/>
-                                    </circle>
-                                    <text x="200" y="160" text-anchor="middle" class="text-sm font-semibold" fill="#1f2937">Согдийская обл.</text>
-                                </g>
-                                
-                                <!-- Хатлонская область -->
-                                <g class="region-marker" data-region="khatlon" style="cursor: pointer;">
-                                    <circle cx="400" cy="250" r="10" fill="#f59e0b" stroke="#ffffff" stroke-width="3" filter="url(#shadow)">
-                                        <animate attributeName="r" values="10;13;10" dur="3s" repeatCount="indefinite"/>
-                                    </circle>
-                                    <circle cx="400" cy="250" r="18" fill="#f59e0b" opacity="0.3">
-                                        <animate attributeName="r" values="18;23;18" dur="3s" repeatCount="indefinite"/>
-                                        <animate attributeName="opacity" values="0.3;0.1;0.3" dur="3s" repeatCount="indefinite"/>
-                                    </circle>
-                                    <text x="400" y="290" text-anchor="middle" class="text-sm font-semibold" fill="#1f2937">Хатлонская обл.</text>
-                                </g>
-                                
-                                <!-- ГБАО -->
-                                <g class="region-marker" data-region="gbao" style="cursor: pointer;">
-                                    <circle cx="580" cy="160" r="10" fill="#ef4444" stroke="#ffffff" stroke-width="3" filter="url(#shadow)">
-                                        <animate attributeName="r" values="10;13;10" dur="2.2s" repeatCount="indefinite"/>
-                                    </circle>
-                                    <circle cx="580" cy="160" r="18" fill="#ef4444" opacity="0.3">
-                                        <animate attributeName="r" values="18;23;18" dur="2.2s" repeatCount="indefinite"/>
-                                        <animate attributeName="opacity" values="0.3;0.1;0.3" dur="2.2s" repeatCount="indefinite"/>
-                                    </circle>
-                                    <text x="580" y="200" text-anchor="middle" class="text-sm font-semibold" fill="#1f2937">ГБАО</text>
-                                </g>
-                                
-                                <!-- РРП -->
-                                <g class="region-marker" data-region="rrp" style="cursor: pointer;">
-                                    <circle cx="350" cy="180" r="10" fill="#8b5cf6" stroke="#ffffff" stroke-width="3" filter="url(#shadow)">
-                                        <animate attributeName="r" values="10;13;10" dur="2.8s" repeatCount="indefinite"/>
-                                    </circle>
-                                    <circle cx="350" cy="180" r="18" fill="#8b5cf6" opacity="0.3">
-                                        <animate attributeName="r" values="18;23;18" dur="2.8s" repeatCount="indefinite"/>
-                                        <animate attributeName="opacity" values="0.3;0.1;0.3" dur="2.8s" repeatCount="indefinite"/>
-                                    </circle>
-                                    <text x="350" y="220" text-anchor="middle" class="text-sm font-semibold" fill="#1f2937">РРП</text>
-                                </g>
-                                
-                                <!-- Декоративные горы -->
-                                <g opacity="0.4">
-                                    <polygon points="150,300 170,280 190,300" fill="#9ca3af"/>
-                                    <polygon points="250,320 270,300 290,320" fill="#6b7280"/>
-                                    <polygon points="450,330 470,310 490,330" fill="#9ca3af"/>
-                                    <polygon points="550,310 570,290 590,310" fill="#6b7280"/>
-                                </g>
-                                
-                                <!-- Название страны -->
-                                <text x="400" y="350" text-anchor="middle" class="text-xl font-bold" fill="#374151" opacity="0.7">РЕСПУБЛИКА ТАДЖИКИСТАН</text>
-                            </svg>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-md">
+                                    <!-- Душанбе -->
+                                    <div class="region-indicator" data-region="dushanbe">
+                                        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-blue-500">
+                                            <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mb-2 animate-pulse">
+                                                <i class="fas fa-city text-white text-lg"></i>
+                                            </div>
+                                            <span class="text-sm font-medium text-gray-700 text-center">Душанбе</span>
+                                            <span class="text-xs text-gray-500">(столица)</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Согдийская область -->
+                                    <div class="region-indicator" data-region="sughd">
+                                        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-green-500">
+                                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mb-2 animate-pulse">
+                                                <i class="fas fa-mountain text-white text-lg"></i>
+                                            </div>
+                                            <span class="text-sm font-medium text-gray-700 text-center">Согдийская обл.</span>
+                                            <span class="text-xs text-gray-500">северный</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Хатлонская область -->
+                                    <div class="region-indicator" data-region="khatlon">
+                                        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-yellow-500">
+                                            <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mb-2 animate-pulse">
+                                                <i class="fas fa-seedling text-white text-lg"></i>
+                                            </div>
+                                            <span class="text-sm font-medium text-gray-700 text-center">Хатлонская обл.</span>
+                                            <span class="text-xs text-gray-500">южный</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- ГБАО -->
+                                    <div class="region-indicator" data-region="gbao">
+                                        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-red-500">
+                                            <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mb-2 animate-pulse">
+                                                <i class="fas fa-mountain text-white text-lg"></i>
+                                            </div>
+                                            <span class="text-sm font-medium text-gray-700 text-center">ГБАО</span>
+                                            <span class="text-xs text-gray-500">автономный</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- РРП -->
+                                    <div class="region-indicator" data-region="rrp">
+                                        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-purple-500">
+                                            <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mb-2 animate-pulse">
+                                                <i class="fas fa-building text-white text-lg"></i>
+                                            </div>
+                                            <span class="text-sm font-medium text-gray-700 text-center">РРП</span>
+                                            <span class="text-xs text-gray-500">центральный</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <p class="text-sm text-gray-500 mt-2 text-center">Нажмите на метку региона для просмотра детальной информации</p>
+                        <p class="text-sm text-gray-500 mt-2 text-center">Нажмите на индикатор региона для просмотра детальной информации</p>
                     </div>
                     
                     <!-- Информация о выбранном регионе -->
@@ -3918,17 +3883,17 @@
             
             const region = window.regionData[regionCode];
             
-            // Выделяем активный маркер
-            document.querySelectorAll('.map-marker').forEach(marker => {
-                marker.classList.remove('active');
+            // Выделяем активный индикатор
+            document.querySelectorAll('.region-indicator').forEach(indicator => {
+                indicator.classList.remove('active');
             });
             
-            const marker = document.querySelector(`[data-region="${regionCode}"]`);
-            if (marker) {
-                marker.classList.add('active');
-                console.log('Маркер активирован:', regionCode);
+            const activeIndicator = document.querySelector(`.region-indicator[data-region="${regionCode}"]`);
+            if (activeIndicator) {
+                activeIndicator.classList.add('active');
+                console.log('Индикатор активирован:', regionCode);
             } else {
-                console.error('Маркер не найден:', regionCode);
+                console.error('Индикатор не найден:', regionCode);
             }
             
             // Генерируем HTML с информацией о регионе
@@ -4006,78 +3971,88 @@
 
         // Инициализация маркеров на карте
         document.addEventListener('DOMContentLoaded', function() {
-            // Инициализация обработчиков для SVG карты
-            function initSVGMapMarkers() {
-                const svgMarkers = document.querySelectorAll('.region-marker');
+            console.log('DOM загружен, инициализируем индикаторы...');
+            
+            // Сначала проверим, что данные о регионах доступны
+            if (!window.regionData) {
+                console.error('ОШИБКА: Данные о регионах не инициализированы!');
+                return;
+            } else {
+                console.log('✓ Данные о регионах доступны:', Object.keys(window.regionData));
+            }
+            
+            // Проверим, что функция showRegionInfo доступна
+            if (!window.showRegionInfo) {
+                console.error('ОШИБКА: Функция showRegionInfo не найдена!');
+                return;
+            } else {
+                console.log('✓ Функция showRegionInfo доступна');
+            }
+            
+            // Инициализация обработчиков для индикаторов регионов
+            function initRegionIndicators() {
+                const regionIndicators = document.querySelectorAll('.region-indicator');
                 
-                if (svgMarkers.length > 0) {
-                    console.log('Найдены SVG маркеры на карте:', svgMarkers.length);
+                console.log('Поиск индикаторов регионов...');
+                console.log('Найдено индикаторов:', regionIndicators.length);
+                
+                if (regionIndicators.length > 0) {
+                    console.log('✓ Найдены индикаторы регионов:', regionIndicators.length);
                     
-                    svgMarkers.forEach(marker => {
-                        marker.addEventListener('click', function(e) {
+                    regionIndicators.forEach((indicator, index) => {
+                        const regionCode = indicator.getAttribute('data-region');
+                        console.log(`Настройка индикатора ${index + 1}: ${regionCode}`);
+                        
+                        indicator.addEventListener('click', function(e) {
                             e.preventDefault();
                             e.stopPropagation();
                             
-                            const regionCode = this.getAttribute('data-region');
-                            console.log('Клик по SVG маркеру региона:', regionCode);
+                            console.log('=== КЛИК ПО ИНДИКАТОРУ ===');
+                            console.log('Регион:', regionCode);
                             
-                            // Убираем активное состояние со всех маркеров
-                            svgMarkers.forEach(m => {
-                                m.classList.remove('active');
-                                // Убираем специальные стили
-                                const circle = m.querySelector('circle');
-                                if (circle) {
-                                    circle.style.transform = '';
-                                    circle.style.filter = 'url(#shadow)';
-                                }
+                            // Убираем активное состояние со всех индикаторов
+                            regionIndicators.forEach(ind => {
+                                ind.classList.remove('active');
                             });
                             
-                            // Добавляем активное состояние к текущему маркеру
+                            // Добавляем активное состояние к текущему индикатору
                             this.classList.add('active');
-                            const activeCircle = this.querySelector('circle');
-                            if (activeCircle) {
-                                activeCircle.style.transform = 'scale(1.3)';
-                                activeCircle.style.filter = 'url(#shadow) brightness(1.2)';
-                            }
+                            console.log('Индикатор активирован:', regionCode);
                             
                             // Показываем информацию о регионе
-                            if (window.showRegionInfo) {
+                            try {
                                 window.showRegionInfo(regionCode);
-                            } else {
-                                console.error('Функция showRegionInfo недоступна');
+                                console.log('✓ Функция showRegionInfo вызвана успешно');
+                            } catch (error) {
+                                console.error('ОШИБКА при вызове showRegionInfo:', error);
                             }
                             
                             return false;
                         });
                         
-                        // Добавляем эффект при наведении
-                        marker.addEventListener('mouseenter', function() {
-                            const circle = this.querySelector('circle');
-                            if (circle && !this.classList.contains('active')) {
-                                circle.style.transform = 'scale(1.1)';
-                                circle.style.filter = 'url(#shadow) brightness(1.1)';
-                            }
-                        });
-                        
-                        marker.addEventListener('mouseleave', function() {
-                            const circle = this.querySelector('circle');
-                            if (circle && !this.classList.contains('active')) {
-                                circle.style.transform = '';
-                                circle.style.filter = 'url(#shadow)';
-                            }
+                        // Добавляем эффекты при наведении
+                        indicator.addEventListener('mouseenter', function() {
+                            console.log('Наведение на:', regionCode);
                         });
                     });
                     
-                    // Показываем информацию о Душанбе по умолчанию
+                    // Автоматически показываем информацию о Душанбе через 1 секунду
                     setTimeout(() => {
-                        const dushanbeMarker = document.querySelector('.region-marker[data-region="dushanbe"]');
-                        if (dushanbeMarker) {
-                            dushanbeMarker.click();
+                        console.log('Автоматическая активация Душанбе...');
+                        const dushanbeIndicator = document.querySelector('.region-indicator[data-region="dushanbe"]');
+                        if (dushanbeIndicator) {
+                            console.log('✓ Найден индикатор Душанбе, кликаем...');
+                            dushanbeIndicator.click();
+                        } else {
+                            console.error('✗ Индикатор Душанбе не найден');
                         }
-                    }, 500);
+                    }, 1000);
                     
                 } else {
-                    console.warn('SVG маркеры не найдены на карте');
+                    console.error('✗ Индикаторы регионов не найдены');
+                    console.log('Проверка DOM:');
+                    console.log('- .region-indicator элементы:', document.querySelectorAll('.region-indicator'));
+                    console.log('- все элементы с data-region:', document.querySelectorAll('[data-region]'));
                 }
             }
             
@@ -4115,12 +4090,9 @@
                 }
             }
             
-            // Запускаем инициализацию маркеров с небольшой задержкой,
-            // чтобы убедиться, что DOM полностью загружен
-            setTimeout(() => {
-                initSVGMapMarkers(); // Инициализируем новые SVG маркеры
-                initMapMarkers(); // Оставляем старые маркеры для совместимости
-            }, 1500);
+            // Запускаем инициализацию сразу
+            console.log('Запуск инициализации индикаторов...');
+            initRegionIndicators();
         });
     </script>
 </body>
