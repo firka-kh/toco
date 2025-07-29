@@ -107,6 +107,18 @@
         .tab-content.active {
             display: block;
         }
+        
+        /* Стили для кнопок вкладок */
+        .tab-button {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            font-weight: 600;
+            color: #2563eb; /* text-blue-600 */
+            border-bottom: 2px solid #3b82f6; /* border-blue-500 */
+        }
 
         /* Боковое меню выплывает слева направо */
         .side-menu {
@@ -1696,10 +1708,21 @@
 
             tabButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // Убираем активный класс со всех кнопок
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    // Добавляем активный класс на нажатую кнопку
+                    // Убираем активный класс и стили со всех кнопок
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.classList.remove('text-blue-600');
+                        btn.classList.remove('border-blue-500');
+                        btn.classList.add('text-gray-500');
+                        btn.classList.add('border-transparent');
+                    });
+                    
+                    // Добавляем активный класс и стили на нажатую кнопку
                     this.classList.add('active');
+                    this.classList.add('text-blue-600');
+                    this.classList.add('border-blue-500');
+                    this.classList.remove('text-gray-500');
+                    this.classList.remove('border-transparent');
                     
                     // Скрываем все контенты вкладок
                     tabContents.forEach(content => content.classList.remove('active'));
