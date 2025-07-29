@@ -99,6 +99,15 @@
             animation: menuLabelShake 0.8s ease;
         }
 
+        /* Стили для содержимого вкладок */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
         /* Боковое меню выплывает слева направо */
         .side-menu {
             position: fixed;
@@ -743,6 +752,20 @@
             </button>
         </div>
         
+        <!-- Панель с вкладками -->
+        <div class="bg-white border-b border-gray-200 mb-8">
+            <div class="container mx-auto px-4">
+                <div class="flex overflow-x-auto">
+                    <button class="tab-button active py-4 px-6 border-b-2 border-blue-500 text-blue-600 font-semibold" data-tab="general">Общая статистика</button>
+                    <button class="tab-button py-4 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-semibold" data-tab="regional">По регионам</button>
+                    <button class="tab-button py-4 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-semibold" data-tab="industries">По отраслям</button>
+                    <button class="tab-button py-4 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-semibold" data-tab="demographic">Демография</button>
+                    <button class="tab-button py-4 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-semibold" data-tab="education">Образование</button>
+                    <button class="tab-button py-4 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-semibold" data-tab="migration">Миграция</button>
+                </div>
+            </div>
+        </div>
+        
         <!-- Основной контент страницы - Общая статистика -->
         <div id="general-tab" class="tab-content active">
             <h2 class="text-2xl font-bold mb-6 text-gray-800">Основные показатели рынка труда</h2>
@@ -1219,6 +1242,208 @@
                     </table>
                 </div>
                 <p class="text-sm text-gray-600 mt-2">Источник: Государственная служба статистики</p>
+            </div>
+        </div>
+        
+        <!-- Вкладка "По регионам" -->
+        <div id="regional-tab" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Рынок труда по регионам Таджикистана</h2>
+            
+            <!-- Карта Таджикистана с показателями по регионам -->
+            <div class="bg-white rounded-lg p-6 shadow-lg mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Региональная карта занятости</h3>
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="w-full md:w-2/3">
+                        <div class="h-96 bg-gray-100 rounded-lg p-4 flex items-center justify-center">
+                            <div class="text-center">
+                                <p class="text-lg font-semibold text-gray-600 mb-2">Интерактивная карта регионов</p>
+                                <p class="text-sm text-gray-500">(Нажмите на регион для детальной информации)</p>
+                                <div class="mt-4 flex flex-col items-center">
+                                    <div class="grid grid-cols-2 gap-4 text-left">
+                                        <div class="flex flex-col">
+                                            <span class="font-medium text-gray-700">• Душанбе</span>
+                                            <span class="font-medium text-gray-700">• Согдийская область</span>
+                                            <span class="font-medium text-gray-700">• Хатлонская область</span>
+                                            <span class="font-medium text-gray-700">• РРП</span>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="font-medium text-gray-700">• ГБАО</span>
+                                            <span class="font-medium text-gray-700">• Куляб</span>
+                                            <span class="font-medium text-gray-700">• Курган-Тюбе</span>
+                                            <span class="font-medium text-gray-700">• Раштская долина</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3">
+                        <div class="bg-gray-50 rounded-lg p-4 h-full">
+                            <h4 class="text-lg font-semibold text-gray-700 mb-3">Статистика по регионам</h4>
+                            <div class="space-y-4">
+                                <div class="p-3 bg-white rounded-lg shadow-sm">
+                                    <p class="text-sm font-medium text-gray-600">Душанбе</p>
+                                    <div class="flex justify-between items-center mt-1">
+                                        <span class="text-sm">Безработица:</span>
+                                        <span class="text-sm font-semibold">5.8%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-1">
+                                        <span class="text-sm">Средняя зарплата:</span>
+                                        <span class="text-sm font-semibold">2780 сомони</span>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-white rounded-lg shadow-sm">
+                                    <p class="text-sm font-medium text-gray-600">Согдийская область</p>
+                                    <div class="flex justify-between items-center mt-1">
+                                        <span class="text-sm">Безработица:</span>
+                                        <span class="text-sm font-semibold">7.2%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-1">
+                                        <span class="text-sm">Средняя зарплата:</span>
+                                        <span class="text-sm font-semibold">2150 сомони</span>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-white rounded-lg shadow-sm">
+                                    <p class="text-sm font-medium text-gray-600">Хатлонская область</p>
+                                    <div class="flex justify-between items-center mt-1">
+                                        <span class="text-sm">Безработица:</span>
+                                        <span class="text-sm font-semibold">8.9%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-1">
+                                        <span class="text-sm">Средняя зарплата:</span>
+                                        <span class="text-sm font-semibold">1850 сомони</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Таблица с детализированными данными по регионам -->
+            <div class="bg-white rounded-lg p-6 shadow-lg mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Детальные показатели по регионам</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Регион</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Население</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Рабочая сила</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Уровень занятости</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Уровень безработицы</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Средняя зарплата</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Душанбе</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">863,400</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">425,600</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">68.2%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5.8%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,780 сомони</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Согдийская область</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,658,400</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,243,500</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">62.8%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">7.2%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,150 сомони</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Хатлонская область</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3,348,300</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,524,600</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">58.1%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8.9%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,850 сомони</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ГБАО</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">228,900</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">98,400</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">54.3%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">9.7%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,720 сомони</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">РРП</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,120,000</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">968,300</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">59.6%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8.1%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,980 сомони</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Графики по регионам -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Уровень безработицы по регионам</h3>
+                    <div class="h-64 bg-gray-100 rounded-lg p-4 flex items-center justify-center">
+                        <p class="text-gray-500">График безработицы по регионам</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Средняя заработная плата по регионам</h3>
+                    <div class="h-64 bg-gray-100 rounded-lg p-4 flex items-center justify-center">
+                        <p class="text-gray-500">График средней зарплаты по регионам</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Сравнительный анализ регионов -->
+            <div class="bg-white rounded-lg p-6 shadow-lg mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Сравнительный анализ регионов</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-lg font-medium text-gray-700 mb-3">Развитие рынка труда</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-start">
+                                <i class="fas fa-circle text-blue-500 mt-1 mr-2 text-xs"></i>
+                                <span>Душанбе демонстрирует наиболее динамичный рост занятости с высокой долей сектора услуг (68%).</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-circle text-blue-500 mt-1 mr-2 text-xs"></i>
+                                <span>Согдийская область показывает устойчивый рост промышленного сектора и экспортоориентированных предприятий.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-circle text-blue-500 mt-1 mr-2 text-xs"></i>
+                                <span>Хатлонская область характеризуется высокой долей сельскохозяйственной занятости (более 60%).</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-circle text-blue-500 mt-1 mr-2 text-xs"></i>
+                                <span>ГБАО имеет наиболее высокий уровень безработицы и сезонной миграции.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-medium text-gray-700 mb-3">Перспективные направления</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-start">
+                                <i class="fas fa-circle text-green-500 mt-1 mr-2 text-xs"></i>
+                                <span>Развитие туризма и сферы гостеприимства в ГБАО и Зеравшанской долине.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-circle text-green-500 mt-1 mr-2 text-xs"></i>
+                                <span>Развитие IT-сектора и технологического предпринимательства в Душанбе.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-circle text-green-500 mt-1 mr-2 text-xs"></i>
+                                <span>Расширение сельскохозяйственной переработки в Хатлонской области.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-circle text-green-500 mt-1 mr-2 text-xs"></i>
+                                <span>Развитие легкой промышленности и текстильного производства в Согдийской области.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -3305,6 +3530,47 @@
             updateWidgetData();
             updateLaborMarketData();
         }, 1000);
+
+        // Функция для переключения вкладок
+        function setupTabs() {
+            // Найти все кнопки вкладок
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            // Добавить обработчик клика для каждой кнопки
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Получить значение атрибута data-tab
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Удалить активный класс у всех кнопок вкладок
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.classList.remove('border-blue-500');
+                        btn.classList.remove('text-blue-600');
+                        btn.classList.add('border-transparent');
+                        btn.classList.add('text-gray-500');
+                    });
+                    
+                    // Добавить активный класс к нажатой кнопке
+                    this.classList.add('active');
+                    this.classList.add('border-blue-500');
+                    this.classList.add('text-blue-600');
+                    this.classList.remove('border-transparent');
+                    this.classList.remove('text-gray-500');
+                    
+                    // Скрыть все вкладки
+                    document.querySelectorAll('.tab-content').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    
+                    // Показать соответствующую вкладку
+                    document.getElementById(tabId + '-tab').classList.add('active');
+                });
+            });
+        }
+        
+        // Инициализация вкладок
+        setupTabs();
     </script>
 </body>
 </html>
