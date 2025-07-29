@@ -13,6 +13,16 @@
     <script>
         // Регистрируем плагины Chart.js глобально
         Chart.register(ChartDataLabels);
+        
+        // Отключаем метки данных по умолчанию, будем включать только для нужных графиков
+        Chart.defaults.plugins.datalabels = {
+            display: false
+        };
+        
+        // Устанавливаем шрифт и цвет по умолчанию
+        Chart.defaults.font.family = "'Roboto', 'Helvetica', 'Arial', sans-serif";
+        Chart.defaults.font.size = 14;
+        Chart.defaults.color = '#333';
     </script>
     <style>
         /* Анимация появления контента */
@@ -346,7 +356,9 @@
         /* Стили для меток данных графика */
         @keyframes datalabel-pulse {
             0% { transform: scale(1); opacity: 1; filter: none; }
-            50% { transform: scale(1.3); opacity: 0.9; filter: none; }
+            25% { transform: scale(1.2); opacity: 0.9; filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.6)); }
+            50% { transform: scale(1.3); opacity: 0.9; filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.7)); }
+            75% { transform: scale(1.2); opacity: 0.9; filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.6)); }
             100% { transform: scale(1); opacity: 1; filter: none; }
         }
         
@@ -363,6 +375,44 @@
         /* Улучшение видимости меток */
         .chartjs-datalabels label {
             z-index: 100 !important;
+            padding: 2px 4px;
+            border-radius: 3px;
+            text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+        
+        /* Стили для меток с увеличением/уменьшением значений */
+        .chartjs-datalabels label.increase {
+            color: rgb(220, 53, 69);
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.7);
+        }
+        
+        .chartjs-datalabels label.decrease {
+            color: rgb(40, 167, 69);
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Анимация для повышения и понижения */
+        @keyframes value-increase {
+            0% { transform: scale(1); color: rgb(33, 37, 41); }
+            50% { transform: scale(1.2); color: rgb(220, 53, 69); font-weight: bold; }
+            100% { transform: scale(1); color: rgb(220, 53, 69); font-weight: bold; }
+        }
+        
+        @keyframes value-decrease {
+            0% { transform: scale(1); color: rgb(33, 37, 41); }
+            50% { transform: scale(1.2); color: rgb(40, 167, 69); font-weight: bold; }
+            100% { transform: scale(1); color: rgb(40, 167, 69); font-weight: bold; }
+        }
+        
+        .value-increase {
+            animation: value-increase 0.8s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+        }
+        
+        .value-decrease {
+            animation: value-decrease 0.8s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
         }
         
         /* Добавляем пояснения к графикам */
@@ -1459,10 +1509,94 @@
                         legend: {
                             position: 'top'
                         },
+                        // Настройка меток данных
+                        datalabels: {
+                            display: true,
+                            align: 'top',
+                            anchor: 'end',
+                            offset: 8,
+                            formatter: function(value, context) {
+                                // Округляем до двух цифр после запятой
+                                return value.toFixed(2);
+                            },
+                            font: function(context) {
+                                // Получаем индекс текущей точки
+                                const index = context.dataIndex;
+                                const dataset = context.chart.data.datasets[0];
+                                
+                                // Если это не первая точка, определяем направление изменения
+                                let isBold = false;
+                                if (index > 0) {
+                                    const currentValue = dataset.data[index];
+                                    const prevValue = dataset.data[index - 1];
+                                    isBold = currentValue !== prevValue;
+                                }
+                                
+                                return {
+                                    weight: isBold ? 'bold' : 'normal',
+                                    size: isBold ? 14 : 12
+                                };
+                            },
+                            color: function(context) {
+                                // Получаем индекс текущей точки
+                                const index = context.dataIndex;
+                                const dataset = context.chart.data.datasets[0];
+                                
+                                // Если это не первая точка, определяем направление изменения
+                                if (index > 0) {
+                                    const currentValue = dataset.data[index];
+                                    const prevValue = dataset.data[index - 1];
+                                    
+                                    if (currentValue > prevValue) {
+                                        return 'rgb(220, 53, 69)'; // Красный для увеличения
+                                    } else if (currentValue < prevValue) {
+                                        return 'rgb(40, 167, 69)'; // Зеленый для уменьшения
+                                    }
+                                }
+                                
+                                return 'rgb(33, 37, 41)'; // Черный для неизменных значений
+                            },
+                            backgroundColor: function(context) {
+                                // Получаем индекс текущей точки
+                                const index = context.dataIndex;
+                                const dataset = context.chart.data.datasets[0];
+                                
+                                // Если это не первая точка, определяем направление изменения
+                                if (index > 0) {
+                                    const currentValue = dataset.data[index];
+                                    const prevValue = dataset.data[index - 1];
+                                    
+                                    if (currentValue !== prevValue) {
+                                        return 'rgba(255, 255, 255, 0.7)';
+                                    }
+                                }
+                                
+                                return 'rgba(255, 255, 255, 0.4)';
+                            },
+                            borderRadius: 3,
+                            padding: {
+                                top: 2,
+                                bottom: 2,
+                                left: 4,
+                                right: 4
+                            },
+                            textStrokeColor: 'white',
+                            textStrokeWidth: 1,
+                            textShadowBlur: 5,
+                            textShadowColor: 'rgba(255, 255, 255, 0.5)',
+                            listeners: {
+                                enter: function(context) {
+                                    context.element.$datalabels._el.classList.add('label-updating');
+                                },
+                                leave: function(context) {
+                                    context.element.$datalabels._el.classList.remove('label-updating');
+                                }
+                            }
+                        },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return `${context.dataset.label}: ${context.parsed.y}%`;
+                                    return `${context.dataset.label}: ${context.parsed.y.toFixed(2)}%`;
                                 }
                             }
                         },
@@ -1898,11 +2032,84 @@
                 
                 // Обновляем данные графика безработицы
                 if (unemploymentChart) {
+                    // Сохраняем предыдущие значения для сравнения
+                    const previousValues = [...unemploymentChart.data.datasets[0].data];
+                    
                     for (let i = 0; i < unemploymentChart.data.datasets[0].data.length; i++) {
-                        // Небольшие случайные колебания
-                        unemploymentChart.data.datasets[0].data[i] += (Math.random() - 0.5) * 0.1;
+                        // Небольшие случайные колебания (до двух знаков после запятой)
+                        const change = (Math.random() - 0.5) * 0.1;
+                        // Ограничиваем до 2 знаков после запятой
+                        unemploymentChart.data.datasets[0].data[i] = parseFloat((unemploymentChart.data.datasets[0].data[i] + change).toFixed(2));
+                        
+                        // Обновляем стили точек данных в зависимости от направления изменения
+                        const currentValue = unemploymentChart.data.datasets[0].data[i];
+                        const previousValue = previousValues[i];
+                        
+                        // Инициализируем массивы для стилей точек, если их еще нет
+                        if (!Array.isArray(unemploymentChart.data.datasets[0].pointBackgroundColor)) {
+                            unemploymentChart.data.datasets[0].pointBackgroundColor = Array(unemploymentChart.data.datasets[0].data.length).fill('white');
+                        }
+                        
+                        if (!Array.isArray(unemploymentChart.data.datasets[0].pointBorderColor)) {
+                            unemploymentChart.data.datasets[0].pointBorderColor = Array(unemploymentChart.data.datasets[0].data.length).fill('rgba(102, 126, 234, 1)');
+                        }
+                        
+                        if (!Array.isArray(unemploymentChart.data.datasets[0].pointRadius)) {
+                            unemploymentChart.data.datasets[0].pointRadius = Array(unemploymentChart.data.datasets[0].data.length).fill(4);
+                        }
+                        
+                        if (!Array.isArray(unemploymentChart.data.datasets[0].pointBorderWidth)) {
+                            unemploymentChart.data.datasets[0].pointBorderWidth = Array(unemploymentChart.data.datasets[0].data.length).fill(2);
+                        }
+                        
+                        // Устанавливаем цвет и размер точек в зависимости от направления изменения
+                        if (currentValue > previousValue) {
+                            // Увеличение - красный цвет
+                            unemploymentChart.data.datasets[0].pointBackgroundColor[i] = 'rgb(220, 53, 69)';
+                            unemploymentChart.data.datasets[0].pointBorderColor[i] = 'rgb(220, 53, 69)';
+                            unemploymentChart.data.datasets[0].pointRadius[i] = 5; // Увеличиваем размер для выделения
+                            unemploymentChart.data.datasets[0].pointBorderWidth[i] = 3; // Делаем границу толще
+                        } else if (currentValue < previousValue) {
+                            // Уменьшение - зеленый цвет
+                            unemploymentChart.data.datasets[0].pointBackgroundColor[i] = 'rgb(40, 167, 69)';
+                            unemploymentChart.data.datasets[0].pointBorderColor[i] = 'rgb(40, 167, 69)';
+                            unemploymentChart.data.datasets[0].pointRadius[i] = 5; // Увеличиваем размер для выделения
+                            unemploymentChart.data.datasets[0].pointBorderWidth[i] = 3; // Делаем границу толще
+                        } else {
+                            // Без изменений - стандартный синий цвет
+                            unemploymentChart.data.datasets[0].pointBackgroundColor[i] = 'white';
+                            unemploymentChart.data.datasets[0].pointBorderColor[i] = 'rgba(102, 126, 234, 1)';
+                            unemploymentChart.data.datasets[0].pointRadius[i] = 4; // Стандартный размер
+                            unemploymentChart.data.datasets[0].pointBorderWidth[i] = 2; // Стандартная толщина границы
+                        }
                     }
+                    
+                    // Обновляем график с новыми данными и стилями
                     unemploymentChart.update();
+                    
+                    // Добавляем анимацию к меткам данных после обновления графика
+                    setTimeout(() => {
+                        const datalabels = document.querySelectorAll('.chartjs-datalabels label');
+                        if (datalabels && datalabels.length > 0) {
+                            datalabels.forEach((label, index) => {
+                                // Добавляем класс только для тех меток, где данные изменились
+                                if (index < previousValues.length) {
+                                    const prev = previousValues[index];
+                                    const current = unemploymentChart.data.datasets[0].data[index];
+                                    
+                                    // Удаляем старые классы
+                                    label.classList.remove('value-increase', 'value-decrease');
+                                    
+                                    // Добавляем новые классы в зависимости от направления изменения
+                                    if (current > prev) {
+                                        label.classList.add('value-increase');
+                                    } else if (current < prev) {
+                                        label.classList.add('value-decrease');
+                                    }
+                                }
+                            });
+                        }
+                    }, 50); // Небольшая задержка, чтобы убедиться, что Chart.js обновил DOM
                 }
             }
             
