@@ -98,6 +98,63 @@
             background: linear-gradient(135deg, #2c5282, #4c51bf);
             animation: menuLabelShake 0.8s ease;
         }
+        
+        /* Стили для интерактивной карты */
+        .map-marker {
+            z-index: 10;
+        }
+        
+        .map-marker .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 5px;
+            pointer-events: none;
+        }
+        
+        .map-marker:hover .tooltip {
+            opacity: 1;
+        }
+        
+        /* Стили для анимации пульсации маркеров */
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.7;
+            }
+            70% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .animate-ping {
+            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
 
         /* Стили для содержимого вкладок */
         .tab-content {
@@ -1242,26 +1299,72 @@
                 <h3 class="text-xl font-semibold mb-4 text-gray-700">Региональная карта занятости</h3>
                 <div class="flex flex-col md:flex-row gap-6">
                     <div class="w-full md:w-2/3">
-                        <div class="h-96 bg-gray-100 rounded-lg p-4 flex items-center justify-center">
-                            <div class="text-center">
-                                <p class="text-lg font-semibold text-gray-600 mb-2">Интерактивная карта регионов</p>
-                                <p class="text-sm text-gray-500">(Нажмите на регион для детальной информации)</p>
-                                <div class="mt-4 flex flex-col items-center">
-                                    <div class="grid grid-cols-2 gap-4 text-left">
-                                        <div class="flex flex-col">
-                                            <span class="font-medium text-gray-700">• Душанбе</span>
-                                            <span class="font-medium text-gray-700">• Согдийская область</span>
-                                            <span class="font-medium text-gray-700">• Хатлонская область</span>
-                                            <span class="font-medium text-gray-700">• РРП</span>
-                                        </div>
-                                        <div class="flex flex-col">
-                                            <span class="font-medium text-gray-700">• ГБАО</span>
-                                            <span class="font-medium text-gray-700">• Куляб</span>
-                                            <span class="font-medium text-gray-700">• Курган-Тюбе</span>
-                                            <span class="font-medium text-gray-700">• Раштская долина</span>
-                                        </div>
+                        <div class="relative h-96 bg-gray-100 rounded-lg overflow-hidden">
+                            <!-- Google Maps с Таджикистаном -->
+                            <iframe src="https://maps.google.com/maps?q=Tajikistan&amp;t=m&amp;z=7&amp;ie=UTF8&amp;iwloc=&amp;output=embed" 
+                                id="tajikistan_map" 
+                                frameborder="0" 
+                                scrolling="no" 
+                                style="width: 100%; height: 100%; border-radius: 0.5rem;">
+                            </iframe>
+                            
+                            <!-- Интерактивные метки на карте -->
+                            <div id="map-markers" class="absolute inset-0 pointer-events-none">
+                                <!-- Душанбе -->
+                                <div class="absolute map-marker" style="top: 40%; left: 28%;" 
+                                     data-region="dushanbe" onclick="showRegionInfo('dushanbe')">
+                                    <div class="w-4 h-4 bg-blue-500 rounded-full animate-pulse cursor-pointer relative pointer-events-auto">
+                                        <span class="absolute top-0 left-0 w-4 h-4 bg-blue-500 rounded-full animate-ping"></span>
+                                        <div class="tooltip">Душанбе</div>
                                     </div>
                                 </div>
+                                
+                                <!-- Согдийская область -->
+                                <div class="absolute map-marker" style="top: 20%; left: 20%;" 
+                                     data-region="sughd" onclick="showRegionInfo('sughd')">
+                                    <div class="w-4 h-4 bg-green-500 rounded-full animate-pulse cursor-pointer relative pointer-events-auto">
+                                        <span class="absolute top-0 left-0 w-4 h-4 bg-green-500 rounded-full animate-ping"></span>
+                                        <div class="tooltip">Согдийская область</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Хатлонская область -->
+                                <div class="absolute map-marker" style="top: 60%; left: 35%;" 
+                                     data-region="khatlon" onclick="showRegionInfo('khatlon')">
+                                    <div class="w-4 h-4 bg-yellow-500 rounded-full animate-pulse cursor-pointer relative pointer-events-auto">
+                                        <span class="absolute top-0 left-0 w-4 h-4 bg-yellow-500 rounded-full animate-ping"></span>
+                                        <div class="tooltip">Хатлонская область</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- ГБАО -->
+                                <div class="absolute map-marker" style="top: 30%; left: 70%;" 
+                                     data-region="gbao" onclick="showRegionInfo('gbao')">
+                                    <div class="w-4 h-4 bg-red-500 rounded-full animate-pulse cursor-pointer relative pointer-events-auto">
+                                        <span class="absolute top-0 left-0 w-4 h-4 bg-red-500 rounded-full animate-ping"></span>
+                                        <div class="tooltip">ГБАО</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- РРП -->
+                                <div class="absolute map-marker" style="top: 35%; left: 40%;" 
+                                     data-region="rrp" onclick="showRegionInfo('rrp')">
+                                    <div class="w-4 h-4 bg-purple-500 rounded-full animate-pulse cursor-pointer relative pointer-events-auto">
+                                        <span class="absolute top-0 left-0 w-4 h-4 bg-purple-500 rounded-full animate-ping"></span>
+                                        <div class="tooltip">РРП</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2 text-center">Нажмите на метку региона для просмотра детальной информации</p>
+                    </div>
+                    
+                    <!-- Информация о выбранном регионе -->
+                    <div class="w-full md:w-1/3">
+                        <div id="region-info" class="bg-gray-100 rounded-lg p-4 h-96 overflow-y-auto">
+                            <div class="text-center h-full flex flex-col items-center justify-center">
+                                <p class="text-lg font-semibold text-gray-600">Выберите регион на карте</p>
+                                <p class="text-sm text-gray-500 mt-2">Нажмите на маркер региона для просмотра статистики занятости</p>
                             </div>
                         </div>
                     </div>
@@ -3585,6 +3688,149 @@
         
         // Запускаем обновление данных рынка труда каждые 3 секунды
         setInterval(updateLaborMarketData, 3000);
+        
+        // Данные о занятости по регионам
+        const regionData = {
+            dushanbe: {
+                name: 'Душанбе',
+                color: 'blue',
+                employment: '67.8%',
+                unemployment: '5.2%',
+                avgSalary: '2,450 сомони',
+                jobs: '12,345',
+                industries: [
+                    { name: 'Услуги', percentage: 45 },
+                    { name: 'Торговля', percentage: 25 },
+                    { name: 'Производство', percentage: 15 },
+                    { name: 'Строительство', percentage: 10 },
+                    { name: 'Другое', percentage: 5 }
+                ]
+            },
+            sughd: {
+                name: 'Согдийская область',
+                color: 'green',
+                employment: '61.3%',
+                unemployment: '6.8%',
+                avgSalary: '1,950 сомони',
+                jobs: '9,780',
+                industries: [
+                    { name: 'Сельское хозяйство', percentage: 35 },
+                    { name: 'Производство', percentage: 25 },
+                    { name: 'Услуги', percentage: 20 },
+                    { name: 'Торговля', percentage: 15 },
+                    { name: 'Другое', percentage: 5 }
+                ]
+            },
+            khatlon: {
+                name: 'Хатлонская область',
+                color: 'yellow',
+                employment: '58.5%',
+                unemployment: '8.2%',
+                avgSalary: '1,750 сомони',
+                jobs: '8,450',
+                industries: [
+                    { name: 'Сельское хозяйство', percentage: 50 },
+                    { name: 'Торговля', percentage: 20 },
+                    { name: 'Услуги', percentage: 15 },
+                    { name: 'Производство', percentage: 10 },
+                    { name: 'Другое', percentage: 5 }
+                ]
+            },
+            gbao: {
+                name: 'ГБАО',
+                color: 'red',
+                employment: '53.2%',
+                unemployment: '10.5%',
+                avgSalary: '1,550 сомони',
+                jobs: '2,340',
+                industries: [
+                    { name: 'Сельское хозяйство', percentage: 40 },
+                    { name: 'Туризм', percentage: 25 },
+                    { name: 'Услуги', percentage: 15 },
+                    { name: 'Торговля', percentage: 15 },
+                    { name: 'Другое', percentage: 5 }
+                ]
+            },
+            rrp: {
+                name: 'РРП',
+                color: 'purple',
+                employment: '59.7%',
+                unemployment: '7.3%',
+                avgSalary: '1,850 сомони',
+                jobs: '7,120',
+                industries: [
+                    { name: 'Сельское хозяйство', percentage: 30 },
+                    { name: 'Услуги', percentage: 25 },
+                    { name: 'Производство', percentage: 20 },
+                    { name: 'Торговля', percentage: 15 },
+                    { name: 'Другое', percentage: 10 }
+                ]
+            }
+        };
+        
+        // Функция для отображения информации о регионе
+        function showRegionInfo(regionCode) {
+            const region = regionData[regionCode];
+            if (!region) return;
+            
+            // Выделяем активный маркер
+            document.querySelectorAll('.map-marker').forEach(marker => {
+                marker.classList.remove('active');
+            });
+            
+            const marker = document.querySelector(`[data-region="${regionCode}"]`);
+            if (marker) marker.classList.add('active');
+            
+            // Генерируем HTML с информацией о регионе
+            const regionInfoHTML = `
+                <div class="animate-fade-in">
+                    <div class="flex items-center mb-4">
+                        <div class="w-4 h-4 rounded-full bg-${region.color}-500 mr-2"></div>
+                        <h4 class="text-lg font-bold text-gray-800">${region.name}</h4>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-white rounded-lg p-3 shadow-sm">
+                            <p class="text-sm text-gray-600">Уровень занятости</p>
+                            <p class="text-xl font-bold text-blue-600">${region.employment}</p>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 shadow-sm">
+                            <p class="text-sm text-gray-600">Безработица</p>
+                            <p class="text-xl font-bold text-red-600">${region.unemployment}</p>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 shadow-sm">
+                            <p class="text-sm text-gray-600">Средняя з/п</p>
+                            <p class="text-xl font-bold text-green-600">${region.avgSalary}</p>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 shadow-sm">
+                            <p class="text-sm text-gray-600">Вакансии</p>
+                            <p class="text-xl font-bold text-purple-600">${region.jobs}</p>
+                        </div>
+                    </div>
+                    
+                    <h5 class="text-md font-semibold text-gray-700 mb-2">Структура занятости по отраслям</h5>
+                    <div class="space-y-2">
+                        ${region.industries.map(industry => `
+                            <div class="bg-white rounded-lg p-2 shadow-sm">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-700">${industry.name}</span>
+                                    <span class="text-sm font-medium text-gray-900">${industry.percentage}%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-${region.color}-500 h-2 rounded-full" style="width: ${industry.percentage}%"></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Обновляем содержимое блока с информацией
+            const regionInfoElement = document.getElementById('region-info');
+            if (regionInfoElement) {
+                regionInfoElement.innerHTML = regionInfoHTML;
+            }
+        }
     </script>
 </body>
 </html>
