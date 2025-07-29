@@ -1305,8 +1305,10 @@
                                 id="tajikistan_map" 
                                 frameborder="0" 
                                 scrolling="no" 
-                                style="width: 100%; height: 100%; border-radius: 0.5rem;">
+                                style="width: 100%; height: 100%; border-radius: 0.5rem; filter: saturate(1.2) contrast(1.1);">
                             </iframe>
+                            <!-- Добавляем оверлей для скрытия лишних элементов управления Google Maps -->
+                            <div class="absolute top-0 left-0 w-64 h-20 bg-transparent pointer-events-none"></div>
                             
                             <!-- Интерактивные метки на карте -->
                             <div id="map-markers" class="absolute inset-0 pointer-events-none">
@@ -1363,8 +1365,11 @@
                     <div class="w-full md:w-1/3">
                         <div id="region-info" class="bg-gray-100 rounded-lg p-4 h-96 overflow-y-auto">
                             <div class="text-center h-full flex flex-col items-center justify-center">
-                                <p class="text-lg font-semibold text-gray-600">Выберите регион на карте</p>
-                                <p class="text-sm text-gray-500 mt-2">Нажмите на маркер региона для просмотра статистики занятости</p>
+                                <h4 class="text-lg font-semibold text-gray-700 mb-2">Статистика по регионам</h4>
+                                <div class="w-16 h-1 bg-blue-500 rounded mb-4"></div>
+                                <i class="fas fa-map-marker-alt text-blue-500 text-3xl mb-3"></i>
+                                <p class="text-md font-medium text-gray-600">Нажмите на маркер региона</p>
+                                <p class="text-sm text-gray-500 mt-2">для просмотра статистики занятости</p>
                             </div>
                         </div>
                     </div>
@@ -3698,6 +3703,11 @@
                 unemployment: '5.2%',
                 avgSalary: '2,450 сомони',
                 jobs: '12,345',
+                population: '863,400',
+                workforcePercent: '68.4%',
+                topJobs: 'IT-специалисты, финансисты, менеджеры',
+                trend: '+2.4%',
+                trendDirection: 'up',
                 industries: [
                     { name: 'Услуги', percentage: 45 },
                     { name: 'Торговля', percentage: 25 },
@@ -3713,6 +3723,11 @@
                 unemployment: '6.8%',
                 avgSalary: '1,950 сомони',
                 jobs: '9,780',
+                population: '2,658,400',
+                workforcePercent: '62.8%',
+                topJobs: 'Агрономы, инженеры, торговые представители',
+                trend: '+1.8%',
+                trendDirection: 'up',
                 industries: [
                     { name: 'Сельское хозяйство', percentage: 35 },
                     { name: 'Производство', percentage: 25 },
@@ -3728,6 +3743,11 @@
                 unemployment: '8.2%',
                 avgSalary: '1,750 сомони',
                 jobs: '8,450',
+                population: '3,274,900',
+                workforcePercent: '59.3%',
+                topJobs: 'Фермеры, строители, сезонные рабочие',
+                trend: '+1.5%',
+                trendDirection: 'up',
                 industries: [
                     { name: 'Сельское хозяйство', percentage: 50 },
                     { name: 'Торговля', percentage: 20 },
@@ -3743,6 +3763,11 @@
                 unemployment: '10.5%',
                 avgSalary: '1,550 сомони',
                 jobs: '2,340',
+                population: '226,900',
+                workforcePercent: '54.8%',
+                topJobs: 'Гиды, смотрители, туристический сервис',
+                trend: '+0.8%',
+                trendDirection: 'up',
                 industries: [
                     { name: 'Сельское хозяйство', percentage: 40 },
                     { name: 'Туризм', percentage: 25 },
@@ -3758,6 +3783,11 @@
                 unemployment: '7.3%',
                 avgSalary: '1,850 сомони',
                 jobs: '7,120',
+                population: '2,048,100',
+                workforcePercent: '60.2%',
+                topJobs: 'Аграрии, производственники, работники сферы услуг',
+                trend: '+1.7%',
+                trendDirection: 'up',
                 industries: [
                     { name: 'Сельское хозяйство', percentage: 30 },
                     { name: 'Услуги', percentage: 25 },
@@ -3784,14 +3814,24 @@
             // Генерируем HTML с информацией о регионе
             const regionInfoHTML = `
                 <div class="animate-fade-in">
-                    <div class="flex items-center mb-4">
+                    <div class="flex items-center mb-2 pb-2 border-b border-gray-200">
                         <div class="w-4 h-4 rounded-full bg-${region.color}-500 mr-2"></div>
                         <h4 class="text-lg font-bold text-gray-800">${region.name}</h4>
+                        <div class="ml-auto flex items-center">
+                            <span class="text-sm font-medium ${region.trendDirection === 'up' ? 'text-green-600' : 'text-red-600'}">
+                                ${region.trend} ${region.trendDirection === 'up' ? '↑' : '↓'}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <p class="text-sm text-gray-600 mb-1">Население: <span class="font-semibold">${region.population} чел.</span></p>
+                        <p class="text-sm text-gray-600">Рабочая сила: <span class="font-semibold">${region.workforcePercent}</span> от населения</p>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-3 mb-4">
                         <div class="bg-white rounded-lg p-3 shadow-sm">
-                            <p class="text-sm text-gray-600">Уровень занятости</p>
+                            <p class="text-sm text-gray-600">Занятость</p>
                             <p class="text-xl font-bold text-blue-600">${region.employment}</p>
                         </div>
                         <div class="bg-white rounded-lg p-3 shadow-sm">
@@ -3808,6 +3848,11 @@
                         </div>
                     </div>
                     
+                    <div class="mb-4 bg-${region.color}-50 rounded-lg p-3">
+                        <p class="text-sm font-medium text-gray-700 mb-1">Востребованные профессии:</p>
+                        <p class="text-sm text-gray-800">${region.topJobs}</p>
+                    </div>
+                    
                     <h5 class="text-md font-semibold text-gray-700 mb-2">Структура занятости по отраслям</h5>
                     <div class="space-y-2">
                         ${region.industries.map(industry => `
@@ -3821,6 +3866,10 @@
                                 </div>
                             </div>
                         `).join('')}
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t border-gray-200 text-right">
+                        <p class="text-xs text-gray-500">Данные актуальны на 29 июля 2025 г.</p>
                     </div>
                 </div>
             `;
