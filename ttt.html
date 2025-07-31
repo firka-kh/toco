@@ -5259,6 +5259,27 @@
                 }
             };
         });
+
+        // Показать региональный таб по умолчанию
+        document.addEventListener('DOMContentLoaded', function() {
+            // Функция для отображения выбранного таба
+            function showTab(tabName) {
+                // Скрыть все табы
+                const allTabs = document.querySelectorAll('.tab-content');
+                allTabs.forEach(tab => {
+                    tab.style.display = 'none';
+                });
+                
+                // Показать выбранный таб
+                const selectedTab = document.getElementById(tabName + '-tab');
+                if (selectedTab) {
+                    selectedTab.style.display = 'block';
+                }
+            }
+            
+            // Показать региональный таб
+            showTab('regional');
+        });
     </script>
 </body>
 </html>
