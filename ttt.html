@@ -281,6 +281,31 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
+        /* Анимация для движения колонок вверх-вниз */
+        @keyframes columnMove {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        
+        /* Стили для процентных значений над колонками */
+        .chart-percentage-label {
+            position: absolute;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.5s ease;
+        }
+        
+        /* Стили для красного текста (значения ниже 35%) */
+        .chart-percentage-label.red {
+            color: rgb(239, 68, 68);
+        }
+        
+        /* Стили для зеленого текста (нормальные значения) */
+        .chart-percentage-label.green {
+            color: rgb(34, 197, 94);
+        }
+        
         /* Стили для графиков */
         .chart-container {
             position: relative;
@@ -4996,17 +5021,42 @@
                 
                 // Данные для графика
                 const regions = ['Душанбе', 'Согдийская обл.', 'Хатлонская обл.', 'ГБАО', 'РРП'];
-                const employmentData = [68.2, 62.8, 58.1, 54.3, 59.6];
+                const employmentData = [68.2, 62.8, 58.1, 31.3, 59.6];
                 const unemploymentData = [5.8, 7.2, 8.9, 9.7, 8.1];
                 const avgSalaryData = [2780, 2150, 1850, 1720, 1980];
                 
-                // Нормализуем данные зарплат для наглядности на графике (делим на 100)
+                // Массив для хранения первоначальных значений для анимации
+                const originalEmploymentData = [...employmentData];
+                
+                // Нормализуем данные зарплат для наглядности на графике (делим на 40)
                 const normalizedSalaryData = avgSalaryData.map(salary => salary / 40);
                 
-                // Создаем градиент для фона графика занятости
-                const gradientEmployment = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
-                gradientEmployment.addColorStop(0, 'rgba(34, 197, 94, 0.7)');
-                gradientEmployment.addColorStop(1, 'rgba(34, 197, 94, 0.1)');
+                // Функция определения цвета для колонок занятости
+                const getEmploymentColor = (value) => {
+                    return value < 35 ? 'rgb(239, 68, 68)' : 'rgb(34, 197, 94)';
+                };
+                
+                // Функция определения цвета для текстовых показателей
+                const getEmploymentTextColor = (value) => {
+                    return value < 35 ? 'text-red-600' : 'text-green-600';
+                };
+                
+                // Создаем градиенты для каждого столбца отдельно
+                const gradients = employmentData.map((value, index) => {
+                    const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
+                    
+                    if (value < 35) {
+                        // Красный градиент для значений ниже 35%
+                        gradient.addColorStop(0, 'rgba(239, 68, 68, 0.7)');
+                        gradient.addColorStop(1, 'rgba(239, 68, 68, 0.1)');
+                    } else {
+                        // Зеленый градиент для нормальных значений
+                        gradient.addColorStop(0, 'rgba(34, 197, 94, 0.7)');
+                        gradient.addColorStop(1, 'rgba(34, 197, 94, 0.1)');
+                    }
+                    
+                    return gradient;
+                });
                 
                 // Создаем градиент для фона графика безработицы
                 const gradientUnemployment = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
@@ -5027,8 +5077,8 @@
                             {
                                 label: 'Уровень занятости (%)',
                                 data: employmentData,
-                                backgroundColor: gradientEmployment,
-                                borderColor: 'rgb(34, 197, 94)',
+                                backgroundColor: gradients, // Используем массив градиентов
+                                borderColor: employmentData.map(value => getEmploymentColor(value)), // Разные цвета границ в зависимости от значения
                                 borderWidth: 2,
                                 borderRadius: 6,
                                 order: 2
@@ -5064,7 +5114,12 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         layout: {
-                            padding: 20
+                            padding: {
+                                top: 40, // Увеличиваем отступ сверху для процентов
+                                left: 20,
+                                right: 20,
+                                bottom: 20
+                            }
                         },
                         plugins: {
                             legend: {
@@ -5108,22 +5163,35 @@
                                 anchor: 'end',
                                 align: 'top',
                                 formatter: function(value, context) {
-                                    if (context.dataset.yAxisID === 'y1') {
+                                    // Если это первый набор данных (уровень занятости)
+                                    if (context.datasetIndex === 0) {
+                                        return value + '%';
+                                    } else if (context.dataset.yAxisID === 'y1') {
                                         return value * 40 + ' с';
                                     } else {
                                         return value + '%';
                                     }
                                 },
                                 color: function(context) {
+                                    // Если это первый набор данных (уровень занятости)
+                                    if (context.datasetIndex === 0) {
+                                        const value = context.dataset.data[context.dataIndex];
+                                        return value < 35 ? 'rgb(239, 68, 68)' : 'rgb(34, 197, 94)';
+                                    }
                                     return context.dataset.borderColor;
                                 },
                                 font: {
-                                    weight: 'bold'
+                                    weight: 'bold',
+                                    size: 14 // Увеличиваем размер шрифта для значений
                                 },
                                 display: function(context) {
-                                    return context.datasetIndex === 2 || // Всегда показываем для линии зарплаты
-                                           context.dataIndex === context.dataset.data.indexOf(Math.max(...context.dataset.data));
-                                }
+                                    // Показываем метки для всех столбцов занятости, линии зарплаты и максимальной безработицы
+                                    return context.datasetIndex === 0 || // Всегда показываем для уровня занятости
+                                           context.datasetIndex === 2 || // Всегда показываем для линии зарплаты
+                                           (context.datasetIndex === 1 && 
+                                            context.dataIndex === context.dataset.data.indexOf(Math.max(...context.dataset.data)));
+                                },
+                                offset: 10 // Отступ от верха колонки
                             }
                         },
                         scales: {
@@ -5162,7 +5230,7 @@
                         },
                         animation: {
                             duration: 1500,
-                            easing: 'easeOutQuart'
+                            easing: 'easeOutElastic'
                         },
                         onClick: function(e, elements) {
                             if (elements.length > 0) {
@@ -5180,28 +5248,61 @@
                     }
                 });
                 
-                // Обновление данных графика каждые 30 секунд
-                setInterval(() => {
-                    // Симулируем получение новых данных с небольшими отклонениями
-                    const newEmploymentData = employmentData.map(value => 
-                        Math.round((value + (Math.random() * 1 - 0.5)) * 10) / 10
-                    );
+                // Анимация движения колонок вверх-вниз
+                let animationDirection = 1; // 1 для движения вверх, -1 для движения вниз
+                let animationCounter = 0;
+                
+                // Обновление данных графика каждые 3 секунды для анимации движения
+                const animationInterval = setInterval(() => {
+                    // Переключаем направление анимации
+                    animationCounter++;
                     
-                    const newUnemploymentData = unemploymentData.map(value => 
-                        Math.round((value + (Math.random() * 0.6 - 0.3)) * 10) / 10
-                    );
+                    if (animationCounter % 5 === 0) {
+                        animationDirection *= -1;
+                    }
                     
-                    const newSalaryData = avgSalaryData.map(value => 
-                        value + Math.floor(Math.random() * 40 - 20)
-                    );
+                    // Генерируем новые данные на основе оригинальных, добавляя или вычитая случайное значение
+                    const animatedEmploymentData = employmentData.map((value, index) => {
+                        // Максимальное отклонение от оригинала - 5%
+                        let variation = (Math.random() * 5) * animationDirection;
+                        
+                        // Но не выходим за пределы разумных значений
+                        let newValue = originalEmploymentData[index] + variation;
+                        
+                        // Случайно меняем некоторые значения ниже 35% для демонстрации красной индикации
+                        if (index === 3 || (Math.random() < 0.15 && index !== 0)) {
+                            newValue = Math.max(28, Math.min(34, newValue));
+                        } else {
+                            newValue = Math.max(40, Math.min(75, newValue));
+                        }
+                        
+                        return Math.round(newValue * 10) / 10;
+                    });
                     
                     // Обновляем наборы данных
-                    regionalChart.data.datasets[0].data = newEmploymentData;
-                    regionalChart.data.datasets[1].data = newUnemploymentData;
-                    regionalChart.data.datasets[2].data = newSalaryData.map(salary => salary / 40);
+                    regionalChart.data.datasets[0].data = animatedEmploymentData;
+                    
+                    // Обновляем цвета в зависимости от новых значений
+                    regionalChart.data.datasets[0].backgroundColor = animatedEmploymentData.map((value, index) => {
+                        const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
+                        
+                        if (value < 35) {
+                            gradient.addColorStop(0, 'rgba(239, 68, 68, 0.7)');
+                            gradient.addColorStop(1, 'rgba(239, 68, 68, 0.1)');
+                        } else {
+                            gradient.addColorStop(0, 'rgba(34, 197, 94, 0.7)');
+                            gradient.addColorStop(1, 'rgba(34, 197, 94, 0.1)');
+                        }
+                        
+                        return gradient;
+                    });
+                    
+                    regionalChart.data.datasets[0].borderColor = animatedEmploymentData.map(value => 
+                        value < 35 ? 'rgb(239, 68, 68)' : 'rgb(34, 197, 94)'
+                    );
                     
                     // Обновляем график с анимацией
-                    regionalChart.update('none'); // 'none' для отключения анимации при обновлении
+                    regionalChart.update();
                     
                     // Мигаем индикатором LIVE
                     const liveIndicator = document.querySelector('.chart-container.interactive .live-indicator');
@@ -5211,7 +5312,26 @@
                             liveIndicator.classList.remove('pulse');
                         }, 1000);
                     }
-                }, 30000);
+                }, 3000);
+                
+                // Полное обновление всех данных (включая безработицу и зарплаты) каждые 20 секунд
+                setInterval(() => {
+                    // Симулируем получение новых данных с более значительными отклонениями
+                    const newUnemploymentData = unemploymentData.map(value => 
+                        Math.round((value + (Math.random() * 2 - 1)) * 10) / 10
+                    );
+                    
+                    const newSalaryData = avgSalaryData.map(value => 
+                        value + Math.floor(Math.random() * 100 - 50)
+                    );
+                    
+                    // Обновляем наборы данных безработицы и зарплаты
+                    regionalChart.data.datasets[1].data = newUnemploymentData;
+                    regionalChart.data.datasets[2].data = newSalaryData.map(salary => salary / 40);
+                    
+                    // Обновляем график с анимацией
+                    regionalChart.update();
+                }, 20000);
                 
                 // Функция для отображения подробной информации о регионе
                 function showRegionDetails(region, data) {
