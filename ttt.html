@@ -140,6 +140,79 @@
             animation: pulse-purple 2s infinite;
         }
         
+        /* Новые стили для обновленного раздела регионов */
+        .region-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .region-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .region-card.active {
+            border: 2px solid #3B82F6;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Анимация для метрик */
+        .metric-card {
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Стили для рейтинговых карточек */
+        .ranking-item {
+            transition: all 0.2s ease;
+        }
+        
+        .ranking-item:hover {
+            transform: translateX(4px);
+        }
+        
+        /* Анимация для прогресс-баров */
+        .progress-bar {
+            transition: width 0.8s ease-in-out;
+        }
+        
+        /* Стили для селектора метрик */
+        #metricSelector {
+            transition: all 0.2s ease;
+        }
+        
+        #metricSelector:focus {
+            border: 2px solid #3B82F6;
+            border-color: #3B82F6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Улучшенные стили для панели деталей */
+        #region-details {
+            transition: all 0.3s ease;
+            min-height: 400px;
+        }
+        
+        /* Стили для экономических индикаторов */
+        .economic-indicator {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+        }
+        
+        /* Адаптивные стили для мобильных устройств */
+        @media (max-width: 768px) {
+            .region-card {
+                margin-bottom: 1rem;
+            }
+            
+            .metric-card {
+                min-height: 120px;
+            }
+        }
+        
         /* Стили для статистических карточек */
         .stat-card {
             transition: all 0.2s ease;
@@ -1444,292 +1517,394 @@
         
         <!-- Вкладка "По регионам" -->
         <div id="regional-tab" class="tab-content">
-            <h2 class="text-2xl font-bold mb-6 text-gray-800">Рынок труда по регионам Таджикистана</h2>
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Рынок труда по регионам</h2>
+                <p class="text-gray-600">Комплексный анализ занятости, зарплат и экономических показателей по регионам Таджикистана</p>
+            </div>
             
-            <!-- Карта Таджикистана с показателями по регионам -->
-            <div class="bg-white rounded-lg p-6 shadow-lg mb-8">
-                <h3 class="text-xl font-semibold mb-4 text-gray-700">Региональная карта занятости</h3>
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="w-full md:w-2/3">
-                        <div class="relative h-96 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
-                            <!-- Схематичная карта Таджикистана в фоне -->
-                            <div class="absolute inset-0 opacity-20">
-                                <svg width="100%" height="100%" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
-                                    <!-- Улучшенная схема границ Таджикистана -->
-                                    <path d="M300,100 C350,80 400,90 450,120 C490,150 500,190 480,230 C460,270 430,290 390,300 C350,310 320,320 290,350 C260,380 220,390 180,380 C140,370 110,340 90,300 C70,260 60,210 80,170 C100,130 140,110 180,100 C220,90 260,95 300,100 Z" 
-                                          fill="none" stroke="#4B5563" stroke-width="3" stroke-dasharray="5,5" />
-                                    
-                                    <!-- Регионы с цветным заполнением -->
-                                    <!-- ГБАО (восток) -->
-                                    <path d="M360,200 C390,180 420,170 450,170 C480,180 490,210 485,240 C475,270 450,280 420,290 C390,280 370,260 360,230 C355,210 350,210 360,200 Z" 
-                                          fill="#FECACA" stroke="#EF4444" stroke-width="1.5" opacity="0.7" />
-                                          
-                                    <!-- Согдийская область (север) -->
-                                    <path d="M150,150 C190,130 220,120 260,125 C290,135 300,160 290,180 C270,200 230,210 190,200 C160,190 140,180 150,150 Z" 
-                                          fill="#A7F3D0" stroke="#10B981" stroke-width="1.5" opacity="0.7" />
-                                          
-                                    <!-- Хатлонская область (юг) -->
-                                    <path d="M240,260 C270,240 310,250 340,270 C360,290 350,320 330,340 C300,350 270,350 250,330 C230,310 220,280 240,260 Z" 
-                                          fill="#FDE68A" stroke="#F59E0B" stroke-width="1.5" opacity="0.7" />
-                                          
-                                    <!-- РРП (центр/запад) -->
-                                    <path d="M170,240 C200,220 230,230 250,250 C260,270 250,300 230,310 C200,320 170,310 160,290 C150,270 150,250 170,240 Z" 
-                                          fill="#DDD6FE" stroke="#8B5CF6" stroke-width="1.5" opacity="0.7" />
-                                          
-                                    <!-- Душанбе (столица) -->
-                                    <circle cx="290" cy="210" r="15" fill="#BFDBFE" stroke="#3B82F6" stroke-width="2" opacity="0.9" />
-                                    
-                                    <!-- Подписи регионов -->
-                                    <text x="290" cy="210" text-anchor="middle" dominant-baseline="middle" fill="#1E40AF" font-size="10" font-weight="bold">Душанбе</text>
-                                    <text x="200" cy="165" text-anchor="middle" dominant-baseline="middle" fill="#065F46" font-size="10" font-weight="bold">Согд</text>
-                                    <text x="300" cy="300" text-anchor="middle" dominant-baseline="middle" fill="#92400E" font-size="10" font-weight="bold">Хатлон</text>
-                                    <text x="430" cy="220" text-anchor="middle" dominant-baseline="middle" fill="#991B1B" font-size="10" font-weight="bold">ГБАО</text>
-                                    <text x="200" cy="280" text-anchor="middle" dominant-baseline="middle" fill="#6D28D9" font-size="10" font-weight="bold">РРП</text>
-                                </svg>
+            <!-- Ключевые метрики по всей стране -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6 shadow-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-blue-100 text-sm font-medium">Общая численность населения</p>
+                            <p class="text-2xl font-bold">9,22 млн</p>
+                            <p class="text-blue-100 text-xs mt-1">+1.8% за год</p>
+                        </div>
+                        <div class="bg-blue-400 rounded-full p-3">
+                            <i class="fas fa-users text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-6 shadow-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-green-100 text-sm font-medium">Трудовые ресурсы</p>
+                            <p class="text-2xl font-bold">4,26 млн</p>
+                            <p class="text-green-100 text-xs mt-1">46.2% от населения</p>
+                        </div>
+                        <div class="bg-green-400 rounded-full p-3">
+                            <i class="fas fa-briefcase text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg p-6 shadow-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-orange-100 text-sm font-medium">Средний уровень безработицы</p>
+                            <p class="text-2xl font-bold">7.5%</p>
+                            <p class="text-orange-100 text-xs mt-1">-0.3% за год</p>
+                        </div>
+                        <div class="bg-orange-400 rounded-full p-3">
+                            <i class="fas fa-chart-line text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6 shadow-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-purple-100 text-sm font-medium">Средняя зарплата</p>
+                            <p class="text-2xl font-bold">2,180 с.</p>
+                            <p class="text-purple-100 text-xs mt-1">+5.2% за год</p>
+                        </div>
+                        <div class="bg-purple-400 rounded-full p-3">
+                            <i class="fas fa-money-bill-wave text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Интерактивная карта и регионы -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800">Интерактивная карта регионов</h3>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-500">Выберите показатель:</span>
+                        <select id="metricSelector" class="bg-gray-50 border border-gray-300 rounded-lg px-3 py-1 text-sm">
+                            <option value="unemployment">Безработица</option>
+                            <option value="salary">Средняя зарплата</option>
+                            <option value="employment">Уровень занятости</option>
+                            <option value="population">Население</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <!-- Региональные карточки -->
+                    <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Душанбе -->
+                        <div class="region-card bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all duration-300" data-region="dushanbe">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-city text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">Душанбе</h4>
+                                        <p class="text-xs text-gray-600">Столица</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium text-blue-600">863.4K</p>
+                                    <p class="text-xs text-gray-500">население</p>
+                                </div>
                             </div>
-                            
-                            <!-- Интерактивные индикаторы регионов -->
-                            <div class="flex flex-col items-center justify-center h-full p-8 relative z-10">
-                                <h4 class="text-xl font-bold text-gray-700 mb-8">Выберите регион</h4>
-                                
-                                <div class="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-md">
-                                    <!-- Душанбе -->
-                                    <div class="region-indicator" data-region="dushanbe">
-                                        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-blue-500">
-                                            <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mb-2">
-                                                <i class="fas fa-city text-white text-lg"></i>
-                                            </div>
-                                            <span class="text-sm font-medium text-gray-700 text-center">Душанбе</span>
-                                            <span class="text-xs text-gray-500">(столица)</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Согдийская область -->
-                                    <div class="region-indicator" data-region="sughd">
-                                        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-green-500">
-                                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mb-2">
-                                                <i class="fas fa-mountain text-white text-lg"></i>
-                                            </div>
-                                            <span class="text-sm font-medium text-gray-700 text-center">Согдийская обл.</span>
-                                            <span class="text-xs text-gray-500">северный</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Хатлонская область -->
-                                    <div class="region-indicator" data-region="khatlon">
-                                        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-yellow-500">
-                                            <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mb-2">
-                                                <i class="fas fa-seedling text-white text-lg"></i>
-                                            </div>
-                                            <span class="text-sm font-medium text-gray-700 text-center">Хатлонская обл.</span>
-                                            <span class="text-xs text-gray-500">южный</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- ГБАО -->
-                                    <div class="region-indicator" data-region="gbao">
-                                        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-red-500">
-                                            <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mb-2">
-                                                <i class="fas fa-mountain text-white text-lg"></i>
-                                            </div>
-                                            <span class="text-sm font-medium text-gray-700 text-center">ГБАО</span>
-                                            <span class="text-xs text-gray-500">автономный</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- РРП -->
-                                    <div class="region-indicator" data-region="rrp">
-                                        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-purple-500">
-                                            <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mb-2">
-                                                <i class="fas fa-building text-white text-lg"></i>
-                                            </div>
-                                            <span class="text-sm font-medium text-gray-700 text-center">РРП</span>
-                                            <span class="text-xs text-gray-500">центральный</span>
-                                        </div>
-                                    </div>
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="bg-white rounded p-2">
+                                    <p class="text-xs text-gray-500">Безработица</p>
+                                    <p class="font-semibold text-green-600">5.8%</p>
+                                </div>
+                                <div class="bg-white rounded p-2">
+                                    <p class="text-xs text-gray-500">Зарплата</p>
+                                    <p class="font-semibold text-blue-600">2,780 с.</p>
                                 </div>
                             </div>
                         </div>
-                        <p class="text-sm text-gray-500 mt-2 text-center">Нажмите на индикатор региона для просмотра детальной информации</p>
+                        
+                        <!-- Согдийская область -->
+                        <div class="region-card bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all duration-300" data-region="sughd">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-mountain text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">Согдийская обл.</h4>
+                                        <p class="text-xs text-gray-600">Северный регион</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium text-green-600">2.66M</p>
+                                    <p class="text-xs text-gray-500">население</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="bg-white rounded p-2">
+                                    <p class="text-xs text-gray-500">Безработица</p>
+                                    <p class="font-semibold text-yellow-600">7.2%</p>
+                                </div>
+                                <div class="bg-white rounded p-2">
+                                    <p class="text-xs text-gray-500">Зарплата</p>
+                                    <p class="font-semibold text-green-600">2,150 с.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Хатлонская область -->
+                        <div class="region-card bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all duration-300" data-region="khatlon">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-seedling text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">Хатлонская обл.</h4>
+                                        <p class="text-xs text-gray-600">Южный регион</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium text-yellow-600">3.35M</p>
+                                    <p class="text-xs text-gray-500">население</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="bg-white rounded p-2">
+                                    <p class="text-xs text-gray-500">Безработица</p>
+                                    <p class="font-semibold text-red-600">8.9%</p>
+                                </div>
+                                <div class="bg-white rounded p-2">
+                                    <p class="text-xs text-gray-500">Зарплата</p>
+                                    <p class="font-semibold text-yellow-600">1,850 с.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- ГБАО -->
+                        <div class="region-card bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all duration-300" data-region="gbao">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-mountain text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">ГБАО</h4>
+                                        <p class="text-xs text-gray-600">Автономная область</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium text-red-600">228.9K</p>
+                                    <p class="text-xs text-gray-500">население</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="bg-white rounded p-2">
+                                    <p class="text-xs text-gray-500">Безработица</p>
+                                    <p class="font-semibold text-red-600">9.7%</p>
+                                </div>
+                                <div class="bg-white rounded p-2">
+                                    <p class="text-xs text-gray-500">Зарплата</p>
+                                    <p class="font-semibold text-red-600">1,720 с.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- РРП -->
+                        <div class="region-card bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all duration-300" data-region="rrp">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-building text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">РРП</h4>
+                                        <p class="text-xs text-gray-600">Центральный регион</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium text-purple-600">2.12M</p>
+                                    <p class="text-xs text-gray-500">население</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="bg-white rounded p-2">
+                                    <p class="text-xs text-gray-500">Безработица</p>
+                                    <p class="font-semibold text-orange-600">8.1%</p>
+                                </div>
+                                <div class="bg-white rounded p-2">
+                                    <p class="text-xs text-gray-500">Зарплата</p>
+                                    <p class="font-semibold text-purple-600">1,980 с.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
-                    <!-- Информация о выбранном регионе -->
-                    <div class="w-full md:w-1/3">
-                        <div id="region-info" class="bg-white rounded-lg p-4 h-96 overflow-y-auto shadow-md">
+                    <!-- Детальная информация о выбранном регионе -->
+                    <div class="lg:col-span-2">
+                        <div id="region-details" class="bg-gray-50 rounded-lg p-6 h-full min-h-96">
                             <div class="text-center h-full flex flex-col items-center justify-center">
-                                <h4 class="text-lg font-semibold text-gray-700 mb-2">Статистика по регионам</h4>
-                                <div class="w-16 h-1 bg-blue-500 rounded mb-4"></div>
-                                <i class="fas fa-map-marker-alt text-blue-500 text-3xl mb-3"></i>
-                                <p class="text-md font-medium text-gray-600">Нажмите на регион</p>
-                                <p class="text-sm text-gray-500 mt-2">для просмотра статистики занятости</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-full md:w-1/3">
-                        <div class="bg-gray-50 rounded-lg p-4 h-full">
-                            <h4 class="text-lg font-semibold text-gray-700 mb-3">Статистика по регионам</h4>
-                            <div class="space-y-4">
-                                <div class="p-3 bg-white rounded-lg shadow-sm">
-                                    <p class="text-sm font-medium text-gray-600">Душанбе</p>
-                                    <div class="flex justify-between items-center mt-1">
-                                        <span class="text-sm">Безработица:</span>
-                                        <span class="text-sm font-semibold">5.8%</span>
-                                    </div>
-                                    <div class="flex justify-between items-center mt-1">
-                                        <span class="text-sm">Средняя зарплата:</span>
-                                        <span class="text-sm font-semibold">2780 сомони</span>
-                                    </div>
+                                <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-map-marked-alt text-gray-500 text-2xl"></i>
                                 </div>
-                                <div class="p-3 bg-white rounded-lg shadow-sm">
-                                    <p class="text-sm font-medium text-gray-600">Согдийская область</p>
-                                    <div class="flex justify-between items-center mt-1">
-                                        <span class="text-sm">Безработица:</span>
-                                        <span class="text-sm font-semibold">7.2%</span>
-                                    </div>
-                                    <div class="flex justify-between items-center mt-1">
-                                        <span class="text-sm">Средняя зарплата:</span>
-                                        <span class="text-sm font-semibold">2150 сомони</span>
-                                    </div>
-                                </div>
-                                <div class="p-3 bg-white rounded-lg shadow-sm">
-                                    <p class="text-sm font-medium text-gray-600">Хатлонская область</p>
-                                    <div class="flex justify-between items-center mt-1">
-                                        <span class="text-sm">Безработица:</span>
-                                        <span class="text-sm font-semibold">8.9%</span>
-                                    </div>
-                                    <div class="flex justify-between items-center mt-1">
-                                        <span class="text-sm">Средняя зарплата:</span>
-                                        <span class="text-sm font-semibold">1850 сомони</span>
-                                    </div>
-                                </div>
+                                <h4 class="text-lg font-semibold text-gray-700 mb-2">Выберите регион</h4>
+                                <p class="text-gray-500 text-center">Нажмите на любой регион слева для просмотра детальной информации о рынке труда</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Таблица с детализированными данными по регионам -->
-            <div class="bg-white rounded-lg p-6 shadow-lg mb-8">
-                <h3 class="text-xl font-semibold mb-4 text-gray-700">Детальные показатели по регионам</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Регион</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Население</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Рабочая сила</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Уровень занятости</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Уровень безработицы</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Средняя зарплата</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Душанбе</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">863,400</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">425,600</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">68.2%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5.8%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,780 сомони</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Согдийская область</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,658,400</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,243,500</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">62.8%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">7.2%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,150 сомони</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Хатлонская область</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3,348,300</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,524,600</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">58.1%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8.9%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,850 сомони</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ГБАО</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">228,900</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">98,400</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">54.3%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">9.7%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,720 сомони</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">РРП</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,120,000</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">968,300</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">59.6%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8.1%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,980 сомони</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- Графики по регионам -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-white rounded-lg p-6 shadow-lg">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Уровень безработицы по регионам</h3>
-                    <div class="h-64 bg-gray-100 rounded-lg p-4 flex items-center justify-center">
-                        <p class="text-gray-500">График безработицы по регионам</p>
+            <!-- Сравнительная аналитика -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- График сравнения регионов -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Сравнение ключевых показателей</h3>
+                    <div class="h-64 bg-gray-50 rounded-lg p-4 flex items-center justify-center">
+                        <canvas id="regionalComparisonChart"></canvas>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg p-6 shadow-lg">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Средняя заработная плата по регионам</h3>
-                    <div class="h-64 bg-gray-100 rounded-lg p-4 flex items-center justify-center">
-                        <p class="text-gray-500">График средней зарплаты по регионам</p>
+                
+                <!-- Тренды и прогнозы -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Тренды занятости по регионам</h3>
+                    <div class="h-64 bg-gray-50 rounded-lg p-4 flex items-center justify-center">
+                        <canvas id="regionalTrendsChart"></canvas>
                     </div>
                 </div>
             </div>
             
-            <!-- Сравнительный анализ регионов -->
-            <div class="bg-white rounded-lg p-6 shadow-lg mb-8">
-                <h3 class="text-xl font-semibold mb-4 text-gray-700">Сравнительный анализ регионов</h3>
+            <!-- Рейтинг регионов -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">Рейтинг регионов по показателям</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- По уровню занятости -->
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-4 flex items-center">
+                            <i class="fas fa-trophy text-yellow-500 mr-2"></i>
+                            По уровню занятости
+                        </h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="w-6 h-6 bg-green-500 text-white text-xs font-bold rounded-full flex items-center justify-center mr-3">1</span>
+                                    <span class="text-sm font-medium">Душанбе</span>
+                                </div>
+                                <span class="text-green-600 font-semibold text-sm">68.2%</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="w-6 h-6 bg-gray-400 text-white text-xs font-bold rounded-full flex items-center justify-center mr-3">2</span>
+                                    <span class="text-sm font-medium">Согдийская</span>
+                                </div>
+                                <span class="text-gray-600 font-semibold text-sm">62.8%</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="w-6 h-6 bg-gray-400 text-white text-xs font-bold rounded-full flex items-center justify-center mr-3">3</span>
+                                    <span class="text-sm font-medium">РРП</span>
+                                </div>
+                                <span class="text-gray-600 font-semibold text-sm">59.6%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- По средней зарплате -->
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-4 flex items-center">
+                            <i class="fas fa-money-bill-wave text-green-500 mr-2"></i>
+                            По средней зарплате
+                        </h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="w-6 h-6 bg-blue-500 text-white text-xs font-bold rounded-full flex items-center justify-center mr-3">1</span>
+                                    <span class="text-sm font-medium">Душанбе</span>
+                                </div>
+                                <span class="text-blue-600 font-semibold text-sm">2,780 с.</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="w-6 h-6 bg-gray-400 text-white text-xs font-bold rounded-full flex items-center justify-center mr-3">2</span>
+                                    <span class="text-sm font-medium">Согдийская</span>
+                                </div>
+                                <span class="text-gray-600 font-semibold text-sm">2,150 с.</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="w-6 h-6 bg-gray-400 text-white text-xs font-bold rounded-full flex items-center justify-center mr-3">3</span>
+                                    <span class="text-sm font-medium">РРП</span>
+                                </div>
+                                <span class="text-gray-600 font-semibold text-sm">1,980 с.</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- По экономическому потенциалу -->
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-4 flex items-center">
+                            <i class="fas fa-chart-line text-purple-500 mr-2"></i>
+                            По росту экономики
+                        </h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="w-6 h-6 bg-purple-500 text-white text-xs font-bold rounded-full flex items-center justify-center mr-3">1</span>
+                                    <span class="text-sm font-medium">Душанбе</span>
+                                </div>
+                                <span class="text-purple-600 font-semibold text-sm">+8.5%</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="w-6 h-6 bg-gray-400 text-white text-xs font-bold rounded-full flex items-center justify-center mr-3">2</span>
+                                    <span class="text-sm font-medium">Согдийская</span>
+                                </div>
+                                <span class="text-gray-600 font-semibold text-sm">+6.8%</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="w-6 h-6 bg-gray-400 text-white text-xs font-bold rounded-full flex items-center justify-center mr-3">3</span>
+                                    <span class="text-sm font-medium">РРП</span>
+                                </div>
+                                <span class="text-gray-600 font-semibold text-sm">+5.7%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Аналитические выводы -->
+            <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                    Ключевые выводы и рекомендации
+                </h3>
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h4 class="text-lg font-medium text-gray-700 mb-3">Развитие рынка труда</h4>
-                        <ul class="space-y-2 text-sm">
-                            <li class="flex items-start">
-                                <i class="fas fa-circle text-blue-500 mt-1 mr-2 text-xs"></i>
-                                <span>Душанбе демонстрирует наиболее динамичный рост занятости с высокой долей сектора услуг (68%).</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-circle text-blue-500 mt-1 mr-2 text-xs"></i>
-                                <span>Согдийская область показывает устойчивый рост промышленного сектора и экспортоориентированных предприятий.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-circle text-blue-500 mt-1 mr-2 text-xs"></i>
-                                <span>Хатлонская область характеризуется высокой долей сельскохозяйственной занятости (более 60%).</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-circle text-blue-500 mt-1 mr-2 text-xs"></i>
-                                <span>ГБАО имеет наиболее высокий уровень безработицы и сезонной миграции.</span>
-                            </li>
-                        </ul>
+                    <div class="space-y-4">
+                        <div class="bg-white rounded-lg p-4 border-l-4 border-blue-500">
+                            <h4 class="font-medium text-gray-800 mb-2">💼 Лидеры по развитию рынка труда</h4>
+                            <p class="text-sm text-gray-600">Душанбе и Согдийская область показывают наилучшие результаты по уровню занятости и заработным платам благодаря диверсификации экономики.</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border-l-4 border-red-500">
+                            <h4 class="font-medium text-gray-800 mb-2">⚠️ Регионы, требующие внимания</h4>
+                            <p class="text-sm text-gray-600">ГБАО имеет высокий уровень безработицы (9.7%) и нуждается в целевых программах поддержки занятости и развития туристического потенциала.</p>
+                        </div>
                     </div>
-                    <div>
-                        <h4 class="text-lg font-medium text-gray-700 mb-3">Перспективные направления</h4>
-                        <ul class="space-y-2 text-sm">
-                            <li class="flex items-start">
-                                <i class="fas fa-circle text-green-500 mt-1 mr-2 text-xs"></i>
-                                <span>Развитие туризма и сферы гостеприимства в ГБАО и Зеравшанской долине.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-circle text-green-500 mt-1 mr-2 text-xs"></i>
-                                <span>Развитие IT-сектора и технологического предпринимательства в Душанбе.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-circle text-green-500 mt-1 mr-2 text-xs"></i>
-                                <span>Расширение сельскохозяйственной переработки в Хатлонской области.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-circle text-green-500 mt-1 mr-2 text-xs"></i>
-                                <span>Развитие легкой промышленности и текстильного производства в Согдийской области.</span>
-                            </li>
-                        </ul>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-white rounded-lg p-4 border-l-4 border-green-500">
+                            <h4 class="font-medium text-gray-800 mb-2">🎯 Перспективные направления</h4>
+                            <p class="text-sm text-gray-600">Развитие IT-сектора в Душанбе, агропереработки в Хатлонской области и туризма в ГБАО может значительно улучшить показатели занятости.</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border-l-4 border-purple-500">
+                            <h4 class="font-medium text-gray-800 mb-2">📈 Прогноз развития</h4>
+                            <p class="text-sm text-gray-600">При сохранении текущих темпов роста ожидается сокращение региональных различий в уровне жизни к 2030 году.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -4329,6 +4504,480 @@
             // Запускаем инициализацию сразу
             console.log('Запуск инициализации индикаторов...');
             initRegionIndicators();
+            
+            // Обновленные данные о регионах для новой концепции
+            window.regionData = {
+                'dushanbe': {
+                    name: 'Душанбе',
+                    type: 'столица',
+                    population: 863400,
+                    laborForce: 425600,
+                    employmentRate: 68.2,
+                    unemploymentRate: 5.8,
+                    averageSalary: 2780,
+                    mainSectors: ['Услуги', 'Торговля', 'Государственное управление'],
+                    vacancies: 3850,
+                    growth: 8.5,
+                    iconClass: 'fas fa-city',
+                    colorClass: 'bg-blue-500',
+                    borderClass: 'border-blue-500',
+                    color: 'blue',
+                    workforcePercent: '68.2% экономически активного населения',
+                    topJobs: 'IT-специалисты, финансисты, административные работники, специалисты сферы услуг',
+                    description: 'Душанбе - столица Таджикистана и крупнейший экономический и культурный центр страны с наиболее развитым рынком труда.',
+                    industries: [
+                        { name: 'Услуги и торговля', percentage: 42 },
+                        { name: 'Административный сектор', percentage: 23 },
+                        { name: 'Образование и здравоохранение', percentage: 18 },
+                        { name: 'Производство', percentage: 12 },
+                        { name: 'Строительство', percentage: 5 }
+                    ],
+                    economicIndicators: {
+                        gdpGrowth: 8.5,
+                        investmentLevel: 'Высокий',
+                        businessClimate: 'Благоприятный',
+                        innovationIndex: 7.2
+                    },
+                    challenges: ['Высокая конкуренция за рабочие места', 'Растущие цены на недвижимость'],
+                    opportunities: ['Развитие IT-сектора', 'Финансовые услуги', 'Туризм']
+                },
+                'sughd': {
+                    name: 'Согдийская область',
+                    type: 'северный регион',
+                    population: 2658400,
+                    laborForce: 1243500,
+                    employmentRate: 62.8,
+                    unemploymentRate: 7.2,
+                    averageSalary: 2150,
+                    mainSectors: ['Промышленность', 'Сельское хозяйство', 'Торговля'],
+                    vacancies: 2950,
+                    growth: 6.8,
+                    iconClass: 'fas fa-mountain',
+                    colorClass: 'bg-green-500',
+                    borderClass: 'border-green-500',
+                    color: 'green',
+                    workforcePercent: '62.8% экономически активного населения',
+                    topJobs: 'Специалисты по горной добыче, агрономы, инженеры, текстильщики',
+                    description: 'Согдийская область - индустриально развитый северный регион с центром в Худжанде, второй по экономическому значению после столицы.',
+                    industries: [
+                        { name: 'Горнодобывающая промышленность', percentage: 28 },
+                        { name: 'Сельское хозяйство', percentage: 26 },
+                        { name: 'Лёгкая промышленность', percentage: 18 },
+                        { name: 'Торговля и услуги', percentage: 17 },
+                        { name: 'Строительство', percentage: 11 }
+                    ],
+                    economicIndicators: {
+                        gdpGrowth: 6.8,
+                        investmentLevel: 'Средний',
+                        businessClimate: 'Стабильный',
+                        innovationIndex: 5.8
+                    },
+                    challenges: ['Зависимость от добывающих отраслей', 'Экологические вызовы'],
+                    opportunities: ['Переработка сельхозпродукции', 'Экспорт продукции', 'Развитие логистики']
+                },
+                'khatlon': {
+                    name: 'Хатлонская область',
+                    type: 'южный регион',
+                    population: 3348300,
+                    laborForce: 1524600,
+                    employmentRate: 58.1,
+                    unemploymentRate: 8.9,
+                    averageSalary: 1850,
+                    mainSectors: ['Сельское хозяйство', 'Хлопководство', 'Пищевая промышленность'],
+                    vacancies: 2420,
+                    growth: 5.2,
+                    iconClass: 'fas fa-seedling',
+                    colorClass: 'bg-yellow-500',
+                    borderClass: 'border-yellow-500',
+                    color: 'yellow',
+                    workforcePercent: '58.1% экономически активного населения',
+                    topJobs: 'Агрономы, специалисты по ирригации, операторы с/х техники, специалисты пищевой промышленности',
+                    description: 'Хатлонская область - самый населенный регион страны, с преимущественно аграрной экономикой и развитым хлопководством.',
+                    industries: [
+                        { name: 'Сельское хозяйство', percentage: 45 },
+                        { name: 'Пищевая промышленность', percentage: 18 },
+                        { name: 'Текстильное производство', percentage: 15 },
+                        { name: 'Торговля', percentage: 12 },
+                        { name: 'Услуги и другие отрасли', percentage: 10 }
+                    ],
+                    economicIndicators: {
+                        gdpGrowth: 5.2,
+                        investmentLevel: 'Средний',
+                        businessClimate: 'Развивающийся',
+                        innovationIndex: 4.1
+                    },
+                    challenges: ['Сезонность занятости', 'Низкие доходы в сельском хозяйстве'],
+                    opportunities: ['Агропереработка', 'Органическое земледелие', 'Развитие кооперативов']
+                },
+                'gbao': {
+                    name: 'ГБАО',
+                    type: 'автономная область',
+                    population: 228900,
+                    laborForce: 98400,
+                    employmentRate: 54.3,
+                    unemploymentRate: 9.7,
+                    averageSalary: 1720,
+                    mainSectors: ['Туризм', 'Сельское хозяйство', 'Горнодобывающая промышленность'],
+                    vacancies: 620,
+                    growth: 3.5,
+                    iconClass: 'fas fa-mountain',
+                    colorClass: 'bg-red-500',
+                    borderClass: 'border-red-500',
+                    color: 'red',
+                    workforcePercent: '54.3% экономически активного населения',
+                    topJobs: 'Гиды, экологи, специалисты по животноводству, горные инженеры',
+                    description: 'Горно-Бадахшанская автономная область - горный регион с трудными условиями для ведения хозяйства, но растущим потенциалом экотуризма.',
+                    industries: [
+                        { name: 'Туризм и экология', percentage: 28 },
+                        { name: 'Животноводство', percentage: 25 },
+                        { name: 'Народные промыслы', percentage: 20 },
+                        { name: 'Горнодобывающая промышленность', percentage: 15 },
+                        { name: 'Услуги и торговля', percentage: 12 }
+                    ],
+                    economicIndicators: {
+                        gdpGrowth: 3.5,
+                        investmentLevel: 'Низкий',
+                        businessClimate: 'Сложный',
+                        innovationIndex: 3.8
+                    },
+                    challenges: ['Изолированность региона', 'Суровые климатические условия'],
+                    opportunities: ['Экотуризм', 'Добыча драгоценных камней', 'Развитие ремесел']
+                },
+                'rrp': {
+                    name: 'РРП',
+                    type: 'центральный регион',
+                    population: 2120000,
+                    laborForce: 968300,
+                    employmentRate: 59.6,
+                    unemploymentRate: 8.1,
+                    averageSalary: 1980,
+                    mainSectors: ['Сельское хозяйство', 'Строительство', 'Транспорт'],
+                    vacancies: 1850,
+                    growth: 5.7,
+                    iconClass: 'fas fa-building',
+                    colorClass: 'bg-purple-500',
+                    borderClass: 'border-purple-500',
+                    color: 'purple',
+                    workforcePercent: '59.6% экономически активного населения',
+                    topJobs: 'Строители, водители, логисты, агрономы, садоводы',
+                    description: 'Районы республиканского подчинения (РРП) - центральный регион, окружающий столицу, с развивающимся строительным сектором и сельским хозяйством.',
+                    industries: [
+                        { name: 'Сельское хозяйство', percentage: 32 },
+                        { name: 'Строительство', percentage: 28 },
+                        { name: 'Транспорт и логистика', percentage: 18 },
+                        { name: 'Производство', percentage: 12 },
+                        { name: 'Услуги', percentage: 10 }
+                    ],
+                    economicIndicators: {
+                        gdpGrowth: 5.7,
+                        investmentLevel: 'Средний',
+                        businessClimate: 'Стабильный',
+                        innovationIndex: 4.9
+                    },
+                    challenges: ['Зависимость от столичного рынка', 'Нехватка квалифицированных кадров'],
+                    opportunities: ['Пригородное строительство', 'Логистические центры', 'Переработка продукции']
+                }
+            };
+            
+            // Новая функция для отображения детальной информации о регионе
+            window.showRegionDetails = function(regionCode) {
+                console.log('Показываем детали региона:', regionCode);
+                
+                const region = window.regionData[regionCode];
+                if (!region) {
+                    console.error('Регион не найден:', regionCode);
+                    return;
+                }
+                
+                // Убираем активное состояние со всех карточек
+                document.querySelectorAll('.region-card').forEach(card => {
+                    card.classList.remove('ring-2', 'ring-blue-500', 'ring-green-500', 'ring-yellow-500', 
+                                          'ring-red-500', 'ring-purple-500', 'shadow-lg');
+                });
+                
+                // Добавляем активное состояние к выбранной карточке
+                const activeCard = document.querySelector(`.region-card[data-region="${regionCode}"]`);
+                if (activeCard) {
+                    activeCard.classList.add('ring-2', `ring-${region.color}-500`, 'shadow-lg');
+                }
+                
+                // Генерируем HTML для детальной информации
+                const detailsHTML = `
+                <div class="animate-fade-in">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 ${region.colorClass} rounded-full flex items-center justify-center mr-4">
+                            <i class="${region.iconClass} text-white text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800">${region.name}</h3>
+                            <p class="text-gray-600">${region.type}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Ключевые метрики -->
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-${region.color}-50 rounded-lg p-3 text-center">
+                            <p class="text-2xl font-bold text-${region.color}-700">${region.population.toLocaleString()}</p>
+                            <p class="text-xs text-gray-600">Население</p>
+                        </div>
+                        <div class="bg-${region.color}-50 rounded-lg p-3 text-center">
+                            <p class="text-2xl font-bold text-${region.color}-700">${region.unemploymentRate}%</p>
+                            <p class="text-xs text-gray-600">Безработица</p>
+                        </div>
+                        <div class="bg-${region.color}-50 rounded-lg p-3 text-center">
+                            <p class="text-2xl font-bold text-${region.color}-700">${region.averageSalary}</p>
+                            <p class="text-xs text-gray-600">Средняя зарплата</p>
+                        </div>
+                        <div class="bg-${region.color}-50 rounded-lg p-3 text-center">
+                            <p class="text-2xl font-bold text-${region.color}-700">+${region.growth}%</p>
+                            <p class="text-xs text-gray-600">Рост экономики</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Структура занятости -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Структура занятости</h4>
+                        <div class="space-y-2">
+                            ${region.industries.map(industry => `
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">${industry.name}</span>
+                                    <div class="flex items-center">
+                                        <div class="w-20 bg-gray-200 rounded-full h-2 mr-2">
+                                            <div class="bg-${region.color}-500 h-2 rounded-full" style="width: ${industry.percentage}%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-800 w-8">${industry.percentage}%</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Экономические показатели -->
+                    <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-semibold text-gray-800 mb-3">Экономические показатели</h4>
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div>
+                                <span class="text-gray-600">Рост ВВП:</span>
+                                <span class="font-medium ml-2">${region.economicIndicators.gdpGrowth}%</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Инвестиции:</span>
+                                <span class="font-medium ml-2">${region.economicIndicators.investmentLevel}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Бизнес-климат:</span>
+                                <span class="font-medium ml-2">${region.economicIndicators.businessClimate}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Инновации:</span>
+                                <span class="font-medium ml-2">${region.economicIndicators.innovationIndex}/10</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Вызовы и возможности -->
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-red-600 mb-2 flex items-center">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>Вызовы
+                            </h4>
+                            <ul class="text-sm space-y-1">
+                                ${region.challenges.map(challenge => `
+                                    <li class="flex items-start">
+                                        <span class="w-2 h-2 bg-red-400 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                                        <span class="text-gray-700">${challenge}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-green-600 mb-2 flex items-center">
+                                <i class="fas fa-lightbulb mr-2"></i>Возможности
+                            </h4>
+                            <ul class="text-sm space-y-1">
+                                ${region.opportunities.map(opportunity => `
+                                    <li class="flex items-start">
+                                        <span class="w-2 h-2 bg-green-400 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                                        <span class="text-gray-700">${opportunity}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                `;
+                
+                // Обновляем содержимое панели деталей
+                const detailsPanel = document.getElementById('region-details');
+                if (detailsPanel) {
+                    detailsPanel.innerHTML = detailsHTML;
+                    console.log('✓ Детали региона обновлены');
+                } else {
+                    console.error('✗ Панель деталей не найдена');
+                }
+            };
+            
+            // Инициализация новых обработчиков событий для карточек регионов
+            function initNewRegionCards() {
+                const regionCards = document.querySelectorAll('.region-card');
+                
+                console.log('Инициализация новых карточек регионов:', regionCards.length);
+                
+                regionCards.forEach(card => {
+                    const regionCode = card.getAttribute('data-region');
+                    
+                    card.addEventListener('click', function() {
+                        console.log('Клик по карточке региона:', regionCode);
+                        window.showRegionDetails(regionCode);
+                    });
+                    
+                    card.addEventListener('mouseenter', function() {
+                        if (!this.classList.contains('ring-2')) {
+                            this.classList.add('shadow-md');
+                        }
+                    });
+                    
+                    card.addEventListener('mouseleave', function() {
+                        if (!this.classList.contains('ring-2')) {
+                            this.classList.remove('shadow-md');
+                        }
+                    });
+                });
+                
+                // Автоматически показываем Душанбе при загрузке
+                setTimeout(() => {
+                    window.showRegionDetails('dushanbe');
+                }, 500);
+            }
+            
+            // Запускаем инициализацию новых карточек
+            initNewRegionCards();
+            
+            // Инициализация графиков для региональной аналитики
+            function initRegionalCharts() {
+                // График сравнения регионов
+                const comparisonCtx = document.getElementById('regionalComparisonChart');
+                if (comparisonCtx) {
+                    new Chart(comparisonCtx, {
+                        type: 'radar',
+                        data: {
+                            labels: ['Занятость', 'Зарплата', 'Рост экономики', 'Инновации', 'Инвестиции'],
+                            datasets: [
+                                {
+                                    label: 'Душанбе',
+                                    data: [68.2, 85, 8.5, 7.2, 80],
+                                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                                    borderColor: 'rgba(59, 130, 246, 1)',
+                                    borderWidth: 2
+                                },
+                                {
+                                    label: 'Согдийская обл.',
+                                    data: [62.8, 65, 6.8, 5.8, 60],
+                                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                                    borderColor: 'rgba(16, 185, 129, 1)',
+                                    borderWidth: 2
+                                },
+                                {
+                                    label: 'Хатлонская обл.',
+                                    data: [58.1, 55, 5.2, 4.1, 45],
+                                    backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                                    borderColor: 'rgba(245, 158, 11, 1)',
+                                    borderWidth: 2
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                r: {
+                                    beginAtZero: true,
+                                    max: 100
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                // График трендов занятости
+                const trendsCtx = document.getElementById('regionalTrendsChart');
+                if (trendsCtx) {
+                    new Chart(trendsCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                            datasets: [
+                                {
+                                    label: 'Душанбе',
+                                    data: [64.2, 65.1, 66.8, 67.2, 67.8, 68.2],
+                                    borderColor: 'rgba(59, 130, 246, 1)',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    tension: 0.4
+                                },
+                                {
+                                    label: 'Согдийская обл.',
+                                    data: [58.5, 59.2, 60.1, 61.4, 62.1, 62.8],
+                                    borderColor: 'rgba(16, 185, 129, 1)',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                    tension: 0.4
+                                },
+                                {
+                                    label: 'Хатлонская обл.',
+                                    data: [54.2, 55.1, 56.2, 56.8, 57.4, 58.1],
+                                    borderColor: 'rgba(245, 158, 11, 1)',
+                                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                    tension: 0.4
+                                },
+                                {
+                                    label: 'ГБАО',
+                                    data: [50.1, 51.2, 52.1, 52.8, 53.5, 54.3],
+                                    borderColor: 'rgba(239, 68, 68, 1)',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    tension: 0.4
+                                },
+                                {
+                                    label: 'РРП',
+                                    data: [56.2, 57.1, 57.8, 58.5, 59.1, 59.6],
+                                    borderColor: 'rgba(139, 92, 246, 1)',
+                                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                                    tension: 0.4
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Динамика уровня занятости (%)'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    min: 45,
+                                    max: 75
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+            
+            // Запускаем инициализацию графиков
+            setTimeout(() => {
+                initRegionalCharts();
+            }, 1000);
             
             // Данные о регионах Таджикистана
             window.regionData = {
