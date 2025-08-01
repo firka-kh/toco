@@ -5973,14 +5973,18 @@
                 // Преобразуем мужские данные в отрицательные для пирамиды
                 const maleDataNegative = maleData.map(value => -value);
                 
-                // Создаем градиенты для столбцов
-                const maleGradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
-                maleGradient.addColorStop(0, 'rgba(54, 162, 235, 0.8)');
-                maleGradient.addColorStop(1, 'rgba(54, 162, 235, 0.2)');
+                // Создаем градиенты для столбцов - делаем их темнее по мере удаления от центра
+                const maleGradient = ctx.getContext('2d').createLinearGradient(400, 0, 0, 0); // Горизонтальный градиент справа налево
+                maleGradient.addColorStop(0, 'rgba(54, 162, 235, 0.3)'); // Очень светлый у центра
+                maleGradient.addColorStop(0.3, 'rgba(54, 162, 235, 0.5)'); // Светлее в первой трети
+                maleGradient.addColorStop(0.7, 'rgba(54, 162, 235, 0.7)'); // Темнее во второй трети
+                maleGradient.addColorStop(1, 'rgba(25, 118, 210, 0.9)'); // Самый темный у края (более насыщенный синий)
                 
-                const femaleGradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
-                femaleGradient.addColorStop(0, 'rgba(255, 99, 132, 0.8)');
-                femaleGradient.addColorStop(1, 'rgba(255, 99, 132, 0.2)');
+                const femaleGradient = ctx.getContext('2d').createLinearGradient(0, 0, 400, 0); // Горизонтальный градиент слева направо
+                femaleGradient.addColorStop(0, 'rgba(255, 99, 132, 0.3)'); // Очень светлый у центра
+                femaleGradient.addColorStop(0.3, 'rgba(255, 99, 132, 0.5)'); // Светлее в первой трети
+                femaleGradient.addColorStop(0.7, 'rgba(255, 99, 132, 0.7)'); // Темнее во второй трети
+                femaleGradient.addColorStop(1, 'rgba(213, 0, 71, 0.9)'); // Самый темный у края (более насыщенный красный)
                 
                 // Сохраняем оригинальные данные для анимации
                 const originalMaleData = [...maleDataNegative];
@@ -6031,16 +6035,7 @@
                                 }
                             },
                             legend: {
-                                position: 'top',
-                                labels: {
-                                    font: {
-                                        size: 12
-                                    },
-                                    color: '#555',
-                                    usePointStyle: true,
-                                    pointStyle: 'circle',
-                                    padding: 15
-                                }
+                                display: false, // Скрываем легенду, так как есть подписи под диаграммой
                             },
                             tooltip: {
                                 callbacks: {
@@ -6058,6 +6053,34 @@
                                 borderWidth: 1,
                                 padding: 10,
                                 cornerRadius: 8
+                            },
+                            // Настройки плагина datalabels
+                            datalabels: {
+                                display: true, // Включаем отображение подписей
+                                formatter: (value) => {
+                                    return Math.abs(value) > 3 ? Math.abs(value).toFixed(1) + '%' : ''; // показываем проценты только для значимых групп
+                                },
+                                color: (context) => {
+                                    // Для больших значений (дальше от центра) - белый текст
+                                    const absValue = Math.abs(context.dataset.data[context.dataIndex]);
+                                    if (absValue > 5.5) return '#fff';
+                                    // Для мужчин - темно-синий, для женщин - темно-красный
+                                    return context.datasetIndex === 0 ? '#0c4a6e' : '#881337';
+                                },
+                                backgroundColor: (context) => {
+                                    // Полупрозрачный фон для меньших значений
+                                    const absValue = Math.abs(context.dataset.data[context.dataIndex]);
+                                    if (absValue <= 5.5) return 'rgba(255, 255, 255, 0.7)';
+                                    return null; // без фона для больших значений
+                                },
+                                borderRadius: 3,
+                                padding: { top: 2, right: 4, bottom: 2, left: 4 },
+                                font: {
+                                    size: 11,
+                                    weight: 'bold'
+                                },
+                                anchor: 'center',
+                                align: 'center'
                             },
                             datalabels: {
                                 formatter: (value) => {
@@ -6165,38 +6188,96 @@
                     chartContainer.style.position = 'relative';
                     // Убираем добавление centerLine и centerLineLabel, так как они больше не нужны
                     
-                    // Добавляем подписи "Мужчины" и "Женщины" с улучшенным позиционированием
+                    // Создаем контейнер для подписей мужчин и женщин
+                    const genderLabelsContainer = document.createElement('div');
+                    genderLabelsContainer.style.position = 'absolute';
+                    genderLabelsContainer.style.left = '0';
+                    genderLabelsContainer.style.right = '0';
+                    genderLabelsContainer.style.bottom = '5px';
+                    genderLabelsContainer.style.display = 'flex';
+                    genderLabelsContainer.style.justifyContent = 'space-between';
+                    genderLabelsContainer.style.padding = '0 50px';
+                    genderLabelsContainer.style.zIndex = '10';
+                    
+                    // Создаем подпись для мужчин (слева)
                     const maleLabel = document.createElement('div');
-                    maleLabel.style.position = 'absolute';
-                    maleLabel.style.left = '25%';
-                    maleLabel.style.top = '2%';
-                    maleLabel.style.transform = 'translateX(-50%)';
-                    maleLabel.style.fontSize = '14px';
+                    maleLabel.style.fontSize = '15px';
                     maleLabel.style.fontWeight = 'bold';
                     maleLabel.style.color = 'rgba(54, 162, 235, 1)';
                     maleLabel.textContent = 'Мужчины';
-                    maleLabel.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-                    maleLabel.style.padding = '2px 8px';
-                    maleLabel.style.borderRadius = '4px';
-                    chartContainer.appendChild(maleLabel);
+                    maleLabel.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                    maleLabel.style.padding = '3px 12px';
+                    maleLabel.style.borderRadius = '15px';
+                    maleLabel.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                    genderLabelsContainer.appendChild(maleLabel);
                     
+                    // Создаем подпись для женщин (справа)
                     const femaleLabel = document.createElement('div');
-                    femaleLabel.style.position = 'absolute';
-                    femaleLabel.style.right = '25%';
-                    femaleLabel.style.top = '2%';
-                    femaleLabel.style.transform = 'translateX(50%)';
-                    femaleLabel.style.fontSize = '14px';
+                    femaleLabel.style.fontSize = '15px';
                     femaleLabel.style.fontWeight = 'bold';
                     femaleLabel.style.color = 'rgba(255, 99, 132, 1)';
                     femaleLabel.textContent = 'Женщины';
-                    femaleLabel.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-                    femaleLabel.style.padding = '2px 8px';
-                    femaleLabel.style.borderRadius = '4px';
-                    chartContainer.appendChild(femaleLabel);
+                    femaleLabel.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                    femaleLabel.style.padding = '3px 12px';
+                    femaleLabel.style.borderRadius = '15px';
+                    femaleLabel.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                    genderLabelsContainer.appendChild(femaleLabel);
+                    
+                    chartContainer.appendChild(genderLabelsContainer);
                 }
                 
                 // Вызываем функцию добавления центральной линии после рендеринга графика
                 setTimeout(addCenterLine, 500);
+                
+                // Добавляем индикатор обновления данных
+                const liveIndicator = document.createElement('div');
+                liveIndicator.className = 'live-indicator';
+                liveIndicator.style.position = 'absolute';
+                liveIndicator.style.top = '10px';
+                liveIndicator.style.right = '10px';
+                liveIndicator.style.display = 'flex';
+                liveIndicator.style.alignItems = 'center';
+                liveIndicator.style.padding = '3px 8px';
+                liveIndicator.style.borderRadius = '12px';
+                liveIndicator.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+                liveIndicator.style.fontSize = '12px';
+                liveIndicator.style.fontWeight = '500';
+                liveIndicator.style.color = 'rgb(6, 95, 70)';
+                
+                // Добавляем пульсирующую точку
+                const pulse = document.createElement('span');
+                pulse.style.display = 'inline-block';
+                pulse.style.width = '8px';
+                pulse.style.height = '8px';
+                pulse.style.borderRadius = '50%';
+                pulse.style.backgroundColor = 'rgb(16, 185, 129)';
+                pulse.style.marginRight = '5px';
+                pulse.style.animation = 'pulse 2s infinite';
+                
+                // Добавляем стиль анимации пульсации
+                const styleEl = document.createElement('style');
+                styleEl.textContent = `
+                    @keyframes pulse {
+                        0% { opacity: 1; }
+                        50% { opacity: 0.4; }
+                        100% { opacity: 1; }
+                    }
+                    .live-indicator.pulse .pulse-dot {
+                        animation: pulse-bright 0.7s ease-out;
+                    }
+                    @keyframes pulse-bright {
+                        0% { transform: scale(1); opacity: 1; }
+                        50% { transform: scale(1.5); opacity: 1; }
+                        100% { transform: scale(1); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(styleEl);
+                
+                pulse.className = 'pulse-dot';
+                liveIndicator.appendChild(pulse);
+                liveIndicator.appendChild(document.createTextNode('Данные обновляются'));
+                
+                chartContainer.appendChild(liveIndicator);
                 
                 // Добавляем информационное окно с аналитикой
                 const demographicInfo = document.createElement('div');
@@ -6294,6 +6375,12 @@
                 `;
                 ctx.parentElement.parentElement.appendChild(trendSelector);
                 
+                // Добавляем источник данных
+                const sourceInfo = document.createElement('div');
+                sourceInfo.className = 'chart-data-source text-xs text-gray-500 italic mt-2 text-right';
+                sourceInfo.textContent = 'Источник: Агентство по статистике РТ, 2024';
+                ctx.parentElement.parentElement.appendChild(sourceInfo);
+                
                 // Данные для разных трендов
                 const trendData = {
                     current: {
@@ -6332,11 +6419,62 @@
                         ageChart.data.datasets[0].data = trendDataset.male;
                         ageChart.data.datasets[1].data = trendDataset.female;
                         
-                        // Обновляем график с анимацией
+                        // Создаем эффект перехода между данными
+                        // Сначала сохраняем текущие данные
+                        const currentMaleData = [...ageChart.data.datasets[0].data];
+                        const currentFemaleData = [...ageChart.data.datasets[1].data];
+                        
+                        // Создаем промежуточные данные (уменьшаем до нуля)
+                        const intermediateMaleData = currentMaleData.map(() => 0);
+                        const intermediateFemaleData = currentFemaleData.map(() => 0);
+                        
+                        // Устанавливаем промежуточные данные с быстрой анимацией
+                        ageChart.data.datasets[0].data = intermediateMaleData;
+                        ageChart.data.datasets[1].data = intermediateFemaleData;
+                        
+                        // Обновляем график с коротким сжатием
                         ageChart.update({
-                            duration: 1000,
-                            easing: 'easeOutQuad'
+                            duration: 300,
+                            easing: 'easeInQuad'
                         });
+                        
+                        // После небольшой задержки устанавливаем новые данные
+                        setTimeout(() => {
+                            ageChart.data.datasets[0].data = trendDataset.male;
+                            ageChart.data.datasets[1].data = trendDataset.female;
+                            
+                            // Обновляем график с более медленным расширением
+                            ageChart.update({
+                                duration: 800, 
+                                easing: 'easeOutElastic'
+                            });
+                        }, 350);
+                        
+                        // Добавляем эффект выделения при переключении трендов
+                        const trendHighlight = document.createElement('div');
+                        trendHighlight.className = 'trend-highlight';
+                        trendHighlight.style.position = 'absolute';
+                        trendHighlight.style.top = '50%';
+                        trendHighlight.style.left = '50%';
+                        trendHighlight.style.transform = 'translate(-50%, -50%)';
+                        trendHighlight.style.width = '70%';
+                        trendHighlight.style.height = '70%';
+                        trendHighlight.style.borderRadius = '10px';
+                        trendHighlight.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+                        trendHighlight.style.opacity = '0';
+                        trendHighlight.style.transition = 'opacity 0.5s ease';
+                        trendHighlight.style.pointerEvents = 'none';
+                        
+                        // Добавляем и убираем эффект выделения
+                        chartContainer.appendChild(trendHighlight);
+                        trendHighlight.style.opacity = '1';
+                        
+                        setTimeout(() => {
+                            trendHighlight.style.opacity = '0';
+                            setTimeout(() => {
+                                trendHighlight.remove();
+                            }, 500);
+                        }, 300);
                         
                         // Обновляем заголовок при необходимости
                         if (trendType === 'forecast') {
