@@ -6088,22 +6088,10 @@
                                     color: 'rgba(0, 0, 0, 0.05)',
                                     lineWidth: 1
                                 },
-                                // Добавляем центральную линию графика через ось
-                                afterDraw: function(axis) {
-                                    const ctx = axis.chart.ctx;
-                                    const xScale = axis.chart.scales.x;
-                                    const yScale = axis.chart.scales.y;
-                                    
-                                    // Рисуем красную центральную линию
-                                    ctx.save();
-                                    ctx.beginPath();
-                                    ctx.moveTo(xScale.getPixelForValue(0), yScale.top);
-                                    ctx.lineTo(xScale.getPixelForValue(0), yScale.bottom);
-                                    ctx.lineWidth = 2;
-                                    ctx.strokeStyle = 'rgba(255, 0, 0, 0.7)';
-                                    ctx.stroke();
-                                    ctx.restore();
-                                },
+                                // Убираем центральную линию графика через ось, как видно на новом скриншоте
+                                /* afterDraw: function(axis) {
+                                    // Рисовали красную центральную линию, но теперь убираем её
+                                }, */
                                 // Правильное выравнивание по нулевому значению
                                 offset: true,
                                 position: 'bottom',
@@ -6167,40 +6155,15 @@
                         dataSource.style.zIndex = '10';
                     }
                     
-                    // Создаем центральную разделительную линию
-                    const centerLine = document.createElement('div');
-                    centerLine.style.position = 'absolute';
-                    centerLine.style.left = '50%';
-                    centerLine.style.top = '10%'; 
-                    centerLine.style.bottom = '15%'; // Увеличиваем отступ снизу, чтобы не перекрывать источник данных
-                    centerLine.style.width = '2px'; // Делаем линию толще
-                    centerLine.style.backgroundColor = 'rgba(255, 0, 0, 0.7)'; // Используем красный цвет, как на скриншоте
-                    centerLine.style.transform = 'translateX(-50%)';
-                    centerLine.style.pointerEvents = 'none';
-                    centerLine.style.zIndex = '5'; // Убедимся, что линия отображается поверх графика
+                    // Убираем центральную разделительную линию, как видно на новом скриншоте
                     
                     // Удаляем линию "нулевой отметки", которая отмечена красной стрелкой
                     
-                    // Добавляем надпись "по центральной линии"
-                    const centerLineLabel = document.createElement('div');
-                    centerLineLabel.style.position = 'absolute';
-                    centerLineLabel.style.left = '50%';
-                    centerLineLabel.style.bottom = '16%'; // Опускаем ниже
-                    centerLineLabel.style.transform = 'translateX(-50%)';
-                    centerLineLabel.style.fontSize = '12px';
-                    centerLineLabel.style.fontWeight = 'normal';
-                    centerLineLabel.style.color = 'rgba(0, 0, 0, 0.6)';
-                    centerLineLabel.style.backgroundColor = 'rgba(255, 255, 255, 0.7)'; // Добавляем фон для лучшей видимости
-                    centerLineLabel.style.padding = '1px 4px';
-                    centerLineLabel.style.borderRadius = '3px';
-                    centerLineLabel.textContent = 'по центральной линии';
+                    // Убираем надпись "по центральной линии", как видно на новом скриншоте
                     
                     const chartContainer = ctx.parentElement;
                     chartContainer.style.position = 'relative';
-                    chartContainer.appendChild(centerLine);
-                    // Убираем линию "нулевой отметки", которая указана красной стрелкой
-                    // chartContainer.appendChild(zeroLine);
-                    chartContainer.appendChild(centerLineLabel);
+                    // Убираем добавление centerLine и centerLineLabel, так как они больше не нужны
                     
                     // Добавляем подписи "Мужчины" и "Женщины" с улучшенным позиционированием
                     const maleLabel = document.createElement('div');
