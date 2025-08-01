@@ -6107,6 +6107,17 @@
                                 // Правильное выравнивание по нулевому значению
                                 offset: true,
                                 position: 'bottom',
+                                // Скрываем метку нуля на оси, так как у нас есть отдельная метка
+                                ticks: {
+                                    callback: function(value) {
+                                        // Скрываем метку 0% на оси, чтобы избежать дублирования
+                                        if (value === 0) return '';
+                                        return Math.abs(value) + '%'; // Отображаем положительные проценты на оси
+                                    },
+                                    font: {
+                                        size: 11
+                                    }
+                                },
                                 // Подчеркиваем нулевую линию
                                 grid: {
                                     color: function(context) {
@@ -6183,11 +6194,14 @@
                     const zeroLabel = document.createElement('div');
                     zeroLabel.style.position = 'absolute';
                     zeroLabel.style.left = '50%';
-                    zeroLabel.style.bottom = '8%';
+                    zeroLabel.style.bottom = '16%'; // Опускаем ниже
                     zeroLabel.style.transform = 'translateX(-50%)';
                     zeroLabel.style.fontSize = '12px';
                     zeroLabel.style.fontWeight = 'normal';
                     zeroLabel.style.color = 'rgba(0, 0, 0, 0.6)';
+                    zeroLabel.style.backgroundColor = 'rgba(255, 255, 255, 0.7)'; // Добавляем фон для лучшей видимости
+                    zeroLabel.style.padding = '1px 4px';
+                    zeroLabel.style.borderRadius = '3px';
                     zeroLabel.textContent = '0%';
                     
                     const chartContainer = ctx.parentElement;
