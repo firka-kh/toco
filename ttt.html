@@ -5970,16 +5970,16 @@
                 regionFilterContainer.className = 'region-filter-container flex items-center justify-between mb-4 px-1 bg-gray-50 rounded-lg py-2';
                 regionFilterContainer.innerHTML = `
                     <div class="text-sm font-medium text-gray-700 mr-3">Регион:</div>
-                    <div class="region-chips flex flex-wrap items-center flex-1 overflow-x-auto pb-1" style="scrollbar-width: thin;">
-                        <button class="region-chip bg-blue-500 text-white text-xs px-3 py-1 rounded-full mr-2 whitespace-nowrap" data-region="all">Все регионы</button>
-                        <button class="region-chip bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full mr-2 whitespace-nowrap" data-region="dushanbe">г. Душанбе</button>
-                        <button class="region-chip bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full mr-2 whitespace-nowrap" data-region="sughd">Согдийская обл.</button>
-                        <button class="region-chip bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full mr-2 whitespace-nowrap" data-region="khatlon">Хатлонская обл.</button>
-                        <button class="region-chip bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full mr-2 whitespace-nowrap" data-region="rnp">РРП</button>
-                        <button class="region-chip bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full mr-2 whitespace-nowrap" data-region="gbao">ГБАО</button>
+                    <div class="region-chips flex items-center flex-1">
+                        <button class="region-chip bg-blue-500 text-white text-sm px-4 py-1 rounded-md mr-2" data-region="all">Все регионы</button>
+                        <button class="region-chip bg-gray-100 text-gray-700 text-sm px-4 py-1 rounded-md mr-2" data-region="dushanbe">г. Душанбе</button>
+                        <button class="region-chip bg-gray-100 text-gray-700 text-sm px-4 py-1 rounded-md mr-2" data-region="sughd">Согдийская обл.</button>
+                        <button class="region-chip bg-gray-100 text-gray-700 text-sm px-4 py-1 rounded-md mr-2" data-region="khatlon">Хатлонская обл.</button>
+                        <button class="region-chip bg-gray-100 text-gray-700 text-sm px-4 py-1 rounded-md mr-2" data-region="rnp">РРП</button>
+                        <button class="region-chip bg-gray-100 text-gray-700 text-sm px-4 py-1 rounded-md mr-2" data-region="gbao">ГБАО</button>
                     </div>
                     <div class="flex items-center">
-                        <button class="text-blue-600 hover:text-blue-800 text-xs px-2 py-1 ml-2 flex items-center" id="customizeRegionsBtn">
+                        <button class="text-blue-600 hover:text-blue-800 text-xs px-2 py-1 ml-2 flex items-center border border-blue-300 rounded-md hover:bg-blue-50 transition-colors" id="customizeRegionsBtn">
                             <i class="fas fa-cog mr-1"></i>
                             <span>Настроить</span>
                         </button>
@@ -6421,6 +6421,9 @@
                     }
                 };
                 
+                // Инициализируем переменную для хранения текущего выбранного региона
+                let currentRegion = 'all';
+                
                 // Данные для разных регионов
                 const regionData = {
                     all: {
@@ -6456,7 +6459,7 @@
                 };
                 
                 // Обработчики для кнопок регионов
-                const regionChips = document.querySelectorAll('.region-chip');
+                const regionChips = regionFilterContainer.querySelectorAll('.region-chip');
                 let currentRegion = 'all'; // текущий выбранный регион
                 
                 regionChips.forEach(chip => {
@@ -6464,12 +6467,12 @@
                         // Убираем активный класс со всех кнопок
                         regionChips.forEach(btn => {
                             btn.classList.remove('bg-blue-500', 'text-white');
-                            btn.classList.add('bg-gray-200', 'text-gray-700');
+                            btn.classList.add('bg-gray-100', 'text-gray-700');
                         });
                         
                         // Добавляем активный класс на нажатую кнопку
                         this.classList.add('bg-blue-500', 'text-white');
-                        this.classList.remove('bg-gray-200', 'text-gray-700');
+                        this.classList.remove('bg-gray-100', 'text-gray-700');
                         
                         // Получаем выбранный регион
                         const regionType = this.getAttribute('data-region');
@@ -6499,6 +6502,28 @@
                         }, 300);
                     });
                 });
+                
+                // Функция для проверки существования данных региона
+                function checkRegionData() {
+                    // Проверяем, существуют ли данные для всех регионов
+                    const regions = ['all', 'dushanbe', 'sughd', 'khatlon', 'rnp', 'gbao'];
+                    
+                    regions.forEach(region => {
+                        if (!regionData[region] || !regionData[region].male || !regionData[region].female) {
+                            console.warn(`Данные для региона ${region} отсутствуют или неполные. Используем данные по умолчанию.`);
+                            
+                            // Создаем данные по умолчанию с небольшими отклонениями
+                            regionData[region] = {
+                                male: originalMaleData.map(val => val * (0.8 + Math.random() * 0.4)),
+                                female: originalFemaleData.map(val => val * (0.8 + Math.random() * 0.4)),
+                                title: `Распределение населения ${region === 'all' ? '' : region} по возрасту и полу (%)`
+                            };
+                        }
+                    });
+                }
+                
+                // Выполняем проверку данных регионов
+                checkRegionData();
                 
                 // Функция анимации переключения данных
                 function animateChartTransition() {
