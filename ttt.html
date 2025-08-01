@@ -6179,36 +6179,28 @@
                     centerLine.style.pointerEvents = 'none';
                     centerLine.style.zIndex = '5'; // Убедимся, что линия отображается поверх графика
                     
-                    // Добавляем линию "нулевой отметки"
-                    const zeroLine = document.createElement('div');
-                    zeroLine.style.position = 'absolute';
-                    zeroLine.style.left = '0';
-                    zeroLine.style.right = '0';
-                    zeroLine.style.bottom = '15%';
-                    zeroLine.style.height = '1px';
-                    zeroLine.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
-                    zeroLine.style.pointerEvents = 'none';
-                    zeroLine.style.zIndex = '4';
+                    // Удаляем линию "нулевой отметки", которая отмечена красной стрелкой
                     
-                    // Добавляем метку "0%"
-                    const zeroLabel = document.createElement('div');
-                    zeroLabel.style.position = 'absolute';
-                    zeroLabel.style.left = '50%';
-                    zeroLabel.style.bottom = '16%'; // Опускаем ниже
-                    zeroLabel.style.transform = 'translateX(-50%)';
-                    zeroLabel.style.fontSize = '12px';
-                    zeroLabel.style.fontWeight = 'normal';
-                    zeroLabel.style.color = 'rgba(0, 0, 0, 0.6)';
-                    zeroLabel.style.backgroundColor = 'rgba(255, 255, 255, 0.7)'; // Добавляем фон для лучшей видимости
-                    zeroLabel.style.padding = '1px 4px';
-                    zeroLabel.style.borderRadius = '3px';
-                    zeroLabel.textContent = '0%';
+                    // Добавляем надпись "по центральной линии"
+                    const centerLineLabel = document.createElement('div');
+                    centerLineLabel.style.position = 'absolute';
+                    centerLineLabel.style.left = '50%';
+                    centerLineLabel.style.bottom = '16%'; // Опускаем ниже
+                    centerLineLabel.style.transform = 'translateX(-50%)';
+                    centerLineLabel.style.fontSize = '12px';
+                    centerLineLabel.style.fontWeight = 'normal';
+                    centerLineLabel.style.color = 'rgba(0, 0, 0, 0.6)';
+                    centerLineLabel.style.backgroundColor = 'rgba(255, 255, 255, 0.7)'; // Добавляем фон для лучшей видимости
+                    centerLineLabel.style.padding = '1px 4px';
+                    centerLineLabel.style.borderRadius = '3px';
+                    centerLineLabel.textContent = 'по центральной линии';
                     
                     const chartContainer = ctx.parentElement;
                     chartContainer.style.position = 'relative';
                     chartContainer.appendChild(centerLine);
-                    chartContainer.appendChild(zeroLine);
-                    chartContainer.appendChild(zeroLabel);
+                    // Убираем линию "нулевой отметки", которая указана красной стрелкой
+                    // chartContainer.appendChild(zeroLine);
+                    chartContainer.appendChild(centerLineLabel);
                     
                     // Добавляем подписи "Мужчины" и "Женщины" с улучшенным позиционированием
                     const maleLabel = document.createElement('div');
