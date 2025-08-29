@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Навигация по страницам портала</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: transform 0.3s, box-shadow 0.3s; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15); }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-2xl font-bold">Навигация по страницам портала</h1>
+        </div>
+    </header>
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a href="employer_profile.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-user-tie text-2xl text-indigo-600"></i>
+                <span>Кабинет работодателя</span>
+            </a>
+            <a href="employer_anons_work.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-bullhorn text-2xl text-yellow-600"></i>
+                <span>Анонсы работодателя</span>
+            </a>
+            <a href="gov_pg.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-university text-2xl text-green-600"></i>
+                <span>Панель госслужащего</span>
+            </a>
+            <a href="index.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-home text-2xl text-blue-600"></i>
+                <span>Главная страница</span>
+            </a>
+            <a href="micro_credit.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-coins text-2xl text-yellow-500"></i>
+                <span>Микрокредитование</span>
+            </a>
+            <a href="news.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-newspaper text-2xl text-red-500"></i>
+                <span>Новости</span>
+            </a>
+            <a href="online_interviews.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-video text-2xl text-purple-600"></i>
+                <span>Онлайн-собеседования</span>
+            </a>
+            <a href="prof_skill_need.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-graduation-cap text-2xl text-indigo-400"></i>
+                <span>Профпереподготовка</span>
+            </a>
+            <a href="serchwork.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-search text-2xl text-blue-400"></i>
+                <span>Поиск работы</span>
+            </a>
+            <a href="skill_serch.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-book text-2xl text-green-400"></i>
+                <span>Образовательные ресурсы</span>
+            </a>
+            <a href="statistics.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-chart-bar text-2xl text-pink-400"></i>
+                <span>Статистика</span>
+            </a>
+            <a href="test_upload.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-upload text-2xl text-gray-400"></i>
+                <span>Массовая загрузка вакансий</span>
+            </a>
+            <a href="tools_analitic.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-tools text-2xl text-blue-700"></i>
+                <span>Инструменты аналитики</span>
+            </a>
+            <a href="ttt.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-cogs text-2xl text-gray-700"></i>
+                <span>Тестовая страница (ttt.html)</span>
+            </a>
+            <a href="user_dashboard.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-user text-2xl text-indigo-700"></i>
+                <span>Личный кабинет соискателя</span>
+            </a>
+            <a href="user_profile.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-id-card text-2xl text-green-700"></i>
+                <span>Профиль соискателя</span>
+            </a>
+            <a href="video_res.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-video text-2xl text-red-700"></i>
+                <span>Видео-резюме</span>
+            </a>
+            <a href="youth_programs.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-users text-2xl text-yellow-700"></i>
+                <span>Молодежные программы</span>
+            </a>
+            <a href="2_online_interview.html" class="bg-white rounded-xl shadow-lg p-6 card-hover flex items-center gap-4">
+                <i class="fas fa-comments text-2xl text-purple-700"></i>
+                <span>2_online_interview.html</span>
+            </a>
+        </div>
+    </main>
+    <footer class="gradient-bg text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            &copy; 2025 Портал рынка труда — Все права защищены
+        </div>
+    </footer>
+</body>
+</html>
