@@ -36,7 +36,7 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             padding: 24px 32px;
         }
-        /* Стили для русского текста (меньше и тусклее) */
+        /* Стили для русского текста */
         .ru { font-size: 0.85em; opacity: 0.75; font-weight: 400; }
         .ru-block { font-size: 0.85em; opacity: 0.75; font-weight: 400; display: block; margin-top: 2px; line-height: 1.2; }
         
@@ -120,15 +120,13 @@
                     </div>
                 </button>
                 
-                <!-- ФАСИЛИТАТОР: На доработке -->
-                <button data-filter="rev" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                <button data-filter="rev" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2 relative">
                     <div class="flex flex-col items-center leading-tight">
                         <span class="text-[12px] font-medium whitespace-nowrap">Дар ҳоли такмил</span><span class="ru text-[11px]">На доработке</span>
                     </div>
                     <span id="dash-rev-badge" class="bg-red-100 text-red-600 px-1.5 py-0.5 rounded text-[10px] font-bold hidden">0</span>
                 </button>
 
-                <!-- GMC -->
                 <button data-filter="gmc" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
                     <div class="flex flex-col items-center leading-tight">
                         <span class="text-[12px] font-medium whitespace-nowrap">Ба GMC пешниҳод шуд</span><span class="ru text-[11px]">Подана в GMC</span>
@@ -136,7 +134,6 @@
                     <span id="dash-gmc-badge" class="bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded text-[10px] font-bold hidden">0</span>
                 </button>
 
-                <!-- PIU -->
                 <button data-filter="piu" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
                     <div class="flex flex-col items-center leading-tight">
                         <span class="text-[12px] font-medium whitespace-nowrap">Барои баррасӣ ба ГРП</span><span class="ru text-[11px]">На рассмотрение ГРП</span>
@@ -144,7 +141,6 @@
                     <span id="dash-piu-badge" class="bg-indigo-100 text-indigo-600 px-1.5 py-0.5 rounded text-[10px] font-bold hidden">0</span>
                 </button>
 
-                <!-- КОМИТЕТ -->
                 <button data-filter="committee" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
                     <div class="flex flex-col items-center leading-tight">
                         <span class="text-[12px] font-medium whitespace-nowrap">Кумита</span><span class="ru text-[11px]">Комитет</span>
@@ -170,200 +166,9 @@
             </div>
         </div>
 
-        <!-- СЕТКА КАРТОЧЕК -->
+        <!-- СЕТКА КАРТОЧЕК ДИНАМИЧЕСКАЯ -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="mainDashboardGrid">
-            
-            <!-- Карточка: На доработке (УВЕДОМЛЕНИЕ ФАСИЛИТАТОРА) -->
-            <div data-status="rev" id="dash-card-10008" class="bg-red-50/30 border border-red-300 shadow-sm hover:border-red-500 transition-all duration-200 flex flex-col min-h-[160px] cursor-pointer rounded-2xl p-5 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-red-500"></div>
-                <div class="flex justify-between items-start mb-1 mt-1">
-                    <h3 class="font-bold text-slate-800 text-[15px]">Азизова Зарина</h3>
-                    <div class="bg-red-100 text-red-800 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse border border-red-300 flex flex-col items-end leading-tight shadow-sm">
-                        <div class="flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Амали Фасилитатор лозим</div>
-                        <span class="ru">Требуется действие Фасилитатора</span>
-                    </div>
-                </div>
-                <div class="text-[11px] text-slate-500 mb-auto mt-1">#10008 • Ороишгар <span class="ru">/ Визажист</span></div>
-                <div class="mt-4 mb-4 flex flex-col">
-                    <span class="text-primary font-bold text-[14px]">7 500 сомонӣ</span><span class="text-primary ru font-bold">7 500 сомони</span>
-                </div>
-                <div class="flex justify-between items-center mt-auto border-t border-red-100 pt-4">
-                    <span class="text-xs text-slate-400 font-medium">06.03.2026</span>
-                    <button onclick="openRevFor('10008')" class="bg-white text-red-600 border border-red-300 text-[12px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-2 hover:bg-red-50 transition-colors shadow-sm text-right leading-tight">
-                        <span>Ислоҳ кардан <span class="ru-block">Исправить</span></span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Карточка ОЧЕРЕДИ 1: Подана в GMC -->
-            <div data-status="gmc" id="dash-card-10001" class="bg-[#F4F7FF] rounded-2xl p-5 border border-[#C6D4FF] shadow-sm hover:border-[#5B4AF0] hover:shadow-md transition-all duration-200 flex flex-col min-h-[160px] relative overflow-hidden cursor-pointer">
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-[#5B4AF0]"></div>
-                <div class="flex justify-between items-start mb-1 mt-1">
-                    <h3 class="font-bold text-slate-800 text-[15px]">Саидова Мадина Алиевна</h3>
-                    <div class="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse flex flex-col items-end shadow-sm border border-blue-200">
-                        <div class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> Ба GMC пешниҳод шуд</div>
-                        <span class="ru">Подана в GMC</span>
-                    </div>
-                </div>
-                <div class="text-[11px] text-slate-500 mb-auto">#10001 • Савдо <span class="ru">/ Торговля</span></div>
-                <div class="mt-4 mb-4 flex flex-col">
-                    <span class="text-primary font-black text-[15px]">5 000 сомонӣ</span><span class="text-primary ru font-bold">5 000 сомони</span>
-                </div>
-                <div class="flex justify-between items-center mt-auto border-t border-[#D9E2FF] pt-4">
-                    <span class="text-xs text-slate-400 font-medium">09.03.2026</span>
-                    <button onclick="openGmcFor('10001')" class="bg-white text-[#5B4AF0] border border-[#C6D4FF] text-[12px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-2 hover:bg-blue-50 transition-colors shadow-sm text-right leading-tight">
-                        <span>Баҳогузорӣ <span class="ru-block">Оценить (GMC)</span></span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Карточка ОЧЕРЕДИ 2: Подана в GMC -->
-            <div data-status="gmc" id="dash-card-10006" class="bg-[#F4F7FF] rounded-2xl p-5 border border-[#C6D4FF] shadow-sm hover:border-[#5B4AF0] hover:shadow-md transition-all duration-200 flex flex-col min-h-[160px] relative overflow-hidden cursor-pointer">
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-[#5B4AF0]"></div>
-                <div class="flex justify-between items-start mb-1 mt-1">
-                    <h3 class="font-bold text-slate-800 text-[15px]">Одинаев Хасан</h3>
-                    <div class="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse flex flex-col items-end shadow-sm border border-blue-200">
-                        <div class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> Ба GMC пешниҳод шуд</div>
-                        <span class="ru">Подана в GMC</span>
-                    </div>
-                </div>
-                <div class="text-[11px] text-slate-500 mb-auto">#10006 • Кишоварзӣ <span class="ru">/ С. хозяйство</span></div>
-                <div class="mt-4 mb-4 flex flex-col">
-                    <span class="text-primary font-black text-[15px]">12 500 сомонӣ</span><span class="text-primary ru font-bold">12 500 сомони</span>
-                </div>
-                <div class="flex justify-between items-center mt-auto border-t border-[#D9E2FF] pt-4">
-                    <span class="text-xs text-slate-400 font-medium">09.03.2026</span>
-                    <button onclick="openGmcFor('10006')" class="bg-white text-[#5B4AF0] border border-[#C6D4FF] text-[12px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-2 hover:bg-blue-50 transition-colors shadow-sm text-right leading-tight">
-                        <span>Баҳогузорӣ <span class="ru-block">Оценить (GMC)</span></span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Карточка ОЧЕРЕДИ 3: Подана в GMC (ВОЗВРАТ ИЗ PIU) -->
-            <div data-status="gmc" id="dash-card-10003" class="bg-amber-50/50 rounded-2xl p-5 border border-amber-300 shadow-sm hover:border-amber-500 hover:shadow-md transition-all duration-200 flex flex-col min-h-[160px] relative overflow-hidden cursor-pointer">
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-amber-500"></div>
-                <div class="flex justify-between items-start mb-1 mt-1">
-                    <h3 class="font-bold text-slate-800 text-[15px]">Каримов Рустам Бобоевич</h3>
-                    <div class="bg-amber-100 text-amber-800 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse flex flex-col items-end shadow-sm border border-amber-300">
-                        <div class="flex items-center gap-1"><i data-lucide="alert-triangle" class="w-3 h-3"></i> Аз ГРП баргашт</div>
-                        <span class="ru">Возврат из PIU</span>
-                    </div>
-                </div>
-                <div class="text-[11px] text-slate-500 mb-auto">#10003 • Устои барқ <span class="ru">/ Электрик</span></div>
-                <div class="mt-4 mb-4 flex flex-col">
-                    <span class="text-primary font-black text-[15px]">8 500 сомонӣ</span><span class="text-primary ru font-bold">8 500 сомони</span>
-                </div>
-                <div class="flex justify-between items-center mt-auto border-t border-amber-200 pt-4">
-                    <span class="text-xs text-slate-400 font-medium">09.03.2026</span>
-                    <button onclick="openGmcFor('10003')" class="bg-white text-amber-700 border border-amber-300 text-[12px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-2 hover:bg-amber-100 transition-colors shadow-sm text-right leading-tight">
-                        <span>Баррасӣ <span class="ru-block">Рассмотреть</span></span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Карточка ОЧЕРЕДИ PIU -->
-            <div data-status="piu" id="dash-card-10004" class="bg-indigo-50/40 border border-indigo-200 hover:border-indigo-400 cursor-pointer rounded-2xl p-5 shadow-sm transition-all duration-200 flex flex-col min-h-[160px] relative overflow-hidden">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-medium text-[14px] text-slate-800">Иванов Иван Иванович</h3>
-                    <div class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse border border-indigo-200 flex flex-col items-end leading-tight">
-                        <span>Барои баррасӣ ба ГРП</span><span class="ru">На рассмотрение ГРП</span>
-                    </div>
-                </div>
-                <div class="text-[11px] text-slate-400 mb-auto">#10004 • Хизматрасонӣ <span class="ru">/ Услуги</span></div>
-                <div class="mt-4 mb-4 flex flex-col">
-                    <span class="text-primary font-bold text-[14px]">8 000 сомонӣ</span><span class="text-primary ru font-bold">8 000 сомони</span>
-                </div>
-                <div class="flex justify-between items-center mt-auto border-t border-slate-100 pt-3">
-                    <span class="text-xs text-slate-400 font-medium">08.03.2026</span>
-                    <span class="text-indigo-600 text-[12px] font-bold flex items-center gap-1 cursor-pointer hover:underline text-right leading-tight" onclick="openPiuFor('10004')">
-                        <span>Санҷиши PIU <span class="ru-block">Верификация PIU</span></span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Карточка ОЧЕРЕДИ Комитет -->
-            <div data-status="committee" id="dash-card-10007" class="bg-teal-50/40 border border-teal-200 hover:border-teal-400 cursor-pointer rounded-2xl p-5 shadow-sm transition-all duration-200 flex flex-col min-h-[160px] relative overflow-hidden">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-medium text-[14px] text-slate-800">Бобоев Али</h3>
-                    <div class="bg-teal-100 text-teal-700 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse border border-teal-200 flex flex-col items-end leading-tight">
-                        <span>Қарори Кумита</span><span class="ru">Решение Комитета</span>
-                    </div>
-                </div>
-                <div class="text-[11px] text-slate-400 mb-auto">#10007 • Истеҳсолот <span class="ru">/ Производство</span></div>
-                <div class="mt-4 mb-4 flex flex-col">
-                    <span class="text-primary font-bold text-[14px]">15 000 сомонӣ</span><span class="text-primary ru font-bold">15 000 сомони</span>
-                </div>
-                <div class="flex justify-between items-center mt-auto border-t border-slate-100 pt-3">
-                    <span class="text-xs text-slate-400 font-medium">07.03.2026</span>
-                    <span class="text-teal-600 text-[12px] font-bold flex items-center gap-1 cursor-pointer hover:underline text-right leading-tight" onclick="openComFor('10007')">
-                        <span>Тасдиқи ниҳоӣ <span class="ru-block">Финальное утверждение</span></span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Карточка: Черновик -->
-            <div data-status="draft" id="dash-card-10002" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:border-primary transition-all duration-200 flex flex-col min-h-[160px] cursor-pointer">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-medium text-slate-800 text-[14px]">Раҳмонов Далер Ҷамшедович</h3>
-                    <div class="bg-slate-100 text-slate-500 px-2 py-1 rounded-md text-[10px] font-medium border border-slate-200 flex flex-col items-end leading-tight">
-                        <span>Сиёҳнавис</span><span class="ru">Черновик</span>
-                    </div>
-                </div>
-                <div class="text-[11px] text-slate-400 mb-auto">#10002 • Истеҳсолот <span class="ru">/ Производство</span></div>
-                <div class="mt-4 mb-4 flex flex-col">
-                    <span class="text-primary font-bold text-[14px]">20 000 сомонӣ</span><span class="text-primary ru font-bold">20 000 сомони</span>
-                </div>
-                <div class="flex justify-between items-center mt-auto border-t border-slate-50 pt-3">
-                    <span class="text-xs text-slate-400 font-medium">09.03.2026</span>
-                    <a href="#" class="text-slate-500 hover:text-primary text-[12px] font-medium flex items-center gap-1 hover:underline text-right leading-tight">
-                        <span>Кушодан <span class="ru-block">Открыть</span></span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Карточка: Грант выдан / Одобрено -->
-            <div data-status="approved" id="dash-card-10010" class="bg-emerald-50/40 rounded-2xl p-5 border border-emerald-200 shadow-sm hover:border-emerald-400 transition-all duration-200 flex flex-col min-h-[160px] cursor-pointer">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-medium text-slate-800 text-[14px]">Мирзоева Ситора</h3>
-                    <div class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded-md text-[10px] font-bold border border-emerald-200 flex flex-col items-end leading-tight">
-                        <span>Тасдиқ шуд</span><span class="ru">Одобрена</span>
-                    </div>
-                </div>
-                <div class="text-[11px] text-slate-400 mb-auto">#10010 • Савдо <span class="ru">/ Торговля</span></div>
-                <div class="mt-4 mb-4 flex flex-col">
-                    <span class="text-primary font-bold text-[14px]">9 000 сомонӣ</span><span class="text-primary ru font-bold">9 000 сомони</span>
-                </div>
-                <div class="flex justify-between items-center mt-auto border-t border-slate-50 pt-3">
-                    <span class="text-xs text-slate-400 font-medium">01.03.2026</span>
-                    <span class="text-emerald-600 text-[12px] font-bold text-right leading-tight hover:underline flex items-center gap-1" onclick="openApprovedFor('10010')">
-                        <span>Кушодан <span class="ru-block">Открыть</span></span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Карточка: Отклонена -->
-            <div data-status="rejected" id="dash-card-10005" class="bg-red-50/40 rounded-2xl p-5 border border-red-200 opacity-70 shadow-sm transition-all duration-200 flex flex-col min-h-[160px]">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-medium text-slate-800 text-[14px]">Шарипова Нилуфар</h3>
-                    <div class="bg-red-100 text-red-700 px-2 py-1 rounded-md text-[10px] font-bold border border-red-200 flex flex-col items-end leading-tight">
-                        <span>Рад карда шуд</span><span class="ru">Отклонена</span>
-                    </div>
-                </div>
-                <div class="text-[11px] text-slate-400 mb-auto">#10005 • Хизматрасонӣ <span class="ru">/ Услуги</span></div>
-                <div class="mt-4 mb-4 flex flex-col">
-                    <span class="text-primary font-bold text-[14px]">4 000 сомонӣ</span><span class="text-primary ru font-bold">4 000 сомони</span>
-                </div>
-                <div class="flex justify-between items-center mt-auto border-t border-slate-50 pt-3">
-                    <span class="text-xs text-slate-400 font-medium">28.02.2026</span>
-                </div>
-            </div>
-
+            <!-- Карточки генерируются через JS -->
         </div>
     </div>
 
@@ -393,6 +198,11 @@
                 </button>
                 <button class="tab-btn pb-3 flex items-center space-x-2 cursor-pointer whitespace-nowrap text-[13px] font-medium text-gray-500 transition-colors" data-target="pane-committee">
                     <i data-lucide="award" class="w-4 h-4"></i><span>Кумита <span class="ru">/ Комитет</span> <span id="com-badge" class="hidden bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded-full text-[10px] ml-1 font-bold">0</span></span>
+                </button>
+                
+                <!-- НОВЫЕ ВКЛАДКИ ДЛЯ ОДОБРЕННЫХ -->
+                <button id="tab-btn-tranches" class="tab-btn hidden pb-3 flex items-center space-x-2 cursor-pointer whitespace-nowrap text-[13px] font-medium text-gray-500 transition-colors" data-target="pane-tranches">
+                    <i data-lucide="credit-card" class="w-4 h-4"></i><span>Траншҳо <span class="ru">/ Транши</span></span>
                 </button>
                 <button id="tab-btn-approved" class="tab-btn hidden pb-3 flex items-center space-x-2 cursor-pointer whitespace-nowrap text-[13px] font-medium text-gray-500 transition-colors" data-target="pane-approved">
                     <i data-lucide="folder-check" class="w-4 h-4"></i><span>Ҳуҷҷатҳо ва Таърих <span class="ru">/ Документы и История</span></span>
@@ -467,8 +277,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4 mt-6 pt-5 border-t border-gray-100">
-                        <button id="btn-submit-facilitator" onclick="submitToGmc()" class="w-full bg-[#5b4ef5] text-white py-2.5 rounded-md text-[13px] font-medium hover:bg-[#4b3ed5] shadow-sm flex flex-col items-center leading-tight">
+                    <div class="flex flex-col sm:flex-row items-center gap-4 mt-6 pt-5 border-t border-gray-100">
+                        <button type="button" onclick="saveToDraft()" class="w-full sm:w-1/2 bg-slate-100 text-slate-700 py-2.5 rounded-md text-[13px] font-bold hover:bg-slate-200 shadow-sm flex flex-col items-center leading-tight transition-colors border border-slate-200">
+                            <span>Захира ба сиёҳнавис</span>
+                            <span class="ru">Сохранить в черновик</span>
+                        </button>
+                        <button type="button" onclick="submitToGmc()" class="w-full sm:w-1/2 bg-[#5b4ef5] text-white py-2.5 rounded-md text-[13px] font-bold hover:bg-[#4b3ed5] shadow-sm flex flex-col items-center leading-tight transition-colors border border-transparent">
                             <span>Фиристодан ба GMC</span>
                             <span class="ru">Отправить в GMC</span>
                         </button>
@@ -538,7 +352,7 @@
                                     <div class="bg-white p-3"><span class="text-gray-500 block text-[10px] mb-0.5">Намуди фаъолият <span class="ru">/ Вид деятельности</span></span><strong id="gmc-hdr-activity">—</strong></div>
                                     <div class="bg-white p-3"><span class="text-gray-500 block text-[10px] mb-0.5">Ҷойгиршавӣ <span class="ru">/ Локация</span></span><strong id="gmc-hdr-location">—</strong></div>
                                     <div class="bg-white p-3"><span class="text-gray-500 block text-[10px] mb-0.5">Маблағи дархостшудаи грант <span class="ru">/ Сумма гранта</span></span><strong id="gmc-hdr-amount">—</strong></div>
-                                    <div class="bg-white p-3 flex flex-col justify-center"><span class="text-gray-500 text-[10px] mb-1">Санаи баҳогузорӣ <span class="ru">/ Дата оценки</span></span><input type="date" class="border border-gray-200 rounded px-2 py-1 w-full outline-none focus:border-blue-500"></div>
+                                    <div class="bg-white p-3 flex flex-col justify-center"><span class="text-gray-500 text-[10px] mb-1">Санаи баҳогузорӣ <span class="ru">/ Дата оценки</span></span><input type="date" id="gmc-date-input" class="border border-gray-200 rounded px-2 py-1 w-full outline-none focus:border-blue-500"></div>
                                     <div class="bg-white p-3 flex flex-col justify-center"><span class="text-gray-500 text-[10px] mb-1">ННШ-и баҳогузор <span class="ru">/ ФИО оценивающего</span></span><input type="text" id="gmc-reviewer" placeholder="Ном Насаб / ФИО" class="border border-gray-200 rounded px-2 py-1 w-full outline-none focus:border-blue-500"></div>
                                 </div>
                             </div>
@@ -833,25 +647,25 @@
                                     <div class="absolute w-4 h-4 bg-emerald-500 rounded-full -left-[9px] top-1 border-2 border-white shadow-sm"></div>
                                     <p class="text-[13px] font-bold text-gray-800 leading-tight">Фасилитатор <span class="ru">/ Фасилитатор</span></p>
                                     <p class="text-[11px] text-gray-500 mt-0.5 leading-tight">Дархост ва нақшаи тиҷоратӣ бор карда шуд <span class="ru-block mt-0.5">Заявка и бизнес-план загружены</span></p>
-                                    <p class="text-[10px] text-gray-400 mt-1 font-medium">01.03.2026</p>
+                                    <p class="text-[10px] text-gray-400 mt-1 font-medium" id="tl-created-date">—</p>
                                 </div>
                                 <div class="relative pl-5">
                                     <div class="absolute w-4 h-4 bg-emerald-500 rounded-full -left-[9px] top-1 border-2 border-white shadow-sm"></div>
                                     <p class="text-[13px] font-bold text-gray-800 leading-tight">GMC</p>
-                                    <p class="text-[11px] text-gray-500 mt-0.5 leading-tight">Баҳогузорӣ мусбат гузашт (Хол: 52) <span class="ru-block mt-0.5">Оценка пройдена положительно (Балл: 52)</span></p>
-                                    <p class="text-[10px] text-gray-400 mt-1 font-medium">03.03.2026</p>
+                                    <p class="text-[11px] text-gray-500 mt-0.5 leading-tight">Баҳогузорӣ мусбат гузашт <span class="ru-block mt-0.5">Оценка пройдена положительно</span></p>
+                                    <p class="text-[10px] text-gray-400 mt-1 font-medium" id="tl-gmc-date">—</p>
                                 </div>
                                 <div class="relative pl-5">
                                     <div class="absolute w-4 h-4 bg-emerald-500 rounded-full -left-[9px] top-1 border-2 border-white shadow-sm"></div>
                                     <p class="text-[13px] font-bold text-gray-800 leading-tight">ГРП <span class="ru">/ PIU</span></p>
                                     <p class="text-[11px] text-gray-500 mt-0.5 leading-tight">Санҷиши 4 мутахассис гузашт <span class="ru-block mt-0.5">Верификация 4 специалистов пройдена</span></p>
-                                    <p class="text-[10px] text-gray-400 mt-1 font-medium">05.03.2026</p>
+                                    <p class="text-[10px] text-gray-400 mt-1 font-medium" id="tl-piu-date">—</p>
                                 </div>
                                 <div class="relative pl-5">
                                     <div class="absolute w-4 h-4 bg-emerald-500 rounded-full -left-[9px] top-1 border-2 border-white shadow-sm"></div>
                                     <p class="text-[13px] font-bold text-gray-800 leading-tight">Кумита <span class="ru">/ Комитет</span></p>
                                     <p class="text-[11px] text-emerald-600 font-bold mt-0.5 leading-tight">Грант тасдиқ шуд <span class="ru-block mt-0.5 text-emerald-600 font-bold">Грант утвержден</span></p>
-                                    <p class="text-[10px] text-gray-400 mt-1 font-medium">07.03.2026</p>
+                                    <p class="text-[10px] text-gray-400 mt-1 font-medium" id="tl-com-date">—</p>
                                 </div>
                             </div>
                         </div>
@@ -885,11 +699,65 @@
                 </div>
             </div>
 
+            <!-- PANE: ТРАНШИ -->
+            <div id="pane-tranches" class="tab-pane hidden">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-[15px] font-bold text-gray-800 uppercase">Идоракунии траншҳо <span class="ru-block mt-0.5">Управление траншами</span></h2>
+                        <button id="toggleTrancheBtn" onclick="toggleTrancheForm()" class="bg-[#5b4ef5] text-white px-4 py-2 rounded-lg text-[13px] font-bold hover:bg-[#4b3ed5] transition-colors flex items-center gap-2 shadow-sm">
+                            <i data-lucide="plus" id="trancheBtnIcon" class="w-4 h-4"></i>
+                            <span id="trancheBtnText">Иловаи транш <span class="ru">/ Добавить транш</span></span>
+                        </button>
+                    </div>
+
+                    <!-- Форма добавления транша -->
+                    <div id="trancheFormBlock" class="hidden bg-[#f8f9fc] border border-[#e5e9f5] rounded-xl p-5 mb-6">
+                        <h3 class="text-[14px] font-bold text-[#5b4ef5] mb-4">Транши нав <span class="ru">/ Новый транш</span> #<span id="new-tranche-num">1</span></h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-[12px] text-gray-600 mb-1.5">Маблағ (сомонӣ) <span class="text-red-500">*</span> <span class="ru">/ Сумма (сомони) *</span></label>
+                                <input type="number" id="tranche-amount" placeholder="2000" class="w-full border border-gray-300 rounded-md px-3 py-2 text-[13px] outline-none focus:border-[#5b4ef5]">
+                            </div>
+                            <div>
+                                <label class="block text-[12px] text-gray-600 mb-1.5">Санаи банақшагирифташуда <span class="text-red-500">*</span> <span class="ru">/ Планируемая дата *</span></label>
+                                <input type="date" id="tranche-date" class="w-full border border-gray-300 rounded-md px-3 py-2 text-[13px] outline-none focus:border-[#5b4ef5]">
+                            </div>
+                        </div>
+                        <div class="mb-5">
+                            <label class="block text-[12px] text-gray-600 mb-1.5">Эзоҳ <span class="ru">/ Примечание</span></label>
+                            <input type="text" id="tranche-note" placeholder="Хариди таҷҳизот... / Закупка оборудования..." class="w-full border border-gray-300 rounded-md px-3 py-2 text-[13px] outline-none focus:border-[#5b4ef5]">
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="saveTranche()" class="w-full sm:w-auto flex-1 bg-[#8b82f8] text-white px-6 py-2.5 rounded-md text-[13px] font-bold hover:bg-[#5b4ef5] transition-colors">Эҷоди транш <span class="ru">/ Создать транш</span></button>
+                            <button onclick="toggleTrancheForm()" class="bg-white border border-gray-200 text-gray-600 px-6 py-2.5 rounded-md text-[13px] font-bold hover:bg-gray-50 transition-colors shadow-sm">Бекор кардан <span class="ru">/ Отмена</span></button>
+                        </div>
+                    </div>
+
+                    <!-- Список траншей -->
+                    <div id="tranchesListContainer" class="space-y-3">
+                        <!-- Empty state -->
+                        <div id="tranchesEmptyState" class="flex flex-col items-center justify-center py-12 text-gray-400">
+                            <i data-lucide="credit-card" class="w-10 h-10 mb-3 text-blue-400/50"></i>
+                            <p class="text-[13px] font-medium text-gray-500">Траншҳо вуҷуд надоранд <span class="ru-block text-center mt-1">Транши не созданы</span></p>
+                            <p class="text-[11px] mt-2 text-center text-gray-400">Барои эҷод кардани транши аввал "Иловаи транш" -ро пахш кунед <span class="ru-block mt-0.5">Нажмите «Добавить транш» чтобы создать первый</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        // База 10 заявителей (Двуязычные данные)
+        // Функция для получения текущего времени
+        function getCurrentDateTime() {
+            const now = new Date();
+            const date = now.toLocaleDateString('ru-RU');
+            const time = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            return `${date}, ${time}`;
+        }
+
+        // База 10 заявителей
         const mockDatabase = {
             "10001": { "full-name": "Саидова Мадина Алиевна", "birth-date": "12.03.1998", "gender": "Зан <span class='ru'>/ Женский</span>", "contacts": "+992 93 111 2233", "address": "ш. Хуҷанд, кӯч. Сомонӣ 45 <span class='ru'>/ г. Худжанд...</span>", "inn": "9876543210", "category": "Корҷӯй <span class='ru'>/ Ищущий</span>", "education": "Миёнаи махсус <span class='ru'>/ Среднее спец.</span>", "course": "Дӯзандагӣ <span class='ru'>/ Швейное дело</span>", "certStatus": "certified" },
             "10002": { "full-name": "Раҳмонов Далер Ҷамшедович", "birth-date": "20.08.1995", "gender": "Мард <span class='ru'>/ Мужской</span>", "contacts": "+992 90 222 3344", "address": "ш. Душанбе, кӯч. Рӯдакӣ 12 <span class='ru'>/ г. Душанбе...</span>", "inn": "1234567890", "category": "Бекор <span class='ru'>/ Безработный</span>", "education": "Олӣ <span class='ru'>/ Высшее</span>", "course": "Кафшергарӣ <span class='ru'>/ Сварочное дело</span>", "certStatus": "certified" },
@@ -903,22 +771,36 @@
             "10010": { "full-name": "Мирзоева Ситора", "birth-date": "25.02.1992", "gender": "Зан <span class='ru'>/ Женский</span>", "contacts": "+992 22 000 1122", "address": "ш. Ҳисор <span class='ru'>/ г. Гиссар</span>", "inn": "9900112233", "category": "Корҷӯй <span class='ru'>/ Ищущий</span>", "education": "Олӣ <span class='ru'>/ Высшее</span>", "course": "Муҳосиб <span class='ru'>/ Бухгалтер</span>", "certStatus": "certified" }
         };
 
-        // Состояние Очередей
+        // Состояние Очередей с демо-данными
         let state = {
+            drafts: [
+                { id: '10002', name: 'Раҳмонов Далер Ҷамшедович', sector: 'Истеҳсолот <span class="ru">/ Производство</span>', amount: '20 000', date: '09.03.2026, 09:15', status: 'draft', history: { created: '09.03.2026, 09:15' } }
+            ],
             gmc_queue: [
-                { id: '10001', name: 'Саидова Мадина Алиевна', sector: 'Савдо <span class="ru">/ Торговля</span>', amount: '5 000', date: '09.03.2026', status: 'new' },
-                { id: '10006', name: 'Одинаев Хасан', sector: 'Кишоварзӣ <span class="ru">/ С. хозяйство</span>', amount: '12 500', date: '09.03.2026', status: 'new' },
-                { id: '10003', name: 'Каримов Рустам Бобоевич', sector: 'Устои барқ <span class="ru">/ Электрик</span>', amount: '8 500', date: '09.03.2026', status: 'returned_from_piu' }
+                { id: '10001', name: 'Саидова Мадина Алиевна', sector: 'Савдо <span class="ru">/ Торговля</span>', amount: '5 000', date: '09.03.2026, 10:20', status: 'new', history: { created: '09.03.2026, 10:20' } },
+                { id: '10006', name: 'Одинаев Хасан', sector: 'Кишоварзӣ <span class="ru">/ С. хозяйство</span>', amount: '12 500', date: '09.03.2026, 11:05', status: 'new', history: { created: '09.03.2026, 11:05' } },
+                { id: '10003', name: 'Каримов Рустам Бобоевич', sector: 'Устои барқ <span class="ru">/ Электрик</span>', amount: '8 500', date: '09.03.2026, 14:30', status: 'returned_from_piu', history: { created: '07.03.2026, 09:00', gmc: '08.03.2026, 10:00', piu: '09.03.2026, 14:30' } }
             ],
             piu_queue: [
-                { id: '10004', name: 'Иванов Иван Иванович', sector: 'Хизматрасонӣ <span class="ru">/ Услуги</span>', amount: '8 000', date: '08.03.2026', status: 'approved_by_gmc' }
+                { id: '10004', name: 'Иванов Иван Иванович', sector: 'Хизматрасонӣ <span class="ru">/ Услуги</span>', amount: '8 000', date: '08.03.2026, 16:20', status: 'approved_by_gmc', history: { created: '06.03.2026, 11:00', gmc: '08.03.2026, 16:20' } }
             ],
             committee_queue: [
-                { id: '10007', name: 'Бобоев Али', sector: 'Истеҳсолот <span class="ru">/ Производство</span>', amount: '15 000', date: '07.03.2026', status: 'approved_by_piu' }
+                { id: '10007', name: 'Бобоев Али', sector: 'Истеҳсолот <span class="ru">/ Производство</span>', amount: '15 000', date: '07.03.2026, 12:45', status: 'approved_by_piu', history: { created: '01.03.2026, 09:30', gmc: '03.03.2026, 14:15', piu: '07.03.2026, 12:45' } }
             ],
             revisions: [
-                { id: '10008', name: 'Азизова Зарина', sector: 'Ороишгар <span class="ru">/ Визажист</span>', amount: '7 500', date: '06.03.2026', status: 'returned_from_gmc' }
-            ]
+                { id: '10008', name: 'Азизова Зарина', sector: 'Ороишгар <span class="ru">/ Визажист</span>', amount: '7 500', date: '06.03.2026, 15:10', status: 'returned_from_gmc', history: { created: '05.03.2026, 10:00', gmc: '06.03.2026, 15:10' } }
+            ],
+            approved: [
+                { id: '10010', name: 'Мирзоева Ситора', sector: 'Савдо <span class="ru">/ Торговля</span>', amount: '9 000', date: '01.03.2026, 11:00', status: 'issued', history: { created: '20.02.2026, 09:15', gmc: '22.02.2026, 14:00', piu: '25.02.2026, 16:30', committee: '01.03.2026, 11:00' } }
+            ],
+            rejected: [
+                { id: '10005', name: 'Шарипова Нилуфар Азаматовна', sector: 'Хизматрасонӣ <span class="ru">/ Услуги</span>', amount: '4 000', date: '28.02.2026, 17:00', status: 'rejected', history: { created: '26.02.2026, 10:00', gmc: '28.02.2026, 17:00' } }
+            ],
+            tranches: {
+                '10010': [
+                    { id: 1, amount: '4 500', date: '10.03.2026', note: 'Хариди мошини дарздӯзӣ / Закупка швейной машинки' }
+                ]
+            }
         };
 
         function loadGmcForm(id) {
@@ -953,6 +835,7 @@
 
         window.openGmcFor = function(id) {
             document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
             document.getElementById('applicationModal').classList.remove('hidden');
             document.querySelector('.tab-btn[data-target="pane-gmc"]').click();
             loadGmcForm(id);
@@ -992,6 +875,7 @@
 
         window.openPiuFor = function(id) {
             document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
             document.getElementById('applicationModal').classList.remove('hidden');
             document.querySelector('.tab-btn[data-target="pane-piu"]').click();
             loadPiuForm(id);
@@ -1016,18 +900,24 @@
         
         window.openComFor = function(id) {
             document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
             document.getElementById('applicationModal').classList.remove('hidden');
             document.querySelector('.tab-btn[data-target="pane-committee"]').click();
             loadComForm(id);
             if(window.lucide) lucide.createIcons();
         };
 
-        window.openRevFor = function(id) {
+        // Открытие Черновика
+        window.openDraftFor = function(id) {
             document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
             document.getElementById('applicationModal').classList.remove('hidden');
             document.querySelector('.tab-btn[data-target="pane-facilitator"]').click();
+            document.getElementById('facilitator-revision-block').classList.add('hidden');
             
             const data = mockDatabase[id];
+            const draftApp = state.drafts.find(d => d.id === id);
+
             if(data) {
                 document.getElementById('id-input').value = id;
                 document.getElementById('display-id').textContent = id;
@@ -1043,19 +933,174 @@
                 document.getElementById('display-category').innerHTML = data.category;
                 document.getElementById('display-education').innerHTML = data.education;
 
-                document.getElementById('course').value = "";
                 document.getElementById('display-course').innerHTML = data.course;
+            }
+
+            if(draftApp) {
+                document.getElementById('amount-input').value = draftApp.amount !== '0' ? draftApp.amount.replace(/\D/g,'') : '';
+                const sectorSelect = document.getElementById('sector-input');
+                for (let i = 0; i < sectorSelect.options.length; i++) {
+                    if (draftApp.sector.includes(sectorSelect.options[i].value.split(' ')[0])) {
+                        sectorSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            if(window.lucide) lucide.createIcons();
+        };
+
+        // Открытие Доработки
+        window.openRevFor = function(id) {
+            document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
+            document.getElementById('applicationModal').classList.remove('hidden');
+            document.querySelector('.tab-btn[data-target="pane-facilitator"]').click();
+            
+            const data = mockDatabase[id];
+            const revApp = state.revisions.find(r => r.id === id);
+
+            if(data) {
+                document.getElementById('id-input').value = id;
+                document.getElementById('display-id').textContent = id;
+                document.getElementById('full-name').value = data['full-name'];
+                document.getElementById('display-fullname').innerHTML = data['full-name'];
+                document.getElementById('inn').value = data.inn;
+                document.getElementById('display-inn').textContent = data.inn;
+                
+                document.getElementById('display-birthdate').innerHTML = data['birth-date'];
+                document.getElementById('display-gender').innerHTML = data.gender;
+                document.getElementById('display-contacts').innerHTML = data.contacts;
+                document.getElementById('display-address').innerHTML = data.address;
+                document.getElementById('display-category').innerHTML = data.category;
+                document.getElementById('display-education').innerHTML = data.education;
+
+                document.getElementById('display-course').innerHTML = data.course;
+            }
+
+            if(revApp) {
+                document.getElementById('amount-input').value = revApp.amount.replace(/\D/g, '');
+                const select = document.getElementById('sector-input');
+                for(let i=0; i<select.options.length; i++) {
+                    if(select.options[i].text === revApp.sector || revApp.sector.includes(select.options[i].value.split(' ')[0])) {
+                        select.selectedIndex = i;
+                        break;
+                    }
+                }
             }
             
             document.getElementById('facilitator-revision-block').classList.remove('hidden');
             if(window.lucide) lucide.createIcons();
         };
 
+        let currentApprovedAppId = null;
+
         window.openApprovedFor = function(id) {
+            currentApprovedAppId = id;
             document.getElementById('tab-btn-approved').classList.remove('hidden');
+            document.getElementById('tab-btn-tranches').classList.remove('hidden');
             document.getElementById('applicationModal').classList.remove('hidden');
+            
+            const app = state.approved.find(a => a.id === id) || { history: {} };
+            const hist = app.history || {};
+
+            document.getElementById('tl-created-date').textContent = hist.created || '—';
+            document.getElementById('tl-gmc-date').textContent = hist.gmc || '—';
+            document.getElementById('tl-piu-date').textContent = hist.piu || '—';
+            document.getElementById('tl-com-date').textContent = hist.committee || '—';
+
+            renderTranches();
+
             document.querySelector('.tab-btn[data-target="pane-approved"]').click();
             if(window.lucide) lucide.createIcons();
+        };
+
+        // --- ЛОГИКА ТРАНШЕЙ ---
+        let isTrancheFormVisible = false;
+
+        window.toggleTrancheForm = function() {
+            isTrancheFormVisible = !isTrancheFormVisible;
+            const form = document.getElementById('trancheFormBlock');
+            const btnIcon = document.getElementById('trancheBtnIcon');
+            const btnText = document.getElementById('trancheBtnText');
+
+            if(isTrancheFormVisible) {
+                form.classList.remove('hidden');
+                btnIcon.setAttribute('data-lucide', 'x');
+                btnText.innerHTML = 'Бекор кардан <span class="ru">/ Отмена</span>';
+            } else {
+                form.classList.add('hidden');
+                btnIcon.setAttribute('data-lucide', 'plus');
+                btnText.innerHTML = 'Иловаи транш <span class="ru">/ Добавить транш</span>';
+            }
+            if(window.lucide) lucide.createIcons();
+        };
+
+        window.saveTranche = function() {
+            const amount = document.getElementById('tranche-amount').value;
+            let date = document.getElementById('tranche-date').value;
+            const note = document.getElementById('tranche-note').value;
+
+            if(!amount || !date) return alert("Маблағ ва санаро пур кунед! / Заполните сумму и дату!");
+
+            // Format date visually
+            const d = new Date(date);
+            date = d.toLocaleDateString('ru-RU');
+
+            if (!state.tranches[currentApprovedAppId]) {
+                state.tranches[currentApprovedAppId] = [];
+            }
+
+            const newId = state.tranches[currentApprovedAppId].length + 1;
+            state.tranches[currentApprovedAppId].push({
+                id: newId,
+                amount: amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "),
+                date: date,
+                note: note,
+                status: 'pending'
+            });
+
+            document.getElementById('tranche-amount').value = '';
+            document.getElementById('tranche-date').value = '';
+            document.getElementById('tranche-note').value = '';
+            
+            toggleTrancheForm();
+            renderTranches();
+        };
+
+        window.renderTranches = function() {
+            const container = document.getElementById('tranchesListContainer');
+            const emptyState = document.getElementById('tranchesEmptyState');
+            const appTranches = state.tranches[currentApprovedAppId] || [];
+
+            document.getElementById('new-tranche-num').textContent = appTranches.length + 1;
+
+            const oldItems = container.querySelectorAll('.tranche-item');
+            oldItems.forEach(el => el.remove());
+
+            if (appTranches.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                appTranches.forEach(t => {
+                    const el = document.createElement('div');
+                    el.className = 'tranche-item bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex items-center justify-between';
+                    el.innerHTML = `
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-bold text-[13px] text-gray-800">Транш #${t.id}</span>
+                                <span class="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase">Интизорӣ <span class="ru">/ Ожидание</span></span>
+                            </div>
+                            <div class="text-[11px] text-gray-500">Сана <span class="ru">/ Дата</span>: <span class="font-medium text-gray-700">${t.date}</span></div>
+                            ${t.note ? `<div class="text-[11px] text-gray-500 mt-1">Эзоҳ <span class="ru">/ Примечание</span>: <span class="italic">${t.note}</span></div>` : ''}
+                        </div>
+                        <div class="text-right">
+                            <span class="font-black text-[14px] text-[#5b4ef5] block">${t.amount} сомонӣ</span>
+                            <span class="font-bold text-[12px] text-[#5b4ef5] ru block">${t.amount} сомони</span>
+                        </div>
+                    `;
+                    container.appendChild(el);
+                });
+            }
         };
 
         // --- ЛОГИКА ОБНОВЛЕНИЯ КАРТОЧЕК НА ДАШБОРДЕ ---
@@ -1064,7 +1109,7 @@
             if(!card) {
                 card = document.createElement('div');
                 card.id = `dash-card-${id}`;
-                document.getElementById('mainDashboardGrid').prepend(card);
+                document.getElementById('mainDashboardGrid').appendChild(card);
             }
             
             card.setAttribute('data-status', status);
@@ -1101,9 +1146,9 @@
                 bHtml = '<div class="bg-red-100 text-red-800 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse border border-red-300 flex flex-col items-end leading-tight shadow-sm"><div class="flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Амали Фасилитатор лозим</div><span class="ru">Требуется действие Фасилитатора</span></div>';
                 aHtml = `<span class="text-red-600 text-[12px] font-bold flex items-center gap-1 cursor-pointer hover:underline text-right leading-tight" onclick="openRevFor('${id}')"><span>Ислоҳ кардан <span class="ru-block">Исправить</span></span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></span>`;
             } else if (status === 'draft') {
-                bClass = 'bg-white border-slate-200';
+                bClass = 'bg-white border-slate-200 cursor-pointer hover:border-primary transition-all duration-200 shadow-sm';
                 bHtml = '<div class="bg-slate-100 text-slate-500 px-2 py-1 rounded-md text-[10px] font-medium border border-slate-200 flex flex-col items-end leading-tight"><span>Сиёҳнавис</span><span class="ru">Черновик</span></div>';
-                aHtml = `<a href="#" class="text-slate-500 hover:text-primary text-[12px] font-medium flex items-center gap-1 hover:underline text-right leading-tight"><span>Кушодан <span class="ru-block">Открыть</span></span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>`;
+                aHtml = `<span class="text-slate-500 hover:text-primary text-[12px] font-bold flex items-center gap-1 cursor-pointer hover:underline text-right leading-tight" onclick="openDraftFor('${id}')"><span>Кушодан <span class="ru-block">Открыть</span></span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>`;
             }
 
             let topLine = '';
@@ -1241,9 +1286,14 @@
 
         submitApplicationBtn.addEventListener('click', () => {
             document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
             applicationModal.classList.remove('hidden');
             document.querySelector('.tab-btn[data-target="pane-facilitator"]').click();
             document.getElementById('facilitator-revision-block').classList.add('hidden');
+            
+            // Сброс формы
+            document.getElementById('amount-input').value = '';
+            document.getElementById('sector-input').selectedIndex = 0;
             
             const data = mockDatabase[selectedMockId];
             document.getElementById('id-input').value = selectedMockId;
@@ -1260,7 +1310,6 @@
             document.getElementById('display-category').innerHTML = data.category;
             document.getElementById('display-education').innerHTML = data.education;
 
-            document.getElementById('course').value = "";
             document.getElementById('display-course').innerHTML = data.course;
             
             if(window.lucide) lucide.createIcons();
@@ -1302,20 +1351,67 @@
             if(dashComBadge) { dashComBadge.textContent = state.committee_queue.length; dashComBadge.classList.toggle('hidden', state.committee_queue.length === 0); }
         };
 
+        // Сохранить в черновик
+        window.saveToDraft = function() {
+            const id = document.getElementById('id-input').value;
+            if(!id) return;
+            const sectorE = document.getElementById('sector-input');
+            const sectorText = sectorE.options[sectorE.selectedIndex] ? sectorE.options[sectorE.selectedIndex].text : '';
+            const amount = document.getElementById('amount-input').value;
+            const timestamp = getCurrentDateTime();
+
+            state.revisions = state.revisions.filter(r => r.id !== id);
+            state.drafts = state.drafts.filter(d => d.id !== id);
+
+            const appObj = {
+                id,
+                name: document.getElementById('full-name').value,
+                sector: sectorText || 'Номаълум <span class="ru">/ Не указано</span>',
+                amount: amount || '0',
+                date: timestamp,
+                status: 'draft',
+                history: { created: timestamp }
+            };
+            state.drafts.push(appObj);
+
+            updateDashboardCard(id, 'draft', appObj);
+            updateAllBadges();
+            applicationModal.classList.add('hidden');
+            if(isFormVisible) toggleBtn.click();
+            alert("Дархост ҳамчун сиёҳнавис захира шуд!\nЗаявка сохранена в черновики!");
+        };
+
         // ФАСИЛИТАТОР -> GMC
         window.submitToGmc = function() {
             const id = document.getElementById('id-input').value;
+            if(!id) return;
             const sectorE = document.getElementById('sector-input');
             const sectorText = sectorE.options[sectorE.selectedIndex].text;
             const amount = document.getElementById('amount-input').value;
             
             if(!sectorE.value || !amount) return alert("Бахш ва маблағро пур кунед!\nЗаполните сектор и сумму!");
 
-            const appObj = { id, name: document.getElementById('full-name').value, sector: sectorText, amount: amount, date: new Date().toLocaleDateString(), status: 'new' };
+            const timestamp = getCurrentDateTime();
+            
+            let existingApp = state.drafts.find(d => d.id === id) || state.revisions.find(r => r.id === id);
+            let hist = existingApp && existingApp.history ? existingApp.history : { created: timestamp };
+            hist.submittedToGmc = timestamp;
+
+            const appObj = { 
+                id, 
+                name: document.getElementById('full-name').value, 
+                sector: sectorText, 
+                amount: amount, 
+                date: timestamp, 
+                status: 'new',
+                history: hist
+            };
+            
             state.gmc_queue.push(appObj);
             
-            // Если заявка была в доработке, удаляем ее оттуда
+            // Если заявка была в доработке или черновике, удаляем ее оттуда
             state.revisions = state.revisions.filter(r => r.id !== id);
+            state.drafts = state.drafts.filter(r => r.id !== id);
 
             updateDashboardCard(id, 'gmc', appObj);
             updateAllBadges();
@@ -1400,6 +1496,10 @@
             const idx = state.gmc_queue.findIndex(a => a.id === currentGmcAppId);
             const app = state.gmc_queue.splice(idx, 1)[0];
             
+            app.history = app.history || {};
+            app.history.gmc = getCurrentDateTime();
+            app.date = getCurrentDateTime();
+
             if(currentGmcChoice === 'ok') { 
                 state.piu_queue.push(app); 
                 updateDashboardCard(app.id, 'piu', app);
@@ -1409,9 +1509,12 @@
                 updateDashboardCard(app.id, 'rev', app);
                 alert("Дархост бо файлҳои эроддор барои такмил ба Фасилитатор фиристода шуд.\nЗаявка с комментариями направлена на доработку Фасилитатору.");
             } else {
+                state.rejected.push(app);
                 updateDashboardCard(app.id, 'rejected', app);
                 alert("Дархост рад карда шуд.\nЗаявка отклонена.");
             }
+
+            document.getElementById('gmc-evaluation-content').classList.add('hidden');
             
             updateAllBadges();
             applicationModal.classList.add('hidden');
@@ -1471,6 +1574,10 @@
             const idx = state.piu_queue.findIndex(a => a.id === currentPiuAppId);
             const app = state.piu_queue.splice(idx, 1)[0];
             
+            app.history = app.history || {};
+            app.history.piu = getCurrentDateTime();
+            app.date = getCurrentDateTime();
+
             const hasRev = Object.values(piuDecisions).includes('resubmit');
 
             if (hasRev) {
@@ -1484,6 +1591,7 @@
                 alert("Санҷиши PIU гузашт! Ҳуҷҷат бетағйир ба Кумита интиқол ёфт.\nВерификация PIU пройдена! Документ в неизменном состоянии передан в Комитет.");
             }
             
+            document.getElementById('piu-evaluation-content').classList.add('hidden');
             updateAllBadges(); applicationModal.classList.add('hidden');
         };
 
@@ -1513,7 +1621,13 @@
             const idx = state.committee_queue.findIndex(a => a.id === currentComAppId);
             const app = state.committee_queue.splice(idx, 1)[0];
 
+            app.history = app.history || {};
+            app.history.committee = getCurrentDateTime();
+            app.date = getCurrentDateTime();
+
             if(currentComChoice === 'ok') { 
+                app.status = 'issued';
+                state.approved.push(app);
                 updateDashboardCard(app.id, 'approved', app);
                 alert("Грант аз ҷониби Кумита тасдиқ шуд!\nГрант утвержден Комитетом!"); 
             } else if(currentComChoice === 'rev') {
@@ -1522,10 +1636,12 @@
                 updateDashboardCard(app.id, 'gmc', app);
                 alert("Барои такмил ба GMC баргардонида шуд.\nВозвращено на доработку в GMC.");
             } else {
+                state.rejected.push(app);
                 updateDashboardCard(app.id, 'rejected', app);
                 alert("Грант рад карда шуд.\nГрант отклонен.");
             }
 
+            document.getElementById('committee-evaluation-content').classList.add('hidden');
             updateAllBadges(); applicationModal.classList.add('hidden');
         };
 
@@ -1540,6 +1656,16 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => { 
+            // Рендер карточек из state
+            document.getElementById('mainDashboardGrid').innerHTML = ''; 
+            state.revisions.forEach(a => updateDashboardCard(a.id, 'rev', a));
+            state.gmc_queue.forEach(a => updateDashboardCard(a.id, 'gmc', a));
+            state.piu_queue.forEach(a => updateDashboardCard(a.id, 'piu', a));
+            state.committee_queue.forEach(a => updateDashboardCard(a.id, 'committee', a));
+            state.drafts.forEach(a => updateDashboardCard(a.id, 'draft', a));
+            state.approved.forEach(a => updateDashboardCard(a.id, 'approved', a));
+            state.rejected.forEach(a => updateDashboardCard(a.id, 'rejected', a));
+
             if(window.lucide) lucide.createIcons(); 
             updateAllBadges();
             updateDashboardFilter();
