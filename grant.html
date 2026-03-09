@@ -107,8 +107,8 @@
         </div>
 
         <!-- Панель фильтров -->
-        <div class="bg-white rounded-xl p-2 shadow-sm border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="flex items-center gap-1 overflow-x-auto pb-2 sm:pb-0 hide-scrollbar" id="dashboard-filters">
+        <div class="bg-white rounded-xl p-2 shadow-sm border border-slate-100 flex flex-col sm:flex-row sm:items-center gap-4">
+            <div class="flex items-center gap-1 overflow-x-auto pb-2 sm:pb-0 hide-scrollbar w-full" id="dashboard-filters">
                 <button data-filter="all" class="filter-btn bg-primary text-white px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
                     <div class="flex flex-col items-center leading-tight">
                         <span class="text-[12px] font-medium whitespace-nowrap">Ҳамаи статусҳо</span><span class="ru text-[11px]">Все статусы</span>
@@ -168,7 +168,6 @@
                     </div>
                 </button>
             </div>
-            <div class="text-[12px] text-slate-400 font-medium px-4 whitespace-nowrap hidden lg:block" id="dashboard-count">8 дархост <span class="ru">/ заявок</span></div>
         </div>
 
         <!-- СЕТКА КАРТОЧЕК -->
@@ -1129,27 +1128,20 @@
         // --- ЛОГИКА ФИЛЬТРАЦИИ НА ГЛАВНОЙ СТРАНИЦЕ ---
         const filterBtns = document.querySelectorAll('.filter-btn');
         const dashboardGrid = document.getElementById('mainDashboardGrid');
-        const dashboardCount = document.getElementById('dashboard-count');
 
         function updateDashboardFilter() {
             const activeBtn = document.querySelector('.filter-btn.bg-primary');
             const currentFilter = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
-            let visibleCount = 0;
 
             const cards = dashboardGrid.querySelectorAll(':scope > div');
             cards.forEach(card => {
                 const status = card.getAttribute('data-status');
                 if (currentFilter === 'all' || status === currentFilter) {
                     card.style.display = 'flex';
-                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
-
-            if (dashboardCount) {
-                dashboardCount.innerHTML = `${visibleCount} дархост <span class="ru">/ заявок</span>`;
-            }
         }
 
         filterBtns.forEach(btn => {
@@ -1420,8 +1412,6 @@
                 updateDashboardCard(app.id, 'rejected', app);
                 alert("Дархост рад карда шуд.\nЗаявка отклонена.");
             }
-
-            document.getElementById('gmc-evaluation-content').classList.add('hidden');
             
             updateAllBadges();
             applicationModal.classList.add('hidden');
@@ -1494,7 +1484,6 @@
                 alert("Санҷиши PIU гузашт! Ҳуҷҷат бетағйир ба Кумита интиқол ёфт.\nВерификация PIU пройдена! Документ в неизменном состоянии передан в Комитет.");
             }
             
-            document.getElementById('piu-evaluation-content').classList.add('hidden');
             updateAllBadges(); applicationModal.classList.add('hidden');
         };
 
@@ -1537,7 +1526,6 @@
                 alert("Грант рад карда шуд.\nГрант отклонен.");
             }
 
-            document.getElementById('committee-evaluation-content').classList.add('hidden');
             updateAllBadges(); applicationModal.classList.add('hidden');
         };
 
