@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления - Редактирование результатов</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #374151;
+        }
+
+        .btn-refresh { background-color: #38b2ac; }
+        .btn-excel { background-color: #a78bfa; }
+        .btn-pdf { background-color: #2bcbb8; }
+        
+        .table-header-text {
+            font-size: 10px;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            font-weight: 700;
+        }
+
+        .exam-badge {
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 9999px;
+            padding: 2px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .details-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Стили выпадающего списка статуса */
+        .status-dropdown-container { position: relative; display: inline-block; }
+        
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            min-width: 125px;
+            transition: all 0.2s;
+        }
+
+        .status-passed { background-color: #e6fffa; color: #319795; border-color: #b2f5ea; }
+        .status-failed { background-color: #fff5f5; color: #e53e3e; border-color: #fed7d7; }
+        .status-absent { background-color: #f7fafc; color: #718096; border-color: #edf2f7; }
+        .status-none { background-color: #fff; color: #a0aec0; border-color: #e2e8f0; }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            z-index: 50;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            min-width: 180px;
+            padding: 8px;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .dropdown-item:hover { background-color: #f8fafc; }
+
+        /* Стили инпутов */
+        .cert-input {
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 12px;
+            width: 100%;
+            color: #4a5568;
+            transition: all 0.2s;
+        }
+        .cert-input:disabled {
+            background-color: #f9fafb;
+            color: #cbd5e0;
+            border-color: #f1f5f9;
+            cursor: not-allowed;
+        }
+        .cert-input:focus:not(:disabled) {
+            border-color: #38b2ac;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(56, 178, 172, 0.1);
+        }
+
+        .dot { width: 8px; height: 8px; border-radius: 50%; transition: background 0.2s; }
+        .dot-green { background-color: #38b2ac; }
+        .dot-red { background-color: #e53e3e; }
+        .dot-grey { background-color: #a0aec0; }
+        .dot-empty { border: 1px solid #cbd5e0; background-color: transparent; }
+
+        .details-header {
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 16px;
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .input-group-container {
+            transition: opacity 0.3s;
+        }
+        .input-disabled {
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-[1400px] mx-auto">
+        <!-- Кнопки управления -->
+        <div class="flex justify-end gap-2 mb-6">
+            <button class="btn-refresh text-white px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition-all">
+                <i class="fas fa-sync-alt mr-2"></i> обновить
+            </button>
+            <button class="btn-excel text-white px-4 py-2 rounded-md text-sm font-medium">Экспорт Excel</button>
+            <button class="btn-pdf text-white px-4 py-2 rounded-md text-sm font-medium">Экспорт в PDF</button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-4 border-b border-gray-100 bg-white">
+                <p class="text-xs text-gray-400 font-medium uppercase tracking-wider">Результаты: 1 - 20 из 47243</p>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50/50">
+                            <th class="p-3 border-b border-gray-100 table-header-text uppercase">ID</th>
+                            <th class="p-3 border-b border-gray-100 table-header-text uppercase">Дата</th>
+                            <th class="p-3 border-b border-gray-100 table-header-text uppercase">Время</th>
+                            <th class="p-3 border-b border-gray-100 table-header-text uppercase">Группа</th>
+                            <th class="p-3 border-b border-gray-100 table-header-text uppercase uppercase">Преподаватель</th>
+                            <th class="p-3 border-b border-gray-100 table-header-text uppercase text-center">Результаты</th>
+                            <th class="p-3 border-b border-gray-100 table-header-text text-right uppercase uppercase">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-[13px]">
+                        <!-- Основная строка курса -->
+                        <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                            <td class="p-4 font-medium">49442</td>
+                            <td class="p-4">2026-02-11</td>
+                            <td class="p-4">17:58:10</td>
+                            <td class="p-4">Кафшергаро (группа 2)</td>
+                            <td class="p-4">Mutahasisi MSHA</td>
+                            <td class="p-4 text-center">
+                                <div onclick="toggleDetails('details-1')" class="exam-badge">
+                                    <span class="text-indigo-600 font-semibold">Экзамен</span>
+                                    <span class="text-gray-400">20 уч.</span>
+                                    <span class="text-emerald-500 font-bold">✓ 5</span>
+                                    <span class="text-rose-500 font-bold">✕ 1</span>
+                                    <span class="text-gray-300">- 14 не выставлено</span>
+                                    <i id="icon-1" class="fas fa-caret-up text-gray-300"></i>
+                                </div>
+                            </td>
+                            <td class="p-4 text-right">
+                                <button class="text-rose-500 hover:text-rose-700">
+                                    <i class="far fa-trash-alt text-lg"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Развернутый список участников -->
+                        <tr id="details-1">
+                            <td colspan="7" class="p-6 bg-blue-50/10">
+                                <div class="details-card p-6">
+                                    <div class="details-header">
+                                        <div class="flex items-center gap-6 text-[13px]">
+                                            <span class="text-indigo-600 font-bold">Экзамен</span>
+                                            <span class="text-gray-400">20 уч.</span>
+                                            <span class="text-emerald-500 font-bold bg-emerald-50 px-2 py-0.5 rounded">✓ 5</span>
+                                            <span class="text-rose-500 font-bold bg-rose-50 px-2 py-0.5 rounded">✕ 1</span>
+                                            <span class="text-gray-300">- 14 не выставлено</span>
+                                        </div>
+                                        <i class="fas fa-caret-up text-gray-400"></i>
+                                    </div>
+
+                                    <table class="w-full">
+                                        <thead>
+                                            <tr class="text-gray-400 text-[11px] font-bold border-b border-gray-100 uppercase tracking-tight">
+                                                <th class="pb-3 text-left w-1/3">Участник</th>
+                                                <th class="pb-3 text-center">Посещ.</th>
+                                                <th class="pb-3 text-center">Экзамен</th>
+                                                <th class="pb-3 text-center w-1/6">Сертификат</th>
+                                                <th class="pb-3 text-center w-1/6">Дата выдачи</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-50">
+                                            <!-- Студент 1 -->
+                                            <tr class="student-row" id="row-s1">
+                                                <td class="py-4 font-medium">Идиев Фатхулло Неъматуллоевич</td>
+                                                <td class="py-4 text-center text-gray-500">23</td>
+                                                <td class="py-4 text-center">
+                                                    <div class="status-dropdown-container">
+                                                        <div onclick="toggleDropdown('dropdown-s1')" class="status-pill status-passed" id="pill-s1">
+                                                            <div class="dot dot-green"></div> <span>Сдал</span> <i class="fas fa-caret-down ml-auto opacity-30"></i>
+                                                        </div>
+                                                        <div id="dropdown-s1" class="dropdown-menu hidden">
+                                                            <div onclick="selectStatus('s1', 'none')" class="dropdown-item"><div class="dot dot-empty"></div> Не выставлен</div>
+                                                            <div onclick="selectStatus('s1', 'passed')" class="dropdown-item font-bold text-emerald-600"><div class="dot dot-green"></div> Сдал</div>
+                                                            <div onclick="selectStatus('s1', 'failed')" class="dropdown-item text-rose-500"><div class="dot dot-red"></div> Не сдал</div>
+                                                            <div onclick="selectStatus('s1', 'absent')" class="dropdown-item text-gray-500"><div class="dot dot-grey"></div> Не явился</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="py-4 px-2">
+                                                    <input type="text" class="cert-input" placeholder="№ сертиф">
+                                                </td>
+                                                <td class="py-4 px-2">
+                                                    <div class="relative input-group-container">
+                                                        <input type="text" class="cert-input pr-8" placeholder="дд.мм.гггг">
+                                                        <i class="far fa-calendar-alt absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none"></i>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <!-- Студент 2 -->
+                                            <tr class="student-row" id="row-s2">
+                                                <td class="py-4 font-medium">Зохирзода Наврузи Мирзоамин</td>
+                                                <td class="py-4 text-center text-gray-500">25</td>
+                                                <td class="py-4 text-center">
+                                                    <div class="status-dropdown-container">
+                                                        <div onclick="toggleDropdown('dropdown-s2')" class="status-pill status-failed" id="pill-s2">
+                                                            <div class="dot dot-red"></div> <span>Не сдал</span> <i class="fas fa-caret-down ml-auto opacity-30"></i>
+                                                        </div>
+                                                        <div id="dropdown-s2" class="dropdown-menu hidden">
+                                                            <div onclick="selectStatus('s2', 'none')" class="dropdown-item"><div class="dot dot-empty"></div> Не выставлен</div>
+                                                            <div onclick="selectStatus('s2', 'passed')" class="dropdown-item text-emerald-600"><div class="dot dot-green"></div> Сдал</div>
+                                                            <div onclick="selectStatus('s2', 'failed')" class="dropdown-item font-bold text-rose-600"><div class="dot dot-red"></div> Не сдал</div>
+                                                            <div onclick="selectStatus('s2', 'absent')" class="dropdown-item text-gray-500"><div class="dot dot-grey"></div> Не явился</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="py-4 px-2">
+                                                    <input type="text" class="cert-input" placeholder="-" disabled>
+                                                </td>
+                                                <td class="py-4 px-2">
+                                                    <div class="relative input-group-container input-disabled">
+                                                        <input type="text" class="cert-input pr-8" placeholder="дд.мм.гггг" disabled>
+                                                        <i class="far fa-calendar-alt absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none"></i>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <!-- Студент 3 -->
+                                            <tr class="student-row" id="row-s3">
+                                                <td class="py-4 font-medium">Мирзоев Махмадулло Абдукаримович</td>
+                                                <td class="py-4 text-center text-gray-500">22</td>
+                                                <td class="py-4 text-center">
+                                                    <div class="status-dropdown-container">
+                                                        <div onclick="toggleDropdown('dropdown-s3')" class="status-pill status-none" id="pill-s3">
+                                                            <div class="dot dot-empty"></div> <span>Не выставлен</span> <i class="fas fa-caret-down ml-auto opacity-30"></i>
+                                                        </div>
+                                                        <div id="dropdown-s3" class="dropdown-menu hidden">
+                                                            <div onclick="selectStatus('s3', 'none')" class="dropdown-item font-bold"><div class="dot dot-empty"></div> Не выставлен</div>
+                                                            <div onclick="selectStatus('s3', 'passed')" class="dropdown-item text-emerald-600"><div class="dot dot-green"></div> Сдал</div>
+                                                            <div onclick="selectStatus('s3', 'failed')" class="dropdown-item text-rose-500"><div class="dot dot-red"></div> Не сдал</div>
+                                                            <div onclick="selectStatus('s3', 'absent')" class="dropdown-item text-gray-500"><div class="dot dot-grey"></div> Не явился</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="py-4 px-2">
+                                                    <input type="text" class="cert-input" placeholder="-" disabled>
+                                                </td>
+                                                <td class="py-4 px-2">
+                                                    <div class="relative input-group-container input-disabled">
+                                                        <input type="text" class="cert-input pr-8" placeholder="дд.мм.гггг" disabled>
+                                                        <i class="far fa-calendar-alt absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none"></i>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Функция раскрытия деталей строки
+        function toggleDetails(id) {
+            const row = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id.split('-')[1]);
+            row.classList.toggle('hidden');
+            if (row.classList.contains('hidden')) {
+                icon.className = 'fas fa-caret-down text-gray-300';
+            } else {
+                icon.className = 'fas fa-caret-up text-gray-300';
+            }
+        }
+
+        // Открытие выпадающего списка
+        function toggleDropdown(id) {
+            event.stopPropagation();
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu.id !== id) menu.classList.add('hidden');
+            });
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        // ЛОГИКА ВЫБОРА СТАТУСА
+        function selectStatus(studentId, type) {
+            const pill = document.getElementById('pill-' + studentId);
+            const row = document.getElementById('row-' + studentId);
+            const inputs = row.querySelectorAll('.cert-input');
+            const containers = row.querySelectorAll('.input-group-container');
+            const dot = pill.querySelector('.dot');
+            const span = pill.querySelector('span');
+
+            // Сброс классов
+            pill.className = 'status-pill';
+            dot.className = 'dot';
+
+            if (type === 'passed') {
+                pill.classList.add('status-passed');
+                dot.classList.add('dot-green');
+                span.innerText = 'Сдал';
+                
+                // Активируем поля
+                inputs.forEach(input => {
+                    input.disabled = false;
+                    if(input.placeholder === '-') input.placeholder = '№ сертиф';
+                });
+                containers.forEach(c => c.classList.remove('input-disabled'));
+            } 
+            else if (type === 'failed') {
+                pill.classList.add('status-failed');
+                dot.classList.add('dot-red');
+                span.innerText = 'Не сдал';
+                disableInputs(inputs, containers);
+            } 
+            else if (type === 'absent') {
+                pill.classList.add('status-absent');
+                dot.classList.add('dot-grey');
+                span.innerText = 'Не явился';
+                disableInputs(inputs, containers);
+            } 
+            else {
+                pill.classList.add('status-none');
+                dot.classList.add('dot-empty');
+                span.innerText = 'Не выставлен';
+                disableInputs(inputs, containers);
+            }
+
+            // Закрыть меню
+            document.getElementById('dropdown-' + studentId).classList.add('hidden');
+        }
+
+        function disableInputs(inputs, containers) {
+            inputs.forEach(input => {
+                input.disabled = true;
+                input.value = ''; // Очищаем при деактивации
+                if (input.placeholder !== 'дд.мм.гггг') input.placeholder = '-';
+            });
+            containers.forEach(c => c.classList.add('input-disabled'));
+        }
+
+        // Закрытие кликом вовне
+        window.addEventListener('click', function() {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.add('hidden'));
+        });
+    </script>
+</body>
+</html>
