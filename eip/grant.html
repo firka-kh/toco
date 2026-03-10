@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дархостҳои грантӣ / Грантовые заявки</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#5B4AF0',
+                        'primary-hover': '#4A3BE0',
+                        background: '#F8F9FA',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F8F9FA;
+            font-family: 'Inter', sans-serif;
+        }
+        .modal-container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 24px 32px;
+        }
+        /* Стили для русского текста */
+        .ru { font-size: 0.85em; opacity: 0.75; font-weight: 400; }
+        .ru-block { font-size: 0.85em; opacity: 0.75; font-weight: 400; display: block; margin-top: 2px; line-height: 1.2; }
+        
+        .score-radio { accent-color: #3b82f6; cursor: pointer; width: 1.1rem; height: 1.1rem; }
+        .elig-radio { accent-color: #10b981; cursor: pointer; width: 1.1rem; height: 1.1rem; }
+        .elig-radio-no { accent-color: #ef4444; cursor: pointer; width: 1.1rem; height: 1.1rem; }
+        .tab-btn.active { border-bottom-width: 2px; border-color: #5b4ef5; color: #5b4ef5; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .placeholder-red-500::placeholder { color: #ef4444; opacity: 0.8; font-size: 12px;}
+    </style>
+</head>
+<body class="p-4 md:p-8 text-slate-800 antialiased relative">
+    
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Шапка страницы -->
+        <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-900">Дархостҳои грантӣ <span class="ru">/ Грантовые заявки</span></h1>
+                <p class="text-sm text-slate-500 mt-1">Идоракунии раванди грантӣ <span class="ru">/ Управление грантовым процессом</span></p>
+            </div>
+            <button id="toggleFormBtn" class="bg-primary hover:bg-primary-hover text-white px-5 py-2.5 rounded-lg text-[13px] font-medium transition-colors flex items-center justify-center gap-2">
+                <span id="btnIcon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </span>
+                <span id="btnText">Дархости нав <span class="ru">/ Новая заявка</span></span>
+            </button>
+        </header>
+
+        <!-- Блок создания заявки -->
+        <div id="createFormBlock" class="hidden bg-[#F4F5FC] border border-[#E1E4FA] rounded-xl p-5 sm:p-6 shadow-sm mb-6">
+            <h2 class="text-primary font-medium mb-1">Эҷоди дархости грантӣ <span class="ru">/ Создать грантовую заявку</span></h2>
+            <p class="text-primary text-xs mb-5 opacity-80">Танҳо барои бенефитсиарҳои сертификатсияшуда дастрас аст <span class="ru">/ Доступно только для сертифицированных</span></p>
+            
+            <div class="mb-5 relative">
+                <label class="block text-sm text-slate-700 mb-2">Бенефитсиар <span class="ru">/ Бенефициар</span> (статус: certified) <span class="text-red-500">*</span></label>
+                
+                <div class="relative bg-white border border-slate-200 rounded-lg flex items-center px-4 min-h-[46px] transition-shadow focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent">
+                    <input type="text" id="beneficiarySearch" autocomplete="off" placeholder="Ҷустуҷӯ аз рӯи ННШ, РМА, телефон... / Поиск по ФИО, ИНН, телефону..." class="w-full bg-transparent text-[13px] focus:outline-none py-2.5">
+                    
+                    <div id="selectedBeneficiary" class="hidden w-full items-center justify-between py-1">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm font-semibold avatar-initials">--</div>
+                            <div class="flex flex-col">
+                                <span class="text-[13px] font-medium text-slate-800 leading-none mb-1 selected-name">Ном Насаб</span>
+                                <span class="bg-emerald-100 text-emerald-600 px-1.5 py-0.5 rounded text-[10px] font-semibold w-max leading-none selected-badge">certified</span>
+                            </div>
+                        </div>
+                        <button id="clearSelection" class="text-slate-400 hover:text-slate-600 ml-2 p-1 focus:outline-none rounded-md hover:bg-slate-100 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center pl-2 pointer-events-none border-l border-transparent" id="dropdownIconContainer">
+                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+
+                <div id="searchDropdown" class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-20 overflow-hidden max-h-64 overflow-y-auto hide-scrollbar">
+                    <div id="searchDropdownList"></div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button id="submitApplicationBtn" class="bg-[#A499F5] text-white px-5 py-2.5 rounded-lg text-[13px] font-medium transition-colors pointer-events-none">Эҷоди дархост <span class="ru">/ Создать заявку</span></button>
+                <button id="cancelFormBtn" class="bg-white hover:bg-slate-50 text-slate-700 px-5 py-2.5 rounded-lg text-[13px] font-medium transition-colors border border-transparent shadow-sm">Бекор кардан <span class="ru">/ Отмена</span></button>
+            </div>
+        </div>
+
+        <!-- Панель фильтров -->
+        <div class="bg-white rounded-xl p-2 shadow-sm border border-slate-100 flex flex-col sm:flex-row sm:items-center gap-4">
+            <div class="flex items-center gap-1 overflow-x-auto pb-2 sm:pb-0 hide-scrollbar w-full" id="dashboard-filters">
+                <button data-filter="all" class="filter-btn bg-primary text-white px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                    <div class="flex flex-col items-center leading-tight">
+                        <span class="text-[12px] font-medium whitespace-nowrap">Ҳамаи статусҳо</span><span class="ru text-[11px]">Все статусы</span>
+                    </div>
+                </button>
+                <button data-filter="draft" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                    <div class="flex flex-col items-center leading-tight">
+                        <span class="text-[12px] font-medium whitespace-nowrap">Сиёҳнавис</span><span class="ru text-[11px]">Черновик</span>
+                    </div>
+                </button>
+                
+                <button data-filter="rev" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2 relative">
+                    <div class="flex flex-col items-center leading-tight">
+                        <span class="text-[12px] font-medium whitespace-nowrap">Дар ҳоли такмил</span><span class="ru text-[11px]">На доработке</span>
+                    </div>
+                    <span id="dash-rev-badge" class="bg-red-100 text-red-600 px-1.5 py-0.5 rounded text-[10px] font-bold hidden">0</span>
+                </button>
+
+                <button data-filter="gmc" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                    <div class="flex flex-col items-center leading-tight">
+                        <span class="text-[12px] font-medium whitespace-nowrap">Ба GMC пешниҳод шуд</span><span class="ru text-[11px]">Подана в GMC</span>
+                    </div>
+                    <span id="dash-gmc-badge" class="bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded text-[10px] font-bold hidden">0</span>
+                </button>
+
+                <button data-filter="piu" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                    <div class="flex flex-col items-center leading-tight">
+                        <span class="text-[12px] font-medium whitespace-nowrap">Барои баррасӣ ба ГРП</span><span class="ru text-[11px]">На рассмотрение ГРП</span>
+                    </div>
+                    <span id="dash-piu-badge" class="bg-indigo-100 text-indigo-600 px-1.5 py-0.5 rounded text-[10px] font-bold hidden">0</span>
+                </button>
+
+                <button data-filter="committee" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                    <div class="flex flex-col items-center leading-tight">
+                        <span class="text-[12px] font-medium whitespace-nowrap">Кумита</span><span class="ru text-[11px]">Комитет</span>
+                    </div>
+                    <span id="dash-com-badge" class="bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded text-[10px] font-bold hidden">0</span>
+                </button>
+
+                <button data-filter="rejected" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                    <div class="flex flex-col items-center leading-tight">
+                        <span class="text-[12px] font-medium whitespace-nowrap">Рад карда шуд</span><span class="ru text-[11px]">Отклонена</span>
+                    </div>
+                </button>
+                <button data-filter="approved" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                    <div class="flex flex-col items-center leading-tight">
+                        <span class="text-[12px] font-medium whitespace-nowrap">Тасдиқ шуд</span><span class="ru text-[11px]">Одобрена</span>
+                    </div>
+                </button>
+                <button data-filter="issued" class="filter-btn text-slate-600 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                    <div class="flex flex-col items-center leading-tight">
+                        <span class="text-[12px] font-medium whitespace-nowrap">Грант дода шуд</span><span class="ru text-[11px]">Грант выдан</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- СЕТКА КАРТОЧЕК ДИНАМИЧЕСКАЯ -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="mainDashboardGrid">
+            <!-- Карточки генерируются через JS -->
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- МОДАЛЬНОЕ ОКНО -->
+    <!-- ========================================== -->
+    <div id="applicationModal" class="fixed inset-0 bg-slate-900/60 z-[100] hidden overflow-y-auto pt-6 pb-10 px-4">
+        <div class="modal-container relative mx-auto my-auto shadow-2xl">
+            <!-- HEADER -->
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900">Дархост: Дастгирии грантии тиҷорат <span class="ru">/ Заявка: Грантовая поддержка бизнеса</span></h1>
+                </div>
+                <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600 transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+
+            <!-- ВКЛАДКИ -->
+            <div class="tabs-container flex items-center space-x-6 border-b border-gray-200 mb-6 overflow-x-auto hide-scroll">
+                <button class="tab-btn active pb-3 flex items-center space-x-2 cursor-pointer whitespace-nowrap text-[13px] font-medium transition-colors" data-target="pane-facilitator">
+                    <i data-lucide="clipboard-list" class="w-4 h-4"></i><span>Фасилитатор <span class="ru">/ Фасилитатор</span></span>
+                </button>
+                <button class="tab-btn pb-3 flex items-center space-x-2 cursor-pointer whitespace-nowrap text-[13px] font-medium text-gray-500 transition-colors" data-target="pane-gmc">
+                    <i data-lucide="scale" class="w-4 h-4"></i><span>GMC <span id="gmc-badge" class="hidden bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded-full text-[10px] ml-1 font-bold">0</span></span>
+                </button>
+                <button class="tab-btn pb-3 flex items-center space-x-2 cursor-pointer whitespace-nowrap text-[13px] font-medium text-gray-500 transition-colors" data-target="pane-piu">
+                    <i data-lucide="search" class="w-4 h-4"></i><span>ГРП <span class="ru">/ PIU</span> <span id="piu-badge" class="hidden bg-indigo-100 text-indigo-600 px-1.5 py-0.5 rounded-full text-[10px] ml-1 font-bold">0</span></span>
+                </button>
+                <button class="tab-btn pb-3 flex items-center space-x-2 cursor-pointer whitespace-nowrap text-[13px] font-medium text-gray-500 transition-colors" data-target="pane-committee">
+                    <i data-lucide="award" class="w-4 h-4"></i><span>Кумита <span class="ru">/ Комитет</span> <span id="com-badge" class="hidden bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded-full text-[10px] ml-1 font-bold">0</span></span>
+                </button>
+                
+                <!-- НОВЫЕ ВКЛАДКИ ДЛЯ ОДОБРЕННЫХ -->
+                <button id="tab-btn-tranches" class="tab-btn hidden pb-3 flex items-center space-x-2 cursor-pointer whitespace-nowrap text-[13px] font-medium text-gray-500 transition-colors" data-target="pane-tranches">
+                    <i data-lucide="credit-card" class="w-4 h-4"></i><span>Траншҳо <span class="ru">/ Транши</span></span>
+                </button>
+                <button id="tab-btn-approved" class="tab-btn hidden pb-3 flex items-center space-x-2 cursor-pointer whitespace-nowrap text-[13px] font-medium text-gray-500 transition-colors" data-target="pane-approved">
+                    <i data-lucide="folder-check" class="w-4 h-4"></i><span>Ҳуҷҷатҳо ва Таърих <span class="ru">/ Документы и История</span></span>
+                </button>
+            </div>
+
+            <!-- PANE: ФАСИЛИТАТОР -->
+            <div id="pane-facilitator" class="tab-pane block space-y-6">
+                
+                <div id="facilitator-revision-block" class="hidden mb-5 bg-red-50 border border-red-300 rounded-xl p-4 shadow-sm">
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="alert-triangle" class="w-6 h-6 text-red-600 mt-0.5"></i>
+                        <div class="w-full">
+                            <h3 class="text-[14px] font-bold text-red-900 leading-tight">Дархост барои такмил баргардонида шуд <span class="ru-block text-red-700 mt-0.5">Заявка возвращена на доработку</span></h3>
+                            <p class="text-[12px] text-red-800 mt-2 leading-tight">Лутфан эродҳоро дар ҳуҷҷати замимашуда хонед ва версияи навро бор кунед. <span class="ru-block mt-0.5">Пожалуйста, ознакомьтесь с комментариями в прикрепленном документе и загрузите новую версию бизнес-плана.</span></p>
+                            <button type="button" onclick="alert('Боргирии ҳуҷҷат бо эродҳо... / Скачивание документа с комментариями...')" class="mt-4 bg-white border border-red-300 text-red-700 py-2 px-4 rounded-lg text-[12px] font-bold hover:bg-red-100 transition-colors flex items-center justify-center gap-2 shadow-sm w-full sm:w-auto">
+                                <i data-lucide="download" class="w-4 h-4"></i> 
+                                <div class="text-left leading-tight">
+                                    <span>Боргирии ҳуҷҷати эроддор</span>
+                                    <span class="ru-block text-[10px]">Скачать документ с комментариями</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#f8f9fc] rounded-xl p-6 border border-[#e5e9f5]">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-8">
+                        <div><div class="text-[12px] text-[#8b92a5] mb-1">Бенефитсиар (ННШ) <span class="ru">/ Бенефициар (ФИО)</span></div><div id="display-fullname" class="text-[13px] font-medium text-gray-900">—</div></div>
+                        <div><div class="text-[12px] text-[#8b92a5] mb-1">Рақами ID <span class="ru">/ ID номер</span></div><div id="display-id" class="text-[13px] font-medium text-gray-900">—</div></div>
+                        <div><div class="text-[12px] text-[#8b92a5] mb-1">РМА (ИНН) <span class="ru">/ ИНН (РМА)</span></div><div id="display-inn" class="text-[13px] font-medium text-gray-900">—</div></div>
+                        <div><div class="text-[12px] text-[#8b92a5] mb-1">Санаи таваллуд <span class="ru">/ Дата рождения</span></div><div id="display-birthdate" class="text-[13px] font-medium text-gray-900">—</div></div>
+                        <div><div class="text-[12px] text-[#8b92a5] mb-1">Ҷинс <span class="ru">/ Пол</span></div><div id="display-gender" class="text-[13px] font-medium text-gray-900">—</div></div>
+                        <div><div class="text-[12px] text-[#8b92a5] mb-1">Тамос <span class="ru">/ Контакты</span></div><div id="display-contacts" class="text-[13px] font-medium text-gray-900">—</div></div>
+                        <div><div class="text-[12px] text-[#8b92a5] mb-1">Суроғаи пурра <span class="ru">/ Полный адрес</span></div><div id="display-address" class="text-[13px] font-medium text-gray-900">—</div></div>
+                        <div><div class="text-[12px] text-[#8b92a5] mb-1">Категория <span class="ru">/ Категория</span></div><div id="display-category" class="text-[13px] font-medium text-gray-900">—</div></div>
+                        <div><div class="text-[12px] text-[#8b92a5] mb-1">Таҳсилот <span class="ru">/ Образование</span></div><div id="display-education" class="text-[13px] font-medium text-gray-900">—</div></div>
+                        <div><div class="text-[12px] text-[#8b92a5] mb-1">Ихтисос / Курс <span class="ru">/ Специальность / Курс</span></div><div id="display-course" class="text-[13px] font-medium text-gray-900">—</div></div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-xl p-6 bg-white shadow-sm">
+                    <h2 class="text-[15px] font-semibold text-gray-800 mb-5">Маълумоти дархост <span class="ru">/ Данные заявки</span></h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[12px] text-gray-600 mb-1.5">Бахши тиҷорат <span class="ru">/ Сектор бизнеса</span></label>
+                            <select id="sector-input" class="w-full border border-gray-300 rounded-md px-3 py-2 text-[13px] focus:border-blue-500 outline-none">
+                                <option value="">— Интихоб кунед / Выберите —</option>
+                                <option value="Савдо / Торговля">Савдо / Торговля</option>
+                                <option value="Хизматрасонӣ / Услуги">Хизматрасонӣ / Услуги</option>
+                                <option value="Истеҳсолот / Производство">Истеҳсолот / Производство</option>
+                                <option value="Кишоварзӣ / Сельское хозяйство">Кишоварзӣ / Сельское хозяйство</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[12px] text-gray-600 mb-1.5">Маблағи дархостшуда (сомонӣ) <span class="ru">/ Сумма запроса (сомони)</span></label>
+                            <input type="number" id="amount-input" placeholder="3000" class="w-full border border-gray-300 rounded-md px-3 py-2 text-[13px] focus:border-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[12px] text-gray-600 mb-1.5">Таҷрибаи корӣ (Вуруди дастӣ) <span class="ru">/ Опыт работы (Ручной ввод)</span></label>
+                            <textarea id="experience" rows="2" class="w-full border border-gray-300 rounded-md px-3 py-2 text-[13px] focus:border-blue-500 outline-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-[12px] text-gray-600 mb-1.5">Боркунии нақшаи тиҷоратӣ (doc, docx, pdf) <span class="ru">/ Загрузка бизнес-плана</span></label>
+                            <div class="flex items-center gap-3">
+                                <button type="button" class="bg-indigo-50 text-indigo-700 border border-indigo-200 px-4 py-2 rounded-lg text-[12px] font-bold hover:bg-indigo-100 transition-colors flex items-center gap-2 relative overflow-hidden">
+                                    <input type="file" id="facilitator-upload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                    <i data-lucide="upload" class="w-4 h-4"></i>
+                                    <div class="text-left leading-tight"><span>Интихоби файл</span><span class="ru-block mt-0.5">Выберите файл</span></div>
+                                </button>
+                                <span class="text-[12px] text-gray-500" id="facilitator-upload-text">Файл интихоб нашудааст <span class="ru">/ Файл не выбран</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center gap-4 mt-6 pt-5 border-t border-gray-100">
+                        <button type="button" onclick="saveToDraft()" class="w-full sm:w-1/2 bg-slate-100 text-slate-700 py-2.5 rounded-md text-[13px] font-bold hover:bg-slate-200 shadow-sm flex flex-col items-center leading-tight transition-colors border border-slate-200">
+                            <span>Захира ба сиёҳнавис</span>
+                            <span class="ru">Сохранить в черновик</span>
+                        </button>
+                        <button type="button" onclick="submitToGmc()" class="w-full sm:w-1/2 bg-[#5b4ef5] text-white py-2.5 rounded-md text-[13px] font-bold hover:bg-[#4b3ed5] shadow-sm flex flex-col items-center leading-tight transition-colors border border-transparent">
+                            <span>Фиристодан ба GMC</span>
+                            <span class="ru">Отправить в GMC</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hidden">
+                    <input type="text" id="id-input"><input type="text" id="full-name"><input type="text" id="inn"><input type="text" id="course">
+                </div>
+            </div>
+
+            <!-- PANE: GMC -->
+            <div id="pane-gmc" class="tab-pane hidden">
+                <div class="border border-blue-200 rounded-xl bg-white shadow-sm overflow-hidden mb-6">
+                    <div class="bg-blue-50 border-b border-blue-200 p-4 flex items-center gap-3">
+                        <i data-lucide="scale" class="w-5 h-5 text-blue-600"></i>
+                        <h2 class="text-[14px] font-bold text-blue-900 uppercase">Баҳогузории нақшаи тиҷоратӣ (GMC) <span class="ru">/ Оценка бизнес-плана</span></h2>
+                    </div>
+                    <div class="p-5">
+
+                        <div id="gmc-evaluation-content" class="hidden space-y-6">
+                            
+                            <div id="gmc-returned-alert" class="hidden p-4 bg-amber-50 border border-amber-200 rounded-xl shadow-sm">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <i data-lucide="alert-circle" class="w-6 h-6 text-amber-600 flex-shrink-0"></i>
+                                        <div>
+                                            <h4 class="text-[13px] font-bold text-amber-900 leading-tight">Баргардонида шуд аз ГРП / Кумита <span class="ru-block mt-0.5 text-amber-700">Возвращено из PIU / Комитета на доработку</span></h4>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="alert('Боргирӣ... / Скачивание...')" class="bg-white border border-amber-300 text-amber-700 py-2 px-4 rounded-lg text-[12px] font-bold hover:bg-amber-100 transition-colors flex items-center justify-center gap-2 shadow-sm w-full sm:w-auto">
+                                        <i data-lucide="download" class="w-4 h-4"></i>
+                                        <div class="text-left leading-tight">
+                                            <span>Боргирии эродҳо аз ГРП</span>
+                                            <span class="ru-block text-[10px]">Скачать комментарии от PIU</span>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="bg-blue-50/50 border border-blue-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2.5 bg-blue-100 text-blue-600 rounded-lg"><i data-lucide="file-text" class="w-5 h-5"></i></div>
+                                    <div>
+                                        <p class="text-[13px] font-bold text-blue-900 leading-tight">Нақшаи тиҷоратии довталаб <span class="ru-block text-blue-700">Бизнес-план заявителя</span></p>
+                                        <p class="text-[11px] text-blue-500 mt-1">Боршуда аз Фасилитатор / Загружено Фасилитатором</p>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="alert('Боргирӣ... / Скачивание...')" class="bg-white border border-blue-300 text-blue-700 py-2 px-4 rounded-lg text-[12px] font-bold hover:bg-blue-100 transition-colors flex items-center gap-2 shadow-sm w-full sm:w-auto justify-center">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    <div class="text-left leading-tight"><span>Боргирӣ</span><span class="ru-block text-[10px]">Скачать</span></div>
+                                </button>
+                            </div>
+
+                            <div class="border border-gray-300 rounded-xl overflow-hidden">
+                                <div class="bg-gray-100 p-3 border-b border-gray-300 font-bold text-[13px] text-gray-800 text-center uppercase leading-tight">
+                                    ШАКЛИ БАҲОГУЗОРИИ НАҚШАИ ТИҶОРАТӢ <br><span class="ru">ФОРМА ОЦЕНКИ БИЗНЕС-ПЛАНА</span>
+                                    <div class="text-[10px] font-normal mt-2 opacity-80 leading-tight">
+                                        Барномаи фарогирии иқтисодии Лоиҳаи "Модернизатсияи ҳифзи иҷтимоӣ ва фарогирии иқтисодӣ" <br>
+                                        <span class="ru">Программа экономической инклюзии проекта «Модернизация социальной защиты и экономическая инклюзия»</span>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-gray-300 text-[12px]">
+                                    <div class="bg-white p-3"><span class="text-gray-500 block text-[10px] mb-0.5">Рақами ID довталаб <span class="ru">/ ID заявителя</span></span><strong id="gmc-hdr-id">—</strong></div>
+                                    <div class="bg-white p-3"><span class="text-gray-500 block text-[10px] mb-0.5">ННШ-и довталаб <span class="ru">/ ФИО заявителя</span></span><strong id="gmc-hdr-name">—</strong></div>
+                                    <div class="bg-white p-3"><span class="text-gray-500 block text-[10px] mb-0.5">Намуди тиҷорат <span class="ru">/ Сектор бизнеса</span></span><strong id="gmc-hdr-sector">—</strong></div>
+                                    <div class="bg-white p-3"><span class="text-gray-500 block text-[10px] mb-0.5">Намуди фаъолият <span class="ru">/ Вид деятельности</span></span><strong id="gmc-hdr-activity">—</strong></div>
+                                    <div class="bg-white p-3"><span class="text-gray-500 block text-[10px] mb-0.5">Ҷойгиршавӣ <span class="ru">/ Локация</span></span><strong id="gmc-hdr-location">—</strong></div>
+                                    <div class="bg-white p-3"><span class="text-gray-500 block text-[10px] mb-0.5">Маблағи дархостшудаи грант <span class="ru">/ Сумма гранта</span></span><strong id="gmc-hdr-amount">—</strong></div>
+                                    <div class="bg-white p-3 flex flex-col justify-center"><span class="text-gray-500 text-[10px] mb-1">Санаи баҳогузорӣ <span class="ru">/ Дата оценки</span></span><input type="date" id="gmc-date-input" class="border border-gray-200 rounded px-2 py-1 w-full outline-none focus:border-blue-500"></div>
+                                    <div class="bg-white p-3 flex flex-col justify-center"><span class="text-gray-500 text-[10px] mb-1">ННШ-и баҳогузор <span class="ru">/ ФИО оценивающего</span></span><input type="text" id="gmc-reviewer" placeholder="Ном Насаб / ФИО" class="border border-gray-200 rounded px-2 py-1 w-full outline-none focus:border-blue-500"></div>
+                                </div>
+                            </div>
+
+                            <div class="border border-gray-300 rounded-xl overflow-hidden shadow-sm text-[12px]">
+                                
+                                <div class="bg-blue-50 border-b border-gray-300 p-3 leading-tight">
+                                    <div class="font-bold text-blue-900">1. Мувофиқат ба меъёрҳо <span class="ru font-normal">/ Соответствие критериям</span></div>
+                                    <div class="text-[10px] text-blue-700 italic mt-1">
+                                        (Агар дар ин бахш ягон "Не / Нет" бошад, дархост новобаста аз холи умумӣ тасдиқ карда намешавад) <br>
+                                        <span class="ru font-normal">(Если в этом разделе есть хотя бы один «Нет», заявка отклоняется независимо от общего балла)</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white divide-y divide-gray-100">
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50">
+                                        <span class="w-3/4 pr-4 leading-tight">Довталаб ба рӯйхати Корти баҳогузории осебпазирӣ мувофиқ аст <span class="ru-block">Заявитель соответствует списку Карты оценки уязвимости</span></span>
+                                        <div class="w-1/4 flex gap-3 justify-end text-[11px]"><label class="flex items-center cursor-pointer whitespace-nowrap"><input type="radio" name="el1" value="yes" class="elig-radio mr-1"> Ҳа <span class="ru">/ Да</span></label><label class="flex items-center cursor-pointer text-red-600 whitespace-nowrap"><input type="radio" name="el1" value="no" class="elig-radio-no mr-1"> Не <span class="ru">/ Нет</span></label></div>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50">
+                                        <span class="w-3/4 pr-4 leading-tight">Шаҳодатномаҳои ҳатмӣ ва баҳои осебпазирӣ дар платформаи EIP мавҷуданд <span class="ru-block">Обязательные сертификаты и балл уязвимости загружены в платформу EIP</span></span>
+                                        <div class="w-1/4 flex gap-3 justify-end text-[11px]"><label class="flex items-center cursor-pointer whitespace-nowrap"><input type="radio" name="el2" value="yes" class="elig-radio mr-1"> Ҳа <span class="ru">/ Да</span></label><label class="flex items-center cursor-pointer text-red-600 whitespace-nowrap"><input type="radio" name="el2" value="no" class="elig-radio-no mr-1"> Не <span class="ru">/ Нет</span></label></div>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50">
+                                        <span class="w-3/4 pr-4 leading-tight">Хавфҳои назарраси амалиётӣ муайян нашудаанд <span class="ru-block">Значительные операционные риски не выявлены</span></span>
+                                        <div class="w-1/4 flex gap-3 justify-end text-[11px]"><label class="flex items-center cursor-pointer whitespace-nowrap"><input type="radio" name="el3" value="yes" class="elig-radio mr-1"> Ҳа <span class="ru">/ Да</span></label><label class="flex items-center cursor-pointer text-red-600 whitespace-nowrap"><input type="radio" name="el3" value="no" class="elig-radio-no mr-1"> Не <span class="ru">/ Нет</span></label></div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-blue-50 border-y border-gray-300 p-3 font-bold text-blue-900 flex justify-between items-center leading-tight">
+                                    <span>2. Консепсияи тиҷорат ва баҳогузории бозор ва хавфҳо <span class="ru-block">Бизнес-концепция, оценка рынка и рисков</span></span>
+                                    <span class="text-[11px] font-normal whitespace-nowrap ml-4">Хол <span class="ru">/ Балл</span> 1-4</span>
+                                </div>
+                                <div class="bg-white divide-y divide-gray-100">
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>1.</b> Идеяи тиҷоратӣ равшан тавсиф шудааст ва ба шароит мувофиқ аст <span class="ru-block">Бизнес-идея четко описана и соответствует местным условиям</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q1" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q1" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q1" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q1" value="4" class="gmc-score-input"> 4</label></div></div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>2.</b> Мизоҷони мақсаднок/бозор равшан муайян шудаанд <span class="ru-block">Целевые клиенты/рынок четко определены</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q2" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q2" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q2" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q2" value="4" class="gmc-score-input"> 4</label></div></div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>3.</b> Рақибон муайян шудаанд <span class="ru-block">Конкуренты идентифицированы</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q3" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q3" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q3" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q3" value="4" class="gmc-score-input"> 4</label></div></div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>4.</b> Афзалиятҳои рақобатӣ тавсиф шудаанд ва онҳо мувофиқанд <span class="ru-block">Конкурентные преимущества описаны и адекватны</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q4" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q4" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q4" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q4" value="4" class="gmc-score-input"> 4</label></div></div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>5.</b> Хавфҳои асосӣ дуруст муайян шудаанд <span class="ru-block">Ключевые риски правильно определены</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q5" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q5" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q5" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q5" value="4" class="gmc-score-input"> 4</label></div></div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>6.</b> Чораҳои паст кардани хавфҳо пешниҳод шудаанд ва онҳо мувофиқанд <span class="ru-block">Меры по снижению рисков представлены и адекватны</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q6" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q6" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q6" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q6" value="4" class="gmc-score-input"> 4</label></div></div>
+                                </div>
+
+                                <div class="bg-blue-50 border-y border-gray-300 p-3 font-bold text-blue-900 flex justify-between items-center leading-tight">
+                                    <span>3. Имконияти техникӣ ва амалисозӣ <span class="ru-block">Техническая осуществимость и реализация</span></span>
+                                    <span class="text-[11px] font-normal whitespace-nowrap ml-4">Хол <span class="ru">/ Балл</span> 1-4</span>
+                                </div>
+                                <div class="bg-white divide-y divide-gray-100">
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>1.</b> Доштани донишҳои зарурӣ мутобиқи фаъолият <span class="ru-block">Наличие необходимых знаний (обучение или опыт)</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q7" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q7" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q7" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q7" value="4" class="gmc-score-input"> 4</label></div></div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>2.</b> Ҷойи лоиҳа ва мақоми ҳуқуқӣ ба фаъолият мувофиқанд <span class="ru-block">Место реализации и правовой статус подходят</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q8" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q8" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q8" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q8" value="4" class="gmc-score-input"> 4</label></div></div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>3.</b> Таҷҳизоти зарурӣ/сармояи гардишӣ равшан муайян шудаанд <span class="ru-block">Требуемое оборудование/капитал четко определены</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q9" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q9" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q9" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q9" value="4" class="gmc-score-input"> 4</label></div></div>
+                                </div>
+
+                                <div class="bg-blue-50 border-y border-gray-300 p-3 font-bold text-blue-900 flex justify-between items-center leading-tight">
+                                    <span>4. Қобилияти молиявӣ <span class="ru-block">Финансовая жизнеспособность</span></span>
+                                    <span class="text-[11px] font-normal whitespace-nowrap ml-4">Хол <span class="ru">/ Балл</span> 1-4</span>
+                                </div>
+                                <div class="bg-white divide-y divide-gray-100">
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>1.</b> Пешгӯиҳои даромад воқеӣ мебошанд <span class="ru-block">Прогнозы доходов реалистичны</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q10" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q10" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q10" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q10" value="4" class="gmc-score-input"> 4</label></div></div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>2.</b> Ҳисобҳои хароҷот дақиқ ва асоснок мебошанд <span class="ru-block">Расчеты затрат точны и обоснованы</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q11" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q11" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q11" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q11" value="4" class="gmc-score-input"> 4</label></div></div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>3.</b> Ҳисоби фоидаи соф дуруст ва мусбат аст <span class="ru-block">Расчет чистой прибыли верен и положителен</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q12" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q12" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q12" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q12" value="4" class="gmc-score-input"> 4</label></div></div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>4.</b> Сатҳи безарарӣ дар давоми 6-12 моҳ дастрас ба назар мерасад <span class="ru-block">Уровень безубыточности достижим в течение 6-12 месяцев</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q13" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q13" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q13" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q13" value="4" class="gmc-score-input"> 4</label></div></div>
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>5.</b> Пешгӯиҳои 3-6-12-моҳа мувофиқанд ва намунаи мантиқии рушдро нишон медиҳанд <span class="ru-block">Прогнозы на 3-6-12 месяцев логичны и последовательны</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q14" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q14" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q14" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q14" value="4" class="gmc-score-input"> 4</label></div></div>
+                                </div>
+
+                                <div class="bg-blue-50 border-y border-gray-300 p-3 font-bold text-blue-900 flex justify-between items-center leading-tight">
+                                    <span>5. Буҷет ва сохтори сармоягузорӣ <span class="ru-block">Бюджет и структура инвестиций</span></span>
+                                    <span class="text-[11px] font-normal whitespace-nowrap ml-4">Хол <span class="ru">/ Балл</span> 1-4</span>
+                                </div>
+                                <div class="bg-white">
+                                    <div class="flex justify-between items-center p-3 hover:bg-gray-50"><span class="w-3/4 pr-4 leading-tight"><b>1.</b> Маблағи дархостшудаи грант асоснок аст ва ба фаъолият мутаносиб аст <span class="ru-block">Запрашиваемая сумма гранта обоснована и соразмерна</span></span><div class="w-1/4 flex gap-2 justify-end"><label><input type="radio" name="q15" value="1" class="gmc-score-input"> 1</label><label><input type="radio" name="q15" value="2" class="gmc-score-input"> 2</label><label><input type="radio" name="q15" value="3" class="gmc-score-input"> 3</label><label><input type="radio" name="q15" value="4" class="gmc-score-input"> 4</label></div></div>
+                                </div>
+
+                                <div class="bg-slate-100 border-t border-gray-300 p-4 flex justify-between items-center">
+                                    <span class="font-black text-[14px] uppercase leading-tight">Баҳогузории умумӣ. Холи умумӣ: <span class="ru-block mt-1">Общая оценка. Итоговый балл:</span></span>
+                                    <div class="text-right">
+                                        <span id="total-score" class="text-3xl font-black text-blue-600">0</span><span class="text-gray-500 font-bold"> / 60</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 relative">
+                                <h3 class="text-[14px] font-bold text-gray-800 mb-4 uppercase">Қарор <span class="ru">/ Решение</span></h3>
+                                <div class="flex flex-col gap-3">
+                                    <button id="btn-recommend" onclick="setGmcDecision('ok')" class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-[13px] font-medium border-2 border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                                        <span class="flex items-center gap-3 text-left leading-tight"><i data-lucide="check-square" class="w-5 h-5 flex-shrink-0"></i> <span><b>Барои тасдиқи грант тавсия дода мешавад</b><span class="ru-block">Рекомендуется к одобрению гранта</span></span></span>
+                                        <span class="text-[10px] text-gray-400 font-normal text-right whitespace-nowrap ml-2">хол <span class="ru">/ балл</span> ≥ 45</span>
+                                    </button>
+                                    <button id="btn-resubmit-gmc" onclick="setGmcDecision('rev')" class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-[13px] font-medium border-2 border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                                        <span class="flex items-center gap-3 text-left leading-tight"><i data-lucide="corner-down-right" class="w-5 h-5 flex-shrink-0"></i> <span><b>Тавсия дода мешавад, ки пас аз ислоҳот дубора пешниҳод кунад</b><span class="ru-block">Рекомендуется вернуть на доработку</span></span></span>
+                                        <span class="text-[10px] text-gray-400 font-normal text-right whitespace-nowrap ml-2">хол <span class="ru">/ балл</span> 30–44</span>
+                                    </button>
+                                    <button id="btn-reject" onclick="setGmcDecision('rej')" class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-[13px] font-medium border-2 border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                                        <span class="flex items-center gap-3 text-left leading-tight"><i data-lucide="x" class="w-5 h-5 flex-shrink-0"></i> <span><b>Барои тасдиқи грант тавсия дода намешавад</b><span class="ru-block">Не рекомендуется к одобрению гранта</span></span></span>
+                                        <span class="text-[10px] text-gray-400 font-normal text-right whitespace-nowrap ml-2">хол <span class="ru">/ балл</span> < 30<br>ё <span class="ru">/ или</span> "Не <span class="ru">/ Нет</span>"</span>
+                                    </button>
+                                </div>
+
+                                <div id="gmc-revision-files" class="hidden mt-4 p-4 bg-red-50 border border-red-300 rounded-xl flex flex-col gap-3">
+                                    <h4 class="text-[13px] font-bold text-red-900 leading-tight">
+                                        Ҳуҷҷат бо эродҳо барои Фасилитатор
+                                        <span class="ru-block mt-0.5 text-red-700">Документ с комментариями для доработки Фасилитатору</span>
+                                    </h4>
+                                    <div class="flex flex-col sm:flex-row gap-3">
+                                        <div class="flex-1 relative">
+                                            <input type="file" id="gmc-revision-upload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                            <button type="button" class="w-full bg-white border border-red-300 text-red-700 py-2 px-3 rounded-lg text-[12px] font-bold hover:bg-red-100 transition-colors flex items-center justify-center gap-2 pointer-events-none">
+                                                <i data-lucide="upload" class="w-4 h-4 flex-shrink-0"></i>
+                                                <div class="text-left leading-tight">
+                                                    <span>Боркунии эродҳо</span>
+                                                    <span class="ru-block text-[10px]">Загрузить с комментариями</span>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div id="gmc-upload-filename" class="text-[11px] text-red-800 font-medium hidden">
+                                        Файл: <span id="gmc-filename-text" class="font-bold"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-5">
+                                    <label class="block text-[12px] font-semibold text-gray-800 mb-2">Шарҳҳои баҳогузор <span class="ru">/ Комментарии проверяющего (если есть)</span></label>
+                                    <textarea id="gmc-comment" class="w-full border border-gray-300 rounded-lg p-3 text-[13px] outline-none focus:border-blue-500 h-20 resize-none" placeholder="Матнро ворид кунед..."></textarea>
+                                </div>
+                                <button onclick="saveGmcDecision()" class="w-full bg-[#5b4ef5] text-white py-3 rounded-lg text-[13px] font-bold mt-5 shadow-sm hover:bg-[#4b3ed5] transition-colors flex flex-col items-center leading-tight">
+                                    <span>Захира кардани қарор</span><span class="ru">Сохранить решение</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANE: PIU -->
+            <div id="pane-piu" class="tab-pane hidden">
+                <div class="p-6">
+                    <div id="piu-evaluation-content" class="hidden space-y-4">
+                        <div class="bg-indigo-50/50 border border-indigo-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm mb-4">
+                            <div>
+                                <p class="text-[11px] text-indigo-500 font-bold uppercase tracking-wider mb-1">Аризадиҳанда <span class="ru">/ Заявитель</span></p>
+                                <p class="text-[14px] font-bold text-indigo-900 leading-tight"><span id="piu-app-name">—</span> <span class="text-indigo-600 font-normal ml-2">#<span id="piu-app-id">—</span></span></p>
+                            </div>
+                            <button type="button" onclick="alert('Боргирӣ... / Скачивание...')" class="bg-white border border-indigo-300 text-indigo-700 py-2 px-4 rounded-lg text-[12px] font-bold hover:bg-indigo-100 transition-colors flex items-center gap-2 shadow-sm w-full sm:w-auto justify-center">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                                <div class="text-left leading-tight"><span>Бизнес-план (GMC)</span><span class="ru-block text-[10px]">Скачать</span></div>
+                            </button>
+                        </div>
+
+                        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 flex justify-between items-center mb-2">
+                            <h3 class="font-semibold text-blue-900 text-[13px]">Раванди санҷиш <span class="ru">/ Прогресс верификации</span></h3>
+                            <span class="text-lg font-bold text-blue-600" id="piu-counter">0/4</span>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-xl p-4 shadow-sm bg-white" id="piu-card-1">
+                            <div class="flex justify-between items-center mb-3"><b>Мутахассиси EIP <span class="ru">/ Специалист EIP</span></b> <button id="piu-trigger-1" onclick="togglePiuForm(1)" class="text-blue-600 text-[12px] font-bold px-3 py-1 bg-blue-50 rounded hover:bg-blue-100 transition-colors">Ворид кардан <span class="ru">/ Внести</span></button></div>
+                            <div id="form-1" class="hidden flex flex-col gap-3">
+                                <div class="flex gap-2">
+                                    <button onclick="setPiuDecision(1, 'approve')" id="btn-app-1" class="flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center"><span>Тасдиқ кардан</span><span class="ru">Одобрить</span></button>
+                                    <button onclick="setPiuDecision(1, 'resubmit')" id="btn-rev-1" class="flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center"><span>Ба такмил</span><span class="ru">На доработку</span></button>
+                                </div>
+                                <div id="piu-comment-block-1" class="hidden">
+                                    <label class="block text-[11px] font-medium text-gray-700 mb-1">Сабаби баргардонидан <span class="ru">/ Причина возврата:</span></label>
+                                    <textarea id="piu-comment-1" rows="2" class="w-full border border-amber-300 rounded px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-100 transition-shadow" placeholder="Шарҳи худро нависед... / Введите комментарий..."></textarea>
+                                </div>
+                                <button onclick="savePiuCard(1)" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-bold transition-colors">OK</button>
+                            </div>
+                        </div>
+                        <div class="border border-gray-200 rounded-xl p-4 shadow-sm bg-white" id="piu-card-2">
+                            <div class="flex justify-between items-center mb-3"><b>Мутахассиси иҷтимоӣ <span class="ru">/ Социальный специалист</span></b> <button id="piu-trigger-2" onclick="togglePiuForm(2)" class="text-blue-600 text-[12px] font-bold px-3 py-1 bg-blue-50 rounded hover:bg-blue-100 transition-colors">Ворид кардан <span class="ru">/ Внести</span></button></div>
+                            <div id="form-2" class="hidden flex flex-col gap-3">
+                                <div class="flex gap-2">
+                                    <button onclick="setPiuDecision(2, 'approve')" id="btn-app-2" class="flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center"><span>Тасдиқ кардан</span><span class="ru">Одобрить</span></button>
+                                    <button onclick="setPiuDecision(2, 'resubmit')" id="btn-rev-2" class="flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center"><span>Ба такмил</span><span class="ru">На доработку</span></button>
+                                </div>
+                                <div id="piu-comment-block-2" class="hidden">
+                                    <label class="block text-[11px] font-medium text-gray-700 mb-1">Сабаби баргардонидан <span class="ru">/ Причина возврата:</span></label>
+                                    <textarea id="piu-comment-2" rows="2" class="w-full border border-amber-300 rounded px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-100 transition-shadow" placeholder="Шарҳи худро нависед... / Введите комментарий..."></textarea>
+                                </div>
+                                <button onclick="savePiuCard(2)" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-bold transition-colors">OK</button>
+                            </div>
+                        </div>
+                        <div class="border border-gray-200 rounded-xl p-4 shadow-sm bg-white" id="piu-card-3">
+                            <div class="flex justify-between items-center mb-3"><b>Мутахассиси экологӣ <span class="ru">/ Экологический специалист</span></b> <button id="piu-trigger-3" onclick="togglePiuForm(3)" class="text-blue-600 text-[12px] font-bold px-3 py-1 bg-blue-50 rounded hover:bg-blue-100 transition-colors">Ворид кардан <span class="ru">/ Внести</span></button></div>
+                            <div id="form-3" class="hidden flex flex-col gap-3">
+                                <div class="flex gap-2">
+                                    <button onclick="setPiuDecision(3, 'approve')" id="btn-app-3" class="flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center"><span>Тасдиқ кардан</span><span class="ru">Одобрить</span></button>
+                                    <button onclick="setPiuDecision(3, 'resubmit')" id="btn-rev-3" class="flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center"><span>Ба такмил</span><span class="ru">На доработку</span></button>
+                                </div>
+                                <div id="piu-comment-block-3" class="hidden">
+                                    <label class="block text-[11px] font-medium text-gray-700 mb-1">Сабаби баргардонидан <span class="ru">/ Причина возврата:</span></label>
+                                    <textarea id="piu-comment-3" rows="2" class="w-full border border-amber-300 rounded px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-100 transition-shadow" placeholder="Шарҳи худро нависед... / Введите комментарий..."></textarea>
+                                </div>
+                                <button onclick="savePiuCard(3)" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-bold transition-colors">OK</button>
+                            </div>
+                        </div>
+                        <div class="border border-gray-200 rounded-xl p-4 shadow-sm bg-white" id="piu-card-4">
+                            <div class="flex justify-between items-center mb-3"><b>Мутахассиси M&E <span class="ru">/ Специалист M&E</span></b> <button id="piu-trigger-4" onclick="togglePiuForm(4)" class="text-blue-600 text-[12px] font-bold px-3 py-1 bg-blue-50 rounded hover:bg-blue-100 transition-colors">Ворид кардан <span class="ru">/ Внести</span></button></div>
+                            <div id="form-4" class="hidden flex flex-col gap-3">
+                                <div class="flex gap-2">
+                                    <button onclick="setPiuDecision(4, 'approve')" id="btn-app-4" class="flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center"><span>Тасдиқ кардан</span><span class="ru">Одобрить</span></button>
+                                    <button onclick="setPiuDecision(4, 'resubmit')" id="btn-rev-4" class="flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center"><span>Ба такмил</span><span class="ru">На доработку</span></button>
+                                </div>
+                                <div id="piu-comment-block-4" class="hidden">
+                                    <label class="block text-[11px] font-medium text-gray-700 mb-1">Сабаби баргардонидан <span class="ru">/ Причина возврата:</span></label>
+                                    <textarea id="piu-comment-4" rows="2" class="w-full border border-amber-300 rounded px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-100 transition-shadow" placeholder="Шарҳи худро нависед... / Введите комментарий..."></textarea>
+                                </div>
+                                <button onclick="savePiuCard(4)" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-bold transition-colors">OK</button>
+                            </div>
+                        </div>
+
+                        <div id="piu-revision-files" class="hidden mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-between">
+                            <div>
+                                <h4 class="text-[13px] font-bold text-amber-900 leading-tight">Боркунии эродҳо ба GMC <span class="ru-block text-amber-700">Загрузить комментарии для GMC</span></h4>
+                                <span id="piu-upload-filename" class="text-[11px] text-amber-800 font-medium hidden">Файл: <span id="piu-filename-text" class="font-bold"></span></span>
+                            </div>
+                            <div class="relative">
+                                <input type="file" id="piu-revision-upload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                <button type="button" class="bg-white border border-amber-300 text-amber-700 py-2 px-3 rounded-lg text-[12px] font-bold hover:bg-amber-100 transition-colors flex items-center gap-2 pointer-events-none">
+                                    <i data-lucide="upload" class="w-4 h-4"></i> Боркунӣ <span class="ru">/ Загрузить</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button id="finalize-piu-btn" onclick="finalizePiu()" disabled class="w-full bg-gray-200 text-gray-500 py-3 rounded-lg text-[13px] font-bold transition-colors cursor-not-allowed mt-4 flex flex-col items-center leading-tight">
+                            <span>Ба анҷом расонидани санҷиш</span><span class="ru">Завершить верификацию</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANE: КОМИТЕТ -->
+            <div id="pane-committee" class="tab-pane hidden">
+                <div class="p-6">
+                    <div id="committee-evaluation-content" class="hidden space-y-4">
+                        
+                        <div class="bg-teal-50/50 border border-teal-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm mb-4">
+                            <div>
+                                <p class="text-[11px] text-teal-500 font-bold uppercase tracking-wider mb-1">Аризадиҳанда <span class="ru">/ Заявитель</span></p>
+                                <p class="text-[14px] font-bold text-teal-900 leading-tight"><span id="com-app-name">—</span> <span class="text-teal-600 font-normal ml-2">#<span id="com-app-id">—</span></span></p>
+                            </div>
+                            <button type="button" onclick="alert('Боргирӣ... / Скачивание...')" class="bg-white border border-teal-300 text-teal-700 py-2 px-4 rounded-lg text-[12px] font-bold hover:bg-teal-100 transition-colors flex items-center gap-2 shadow-sm w-full sm:w-auto justify-center">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                                <div class="text-left leading-tight"><span>Бизнес-план (PIU)</span><span class="ru-block text-[10px]">Скачать</span></div>
+                            </button>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 relative">
+                            <h3 class="text-[14px] font-bold text-gray-800 mb-4 uppercase">Қарори Кумита <span class="ru">/ Решение Комитета</span></h3>
+                            <div class="flex flex-col gap-3">
+                                <button id="btn-com-approve" onclick="setComDecision('ok')" class="w-full flex items-center px-4 py-3 rounded-lg text-[13px] font-medium border-2 border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                                    <i data-lucide="check-square" class="w-5 h-5 mr-3"></i> <div class="text-left leading-tight"><b>Тасдиқи ниҳоӣ ва додани грант</b><span class="ru-block">Финальное утверждение и выдача гранта</span></div>
+                                </button>
+                                <button id="btn-com-rev" onclick="setComDecision('rev')" class="w-full flex items-center px-4 py-3 rounded-lg text-[13px] font-medium border-2 border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                                    <i data-lucide="corner-down-right" class="w-5 h-5 mr-3"></i> <div class="text-left leading-tight"><b>Барои такмил ба GMC баргардонида шавад</b><span class="ru-block">Вернуть на доработку в GMC</span></div>
+                                </button>
+                                <button id="btn-com-reject" onclick="setComDecision('rej')" class="w-full flex items-center px-4 py-3 rounded-lg text-[13px] font-medium border-2 border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                                    <i data-lucide="x" class="w-5 h-5 mr-3"></i> <div class="text-left leading-tight"><b>Грант рад карда шуд</b><span class="ru-block">Грант отклонен</span></div>
+                                </button>
+                            </div>
+
+                            <div id="com-revision-files" class="hidden mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <h4 class="text-[13px] font-bold text-amber-900 leading-tight">Боркунии эродҳо ба GMC <span class="ru-block text-amber-700">Загрузить комментарии для GMC</span></h4>
+                                    <span id="com-upload-filename" class="text-[11px] text-amber-800 font-medium hidden">Файл: <span id="com-filename-text" class="font-bold"></span></span>
+                                </div>
+                                <div class="relative">
+                                    <input type="file" id="com-revision-upload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                    <button type="button" class="bg-white border border-amber-300 text-amber-700 py-2 px-3 rounded-lg text-[12px] font-bold hover:bg-amber-100 transition-colors flex items-center gap-2 pointer-events-none">
+                                        <i data-lucide="upload" class="w-4 h-4"></i> Боркунӣ <span class="ru">/ Загрузить</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button onclick="saveComDecision()" class="w-full bg-[#5b4ef5] text-white py-3 rounded-lg text-[13px] font-bold mt-5 shadow-sm hover:bg-[#4b3ed5] transition-colors flex flex-col items-center leading-tight">
+                                <span>Захира кардани қарор</span><span class="ru">Сохранить решение</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANE: ОДОБРЕННЫЕ И ДОКУМЕНТЫ -->
+            <div id="pane-approved" class="tab-pane hidden">
+                <div class="p-6">
+                    <h2 class="text-[15px] font-bold text-gray-800 mb-5 uppercase">Таърихи дархост ва ҳуҷҷатҳо <span class="ru-block">История заявки и документы</span></h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Timeline -->
+                        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                            <h3 class="text-[13px] font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Таърихи тағйирот <span class="ru-block mt-1 text-gray-500">История изменений</span></h3>
+                            <div class="relative border-l-2 border-emerald-400 ml-3 space-y-6 mt-4">
+                                <div class="relative pl-5">
+                                    <div class="absolute w-4 h-4 bg-emerald-500 rounded-full -left-[9px] top-1 border-2 border-white shadow-sm"></div>
+                                    <p class="text-[13px] font-bold text-gray-800 leading-tight">Фасилитатор <span class="ru">/ Фасилитатор</span></p>
+                                    <p class="text-[11px] text-gray-500 mt-0.5 leading-tight">Дархост ва нақшаи тиҷоратӣ бор карда шуд <span class="ru-block mt-0.5">Заявка и бизнес-план загружены</span></p>
+                                    <p class="text-[10px] text-gray-400 mt-1 font-medium" id="tl-created-date">—</p>
+                                </div>
+                                <div class="relative pl-5">
+                                    <div class="absolute w-4 h-4 bg-emerald-500 rounded-full -left-[9px] top-1 border-2 border-white shadow-sm"></div>
+                                    <p class="text-[13px] font-bold text-gray-800 leading-tight">GMC</p>
+                                    <p class="text-[11px] text-gray-500 mt-0.5 leading-tight">Баҳогузорӣ мусбат гузашт <span class="ru-block mt-0.5">Оценка пройдена положительно</span></p>
+                                    <p class="text-[10px] text-gray-400 mt-1 font-medium" id="tl-gmc-date">—</p>
+                                </div>
+                                <div class="relative pl-5">
+                                    <div class="absolute w-4 h-4 bg-emerald-500 rounded-full -left-[9px] top-1 border-2 border-white shadow-sm"></div>
+                                    <p class="text-[13px] font-bold text-gray-800 leading-tight">ГРП <span class="ru">/ PIU</span></p>
+                                    <p class="text-[11px] text-gray-500 mt-0.5 leading-tight">Санҷиши 4 мутахассис гузашт <span class="ru-block mt-0.5">Верификация 4 специалистов пройдена</span></p>
+                                    <p class="text-[10px] text-gray-400 mt-1 font-medium" id="tl-piu-date">—</p>
+                                </div>
+                                <div class="relative pl-5">
+                                    <div class="absolute w-4 h-4 bg-emerald-500 rounded-full -left-[9px] top-1 border-2 border-white shadow-sm"></div>
+                                    <p class="text-[13px] font-bold text-gray-800 leading-tight">Кумита <span class="ru">/ Комитет</span></p>
+                                    <p class="text-[11px] text-emerald-600 font-bold mt-0.5 leading-tight">Грант тасдиқ шуд <span class="ru-block mt-0.5 text-emerald-600 font-bold">Грант утвержден</span></p>
+                                    <p class="text-[10px] text-gray-400 mt-1 font-medium" id="tl-com-date">—</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Documents -->
+                        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col gap-4">
+                            <h3 class="text-[13px] font-bold text-gray-800 mb-1 border-b border-gray-100 pb-2">Ҳуҷҷатҳои ниҳоӣ <span class="ru-block mt-1 text-gray-500">Финальные документы</span></h3>
+                            
+                            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 flex items-center justify-between shadow-sm">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2.5 bg-blue-100 text-blue-600 rounded-lg"><i data-lucide="file-text" class="w-5 h-5"></i></div>
+                                    <div>
+                                        <p class="text-[13px] font-bold text-blue-900 leading-tight">Нақшаи тиҷоратӣ (Ниҳоӣ) <span class="ru-block text-[11px] font-normal text-blue-700 mt-0.5">Бизнес-план (Финальный)</span></p>
+                                    </div>
+                                </div>
+                                <button onclick="alert('Боргирии нақшаи тиҷоратӣ... / Скачивание бизнес-плана...')" class="bg-white border border-blue-300 text-blue-700 p-2 rounded hover:bg-blue-100 transition-colors shadow-sm"><i data-lucide="download" class="w-4 h-4"></i></button>
+                            </div>
+
+                            <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex items-center justify-between mt-2 shadow-sm relative overflow-hidden">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-400"></div>
+                                <div class="flex items-center gap-3 pl-2">
+                                    <div class="p-2.5 bg-emerald-100 text-emerald-600 rounded-lg"><i data-lucide="file-signature" class="w-5 h-5"></i></div>
+                                    <div>
+                                        <p class="text-[13px] font-bold text-emerald-900 leading-tight">Шартномаи имзошуда <span class="ru-block text-[11px] font-normal text-emerald-700 mt-0.5">Подписанный договор</span></p>
+                                    </div>
+                                </div>
+                                <button onclick="alert('Боргирии шартнома... / Скачивание договора...')" class="bg-white border border-emerald-300 text-emerald-700 p-2 rounded hover:bg-emerald-100 transition-colors shadow-sm"><i data-lucide="download" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANE: ТРАНШИ -->
+            <div id="pane-tranches" class="tab-pane hidden">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-[15px] font-bold text-gray-800 uppercase">Идоракунии траншҳо <span class="ru-block mt-0.5">Управление траншами</span></h2>
+                        <button id="toggleTrancheBtn" onclick="toggleTrancheForm()" class="bg-[#5b4ef5] text-white px-4 py-2 rounded-lg text-[13px] font-bold hover:bg-[#4b3ed5] transition-colors flex items-center gap-2 shadow-sm">
+                            <i data-lucide="plus" id="trancheBtnIcon" class="w-4 h-4"></i>
+                            <span id="trancheBtnText">Иловаи транш <span class="ru">/ Добавить транш</span></span>
+                        </button>
+                    </div>
+
+                    <!-- Форма добавления транша -->
+                    <div id="trancheFormBlock" class="hidden bg-[#f8f9fc] border border-[#e5e9f5] rounded-xl p-5 mb-6">
+                        <h3 class="text-[14px] font-bold text-[#5b4ef5] mb-4">Транши нав <span class="ru">/ Новый транш</span> #<span id="new-tranche-num">1</span></h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-[12px] text-gray-600 mb-1.5">Маблағ (сомонӣ) <span class="text-red-500">*</span> <span class="ru">/ Сумма (сомони) *</span></label>
+                                <input type="number" id="tranche-amount" placeholder="2000" class="w-full border border-gray-300 rounded-md px-3 py-2 text-[13px] outline-none focus:border-[#5b4ef5]">
+                            </div>
+                            <div>
+                                <label class="block text-[12px] text-gray-600 mb-1.5">Санаи банақшагирифташуда <span class="text-red-500">*</span> <span class="ru">/ Планируемая дата *</span></label>
+                                <input type="date" id="tranche-date" class="w-full border border-gray-300 rounded-md px-3 py-2 text-[13px] outline-none focus:border-[#5b4ef5]">
+                            </div>
+                        </div>
+                        <div class="mb-5">
+                            <label class="block text-[12px] text-gray-600 mb-1.5">Эзоҳ <span class="ru">/ Примечание</span></label>
+                            <input type="text" id="tranche-note" placeholder="Хариди таҷҳизот... / Закупка оборудования..." class="w-full border border-gray-300 rounded-md px-3 py-2 text-[13px] outline-none focus:border-[#5b4ef5]">
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="saveTranche()" class="w-full sm:w-auto flex-1 bg-[#8b82f8] text-white px-6 py-2.5 rounded-md text-[13px] font-bold hover:bg-[#5b4ef5] transition-colors">Эҷоди транш <span class="ru">/ Создать транш</span></button>
+                            <button onclick="toggleTrancheForm()" class="bg-white border border-gray-200 text-gray-600 px-6 py-2.5 rounded-md text-[13px] font-bold hover:bg-gray-50 transition-colors shadow-sm">Бекор кардан <span class="ru">/ Отмена</span></button>
+                        </div>
+                    </div>
+
+                    <!-- Список траншей -->
+                    <div id="tranchesListContainer" class="space-y-3">
+                        <!-- Empty state -->
+                        <div id="tranchesEmptyState" class="flex flex-col items-center justify-center py-12 text-gray-400">
+                            <i data-lucide="credit-card" class="w-10 h-10 mb-3 text-blue-400/50"></i>
+                            <p class="text-[13px] font-medium text-gray-500">Траншҳо вуҷуд надоранд <span class="ru-block text-center mt-1">Транши не созданы</span></p>
+                            <p class="text-[11px] mt-2 text-center text-gray-400">Барои эҷод кардани транши аввал "Иловаи транш" -ро пахш кунед <span class="ru-block mt-0.5">Нажмите «Добавить транш» чтобы создать первый</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Функция для получения текущего времени
+        function getCurrentDateTime() {
+            const now = new Date();
+            const date = now.toLocaleDateString('ru-RU');
+            const time = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            return `${date}, ${time}`;
+        }
+
+        // База 10 заявителей
+        const mockDatabase = {
+            "10001": { "full-name": "Саидова Мадина Алиевна", "birth-date": "12.03.1998", "gender": "Зан <span class='ru'>/ Женский</span>", "contacts": "+992 93 111 2233", "address": "ш. Хуҷанд, кӯч. Сомонӣ 45 <span class='ru'>/ г. Худжанд...</span>", "inn": "9876543210", "category": "Корҷӯй <span class='ru'>/ Ищущий</span>", "education": "Миёнаи махсус <span class='ru'>/ Среднее спец.</span>", "course": "Дӯзандагӣ <span class='ru'>/ Швейное дело</span>", "certStatus": "certified" },
+            "10002": { "full-name": "Раҳмонов Далер Ҷамшедович", "birth-date": "20.08.1995", "gender": "Мард <span class='ru'>/ Мужской</span>", "contacts": "+992 90 222 3344", "address": "ш. Душанбе, кӯч. Рӯдакӣ 12 <span class='ru'>/ г. Душанбе...</span>", "inn": "1234567890", "category": "Бекор <span class='ru'>/ Безработный</span>", "education": "Олӣ <span class='ru'>/ Высшее</span>", "course": "Кафшергарӣ <span class='ru'>/ Сварочное дело</span>", "certStatus": "certified" },
+            "10003": { "full-name": "Каримов Рустам Бобоевич", "birth-date": "05.11.1990", "gender": "Мард <span class='ru'>/ Мужской</span>", "contacts": "+992 92 333 4455", "address": "ш. Бохтар <span class='ru'>/ г. Бохтар</span>", "inn": "2233445566", "category": "Муҳоҷир <span class='ru'>/ Мигрант</span>", "education": "Миёна <span class='ru'>/ Среднее</span>", "course": "Устои барқ <span class='ru'>/ Электрик</span>", "certStatus": "pending" },
+            "10004": { "full-name": "Иванов Иван Иванович", "birth-date": "15.04.1988", "gender": "Мард <span class='ru'>/ Мужской</span>", "contacts": "+992 88 444 5566", "address": "ш. Душанбе <span class='ru'>/ г. Душанбе</span>", "inn": "3344556677", "category": "Корҷӯй <span class='ru'>/ Ищущий</span>", "education": "Олӣ <span class='ru'>/ Высшее</span>", "course": "Барномасоз <span class='ru'>/ Программист</span>", "certStatus": "certified" },
+            "10005": { "full-name": "Шарипова Нилуфар Азаматовна", "birth-date": "22.07.2001", "gender": "Зан <span class='ru'>/ Женский</span>", "contacts": "+992 98 555 6677", "address": "ш. Кӯлоб <span class='ru'>/ г. Куляб</span>", "inn": "4455667788", "category": "Ҷавонон <span class='ru'>/ Молодежь</span>", "education": "Миёнаи махсус <span class='ru'>/ Среднее спец.</span>", "course": "Қаннодӣ <span class='ru'>/ Кондитер</span>", "certStatus": "rejected" },
+            "10006": { "full-name": "Одинаев Хасан", "birth-date": "10.01.1985", "gender": "Мард <span class='ru'>/ Мужской</span>", "contacts": "+992 55 666 7788", "address": "ш. Панҷакент <span class='ru'>/ г. Пенджикент</span>", "inn": "5566778899", "category": "Бекор <span class='ru'>/ Безработный</span>", "education": "Олӣ <span class='ru'>/ Высшее</span>", "course": "Агроном <span class='ru'>/ Агроном</span>", "certStatus": "certified" },
+            "10007": { "full-name": "Бобоев Али", "birth-date": "30.09.1993", "gender": "Мард <span class='ru'>/ Мужской</span>", "contacts": "+992 77 777 8899", "address": "ш. Исфара <span class='ru'>/ г. Исфара</span>", "inn": "6677889900", "category": "Корҷӯй <span class='ru'>/ Ищущий</span>", "education": "Миёна <span class='ru'>/ Среднее</span>", "course": "Челонгар <span class='ru'>/ Слесарь</span>", "certStatus": "certified" },
+            "10008": { "full-name": "Азизова Зарина", "birth-date": "08.12.1996", "gender": "Зан <span class='ru'>/ Женский</span>", "contacts": "+992 11 888 9900", "address": "ш. Турсунзода <span class='ru'>/ г. Турсунзаде</span>", "inn": "7788990011", "category": "Бевазан <span class='ru'>/ Вдова</span>", "education": "Миёнаи махсус <span class='ru'>/ Среднее спец.</span>", "course": "Ороишгар <span class='ru'>/ Визажист</span>", "certStatus": "certified" },
+            "10009": { "full-name": "Курбонов Фирдавс", "birth-date": "14.05.1999", "gender": "Мард <span class='ru'>/ Мужской</span>", "contacts": "+992 99 999 0011", "address": "ш. Душанбе <span class='ru'>/ г. Душанбе</span>", "inn": "8899001122", "category": "Ҷавонон <span class='ru'>/ Молодежь</span>", "education": "Олӣ <span class='ru'>/ Высшее</span>", "course": "Молия <span class='ru'>/ Финансы</span>", "certStatus": "pending" },
+            "10010": { "full-name": "Мирзоева Ситора", "birth-date": "25.02.1992", "gender": "Зан <span class='ru'>/ Женский</span>", "contacts": "+992 22 000 1122", "address": "ш. Ҳисор <span class='ru'>/ г. Гиссар</span>", "inn": "9900112233", "category": "Корҷӯй <span class='ru'>/ Ищущий</span>", "education": "Олӣ <span class='ru'>/ Высшее</span>", "course": "Муҳосиб <span class='ru'>/ Бухгалтер</span>", "certStatus": "certified" }
+        };
+
+        // Состояние Очередей с демо-данными
+        let state = {
+            drafts: [
+                { id: '10002', name: 'Раҳмонов Далер Ҷамшедович', sector: 'Истеҳсолот <span class="ru">/ Производство</span>', amount: '20 000', date: '09.03.2026, 09:15', status: 'draft', history: { created: '09.03.2026, 09:15' } }
+            ],
+            gmc_queue: [
+                { id: '10001', name: 'Саидова Мадина Алиевна', sector: 'Савдо <span class="ru">/ Торговля</span>', amount: '5 000', date: '09.03.2026, 10:20', status: 'new', history: { created: '09.03.2026, 10:20' } },
+                { id: '10006', name: 'Одинаев Хасан', sector: 'Кишоварзӣ <span class="ru">/ С. хозяйство</span>', amount: '12 500', date: '09.03.2026, 11:05', status: 'new', history: { created: '09.03.2026, 11:05' } },
+                { id: '10003', name: 'Каримов Рустам Бобоевич', sector: 'Устои барқ <span class="ru">/ Электрик</span>', amount: '8 500', date: '09.03.2026, 14:30', status: 'returned_from_piu', history: { created: '07.03.2026, 09:00', gmc: '08.03.2026, 10:00', piu: '09.03.2026, 14:30' } }
+            ],
+            piu_queue: [
+                { id: '10004', name: 'Иванов Иван Иванович', sector: 'Хизматрасонӣ <span class="ru">/ Услуги</span>', amount: '8 000', date: '08.03.2026, 16:20', status: 'approved_by_gmc', history: { created: '06.03.2026, 11:00', gmc: '08.03.2026, 16:20' } }
+            ],
+            committee_queue: [
+                { id: '10007', name: 'Бобоев Али', sector: 'Истеҳсолот <span class="ru">/ Производство</span>', amount: '15 000', date: '07.03.2026, 12:45', status: 'approved_by_piu', history: { created: '01.03.2026, 09:30', gmc: '03.03.2026, 14:15', piu: '07.03.2026, 12:45' } }
+            ],
+            revisions: [
+                { id: '10008', name: 'Азизова Зарина', sector: 'Ороишгар <span class="ru">/ Визажист</span>', amount: '7 500', date: '06.03.2026, 15:10', status: 'returned_from_gmc', history: { created: '05.03.2026, 10:00', gmc: '06.03.2026, 15:10' } }
+            ],
+            approved: [
+                { id: '10010', name: 'Мирзоева Ситора', sector: 'Савдо <span class="ru">/ Торговля</span>', amount: '9 000', date: '01.03.2026, 11:00', status: 'issued', history: { created: '20.02.2026, 09:15', gmc: '22.02.2026, 14:00', piu: '25.02.2026, 16:30', committee: '01.03.2026, 11:00' } }
+            ],
+            rejected: [
+                { id: '10005', name: 'Шарипова Нилуфар Азаматовна', sector: 'Хизматрасонӣ <span class="ru">/ Услуги</span>', amount: '4 000', date: '28.02.2026, 17:00', status: 'rejected', history: { created: '26.02.2026, 10:00', gmc: '28.02.2026, 17:00' } }
+            ],
+            tranches: {
+                '10010': [
+                    { id: 1, amount: '4 500', date: '10.03.2026', note: 'Хариди мошини дарздӯзӣ / Закупка швейной машинки' }
+                ]
+            }
+        };
+
+        function loadGmcForm(id) {
+            const app = state.gmc_queue.find(a => a.id === id);
+            if(app) {
+                currentGmcAppId = id;
+                const dbUser = mockDatabase[id];
+
+                const alertBlock = document.getElementById('gmc-returned-alert');
+                if(app.status === 'returned_from_piu' || app.status === 'returned_from_com') {
+                    alertBlock.classList.remove('hidden');
+                } else {
+                    alertBlock.classList.add('hidden');
+                }
+
+                document.getElementById('gmc-hdr-id').textContent = app.id;
+                document.getElementById('gmc-hdr-name').textContent = app.name;
+                document.getElementById('gmc-hdr-sector').innerHTML = app.sector;
+                document.getElementById('gmc-hdr-amount').textContent = app.amount;
+                document.getElementById('gmc-hdr-activity').innerHTML = dbUser ? dbUser.course : '—';
+                document.getElementById('gmc-hdr-location').innerHTML = dbUser ? dbUser.address : '—';
+                
+                document.getElementById('gmc-evaluation-content').classList.remove('hidden');
+                
+                document.querySelectorAll('.gmc-score-input, .elig-radio, .elig-radio-no').forEach(el => el.checked = false);
+                document.getElementById('gmc-comment').value = '';
+                currentGmcChoice = null;
+                document.getElementById('gmc-revision-files').classList.add('hidden');
+                updateGmcScoreAndButtons();
+            }
+        }
+
+        window.openGmcFor = function(id) {
+            document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
+            document.getElementById('applicationModal').classList.remove('hidden');
+            document.querySelector('.tab-btn[data-target="pane-gmc"]').click();
+            loadGmcForm(id);
+            if(window.lucide) lucide.createIcons();
+        };
+
+        function loadPiuForm(id) {
+            const app = state.piu_queue.find(a => a.id === id);
+            if(app) {
+                currentPiuAppId = id;
+                
+                document.getElementById('piu-app-name').innerHTML = app.name;
+                document.getElementById('piu-app-id').innerHTML = app.id;
+
+                document.getElementById('piu-evaluation-content').classList.remove('hidden');
+                piuStatus = {1:'pending', 2:'pending', 3:'pending', 4:'pending'};
+                [1,2,3,4].forEach(i => { 
+                    document.getElementById(`form-${i}`).classList.add('hidden'); 
+                    document.getElementById(`btn-app-${i}`).className = "flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center leading-tight";
+                    document.getElementById(`btn-rev-${i}`).className = "flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center leading-tight";
+                    
+                    document.getElementById(`piu-comment-block-${i}`).classList.add('hidden');
+                    document.getElementById(`piu-comment-${i}`).value = '';
+                    
+                    const triggerBtn = document.getElementById(`piu-trigger-${i}`);
+                    if(triggerBtn) {
+                        triggerBtn.className = "text-blue-600 text-[12px] font-bold px-3 py-1 bg-blue-50 rounded hover:bg-blue-100 transition-colors";
+                        triggerBtn.innerHTML = "Ворид кардан <span class='ru'>/ Внести</span>";
+                    }
+                });
+                document.getElementById('piu-counter').textContent = '0/4';
+                document.getElementById('piu-revision-files').classList.add('hidden');
+                document.getElementById('finalize-piu-btn').disabled = true;
+                document.getElementById('finalize-piu-btn').className = 'w-full bg-gray-200 text-gray-500 py-3 rounded-lg text-[13px] font-bold cursor-not-allowed mt-4 flex flex-col items-center leading-tight';
+            }
+        }
+
+        window.openPiuFor = function(id) {
+            document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
+            document.getElementById('applicationModal').classList.remove('hidden');
+            document.querySelector('.tab-btn[data-target="pane-piu"]').click();
+            loadPiuForm(id);
+            if(window.lucide) lucide.createIcons();
+        };
+
+        function loadComForm(id) {
+            const app = state.committee_queue.find(a => a.id === id);
+            if(app) {
+                currentComAppId = id;
+                document.getElementById('com-app-name').innerHTML = app.name;
+                document.getElementById('com-app-id').innerHTML = app.id;
+
+                document.getElementById('committee-evaluation-content').classList.remove('hidden');
+                currentComChoice = null;
+                document.getElementById('com-revision-files').classList.add('hidden');
+                ['btn-com-approve', 'btn-com-rev', 'btn-com-reject'].forEach(btnId => {
+                    document.getElementById(btnId).className = "w-full flex items-center px-4 py-3 rounded-lg text-[13px] font-medium border-2 border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors";
+                });
+            }
+        }
+        
+        window.openComFor = function(id) {
+            document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
+            document.getElementById('applicationModal').classList.remove('hidden');
+            document.querySelector('.tab-btn[data-target="pane-committee"]').click();
+            loadComForm(id);
+            if(window.lucide) lucide.createIcons();
+        };
+
+        // Открытие Черновика
+        window.openDraftFor = function(id) {
+            document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
+            document.getElementById('applicationModal').classList.remove('hidden');
+            document.querySelector('.tab-btn[data-target="pane-facilitator"]').click();
+            document.getElementById('facilitator-revision-block').classList.add('hidden');
+            
+            const data = mockDatabase[id];
+            const draftApp = state.drafts.find(d => d.id === id);
+
+            if(data) {
+                document.getElementById('id-input').value = id;
+                document.getElementById('display-id').textContent = id;
+                document.getElementById('full-name').value = data['full-name'];
+                document.getElementById('display-fullname').innerHTML = data['full-name'];
+                document.getElementById('inn').value = data.inn;
+                document.getElementById('display-inn').textContent = data.inn;
+                
+                document.getElementById('display-birthdate').innerHTML = data['birth-date'];
+                document.getElementById('display-gender').innerHTML = data.gender;
+                document.getElementById('display-contacts').innerHTML = data.contacts;
+                document.getElementById('display-address').innerHTML = data.address;
+                document.getElementById('display-category').innerHTML = data.category;
+                document.getElementById('display-education').innerHTML = data.education;
+
+                document.getElementById('display-course').innerHTML = data.course;
+            }
+
+            if(draftApp) {
+                document.getElementById('amount-input').value = draftApp.amount !== '0' ? draftApp.amount.replace(/\D/g,'') : '';
+                const sectorSelect = document.getElementById('sector-input');
+                for (let i = 0; i < sectorSelect.options.length; i++) {
+                    if (draftApp.sector.includes(sectorSelect.options[i].value.split(' ')[0])) {
+                        sectorSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            if(window.lucide) lucide.createIcons();
+        };
+
+        // Открытие Доработки
+        window.openRevFor = function(id) {
+            document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
+            document.getElementById('applicationModal').classList.remove('hidden');
+            document.querySelector('.tab-btn[data-target="pane-facilitator"]').click();
+            
+            const data = mockDatabase[id];
+            const revApp = state.revisions.find(r => r.id === id);
+
+            if(data) {
+                document.getElementById('id-input').value = id;
+                document.getElementById('display-id').textContent = id;
+                document.getElementById('full-name').value = data['full-name'];
+                document.getElementById('display-fullname').innerHTML = data['full-name'];
+                document.getElementById('inn').value = data.inn;
+                document.getElementById('display-inn').textContent = data.inn;
+                
+                document.getElementById('display-birthdate').innerHTML = data['birth-date'];
+                document.getElementById('display-gender').innerHTML = data.gender;
+                document.getElementById('display-contacts').innerHTML = data.contacts;
+                document.getElementById('display-address').innerHTML = data.address;
+                document.getElementById('display-category').innerHTML = data.category;
+                document.getElementById('display-education').innerHTML = data.education;
+
+                document.getElementById('display-course').innerHTML = data.course;
+            }
+
+            if(revApp) {
+                document.getElementById('amount-input').value = revApp.amount.replace(/\D/g, '');
+                const select = document.getElementById('sector-input');
+                for(let i=0; i<select.options.length; i++) {
+                    if(select.options[i].text === revApp.sector || revApp.sector.includes(select.options[i].value.split(' ')[0])) {
+                        select.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            
+            document.getElementById('facilitator-revision-block').classList.remove('hidden');
+            if(window.lucide) lucide.createIcons();
+        };
+
+        let currentApprovedAppId = null;
+
+        window.openApprovedFor = function(id) {
+            currentApprovedAppId = id;
+            document.getElementById('tab-btn-approved').classList.remove('hidden');
+            document.getElementById('tab-btn-tranches').classList.remove('hidden');
+            document.getElementById('applicationModal').classList.remove('hidden');
+            
+            const app = state.approved.find(a => a.id === id) || { history: {} };
+            const hist = app.history || {};
+
+            document.getElementById('tl-created-date').textContent = hist.created || '—';
+            document.getElementById('tl-gmc-date').textContent = hist.gmc || '—';
+            document.getElementById('tl-piu-date').textContent = hist.piu || '—';
+            document.getElementById('tl-com-date').textContent = hist.committee || '—';
+
+            renderTranches();
+
+            document.querySelector('.tab-btn[data-target="pane-approved"]').click();
+            if(window.lucide) lucide.createIcons();
+        };
+
+        // --- ЛОГИКА ТРАНШЕЙ ---
+        let isTrancheFormVisible = false;
+
+        window.toggleTrancheForm = function() {
+            isTrancheFormVisible = !isTrancheFormVisible;
+            const form = document.getElementById('trancheFormBlock');
+            const btnIcon = document.getElementById('trancheBtnIcon');
+            const btnText = document.getElementById('trancheBtnText');
+
+            if(isTrancheFormVisible) {
+                form.classList.remove('hidden');
+                btnIcon.setAttribute('data-lucide', 'x');
+                btnText.innerHTML = 'Бекор кардан <span class="ru">/ Отмена</span>';
+            } else {
+                form.classList.add('hidden');
+                btnIcon.setAttribute('data-lucide', 'plus');
+                btnText.innerHTML = 'Иловаи транш <span class="ru">/ Добавить транш</span>';
+            }
+            if(window.lucide) lucide.createIcons();
+        };
+
+        window.saveTranche = function() {
+            const amount = document.getElementById('tranche-amount').value;
+            let date = document.getElementById('tranche-date').value;
+            const note = document.getElementById('tranche-note').value;
+
+            if(!amount || !date) return alert("Маблағ ва санаро пур кунед! / Заполните сумму и дату!");
+
+            // Format date visually
+            const d = new Date(date);
+            date = d.toLocaleDateString('ru-RU');
+
+            if (!state.tranches[currentApprovedAppId]) {
+                state.tranches[currentApprovedAppId] = [];
+            }
+
+            const newId = state.tranches[currentApprovedAppId].length + 1;
+            state.tranches[currentApprovedAppId].push({
+                id: newId,
+                amount: amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "),
+                date: date,
+                note: note,
+                status: 'pending'
+            });
+
+            document.getElementById('tranche-amount').value = '';
+            document.getElementById('tranche-date').value = '';
+            document.getElementById('tranche-note').value = '';
+            
+            toggleTrancheForm();
+            renderTranches();
+        };
+
+        window.renderTranches = function() {
+            const container = document.getElementById('tranchesListContainer');
+            const emptyState = document.getElementById('tranchesEmptyState');
+            const appTranches = state.tranches[currentApprovedAppId] || [];
+
+            document.getElementById('new-tranche-num').textContent = appTranches.length + 1;
+
+            const oldItems = container.querySelectorAll('.tranche-item');
+            oldItems.forEach(el => el.remove());
+
+            if (appTranches.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                appTranches.forEach(t => {
+                    const el = document.createElement('div');
+                    el.className = 'tranche-item bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex items-center justify-between';
+                    el.innerHTML = `
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-bold text-[13px] text-gray-800">Транш #${t.id}</span>
+                                <span class="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase">Интизорӣ <span class="ru">/ Ожидание</span></span>
+                            </div>
+                            <div class="text-[11px] text-gray-500">Сана <span class="ru">/ Дата</span>: <span class="font-medium text-gray-700">${t.date}</span></div>
+                            ${t.note ? `<div class="text-[11px] text-gray-500 mt-1">Эзоҳ <span class="ru">/ Примечание</span>: <span class="italic">${t.note}</span></div>` : ''}
+                        </div>
+                        <div class="text-right">
+                            <span class="font-black text-[14px] text-[#5b4ef5] block">${t.amount} сомонӣ</span>
+                            <span class="font-bold text-[12px] text-[#5b4ef5] ru block">${t.amount} сомони</span>
+                        </div>
+                    `;
+                    container.appendChild(el);
+                });
+            }
+        };
+
+        // --- ЛОГИКА ОБНОВЛЕНИЯ КАРТОЧЕК НА ДАШБОРДЕ ---
+        function updateDashboardCard(id, status, app) {
+            let card = document.getElementById(`dash-card-${id}`);
+            if(!card) {
+                card = document.createElement('div');
+                card.id = `dash-card-${id}`;
+                document.getElementById('mainDashboardGrid').appendChild(card);
+            }
+            
+            card.setAttribute('data-status', status);
+            let bHtml = '', aHtml = '', bClass = '';
+            
+            if (status === 'gmc') {
+                bClass = 'bg-[#F4F7FF] border-[#C6D4FF] hover:border-[#5B4AF0] cursor-pointer';
+                
+                if (app.status === 'returned_from_piu' || app.status === 'returned_from_com') {
+                    bClass = 'bg-amber-50/50 border-amber-300 hover:border-amber-500 cursor-pointer';
+                    bHtml = '<div class="bg-amber-100 text-amber-800 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse flex flex-col items-end shadow-sm border border-amber-300"><div class="flex items-center gap-1"><i data-lucide="alert-triangle" class="w-3 h-3"></i> Аз ГРП/Кумита баргашт</div><span class="ru">Возврат из PIU/Комитета</span></div>';
+                    aHtml = `<button onclick="openGmcFor('${id}')" class="bg-white text-amber-700 border border-amber-300 text-[12px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-2 hover:bg-amber-100 transition-colors shadow-sm text-right leading-tight"><span>Баррасӣ <span class="ru-block">Рассмотреть</span></span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>`;
+                } else {
+                    bHtml = '<div class="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse flex flex-col items-end shadow-sm border border-blue-200"><div class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> Ба GMC пешниҳод шуд</div><span class="ru">Подана в GMC</span></div>';
+                    aHtml = `<button onclick="openGmcFor('${id}')" class="bg-white text-[#5B4AF0] border border-[#C6D4FF] text-[12px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-2 hover:bg-blue-50 transition-colors shadow-sm text-right leading-tight"><span>Баҳогузорӣ <span class="ru-block">Оценить (GMC)</span></span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>`;
+                }
+            } else if (status === 'piu') {
+                bClass = 'bg-indigo-50/40 border-indigo-200 hover:border-indigo-400 cursor-pointer';
+                bHtml = '<div class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse border border-indigo-200 flex flex-col items-end"><span>Барои баррасӣ ба ГРП</span><span class="ru">На рассмотрение ГРП</span></div>';
+                aHtml = `<span class="text-indigo-600 text-[12px] font-bold flex items-center gap-1 cursor-pointer hover:underline text-right leading-tight" onclick="openPiuFor('${id}')"><span>Санҷиши PIU <span class="ru-block">Верификация PIU</span></span></span>`;
+            } else if (status === 'committee') {
+                bClass = 'bg-teal-50/40 border-teal-200 hover:border-teal-400 cursor-pointer';
+                bHtml = '<div class="bg-teal-100 text-teal-700 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse border border-teal-200 flex flex-col items-end"><span>Қарори Кумита</span><span class="ru">Решение Комитета</span></div>';
+                aHtml = `<span class="text-teal-600 text-[12px] font-bold flex items-center gap-1 cursor-pointer hover:underline text-right leading-tight" onclick="openComFor('${id}')"><span>Тасдиқи ниҳоӣ <span class="ru-block">Финальное утверждение</span></span></span>`;
+            } else if (status === 'approved' || status === 'issued') {
+                bClass = 'bg-emerald-50/40 border-emerald-200 cursor-pointer hover:border-emerald-400 transition-all duration-200 shadow-sm';
+                bHtml = `<div class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded-md text-[10px] font-bold border border-emerald-200 flex flex-col items-end"><span>${status === 'issued' ? 'Грант дода шуд' : 'Тасдиқ шуд'}</span><span class="ru">${status === 'issued' ? 'Грант выдан' : 'Одобрена'}</span></div>`;
+                aHtml = `<span class="text-emerald-600 text-[12px] font-bold flex items-center gap-1 hover:underline text-right leading-tight" onclick="openApprovedFor('${id}')"><span>Кушодан <span class="ru-block">Открыть</span></span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>`;
+            } else if (status === 'rejected') {
+                bClass = 'bg-red-50/40 border-red-200 opacity-70';
+                bHtml = '<div class="bg-red-100 text-red-700 px-2 py-1 rounded-md text-[10px] font-bold border border-red-200 flex flex-col items-end"><span>Рад карда шуд</span><span class="ru">Отклонена</span></div>';
+            } else if (status === 'rev') {
+                bClass = 'bg-red-50/30 border-red-300 hover:border-red-500 transition-all duration-200 cursor-pointer';
+                bHtml = '<div class="bg-red-100 text-red-800 px-2 py-1 rounded-md text-[10px] font-bold animate-pulse border border-red-300 flex flex-col items-end leading-tight shadow-sm"><div class="flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Амали Фасилитатор лозим</div><span class="ru">Требуется действие Фасилитатора</span></div>';
+                aHtml = `<span class="text-red-600 text-[12px] font-bold flex items-center gap-1 cursor-pointer hover:underline text-right leading-tight" onclick="openRevFor('${id}')"><span>Ислоҳ кардан <span class="ru-block">Исправить</span></span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></span>`;
+            } else if (status === 'draft') {
+                bClass = 'bg-white border-slate-200 cursor-pointer hover:border-primary transition-all duration-200 shadow-sm';
+                bHtml = '<div class="bg-slate-100 text-slate-500 px-2 py-1 rounded-md text-[10px] font-medium border border-slate-200 flex flex-col items-end leading-tight"><span>Сиёҳнавис</span><span class="ru">Черновик</span></div>';
+                aHtml = `<span class="text-slate-500 hover:text-primary text-[12px] font-bold flex items-center gap-1 cursor-pointer hover:underline text-right leading-tight" onclick="openDraftFor('${id}')"><span>Кушодан <span class="ru-block">Открыть</span></span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>`;
+            }
+
+            let topLine = '';
+            if (status === 'gmc') topLine = `<div class="absolute top-0 left-0 w-full h-1.5 ${app.status === 'returned_from_piu' || app.status === 'returned_from_com' ? 'bg-amber-500' : 'bg-[#5B4AF0]'}"></div>`;
+            if (status === 'rev') topLine = `<div class="absolute top-0 left-0 w-full h-1.5 bg-red-500"></div>`;
+
+            card.className = `${bClass} rounded-2xl p-5 border shadow-sm transition-all duration-200 flex flex-col min-h-[160px] relative overflow-hidden`;
+            card.innerHTML = `
+                ${topLine}
+                <div class="flex justify-between items-start mb-1 ${status === 'gmc' || status === 'rev' ? 'mt-1' : ''}">
+                    <h3 class="font-${status === 'gmc' || status === 'rev' ? 'bold text-[15px]' : 'medium text-[14px]'} text-slate-800">${app.name}</h3>${bHtml}
+                </div>
+                <div class="text-[11px] text-slate-${status === 'gmc' ? '500' : '400'} mb-auto ${status === 'rev' ? 'mt-1' : ''}">#${app.id} • ${app.sector}</div>
+                <div class="mt-4 mb-4 flex flex-col"><span class="text-primary font-${status === 'gmc' || status === 'rev' ? 'black text-[15px]' : 'bold text-[14px]'}">${app.amount} сомонӣ</span><span class="text-primary ru font-bold">${app.amount} сомони</span></div>
+                <div class="flex justify-between items-center mt-auto border-t border-${status === 'gmc' ? (app.status === 'returned_from_piu' ? 'amber-200' : '[#D9E2FF]') : (status === 'rev' ? 'red-100' : 'slate-100')} pt-4">
+                    <span class="text-xs text-slate-400 font-medium">${app.date}</span>${aHtml}
+                </div>`;
+                
+            updateDashboardFilter();
+        }
+
+        // --- ЛОГИКА ФИЛЬТРАЦИИ НА ГЛАВНОЙ СТРАНИЦЕ ---
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const dashboardGrid = document.getElementById('mainDashboardGrid');
+
+        function updateDashboardFilter() {
+            const activeBtn = document.querySelector('.filter-btn.bg-primary');
+            const currentFilter = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+
+            const cards = dashboardGrid.querySelectorAll(':scope > div');
+            cards.forEach(card => {
+                const status = card.getAttribute('data-status');
+                if (currentFilter === 'all' || status === currentFilter) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-primary', 'text-white');
+                    b.classList.add('text-slate-600', 'hover:bg-slate-50');
+                });
+                btn.classList.add('bg-primary', 'text-white');
+                btn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                updateDashboardFilter();
+            });
+        });
+
+        // --- ЛОГИКА ДАШБОРДА ПОИСКА И ФАСИЛИТАТОРА ---
+        const toggleBtn = document.getElementById('toggleFormBtn');
+        const formBlock = document.getElementById('createFormBlock');
+        const searchInput = document.getElementById('beneficiarySearch');
+        const searchDropdownList = document.getElementById('searchDropdownList');
+        const selectedBeneficiary = document.getElementById('selectedBeneficiary');
+        const clearSelectionBtn = document.getElementById('clearSelection');
+        const submitApplicationBtn = document.getElementById('submitApplicationBtn');
+        const applicationModal = document.getElementById('applicationModal');
+
+        let isFormVisible = false;
+        let selectedMockId = null;
+
+        const plusIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+        const crossIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+
+        toggleBtn.addEventListener('click', () => {
+            isFormVisible = !isFormVisible;
+            if(isFormVisible) {
+                formBlock.classList.remove('hidden');
+                document.getElementById('btnIcon').innerHTML = crossIcon;
+                document.getElementById('btnText').innerHTML = 'Бекор кардан <span class="ru">/ Отмена</span>';
+            } else {
+                formBlock.classList.add('hidden');
+                document.getElementById('btnIcon').innerHTML = plusIcon;
+                document.getElementById('btnText').innerHTML = 'Дархости нав <span class="ru">/ Новая заявка</span>';
+                if(clearSelectionBtn) clearSelectionBtn.click();
+            }
+        });
+
+        document.getElementById('cancelFormBtn').addEventListener('click', () => { if(isFormVisible) toggleBtn.click(); });
+
+        function populateDropdown(query = '') {
+            searchDropdownList.innerHTML = '';
+            for (const [id, user] of Object.entries(mockDatabase)) {
+                if (query && !user['full-name'].toLowerCase().includes(query.toLowerCase()) && !id.includes(query)) continue;
+                const initials = user['full-name'].substring(0,2).toUpperCase();
+                const badgeColor = user.certStatus === 'certified' ? 'bg-emerald-100 text-emerald-600' : (user.certStatus === 'pending' ? 'bg-amber-100 text-amber-600' : 'bg-red-100 text-red-600');
+                
+                const item = document.createElement('div');
+                item.className = 'p-3 hover:bg-slate-50 cursor-pointer flex justify-between border-b border-slate-100 last:border-0';
+                item.innerHTML = `<div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">${initials}</div><div class="flex flex-col"><span class="text-[13px] font-medium">${user['full-name']}</span><span class="text-[11px] text-gray-500">ID: ${id} | ИНН: ${user.inn}</span></div></div><span class="${badgeColor} px-2 py-1 rounded text-[10px] font-bold h-max">${user.certStatus}</span>`;
+                item.addEventListener('click', () => selectBeneficiary(id, user, initials));
+                searchDropdownList.appendChild(item);
+            }
+        }
+
+        function selectBeneficiary(id, user, initials) {
+            selectedMockId = id;
+            document.getElementById('searchDropdown').classList.add('hidden');
+            searchInput.classList.add('hidden');
+            selectedBeneficiary.classList.remove('hidden');
+            selectedBeneficiary.classList.add('flex');
+            
+            selectedBeneficiary.querySelector('.selected-name').textContent = user['full-name'];
+            selectedBeneficiary.querySelector('.avatar-initials').textContent = initials;
+            
+            const badgeSpan = selectedBeneficiary.querySelector('.selected-badge');
+            const badgeColor = user.certStatus === 'certified' ? 'bg-emerald-100 text-emerald-600' : (user.certStatus === 'pending' ? 'bg-amber-100 text-amber-600' : 'bg-red-100 text-red-600');
+            badgeSpan.className = `${badgeColor} px-1.5 py-0.5 rounded text-[10px] font-semibold w-max leading-none selected-badge`;
+            badgeSpan.textContent = user.certStatus;
+            
+            if (user.certStatus === 'certified') {
+                submitApplicationBtn.classList.remove('bg-[#A499F5]', 'pointer-events-none');
+                submitApplicationBtn.classList.add('bg-primary', 'hover:bg-primary-hover', 'cursor-pointer');
+            } else {
+                submitApplicationBtn.classList.add('bg-[#A499F5]', 'pointer-events-none');
+                submitApplicationBtn.classList.remove('bg-primary', 'hover:bg-primary-hover', 'cursor-pointer');
+            }
+        }
+
+        searchInput.addEventListener('focus', () => { populateDropdown(searchInput.value); document.getElementById('searchDropdown').classList.remove('hidden'); });
+        searchInput.addEventListener('input', (e) => { populateDropdown(e.target.value); document.getElementById('searchDropdown').classList.remove('hidden'); });
+        
+        clearSelectionBtn.addEventListener('click', () => {
+            selectedMockId = null;
+            selectedBeneficiary.classList.add('hidden');
+            selectedBeneficiary.classList.remove('flex');
+            searchInput.classList.remove('hidden');
+            searchInput.value = '';
+            submitApplicationBtn.className = 'bg-[#A499F5] text-white px-5 py-2.5 rounded-lg text-[13px] font-medium transition-colors pointer-events-none';
+        });
+
+        submitApplicationBtn.addEventListener('click', () => {
+            document.getElementById('tab-btn-approved').classList.add('hidden');
+            document.getElementById('tab-btn-tranches').classList.add('hidden');
+            applicationModal.classList.remove('hidden');
+            document.querySelector('.tab-btn[data-target="pane-facilitator"]').click();
+            document.getElementById('facilitator-revision-block').classList.add('hidden');
+            
+            // Сброс формы
+            document.getElementById('amount-input').value = '';
+            document.getElementById('sector-input').selectedIndex = 0;
+            
+            const data = mockDatabase[selectedMockId];
+            document.getElementById('id-input').value = selectedMockId;
+            document.getElementById('display-id').textContent = selectedMockId;
+            document.getElementById('full-name').value = data['full-name'];
+            document.getElementById('display-fullname').innerHTML = data['full-name'];
+            document.getElementById('inn').value = data.inn;
+            document.getElementById('display-inn').textContent = data.inn;
+            
+            document.getElementById('display-birthdate').innerHTML = data['birth-date'];
+            document.getElementById('display-gender').innerHTML = data.gender;
+            document.getElementById('display-contacts').innerHTML = data.contacts;
+            document.getElementById('display-address').innerHTML = data.address;
+            document.getElementById('display-category').innerHTML = data.category;
+            document.getElementById('display-education').innerHTML = data.education;
+
+            document.getElementById('display-course').innerHTML = data.course;
+            
+            if(window.lucide) lucide.createIcons();
+        });
+        document.getElementById('closeModalBtn').addEventListener('click', () => applicationModal.classList.add('hidden'));
+
+        // --- ЛОГИКА GMC/PIU/COMMITTEE ---
+        let currentGmcAppId = null;
+        let currentGmcChoice = null;
+        
+        let currentPiuAppId = null;
+        let piuDecisions = {1:null, 2:null, 3:null, 4:null};
+        let piuStatus = {1:'pending', 2:'pending', 3:'pending', 4:'pending'};
+
+        let currentComAppId = null;
+        let currentComChoice = null;
+
+        window.updateAllBadges = function() {
+            const gmcBadge = document.getElementById('gmc-badge');
+            if(gmcBadge) { gmcBadge.textContent = state.gmc_queue.length; gmcBadge.classList.toggle('hidden', state.gmc_queue.length === 0); }
+            
+            const piuBadge = document.getElementById('piu-badge');
+            if(piuBadge) { piuBadge.textContent = state.piu_queue.length; piuBadge.classList.toggle('hidden', state.piu_queue.length === 0); }
+
+            const comBadge = document.getElementById('com-badge');
+            if(comBadge) { comBadge.textContent = state.committee_queue.length; comBadge.classList.toggle('hidden', state.committee_queue.length === 0); }
+
+            // Обновление бейджей на дашборде
+            const dashRevBadge = document.getElementById('dash-rev-badge');
+            if(dashRevBadge) { dashRevBadge.textContent = state.revisions.length; dashRevBadge.classList.toggle('hidden', state.revisions.length === 0); }
+
+            const dashGmcBadge = document.getElementById('dash-gmc-badge');
+            if(dashGmcBadge) { dashGmcBadge.textContent = state.gmc_queue.length; dashGmcBadge.classList.toggle('hidden', state.gmc_queue.length === 0); }
+
+            const dashPiuBadge = document.getElementById('dash-piu-badge');
+            if(dashPiuBadge) { dashPiuBadge.textContent = state.piu_queue.length; dashPiuBadge.classList.toggle('hidden', state.piu_queue.length === 0); }
+
+            const dashComBadge = document.getElementById('dash-com-badge');
+            if(dashComBadge) { dashComBadge.textContent = state.committee_queue.length; dashComBadge.classList.toggle('hidden', state.committee_queue.length === 0); }
+        };
+
+        // Сохранить в черновик
+        window.saveToDraft = function() {
+            const id = document.getElementById('id-input').value;
+            if(!id) return;
+            const sectorE = document.getElementById('sector-input');
+            const sectorText = sectorE.options[sectorE.selectedIndex] ? sectorE.options[sectorE.selectedIndex].text : '';
+            const amount = document.getElementById('amount-input').value;
+            const timestamp = getCurrentDateTime();
+
+            state.revisions = state.revisions.filter(r => r.id !== id);
+            state.drafts = state.drafts.filter(d => d.id !== id);
+
+            const appObj = {
+                id,
+                name: document.getElementById('full-name').value,
+                sector: sectorText || 'Номаълум <span class="ru">/ Не указано</span>',
+                amount: amount || '0',
+                date: timestamp,
+                status: 'draft',
+                history: { created: timestamp }
+            };
+            state.drafts.push(appObj);
+
+            updateDashboardCard(id, 'draft', appObj);
+            updateAllBadges();
+            applicationModal.classList.add('hidden');
+            if(isFormVisible) toggleBtn.click();
+            alert("Дархост ҳамчун сиёҳнавис захира шуд!\nЗаявка сохранена в черновики!");
+        };
+
+        // ФАСИЛИТАТОР -> GMC
+        window.submitToGmc = function() {
+            const id = document.getElementById('id-input').value;
+            if(!id) return;
+            const sectorE = document.getElementById('sector-input');
+            const sectorText = sectorE.options[sectorE.selectedIndex].text;
+            const amount = document.getElementById('amount-input').value;
+            
+            if(!sectorE.value || !amount) return alert("Бахш ва маблағро пур кунед!\nЗаполните сектор и сумму!");
+
+            const timestamp = getCurrentDateTime();
+            
+            let existingApp = state.drafts.find(d => d.id === id) || state.revisions.find(r => r.id === id);
+            let hist = existingApp && existingApp.history ? existingApp.history : { created: timestamp };
+            hist.submittedToGmc = timestamp;
+
+            const appObj = { 
+                id, 
+                name: document.getElementById('full-name').value, 
+                sector: sectorText, 
+                amount: amount, 
+                date: timestamp, 
+                status: 'new',
+                history: hist
+            };
+            
+            state.gmc_queue.push(appObj);
+            
+            // Если заявка была в доработке или черновике, удаляем ее оттуда
+            state.revisions = state.revisions.filter(r => r.id !== id);
+            state.drafts = state.drafts.filter(r => r.id !== id);
+
+            updateDashboardCard(id, 'gmc', appObj);
+            updateAllBadges();
+            applicationModal.classList.add('hidden');
+            if(isFormVisible) toggleBtn.click();
+            alert("Нақшаи тиҷоратӣ бор шуд ва дархост ба GMC фиристода шуд!\nБизнес-план загружен и заявка успешно передана в GMC.");
+        };
+
+        window.updateGmcScoreAndButtons = function() {
+            let total = 0;
+            document.querySelectorAll('.gmc-score-input:checked').forEach(r => total += parseInt(r.value));
+            const totalEl = document.getElementById('total-score');
+            if (totalEl) totalEl.textContent = total;
+
+            let hasNo = false;
+            document.querySelectorAll('.elig-radio-no:checked').forEach(r => hasNo = true);
+
+            const bOk = document.getElementById('btn-recommend');
+            const bRev = document.getElementById('btn-resubmit-gmc');
+            const bRej = document.getElementById('btn-reject');
+
+            if(!bOk || !bRev || !bRej) return;
+
+            bOk.disabled = false; bRev.disabled = false; bRej.disabled = false;
+
+            if (hasNo) {
+                bOk.disabled = true; 
+                bRev.disabled = true;
+            } else {
+                if (total >= 45) {
+                    bRev.disabled = true; bRej.disabled = true;
+                } else if (total >= 30 && total <= 44) {
+                    bOk.disabled = true; bRej.disabled = true;
+                } else if (total > 0) {
+                    bOk.disabled = true; bRev.disabled = true;
+                }
+            }
+            
+            if (bOk.disabled && currentGmcChoice === 'ok') setGmcDecision(null);
+            if (bRev.disabled && currentGmcChoice === 'rev') setGmcDecision(null);
+            if (bRej.disabled && currentGmcChoice === 'rej') setGmcDecision(null);
+        };
+
+        document.addEventListener('change', (e) => {
+            if(e.target.classList.contains('gmc-score-input') || e.target.classList.contains('elig-radio') || e.target.classList.contains('elig-radio-no')) {
+                updateGmcScoreAndButtons();
+            }
+        });
+
+        window.setGmcDecision = function(val) {
+            const bOk = document.getElementById('btn-recommend');
+            const bRev = document.getElementById('btn-resubmit-gmc');
+            const bRej = document.getElementById('btn-reject');
+            if(!bOk) return;
+
+            if(val === 'ok' && bOk.disabled) return;
+            if(val === 'rev' && bRev.disabled) return;
+            if(val === 'rej' && bRej.disabled) return;
+
+            currentGmcChoice = val;
+            const baseClass = "w-full flex items-center justify-between px-4 py-3 rounded-lg text-[13px] font-medium border-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed ";
+            
+            bOk.className = baseClass + "border-gray-200 text-gray-600 hover:bg-gray-50";
+            bRev.className = baseClass + "border-gray-200 text-gray-600 hover:bg-gray-50";
+            bRej.className = baseClass + "border-gray-200 text-gray-600 hover:bg-gray-50";
+
+            if(val === 'ok') bOk.className = baseClass + "border-[#41c79a] bg-[#e6f8f1] text-[#41c79a]";
+            if(val === 'rev') bRev.className = baseClass + "border-amber-400 bg-amber-50 text-amber-700";
+            if(val === 'rej') bRej.className = baseClass + "border-red-400 bg-red-50 text-red-600";
+
+            const revFilesBlock = document.getElementById('gmc-revision-files');
+            if (revFilesBlock) {
+                if (val === 'rev') revFilesBlock.classList.remove('hidden');
+                else revFilesBlock.classList.add('hidden');
+            }
+        };
+
+        // GMC -> PIU / Фасилитатор
+        window.saveGmcDecision = function() {
+            if(!currentGmcChoice) return alert("Қарори ниҳоиро интихоб кунед\nВыберите итоговое решение");
+            
+            const idx = state.gmc_queue.findIndex(a => a.id === currentGmcAppId);
+            const app = state.gmc_queue.splice(idx, 1)[0];
+            
+            app.history = app.history || {};
+            app.history.gmc = getCurrentDateTime();
+            app.date = getCurrentDateTime();
+
+            if(currentGmcChoice === 'ok') { 
+                state.piu_queue.push(app); 
+                updateDashboardCard(app.id, 'piu', app);
+                alert("Дархост тасдиқ шуд! Ҳуҷҷат бетағйир ба ГРП (PIU) интиқол ёфт.\nЗаявка одобрена! Документ в неизменном состоянии передан в ГРП(PIU)."); 
+            } else if(currentGmcChoice === 'rev') {
+                state.revisions.push(app);
+                updateDashboardCard(app.id, 'rev', app);
+                alert("Дархост бо файлҳои эроддор барои такмил ба Фасилитатор фиристода шуд.\nЗаявка с комментариями направлена на доработку Фасилитатору.");
+            } else {
+                state.rejected.push(app);
+                updateDashboardCard(app.id, 'rejected', app);
+                alert("Дархост рад карда шуд.\nЗаявка отклонена.");
+            }
+
+            document.getElementById('gmc-evaluation-content').classList.add('hidden');
+            
+            updateAllBadges();
+            applicationModal.classList.add('hidden');
+        };
+
+        window.togglePiuForm = function(id) { document.getElementById(`form-${id}`).classList.toggle('hidden'); };
+        
+        window.setPiuDecision = function(id, dec) { 
+            piuDecisions[id] = dec; 
+            const okBtn = document.getElementById(`btn-app-${id}`);
+            const revBtn = document.getElementById(`btn-rev-${id}`);
+            const commentBlock = document.getElementById(`piu-comment-block-${id}`);
+            
+            okBtn.className = "flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center leading-tight";
+            revBtn.className = "flex-1 py-2 border rounded text-xs hover:bg-gray-50 flex flex-col items-center leading-tight";
+
+            if (dec === 'approve') {
+                okBtn.className = "flex-1 py-2 border rounded text-xs border-[#41c79a] bg-[#e6f8f1] text-[#41c79a] font-bold flex flex-col items-center leading-tight";
+                if(commentBlock) commentBlock.classList.add('hidden');
+            } else if (dec === 'resubmit') {
+                revBtn.className = "flex-1 py-2 border rounded text-xs border-amber-400 bg-amber-50 text-amber-700 font-bold flex flex-col items-center leading-tight";
+                if(commentBlock) commentBlock.classList.remove('hidden');
+            }
+            
+            const showUpload = Object.values(piuDecisions).includes('resubmit');
+            if (showUpload) document.getElementById('piu-revision-files').classList.remove('hidden');
+            else document.getElementById('piu-revision-files').classList.add('hidden');
+        };
+
+        window.savePiuCard = function(id) {
+            if(!piuDecisions[id]) return alert("Қарорро интихоб кунед / Выберите решение");
+            
+            if(piuDecisions[id] === 'resubmit') {
+                const comment = document.getElementById(`piu-comment-${id}`).value.trim();
+                if(!comment) return alert("Лутфан сабаби баргардониданро нависед! / Пожалуйста, укажите причину возврата на доработку!");
+            }
+
+            piuStatus[id] = 'completed'; togglePiuForm(id);
+            
+            const triggerBtn = document.getElementById(`piu-trigger-${id}`);
+            if(triggerBtn) {
+                triggerBtn.className = "text-slate-500 text-[12px] font-bold px-3 py-1 bg-slate-100 rounded hover:bg-slate-200 transition-colors";
+                triggerBtn.innerHTML = "Таҳрир <span class='ru'>/ Изменить</span>";
+            }
+
+            const count = Object.values(piuStatus).filter(s => s === 'completed').length;
+            document.getElementById('piu-counter').textContent = `${count}/4`;
+            
+            if(count === 4) {
+                const btn = document.getElementById('finalize-piu-btn');
+                btn.disabled = false; btn.className = 'w-full bg-[#5b4ef5] text-white py-3 rounded-lg text-[13px] font-bold hover:bg-[#4b3ed5] mt-4 cursor-pointer shadow-sm transition-colors flex flex-col items-center leading-tight';
+            }
+        };
+
+        // PIU -> GMC (на доработку) ИЛИ Комитет
+        window.finalizePiu = function() {
+            const idx = state.piu_queue.findIndex(a => a.id === currentPiuAppId);
+            const app = state.piu_queue.splice(idx, 1)[0];
+            
+            app.history = app.history || {};
+            app.history.piu = getCurrentDateTime();
+            app.date = getCurrentDateTime();
+
+            const hasRev = Object.values(piuDecisions).includes('resubmit');
+
+            if (hasRev) {
+                app.status = 'returned_from_piu';
+                state.gmc_queue.push(app);
+                updateDashboardCard(app.id, 'gmc', app);
+                alert("Бо эродҳо ба GMC баргардонида шуд.\nВозвращено с комментариями на доработку в GMC.");
+            } else {
+                state.committee_queue.push(app);
+                updateDashboardCard(app.id, 'committee', app);
+                alert("Санҷиши PIU гузашт! Ҳуҷҷат бетағйир ба Кумита интиқол ёфт.\nВерификация PIU пройдена! Документ в неизменном состоянии передан в Комитет.");
+            }
+            
+            document.getElementById('piu-evaluation-content').classList.add('hidden');
+            updateAllBadges(); applicationModal.classList.add('hidden');
+        };
+
+        window.setComDecision = function(val) {
+            currentComChoice = val;
+            const bOk = document.getElementById('btn-com-approve');
+            const bRev = document.getElementById('btn-com-rev');
+            const bRej = document.getElementById('btn-com-reject');
+
+            const baseClass = "w-full flex items-center px-4 py-3 rounded-lg text-[13px] font-medium border-2 transition-colors ";
+            bOk.className = baseClass + "border-gray-200 text-gray-600 hover:bg-gray-50";
+            bRev.className = baseClass + "border-gray-200 text-gray-600 hover:bg-gray-50";
+            bRej.className = baseClass + "border-gray-200 text-gray-600 hover:bg-gray-50";
+
+            if(val === 'ok') bOk.className = baseClass + "border-[#41c79a] bg-[#e6f8f1] text-[#41c79a]";
+            if(val === 'rev') bRev.className = baseClass + "border-amber-400 bg-amber-50 text-amber-700";
+            if(val === 'rej') bRej.className = baseClass + "border-red-400 bg-red-50 text-red-600";
+
+            const revBlock = document.getElementById('com-revision-files');
+            if (val === 'rev') revBlock.classList.remove('hidden');
+            else revBlock.classList.add('hidden');
+        };
+
+        // Комитет -> GMC (на доработку) ИЛИ Одобрено/Отклонено
+        window.saveComDecision = function() {
+            if(!currentComChoice) return alert("Қарорро интихоб кунед / Выберите решение");
+            const idx = state.committee_queue.findIndex(a => a.id === currentComAppId);
+            const app = state.committee_queue.splice(idx, 1)[0];
+
+            app.history = app.history || {};
+            app.history.committee = getCurrentDateTime();
+            app.date = getCurrentDateTime();
+
+            if(currentComChoice === 'ok') { 
+                app.status = 'issued';
+                state.approved.push(app);
+                updateDashboardCard(app.id, 'approved', app);
+                alert("Грант аз ҷониби Кумита тасдиқ шуд!\nГрант утвержден Комитетом!"); 
+            } else if(currentComChoice === 'rev') {
+                app.status = 'returned_from_com';
+                state.gmc_queue.push(app);
+                updateDashboardCard(app.id, 'gmc', app);
+                alert("Барои такмил ба GMC баргардонида шуд.\nВозвращено на доработку в GMC.");
+            } else {
+                state.rejected.push(app);
+                updateDashboardCard(app.id, 'rejected', app);
+                alert("Грант рад карда шуд.\nГрант отклонен.");
+            }
+
+            document.getElementById('committee-evaluation-content').classList.add('hidden');
+            updateAllBadges(); applicationModal.classList.add('hidden');
+        };
+
+        // Навигация вкладок
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active', 'border-[#5b4ef5]', 'text-[#5b4ef5]'); b.classList.add('border-transparent', 'text-gray-500'); });
+                btn.classList.add('active', 'border-[#5b4ef5]', 'text-[#5b4ef5]'); btn.classList.remove('border-transparent', 'text-gray-500');
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
+                const t = document.getElementById(btn.getAttribute('data-target')); if(t) t.classList.remove('hidden');
+            };
+        });
+
+        document.addEventListener('DOMContentLoaded', () => { 
+            // Рендер карточек из state
+            document.getElementById('mainDashboardGrid').innerHTML = ''; 
+            state.revisions.forEach(a => updateDashboardCard(a.id, 'rev', a));
+            state.gmc_queue.forEach(a => updateDashboardCard(a.id, 'gmc', a));
+            state.piu_queue.forEach(a => updateDashboardCard(a.id, 'piu', a));
+            state.committee_queue.forEach(a => updateDashboardCard(a.id, 'committee', a));
+            state.drafts.forEach(a => updateDashboardCard(a.id, 'draft', a));
+            state.approved.forEach(a => updateDashboardCard(a.id, 'approved', a));
+            state.rejected.forEach(a => updateDashboardCard(a.id, 'rejected', a));
+
+            if(window.lucide) lucide.createIcons(); 
+            updateAllBadges();
+            updateDashboardFilter();
+
+            // Обработка загрузки файла во всех блоках
+            ['facilitator-upload', 'gmc-revision-upload', 'piu-revision-upload', 'com-revision-upload'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', function() {
+                        const parent = this.closest('.relative') ? this.closest('.relative').parentElement : this.parentElement;
+                        let fileNameBlock = null;
+                        let fileNameText = null;
+
+                        if (id === 'facilitator-upload') {
+                            fileNameBlock = document.getElementById('facilitator-upload-text');
+                            if(fileNameBlock) {
+                                if (this.files && this.files.length > 0) {
+                                    fileNameBlock.innerHTML = `<span class="text-indigo-700 font-bold">${this.files[0].name}</span>`;
+                                } else {
+                                    fileNameBlock.innerHTML = `Файл интихоб нашудааст <span class="ru">/ Файл не выбран</span>`;
+                                }
+                            }
+                            return;
+                        }
+
+                        if(parent) fileNameBlock = parent.querySelector('.text-amber-800, .text-red-800');
+                        if(fileNameBlock) fileNameText = fileNameBlock.querySelector('span');
+
+                        if (this.files && this.files.length > 0 && fileNameText) {
+                            fileNameText.textContent = this.files[0].name;
+                            fileNameBlock.classList.remove('hidden');
+                        } else if(fileNameBlock) {
+                            fileNameBlock.classList.add('hidden');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
