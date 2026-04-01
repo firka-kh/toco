@@ -84,7 +84,7 @@
         }
 
         .card {
-            width: min(520px, 100%);
+            width: min(640px, 100%);
             position: relative;
             z-index: 1;
             background: var(--card);
@@ -94,7 +94,7 @@
             box-shadow:
                 0 30px 70px rgba(12, 45, 72, 0.16),
                 inset 0 1px 0 rgba(255, 255, 255, 0.9);
-            padding: 34px 28px 26px;
+            padding: clamp(20px, 4vw, 34px) clamp(16px, 4vw, 28px) clamp(16px, 3vw, 26px);
             text-align: center;
             animation: rise 0.8s cubic-bezier(.17, .84, .44, 1) both;
         }
@@ -179,11 +179,15 @@
             color: #fff;
             text-decoration: none;
             font-weight: 800;
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 2.7vw, 1rem);
             letter-spacing: 0.01em;
             isolation: isolate;
             overflow: hidden;
             transition: transform .16s ease, box-shadow .16s ease;
+            min-height: 54px;
+            text-wrap: balance;
+            background-size: 180% 180%;
+            animation: gradientFlow 6s ease-in-out infinite;
         }
 
         .btn-wa {
@@ -202,9 +206,49 @@
             position: absolute;
             inset: 0;
             background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.34) 50%, transparent 80%);
-            transform: translateX(-115%);
-            transition: transform .7s ease;
             z-index: -1;
+        }
+
+        .btn-wa::before {
+            animation: sheen-right-to-left 2.8s linear infinite;
+        }
+
+        .btn-call::before {
+            animation: sheen-left-to-right 2.8s linear infinite;
+        }
+
+        @keyframes sheen-left-to-right {
+            0% {
+                transform: translateX(-115%);
+            }
+
+            100% {
+                transform: translateX(115%);
+            }
+        }
+
+        @keyframes sheen-right-to-left {
+            0% {
+                transform: translateX(115%);
+            }
+
+            100% {
+                transform: translateX(-115%);
+            }
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .btn-wa:hover,
@@ -218,11 +262,6 @@
 
         .btn-call:hover {
             box-shadow: 0 18px 34px rgba(21, 88, 214, 0.43);
-        }
-
-        .btn-wa:hover::before,
-        .btn-call:hover::before {
-            transform: translateX(115%);
         }
 
         .btn-wa:active,
@@ -308,6 +347,33 @@
                 border-radius: 14px;
                 padding: 13px 14px;
                 font-size: 0.95rem;
+                min-height: 50px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .project-tag {
+                font-size: 0.69rem;
+                padding: 7px 10px;
+            }
+
+            .invite {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (min-width: 700px) and (max-width: 1100px) {
+            body {
+                padding: 28px;
+            }
+
+            .card {
+                width: min(760px, 100%);
+                border-radius: 34px;
+            }
+
+            .button-stack {
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
@@ -353,7 +419,7 @@
                     <path
                         d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.24.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
                 </svg>
-                Позвонить: +992 98 235 10 10
+                Позвонить
             </a>
         </div>
 
