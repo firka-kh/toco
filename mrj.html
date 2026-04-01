@@ -6,6 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Механизм рассмотрения жалоб</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@600;700&display=swap');
+
+        :root {
+            --bg-a: #ecf7ff;
+            --bg-b: #e8fff4;
+            --ink: #0f2d46;
+            --muted: #5f7890;
+            --card: rgba(255, 255, 255, 0.78);
+            --line: rgba(20, 62, 95, 0.13);
+            --wa-a: #23d366;
+            --wa-b: #0f9d7c;
+            --call-a: #2f76ff;
+            --call-b: #1558d6;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,125 +28,81 @@
         }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Manrope', sans-serif;
+            color: var(--ink);
             min-height: 100vh;
-            background: linear-gradient(135deg, #0a3d62 0%, #1a5276 45%, #148f77 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            display: grid;
+            place-items: center;
+            padding: 22px;
+            background:
+                radial-gradient(1200px 700px at 0% 0%, #d9f0ff 0%, transparent 62%),
+                radial-gradient(900px 700px at 100% 15%, #d8ffe5 0%, transparent 58%),
+                radial-gradient(900px 900px at 70% 100%, #dbecff 0%, transparent 55%),
+                linear-gradient(140deg, var(--bg-a), var(--bg-b));
+            overflow-x: hidden;
             position: relative;
         }
 
-        /* Пузыри фона */
-        .bubbles {
+        body::before,
+        body::after {
+            content: '';
             position: fixed;
-            inset: 0;
-            pointer-events: none;
             z-index: 0;
+            border-radius: 999px;
+            filter: blur(14px);
+            animation: drift 10s ease-in-out infinite;
+            pointer-events: none;
         }
 
-        .bubble {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.06);
-            animation: floatUp linear infinite;
+        body::before {
+            width: 240px;
+            height: 240px;
+            top: -50px;
+            right: -30px;
+            background: rgba(35, 211, 102, 0.18);
         }
 
-        .bubble:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            left: 8%;
-            animation-duration: 14s;
-            animation-delay: 0s;
+        body::after {
+            width: 260px;
+            height: 260px;
+            bottom: -70px;
+            left: -40px;
+            background: rgba(47, 118, 255, 0.14);
+            animation-delay: -3s;
         }
 
-        .bubble:nth-child(2) {
-            width: 50px;
-            height: 50px;
-            left: 22%;
-            animation-duration: 10s;
-            animation-delay: 2s;
-        }
+        @keyframes drift {
 
-        .bubble:nth-child(3) {
-            width: 110px;
-            height: 110px;
-            left: 43%;
-            animation-duration: 16s;
-            animation-delay: 1s;
-        }
-
-        .bubble:nth-child(4) {
-            width: 65px;
-            height: 65px;
-            left: 63%;
-            animation-duration: 11s;
-            animation-delay: 3s;
-        }
-
-        .bubble:nth-child(5) {
-            width: 90px;
-            height: 90px;
-            left: 80%;
-            animation-duration: 13s;
-            animation-delay: 0.5s;
-        }
-
-        .bubble:nth-child(6) {
-            width: 40px;
-            height: 40px;
-            left: 4%;
-            animation-duration: 9s;
-            animation-delay: 4s;
-        }
-
-        .bubble:nth-child(7) {
-            width: 70px;
-            height: 70px;
-            left: 92%;
-            animation-duration: 12s;
-            animation-delay: 1.5s;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(110vh);
-                opacity: 0;
-            }
-
-            10% {
-                opacity: 1;
-            }
-
-            90% {
-                opacity: 1;
-            }
-
+            0%,
             100% {
-                transform: translateY(-10vh);
-                opacity: 0;
+                transform: translateY(0px) scale(1);
+            }
+
+            50% {
+                transform: translateY(14px) scale(1.04);
             }
         }
 
-        /* Карточка */
         .card {
+            width: min(520px, 100%);
             position: relative;
             z-index: 1;
-            background: rgba(255, 255, 255, 0.97);
+            background: var(--card);
+            border: 1px solid var(--line);
             border-radius: 30px;
-            padding: 48px 36px 40px;
-            max-width: 420px;
-            width: 92%;
-            box-shadow: 0 32px 90px rgba(0, 0, 0, 0.38);
+            backdrop-filter: blur(10px);
+            box-shadow:
+                0 30px 70px rgba(12, 45, 72, 0.16),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            padding: 34px 28px 26px;
             text-align: center;
-            animation: cardIn 0.7s cubic-bezier(.22, 1, .36, 1) both;
+            animation: rise 0.8s cubic-bezier(.17, .84, .44, 1) both;
         }
 
-        @keyframes cardIn {
+        @keyframes rise {
             from {
                 opacity: 0;
-                transform: translateY(36px) scale(0.96);
+                transform: translateY(24px) scale(0.98);
             }
 
             to {
@@ -140,165 +111,209 @@
             }
         }
 
-        /* Большая иконка WhatsApp */
         .wa-icon-wrap {
             display: flex;
-            align-items: center;
             justify-content: center;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .wa-icon-bg {
-            width: 96px;
-            height: 96px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 32px rgba(37, 211, 102, 0.45);
-            animation: pulse 2.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 8px 32px rgba(37, 211, 102, 0.45);
-            }
-
-            50% {
-                box-shadow: 0 8px 50px rgba(37, 211, 102, 0.7);
-            }
+            width: 84px;
+            height: 84px;
+            border-radius: 26px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--wa-a), var(--wa-b));
+            box-shadow: 0 16px 32px rgba(35, 211, 102, 0.34);
+            transform: rotate(-6deg);
         }
 
         .wa-icon-bg svg {
-            width: 56px;
-            height: 56px;
+            width: 46px;
+            height: 46px;
+            transform: rotate(6deg);
         }
 
-        /* Заголовок */
         h1 {
-            font-size: 1.6em;
-            color: #0a3d62;
-            font-weight: 800;
-            line-height: 1.25;
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(1.5rem, 4.3vw, 2.05rem);
+            line-height: 1.16;
             margin-bottom: 10px;
+            letter-spacing: -0.03em;
         }
 
         .project-tag {
             display: inline-block;
-            background: #eaf6ff;
-            color: #1a5276;
-            font-size: 11.5px;
-            font-weight: 600;
-            padding: 5px 14px;
-            border-radius: 20px;
-            margin-bottom: 28px;
-            line-height: 1.5;
+            font-size: 0.77rem;
+            font-weight: 700;
+            color: #12466e;
+            background: linear-gradient(180deg, #eff8ff, #e5f3ff);
+            border: 1px solid #d4e8f9;
+            border-radius: 999px;
+            padding: 8px 14px;
+            margin-bottom: 15px;
         }
 
-        /* Текст приглашения */
         .invite {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.65;
-            margin-bottom: 28px;
+            color: var(--muted);
+            font-size: 0.98rem;
+            line-height: 1.58;
+            margin-bottom: 18px;
         }
 
-        /* Кнопка */
-        .btn-wa {
+        .button-stack {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .btn-wa,
+        .btn-call {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            color: white;
-            padding: 17px 32px;
+            gap: 11px;
+            border-radius: 16px;
+            padding: 15px 20px;
+            color: #fff;
             text-decoration: none;
-            border-radius: 50px;
-            font-size: 17px;
-            font-weight: 700;
-            box-shadow: 0 8px 28px rgba(37, 211, 102, 0.42);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-            margin-bottom: 28px;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: 0.01em;
+            isolation: isolate;
+            overflow: hidden;
+            transition: transform .16s ease, box-shadow .16s ease;
+        }
+
+        .btn-wa {
+            background: linear-gradient(135deg, var(--wa-a), var(--wa-b));
+            box-shadow: 0 14px 26px rgba(35, 211, 102, 0.34);
+        }
+
+        .btn-call {
+            background: linear-gradient(135deg, var(--call-a), var(--call-b));
+            box-shadow: 0 14px 26px rgba(21, 88, 214, 0.32);
+        }
+
+        .btn-wa::before,
+        .btn-call::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.34) 50%, transparent 80%);
+            transform: translateX(-115%);
+            transition: transform .7s ease;
+            z-index: -1;
+        }
+
+        .btn-wa:hover,
+        .btn-call:hover {
+            transform: translateY(-2px);
         }
 
         .btn-wa:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 38px rgba(37, 211, 102, 0.6);
+            box-shadow: 0 18px 34px rgba(35, 211, 102, 0.45);
         }
 
-        .btn-wa:active {
+        .btn-call:hover {
+            box-shadow: 0 18px 34px rgba(21, 88, 214, 0.43);
+        }
+
+        .btn-wa:hover::before,
+        .btn-call:hover::before {
+            transform: translateX(115%);
+        }
+
+        .btn-wa:active,
+        .btn-call:active {
             transform: translateY(0);
         }
 
-        .btn-wa svg {
-            width: 26px;
-            height: 26px;
+        .btn-wa:focus-visible,
+        .btn-call:focus-visible {
+            outline: 3px solid rgba(20, 95, 156, 0.28);
+            outline-offset: 2px;
+        }
+
+        .btn-wa svg,
+        .btn-call svg {
+            width: 24px;
+            height: 24px;
             flex-shrink: 0;
         }
 
-        /* Инфо-строки */
         .info-list {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-width: 280px;
-            margin: 0 auto;
+            justify-content: center;
         }
 
         .info-row {
+            width: 100%;
+            max-width: 320px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: #f7f9fa;
-            border: 1px solid #eef0f2;
-            border-radius: 14px;
-            padding: 11px 16px;
+            gap: 11px;
             text-align: left;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid #d9ebf6;
+            border-radius: 14px;
+            padding: 10px 13px;
         }
 
         .info-row .ico {
-            font-size: 22px;
-            flex-shrink: 0;
+            width: 33px;
+            height: 33px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: #eaf4ff;
+            font-size: 1.04rem;
         }
 
         .info-row .lbl {
-            font-size: 11px;
-            color: #95a5a6;
+            font-size: 0.74rem;
+            color: #6f869d;
         }
 
         .info-row .val {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: #1a3a52;
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #163f61;
         }
 
-        @media (max-width: 400px) {
-            .card {
-                padding: 36px 18px 30px;
+        @media (max-width: 520px) {
+            body {
+                padding: 14px;
             }
 
-            h1 {
-                font-size: 1.35em;
+            .card {
+                border-radius: 24px;
+                padding: 24px 16px 18px;
+            }
+
+            .wa-icon-bg {
+                width: 70px;
+                height: 70px;
+                border-radius: 20px;
+            }
+
+            .wa-icon-bg svg {
+                width: 38px;
+                height: 38px;
+            }
+
+            .btn-wa,
+            .btn-call {
+                border-radius: 14px;
+                padding: 13px 14px;
+                font-size: 0.95rem;
             }
         }
     </style>
 </head>
 
 <body>
-
-    <div class="bubbles">
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-    </div>
-
     <div class="card">
 
         <!-- Иконка WhatsApp -->
@@ -323,30 +338,26 @@
             Мы ответим в течение рабочего дня.
         </p>
 
-        <a href="https://wa.me/992982351010?text=%D0%9C%D0%B5%D1%85%D0%B0%D0%BD%D0%B8%D0%B7%D0%BC%20%D1%80%D0%B0%D1%81%D1%81%D0%BC%D0%BE%D1%82%D1%80%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%B6%D0%B0%D0%BB%D0%BE%D0%B1%20%D0%B2%20%D0%9B%D0%9C%D0%98%D0%A1%20%D0%A2%D0%B0%D0%B4%D0%B6%D0%B8%D0%BA%D0%B8%D1%81%D1%82%D0%B0%D0%BD%D0%B0"
-            class="btn-wa" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 32 32" fill="white">
-                <path
-                    d="M16 3C8.8 3 3 8.8 3 16c0 2.4.65 4.7 1.8 6.7L3 29l6.5-1.75A13 13 0 0 0 16 29c7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.5c-2.1 0-4.1-.56-5.85-1.6l-.42-.25-4.35 1.17 1.15-4.24-.27-.44A10.46 10.46 0 1 1 26.5 16c0 5.79-4.7 10.5-10.5 10.5zm5.75-7.85c-.32-.16-1.87-.92-2.16-1.03-.29-.1-.5-.16-.71.16-.21.32-.82 1.03-.99 1.24-.18.21-.36.24-.67.08-.32-.16-1.33-.49-2.54-1.57-.94-.84-1.57-1.87-1.75-2.19-.18-.32-.02-.5.14-.66.14-.14.32-.36.48-.54.16-.18.21-.32.32-.53.1-.21.05-.4-.02-.56-.08-.16-.71-1.72-.97-2.35-.26-.62-.52-.53-.71-.54h-.61c-.21 0-.54.08-.82.4-.29.32-1.09 1.06-1.09 2.58s1.12 3 1.27 3.2c.16.21 2.2 3.36 5.33 4.7.74.32 1.32.51 1.77.65.74.24 1.42.2 1.95.12.6-.09 1.87-.76 2.13-1.5.27-.74.27-1.37.19-1.5-.08-.13-.29-.21-.61-.37z" />
-            </svg>
-            Написать в WhatsApp
-        </a>
+        <div class="button-stack">
+            <a href="https://wa.me/992982351010?text=%D0%9C%D0%B5%D1%85%D0%B0%D0%BD%D0%B8%D0%B7%D0%BC%20%D1%80%D0%B0%D1%81%D1%81%D0%BC%D0%BE%D1%82%D1%80%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%B6%D0%B0%D0%BB%D0%BE%D0%B1%20%D0%B2%20%D0%9B%D0%9C%D0%98%D0%A1%20%D0%A2%D0%B0%D0%B4%D0%B6%D0%B8%D0%BA%D0%B8%D1%81%D1%82%D0%B0%D0%BD%D0%B0"
+                class="btn-wa" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 32 32" fill="white">
+                    <path
+                        d="M16 3C8.8 3 3 8.8 3 16c0 2.4.65 4.7 1.8 6.7L3 29l6.5-1.75A13 13 0 0 0 16 29c7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.5c-2.1 0-4.1-.56-5.85-1.6l-.42-.25-4.35 1.17 1.15-4.24-.27-.44A10.46 10.46 0 1 1 26.5 16c0 5.79-4.7 10.5-10.5 10.5zm5.75-7.85c-.32-.16-1.87-.92-2.16-1.03-.29-.1-.5-.16-.71.16-.21.32-.82 1.03-.99 1.24-.18.21-.36.24-.67.08-.32-.16-1.33-.49-2.54-1.57-.94-.84-1.57-1.87-1.75-2.19-.18-.32-.02-.5.14-.66.14-.14.32-.36.48-.54.16-.18.21-.32.32-.53.1-.21.05-.4-.02-.56-.08-.16-.71-1.72-.97-2.35-.26-.62-.52-.53-.71-.54h-.61c-.21 0-.54.08-.82.4-.29.32-1.09 1.06-1.09 2.58s1.12 3 1.27 3.2c.16.21 2.2 3.36 5.33 4.7.74.32 1.32.51 1.77.65.74.24 1.42.2 1.95.12.6-.09 1.87-.76 2.13-1.5.27-.74.27-1.37.19-1.5-.08-.13-.29-.21-.61-.37z" />
+                </svg>
+                Написать в WhatsApp
+            </a>
+
+            <a href="tel:+992982351010" class="btn-call" aria-label="Позвонить +992 98 235 10 10">
+                <svg viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                    <path
+                        d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.24.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                </svg>
+                Позвонить: +992 98 235 10 10
+            </a>
+        </div>
 
         <div class="info-list">
-            <div class="info-row">
-                <span class="ico">📞</span>
-                <div>
-                    <div class="lbl">WhatsApp / Звонок</div>
-                    <div class="val">+992 98 235 10 10</div>
-                </div>
-            </div>
-            <div class="info-row">
-                <span class="ico">🏙️</span>
-                <div>
-                    <div class="lbl">Расположение</div>
-                    <div class="val">Душанбе, Таджикистан</div>
-                </div>
-            </div>
             <div class="info-row">
                 <span class="ico">🕐</span>
                 <div>
