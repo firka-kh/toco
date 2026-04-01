@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Механизм рассмотрения жалоб — ЛМИС Таджикистан</title>
+    <title>Механизм рассмотрения жалоб</title>
     <style>
         * {
             margin: 0;
@@ -15,7 +15,7 @@
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #0a3d62 0%, #1a5276 40%, #148f77 100%);
+            background: linear-gradient(135deg, #0a3d62 0%, #1a5276 45%, #148f77 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -23,13 +23,10 @@
             position: relative;
         }
 
-        /* Анимированные пузыри на фоне */
+        /* Пузыри фона */
         .bubbles {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             pointer-events: none;
             z-index: 0;
         }
@@ -37,39 +34,39 @@
         .bubble {
             position: absolute;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            animation: float linear infinite;
+            background: rgba(255, 255, 255, 0.06);
+            animation: floatUp linear infinite;
         }
 
         .bubble:nth-child(1) {
             width: 80px;
             height: 80px;
-            left: 10%;
-            animation-duration: 12s;
+            left: 8%;
+            animation-duration: 14s;
             animation-delay: 0s;
         }
 
         .bubble:nth-child(2) {
             width: 50px;
             height: 50px;
-            left: 25%;
-            animation-duration: 9s;
+            left: 22%;
+            animation-duration: 10s;
             animation-delay: 2s;
         }
 
         .bubble:nth-child(3) {
-            width: 120px;
-            height: 120px;
-            left: 45%;
-            animation-duration: 15s;
+            width: 110px;
+            height: 110px;
+            left: 43%;
+            animation-duration: 16s;
             animation-delay: 1s;
         }
 
         .bubble:nth-child(4) {
-            width: 60px;
-            height: 60px;
-            left: 65%;
-            animation-duration: 10s;
+            width: 65px;
+            height: 65px;
+            left: 63%;
+            animation-duration: 11s;
             animation-delay: 3s;
         }
 
@@ -84,22 +81,22 @@
         .bubble:nth-child(6) {
             width: 40px;
             height: 40px;
-            left: 5%;
-            animation-duration: 8s;
+            left: 4%;
+            animation-duration: 9s;
             animation-delay: 4s;
         }
 
         .bubble:nth-child(7) {
             width: 70px;
             height: 70px;
-            left: 90%;
-            animation-duration: 11s;
+            left: 92%;
+            animation-duration: 12s;
             animation-delay: 1.5s;
         }
 
-        @keyframes float {
+        @keyframes floatUp {
             0% {
-                transform: translateY(110vh) scale(0.8);
+                transform: translateY(110vh);
                 opacity: 0;
             }
 
@@ -112,21 +109,21 @@
             }
 
             100% {
-                transform: translateY(-10vh) scale(1.1);
+                transform: translateY(-10vh);
                 opacity: 0;
             }
         }
 
-        /* Основная карточка */
+        /* Карточка */
         .card {
             position: relative;
             z-index: 1;
             background: rgba(255, 255, 255, 0.97);
-            border-radius: 28px;
-            padding: 44px 36px 36px;
-            max-width: 480px;
+            border-radius: 30px;
+            padding: 48px 36px 40px;
+            max-width: 420px;
             width: 92%;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.15);
+            box-shadow: 0 32px 90px rgba(0, 0, 0, 0.38);
             text-align: center;
             animation: cardIn 0.7s cubic-bezier(.22, 1, .36, 1) both;
         }
@@ -134,7 +131,7 @@
         @keyframes cardIn {
             from {
                 opacity: 0;
-                transform: translateY(40px) scale(0.95);
+                transform: translateY(36px) scale(0.96);
             }
 
             to {
@@ -143,148 +140,93 @@
             }
         }
 
-        /* Значок вверху */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #0a3d62, #148f77);
-            color: white;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            padding: 6px 16px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-        }
-
-        .badge svg {
-            width: 14px;
-            height: 14px;
-            flex-shrink: 0;
-        }
-
-        h1 {
-            font-size: 1.65em;
-            color: #0a3d62;
-            font-weight: 800;
-            line-height: 1.25;
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            font-size: 13px;
-            color: #7f8c8d;
-            line-height: 1.6;
-            margin-bottom: 28px;
-        }
-
-        .subtitle strong {
-            color: #2c3e50;
-        }
-
-        /* Блок QR */
-        .qr-wrap {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 22px;
-        }
-
-        .qr-border {
-            padding: 10px;
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            border-radius: 18px;
-            display: inline-block;
-            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.35);
-            animation: pulseBorder 2.5s ease-in-out infinite;
-        }
-
-        @keyframes pulseBorder {
-
-            0%,
-            100% {
-                box-shadow: 0 8px 30px rgba(37, 211, 102, 0.35);
-            }
-
-            50% {
-                box-shadow: 0 8px 45px rgba(37, 211, 102, 0.6);
-            }
-        }
-
-        .qr-inner {
-            background: white;
-            border-radius: 10px;
-            padding: 8px;
-            display: flex;
-        }
-
-        .qr-inner img {
-            width: 200px;
-            height: 200px;
-            border-radius: 6px;
-            display: block;
-        }
-
-        /* Метка WhatsApp поверх QR */
-        .qr-label {
+        /* Большая иконка WhatsApp */
+        .wa-icon-wrap {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            margin-top: 12px;
-            font-size: 13px;
-            color: #27ae60;
-            font-weight: 700;
+            margin-bottom: 24px;
         }
 
-        .qr-label svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Разделитель */
-        .divider {
+        .wa-icon-bg {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #25D366, #128C7E);
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin: 20px 0;
-            color: #bdc3c7;
-            font-size: 12px;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(37, 211, 102, 0.45);
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 8px 32px rgba(37, 211, 102, 0.45);
+            }
+
+            50% {
+                box-shadow: 0 8px 50px rgba(37, 211, 102, 0.7);
+            }
+        }
+
+        .wa-icon-bg svg {
+            width: 56px;
+            height: 56px;
+        }
+
+        /* Заголовок */
+        h1 {
+            font-size: 1.6em;
+            color: #0a3d62;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+
+        .project-tag {
+            display: inline-block;
+            background: #eaf6ff;
+            color: #1a5276;
+            font-size: 11.5px;
             font-weight: 600;
-            letter-spacing: .5px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            line-height: 1.5;
         }
 
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #ecf0f1;
+        /* Текст приглашения */
+        .invite {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.65;
+            margin-bottom: 28px;
         }
 
-        /* Кнопка WhatsApp */
+        /* Кнопка */
         .btn-wa {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            background: linear-gradient(135deg, #25D366, #128C7E);
             color: white;
-            padding: 16px 28px;
+            padding: 17px 32px;
             text-decoration: none;
             border-radius: 50px;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 700;
-            letter-spacing: .3px;
-            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+            box-shadow: 0 8px 28px rgba(37, 211, 102, 0.42);
             transition: transform 0.15s ease, box-shadow 0.15s ease;
-            margin-bottom: 12px;
+            margin-bottom: 28px;
         }
 
         .btn-wa:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 35px rgba(37, 211, 102, 0.55);
+            box-shadow: 0 12px 38px rgba(37, 211, 102, 0.6);
         }
 
         .btn-wa:active {
@@ -292,74 +234,424 @@
         }
 
         .btn-wa svg {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             flex-shrink: 0;
         }
 
         /* Инфо-строки */
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 20px;
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 280px;
+            margin: 0 auto;
         }
 
-        .info-item {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 12px 10px;
-            font-size: 12px;
-            color: #555;
-            border: 1px solid #eee;
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f7f9fa;
+            border: 1px solid #eef0f2;
+            border-radius: 14px;
+            padding: 11px 16px;
+            text-align: left;
         }
 
-        .info-item .icon {
-            font-size: 18px;
-            margin-bottom: 4px;
+        .info-row .ico {
+            font-size: 22px;
+            flex-shrink: 0;
         }
 
-        .info-item .val {
+        .info-row .lbl {
+            font-size: 11px;
+            color: #95a5a6;
+        }
+
+        .info-row .val {
+            font-size: 13.5px;
             font-weight: 700;
-            color: #2c3e50;
-            font-size: 13px;
+            color: #1a3a52;
         }
 
-        /* Нижний футер */
-        .footer-card {
-            margin-top: 20px;
-            padding-top: 16px;
-            border-top: 1px solid #ecf0f1;
-            font-size: 11.5px;
-            color: #aaa;
-            line-height: 1.7;
-        }
-
-        .footer-card a {
-            color: #25D366;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        @media (max-width: 420px) {
+        @media (max-width: 400px) {
             .card {
-                padding: 32px 20px 28px;
+                padding: 36px 18px 30px;
             }
 
             h1 {
-                font-size: 1.4em;
-            }
-
-            .qr-inner img {
-                width: 170px;
-                height: 170px;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
+                font-size: 1.35em;
             }
         }
     </style>
+</head>
+
+<body>
+
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="card">
+
+        <!-- Иконка WhatsApp -->
+        <div class="wa-icon-wrap">
+            <div class="wa-icon-bg">
+                <svg viewBox="0 0 32 32" fill="white">
+                    <path
+                        d="M16 3C8.8 3 3 8.8 3 16c0 2.4.65 4.7 1.8 6.7L3 29l6.5-1.75A13 13 0 0 0 16 29c7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.5c-2.1 0-4.1-.56-5.85-1.6l-.42-.25-4.35 1.17 1.15-4.24-.27-.44A10.46 10.46 0 1 1 26.5 16c0 5.79-4.7 10.5-10.5 10.5zm5.75-7.85c-.32-.16-1.87-.92-2.16-1.03-.29-.1-.5-.16-.71.16-.21.32-.82 1.03-.99 1.24-.18.21-.36.24-.67.08-.32-.16-1.33-.49-2.54-1.57-.94-.84-1.57-1.87-1.75-2.19-.18-.32-.02-.5.14-.66.14-.14.32-.36.48-.54.16-.18.21-.32.32-.53.1-.21.05-.4-.02-.56-.08-.16-.71-1.72-.97-2.35-.26-.62-.52-.53-.71-.54h-.61c-.21 0-.54.08-.82.4-.29.32-1.09 1.06-1.09 2.58s1.12 3 1.27 3.2c.16.21 2.2 3.36 5.33 4.7.74.32 1.32.51 1.77.65.74.24 1.42.2 1.95.12.6-.09 1.87-.76 2.13-1.5.27-.74.27-1.37.19-1.5-.08-.13-.29-.21-.61-.37z" />
+                </svg>
+            </div>
+        </div>
+
+        <h1>Механизм рассмотрения жалоб</h1>
+
+        <div class="project-tag">
+            Проект «Модернизация социальной защиты<br>и экономическая интеграция»
+        </div>
+
+        <p class="invite">
+            Если у вас есть жалоба, предложение или вопрос —<br>
+            напишите нам напрямую в <strong>WhatsApp</strong>.<br>
+            Мы ответим в течение рабочего дня.
+        </p>
+
+        <a href="https://wa.me/992982351010?text=%D0%9C%D0%B5%D1%85%D0%B0%D0%BD%D0%B8%D0%B7%D0%BC%20%D1%80%D0%B0%D1%81%D1%81%D0%BC%D0%BE%D1%82%D1%80%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%B6%D0%B0%D0%BB%D0%BE%D0%B1%20%D0%B2%20%D0%9B%D0%9C%D0%98%D0%A1%20%D0%A2%D0%B0%D0%B4%D0%B6%D0%B8%D0%BA%D0%B8%D1%81%D1%82%D0%B0%D0%BD%D0%B0"
+            class="btn-wa" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 32 32" fill="white">
+                <path
+                    d="M16 3C8.8 3 3 8.8 3 16c0 2.4.65 4.7 1.8 6.7L3 29l6.5-1.75A13 13 0 0 0 16 29c7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.5c-2.1 0-4.1-.56-5.85-1.6l-.42-.25-4.35 1.17 1.15-4.24-.27-.44A10.46 10.46 0 1 1 26.5 16c0 5.79-4.7 10.5-10.5 10.5zm5.75-7.85c-.32-.16-1.87-.92-2.16-1.03-.29-.1-.5-.16-.71.16-.21.32-.82 1.03-.99 1.24-.18.21-.36.24-.67.08-.32-.16-1.33-.49-2.54-1.57-.94-.84-1.57-1.87-1.75-2.19-.18-.32-.02-.5.14-.66.14-.14.32-.36.48-.54.16-.18.21-.32.32-.53.1-.21.05-.4-.02-.56-.08-.16-.71-1.72-.97-2.35-.26-.62-.52-.53-.71-.54h-.61c-.21 0-.54.08-.82.4-.29.32-1.09 1.06-1.09 2.58s1.12 3 1.27 3.2c.16.21 2.2 3.36 5.33 4.7.74.32 1.32.51 1.77.65.74.24 1.42.2 1.95.12.6-.09 1.87-.76 2.13-1.5.27-.74.27-1.37.19-1.5-.08-.13-.29-.21-.61-.37z" />
+            </svg>
+            Написать в WhatsApp
+        </a>
+
+        <div class="info-list">
+            <div class="info-row">
+                <span class="ico">📞</span>
+                <div>
+                    <div class="lbl">WhatsApp / Звонок</div>
+                    <div class="val">+992 98 235 10 10</div>
+                </div>
+            </div>
+            <div class="info-row">
+                <span class="ico">🏙️</span>
+                <div>
+                    <div class="lbl">Расположение</div>
+                    <div class="val">Душанбе, Таджикистан</div>
+                </div>
+            </div>
+            <div class="info-row">
+                <span class="ico">🕐</span>
+                <div>
+                    <div class="lbl">Время работы</div>
+                    <div class="val">09:00 – 18:00, Пн – Пт</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Механизм рассмотрения жалоб — ЛМИС Таджикистан</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0a3d62 0%, #1a5276 40%, #148f77 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Анимированные пузыри на фоне */
+    .bubbles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .bubble {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        animation: float linear infinite;
+    }
+
+    .bubble:nth-child(1) {
+        width: 80px;
+        height: 80px;
+        left: 10%;
+        animation-duration: 12s;
+        animation-delay: 0s;
+    }
+
+    .bubble:nth-child(2) {
+        width: 50px;
+        height: 50px;
+        left: 25%;
+        animation-duration: 9s;
+        animation-delay: 2s;
+    }
+
+    .bubble:nth-child(3) {
+        width: 120px;
+        height: 120px;
+        left: 45%;
+        animation-duration: 15s;
+        animation-delay: 1s;
+    }
+
+    .bubble:nth-child(4) {
+        width: 60px;
+        height: 60px;
+        left: 65%;
+        animation-duration: 10s;
+        animation-delay: 3s;
+    }
+
+    .bubble:nth-child(5) {
+        width: 90px;
+        height: 90px;
+        left: 80%;
+        animation-duration: 13s;
+        animation-delay: 0.5s;
+    }
+
+    .bubble:nth-child(6) {
+        width: 40px;
+        height: 40px;
+        left: 5%;
+        animation-duration: 8s;
+        animation-delay: 4s;
+    }
+
+    .bubble:nth-child(7) {
+        width: 70px;
+        height: 70px;
+        left: 90%;
+        animation-duration: 11s;
+        animation-delay: 1.5s;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(110vh) scale(0.8);
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-10vh) scale(1.1);
+            opacity: 0;
+        }
+    }
+
+    /* Основная карточка */
+    .card {
+        position: relative;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.97);
+        border-radius: 28px;
+        padding: 44px 36px 36px;
+        max-width: 480px;
+        width: 92%;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.15);
+        text-align: center;
+        animation: cardIn 0.7s cubic-bezier(.22, 1, .36, 1) both;
+    }
+
+    @keyframes cardIn {
+        from {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Значок вверху */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #0a3d62, #148f77);
+        color: white;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        padding: 6px 16px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }
+
+    .badge svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+    }
+
+    h1 {
+        font-size: 1.65em;
+        color: #0a3d62;
+        font-weight: 800;
+        line-height: 1.25;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        font-size: 13px;
+        color: #7f8c8d;
+        line-height: 1.6;
+        margin-bottom: 28px;
+    }
+
+    .subtitle strong {
+        color: #2c3e50;
+    }
+
+    /* Кнопка WhatsApp */
+    .btn-wa {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+        color: white;
+        padding: 16px 28px;
+        text-decoration: none;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: .3px;
+        box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        margin-bottom: 12px;
+    }
+
+    .btn-wa:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 35px rgba(37, 211, 102, 0.55);
+    }
+
+    .btn-wa:active {
+        transform: translateY(0);
+    }
+
+    .btn-wa svg {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+
+    /* Инфо-строки */
+    .info-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 20px;
+        max-width: 260px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .info-item {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 10px 16px;
+        font-size: 12px;
+        color: #555;
+        border: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-align: left;
+    }
+
+    .info-item .icon {
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .info-item .icon {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+
+    .info-item .val {
+        font-weight: 700;
+        color: #2c3e50;
+        font-size: 13px;
+    }
+
+    /* Нижний футер */
+    .footer-card {
+        margin-top: 20px;
+        padding-top: 16px;
+        border-top: 1px solid #ecf0f1;
+        font-size: 11.5px;
+        color: #aaa;
+        line-height: 1.7;
+    }
+
+    .footer-card a {
+        color: #25D366;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    @media (max-width: 420px) {
+        .card {
+            padding: 32px 20px 28px;
+        }
+
+        h1 {
+            font-size: 1.4em;
+        }
+
+        .qr-inner img {
+            width: 170px;
+            height: 170px;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
 </head>
 
 <body>
@@ -377,42 +669,11 @@
 
     <div class="card">
 
-        <!-- Бейдж -->
-        <div class="badge">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-                <path
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" />
-            </svg>
-            ЛМИС · Таджикистан · 2026
-        </div>
-
         <!-- Заголовок -->
         <h1>Механизм рассмотрения жалоб</h1>
-        <p class="subtitle">
-            <strong>Система информации о рынке труда</strong><br>
-            Проектная группа при Министерстве труда,<br>миграции и занятости Республики Таджикистан
+        <p class="subtitle" style="font-size:12px; color:#95a5a6; margin-top:4px;">
+            Проект «Модернизация социальной защиты<br>и экономическая интеграция»
         </p>
-
-        <!-- QR-код -->
-        <div class="qr-wrap">
-            <div class="qr-border">
-                <div class="qr-inner">
-                    <!-- QR генерируется через бесплатный API на основе ссылки WhatsApp -->
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=4&color=0a3d62&bgcolor=ffffff&data=https%3A%2F%2Fwa.me%2F992982351010%3Ftext%3D%25D0%259C%25D0%25B5%25D1%2585%25D0%25B0%25D0%25BD%25D0%25B8%25D0%25B7%25D0%25BC%2520%25D1%2580%25D0%25B0%25D1%2581%25D1%2581%25D0%25BC%25D0%25BE%25D1%2582%25D1%2580%25D0%25B5%25D0%25BD%25D0%25B8%25D1%258F%2520%25D0%25B6%25D0%25B0%25D0%25BB%25D0%25BE%25D0%25B1%2520%25D0%25B2%2520%25D0%259B%25D0%259C%25D0%2598%25D0%25A1%2520%25D0%25A2%25D0%25B0%25D0%25B4%25D0%25B6%25D0%25B8%25D0%25BA%25D0%25B8%25D1%2581%25D1%2582%25D0%25B0%25D0%25BD%25D0%25B0"
-                        alt="QR-код для WhatsApp">
-                </div>
-            </div>
-        </div>
-        <div class="qr-label">
-            <!-- WhatsApp иконка -->
-            <svg viewBox="0 0 32 32" fill="#25D366">
-                <path
-                    d="M16 3C8.8 3 3 8.8 3 16c0 2.4.65 4.7 1.8 6.7L3 29l6.5-1.75A13 13 0 0 0 16 29c7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.5c-2.1 0-4.1-.56-5.85-1.6l-.42-.25-4.35 1.17 1.15-4.24-.27-.44A10.46 10.46 0 1 1 26.5 16c0 5.79-4.7 10.5-10.5 10.5zm5.75-7.85c-.32-.16-1.87-.92-2.16-1.03-.29-.1-.5-.16-.71.16-.21.32-.82 1.03-.99 1.24-.18.21-.36.24-.67.08-.32-.16-1.33-.49-2.54-1.57-.94-.84-1.57-1.87-1.75-2.19-.18-.32-.02-.5.14-.66.14-.14.32-.36.48-.54.16-.18.21-.32.32-.53.1-.21.05-.4-.02-.56-.08-.16-.71-1.72-.97-2.35-.26-.62-.52-.53-.71-.54h-.61c-.21 0-.54.08-.82.4-.29.32-1.09 1.06-1.09 2.58s1.12 3 1.27 3.2c.16.21 2.2 3.36 5.33 4.7.74.32 1.32.51 1.77.65.74.24 1.42.2 1.95.12.6-.09 1.87-.76 2.13-1.5.27-.74.27-1.37.19-1.5-.08-.13-.29-.21-.61-.37z" />
-            </svg>
-            Откройте камеру и отсканируйте QR-код
-        </div>
-
-        <div class="divider">или</div>
 
         <!-- Кнопка -->
         <a href="https://wa.me/992982351010?text=%D0%9C%D0%B5%D1%85%D0%B0%D0%BD%D0%B8%D0%B7%D0%BC%20%D1%80%D0%B0%D1%81%D1%81%D0%BC%D0%BE%D1%82%D1%80%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%B6%D0%B0%D0%BB%D0%BE%D0%B1%20%D0%B2%20%D0%9B%D0%9C%D0%98%D0%A1%20%D0%A2%D0%B0%D0%B4%D0%B6%D0%B8%D0%BA%D0%B8%D1%81%D1%82%D0%B0%D0%BD%D0%B0"
@@ -428,25 +689,25 @@
         <div class="info-grid">
             <div class="info-item">
                 <div class="icon">📞</div>
-                <div class="val">+992 98 235 10 10</div>
-                <div>WhatsApp / Звонок</div>
+                <div>
+                    <div class="val">+992 98 235 10 10</div>
+                    <div>WhatsApp / Звонок</div>
+                </div>
             </div>
             <div class="info-item">
                 <div class="icon">🏙️</div>
-                <div class="val">Душанбе</div>
-                <div>Таджикистан</div>
+                <div>
+                    <div class="val">Душанбе</div>
+                    <div>Таджикистан</div>
+                </div>
             </div>
             <div class="info-item">
                 <div class="icon">🕐</div>
-                <div class="val">09:00 – 18:00</div>
-                <div>Пн – Пт</div>
+                <div>
+                    <div class="val">09:00 – 18:00</div>
+                    <div>Пн – Пт</div>
+                </div>
             </div>
-        </div>
-
-        <div class="footer-card">
-            © 2026 · ЛМИС Республики Таджикистан<br>
-            Министерство труда, миграции и занятости<br>
-            <a href="https://wa.me/992982351010" target="_blank" rel="noopener noreferrer">wa.me/992982351010</a>
         </div>
 
     </div>
